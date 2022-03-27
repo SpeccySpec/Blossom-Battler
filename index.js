@@ -287,8 +287,29 @@ class Command {
 const commands = {}
 commands.test = new Command({
 	desc: "a",
+	section: "misc",
 	func: (message, args) => {
 		message.reply("**[DEBUG]**\nThis is a test command.")
+	}
+})
+
+commands.help = new Command({
+	desc: "Lists all of Bloom Battler's commands.",
+	section: "misc",
+	func: (message, args) => {
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle('List of Commands')
+			.setDescription('This is a list of commands!')
+
+		switch(args[1].toLowerCase()) {
+			default:
+				for (const i in commands) {
+					DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: commands[i].desc, inline: true})
+				}
+		}
+
+		message.channel.send({embeds: [DiscordEmbed]});
 	}
 })
 
@@ -296,13 +317,11 @@ const prefix = "rpg!"
 
 client.on("messageCreate", (message) => {
 	if (!message.content.startsWith(prefix)) return;
-	let args = [...message.content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "")
-	let command = commands[args.shift()]
-	if (!command) {
-		message.channel.send("That command does not exist!")
-	} else {
-		command.call(message, args)
-	}
+	let args = [...message.content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
+	let command = commands[args.shift()];
+
+	if (!command) return message.channel.send("That command does not exist!");
+	command.call(message, args)
 })
 
 client.login(process.env.TOKEN);
