@@ -277,6 +277,10 @@ const terrains = [
 	"eternaldarkness"
 ]
 
+function getPrefix(server) {
+	return 'rpg!' // for now
+}
+
 class Command {
 	constructor(object) {
 		this.desc = object.desc
@@ -302,8 +306,8 @@ commands.help = new Command({
 			.setTitle('List of Commands')
 			.setDescription('This is a list of commands!')
 
-		if (args[1]) {
-			switch(args[1].toLowerCase()) {
+		if (args[0]) {
+			switch(args[0].toLowerCase()) {
 				default:
 					for (const i in commands) {
 						DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: commands[i].desc, inline: true})
