@@ -298,8 +298,9 @@ client.on("messageCreate", (message) => {
 	let command = commands[args.shift()]
 	if (!command) {
 		message.channel.send("That command does not exist!")
+	} else {
+		command.call(message, args)
 	}
-	command.call(message, args)
 })
 
 client.login(process.env.TOKEN);
