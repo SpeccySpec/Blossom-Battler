@@ -323,6 +323,33 @@ commands.help = new Command({
 
 const prefix = "rpg!"
 
+client.on("guildCreate", (guild) => {
+	//make an embed with a welcome message
+	let DiscordEmbed = new Discord.MessageEmbed()
+		.setColor('#0099ff')
+		.setTitle('Welcome, everyone!')
+		.setDescription(`I'm Bloom Battler, and welcome to my extravagant Real-Time RPG experience.`)
+		.addField('What can I do?', `I can do whatever you imagine. This includes:
+			**- Characters
+			- Items
+			- Skills
+			- Chests
+			- Enemies
+			- Etc.**
+			I can also do a multitiude of misc. things.`)
+		.addField('How can I start?', `Type ${getPrefix(guild.id)}help to get started!`)
+	
+	let channel = guild.channels.cache.find(
+		(ch) => ch.type === 'GUILD_TEXT',
+	);
+		
+	if (!channel) return console.log('Where should I post?');
+		
+	//send an image, and then the embed
+	channel.send({files: [`${dataPath}/images/welcome.png`]})
+		.then(() => channel.send({embeds: [DiscordEmbed]}))
+})
+
 client.on("messageCreate", (message) => {
 	if (!message.content.startsWith(prefix)) return;
 	let args = [...message.content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
