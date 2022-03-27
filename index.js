@@ -302,11 +302,15 @@ commands.help = new Command({
 			.setTitle('List of Commands')
 			.setDescription('This is a list of commands!')
 
-		switch(args[1].toLowerCase()) {
-			default:
-				for (const i in commands) {
-					DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: commands[i].desc, inline: true})
-				}
+		if (args[1]) {
+			switch(args[1].toLowerCase()) {
+				default:
+					for (const i in commands) {
+						DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: commands[i].desc, inline: true})
+					}
+			}
+		} else {
+			for (const i in commands) DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: commands[i].desc, inline: true});
 		}
 
 		message.channel.send({embeds: [DiscordEmbed]});
