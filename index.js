@@ -292,9 +292,11 @@ commands.test = new Command({
 	}
 })
 
+const prefix = "rpg!"
+
 client.on("messageCreate", (message) => {
-	if (!message.content.startsWith("rpg!")) return;
-	let args = [...message.content.matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "")
+	if (!message.content.startsWith(prefix)) return;
+	let args = [...message.content.slice(prefix.length()).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "")
 	let command = commands[args.shift()]
 	if (!command) {
 		message.channel.send("That command does not exist!")
