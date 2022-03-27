@@ -301,3 +301,5 @@ client.on("messageCreate", (message) => {
 	}
 	command.call(message, args)
 })
+
+client.login(process.env.TOKEN);
