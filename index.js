@@ -266,6 +266,7 @@ getPrefix = (server) => {
 Command = class {
 	constructor(object) {
 		this.desc = object.desc
+		this.section = object.section
 		this.call = object.func
 	}
 }
