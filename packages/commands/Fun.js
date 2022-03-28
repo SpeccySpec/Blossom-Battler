@@ -27,10 +27,10 @@ commands.diceroll = new Command({
             return false
         }
 
-		const num1 = parseInt(arg[0]);
+		const num1 = parseInt(args[0]);
 
-		if (arg[1]) {
-            const num2 = parseInt(arg[1]);
+		if (args[1]) {
+            const num2 = parseInt(args[1]);
 
 			if (num1 < 1)
                 return message.channel.send(`Your 1st number (${num1}) has got to be a number above 1.`);
