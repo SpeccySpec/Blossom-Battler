@@ -17,9 +17,13 @@ commands.help = new Command({
 		let category = args[0]
 		if (category) {
 			category = category.toLowerCase()
-			if (aliases[category])
-				category = aliases[category]
-			DiscordEmbed.setDescription(categories[category])
+			let pogname = aliases[category]
+			if (pogname)
+				category = pogname
+			let description = categories[category]
+			if (!description)
+				return void commands.help.call(message, [])
+			DiscordEmbed.setDescription(description)
 			for (const i in commands) {
 				if (commands[i].section == category || category == 'all') {
 					DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: commands[i].desc, inline: true})
