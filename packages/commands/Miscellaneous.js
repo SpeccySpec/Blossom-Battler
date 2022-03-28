@@ -1,6 +1,7 @@
 const categories = {
 	misc: "There is nothing much lol",
-	fun: "Fun things to use, come try them out!"
+	fun: "Fun things to use, come try them out!",
+	all: "All of the existing commands"
 }
 
 const aliases = {
