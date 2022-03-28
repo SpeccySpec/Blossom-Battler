@@ -279,7 +279,7 @@ global.Command = class {
 
 Object.assign(global, require('./index.js'));
 
-global.commands = {}
+commands = {}
 const commandFiles = fs.readdirSync(`${packPath}/commands`).filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
