@@ -8,28 +8,27 @@ commands.help = new Command({
 
 		if (args[0]) {
 			switch(args[0].toLowerCase()) {
+				case 'misc':
 				case 'miscellaneous':
 					DiscordEmbed.setDescription('There is nothing much lol')
-					for (const i in commands) {
-						if (commands[i].section == 'misc') {
-							DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: commands[i].desc, inline: true})
-						}
-					}
+					sort('misc')
 					break;
 				case 'fun':
 					DiscordEmbed.setDescription('Fun things to use, come try them out!')
-					for (const i in commands) {
-						if (commands[i].section == 'fun') {
-							DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: commands[i].desc, inline: true})
-						}
-					}
+					sort('fun')
 					break;
 				default:
 					DiscordEmbed.setDescription('This is a list of commands!')
-					for (const i in commands) {
+					sort('all')
+					break;
+			}
+
+			function sort(category) {
+				for (const i in commands) {
+					if (commands[i].section == category || category == 'all') {
 						DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: commands[i].desc, inline: true})
 					}
-					break;
+				}
 			}
 		} else {
 			const file = new Discord.MessageAttachment(`${dataPath}/images/Help.png`);
