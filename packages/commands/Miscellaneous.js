@@ -17,7 +17,7 @@ commands.help = new Command({
 		let category = args[0]
 		if (category) {
 			category = category.toLowerCase()
-			if (alises[category])
+			if (aliases[category])
 				category = aliases[category]
 			DiscordEmbed.setDescription(categories[category])
 			for (const i in commands) {
