@@ -270,19 +270,20 @@ function getPrefix(server) {
 	return 'rpg!' // for now
 }
 
-class Command {
+global.Command = class {
 	constructor(object) {
 		this.desc = object.desc
 		this.call = object.func
 	}
 }
 
-const commands = {}
+Object.assign(global, require('./index.js'));
+
+global.commands = {}
 const commandFiles = fs.readdirSync(`${packPath}/commands`).filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
 	const command = require(`${packPath}/commands/${file}`);
-	command.getCommands(commands)
 }
 
 commands.help = new Command({
