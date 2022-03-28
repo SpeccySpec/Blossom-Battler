@@ -39,17 +39,6 @@ const skillFuncs = require(packPath + '/skillFuncs.js');
 
 const RF = require(packPath + '/relicFuncs.js');
 
-// Now for specific commands
-const makeLoot = require(packPath + '/commands/loot/makeloot.js');
-const assignLoot = require(packPath + '/commands/loot/assignloot.js');
-const getLoot = require(packPath + '/commands/loot/getloot.js');
-const searchLoot = require(packPath + '/commands/loot/searchloots.js');
-const listLoot = require(packPath + '/commands/loot/listloots.js');
-const deassignLoot = require(packPath + '/commands/loot/deassignloot.js');
-const removeLoot = require(packPath + '/commands/loot/removeloot.js');
-
-const registerSkillSteps = require(packPath + '/commands/registerskill.js');
-
 //Canvas, for making custom pictures.
 const Canvas = require('canvas');
 
@@ -289,13 +278,12 @@ class Command {
 }
 
 const commands = {}
-commands.test = new Command({
-	desc: "a",
-	section: "misc",
-	func: (message, args) => {
-		message.reply("**[DEBUG]**\nThis is a test command.")
-	}
-})
+const commandFiles = fs.readdirSync(`${packPath}/commands`).filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+	const command = require(`${packPath}/commands/${file}`);
+	command.getCommands(commands)
+}
 
 commands.help = new Command({
 	desc: "Lists all of Bloom Battler's commands.",
