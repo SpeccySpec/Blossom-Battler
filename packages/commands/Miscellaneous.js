@@ -1,3 +1,12 @@
+const categories = {
+	misc: "There is nothing much lol",
+	fun: "Fun things to use, come try them out!"
+}
+
+const aliases = {
+	miscellaneous: "misc"	
+}
+
 commands.help = new Command({
 	desc: "*Args: <?Category>*\nLists all of Bloom Battler's commands.",
 	section: "misc",
@@ -5,29 +14,15 @@ commands.help = new Command({
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
 			.setTitle('List of Commands')
-
-		if (args[0]) {
-			switch(args[0].toLowerCase()) {
-				case 'misc':
-				case 'miscellaneous':
-					DiscordEmbed.setDescription('There is nothing much lol')
-					sort('misc')
-					break;
-				case 'fun':
-					DiscordEmbed.setDescription('Fun things to use, come try them out!')
-					sort('fun')
-					break;
-				default:
-					DiscordEmbed.setDescription('This is a list of commands!')
-					sort('all')
-					break;
-			}
-
-			function sort(category) {
-				for (const i in commands) {
-					if (commands[i].section == category || category == 'all') {
-						DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: commands[i].desc, inline: true})
-					}
+		let category = args[0]
+		if (category) {
+			category = category.toLowerCase()
+			if (alises[category])
+				category = alises[category]
+			DiscordEmbed.setDescription(categories[category])
+			for (const i in commands) {
+				if (commands[i].section == category || category == 'all') {
+					DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: commands[i].desc, inline: true})
 				}
 			}
 		} else {
