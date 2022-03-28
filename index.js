@@ -316,3 +316,4 @@ client.on("messageCreate", (message) => {
 })
 
 client.login(process.env.TOKEN);
+console.log(`The bot is now in session! Enjoy!`)
