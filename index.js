@@ -4,10 +4,10 @@
 ///////////////////////////////////
 
 //Discord.JS initiation.
-const Discord = require('discord.js');
-const Voice = require('@discordjs/voice');
-const Builders = require('@discordjs/builders');
-const client = new Discord.Client({
+Discord = require('discord.js');
+Voice = require('@discordjs/voice');
+Builders = require('@discordjs/builders');
+client = new Discord.Client({
 	intents: [
 		Discord.Intents.FLAGS.GUILDS,
 		Discord.Intents.FLAGS.GUILD_MEMBERS,
@@ -24,34 +24,34 @@ const client = new Discord.Client({
 });
 
 // Path to 'data' folder
-const dataPath = './data'
+dataPath = './data'
 
 // Path to 'packages' folder
-const packPath = './Packages'
+packPath = './Packages'
 
 // Bot Stuff
-const utilityFuncs = require(packPath + '/utilityFuncs.js');
-const charFuncs = require(packPath + '/charFuncs.js');
-const enemyFuncs = require(packPath + '/enemyFuncs.js');
-const attackFuncs = require(packPath + '/attackFuncs.js');
-const turnFuncs = require(packPath + '/turnFuncs.js');
-const skillFuncs = require(packPath + '/skillFuncs.js');
+utilityFuncs = require(packPath + '/utilityFuncs.js');
+charFuncs = require(packPath + '/charFuncs.js');
+enemyFuncs = require(packPath + '/enemyFuncs.js');
+attackFuncs = require(packPath + '/attackFuncs.js');
+turnFuncs = require(packPath + '/turnFuncs.js');
+skillFuncs = require(packPath + '/skillFuncs.js');
 
-const RF = require(packPath + '/relicFuncs.js');
+RF = require(packPath + '/relicFuncs.js');
 
 //Canvas, for making custom pictures.
-const Canvas = require('canvas');
+Canvas = require('canvas');
 
 //FS, for writing files.
-const fs = require('fs');
+fs = require('fs');
 
 //Request, for requesting files
-const request = require('request');
+request = require('request');
 
 // Voice Shit
-const ffmpeg = require('ffmpeg-static');
-const ytdl = require('ytdl-core');
-const http = require('http');
+ffmpeg = require('ffmpeg-static');
+ytdl = require('ytdl-core');
+http = require('http');
 
 // Daily Quote - Resets at midnight
 let dailyQuote = 'none'
@@ -90,16 +90,9 @@ setTimeout(function() {
 
 // Other Required Shit
 require('dotenv').config();
-const { isBooleanObject } = require('util/types');
-
-// Games
-let doGSM = false;
-
-// Blacksmith
-let blackSmith = {}
 
 // Elements
-const Elements = [
+Elements = [
     "strike",
     "slash",
     "pierce",
@@ -125,7 +118,7 @@ const Elements = [
     "passive"
 ]
 
-const elementEmoji = {
+elementEmoji = {
 	strike: "<:strike:877132710370480190>",
 	slash: "<:slash:877132710345338960> ",
 	pierce: "<:pierce:877132710315950101>",
@@ -154,7 +147,7 @@ const elementEmoji = {
 }
 
 // Item
-const itemTypes = [
+itemTypes = [
 	"skill",
 	"heal",
 	"healmp",
@@ -164,7 +157,7 @@ const itemTypes = [
 	"pacify"
 ]
 
-const itemTypeEmoji = {
+itemTypeEmoji = {
 	skill: '🎇',
 
 	heal: "🌀",
@@ -177,7 +170,7 @@ const itemTypeEmoji = {
 }
 
 // Status Effects
-const statusEffects = [
+statusEffects = [
     "burn",
 	"bleed",
     "freeze",
@@ -200,7 +193,7 @@ const statusEffects = [
 	"confusion"
 ]
 
-const statusEmojis = {
+statusEmojis = {
     burn: "🔥",
 	bleed: "<:bleed:906903499462307870>",
     freeze: "❄",
@@ -225,7 +218,7 @@ const statusEmojis = {
 }
 
 // Enemy Habitats
-const enmHabitats = [
+enmHabitats = [
 	"grasslands",
 	"forests",
 	"swamps",
@@ -236,7 +229,7 @@ const enmHabitats = [
 	"unknown"
 ]
 
-const weathers = [
+weathers = [
 	"rain",
 	"thunder",
 	"sunlight",
@@ -245,7 +238,7 @@ const weathers = [
 	"hail"
 ]
 
-const terrains = [
+terrains = [
 	"flaming", // 10 damage with 10% chance of burn
 	"thunder", // 1.2x to elec
 	"grassy",
@@ -266,18 +259,16 @@ const terrains = [
 	"eternaldarkness"
 ]
 
-function getPrefix(server) {
+getPrefix = (server) => {
 	return 'rpg!' // for now
 }
 
-global.Command = class {
+Command = class {
 	constructor(object) {
 		this.desc = object.desc
 		this.call = object.func
 	}
 }
-
-Object.assign(global, require('./index.js'));
 
 commands = {}
 const commandFiles = fs.readdirSync(`${packPath}/commands`).filter(file => file.endsWith('.js'));
@@ -285,30 +276,6 @@ const commandFiles = fs.readdirSync(`${packPath}/commands`).filter(file => file.
 for (const file of commandFiles) {
 	const command = require(`${packPath}/commands/${file}`);
 }
-
-commands.help = new Command({
-	desc: "Lists all of Bloom Battler's commands.",
-	section: "misc",
-	func: (message, args) => {
-		let DiscordEmbed = new Discord.MessageEmbed()
-			.setColor('#0099ff')
-			.setTitle('List of Commands')
-			.setDescription('This is a list of commands!')
-
-		if (args[0]) {
-			switch(args[0].toLowerCase()) {
-				default:
-					for (const i in commands) {
-						DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: commands[i].desc, inline: true})
-					}
-			}
-		} else {
-			for (const i in commands) DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: commands[i].desc, inline: true});
-		}
-
-		message.channel.send({embeds: [DiscordEmbed]});
-	}
-})
 
 const prefix = "rpg!"
 
