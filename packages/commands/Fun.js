@@ -202,14 +202,6 @@ commands.quote = new Command({
 })
 
 // Ship
-function getFromMention(mention) {
-	if (!mention) return;
-
-	if (mention.startsWith('<@!') && mention.endsWith('>')) {
-		mention = mention.slice(3, -1);
-		return client.users.cache.get(mention);
-	}
-}
 
 let shipPath = `${dataPath}/ships.json`
 let shipRead = fs.readFileSync(shipPath, {flag: 'as+'});
@@ -258,11 +250,12 @@ commands.ship = new Command({
 
 		for (i in shipCandidates) {
 			// Converting Mentions
-			if (shipCandidates[i].mention) {
-				if (shipCandidates[i].startsWith('<@!') && shipCandidates[i].endsWith('>')) {
-					let a = getFromMention(shipCandidates[i])
-					shipCandidates[i] = a.username
-				}
+			console.log(shipCandidates[i])
+			if (shipCandidates[i].startsWith('<@!') && shipCandidates[i].endsWith('>')) {
+				let mention = shipCandidates[i].slice(3, -1);
+				console.log(mention)
+				try {mention = client.users.cache.get(mention);} catch (e) {mention = undefined;}
+				shipCandidates[i] = mention != undefined ? mention.username : '[UNKNOWN]';
 			}
 
 			if (!shipFile[shipCandidates[i]]) {
