@@ -9,7 +9,7 @@ const aliases = {
 }
 
 commands.help = new Command({
-	desc: "*Args: {?Word: Category}*\nLists all of Bloom Battler's commands.",
+	desc: "*Args: {Word: Category}*\nLists all of Bloom Battler's commands.",
 	section: "misc",
 	func: (message, args) => {
 		let DiscordEmbed = new Discord.MessageEmbed()
@@ -32,7 +32,7 @@ commands.help = new Command({
 			}
 		} else {
 			const file = new Discord.MessageAttachment(`${dataPath}/images/Help.png`);
-			DiscordEmbed.setDescription(`If you want to check commands in which categories, we have a list of them below!\n\nIf you want to see all commands at once, type ${getPrefix(message.guild.id)}help all.\n\nArguments in <> or {} should be substituted in with other values. If they're in {}, and have a "?" within them, then they're optional.`)
+			DiscordEmbed.setDescription(`If you want to check commands in which categories, we have a list of them below!\n\nIf you want to see all commands at once, type ${getPrefix(message.guild.id)}help all.\n\nArguments in <> or {} should be substituted in with other values. If they're in {}, then they're optional.`)
 			for (let i in categories) {
 				if (i == 'all') continue
 

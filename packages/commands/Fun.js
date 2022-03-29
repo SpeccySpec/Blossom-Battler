@@ -13,7 +13,7 @@ commands.ping = new Command({
 })
 
 commands.diceroll = new Command({
-	desc: "*Args: <Num: Sides> {?Num: Dice Count}*\nRolls the specified amount of dice with the specified amount of sides.",
+	desc: "*Args: <Num: Sides> {Num: Dice Count}*\nRolls the specified amount of dice with the specified amount of sides.",
 	section: "fun",
 	func: (message, args) => {
 		if (!args[0] || args[0] === ' ' || args[0] === 'null') {
@@ -129,7 +129,7 @@ let duoScenarios = [
 ]
 
 commands.scenario = new Command({
-	desc: "*Args: {?Ping: Another Person}*\nGenerates a funny scenario that could probably easily be taken out of context.",
+	desc: "*Args: {Ping: Another Person}*\nGenerates a funny scenario that could probably easily be taken out of context.",
 	section: "fun",
 	func: (message, arg) => {
         if (arg[1]) {
