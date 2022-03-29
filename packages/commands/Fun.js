@@ -1,6 +1,6 @@
 commands.ping = new Command({
-	desc: "Pong.",
-	section: "Check for my Latency and API Latency.",
+	desc: "Check for my Latency and API Latency.",
+	section: "fun",
 	func: (message, args) => {
 		let pingVal = Date.now() - message.createdTimestamp
 		let latencyVal = Math.round(client.ws.ping)
@@ -27,50 +27,34 @@ commands.diceroll = new Command({
 
 		const num1 = parseInt(args[0]);
 
-		if (args[1]) {
-            const num2 = parseInt(args[1]);
+		const num2 = args[1] ? parseInt(args[1]) : 1
 
-			if (num1 < 1)
-                return message.channel.send(`Your 1st number (${num1}) has got to be a number above 1.`);
-			else if (num2 < 1)
-                return message.channel.send(`Your 2nd number (${num2}) has got to be a number above 1.`);
-			else if (num1 > 300)
-                return message.channel.send(`Your 1st number (${num1}) has got to be a number below 300.`);
-			else if (num2 > 300)
-                return message.channel.send(`Your 2nd number (${num2}) has got to be a number below 300.`);
+		if (num1 < 1) return message.channel.send(`Your 1st number (${num1}) has got to be a number above 1.`);
+		else if (num2 < 1)  return message.channel.send(`Your 2nd number (${num2}) has got to be a number above 1.`);
+		else if (num1 > 300) return message.channel.send(`Your 1st number (${num1}) has got to be a number below 300.`);
+		else if (num2 > 300) return message.channel.send(`Your 2nd number (${num2}) has got to be a number below 300.`);
 
-			let totalNum = 0;
-			let resultsNums = [];
-			for (let i = 0; i < num2; i++) {
-				const resultNum = Math.ceil(Math.random() * num1)
-				resultsNums.push(resultNum)
-				totalNum += resultNum;
-			};
+		let totalNum = 0;
+		let resultsNums = [];
+		for (let i = 0; i < num2; i++) {
+			const resultNum = Math.ceil(Math.random() * num1)
+			resultsNums.push(resultNum)
+			totalNum += resultNum;
+		};
 
-			resultsNums.sort(function(a, b) {return a + b})
+		resultsNums.sort(function(a, b) {return a + b})
 
-			let resultsTxt = `(${resultsNums})`
+		let resultsTxt = `(${resultsNums})`
 
-			let endTxt = `Your result after multiple rolls is ${totalNum} ${resultsTxt} after rolling a ${num2}d${num1}.`
-			if (totalNum == 69)
-				endTxt += ' Therefore, I have a [prize](https://www.youtube.com/watch?v=ub82Xb1C8os) for you :)';
+		let endTxt = `Your result ${num2 == 1 ? `` : `from multiple rolls`} is ${totalNum} ${num2 != 1 ? resultsTxt : ''} after rolling a ${num2}d${num1}.`
+		if (totalNum == 69)
+			endTxt += ' Therefore, I have a [prize](https://www.youtube.com/watch?v=ub82Xb1C8os) for you :)';
 
-			const DiscordEmbed = new Discord.MessageEmbed()
-                .setColor('#0099ff')
-                .setTitle(`${getPrefix(message.guild.id)}diceroll`)
-				.setDescription(endTxt)
-			message.channel.send({embeds: [DiscordEmbed]})
-        } else {
-			if (num1 < 1)
-                return message.channel.send(`Your number (${num1}) has got to be a number above 1.`);
-
-            let resultNum = Math.ceil(Math.random() * num1)
-			const DiscordEmbed = new Discord.MessageEmbed()
-                .setColor('#0099ff')
-                .setTitle(`${getPrefix(message.guild.id)}diceroll`)
-				.setDescription(`Your result is ${resultNum} after rolling a d${num1}.`)
-			message.channel.send({embeds: [DiscordEmbed]})
-        };
+		const DiscordEmbed = new Discord.MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle(`${getPrefix(message.guild.id)}diceroll`)
+			.setDescription(endTxt)
+		message.channel.send({embeds: [DiscordEmbed]})
 	}
 })
 
@@ -118,9 +102,9 @@ let duoScenarios = [
 	`secretly have a crush on eachother, but you don't have the courage.`,
 	`are in the middle of a Pokemon battle! Who prevails is up to you.`,
 	`trades a ${tradePkmn[Math.round(Math.random() * tradePkmn.length)]} for a ${tradePkmn[Math.round(Math.random() * tradePkmn.length)]}.`,
-	`play a competitve video game together: Super Smash Bros!`,
-	`play a competitve video game together: Mario Kart 8!`,
-	`play a competitve video game together: Kirby's Dream Course!`,
+	`play a competitive video game together: Super Smash Bros!`,
+	`play a competitive video game together: Mario Kart 8!`,
+	`play a competitive video game together: Kirby's Dream Course!`,
 	`play a cooperative video game together: New Super Mario Bros U!`,
 	`play a cooperative video game together: Miitopia!`,
 	`play a cooperative video game together: Pokemon: Let's Go!`,
@@ -135,7 +119,7 @@ let duoScenarios = [
 	`travel through space to get to Mars! As they land, they discover many locations, single celled organisms and overall, just have fun!\nSo endearing!`,
 	`are sister and brother.`,
 	`are brother and sister.`,
-	`are agressive towards eachother, as one is a bully, bullying the other.\nAfter 4 years of constant conflict, a friend talks them to their senses, and now, the two are best of friends! 🤔 So unexpected! 🤔`,
+	`are aggressive towards eachother, as one is a bully, bullying the other.\nAfter 4 years of constant conflict, a friend talks them to their senses, and now, the two are best of friends! 🤔 So unexpected! 🤔`,
 	`lean in for a kiss, and kiss! Hehe!\n💏 So Kawaii 💏`,
 	`'s pets get along very well together!`,
 	`stick together during college. Everyone else seems so scary, as if they were from a foreign world.`,
@@ -145,7 +129,7 @@ let duoScenarios = [
 ]
 
 commands.scenario = new Command({
-	desc: "*Args: {?Ping: Another Person}*\nGenerates a funny scenario that could probably easilly be taken out of context.",
+	desc: "*Args: {?Ping: Another Person}*\nGenerates a funny scenario that could probably easily be taken out of context.",
 	section: "fun",
 	func: (message, arg) => {
         if (arg[1]) {
