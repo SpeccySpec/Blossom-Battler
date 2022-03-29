@@ -211,11 +211,21 @@ function getFromMention(mention) {
 	}
 }
 
+let shipPath = `${dataPath}/ships.json`
+let shipRead = fs.readFileSync(shipPath, {flag: 'as+'});
+
+if (!shipRead || shipRead == "" || shipRead == " ") {
+	shipRead = "{}"
+	fs.writeFileSync(shipPath, shipRead);
+}
+
+let shipFile = JSON.parse(shipRead);
+
 commands.ship = new Command({
 	desc: "*<Word: Person #1> {?Word: Person #2}*\nShip yourself with someone... or ship two seperate people! It's funny, trust me.",
 	section: "fun",
 	func: (message, args) => {
-		if (!args[1]) return message.channel.send(`Please specify at least one person who you want to ship yourself with, or two if you want to ship two different people.`);
+		if (!args[0]) return message.channel.send(`Please specify at least one person who you want to ship yourself with, or two if you want to ship two different people.`);
 
 		// Undefined
 		let allUndefined = true;
@@ -236,7 +246,7 @@ commands.ship = new Command({
 			return false
 		}
 
-		for (i in args) {
+		for (const i in args) {
 			if (args[i].startsWith('<@!') && args[i].endsWith('>')) {
 				let a = getFromMention(args[i])
 				args[i] = a.username
@@ -248,9 +258,7 @@ commands.ship = new Command({
 			args[0] = message.author.username
 		}
 
-		let shipCandidates = []
-		shipCandidates = arg
-		shipCandidates.shift()
+		let shipCandidates = args
 
 		// Converting Mentions
 		for (i in shipCandidates) {
@@ -275,17 +283,6 @@ commands.ship = new Command({
 		let filtered = new Set(shipCandidates);
 		shipCandidates = [...filtered]
 
-		//Fetching Love
-		let shipPath = dataPath+'/Ship/shipParameters.json'
-		let shipRead = fs.readFileSync(shipPath, {flag: 'as+'});
-
-		if (!shipRead || shipRead == "" || shipRead == " ") {
-			shipRead = "{}"
-			fs.writeFileSync(shipPath, JSON.stringify(shipFile, null, '    '));
-		}
-
-		let shipFile = JSON.parse(shipRead);
-
 		let loveParameters = []
 		let loveResults = []
 		let loveCloseness = 0
@@ -301,7 +298,6 @@ commands.ship = new Command({
 			}
 
 			let candidate = shipFile[shipCandidates[i]]
-
 			loveParameters.push(candidate.loveParameter)
 		}
 
