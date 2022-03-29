@@ -132,7 +132,7 @@ let duoScenarios = [
 ]
 
 commands.scenario = new Command({
-	desc: "*Args: {?Ping: Another Person}*\nGenerates a funny scenario that could probably easily be taken out of context.",
+	desc: "*Args: {Ping: Another Person}*\nGenerates a funny scenario that could probably easily be taken out of context.",
 	section: "fun",
 	func: (message, args) => {
         if (args[0]) {
@@ -151,8 +151,8 @@ commands.scenario = new Command({
             } else {
                 const DiscordEmbed = new Discord.MessageEmbed()
                     .setColor('#0099ff')
-                    .setTitle(`${message.author.username} & ${args[1]}`)
-					.setDescription(`${message.author.username} & ${args[1]} are not related in any way.`)
+                    .setTitle(`${message.author.username} & ${args[0]}`)
+					.setDescription(`${message.author.username} & ${args[0]} are not related in any way.`)
                 message.channel.send({embeds: [DiscordEmbed]})
             }
         } else {
@@ -222,7 +222,7 @@ if (!shipRead || shipRead == "" || shipRead == " ") {
 let shipFile = JSON.parse(shipRead);
 
 commands.ship = new Command({
-	desc: "*<Word: Person #1> {?Word: Person #2}*\nShip yourself with someone... or ship two seperate people! It's funny, trust me.",
+	desc: "*<Word: Person #1> {Word: Person #2}*\nShip yourself with someone... or ship two seperate people! It's funny, trust me.",
 	section: "fun",
 	func: (message, args) => {
 		if (!args[0]) return message.channel.send(`Please specify at least one person who you want to ship yourself with, or two if you want to ship two different people.`);
