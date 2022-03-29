@@ -222,7 +222,7 @@ if (!shipRead || shipRead == "" || shipRead == " ") {
 let shipFile = JSON.parse(shipRead);
 
 commands.ship = new Command({
-	desc: "*<Word: Person #1> {Word: Person #2}*\nShip yourself with someone... or ship two seperate people! It's funny, trust me.",
+	desc: "*<Word: Person #1> {Word: Person #2} {...}*\nShip yourself with someone... or ship two separate people, or more! It's funny, trust me.",
 	section: "fun",
 	func: (message, args) => {
 		if (!args[0]) return message.channel.send(`Please specify at least one person who you want to ship yourself with, or two if you want to ship two different people.`);
@@ -230,7 +230,7 @@ commands.ship = new Command({
 		// Undefined
 		let allUndefined = true;
 		for (const i in args) {
-			if (args[i].toLowerCase() != 'undefined') allUndefined = false;
+			if (args[i].toLowerCase() != 'undefined') { allUndefined = false; break; }
 		}
 
 		if (allUndefined) {
@@ -246,13 +246,6 @@ commands.ship = new Command({
 			return false
 		}
 
-		for (const i in args) {
-			if (args[i].startsWith('<@!') && args[i].endsWith('>')) {
-				let a = getFromMention(args[i])
-				args[i] = a.username
-			}
-		}
-
 		if (!args[1]) {
 			args[1] = args[0]
 			args[0] = message.author.username
@@ -260,22 +253,31 @@ commands.ship = new Command({
 
 		let shipCandidates = args
 
-		// Converting Mentions
-		for (i in shipCandidates) {
-			if (shipCandidates[i].mention)
-				console.log("true");
-		}
-
-		// Getting Candidates
 		let resulttext = "**Candidates:** \n"
-		for (i in shipCandidates)
-			resulttext = resulttext + `:small_orange_diamond: ${shipCandidates[i]} \n`
-		
-		//Splicing Name
 		let splicedName = ""
+
 		for (i in shipCandidates) {
-			let nameToCut
-			nameToCut = shipCandidates[i].slice(Math.floor(shipCandidates[i].length / shipCandidates.length * i), Math.round(shipCandidates[i].length / shipCandidates.length * (i + 1)))
+			// Converting Mentions
+			if (shipCandidates[i].mention) {
+				if (shipCandidates[i].startsWith('<@!') && shipCandidates[i].endsWith('>')) {
+					let a = getFromMention(shipCandidates[i])
+					shipCandidates[i] = a.username
+				}
+			}
+
+			if (!shipFile[shipCandidates[i]]) {
+				shipFile[shipCandidates[i]] = {
+					loveParameter: Math.round(Math.random() * 100),
+				}
+
+				fs.writeFileSync(shipPath, JSON.stringify(shipFile, null, '    '));
+			}
+
+			// Getting Candidates
+			resulttext += `:small_orange_diamond: ${shipCandidates[i]} \n`
+
+			//Splicing Name
+			let nameToCut = shipCandidates[i].slice(Math.round(shipCandidates[i].length / shipCandidates.length * i), Math.round((shipCandidates[i].length / shipCandidates.length * i + shipCandidates[i].length / shipCandidates.length)))
 			splicedName += nameToCut
 		}
 
@@ -289,14 +291,6 @@ commands.ship = new Command({
 		let finalLoveCloseness = 0
 
 		for (i in shipCandidates) {
-			if (!shipFile[shipCandidates[i]]) {
-				shipFile[shipCandidates[i]] = {
-					loveParameter: Math.round(Math.random() * 100),
-				}
-
-				fs.writeFileSync(shipPath, JSON.stringify(shipFile, null, '    '));
-			}
-
 			let candidate = shipFile[shipCandidates[i]]
 			loveParameters.push(candidate.loveParameter)
 		}
@@ -306,13 +300,10 @@ commands.ship = new Command({
 
 			if (loveParameters.length > 1) {
 				if (loveParameters[secondID] != undefined) {
-					loveResults.push(loveParameters[i])
-					loveResults.push(loveParameters[secondID])
-					loveResults.sort((a,b) => a - b)
+					loveResults = [loveParameters[i], loveParameters[secondID]].sort((a,b) => a - b)
 
 					loveCloseness = loveResults[1] - loveResults[0]
 					finalLoveCloseness += 100 - loveCloseness
-					loveResults = []
 				}
 			} else
 				finalLoveCloseness += loveParameters[i]
