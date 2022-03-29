@@ -33,8 +33,19 @@ commands.help = new Command({
 		} else {
 			const file = new Discord.MessageAttachment(`${dataPath}/images/Help.png`);
 			DiscordEmbed.setDescription(`If you want to check commands in which categories, we have a list of them below!\n\nIf you want to see all commands at once, type ${getPrefix(message.guild.id)}help all.\n\nArguments in <> or {} should be substituted in with other values. If they're in {}, and have a "?" within them, then they're optional.`)
-			DiscordEmbed.fields.push({name: `Miscellaneous`, value: 'There is nothing much lol', inline: true});
-			DiscordEmbed.fields.push({name: `Fun`, value: 'Fun things to use, come try them out!', inline: true});
+			for (let i in categories) {
+				if (i == 'all') continue
+
+				let aliasName = i
+				for (const a in aliases) {
+					if (aliases[a] == i) {
+						aliasName = a.toString()
+						break
+					}
+				}
+				console.log(aliasName)
+				DiscordEmbed.fields.push({name: aliasName.charAt(0).toUpperCase() + aliasName.slice(1), value: categories[i], inline: true});
+			}
 			DiscordEmbed.setThumbnail('attachment://Help.png')
 
 			return message.channel.send({embeds: [DiscordEmbed], files: [file]})
