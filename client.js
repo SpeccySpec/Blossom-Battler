@@ -337,11 +337,38 @@ makeDirectory = (dir) => {
 	return directories;
 }
 
+typeParsers = {
+	Num: arg => {return parseInt(arg) || undefined},
+	Decimal: arg => {return parseFloat(arg) || undefined},
+	Word: arg => {return typeParsers.Ping(arg) || typeParsers.Channel(arg) ? undefined : arg},
+	Ping: arg => {},
+	Channel: arg => {}, //placeholders
+	ID: arg => {}
+}
+
 Command = class {
 	constructor(object) {
 		this.desc = object.desc
 		this.section = object.section
-		this.call = object.func
+		this.func = object.func
+		this.args = object.args
+	}
+
+	call(message, rawargs) {
+		const error = message.channel.send
+		let args = []
+		for (const [i, arg] of this.args.entries()) {
+			const rawarg = rawargs[i]
+			if (rawarg) {
+				const parser = typeParsers[arg.type]
+				const parsedArg = parser ? parser(rawarg) : rawarg
+				if (!parsedArg) return void error("Invalid argument for \"" + arg.name + "\", it has to be of type \"" + arg.type + "\".")
+				args.push(parsedArg)
+			} else if (arg.forced) {
+				return void error(arg.forced)
+			}
+		}
+		this.func(message, args)
 	}
 }
 

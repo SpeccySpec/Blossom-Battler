@@ -14,7 +14,12 @@ const aliases = {
 commands.help = new Command({
 	desc: "*Args: {Word: Category}*\nLists all of Bloom Battler's commands.",
 	section: "misc",
-//	args: [["Word", "Category", false]], - [["Type", "What For", Boolean for Manditory]]
+	args: [
+		{
+			name: "Category",
+			type: "Word"
+		}
+	],
 	func: (message, args) => {
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
@@ -47,7 +52,6 @@ commands.help = new Command({
 						break
 					}
 				}
-				console.log(aliasName)
 				DiscordEmbed.fields.push({name: aliasName.charAt(0).toUpperCase() + aliasName.slice(1), value: categories[i], inline: true});
 			}
 			DiscordEmbed.setThumbnail('attachment://Help.png')

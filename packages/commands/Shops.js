@@ -13,7 +13,7 @@ commands.openshop = new Command({
             const DiscordEmbed = new Discord.MessageEmbed()
                 .setColor('#0099ff')
                 .setTitle(`${prefix}openshop`)
-				.setDescription('*Args: <Word: Name> <Snowflake: Channel> <Continuous Words: Items...>*\nOpens a shop with <Name> at <Channel>, selling all of the <Items> listed!')
+				.setDescription(commands.openshop.desc)
             return message.channel.send({embeds: [DiscordEmbed]})
         }
 		
