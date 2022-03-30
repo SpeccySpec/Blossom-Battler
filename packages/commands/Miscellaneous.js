@@ -1,6 +1,9 @@
 const categories = {
-	misc: "There is nothing much lol",
+	misc: "Other things that don't fit into the other sections.",
 	fun: "Fun things to use, come try them out!",
+	food: "Tasty, tasty food! All for you to try out!",
+	shops: "Need Items? Open shops and sell them!",
+	battle: "The main part of Bloom Battler is well... the battles of course!",
 	all: "All of the existing commands"
 }
 
@@ -11,6 +14,7 @@ const aliases = {
 commands.help = new Command({
 	desc: "*Args: {Word: Category}*\nLists all of Bloom Battler's commands.",
 	section: "misc",
+//	args: [["Word", "Category", false]], - [["Type", "What For", Boolean for Manditory]]
 	func: (message, args) => {
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#0099ff')

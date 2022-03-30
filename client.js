@@ -256,8 +256,85 @@ terrains = [
 	"eternaldarkness"
 ]
 
+Targets = [
+	'one',
+	'ally',
+	'allopposing',
+	'allallies',
+	'caster',
+	'everyone',
+	'random',
+	'randomopposing'
+]
+
 getPrefix = (server) => {
 	return 'rpg!' // for now
+}
+
+// Clone Object
+objClone = (source) => {
+	if (Object.prototype.toString.call(source) === '[object Array]') {
+		let clone = []
+
+		for (let i = 0; i < source.length; i++)
+			clone[i] = objClone(source[i]);
+
+		return clone
+	} else if (typeof(source)=="object") {
+		let clone = {}
+
+		for (let prop in source) {
+			if (source.hasOwnProperty(prop)) clone[prop] = objClone(source[prop]);
+		}
+
+		return clone
+	} else {
+		return source
+	}
+}
+
+// setUpFile
+fileStore = {};
+setUpFile = (file) => {
+	if (fileStore[file]) return fileStore[file];
+	let fileRead = fs.readFileSync(file, {flag: 'as+'});
+
+	if (!fileRead || fileRead == "" || fileRead == " ") {
+		fileRead = "{}"
+		fs.writeFileSync(file, fileRead);
+	}
+
+	let fileFile = JSON.parse(fileRead);
+	fileStore[file] = fileFile
+	return fileFile;
+}
+
+// makeDirectory
+makeDirectory = (dir) => {
+	let directories = [dir];
+
+	for (let i = 0; i < dir.length; i++) {
+		if (dir.charAt(i) == '/') {
+			let dire = dir.slice(0, i);
+			if (!fs.existsSync(dire)) directories.push(dire);
+		}
+	}
+	
+	if (directories.length < 1) return;
+
+	for (let i in directories) {
+		if (!fs.existsSync(directories[i])) {
+			fs.mkdir(directories[i], function(err) {
+				if (err) {
+					console.log(err)
+				} else {
+					console.log(`Created directory at "${directories[i]}"`)
+				}
+			})
+		}
+	}
+	
+	return directories;
 }
 
 Command = class {
@@ -275,9 +352,29 @@ for (const file of commandFiles) {
 	const command = require(`${packPath}/commands/${file}`);
 }
 
-const prefix = "rpg!"
-
 client.on("guildCreate", (guild) => {
+	makeDirectory(`${dataPath}/json/${message.guild.id}`);
+
+	// Set up File Data
+	setUpFile(`${dataPath}/json/skills.json`)
+
+	// Server Data
+	setUpFile(`${dataPath}/json/${message.guild.id}/server.json`)
+	setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`)
+	setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
+	setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+	setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
+	setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
+	setUpFile(`${dataPath}/json/${message.guild.id}/blacksmiths.json`)
+
+	// Character Data
+	setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
+	setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
+	setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
+	
+	// Battle Data
+	setUpFile(`${dataPath}/json/${message.guild.id}/battle-${message.channel.id}.json`)
+
 	//make an embed with a welcome message
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor('#0099ff')
@@ -290,9 +387,9 @@ client.on("guildCreate", (guild) => {
 			- Chests
 			- Enemies
 			- Etc.**
-			I can also do a multitiude of misc. things.`)
+			I can also do a multitiude of misc. things!`)
 		.addField('How can I start?', `Type ${getPrefix(guild.id)}help to get started!`)
-	
+
 	let channel = guild.channels.cache.find(
 		(ch) => ch.type === 'GUILD_TEXT',
 	);
@@ -304,7 +401,11 @@ client.on("guildCreate", (guild) => {
 		.then(() => channel.send({embeds: [DiscordEmbed]}))
 })
 
+prefix = 'rpg!';
 client.on("messageCreate", (message) => {
+	makeDirectory(`${dataPath}/json/${message.guild.id}`);
+
+	// Register commands
 	if (!message.content.startsWith(prefix)) return;
 	let args = [...message.content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
 	let command = commands[args.shift()];

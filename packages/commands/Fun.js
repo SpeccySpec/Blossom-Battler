@@ -202,17 +202,6 @@ commands.quote = new Command({
 })
 
 // Ship
-
-let shipPath = `${dataPath}/ships.json`
-let shipRead = fs.readFileSync(shipPath, {flag: 'as+'});
-
-if (!shipRead || shipRead == "" || shipRead == " ") {
-	shipRead = "{}"
-	fs.writeFileSync(shipPath, shipRead);
-}
-
-let shipFile = JSON.parse(shipRead);
-
 commands.ship = new Command({
 	desc: "*<Word: Person #1> {Word: Person #2} {...}*\nShip yourself with someone... or ship two separate people, or more! It's funny, trust me.",
 	section: "fun",
@@ -243,7 +232,8 @@ commands.ship = new Command({
 			args[0] = message.author.username
 		}
 
-		let shipCandidates = args
+		let shipFile = setUpFile(`${dataPath}/json/ships.json`);
+		let shipCandidates = args;
 
 		let resulttext = "**Candidates:** \n"
 		let splicedName = ""
@@ -263,7 +253,7 @@ commands.ship = new Command({
 					loveParameter: Math.round(Math.random() * 100),
 				}
 
-				fs.writeFileSync(shipPath, JSON.stringify(shipFile, null, '    '));
+				fs.writeFileSync(`${dataPath}/json/ships.json`, JSON.stringify(shipFile, null, '    '));
 			}
 
 			// Getting Candidates

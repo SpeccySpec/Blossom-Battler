@@ -1,0 +1,114 @@
+{
+    "0": {
+		"title": "Guide to Battles! - Ramia",
+		"desc": "Hii, I'm Ramia, the writer to this guide! Bloom Battler is a Discord Bot that allows you to create characters, skills, items and more! Flick through it with 'rpg!guide <Page Number>'!"
+	},
+	
+	"1": {
+		"title": "Page 1 - Character Creation",
+		"desc": "Let's start with the most essential part! **Character creation**!\nWe'll be covering the command 'rpg!registerchar'. If you use it with no arguments, you'll get information about what each stat is for; I'm here to tell you about how characters here work in general!\n\nCharacters in RPGBot can be used for **battle**... well mostly battle. They can grow trust to other characters, have pets help... and more! Let's get started with the biggest parts.",
+		"fields": [
+			{
+				"title": "Stats",
+				"text": "Stats are crucial. They WILL make or break a character. They WILL affect their playstyle. They WILL affect their usefulness. Arguably, these are the most important part of a character. Here are some reccomendations:\n**Healers** are usually magic based with average endurance & HP.\n**Physical Attackers** come in 3 kinds, __Hard-Hitting__, __Average__ and __Agile__. __Hard-Hitting__ **Physical Attackers** usually have high endurance and HP, with less MP. Further down, they become faster and have less endurance.\n**Magic Attackers** are usually focused on __one element__, with another as a backup. The main element is often __stronger__ than the backup element. They can also be __Hard-Hitting__, __Average__ or __Agile__. Please read the next page to figure out how to keep your characters balanced.",
+				"inline": false
+			},
+			{
+				"title": "Skills",
+				"text": "Skills are the attacks characters will use in battle. Each usually has a different property that makes it different from others. Every skill has an **element**, **power**, **cost**, and **accuracy**. The rest is extra things that make them different to others, like hit count, critical hit chance, and other things. You can register your own skills with 'rpg!registerskill', 'rpg!registerstatus' and 'rpg!registerpassive'. You can use all 3 with no arguments to learn more. You can give a character a skill with 'rpg!learnskill' and 'rpg!replaceskill'",
+				"inline": false
+			},
+			{
+				"title": "Trust, Pets & Bios",
+				"text": "Characters will build trust with others by performing certain actions in battle, for example, healing, using items or shielding them. Using the 'rpg!trustxp' command out of battle can also increment trust. There are also pets, which will attack more often with higher trust. You can set and see bios with 'rpg!setbioinfo' and 'rpg!getbio' respectively.",
+				"inline": false
+			}
+		]
+	},
+	
+	"2": {
+		"title": "Page 2 - Balance and what NOT to do.",
+		"desc": "Whether you're having fun or doing this seriously, there are __ALWAYS__ things that will make it unfun for others and make it seem like you're going overboard. I'll go over these things on this page.",
+		"fields": [
+			{
+				"title": "Do NOT Overstat",
+				"text": "Do you like the term ''overstat''? Yeah I made it just now!\nOverstatting is giving a character... say, __high endurance__ when they **don't need it**, or __high agility__ when they **shouldn't have it**. It's annoying, makes then undefeatable, and removes the whole point of *challenge* in your battles! What you also **shouldn't** do is giving many stats the same value, you will have many issues in doing this.",
+				"inline": false
+			},
+			{
+				"title": "Element Mastery",
+				"text": "This probably won't apply to litteral glass, but do NOT use too many elements. **ONE, TWO OR RARELY THREE WILL BE ENOUGH, THAT IS IT.** Using too many elements will make *you* the solution to everything, and will also make you undefeatable due to you always having the opposing weakness. So yeah just don't. I should probably also mention that __eight skills should be the **MAXIMUM** for characters__.",
+				"inline": false
+			},
+			{
+				"title": "Affinity Overusage",
+				"text": "Do NOT overuse affinities. You should not resist (in some way) too many elements. Infact, two or three at most should be enough for your character. There may be special cases where this is ok, in terms of weaknesses, for example, a character with <:passive:906874477210648576>**Wonder Guard**. Generally though, don't do this.",
+				"inline": false
+			}
+		]
+	},
+	
+	"3": {
+		"title": "Page 3 - Battle System",
+		"desc": "This will go over the Battle System itself! It's very simple and easy to understand but battles can be confusing if you're not following along with it! With **all the listed commands**, you should use the **sided ID** of the character, which is usually to the left of their name & HP, like this!\n**0**: Ramia *(200/200HP) (100/100MP)*",
+		"fields": [
+			{
+				"title": "Using a Melee Attack",
+				"text": "Use the command when it is your turn: **''rpg!usemelee <User> <Target>''**\nThis will use the character's melee attack against the foe. It is a weak attack that should only be used when you're out of other options.",
+				"inline": false
+			},
+			{
+				"title": "Using a Skill",
+				"text": "Use the command when it is your turn: **''rpg!usemove <User> <Target> <Skill Name>''**\nThis will use the specified skill if the character knows it. You'll know if they know the skill because it'll be listed on the right side of the embed like this: \n\n                      %RANDOMSKILL%\n\n Each skill has an element, and the opponent may be weak to, resist, block, repel or drain it.",
+				"inline": false
+			},
+			{
+				"title": "Using an Item",
+				"text": "Use the command when it is your turn: **''rpg!useitem <User> <Item Name> <Target>''**\nThis will use the specified item if the party has it. There's weapons & armor, healing items, reviving items and more.",
+				"inline": false
+			},
+			{
+				"title": "Guarding",
+				"text": "Use the command when it is your turn: **''rpg!guard <User>''**\nSimply guards from the next attack. This halves the damage recieved and removes weakness affinities from the attack.",
+				"inline": false
+			},
+			{
+				"title": "Tactics",
+				"text": "Use the command when it is your turn: **''rpg!tactics <User> <Type> <Target>''**\nYou can either run, negotiate or tweak your party here.\nRunning away has a chance to fail if your speed stat is lower than the enemies' average. You cannot run from bosses.\nYou can have backup party members to switch around with regular party members mid-battle. Only the leader of the party can do it, and it uses up their turn.\nAnd negotiation... this is explained on the next page.",
+				"inline": false
+			}
+		]
+	},
+	
+	"4": {
+		"title": "Page 4 - Negotiation",
+		"desc": "You can negotiate with enemies to befriend and pacify them! Pacifying enough of the same enemy will allow you to keep them as an ally.",
+		"fields": [
+			{
+				"title": "The Command",
+				"text": "To negotiate with an enemy, use the command **''rpg!tactics <User> Pacify <Target>''**. It is part of the tactics menu. Each enemy usually has different ways to pacify them, think of Undertale or Deltarune's sparing system.",
+				"inline": false
+			},
+			{
+				"title": "Uses of Pacifying",
+				"text": "When you pacify an enemy, they will be added to the party's pets. You can switch between pets and use their different skills to fight, pacify other enemies, or you can switch between pets. Only the team's leader (the first in the order) will be able to control the pet, so others should guide the leader on what to do",
+				"inline": false
+			},
+			{
+				"title": "Attacking with Pets (petskill)",
+				"text": "The pet's default stats will be used to strike the foe. Pets have 1 **special** skill,\n for example: \n%RANDOMSKILL%\nand use that when attacking.",
+				"inline": false
+			},
+			{
+				"title": "Pacifying with Pets (pacify)",
+				"text": "The pet can pacify foes the same way their team can - Use the same inputs for this.",
+				"inline": false
+			},
+			{
+				"title": "Switching Pets (switchpet)",
+				"text": "You can switch pets mid-battle to use a different **special skill**! You can only switch with pets you have, and this will drain the pet's turn.",
+				"inline": false
+			}
+		]
+	}
+}
