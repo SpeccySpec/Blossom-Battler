@@ -53,6 +53,9 @@ ffmpeg = require('ffmpeg-static');
 ytdl = require('ytdl-core');
 http = require('http');
 
+//hatebin, for converting long walls of text into links
+hastebin = require('hastebin-gen');
+
 // Daily Quote - Resets at midnight
 let dailyQuote = 'none'
 
