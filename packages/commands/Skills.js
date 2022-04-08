@@ -70,7 +70,7 @@ commands.registerskill = new Command({
 			cost: cost,
 			costtype: costtype,
 			target: args[8].toLowerCase(),
-			originalAuthor: message.guild.id
+			originalAuthor: message.author.id
 		}
 		
 		if (parseFloat(args[5]) > 0) skillDefs.crit = parseFloat(args[5]);
