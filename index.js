@@ -13,6 +13,7 @@ const manager = new ShardingManager('./client.js', {
 
 // Emitted when a shard is created
 manager.on('shardCreate', (shard) => console.log(`Shard ${shard.id} launched`));
+process.on('unhandledRejection', err => { console.log(err.stack, "error"); });
 
 // Spawn your shards
 manager.spawn();

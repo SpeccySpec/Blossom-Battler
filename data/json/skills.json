@@ -1,0 +1,15 @@
+{
+    "Agi": {
+        "name": "Agi",
+        "type": "fire",
+        "pow": 60,
+        "hits": 1,
+        "acc": 95,
+        "cost": 4,
+        "costtype": "mp",
+        "target": "one",
+        "status": "burn",
+        "statuschance": 5,
+        "desc": "The user sets the foe alight, with a low chance to inflict burning."
+    }
+}
