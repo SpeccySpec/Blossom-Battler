@@ -1,0 +1,416 @@
+{
+    "official": {
+        "cones": {
+            "Waffle": {
+                "name": "Waffle",
+                "image": "image"
+            },
+            "Sugar": {
+                "name": "Sugar",
+                "image": "image"
+            },
+            "Cake": {
+                "name": "Cake",
+                "image": "image"
+            }
+        },
+        "flavors": {
+            "Chocolate": {
+                "name": "Chocolate",
+                "image": "image"
+            },
+            "Vanilla": {
+                "name": "Vanilla",
+                "image": "image"
+            },
+            "Acal Berry": {
+                "name": "Acal Berry",
+                "image": "image"
+            },
+            "Almond": {
+                "name": "Almond",
+                "image": "image"
+            },
+            "Mojito": {
+                "name": "Mojito",
+                "image": "image"
+            },
+            "Gingerbread": {
+                "name": "Gingerbread",
+                "image": "image"
+            },
+            "Salted Caramel": {
+                "name": "Salted Caramel",
+                "image": "image"
+            },
+            "Caramel": {
+                "name": "Caramel",
+                "image": "image"
+            },
+            "Marshmallow": {
+                "name": "Marshmallow",
+                "image": "image"
+            },
+            "Raspberry": {
+                "name": "Raspberry",
+                "image": "image"
+            },
+            "Coffee": {
+                "name": "Coffee",
+                "image": "image"
+            },
+            "Mocha": {
+                "name": "Mocha",
+                "image": "image"
+            },
+            "Lamington": {
+                "name": "Lamington",
+                "image": "image"
+            },
+            "Saffron": {
+                "name": "Saffron",
+                "image": "image"
+            },
+            "Banana Foster": {
+                "name": "Banana Foster",
+                "image": "image"
+            },
+            "Buttercake": {
+                "name": "Buttercake",
+                "image": "image"
+            },
+            "Rainbow": {
+                "name": "Rainbow",
+                "image": "image"
+            },
+            "Strawberry": {
+                "name": "Strawberry",
+                "image": "image"
+            },
+            "Orange": {
+                "name": "Orange",
+                "image": "image"
+            },
+            "Lemon": {
+                "name": "Lemon",
+                "image": "image"
+            },
+            "Lime": {
+                "name": "Lime",
+                "image": "image"
+            },
+            "Apple": {
+                "name": "Apple",
+                "image": "image"
+            },
+            "Sour Apple": {
+                "name": "Sour Apple",
+                "image": "image"
+            },
+            "Blueberry": {
+                "name": "Blueberry",
+                "image": "image"
+            },
+            "Blackberry": {
+                "name": "Blackberry",
+                "image": "image"
+            },
+            "Cherry": {
+                "name": "Cherry",
+                "image": "image"
+            },
+            "Bear Claw": {
+                "name": "Bear Claw",
+                "image": "image"
+            },
+            "Cinnamon": {
+                "name": "Cinnamon",
+                "image": "image"
+            },
+            "Cinnamon Toast": {
+                "name": "Cinnamon Toast",
+                "image": "image"
+            },
+            "Kaffir Lime": {
+                "name": "Kaffir Lime",
+                "image": "image"
+            },
+            "Margarita": {
+                "name": "Margarita",
+                "image": "image"
+            },
+            "Italian Cherry": {
+                "name": "Italian Cherry",
+                "image": "image"
+            },
+            "Butter": {
+                "name": "Butter",
+                "image": "image"
+            },
+            "Spumoni": {
+                "name": "Spumoni",
+                "image": "image"
+            },
+            "Asparagus": {
+                "name": "Asparagus",
+                "image": "image"
+            },
+            "Birthday Cake": {
+                "name": "Birthday Cake",
+                "image": "image"
+            },
+            "Mint": {
+                "name": "Mint",
+                "image": "image"
+            },
+            "Mint Chocolate Chip": {
+                "name": "Mint Chocolate Chip",
+                "image": "image"
+            },
+            "Banana": {
+                "name": "Banana",
+                "image": "image"
+            },
+            "Pistachio": {
+                "name": "Pistachio",
+                "image": "image"
+            },
+            "Grape": {
+                "name": "Grape",
+                "image": "image"
+            },
+            "Mango": {
+                "name": "Mango",
+                "image": "image"
+            },
+            "Neapolitan": {
+                "name": "Neapolitan",
+                "image": "image"
+            },
+            "Red Velvet": {
+                "name": "Red Velvet",
+                "image": "image"
+            },
+            "Carrot Cake": {
+                "name": "Carrot Cake",
+                "image": "image"
+            },
+            "Superman": {
+                "name": "Superman",
+                "image": "image"
+            },
+            "Black Sesame": {
+                "name": "Black Sesame",
+                "image": "image"
+            },
+            "Licorice": {
+                "image": "image"
+            },
+            "Peppermint": {
+                "name": "Peppermint",
+                "image": "image"
+            },
+            "Wine": {
+                "name": "Wine",
+                "image": "image"
+            },
+            "Straciatella": {
+                "name": "Straciatella",
+                "image": "image"
+            },
+            "Lucuma": {
+                "name": "Lucuma",
+                "image": "image"
+            },
+            "Ube": {
+                "name": "Ube",
+                "image": "image"
+            },
+            "Pineapple": {
+                "name": "Pineapple",
+                "image": "image"
+            },
+            "Chocolate Fudge": {
+                "name": "Chocolate Fudge",
+                "image": "image"
+            },
+            "Lemon Sorbet": {
+                "name": "Lemon Sorbet",
+                "image": "image"
+            },
+            "Strawberry Shortcake": {
+                "name": "Strawberry Shortcake",
+                "image": "image"
+            },
+            "Chocolate Cherry Fudge": {
+                "name": "Chocolate Cherry Fudge",
+                "image": "image"
+            },
+            "Bubblegum": {
+                "name": "Bubblegum",
+                "image": "image"
+            },
+            "Cotton Candy": {
+                "name": "Cotton Candy",
+                "image": "image"
+            },
+            "Spearmint": {
+                "name": "Spearmint",
+                "image": "image"
+            },
+            "Smurf": {
+                "name": "Smurf",
+                "image": "image"
+            },
+            "Green Tea": {
+                "name": "Green Tea",
+                "image": "image"
+            },
+            "Milk": {
+                "name": "Milk",
+                "image": "image"
+            },
+            "Dark Chocolate": {
+                "name": "Dark Chocolate",
+                "image": "image"
+            },
+            "Milk Chocolate": {
+                "name": "Milk Chocolate",
+                "image": "image"
+            },
+            "Gold Medal Ribbon": {
+                "name": "Gold Medal Ribbon",
+                "image": "image"
+            },
+            "Alphonso And Cream": {
+                "name": "Alphonso And Cream",
+                "image": "image"
+            },
+            "Papaya Pineapple": {
+                "name": "Papaya Pineapple",
+                "image": "image"
+            },
+            "Papaya": {
+                "name": "Papaya",
+                "image": "image"
+            },
+            "Cookies And Cream": {
+                "name": "Cookies And Cream",
+                "image": "image"
+            },
+            "Durian": {
+                "name": "Durian",
+                "image": "image"
+            },
+            "Lavender": {
+                "name": "Lavender",
+                "image": "image"
+            },
+            "Orange Custard Chocolate Chip": {
+                "name": "Orange Custard Chocolate Chip",
+                "image": "image"
+            },
+            "Chocolate Raspberry": {
+                "name": "Chocolate Raspberry",
+                "image": "image"
+            },
+            "Panna Cotta": {
+                "name": "Panna Cotta",
+                "image": "image"
+            },
+            "Cookie Monster": {
+                "name": "Cookie Monster",
+                "image": "image"
+            },
+            "Dark Moon Chocolate": {
+                "name": "Dark Moon Chocolate",
+                "image": "image"
+            },
+            "Orange Sherbert": {
+                "name": "Orange Sherbert",
+                "image": "image"
+            },
+            "Cheesecake": {
+                "name": "Cheesecake",
+                "image": "image"
+            },
+            "Key Lime Pie": {
+                "name": "Key Lime Pie",
+                "image": "image"
+            },
+            "Gelato": {
+                "name": "Gelato",
+                "image": "image"
+            },
+            "Pomegrante Chocolate Fudge": {
+                "name": "Pomegrante Chocolate Fudge",
+                "image": "image"
+            },
+            "Orange Chocolate Fudge": {
+                "name": "Orange Chocolate Fudge",
+                "image": "image"
+            },
+            "Strawberry Chocolate": {
+                "name": "Strawberry Chocolate",
+                "image": "image"
+            },
+            "Ketchup": {
+                "name": "Ketchup",
+                "image": "image"
+            },
+            "Chocolate Mint Chip": {
+                "name": "Chocolate Mint Chip",
+                "image": "image"
+            },
+            "Chocolate Spearmint Chip": {
+                "name": "Chocolate Spearmint Chip",
+                "image": "image"
+            },
+            "Spearmint Chocolate Chip": {
+                "name": "Spearmint Chocolate Chip",
+                "image": "image"
+            },
+            "Lavender Sorbet": {
+                "name": "Lavender Sorbet",
+                "image": "image"
+            },
+            "Deep Orange": {
+                "name": "Deep Orange",
+                "image": "image"
+            },
+            "Deep Cherry": {
+                "name": "Deep Cherry",
+                "image": "image"
+            },
+            "Deep Raspberry": {
+                "name": "Deep Raspberry",
+                "image": "image"
+            },
+            "Deep Lavender": {
+                "name": "Deep Lavender",
+                "image": "image"
+            },
+            "Deep Ume": {
+                "name": "Deep Ume",
+                "image": "image"
+            },
+            "Deep Blackberry": {
+                "name": "Deep Blackberry",
+                "image": "image"
+            },
+            "Deep Blueberry": {
+                "name": "Deep Blueberry",
+                "image": "image"
+            },
+            "Snow": {
+                "name": "Snow",
+                "image": "image"
+            }
+        }
+    },
+    "441198920668938260": {
+        "cones": {
+        },
+        "flavors": {}
+    }
+}

@@ -38,9 +38,11 @@ commands.guide = new Command({
 						let skillVal = possibleSkills[Math.round(Math.random() * (possibleSkills.length-1))]
 						skillDefs = skillFile[skillVal]
 
-						descTxt = descTxt.replace('%RANDOMSKILL%', `${elementEmoji[skillDefs.type]}${skillDefs.name ? skillDefs.name : skillVal}\n`)
+						descTxt = descTxt.replace('%RANDOMSKILL%', `${elementEmoji[skillDefs.type]}${skillDefs.name ? skillDefs.name : skillVal}`)
 					}
 					
+					descTxt = descTxt.replace('rpg!', getPrefix(message.guild.id))
+
 					DiscordEmbed.fields.push({name: titleTxt, value: descTxt, inline: inline})
 				}
 			}

@@ -5,45 +5,10 @@ const adminList = [
 ]
 
 // Export Functions
-module.exports = {
-	validType: function(type) {
-		if (!type) return false;
-
-		for (const i in Elements) {
-			if (type.toLowerCase() === Elements[i])
-				return true;
-		}
-
-		return false;
-	},
-	
-	validStatus: function(eff) {
-		if (!eff) return false;
-
-		for (const i in statusEffects) {
-			if (eff.toLowerCase() === statusEffects[i])
-				return true;
-		}
-
-		return false;
-	},
-
-	validTarg: function(type) {
-		if (!type) return false;
-		for (const i in Targets) {
-			if (type.toLowerCase() === Targets[i])
-				return true;
-		}
-
-		return false
-	},
-
-	validStat: function(stat) {
-		var stats = ['atk', 'mag', 'agl', 'end', 'prc', 'luk', 'chr', 'int']
-		for (const i in stats) {
-			if (stat === stats[i]) {
-				return true
-			}
+module.exports = {	
+	inArray: function(val, arr) {
+		for (const i in arr) {
+			if (val === arr[i]) return true;
 		}
 
 		return false

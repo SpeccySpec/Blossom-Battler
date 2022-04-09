@@ -53,6 +53,9 @@ ffmpeg = require('ffmpeg-static');
 ytdl = require('ytdl-core');
 http = require('http');
 
+//hatebin, for converting long walls of text into links
+hastebin = require('hastebin-gen');
+
 // Daily Quote - Resets at midnight
 let dailyQuote = 'none'
 
@@ -141,6 +144,34 @@ elementEmoji = {
 	status: "<:status:906877331711344721>",
 	heal: "<:heal:906758309351161907>",
 	passive: "<:passive:906874477210648576>"
+}
+
+elementColors = {
+	strike: '#ffc012',
+	slash: '#aba060',
+	pierce: '#e3c8ac',
+	
+	fire: '#ff425f',
+	water: '#8c19ff',
+	ice: '#5cf4ff',
+	electric: '#ffe100',
+	wind: '#d6f2ff',
+	earth: '#82612b',
+	grass: '#2da659',
+	psychic: '#ff2ee3',
+	poison: '#6f00b0',
+	metal: '#d6d6d6',
+	curse: '#7a1730',
+	bless: '#fff4cc',
+	nuclear: '#5eb000',
+	gravity: '#030a96',
+	sound: '#15ff00',
+	
+	almighty: '#ffffff',
+	
+	status: '#0008ff',
+	heal: '#61ffab',
+	passive: '#ffa200'
 }
 
 // Item
@@ -238,17 +269,17 @@ weathers = [
 terrains = [
 	"flaming", // 10 damage with 10% chance of burn
 	"thunder", // 1.2x to elec
-	"grassy",
-	"light",
-	"psychic",
-	"misty",
-	"sky",
-	"muddy",
-	
+	"grassy", // 10% heal before turn
+	"light", // 1.2x to bless
+	"psychic", // reverse turn order
+	"misty", // ignore status inflictions
+	"sky", // 1.2x to wind
+	"muddy", // 1.2x to earth, -33% agl
+
 	// boss specific
-	"flooded",
-	"swamp",
-	"glacial",
+	"flooded", // 1.3x to water
+	"swamp", // 1.3x to earth and grass
+	"glacial", // 1.3x to ice, +20% freeze chance on ice skills
 	"fairydomain",
 	"graveyard",
 	"factory",
@@ -257,14 +288,31 @@ terrains = [
 ]
 
 Targets = [
-	'one',
-	'ally',
-	'allopposing',
-	'allallies',
-	'caster',
-	'everyone',
-	'random',
-	'randomopposing'
+	'one', // target one foe
+	'ally', // target one ally
+	'caster', // target the caster
+
+	'allopposing', // target all foes
+	'allallies', // target all allies
+	'randomopposing', // target random foes
+	'randomallies', // target random allies
+
+	'random', // target random fighters
+	'everyone', // target all fighters
+	
+	'spreadopposing', // target one foe, damage spreads to 2 surrounding.
+	'spreadallies' // target one ally, effects spread to 2 surrounding.
+]
+
+costTypes = [
+	'mp',
+	'mppercent',
+	'hp',
+	'hppercent',
+	'lb',
+	'lbpercent',
+	'money',
+	'moneypercent'
 ]
 
 getPrefix = (server) => {
@@ -309,6 +357,9 @@ setUpFile = (file) => {
 	return fileFile;
 }
 
+//global got json stuff
+skillFile = setUpFile(`${dataPath}/json/skills.json`)
+
 // makeDirectory
 makeDirectory = (dir) => {
 	let directories = [dir];
@@ -337,6 +388,7 @@ makeDirectory = (dir) => {
 	return directories;
 }
 
+
 typeParsers = {
 	Num: arg => {return parseInt(arg) || undefined},
 	Decimal: arg => {return parseFloat(arg) || undefined},
@@ -344,6 +396,19 @@ typeParsers = {
 	Ping: arg => {},
 	Channel: arg => {}, //placeholders
 	ID: arg => {}
+}
+
+elementList = () => {		
+	const DiscordEmbed = new Discord.MessageEmbed()
+		.setColor('#0099ff')
+		.setTitle('List of usable elements:')
+
+	let elementTxt = ''
+	for (const i in Elements)
+		elementTxt += `${elementEmoji[Elements[i]]} **${[Elements[i]]}**\n`;
+	
+	DiscordEmbed.setDescription(elementTxt)
+	return DiscordEmbed;
 }
 
 Command = class {
@@ -381,9 +446,6 @@ for (const file of commandFiles) {
 
 client.on("guildCreate", (guild) => {
 	makeDirectory(`${dataPath}/json/${message.guild.id}`);
-
-	// Set up File Data
-	setUpFile(`${dataPath}/json/skills.json`)
 
 	// Server Data
 	setUpFile(`${dataPath}/json/${message.guild.id}/server.json`)

@@ -1,0 +1,248 @@
+{
+    "official": {
+        "buns": {
+            "Plain": {
+                "name": "Plain",
+                "image": ["image", "image"]
+            },
+            "Sesame": {
+                "name": "Sesame",
+                "image": ["image", "image"]
+            },
+            "Black": {
+                "name": "Black",
+                "image": ["image", "image"]
+            },
+            "Pretzel": {
+                "name": "Pretzel",
+                "image": ["image", "image"]
+            },
+            "Kaiser Roll": {
+                "name": "Kaiser Roll",
+                "image": ["image", "image"]
+            },
+            "Brioche": {
+                "name": "Brioche",
+                "image": ["image", "image"]
+            },
+            "Potato": {
+                "name": "Potato",
+                "image": ["image", "image"]
+            },
+            "Ciabatta": {
+                "name": "Ciabatta",
+                "image": ["image", "image"]
+            },
+            "Onion": {
+                "name": "Onion",
+                "image": ["image", "image"]
+            },
+            "English Muffin": {
+                "name": "English Muffin",
+                "image": ["image", "image"]
+            }
+        },
+        "ingredients": {
+            "Egg": {
+                "name": "Egg",
+                "image": "image"
+            },
+            "Burger Patty": {
+                "name": "Burger Patty",
+                "image": "image"
+            },
+            "Pepper Jack Cheese": {
+                "name": "Pepper Jack Cheese",
+                "image": "image"
+            },
+            "Avocado": {
+                "name": "Avocado",
+                "image": "image"
+            },
+            "Sweet Potato Fries": {
+                "name": "Sweet Potato Fries",
+                "image": "image"
+            },
+            "Ketchup": {
+                "name": "Ketchup",
+                "image": "image"
+            },
+            "Mayo": {
+                "name": "Mayo",
+                "image": "image"
+            },
+            "Mustard": {
+                "name": "Mustard",
+                "image": "image"
+            },
+            "Special Sauce": {
+                "name": "Special Sauce",
+                "image": "image"
+            },
+            "Hot Sauce": {
+                "name": "Hot Sauce",
+                "image": "image"
+            },
+            "Grilled Corn": {
+                "name": "Grilled Corn",
+                "image": "image"
+            },
+            "Regular Cheese": {
+                "name": "Regular Cheese",
+                "image": "image"
+            },
+            "Tomatoes": {
+                "name": "Tomatoes",
+                "image": "image"
+            },
+            "Spinach": {
+                "name": "Spinach",
+                "image": "image"
+            },
+            "Chilli": {
+                "name": "Chilli",
+                "image": "image"
+            },
+            "Onions": {
+                "name": "Onions",
+                "image": "image"
+            },
+            "Caramelized Onions": {
+                "name": "Caramelized Onions",
+                "image": "image"
+            },
+            "Bacon": {
+                "name": "Bacon",
+                "image": "image"
+            },
+            "Arugula": {
+                "name": "Arugula",
+                "image": "image"
+            },
+            "Pico": {
+                "name": "Pico",
+                "image": "image"
+            },
+            "Sauerkraut": {
+                "name": "Sauerkraut",
+                "image": "image"
+            },
+            "Mushrooms": {
+                "name": "Mushrooms",
+                "image": "image"
+            },
+            "Jalapeno": {
+                "name": "Jalapeno",
+                "image": "image"
+            },
+            "Pickles": {
+                "name": "Pickles",
+                "image": "image"
+            },
+            "BBQ": {
+                "name": "BBQ",
+                "image": "image"
+            },
+            "Mozzarella": {
+                "name": "Mozzarella",
+                "image": "image"
+            },
+            "Hash Brown": {
+                "name": "Hash Brown",
+                "image": "image"
+            },
+            "Romaine": {
+                "name": "Romaine",
+                "image": "image"
+            },
+            "Peppers": {
+                "name": "Peppers",
+                "image": "image"
+            },
+            "Olives": {
+                "name": "Olives",
+                "image": "image"
+            },
+            "Pretzels": {
+                "name": "Pretzels",
+                "image": "image"
+            },
+            "Eggplant": {
+                "name": "Eggplant",
+                "image": "image"
+            },
+            "Mango": {
+                "name": "Mango",
+                "image": "image"
+            },
+            "Artichoke Hearts": {
+                "name": "Artichoke Hearts",
+                "image": "image"
+            },
+            "Nacho Chips": {
+                "name": "Nacho Chips",
+                "image": "image"
+            },
+            "Doritos": {
+                "name": "Doritos",
+                "image": "image"
+            },
+            "French Fries": {
+                "name": "French Fries",
+                "image": "image"
+            },
+            "Grilled Pineapple": {
+                "name": "Grilled Pineapple",
+                "image": "image"
+            },
+            "Guacamole": {
+                "name": "Guacamole",
+                "image": "image"
+            },
+            "Ham": {
+                "name": "Ham",
+                "image": "image"
+            },
+            "Cucumbers": {
+                "name": "Cucumbers",
+                "image": "image"
+            },
+            "Potato Sticks": {
+                "name": "Potato Sticks",
+                "image": "image"
+            },
+            "Sliced Apples": {
+                "name": "Sliced Apples",
+                "image": "image"
+            },
+            "Potato Chips": {
+                "name": "Potato Chips",
+                "image": "image"
+            },
+            "Scallions": {
+                "name": "Scallions",
+                "image": "image"
+            },
+            "Lettuce": {
+                "name": "Lettuce",
+                "image": "image"
+            },
+            "Salami": {
+                "name": "Salami",
+                "image": "image"
+            }
+        }
+    },
+    "441198920668938260": {
+        "buns": {
+            "a": {
+                "name": "a",
+                "image": [
+                    "https://cdn.discordapp.com/attachments/877143757697454123/959582516132593724/template.png",
+                    "https://cdn.discordapp.com/attachments/877143757697454123/959582516132593724/template.png"
+                ]
+            }
+        },
+        "ingredients": {}
+    }
+}
