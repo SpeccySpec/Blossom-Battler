@@ -12,7 +12,7 @@ const aliases = {
 }
 
 commands.help = new Command({
-	desc: "*Args: {Word: Category}*\nLists all of Bloom Battler's commands.",
+	desc: "Lists all of Bloom Battler's commands.",
 	section: "misc",
 	args: [
 		{
@@ -36,7 +36,14 @@ commands.help = new Command({
 			DiscordEmbed.setDescription(description)
 			for (const i in commands) {
 				if (commands[i].section == category || category == 'all') {
-					DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: commands[i].desc, inline: true})
+					const command = commands[i]
+					let args = "*"
+					for (const arg of command.args) {
+						const argdesc = `${arg.type}: ${arg.name}`
+						args += arg.forced ? `<${argdesc}>` : `\{${argdesc}\}`
+					}
+					args = args == "*" ? "" : args + "*\n"
+					DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: `${args}${command.desc}`, inline: true})
 				}
 			}
 		} else {
