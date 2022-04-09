@@ -415,7 +415,7 @@ Command = class {
 		this.desc = object.desc
 		this.section = object.section
 		this.func = object.func
-		this.args = object.args
+		this.args = object.args ?? []
 	}
 
 	call(message, rawargs) {
