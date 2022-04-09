@@ -357,6 +357,9 @@ setUpFile = (file) => {
 	return fileFile;
 }
 
+//global got json stuff
+skillFile = setUpFile(`${dataPath}/json/skills.json`)
+
 // makeDirectory
 makeDirectory = (dir) => {
 	let directories = [dir];
@@ -416,9 +419,6 @@ for (const file of commandFiles) {
 
 client.on("guildCreate", (guild) => {
 	makeDirectory(`${dataPath}/json/${message.guild.id}`);
-
-	// Set up File Data
-	setUpFile(`${dataPath}/json/skills.json`)
 
 	// Server Data
 	setUpFile(`${dataPath}/json/${message.guild.id}/server.json`)

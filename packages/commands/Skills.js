@@ -58,9 +58,6 @@ commands.registerskill = new Command({
 
 		if (!args[8] || !utilityFuncs.inArray(args[8].toLowerCase(), Targets)) return message.channel.send('Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n-SpreadOpposing\n- SpreadAllies```')
 
-		// Okay, now, let's put these things in the skill file!
-		let skillFile = setUpFile(`${dataPath}/json/skills.json`)
-
 		let skillDefs = {
 			name: args[0],
 			type: args[7].toLowerCase(),
