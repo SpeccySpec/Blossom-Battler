@@ -388,16 +388,6 @@ makeDirectory = (dir) => {
 	return directories;
 }
 
-
-typeParsers = {
-	Num: arg => {return parseInt(arg) || undefined},
-	Decimal: arg => {return parseFloat(arg) || undefined},
-	Word: arg => {return typeParsers.Ping(arg) || typeParsers.Channel(arg) ? undefined : arg},
-	Ping: arg => {},
-	Channel: arg => {}, //placeholders
-	ID: arg => {}
-}
-
 elementList = () => {		
 	const DiscordEmbed = new Discord.MessageEmbed()
 		.setColor('#0099ff')
@@ -409,6 +399,15 @@ elementList = () => {
 	
 	DiscordEmbed.setDescription(elementTxt)
 	return DiscordEmbed;
+}
+
+typeParsers = {
+	Num: arg => {return parseInt(arg) || undefined},
+	Decimal: arg => {return parseFloat(arg) || undefined},
+	Word: arg => {return typeParsers.Ping(arg) || typeParsers.Channel(arg) ? undefined : arg},
+	Ping: arg => {},
+	Channel: arg => {}, //placeholders
+	ID: arg => {}
 }
 
 Command = class {
