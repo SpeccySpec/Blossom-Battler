@@ -20,9 +20,15 @@ subcategories = {
 }
 
 imagesNeeded = {
-	'icecream': 1,
-	'pizza': 1,
-	'hamburger': 2
+	"cones": 1,
+	"flavors": 1,
+	"crusts": 1,
+	"sauces": 1,
+	"cheeses": 1,
+	"toppings": 1,
+	"condiments": 1,
+	"buns": 2,
+	"ingredients": 1
 }
 
 singularVerb = {
@@ -198,6 +204,8 @@ function checkCategories(args, limit) {
 	if (!subcategories[args[0].toLowerCase()].includes(args[1].toLowerCase())) {
 		return false
 	}
+
+	return true
 }
 
 
@@ -453,13 +461,13 @@ commands.registerfood = new Command({
 	section: "food",
 	func: (message, args) => {
 
-		if (args.length < 4) {
+		if (args.length < 3) {
 			let embed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
 			.setTitle(`${getPrefix(message.guild.id)}registerfood`)
 			.setDescription(`To register a food item, try:\n*${getPrefix(message.guild.id)}registerfood <Word: Main Category> <Word: Sub-category> <Word: Name> <Attachment: Image>*`)
 		
-			return
+			return message.channel.send({embeds: [embed]})
 		}
 
 		if (!checkCategories(args)) return setInvalidEmbed(message)
@@ -484,12 +492,12 @@ commands.registerfood = new Command({
 
 		let attachments = []
 		let attachImages = message.attachments.map(a => a)
-		for (i = 0; i < imagesNeeded[args[0].toLowerCase()]; i++) {
+		for (i = 0; i < imagesNeeded[args[1].toLowerCase()]; i++) {
 			if (!checkImage(message, args[3 + i], attachImages[i])) continue
 			attachments.push(checkImage(message, args[3 + i], attachImages[i]))
 		}
-		if (attachments.length < imagesNeeded[args[0].toLowerCase()]) {
-			return message.channel.send(`You must attach ${imagesNeeded[args[0].toLowerCase()] - attachments.length} more image(s).`)
+		if (attachments.length < imagesNeeded[args[1].toLowerCase()]) {
+			return message.channel.send(`You must attach ${imagesNeeded[args[1].toLowerCase()] - attachments.length} more image(s).`)
 		}
 
 		//write to json
@@ -641,12 +649,12 @@ commands.foodimage = new Command({
 
 		let attachments = []
 		let attachImages = message.attachments.map(a => a)
-		for (i = 0; i < imagesNeeded[args[0].toLowerCase()]; i++) {
+		for (i = 0; i < imagesNeeded[args[1].toLowerCase()]; i++) {
 			if (!checkImage(message, args[3 + i], attachImages[i])) continue
 			attachments.push(checkImage(message, args[3 + i], attachImages[i]))
 		}
-		if (attachments.length < imagesNeeded[args[0].toLowerCase()]) {
-			return message.channel.send(`You must attach ${imagesNeeded[args[0].toLowerCase()] - attachments.length} more image(s).`)
+		if (attachments.length < imagesNeeded[args[1].toLowerCase()]) {
+			return message.channel.send(`You must attach ${imagesNeeded[args[1].toLowerCase()] - attachments.length} more image(s).`)
 		}
 
 		//write to json
