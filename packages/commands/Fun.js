@@ -194,8 +194,78 @@ commands.quote = new Command({
 })
 
 // Ship
+const footerTexts = [
+	[
+		"This one, for sure, isn't happening.",
+		"Forget about even trying with this.",
+		"lol suck!"
+	],
+	[
+		"This one won't work out at all.",
+		"bruh.",
+		"This is sad"
+	],
+	[
+		"There's no chance this one's happening.",
+		'Here is a cookie for your troubles: "🍪"',
+		"Sad."
+	],
+	[
+		"Possible, but don't get your hopes up.",
+		"try harder lol",
+		"Well this is... unfortunate."
+	],
+	[
+		"Maybe if you try hard enough...",
+		"In another timeline, this would work!",
+		"Perhaps they'll be together if you hope"
+	],
+	[
+		"Interesting outcome.",
+		"I see, I see.",
+		"Almost."
+	],
+	[
+		"This ship's not tooooo bad.",
+		"nice NICE",
+		"Very cool"
+	],
+	[
+		"I like where this is going.",
+		"This could go places!",
+		"Avoid the fanfic sites."
+	],
+	[
+		"This one could turn into something...",
+		"They have a high chance of being together!!",
+		"Fanfic time."
+	],
+	[
+		"Awww, they fit so well together!",
+		"They're so nice together.",
+		"Cute couple.",
+	],
+	[
+		"Almost, almost!",
+		"Just barely!",
+		"So close."
+	]
+]
+
 commands.ship = new Command({
-	desc: "*<Word: Person #1> {Word: Person #2} {...}*\nShip yourself with someone... or ship two separate people, or more! It's funny, trust me.",
+	desc: "Ship yourself with someone... or ship two separate people, or more! It's funny, trust me.",
+	args: [
+		{
+			name: "Person #1",
+			type: "Any",
+			forced: true
+		},
+		{
+			name: "Person #2",
+			type: "Any",
+			multiple: true
+		}
+	],
 	section: "fun",
 	func: (message, args) => {
 		if (!args[0]) return message.channel.send(`Please specify at least one person who you want to ship yourself with, or two if you want to ship two different people.`);
@@ -232,10 +302,8 @@ commands.ship = new Command({
 
 		for (i in shipCandidates) {
 			// Converting Mentions
-			console.log(shipCandidates[i])
 			if (shipCandidates[i].startsWith('<@!') && shipCandidates[i].endsWith('>')) {
 				let mention = shipCandidates[i].slice(3, -1);
-				console.log(mention)
 				try {mention = client.users.cache.get(mention);} catch (e) {mention = undefined;}
 				shipCandidates[i] = mention != undefined ? mention.username : '[UNKNOWN]';
 			}
@@ -292,107 +360,19 @@ commands.ship = new Command({
         const loveLevel = ":white_medium_square:".repeat(loveIndex) + ":black_medium_square:".repeat(10 - loveIndex);
 
 		//footer reactions
-		let footerConditions = [
-			`${(love <= 0) ? true : false}`,
-			`${(love <= 10 && love > 0) ? true : false}`,
-			`${(love <= 20 && love > 10) ? true : false}`,
-			`${(love <= 30 && love > 20) ? true : false}`,
-			`${(love <= 40 && love > 30) ? true : false}`,
-			`${(love <= 50 && love > 40) ? true : false}`,
-			`${(love <= 60 && love > 50) ? true : false}`,
-			`${(love <= 70 && love > 60) ? true : false}`,
-			`${(love <= 80 && love > 70) ? true : false}`,
-			`${(love <= 90 && love > 80) ? true : false}`,
-			`${(love <= 99 && love > 90) ? true : false}`
-		]
-		let footerText = ""
-		
-		const footerTexts = [
-			[
-				"This one, for sure, isn't happening.",
-				"Forget about even trying with this.",
-				"lol suck!"
-			],
-			
-			[
-				"This one won't work out at all.",
-				"bruh.",
-				"This is sad"
-			],
-			
-			[
-				"There's no chance this one's happening.",
-				'Here is a cookie for your troubles: "🍪"',
-				"Sad."
-			],
-			
-			[
-				"Possible, but don't get your hopes up.",
-				"try harder lol",
-				"Well this is... unfortunate."
-			],
-			
-			[
-				"Maybe if you try hard enough...",
-				"In another timeline, this would work!",
-				"Perhaps they'll be together if you hope"
-			],
-			
-			[
-				"Interesting outcome.",
-				"I see, I see.",
-				"Almost."
-			],
-			
-			[
-				"This ship's not tooooo bad.",
-				"nice NICE",
-				"Very cool"
-			],
-			
-			[
-				"I like where this is going.",
-				"This could go places!",
-				"Avoid the fanfic sites."
-			],
-			
-			[
-				"This one could turn into something...",
-				"They have a high chance of being together!!",
-				"Fanfic time."
-			],
-			
-			[
-				"Awww, they fit so well together!",
-				"They're so nice together.",
-				"Cute couple.",
-			],
-			
-			[
-				"Almost, almost!",
-				"Just barely!",
-				"So close."
-			]
-		]
-
-		for (i in footerConditions) {
-			if (footerConditions[i].endsWith('true')) {
-				footerText = footerTexts[i][Math.round(Math.random() * footerTexts[i].length-1)]
-			}
+		let footerText
+		switch (love) {
+			case 69: {footerText = "Nice. ( ͡° ͜ʖ ͡°)"; break}
+			case 100: {footerText = "OTP!"; break}
+			default: {footerText = footerTexts[Math.floor(love / 10)][Math.round(Math.random() * 2)]}
 		}
 
-		if (love === 69)
-			footerText = 'Nice. ( ͡° ͜ʖ ͡°)'
-
-		if (love === 100)
-			footerText = 'OTP!'
-
 		// Send Embed
-		const DiscordEmbed = new Discord.MessageEmbed()
+		message.channel.send({embeds: [new Discord.MessageEmbed()
             .setColor('#ff06aa')
-            .setTitle(`${splicedName}`)
+            .setTitle(splicedName)
 			.setDescription(`${resulttext}\n**${love}%** ${loveLevel}`)
-			.setFooter(`${footerText}`)
-		message.channel.send({embeds: [DiscordEmbed]})
+			.setFooter(footerText)
+		]})
 	}
 })
