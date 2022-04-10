@@ -420,13 +420,21 @@ Command = class {
 
 	call(message, rawargs) {
 		let args = []
-		for (const [i, arg] of this.args.entries()) {
-			const rawarg = rawargs[i]
+		for (const arg of this.args) {
+			const rawarg = rawargs.pop()
 			if (rawarg) {
 				const parser = typeParsers[arg.type]
 				const parsedArg = parser ? parser({arg: rawarg, message}) : rawarg
-				if (!parsedArg) return void message.channel.send("Invalid argument for \"" + arg.name + "\", it has to be of type \"" + arg.type + "\".")
+				if (!parsedArg) return void message.channel.send(`Invalid argument for "${arg.name}", it has to be of type "${arg.type}".`)
 				args.push(parsedArg)
+				if (arg.multiple) {
+					for (const rawarg of rawargs) {
+						const parsedExtraArg = parser ? parser({arg: rawarg, message}) : rawarg
+						if (!parsedExtraArg) return void message.channel.send(`Invalid extra argument for "${arg.name}", it has to be of type "${arg.type}".`)
+						args.push(parsedExtraArg)
+					}
+					break
+				}
 			} else if (arg.forced) {
 				const desc = this.getFullDesc()
 				const DiscordEmbed = new Discord.MessageEmbed()
@@ -444,6 +452,10 @@ Command = class {
 		for (const arg of this.args) {
 			const argdesc = `${arg.type}: ${arg.name}`
 			args += arg.forced ? `<${argdesc}> ` : `\{${argdesc}\} `
+			if (arg.multiple) {
+				args += "{...}"
+				break
+			}
 		}
 		args = args == "*" ? "" : args + "*\n"
 		return `${args}${this.desc}` 
