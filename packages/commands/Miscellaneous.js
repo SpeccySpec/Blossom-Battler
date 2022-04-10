@@ -35,15 +35,10 @@ commands.help = new Command({
 				return void commands.help.call(message, [])
 			DiscordEmbed.setDescription(description)
 			for (const i in commands) {
-				if (commands[i].section == category || category == 'all') {
-					const command = commands[i]
-					let args = "*"
-					for (const arg of command.args) {
-						const argdesc = `${arg.type}: ${arg.name}`
-						args += arg.forced ? `<${argdesc}>` : `\{${argdesc}\}`
-					}
-					args = args == "*" ? "" : args + "*\n"
-					DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value: `${args}${command.desc}`, inline: true})
+				const command = commands[i]
+				if (command.section == category || category == 'all') {
+					const value = command.getFullDesc()
+					DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value, inline: true})
 				}
 			}
 		} else {

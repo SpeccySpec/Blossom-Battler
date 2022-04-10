@@ -405,13 +405,14 @@ typeParsers = {
 	Num: arg => {return parseInt(arg) || undefined},
 	Decimal: arg => {return parseFloat(arg) || undefined},
 	Word: arg => {return typeParsers.Ping(arg) || typeParsers.Channel(arg) ? undefined : arg},
-	Ping: arg => {},
+	Ping: (_, message) => {return message.mentions.users.first() || undefined},
 	Channel: arg => {}, //placeholders
 	ID: arg => {}
 }
 
 Command = class {
 	constructor(object) {
+		this.name = object.name
 		this.desc = object.desc
 		this.section = object.section
 		this.func = object.func
@@ -419,20 +420,34 @@ Command = class {
 	}
 
 	call(message, rawargs) {
-		const error = message.channel.send
 		let args = []
 		for (const [i, arg] of this.args.entries()) {
 			const rawarg = rawargs[i]
 			if (rawarg) {
 				const parser = typeParsers[arg.type]
-				const parsedArg = parser ? parser(rawarg) : rawarg
-				if (!parsedArg) return void error("Invalid argument for \"" + arg.name + "\", it has to be of type \"" + arg.type + "\".")
+				const parsedArg = parser ? parser(rawarg, message) : rawarg
+				if (!parsedArg) return void message.channel.send("Invalid argument for \"" + arg.name + "\", it has to be of type \"" + arg.type + "\".")
 				args.push(parsedArg)
 			} else if (arg.forced) {
-				return void error(arg.forced)
+				const desc = this.getFullDesc()
+				const DiscordEmbed = new Discord.MessageEmbed()
+					.setColor('#0099ff')
+					.setTitle(`Missing required argument "${arg.name}"!`)
+					.setDescription(desc)
+				return void message.channel.send({embeds: [DiscordEmbed]})
 			}
 		}
 		this.func(message, args)
+	}
+
+	getFullDesc() {
+		let args = "*"
+		for (const arg of this.args) {
+			const argdesc = `${arg.type}: ${arg.name}`
+			args += arg.forced ? `<${argdesc}> ` : `\{${argdesc}\} `
+		}
+		args = args == "*" ? "" : args + "*\n"
+		return `${args}${this.desc}` 
 	}
 }
 

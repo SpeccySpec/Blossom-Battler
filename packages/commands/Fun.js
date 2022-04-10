@@ -15,21 +15,22 @@ commands.ping = new Command({
 
 // Diceroll
 commands.diceroll = new Command({
-	desc: "*Args: <Num: Sides> {Num: Dice Count}*\nRolls the specified amount of dice with the specified amount of sides.",
+	desc: "Rolls the specified amount of dice with the specified amount of sides.",
 	section: "fun",
+	args: [
+		{
+			name: "Sides",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Dice Count",
+			type: "Num"
+		}
+	],
 	func: (message, args) => {
-		if (!args[0] || args[0] === ' ' || args[0] === 'null') {
-            const DiscordEmbed = new Discord.MessageEmbed()
-                .setColor('#0099ff')
-                .setTitle(`${getPrefix(message.guild.id)}diceroll`)
-				.setDescription(commands.diceroll.desc)
-            message.channel.send({embeds: [DiscordEmbed]})
-            return false
-        }
-
-		const num1 = parseInt(args[0]);
-
-		const num2 = args[1] ? parseInt(args[1]) : 1
+		const num1 = args[0]
+		const num2 = args[1] ?? 1
 
 		if (num1 < 1) return message.channel.send(`Your 1st number (${num1}) has got to be a number above 1.`);
 		else if (num2 < 1)  return message.channel.send(`Your 2nd number (${num2}) has got to be a number above 1.`);
