@@ -402,10 +402,10 @@ elementList = () => {
 }
 
 typeParsers = {
-	Num: arg => {return parseInt(arg) || undefined},
-	Decimal: arg => {return parseFloat(arg) || undefined},
-	Word: arg => {return typeParsers.Ping(arg) || typeParsers.Channel(arg) ? undefined : arg},
-	Ping: (_, message) => {return message.mentions.users.first() || undefined},
+	Num: ({arg}) => {return parseInt(arg) || undefined},
+	Decimal: ({arg}) => {return parseFloat(arg) || undefined},
+	Word: ({arg}) => {return typeParsers.Ping(arg) || typeParsers.Channel(arg) ? undefined : arg},
+	Ping: ({message}) => {return message.mentions.users.first() || undefined},
 	Channel: arg => {}, //placeholders
 	ID: arg => {}
 }
@@ -425,7 +425,7 @@ Command = class {
 			const rawarg = rawargs[i]
 			if (rawarg) {
 				const parser = typeParsers[arg.type]
-				const parsedArg = parser ? parser(rawarg, message) : rawarg
+				const parsedArg = parser ? parser({rawarg: arg, message}) : rawarg
 				if (!parsedArg) return void message.channel.send("Invalid argument for \"" + arg.name + "\", it has to be of type \"" + arg.type + "\".")
 				args.push(parsedArg)
 			} else if (arg.forced) {
