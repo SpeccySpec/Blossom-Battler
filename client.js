@@ -407,7 +407,8 @@ typeParsers = {
 	Word: (vars) => {return (typeParsers.Ping(vars) || typeParsers.Channel(vars)) ? undefined : vars.arg},
 	Ping: ({message}) => {return message.mentions.users.first()},
 	Channel: arg => {}, //placeholders
-	ID: arg => {}
+	ID: arg => {},
+	Image: ({message}) => {return checkImage(message, undefined, message.attachments.first())}
 }
 
 Command = class {
