@@ -133,41 +133,32 @@ let duoScenarios = [
 ]
 
 commands.scenario = new Command({
-	desc: "*Args: {Ping: Another Person}*\nGenerates a funny scenario that could probably easily be taken out of context.",
+	desc: "Generates a funny scenario that could probably easily be taken out of context.",
+	args: [
+		{
+			name: "Another Person",
+			type: "Ping"
+		}
+	],
 	section: "fun",
 	func: (message, args) => {
-        if (args[0]) {
-            if (message.mentions.users.first()) {
-                let taggedUser = message.mentions.users.first();
-                let sceneText = `${message.author.username} & ${taggedUser.username} `
-				let scenario = duoScenarios[Math.round(Math.random() * (duoScenarios.length - 1))]
-				
-				sceneText += scenario
-				const DiscordEmbed = new Discord.MessageEmbed()
-					.setColor('#0099ff')
-					.setTitle(`${message.author.username} & ${taggedUser.username}`)
-					.setDescription(`${sceneText}`)
-					.setFooter('rpg!scenario');
-				message.channel.send({embeds: [DiscordEmbed]})
-            } else {
-                const DiscordEmbed = new Discord.MessageEmbed()
-                    .setColor('#0099ff')
-                    .setTitle(`${message.author.username} & ${args[0]}`)
-					.setDescription(`${message.author.username} & ${args[0]} are not related in any way.`)
-                message.channel.send({embeds: [DiscordEmbed]})
-            }
-        } else {
-            let sceneText = `${message.author.username} `
-            let scenario = soloScenarios[Math.round(Math.random() * (soloScenarios.length - 1))]
-            
-			sceneText += scenario
-            const DiscordEmbed = new Discord.MessageEmbed()
-                .setColor('#0099ff')
-                .setTitle(`${message.author.username}`)
-				.setDescription(`${sceneText}`)
-            message.channel.send({embeds: [DiscordEmbed]})
-            return true
-        };
+		const taggedUser = args[0]
+		const embed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setFooter('rpg!scenario')
+		if (taggedUser) {
+			const users = `${message.author.username} & ${taggedUser.username}`
+			message.channel.send({embeds: [embed
+				.setTitle(users)
+				.setDescription(`${users} ${duoScenarios[Math.round(Math.random() * (duoScenarios.length - 1))]}`)
+			]})
+		} else {
+			const username = message.author.username
+			message.channel.send({embeds: [embed
+				.setTitle(username)
+				.setDescription(`${username} ${soloScenarios[Math.round(Math.random() * (soloScenarios.length - 1))]}`)
+			]})
+		}
 	}
 })
 
