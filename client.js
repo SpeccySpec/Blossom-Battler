@@ -92,6 +92,7 @@ setTimeout(function() {
 }, midnightInMS());
 
 // Elements
+// Elements
 Elements = [
     "strike",
     "slash",
@@ -357,9 +358,6 @@ setUpFile = (file) => {
 	return fileFile;
 }
 
-//global got json stuff
-skillFile = setUpFile(`${dataPath}/json/skills.json`)
-
 // makeDirectory
 makeDirectory = (dir) => {
 	let directories = [dir];
@@ -402,6 +400,9 @@ elementList = () => {
 	return DiscordEmbed;
 }
 
+// Global JSONs
+skillFile = setUpFile(`${dataPath}/json/skills.json`)
+
 Command = class {
 	constructor(object) {
 		this.desc = object.desc
@@ -412,10 +413,20 @@ Command = class {
 
 commands = {}
 const commandFiles = fs.readdirSync(`${packPath}/commands`).filter(file => file.endsWith('.js'));
-
 for (const file of commandFiles) {
-	const command = require(`${packPath}/commands/${file}`);
+	let command = require(`${packPath}/commands/${file}`);
 }
+
+// Run this shit
+let folders = ['skills'] // there WILL be moreee
+
+for (const i in folders) {
+	let files = fs.readdirSync(`${packPath}/${folders[i]}`).filter(file => file.endsWith('.js'));
+	for (const file of files) {
+		require(`${packPath}/${folders[i]}/${file}`);
+	}
+}
+
 
 client.on("guildCreate", (guild) => {
 	makeDirectory(`${dataPath}/json/${message.guild.id}`);

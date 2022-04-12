@@ -2,7 +2,6 @@
 commands.registerskill = new Command({
 	desc: `*Args: <Word: Name> {Num: Cost} {Word: CostType} <Num: Power> <Num: Acc> {Num: CritChance} <Num: Hits> <Word: Element> <Word: Targets> {Word: Status} {Num: StatusChance} "{Sentence: Description}"*\nRegister a skill to use in-battle! Characters can learn skills, items can utilise skills too. Skills can also have a number of extras, apply them with "rpg!applyextra".`,
 	section: "battle",
-//	args: [["Word", "SkillName", true], ["Number", "Cost", false], ["Word", "CostType", false], ["Number", "Power", true], ["Number", "Accuracy", true], ["Number", "CritChance", false], ["Number", "Hits", true], ["Word", "Target Type", true], ["Word", "Status", false], ["Number", "StatusChance", false], ["Sentence", "Description", false]], - [["Type", "What For", Boolean for Manditory]]
 	func: (message, args) => {
 		if (!args[0]) {
             const DiscordEmbed = new Discord.MessageEmbed()
@@ -69,7 +68,7 @@ commands.registerskill = new Command({
 			target: args[8].toLowerCase(),
 			originalAuthor: message.author.id
 		}
-		
+
 		if (parseFloat(args[5]) > 0) skillDefs.crit = parseFloat(args[5]);
 
 		if (args[9]) {
@@ -91,5 +90,39 @@ commands.registerskill = new Command({
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
 		message.channel.send({content: `${skillDefs.name} has been registered:`, embeds: [skillFuncs.skillDesc(skillDefs, skillDefs.name, message.guild.id)]})
+	}
+})
+
+commands.listatkextras = new Command({
+	desc: 'List the possible extras you can give a skill.',
+	section: "battle",
+	func: (message, args) => {
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle('List of Attacking Extras')
+			.setDescription('When attacking, skills can have extra effects! These are called extras, and can be added with the "applyextra" command.')
+
+		for (let i in extrasList) {
+			DiscordEmbed.fields.push({name: `${extrasList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: extrasList[i].desc, inline: true});
+		}
+
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
+commands.applyextra = new Command({
+	desc: `*Args: <Word: Skill Name> <Word: Extra> <Any: Var1> <Any: Var2> <Any: Var3> <Any: Var4> <Any: Var5>\nRegister a skill to use in-battle! Characters can learn skills, items can utilise skills too. Skills can also have a number of extras, apply them with "rpg!applyextra".`,
+	section: "battle",
+	func: (message, args) => {
+		if (!args[0]) return message.channel.send('Please enter a valid skill name!')
+		if (!args[1]) return message.channel.send('Please enter a valid extra! You can list them all with rpg!listextras.')
+
+		if (skillFile[args[0]]) {
+			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skillFile[args[0]].originalAuthor != message.author.id) {
+				return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
+			}
+			applyExtra(message, skillFile[args[0]], args[1], args[2], args[3], args[4], args[5], args[6]);
+			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+		}
 	}
 })
