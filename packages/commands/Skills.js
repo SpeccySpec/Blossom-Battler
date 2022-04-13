@@ -1,6 +1,6 @@
 // Handle Skills
 commands.registerskill = new Command({
-	desc: `Register a skill to use in-battle! Characters can learn skills, items can utilise skills too. Skills can also have a number of extras, apply them with "rpg!applyextra".`,
+	desc: `Register a skill to use in-battle! Characters can learn skills, items can utilize skills too. Skills can also have a number of extras, apply them with "rpg!applyextra".`,
 	section: "battle",
 	args: [
 		{
