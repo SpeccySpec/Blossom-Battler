@@ -541,17 +541,13 @@ Command = class {
 	}
 
 	getFullDesc() {
-		let args = "*"
-		for (const arg of this.args) {
-			const argdesc = `${arg.type}: ${arg.name}`
-			args += arg.forced ? `<${argdesc}> ` : `\{${argdesc}\} `
-			if (arg.multiple) {
-				args += "{...}"
-				break
-			}
-		}
-		args = args == "*" ? "" : args + "*\n"
-		return `${args}${this.desc}` 
+		const args = this.args.map(arg => {
+			let argdesc = `${arg.type}: ${arg.name}`
+			argdesc = arg.forced ? `<${argdesc}>` : `\{${argdesc}\}`
+			if (arg.multiple) argdesc += " {...}"
+			return argdesc
+		})
+		return args.length > 0 ? `*${args.join(" ")}*\n${this.desc}` : this.desc
 	}
 }
 
