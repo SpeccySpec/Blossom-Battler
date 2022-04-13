@@ -1,10 +1,10 @@
 {
-    "Sweet": {
+    "120": {
         "name": "Sweet",
         "rarity": "sentient",
         "cost": 0,
-        "type": "healmp",
+        "type": "healhpmp",
         "originalAuthor": "441198920668938260",
-        "healmp": 60
+        "healhpmp": 120
     }
 }

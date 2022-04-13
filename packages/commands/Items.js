@@ -121,7 +121,7 @@ commands.registeritem = new Command({
         if (args[5]) itemFile[args[0]].desc = args[5];
 
         let amount
-        switch (args[3]) {
+        switch (args[3].toLowerCase()) {
             case 'skill':
                 if (!skillFile[args[4]]) return message.channel.send(`${args[4]} is not a valid skill name.`);
                 amount = args[4]
@@ -198,5 +198,142 @@ commands.listitems = new Command({
         }
 
         listArray(message.channel, array, parseInt(args[1]));
+    }
+})
+
+commands.purgeitem = new Command({
+    desc: `Purges an item of your choice.`,
+    section: 'items',
+    args: [
+        {
+            name: "Name",
+            type: "Word",
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+
+        if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
+
+        if (!message.member.permissions.serialize().ADMINISTRATOR) {
+            if (itemFile[args[0]].originalAuthor != message.author.id) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to delete it.")
+        }
+
+        message.channel.send(`Are you **sure** you want to delete ${itemFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this item.\n**Y/N**`);
+
+        var givenResponce = false
+        var collector = message.channel.createMessageCollector({ time: 15000 });
+        collector.on('collect', m => {
+            if (m.author.id == message.author.id) {
+                if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
+                    message.channel.send(`${itemFile[args[0]].name} has been erased from existance. The loot and chests that have this item should be checked in order to ensure that they do not have an invalid item.`)
+                    delete itemFile[args[0]]
+
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
+                } else
+                    message.channel.send(`${itemFile[args[0]].name} will not be deleted.`);
+
+                    givenResponce = true
+                    collector.stop()
+                }
+            });
+            collector.on('end', c => {
+                if (givenResponce == false)
+                    message.channel.send(`No response given.\n${itemFile[args[0]].name} will not be deleted.`);
+            });
+    }
+})
+
+commands.edititem = new Command({
+    desc: `Edit existing items and change how they work in battle!`,
+    section: 'items',
+    args: [
+        {
+            name: "Name",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Field",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "New Value 1",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "New Value 2",
+            type: "Word",
+        }
+    ],
+    func: (message, args) => {
+        itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+
+        if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
+
+        if (!message.member.permissions.serialize().ADMINISTRATOR) {
+            if (itemFile[args[0]].originalAuthor != message.author.id) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to edit it.")
+        }
+
+        let editField = args[1].toLowerCase();
+        switch (editField) {
+            case 'name':
+            case 'desc':
+                itemFile[args[0]][editField] = args[2];
+                break;
+            case 'type':
+                if (!itemTypes.includes(args[2].toLowerCase())) return message.channel.send(`${args[2]} is not a valid item type. Valid types are:\n${Builders.codeBlock('', '- '+itemTypes.join(',\n- '))}`);
+                let amount
+                switch (args[2].toLowerCase()) {
+                    case 'skill':
+                        if (!skillFile[args[3]]) return message.channel.send(`${args[4]} is not a valid skill name.`);
+                        amount = args[3]
+                        break;
+                    case 'heal':
+                    case 'healmp':
+                        amount = args[3] && parseInt(args[3]) ? parseInt(args[3]) : 60;
+                        break;
+                    case 'healhpmp':
+                        amount = args[3] && parseInt(args[3]) ? parseInt(args[3]) : 40;
+                        break;
+                    case 'revive':
+                        amount = args[3] && parseInt(args[3]) ? parseInt(args[3]) : 2;
+                        break;
+                    case 'pacify':
+                        amount = args[3] && parseInt(args[3]) ? Math.max(0, Math.min(parseInt(args[3]), 100)) : 30;
+                }
+
+                delete itemFile[args[0]].skill;
+                delete itemFile[args[0]].heal;
+                delete itemFile[args[0]].healmp;
+                delete itemFile[args[0]].healhpmp;
+                delete itemFile[args[0]].revive;
+                delete itemFile[args[0]].pacify;
+
+                itemFile[args[0]].type = args[2].toLowerCase();
+                if (amount) itemFile[args[0]][args[2]] = amount;
+                break;
+            case 'cost':
+                itemFile[args[0]].cost = Math.max(0, parseInt(args[2]));
+                break;
+            case 'rarity':
+                if (!itemRarities.includes(args[2].toLowerCase()) && args[2].toLowerCase() != 'none') return message.channel.send(`${args[2]} is not a valid item rarity. Valid rarities are:\n${Builders.codeBlock('', '- '+itemRarities.join(',\n- '))}`);
+                itemFile[args[0]].rarity = args[2].toLowerCase();
+                break;
+            case 'truename':
+                if (itemFile[args[2]]) {
+                    return message.channel.send(`An item called ${args[2]} (${itemFile[args[2]].name}) already exists!`)
+                } else {
+                    itemFile[args[2]] = utilityFuncs.cloneObj(itemFile[args[0]])
+                    delete itemFile[args[0]]
+                }
+                break;
+            }
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
+        message.react('👍');
     }
 })
