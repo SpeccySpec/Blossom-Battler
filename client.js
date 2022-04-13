@@ -305,6 +305,27 @@ statusEmojis = {
 	confusion: '☄️'
 }
 
+elementTechs = {
+	burn: ['water', 'earth', 'nuclear'],
+	bleed: ['slash', 'poison', 'nuclear'],
+	freeze: ['strike', 'fire', 'earth'],
+	paralyze: ['strike', 'slash', 'pierce'],
+	dizzy: ['psychic', 'earth', 'wind'],
+	sleep: ['all'],
+	despair: ['psychic', 'curse', 'grass'],
+	poison: ['slash', 'pierce', 'wind'],
+	brainwash: ['psychic', 'bless', 'curse'],
+	fear: ['psychic', 'curse', 'ice'],
+	rage: ['bless', 'ice', 'psychic'],
+	ego: ['ice', 'pierce', 'sound'],
+	silence: ['sound', 'poison', 'nuclear'],
+	dazed: ['strike', 'wind', 'water'],
+	hunger: ['strike', 'pierce', 'earth'],
+	illness: ['slash', 'poison', 'nuclear'],
+	mirror: ['strike', 'slash', 'pierce'],
+	blind: ['curse', 'bless', 'gravity']
+}
+
 // Enemy Habitats
 enmHabitats = [
 	"grasslands",

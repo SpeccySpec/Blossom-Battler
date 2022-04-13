@@ -477,6 +477,28 @@ commands.listskills = new Command({
 	}
 })
 
+commands.searchskills = new Command({
+	desc: 'Searches for skills based on the phrase.',
+	section: "battle",
+	args: [
+		{
+			name: "Phrase",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let array = []
+		for (const i in skillFile) {
+			if (skillFile[i].name.includes(args[0])) {
+				array.push({title: `${elementEmoji[skillFile[i].type]}${skillFile[i].name} (${i})`, desc: `${skillFile[i].pow} Power and ${skillFile[i].acc}% Accuracy.`});
+			}
+		}
+
+		listArray(message.channel, array, args[1]);
+	}
+})
+
 /*
 	DELETING SKILLS
 					  */
@@ -626,5 +648,81 @@ commands.randskill = new Command({
 
 		let skill = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
 		message.channel.send({embeds: [skillFuncs.skillDesc(skillFile[skill], skillFile[skill].name, message.guild.id)]})
+	}
+})
+
+/*
+	GETTING ELEMENTS AND STATUSES
+									*/
+
+commands.listelements = new Command({
+	desc: 'Lists all the elements.',
+	section: "battle",
+	args: [],
+	func: (message, args) => {
+		const DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle('List of usable elements:')
+
+		let elementList = '';
+		for (let element in Elements) {
+			elementList += `${elementEmoji[Elements[element]]} ${Elements[element]}\n`;
+		}
+		
+		DiscordEmbed.setDescription(elementList)
+		message.channel.send({embeds: [DiscordEmbed]})
+	}
+})
+
+commands.liststatus = new Command({
+	desc: 'Lists all the status effects.',
+	section: "battle",
+	args: [],
+	func: (message, args) => {
+		const DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle('List of status effects:')
+			.setDescription('Status affects will affect fighters in-battle and can be fatal if not cured.')
+			.addFields()
+
+		let statusDesc = {
+			burn: '💥Take 1/10th of max HP damage each turn until cured, or you reach one hp. Halves ATK stat.',
+			bleed: '💥Take 1/10th of max HP damage each until cured, or the inflicted is defeated.',
+			freeze: '💥Immobilized for one turn.',
+			paralyze: '💥Immobilized for one turn.',
+			poison: '💥Take 1/10th of max HP damage each turn until cured, or you reach one hp. Halves MAG stat.',
+			dizzy: '🌀Accuracy of all skills halved for 3 turns.',
+			sleep: '🌀Immobilized for 2 turns, restore 1/20th of HP & MP while affected.',
+			despair: '🌀Lose 1/10th of max MP every turn until cured. Downs the inflicted once they reach 0MP.',
+			brainwash: '🌀Use a random move on the incorrect target for 2 turns.',
+			fear: '🌀50% chance to be immobilized but cured from the status.',
+			rage: '🌀Forced to use stronger melee attack on a random target for 2 turns.',
+			ego: '🌀Unnable to use heal skills for 3 turns.',
+			silence: '🌀Unable to use any magical skills for 2 turns.',
+			dazed: '💥Unable to use any physical skills for 2 turns.',
+			hunger: '💥ATK, MAG, AGL & PRC halved.',
+			illness: '💥Take 1/10th of max HP damage each turn until cured, or the inflicted is defeated. 1/3 chance to infect another party member next to you. Spreads amongst backup if in backup.',
+			infatuation: '🌀50% chance to hault attack. Stacks with other status effects.',
+			confusion: '🌀50% chance to damage self when attacking. Stacks with other status effects.',
+			mirror: '💥Immobilized for 3 turns. Repel magic skills.',
+			blind: '💥PRC and AGL halved.'
+		}
+
+		for (const i in statusEffects) {
+			let techTxt = ''
+			for (const k in elementTechs[statusEffects[i]]) {
+				if (elementTechs[statusEffects[i]][k] === 'all') {
+					techTxt = 'ALL';
+					break;
+				} else
+					techTxt += elementEmoji[elementTechs[statusEffects[i]][k]];
+			}
+			
+			if (techTxt === '') techTxt = 'NOTHING'
+
+			DiscordEmbed.fields.push({name: `${statusEmojis[statusEffects[i].toLowerCase()]}${statusEffects[i]}`, value: `_${techTxt} tech off of ${statusEmojis[statusEffects[i].toLowerCase()]}._\n${statusDesc[statusEffects[i].toLowerCase()]}`, inline: true})
+		}
+
+		message.channel.send({embeds: [DiscordEmbed]})
 	}
 })
