@@ -15,21 +15,22 @@ commands.ping = new Command({
 
 // Diceroll
 commands.diceroll = new Command({
-	desc: "*Args: <Num: Sides> {Num: Dice Count}*\nRolls the specified amount of dice with the specified amount of sides.",
+	desc: "Rolls the specified amount of dice with the specified amount of sides.",
 	section: "fun",
+	args: [
+		{
+			name: "Sides",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Dice Count",
+			type: "Num"
+		}
+	],
 	func: (message, args) => {
-		if (!args[0] || args[0] === ' ' || args[0] === 'null') {
-            const DiscordEmbed = new Discord.MessageEmbed()
-                .setColor('#0099ff')
-                .setTitle(`${getPrefix(message.guild.id)}diceroll`)
-				.setDescription(commands.diceroll.desc)
-            message.channel.send({embeds: [DiscordEmbed]})
-            return false
-        }
-
-		const num1 = parseInt(args[0]);
-
-		const num2 = args[1] ? parseInt(args[1]) : 1
+		const num1 = args[0]
+		const num2 = args[1] ?? 1
 
 		if (num1 < 1) return message.channel.send(`Your 1st number (${num1}) has got to be a number above 1.`);
 		else if (num2 < 1)  return message.channel.send(`Your 2nd number (${num2}) has got to be a number above 1.`);
@@ -132,41 +133,32 @@ let duoScenarios = [
 ]
 
 commands.scenario = new Command({
-	desc: "*Args: {Ping: Another Person}*\nGenerates a funny scenario that could probably easily be taken out of context.",
+	desc: "Generates a funny scenario that could probably easily be taken out of context.",
+	args: [
+		{
+			name: "Another Person",
+			type: "Ping"
+		}
+	],
 	section: "fun",
 	func: (message, args) => {
-        if (args[0]) {
-            if (message.mentions.users.first()) {
-                let taggedUser = message.mentions.users.first();
-                let sceneText = `${message.author.username} & ${taggedUser.username} `
-				let scenario = duoScenarios[Math.round(Math.random() * (duoScenarios.length - 1))]
-				
-				sceneText += scenario
-				const DiscordEmbed = new Discord.MessageEmbed()
-					.setColor('#0099ff')
-					.setTitle(`${message.author.username} & ${taggedUser.username}`)
-					.setDescription(`${sceneText}`)
-					.setFooter('rpg!scenario');
-				message.channel.send({embeds: [DiscordEmbed]})
-            } else {
-                const DiscordEmbed = new Discord.MessageEmbed()
-                    .setColor('#0099ff')
-                    .setTitle(`${message.author.username} & ${args[0]}`)
-					.setDescription(`${message.author.username} & ${args[0]} are not related in any way.`)
-                message.channel.send({embeds: [DiscordEmbed]})
-            }
-        } else {
-            let sceneText = `${message.author.username} `
-            let scenario = soloScenarios[Math.round(Math.random() * (soloScenarios.length - 1))]
-            
-			sceneText += scenario
-            const DiscordEmbed = new Discord.MessageEmbed()
-                .setColor('#0099ff')
-                .setTitle(`${message.author.username}`)
-				.setDescription(`${sceneText}`)
-            message.channel.send({embeds: [DiscordEmbed]})
-            return true
-        };
+		const taggedUser = args[0]
+		const embed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setFooter('rpg!scenario')
+		if (taggedUser) {
+			const users = `${message.author.username} & ${taggedUser.username}`
+			message.channel.send({embeds: [embed
+				.setTitle(users)
+				.setDescription(`${users} ${duoScenarios[Math.round(Math.random() * (duoScenarios.length - 1))]}`)
+			]})
+		} else {
+			const username = message.author.username
+			message.channel.send({embeds: [embed
+				.setTitle(username)
+				.setDescription(`${username} ${soloScenarios[Math.round(Math.random() * (soloScenarios.length - 1))]}`)
+			]})
+		}
 	}
 })
 
@@ -202,8 +194,78 @@ commands.quote = new Command({
 })
 
 // Ship
+const footerTexts = [
+	[
+		"This one, for sure, isn't happening.",
+		"Forget about even trying with this.",
+		"lol suck!"
+	],
+	[
+		"This one won't work out at all.",
+		"bruh.",
+		"This is sad"
+	],
+	[
+		"There's no chance this one's happening.",
+		'Here is a cookie for your troubles: "🍪"',
+		"Sad."
+	],
+	[
+		"Possible, but don't get your hopes up.",
+		"try harder lol",
+		"Well this is... unfortunate."
+	],
+	[
+		"Maybe if you try hard enough...",
+		"In another timeline, this would work!",
+		"Perhaps they'll be together if you hope"
+	],
+	[
+		"Interesting outcome.",
+		"I see, I see.",
+		"Almost."
+	],
+	[
+		"This ship's not tooooo bad.",
+		"nice NICE",
+		"Very cool"
+	],
+	[
+		"I like where this is going.",
+		"This could go places!",
+		"Avoid the fanfic sites."
+	],
+	[
+		"This one could turn into something...",
+		"They have a high chance of being together!!",
+		"Fanfic time."
+	],
+	[
+		"Awww, they fit so well together!",
+		"They're so nice together.",
+		"Cute couple.",
+	],
+	[
+		"Almost, almost!",
+		"Just barely!",
+		"So close."
+	]
+]
+
 commands.ship = new Command({
-	desc: "*<Word: Person #1> {Word: Person #2} {...}*\nShip yourself with someone... or ship two separate people, or more! It's funny, trust me.",
+	desc: "Ship yourself with someone... or ship two separate people, or more! It's funny, trust me.",
+	args: [
+		{
+			name: "Person #1",
+			type: "Any",
+			forced: true
+		},
+		{
+			name: "Person #2",
+			type: "Any",
+			multiple: true
+		}
+	],
 	section: "fun",
 	func: (message, args) => {
 		if (!args[0]) return message.channel.send(`Please specify at least one person who you want to ship yourself with, or two if you want to ship two different people.`);
@@ -240,10 +302,8 @@ commands.ship = new Command({
 
 		for (i in shipCandidates) {
 			// Converting Mentions
-			console.log(shipCandidates[i])
 			if (shipCandidates[i].startsWith('<@!') && shipCandidates[i].endsWith('>')) {
 				let mention = shipCandidates[i].slice(3, -1);
-				console.log(mention)
 				try {mention = client.users.cache.get(mention);} catch (e) {mention = undefined;}
 				shipCandidates[i] = mention != undefined ? mention.username : '[UNKNOWN]';
 			}
@@ -300,107 +360,19 @@ commands.ship = new Command({
         const loveLevel = ":white_medium_square:".repeat(loveIndex) + ":black_medium_square:".repeat(10 - loveIndex);
 
 		//footer reactions
-		let footerConditions = [
-			`${(love <= 0) ? true : false}`,
-			`${(love <= 10 && love > 0) ? true : false}`,
-			`${(love <= 20 && love > 10) ? true : false}`,
-			`${(love <= 30 && love > 20) ? true : false}`,
-			`${(love <= 40 && love > 30) ? true : false}`,
-			`${(love <= 50 && love > 40) ? true : false}`,
-			`${(love <= 60 && love > 50) ? true : false}`,
-			`${(love <= 70 && love > 60) ? true : false}`,
-			`${(love <= 80 && love > 70) ? true : false}`,
-			`${(love <= 90 && love > 80) ? true : false}`,
-			`${(love <= 99 && love > 90) ? true : false}`
-		]
-		let footerText = ""
-		
-		const footerTexts = [
-			[
-				"This one, for sure, isn't happening.",
-				"Forget about even trying with this.",
-				"lol suck!"
-			],
-			
-			[
-				"This one won't work out at all.",
-				"bruh.",
-				"This is sad"
-			],
-			
-			[
-				"There's no chance this one's happening.",
-				'Here is a cookie for your troubles: "🍪"',
-				"Sad."
-			],
-			
-			[
-				"Possible, but don't get your hopes up.",
-				"try harder lol",
-				"Well this is... unfortunate."
-			],
-			
-			[
-				"Maybe if you try hard enough...",
-				"In another timeline, this would work!",
-				"Perhaps they'll be together if you hope"
-			],
-			
-			[
-				"Interesting outcome.",
-				"I see, I see.",
-				"Almost."
-			],
-			
-			[
-				"This ship's not tooooo bad.",
-				"nice NICE",
-				"Very cool"
-			],
-			
-			[
-				"I like where this is going.",
-				"This could go places!",
-				"Avoid the fanfic sites."
-			],
-			
-			[
-				"This one could turn into something...",
-				"They have a high chance of being together!!",
-				"Fanfic time."
-			],
-			
-			[
-				"Awww, they fit so well together!",
-				"They're so nice together.",
-				"Cute couple.",
-			],
-			
-			[
-				"Almost, almost!",
-				"Just barely!",
-				"So close."
-			]
-		]
-
-		for (i in footerConditions) {
-			if (footerConditions[i].endsWith('true')) {
-				footerText = footerTexts[i][Math.round(Math.random() * footerTexts[i].length-1)]
-			}
+		let footerText
+		switch (love) {
+			case 69: {footerText = "Nice. ( ͡° ͜ʖ ͡°)"; break}
+			case 100: {footerText = "OTP!"; break}
+			default: {footerText = footerTexts[Math.floor(love / 10)][Math.round(Math.random() * 2)]}
 		}
 
-		if (love === 69)
-			footerText = 'Nice. ( ͡° ͜ʖ ͡°)'
-
-		if (love === 100)
-			footerText = 'OTP!'
-
 		// Send Embed
-		const DiscordEmbed = new Discord.MessageEmbed()
+		message.channel.send({embeds: [new Discord.MessageEmbed()
             .setColor('#ff06aa')
-            .setTitle(`${splicedName}`)
+            .setTitle(splicedName)
 			.setDescription(`${resulttext}\n**${love}%** ${loveLevel}`)
-			.setFooter(`${footerText}`)
-		message.channel.send({embeds: [DiscordEmbed]})
+			.setFooter(footerText)
+		]})
 	}
 })

@@ -2,7 +2,25 @@
 // Can't be done before items are created
 // Leave this to me - Spectra
 commands.openshop = new Command({
-	desc: '*Args: <Word: Name> <Snowflake: Channel> <Continuous Words: Items...>*\nOpens a shop with <Name> at <Channel>, selling all of the <Items> listed!',
+	desc: 'Opens a shop with <Name> at <Channel>, selling all of the <Items> listed!',
+	args: [
+		{
+			name: "Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Channel",
+			type: "ID",
+			forced: true
+		},
+		{
+			name: "Items",
+			type: "Word",
+			forced: true,
+			multiple: true
+		}
+	],
 	section: "items",
 	func: (message, args) => {
 		let shopData = setUpFile(`${dataPath}/json/${message.guild.id}/shops.json`);
@@ -13,7 +31,7 @@ commands.openshop = new Command({
             const DiscordEmbed = new Discord.MessageEmbed()
                 .setColor('#0099ff')
                 .setTitle(`${prefix}openshop`)
-				.setDescription('*Args: <Word: Name> <Snowflake: Channel> <Continuous Words: Items...>*\nOpens a shop with <Name> at <Channel>, selling all of the <Items> listed!')
+				.setDescription(commands.openshop.desc)
             return message.channel.send({embeds: [DiscordEmbed]})
         }
 		

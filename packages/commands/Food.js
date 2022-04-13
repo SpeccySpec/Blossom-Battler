@@ -169,8 +169,8 @@ function setInvalidEmbed(message, limit) {
 	return message.channel.send({embeds: [embed]})
 }
 
-function checkImage(message, arg, image) {
-	const validExtensions = ['png', 'bmp', 'tiff', 'tif', 'gif', 'jpg', 'jpeg', 'apng', 'webp']
+const validExtensions = ['png', 'bmp', 'tiff', 'tif', 'gif', 'jpg', 'jpeg', 'apng', 'webp']
+checkImage = (message, arg, image) => {
 	if (image != undefined) {
 		if (!validExtensions.includes(image.url.split('.').pop())) {
 			message.channel.send(`The image you uploaded is not a valid image.`)
@@ -223,16 +223,24 @@ function checkCategories(args, limit) {
 //Commands
 
 //Privacy
+const validOptions = ['global', 'server', 'category', 'channel']
+
 commands.foodprivacy = new Command({
-	desc: '*Args: {Word: Choice}*\nI will change your privacy settings on food view. You can private yourself from:\n- *global*\n- *server*\n- *category*\n- *channel*\n\nTo view your settings, use it without arguments.',
+	desc: 'I will change your privacy settings on food view. You can private yourself from:\n- *global*\n- *server*\n- *category*\n- *channel*\n\nTo view your settings, use it without arguments.',
 	section: "food",
+	args: [
+		{
+			name: "Choice",
+			type: "Word"
+		}
+	],
 	func: (message, args) => {
 
         setupFileProfile(message.author.id, 'privacy', userPrivacy)
 
-		const validOptions = ['global', 'server', 'category', 'channel']
+		const choice = args[0] ? args[0].toLowerCase() : undefined
 
-        if (!args[0] || (args[0] && !validOptions.includes(args[0].toLowerCase()))) {
+        if (!choice || (choice && !validOptions.includes(choice))) {
             const isGlobalBlock = userPrivacy[message.author.id].global ? 'Yes' : 'No'
 
 			const isServerBlock = userPrivacy[message.author.id].bServers.includes(message.guild.id) ? 'Yes' : 'No'
@@ -282,7 +290,7 @@ commands.foodprivacy = new Command({
 
 			return message.channel.send({embeds: [embed]})
         } else {
-			switch (args[0].toLowerCase()) {
+			switch (choice) {
 				case 'global':
 					userPrivacy[message.author.id].global = !userPrivacy[message.author.id].global
 
@@ -334,31 +342,51 @@ commands.foodprivacy = new Command({
 
 
 //preferences
+const ochanceAliases = ['official_chance', 'official', 'official chance', 'officialchance']
+const uchanceAliases = ['user_chance', 'user chance', 'userchance']
+const ublockAliases = ['user_block', 'user block', 'user', 'userblock']
+const pblockAliases = ['phrase_block', 'phrase block', 'phrase', 'phraseblock']
+
 commands.foodpreferences = new Command({
-	desc: '*Args: {Word: Choice}*\nI will change your user food preferences. You can set preferences for:\n- *official_chance <Number: Chance>*\n- *user_chance <Number: Chance>*\n- *user_block <ID: User>*\n- *phrase_block <Word: Phrase>*\n\nTo view your preferences, use it without arguments.',
+	desc: 'I will change your user food preferences. You can set preferences for:\n- *official_chance <Number: Chance>*\n- *user_chance <Number: Chance>*\n- *user_block <ID: User>*\n- *phrase_block <Word: Phrase>*\n\nTo view your preferences, use it without arguments.',
 	section: "food",
+	args: [
+		{
+			name: "Choice",
+			type: "Word"
+		},
+		{
+			name: "Value",
+			type: "Word"
+		}
+	],
 	func: (message, args) => {
 
 		setupFileProfile(message.author.id, 'preferences', userPreferences)
 
-		const ochanceAliases = args[0] && ['official_chance', 'official', 'official chance', 'officialchance'].includes(args[0].toLowerCase())
-		const uchanceAliases = args[0] && ['user_chance', 'user chance', 'userchance'].includes(args[0].toLowerCase())
-		const ublockAliases = args[0] && ['user_block', 'user block', 'user', 'userblock'].includes(args[0].toLowerCase())
-		const pblockAliases = args[0] && ['phrase_block', 'phrase block', 'phrase', 'phraseblock'].includes(args[0].toLowerCase())
+		const choice = args[0] && args[0].toLowerCase()
 
-		if (((ochanceAliases || uchanceAliases || ublockAliases || pblockAliases) && !args[1]) || (!ochanceAliases && !uchanceAliases && !ublockAliases & !pblockAliases)) {
-			const oChan = Math.round(userPreferences[message.author.id].OfficialChance)
-			const uChan = Math.round(userPreferences[message.author.id].UserChance)
-			const indexOChan = makeBar(userPreferences[message.author.id].OfficialChance)
-			const indexUChan = makeBar(userPreferences[message.author.id].UserChance)
+		const ochanceAliases = choice && ochanceAliases.includes(choice)
+		const uchanceAliases = choice && uchanceAliases.includes(choice)
+		const ublockAliases = choice && ublockAliases.includes(choice)
+		const pblockAliases = choice && pblockAliases.includes(choice)
+
+		let value = args[1]
+
+		if (((ochanceAliases || uchanceAliases || ublockAliases || pblockAliases) && !value) || (!ochanceAliases && !uchanceAliases && !ublockAliases & !pblockAliases)) {
+			const preferences = userPreferences[message.author.id]
+			const oChan = Math.round(preferences.OfficialChance)
+			const uChan = Math.round(preferences.UserChance)
+			const indexOChan = makeBar(preferences.OfficialChance)
+			const indexUChan = makeBar(preferences.UserChance)
 
 			passOff()
 
 			async function passOff() {
 				let userText = ''
-				for (let i = 0; i < userPreferences[message.author.id].BlockedUsers.length; i++) {
-					if (message.guild.members.cache.get(userPreferences[message.author.id].BlockedUsers[i]))
-					userText += `\n- ${message.guild.members.cache.get(userPreferences[message.author.id].BlockedUsers[i]).user.tag}`
+				for (let i = 0; i < preferences.BlockedUsers.length; i++) {
+					if (message.guild.members.cache.get(preferences.BlockedUsers[i]))
+					userText += `\n- ${message.guild.members.cache.get(preferences.BlockedUsers[i]).user.tag}`
 				}
 				if (userText == '')
 				userText = 'None'
@@ -369,9 +397,9 @@ commands.foodpreferences = new Command({
 					userText = `*Hastebin:\n${link}.*`
 				}
 
-				let phraseText = userPreferences[message.author.id].BlockedPhrases.length > 0 ? '' : 'None'
-				for (i in userPreferences[message.author.id].BlockedPhrases) {
-					phraseText += `\n- ${userPreferences[message.author.id].BlockedPhrases[i]}`
+				let phraseText = preferences.BlockedPhrases.length > 0 ? '' : 'None'
+				for (i in preferences.BlockedPhrases) {
+					phraseText += `\n- ${preferences.BlockedPhrases[i]}`
 				}
 
 				if (phraseText.length > 256) {
@@ -397,38 +425,38 @@ commands.foodpreferences = new Command({
 		}
 
 		if (pblockAliases) {
-			if (userPreferences[message.author.id].BlockedPhrases.includes(args[1].toLowerCase())) {
-                userPreferences[message.author.id].BlockedPhrases.splice(userPreferences[message.author.id].BlockedPhrases.indexOf(args[1].toLowerCase()), 1)
-                message.channel.send(`The phrase **${args[1].toLowerCase()}** is no longer on your own blacklist.`)
+			value = value.toLowerCase()
+			if (preferences.BlockedPhrases.includes(value)) {
+                preferences.BlockedPhrases.splice(preferences.BlockedPhrases.indexOf(value), 1)
+                message.channel.send(`The phrase **${value}** is no longer on your own blacklist.`)
             } else {
-                userPreferences[message.author.id].BlockedPhrases.push(args[1].toLowerCase())
-                message.channel.send(`The phrase **${args[1].toLowerCase()}** is now on your own blacklist.`)
+                preferences.BlockedPhrases.push(value)
+                message.channel.send(`The phrase **${value}** is now on your own blacklist.`)
             }
 		} else if (ochanceAliases) {
-			args[1] = Math.max(Math.min(parseInt(args[1]), 100), 0)
-			userPreferences[message.author.id].OfficialChance = args[1]
-			message.channel.send(`Your chance of food from the official category has been set to **${args[1]}%**.`)
+			value = Math.max(Math.min(parseInt(value), 100), 0)
+			preferences.OfficialChance = value
+			message.channel.send(`Your chance of food from the official category has been set to **${value}%**.`)
 		} else if (uchanceAliases) {
-			args[1] = Math.max(Math.min(parseInt(args[1]), 100), 0)
-			userPreferences[message.author.id].UserChance = args[1]
-			message.channel.send(`Your chance of food from the users has been set to **${args[1]}%**.`)
+			value = Math.max(Math.min(parseInt(value), 100), 0)
+			preferences.UserChance = value
+			message.channel.send(`Your chance of food from the users has been set to **${value}%**.`)
 		} else if (ublockAliases) {
-			let userID = args[1]
 			//if it is a mention, convert it to an ID
-			if (userID.startsWith('<@!') && userID.endsWith('>')) {
-				userID = userID.slice(3, -1)
+			if (value.startsWith('<@!') && value.endsWith('>')) {
+				value = value.slice(3, -1)
 			}
 
-			if (client.users.cache.has(userID)) {
-				if (userPreferences[message.author.id].BlockedUsers.includes(userID)) {
-					userPreferences[message.author.id].BlockedUsers.splice(userPreferences[message.author.id].BlockedUsers.indexOf(userID), 1)
-					message.channel.send(`The user **${client.users.cache.get(userID).username}** is no longer on your own blacklist.`)
+			if (client.users.cache.has(value)) {
+				if (preferences.BlockedUsers.includes(value)) {
+					preferences.BlockedUsers.splice(preferences.BlockedUsers.indexOf(value), 1)
+					message.channel.send(`The user **${client.users.cache.get(value).username}** is no longer on your own blacklist.`)
 				} else {
-					userPreferences[message.author.id].BlockedUsers.push(userID)
-					message.channel.send(`The user **${client.users.cache.get(userID).username}** is now on your own blacklist.`)
+					preferences.BlockedUsers.push(value)
+					message.channel.send(`The user **${client.users.cache.get(value).username}** is now on your own blacklist.`)
 				}
 			} else {
-				return message.channel.send(`The user **${userID}** does not exist.`)
+				return message.channel.send(`The user **${value}** does not exist.`)
 			}
 		}
 
@@ -454,11 +482,32 @@ commands.foodcategories = new Command({
 })
 
 
-
-
 commands.registerfood = new Command({
-	desc: `*Args: <Word: Main Category> <Word: Sub-category> <Word: Name> <Attachment: Image>*\nRegister a food item.`,
+	desc: `Register a food item.`,
 	section: "food",
+	args: [
+		{
+			name: "Main Category",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Sub Category",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Attachment",
+			type: "Image or URL",
+			forced: true,
+			multiple: true
+		}
+	],
 	func: (message, args) => {
 
 		if (args.length < 3) {

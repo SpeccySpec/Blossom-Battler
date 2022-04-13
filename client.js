@@ -390,7 +390,6 @@ makeDirectory = (dir) => {
 	return directories;
 }
 
-// Element List
 elementList = () => {		
 	const DiscordEmbed = new Discord.MessageEmbed()
 		.setColor('#0099ff')
@@ -402,6 +401,16 @@ elementList = () => {
 	
 	DiscordEmbed.setDescription(elementTxt)
 	return DiscordEmbed;
+}
+
+typeParsers = {
+	Num: ({arg}) => {return parseInt(arg) || undefined},
+	Decimal: ({arg}) => {return parseFloat(arg) || undefined},
+	Word: (vars) => {return (typeParsers.Ping(vars) || typeParsers.Channel(vars)) ? undefined : vars.arg},
+	Ping: ({message}) => {return message.mentions.users.first()},
+	Channel: arg => {}, //placeholders
+	ID: arg => {},
+	Image: ({message}) => {return checkImage(message, undefined, message.attachments.first())}
 }
 
 const backButton = new Discord.MessageButton({
@@ -476,7 +485,51 @@ Command = class {
 	constructor(object) {
 		this.desc = object.desc
 		this.section = object.section
-		this.call = object.func
+		this.func = object.func
+		this.args = object.args ?? []
+	}
+
+	call(message, rawargs) {
+		let args = []
+		for (const arg of this.args) {
+			const rawarg = rawargs.pop()
+			if (rawarg) {
+				const parser = typeParsers[arg.type]
+				const parsedArg = parser ? parser({arg: rawarg, message}) : rawarg
+				if (!parsedArg) return void message.channel.send(`Invalid argument for "${arg.name}", it has to be of type "${arg.type}".`)
+				args.push(parsedArg)
+				if (arg.multiple) {
+					for (const rawarg of rawargs) {
+						const parsedExtraArg = parser ? parser({arg: rawarg, message}) : rawarg
+						if (!parsedExtraArg) return void message.channel.send(`Invalid extra argument for "${arg.name}", it has to be of type "${arg.type}".`)
+						args.push(parsedExtraArg)
+					}
+					break
+				}
+			} else if (arg.forced) {
+				const desc = this.getFullDesc()
+				const DiscordEmbed = new Discord.MessageEmbed()
+					.setColor('#0099ff')
+					.setTitle(`Missing required argument "${arg.name}"!`)
+					.setDescription(desc)
+				return void message.channel.send({embeds: [DiscordEmbed]})
+			}
+		}
+		this.func(message, args)
+	}
+
+	getFullDesc() {
+		let args = "*"
+		for (const arg of this.args) {
+			const argdesc = `${arg.type}: ${arg.name}`
+			args += arg.forced ? `<${argdesc}> ` : `\{${argdesc}\} `
+			if (arg.multiple) {
+				args += "{...}"
+				break
+			}
+		}
+		args = args == "*" ? "" : args + "*\n"
+		return `${args}${this.desc}` 
 	}
 }
 
