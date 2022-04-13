@@ -596,6 +596,7 @@ commands.renamefood = new Command({
 		//write to json
 		foodFiles[args[0].toLowerCase()][message.author.id][args[1].toLowerCase()][args[3].toLowerCase()] = foodFiles[args[0].toLowerCase()][message.author.id][args[1].toLowerCase()][args[2].toLowerCase()]
 		delete foodFiles[args[0].toLowerCase()][message.author.id][args[1].toLowerCase()][args[2].toLowerCase()]
+		foodFiles[args[0].toLowerCase()][message.author.id][args[1].toLowerCase()][args[3].toLowerCase()].name = args[3].toLowerCase()
 
 		fs.writeFileSync(`${dataPath}/json/food/${args[0].toLowerCase()}.json`, JSON.stringify(foodFiles[args[0].toLowerCase()], null, '    '));
 		message.channel.send(`The ${args[0].toLowerCase()} ${singularVerb[args[1].toLowerCase()]} item **${args[2].toLowerCase()}** has been renamed to **${args[3].toLowerCase()}**.`)
