@@ -169,8 +169,10 @@ function setInvalidEmbed(message, limit) {
 	return message.channel.send({embeds: [embed]})
 }
 
-const validExtensions = ['png', 'bmp', 'tiff', 'tif', 'gif', 'jpg', 'jpeg', 'apng', 'webp']
+validExtensions = ['png', 'bmp', 'tiff', 'tif', 'gif', 'jpg', 'jpeg', 'apng', 'webp']
 checkImage = (message, arg, image) => {
+	console.log(arg, image)
+	
 	if (image != undefined) {
 		if (!validExtensions.includes(image.url.split('.').pop())) {
 			message.channel.send(`The image you uploaded is not a valid image.`)

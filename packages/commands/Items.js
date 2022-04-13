@@ -55,6 +55,9 @@ function itemDesc(itemDefs, itemName, message) {
         .setColor('#0099ff')
 		.setTitle(`${itemTypeEmoji[itemDefs.type]}${itemDefs.rarity && itemDefs.rarity != 'none' ? itemRarityEmoji[itemDefs.rarity] : ``} ${itemDefs.name ? itemDefs.name : itemDefs} *(${userTxt})*`)
 		.setDescription(finalText)
+
+        if (itemDefs.image)
+            DiscordEmbed.setThumbnail(itemDefs.image);
 	return DiscordEmbed;
 }
 
@@ -137,6 +140,7 @@ commands.registeritem = new Command({
                 break;
             case 'pacify':
                 amount = args[4] && parseInt(args[4]) ? Math.max(0, Math.min(parseInt(args[4]), 100)) : 30;
+                break;
         }
 
         if (amount) itemFile[args[0]][args[3]] = amount;
@@ -330,6 +334,10 @@ commands.edititem = new Command({
                     itemFile[args[2]] = utilityFuncs.cloneObj(itemFile[args[0]])
                     delete itemFile[args[0]]
                 }
+                break;
+            case 'image':
+                if (!checkImage(message, args[2], message.attachments.first())) return message.channel.send(`${args[2]} is not a valid image.`);
+                itemFile[args[0]].image = checkImage(message, args[2], message.attachments.first())
                 break;
             }
 
