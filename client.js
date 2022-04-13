@@ -191,15 +191,37 @@ itemTypes = [
 ]
 
 itemTypeEmoji = {
-	skill: '🎇',
+	skill: '<:skill:963788061068656661>',
+	
+	heal: "<:healhp:963788060665970709>",
+	healmp: "<:healmp:963788061253201980>",
+	healhpmp: "<:healhpmp:963788060976357446>",
 
-	heal: "🌀",
-	healmp: "⭐",
-	healhpmp: "🔰",
+	revive: "<:revive:963788061056049213>",
+	material: '<:material:963788061731348510>',
+	pacify: '<:pacify:963788061068648479>',
+}
 
-	revive: "✨",
-	material: '🛠',
-	pacify: '🎵',
+itemRarities = [
+	"common",
+	"uncommon",
+	"rare",
+	"veryrare",
+	"epic",
+	"legendary",
+	"sentient",
+	"artifact"
+]
+
+itemRarityEmoji = {
+	common: '<:common:963787701230915614>',
+	uncommon: '<:uncommon:963787700903743509>',
+	rare: '<:rare:963787701444804608>',
+	veryrare: '<:veryrare:963787701256077332>',
+	epic: '<:epic:963787701268643890>',
+	legendary: '<:legendary:963787701524516875>',
+	sentient: '<:sentient:963787701205745754>',
+	artifact: '<:artifact:963787701084106872>'
 }
 
 // Status Effects
