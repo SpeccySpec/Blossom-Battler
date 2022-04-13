@@ -366,7 +366,7 @@ commands.searchitems = new Command({
 
 commands.randitem = new Command({
     desc: `Get a random item.`,
-    section: 'items',
+    section: 'fun',
     args: [],
     func: (message, args) => {
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
