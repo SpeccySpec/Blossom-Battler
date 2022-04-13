@@ -320,7 +320,7 @@ commands.listitems = new Command({
 })
 
 commands.purgeitem = new Command({
-    desc: `Purges an item of your choice.`,
+    desc: `Purges an item of your choice. **YOU CANNOT GET IT BACK AFTER DELETION!**`,
     section: 'items',
     args: [
         {
@@ -582,6 +582,47 @@ commands.itemimage = new Command({
     }
 })
 
+commands.purgeweapon = new Command({
+    desc: `Purges a weapon of your choice. **YOU CANNOT GET IT BACK AFTER DELETION!**`,
+    section: 'items',
+    args: [
+        {
+            name: "Name",
+            type: "Word",
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+
+        if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
+
+        if (itemFile[args[0]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to delete it.")
+
+        message.channel.send(`Are you **sure** you want to delete ${itemFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this item.\n**Y/N**`);
+
+        var givenResponce = false
+        var collector = message.channel.createMessageCollector({ time: 15000 });
+        collector.on('collect', m => {
+            if (m.author.id == message.author.id) {
+                if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
+                    message.channel.send(`${itemFile[args[0]].name} has been erased from existance. The loot and chests that have this item should be checked in order to ensure that they do not have an invalid item.`)
+                    delete itemFile[args[0]]
+
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
+                } else
+                    message.channel.send(`${itemFile[args[0]].name} will not be deleted.`);
+
+                    givenResponce = true
+                    collector.stop()
+                }
+            });
+            collector.on('end', c => {
+                if (givenResponce == false)
+                    message.channel.send(`No response given.\n${itemFile[args[0]].name} will not be deleted.`);
+            });
+    }
+})
 
 
 
@@ -922,6 +963,8 @@ commands.editweapon = new Command({
     }
 })
 
+
+
 commands.registerarmor = new Command({
     desc: 'Creates an armor piece to be equipped. They can be used in battle to grant certain effects or restore health.',
     section: 'items',
@@ -1221,5 +1264,47 @@ commands.editarmor = new Command({
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/armors.json`, JSON.stringify(armorFile, null, 4));
         message.react('👍');
+    }
+})
+
+commands.purgearmor = new Command({
+    desc: `Purges an armor of your choice. **YOU CANNOT GET IT BACK AFTER DELETION!**`,
+    section: 'items',
+    args: [
+        {
+            name: "Name",
+            type: "Word",
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
+
+        if (!armorFile[args[0]]) return message.channel.send(`${args[0]} is not a valid armor name.`);
+
+        if (armorFile[args[0]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this armor, therefore, you have insufficient permissions to delete it.")
+
+        message.channel.send(`Are you **sure** you want to delete ${armorFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this armor.\n**Y/N**`);
+
+        var givenResponce = false
+        var collector = message.channel.createMessageCollector({ time: 15000 });
+        collector.on('collect', m => {
+            if (m.author.id == message.author.id) {
+                if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
+                    message.channel.send(`${armorFile[args[0]].name} has been erased from existance. The loot and chests that have this armor should be checked in order to ensure that they do not have an invalid armor.`)
+                    delete armorFile[args[0]]
+
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/armors.json`, JSON.stringify(armorFile, null, 4));
+                } else
+                    message.channel.send(`${armorFile[args[0]].name} will not be deleted.`);
+
+                    givenResponce = true
+                    collector.stop()
+                }
+            });
+            collector.on('end', c => {
+                if (givenResponce == false)
+                    message.channel.send(`No response given.\n${armorFile[args[0]].name} will not be deleted.`);
+            });
     }
 })
