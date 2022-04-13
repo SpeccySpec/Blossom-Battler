@@ -70,6 +70,13 @@ let tempSkill = fs.readFileSync(dataPath+'/dailyskill.txt', {flag: 'as+'});
 if (tempSkill && tempSkill != '')
 	dailySkill = tempSkill.toString();
 
+// Daily Item - Resets at midnight
+dailyItem = {}
+
+let tempItem = fs.readFileSync(dataPath+'/dailyItem.txt', {flag: 'as+'});
+if (tempItem && tempItem != '')
+	dailyItem = JSON.parse(tempItem);
+
 // Midnight Moment
 function midnightInMS() {
     return new Date().setHours(24, 0, 0, 0) - new Date().getTime()
@@ -78,16 +85,20 @@ function midnightInMS() {
 setTimeout(function() {
 	dailyQuote = 'none';
 	dailySkill = 'none';
+	dailyItem = {};
 
 	fs.writeFileSync(dataPath+'/dailyquote.txt', '');
 	fs.writeFileSync(dataPath+'/dailyskill.txt', '');
+	fs.writeFileSync(dataPath+'/dailyItem.txt', '');
 
 	setTimeout(function() {
 		dailyQuote = 'none';
 		dailySkill = 'none';
+		dailyItem = {};
 
 		fs.writeFileSync(dataPath+'/dailyquote.txt', '');
 		fs.writeFileSync(dataPath+'/dailyskill.txt', '');
+		fs.writeFileSync(dataPath+'/dailyItem.txt', '');
 	}, midnightInMS());
 }, midnightInMS());
 

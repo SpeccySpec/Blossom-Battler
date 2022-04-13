@@ -378,3 +378,57 @@ commands.randitem = new Command({
         message.channel.send({content:`Congratulations, ${message.guild.members.cache.get(item.originalAuthor).user.username}! ${itemTypeEmoji[item.type]} ${item.name} has been rolled!`, embeds: [itemDesc(item, item.name, message)]})
     }
 })
+
+commands.dailyitem = new Command({
+    desc: 'Any random item can be set as a daily one! Test your luck to see if yours is here!',
+    section: "fun",
+    args: [],
+    func: (message, args) => {
+        itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+        if (Object.keys(itemFile).length == 0) return message.channel.send(`No items have been added yet!`);
+        if (!dailyItem) dailyItem = {};
+
+        let notice = 'Here is the daily item, again.'
+        if (!dailyItem[message.guild.id]) {
+            dailyItem[message.guild.id] = Object.keys(itemFile)[Math.floor(Math.random() * Object.keys(itemFile).length)];
+
+            let authorTxt = itemFile[dailyItem[message.guild.id]].originalAuthor ? `<@!${itemFile[dailyItem[message.guild.id]].originalAuthor}>` : '<@776480348757557308>'
+            notice = `${authorTxt}, your item is the daily item for today!`;
+        }
+
+        setTimeout(function() {
+            if (itemFile[dailyItem[message.guild.id]]) {
+                let today = new Date();
+                let dd = String(today.getDate()).padStart(2, '0');
+                let mm = String(today.getMonth() + 1).padStart(2, '0');
+                let yyyy = today.getFullYear();
+
+                today = mm + '/' + dd + '/' + yyyy;
+                
+                if (mm === '12' && dd === '24')
+                    today = 'Christmas Eve';
+                else if (mm === '12' && dd === '25')
+                    today = 'Christmas';
+                else if (mm === '12' && dd === '26')
+                    today = 'Boxing Day';
+                else if (mm === '12' && dd === '31')
+                    today = "New Years' Eve";
+                else if (mm === '1' && dd === '1')
+                    today = 'New Years';
+                else if (mm === '4' && dd === '1')
+                    today = "April Fools' day";
+                else if (mm === '4' && dd === '17' && yyyy == '2022')
+                    today = 'Easter (2022)';
+                else if (mm === '6' && dd === '2')
+                    today = "<@516359709779820544>'s birthday";
+                else if (mm === '10' && dd === '31')
+                    today = 'Halloween';		
+
+                fs.writeFileSync(dataPath+'/dailyitem.txt', JSON.stringify(dailyItem));
+
+                let itemTxt = `**[${today}]**\n${notice}`
+                message.channel.send({content: itemTxt, embeds: [itemDesc(itemFile[dailyItem[message.guild.id]], itemFile[dailyItem[message.guild.id]].name, message)]});	
+            }
+        }, 500);
+    }
+})
