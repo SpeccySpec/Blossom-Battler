@@ -375,6 +375,6 @@ commands.randitem = new Command({
 
         let item = Object.keys(itemFile)[Math.floor(Math.random() * Object.keys(itemFile).length)];
         item = itemFile[item]
-        message.channel.send({content:`Congratulations! <@!${item.originalAuthor}>! ${itemTypeEmoji[item.type]} ${item.name} has been rolled!`, embeds: [itemDesc(item, item.name, message)]})
+        message.channel.send({content:`Congratulations, ${message.guild.members.cache.get(item.originalAuthor).user.username}! ${itemTypeEmoji[item.type]} ${item.name} has been rolled!`, embeds: [itemDesc(item, item.name, message)]})
     }
 })
