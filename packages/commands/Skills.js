@@ -238,6 +238,13 @@ commands.editskill = new Command({
 					} else {
 						skillFile[args[2]] = utilityFuncs.cloneObj(skillFile[args[0]])
 						delete skillFile[args[0]]
+
+						itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+						for (let item in itemFile) {
+							if (itemFile[item].skill == args[0]) {
+								itemFile[item].skill = args[2]
+							}
+						}
 					}
 
 				default:

@@ -2,6 +2,7 @@ const categories = {
 	misc: "Other things that don't fit into the other sections.",
 	fun: "Fun things to use, come try them out!",
 	food: "Tasty, tasty food! All for you to try out!",
+	items: "Items that you can use to do things!",
 	shops: "Need Items? Open shops and sell them!",
 	battle: "The main part of Bloom Battler is well... the battles of course!",
 	all: "All of the existing commands"
