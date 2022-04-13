@@ -197,6 +197,8 @@ commands.listitems = new Command({
             array.push({title: `${itemTypeEmoji[itemFile[item].type]}${itemFile[item].name} (${item})`, desc: `${itemFile[item].cost} cost`});
         }
 
+        if (array.length == 0) return message.channel.send(`No items found.`);
+
         listArray(message.channel, array, parseInt(args[1]));
     }
 })
@@ -335,5 +337,31 @@ commands.edititem = new Command({
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
         message.react('👍');
+    }
+})
+
+commands.searchitems = new Command({
+    desc: `Search for items by name.`,
+    section: 'items',
+    args: [
+        {
+            name: "Name",
+            type: "Word",
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+
+        let array = []
+        for (let item in itemFile) {
+            if (itemFile[item].name.includes(args[0]) || item.includes(args[0])) {
+                array.push({title: `${itemTypeEmoji[itemFile[item].type]}${itemFile[item].name} (${item})`, desc: `${itemFile[item].cost} cost`});
+            }
+        }
+
+        if (array.length == 0) return message.channel.send(`No items found with the name ${args[0]}.`);
+        
+        listArray(message.channel, array, parseInt(args[1]));
     }
 })
