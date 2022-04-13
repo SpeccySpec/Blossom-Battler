@@ -515,7 +515,7 @@ Command = class {
 				return void message.channel.send({embeds: [DiscordEmbed]})
 			}
 		}
-		this.func(message, args)
+		this.func(message, args.reverse())
 	}
 
 	getFullDesc() {
