@@ -93,24 +93,24 @@ commands.registerskill = new Command({
 		let cost = 0;
 		let costtype = 'mp';
 		if (args[1] && args[1] > 0) {
-			cost = parseInt(args[1]);
+			cost = args[1];
 			if (args[2] && utilityFuncs.inArray(args[2].toLowerCase(), costTypes)) costtype = args[2].toLowerCase();
 		}
 
 		// So much shit to check :(
 		if (!args[3]) return message.channel.send('Please enter a value for **Power**! Skills can have up to 2000 power.');
-		if (parseInt(args[3]) < 1) return message.channel.send('Skills with 0 power or less will not function!');
+		if (args[3] < 1) return message.channel.send('Skills with 0 power or less will not function!');
 		if (!isFinite(args[3])) return message.channel.send('Please enter a whole number for **Power**!')
 
 		if (!args[4]) return message.channel.send('Please enter a value for **Accuracy**! Skills can have up to 100 accuracy.');
-		if (parseFloat(args[4]) < 1) return message.channel.send('Skills with 0% accuracy or less will not function!');
+		if (args[4] < 1) return message.channel.send('Skills with 0% accuracy or less will not function!');
 		if (!isFinite(args[4])) return message.channel.send('Please enter a decimal or whole number for **Accuracy**!')
 
 		if (!args[5]) return message.channel.send('Please enter a value for **Critical Hit Chance**, or leave it at 0 for no critical hit.');
 		if (!isFinite(args[5])) return message.channel.send('Please enter a decimal or whole number for **Critical Hit Chance**!')
 
 		if (!args[6]) return message.channel.send('Please enter a value for **Hits**!');
-		if (parseInt(args[6]) < 1) return message.channel.send('Skills with 0 hits or less will not function!');
+		if (args[6] < 1) return message.channel.send('Skills with 0 hits or less will not function!');
 		if (!isFinite(args[6])) return message.channel.send('Please enter a whole number for **Hits**!')
 
 		if (!args[7] || !utilityFuncs.inArray(args[7].toLowerCase(), Elements)) {
@@ -126,16 +126,16 @@ commands.registerskill = new Command({
 			name: args[0],
 			type: args[7].toLowerCase(),
 			atktype: atype,
-			pow: parseInt(args[3]),
-			hits: parseInt(args[6]),
-			acc: Math.min(100, parseFloat(args[4])),
+			pow: args[3],
+			hits: args[6],
+			acc: Math.min(100, args[4]),
 			cost: cost,
 			costtype: costtype,
 			target: args[9].toLowerCase(),
 			originalAuthor: message.author.id
 		}
 
-		if (parseFloat(args[5]) > 0) skillDefs.crit = parseFloat(args[5]);
+		if (args[5] > 0) skillDefs.crit = args[5];
 
 		if (args[10] && args[10].toLowerCase() != 'none') {
 			if (!utilityFuncs.inArray(args[10].toLowerCase(), statusEffects)) {
@@ -147,10 +147,10 @@ commands.registerskill = new Command({
 			}
 
 			skillDefs.status = args[10].toLowerCase();
-			if (isFinite(args[11]) && parseFloat(args[11]) < 100) skillDefs.statuschance = parseFloat(args[11]);
+			if (isFinite(args[11]) && args[11] < 100) skillDefs.statuschance = args[11];
 		}
 
-		if (args[12]) skillDefs.desc = args[12]
+		if (args[12]) skillDefs.desc = args[12];
 
 		skillFile[args[0]] = skillDefs;
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
@@ -197,8 +197,8 @@ commands.listatkextras = new Command({
 		let lastOne = 5;
 
 		if (args[0]) {
-			firstOne += 6*(parseInt(args[0])-1);
-			lastOne += 6*(parseInt(args[0])-1);
+			firstOne += 6*(args[0]-1);
+			lastOne += 6*(args[0]-1);
 		}
 
 		for (let i = firstOne; i <= lastOne; i++) {
@@ -332,15 +332,15 @@ commands.editskill = new Command({
 				case 'pow':
 				case 'power':
 				case 'strength':
-					let totalDmg = parseInt(args[2])*skillFile[args[0]].hits;
+					let totalDmg = args[2]*skillFile[args[0]].hits;
 					if (totalDmg > 2000) return message.channel.send(`The Power cap for skills is 2000! A skill of ${skillFile[args[0]].hits} hits can have a maximum of ${2000/skillFile[args[0]].hits} power!`);
-					if (parseInt(args[2]) < 0) return message.channel.send('Skills cannot go below 0 power.');
+					if (args[2] < 0) return message.channel.send('Skills cannot go below 0 power.');
 
-					skillFile[args[0]].pow = parseInt(args[2]);
+					skillFile[args[0]].pow = args[2];
 
 				case 'acc':
 				case 'crit':
-					skillFile[args[0]][editField] = parseFloat(args[2]);
+					skillFile[args[0]][editField] = args[2];
 					break;
 
 				case 'name':
@@ -385,7 +385,7 @@ commands.editskill = new Command({
 					break;
 
 				default:
-					skillFile[args[0]][editField] = parseInt(args[2]);
+					skillFile[args[0]][editField] = args[2];
 			}
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
@@ -455,7 +455,7 @@ commands.listskills = new Command({
 			array.push({title: `${elementEmoji[skillFile[i].type]}${skillFile[i].name} (${i})`, desc: descTxt});
 		}
 
-		listArray(message.channel, array, parseInt(args[1]));
+		listArray(message.channel, array, args[1]);
 	}
 })
 
