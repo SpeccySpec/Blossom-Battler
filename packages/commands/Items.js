@@ -440,3 +440,31 @@ commands.dailyitem = new Command({
         }, 500);
     }
 })
+
+commands.itemimage = new Command({
+    desc: 'Sets the image for an item.',
+    section: 'items',
+    args: [
+        {
+            name: "Item",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Image",
+            type: "Attachment",
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+
+        if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item.`);
+        if (!checkImage(message, args[1], message.attachments.first())) return message.channel.send(`${args[1]} is not a valid image.`);
+
+        itemFile[args[0]].image = checkImage(message, args[1], message.attachments.first())
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
+        message.react('👍');
+    }
+})
