@@ -486,8 +486,19 @@ commands.purgeskill = new Command({
 			collector.on('collect', m => {
 				if (m.author.id == message.author.id) {
 					if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
-						message.channel.send(`${skillFile[args[0]].name} has been erased from existance.\n_The characters and enemies that know this skill should be checked in order to ensure that they do not have an invalid skill._`)
+						message.channel.send(`${skillFile[args[0]].name} has been erased from existance.\n`)
 						delete skillFile[args[0]];
+
+						let itemWarning = '';
+						itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+						for (let item in itemFile) {
+							if (itemFile[item].skill == args[0]) {
+								itemFile[item].skill = ''
+								itemWarning = `\n- ${itemFile[item]}`
+							}
+						}
+
+						if (itemWarning != '') message.channel.send(`**WARNING!** Items such as: ${itemWarning}\nhad their skill deleted.`)
 
 						fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 					} else message.channel.send(`${skillFile[args[0]].name} will not be deleted.`);
