@@ -124,6 +124,7 @@ commands.registeritem = new Command({
         switch (args[3].toLowerCase()) {
             case 'skill':
                 if (!skillFile[args[4]]) return message.channel.send(`${args[4]} is not a valid skill name.`);
+                if (skillFile[args[4]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send(`You cannot use a skill that you do not own.`);
                 amount = args[4]
                 break;
             case 'heal':
@@ -218,9 +219,7 @@ commands.purgeitem = new Command({
 
         if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
 
-        if (!message.member.permissions.serialize().ADMINISTRATOR) {
-            if (itemFile[args[0]].originalAuthor != message.author.id) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to delete it.")
-        }
+        if (itemFile[args[0]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to delete it.")
 
         message.channel.send(`Are you **sure** you want to delete ${itemFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this item.\n**Y/N**`);
 
@@ -292,6 +291,7 @@ commands.edititem = new Command({
                 switch (args[2].toLowerCase()) {
                     case 'skill':
                         if (!skillFile[args[3]]) return message.channel.send(`${args[4]} is not a valid skill name.`);
+                        if (skillFile[args[3]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send(`You cannot use a skill that you do not own.`);
                         amount = args[3]
                         break;
                     case 'heal':
