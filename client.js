@@ -92,11 +92,12 @@ setTimeout(function() {
 }, midnightInMS());
 
 // Elements
-// Elements
 Elements = [
     "strike",
     "slash",
     "pierce",
+	"explode",
+
     "fire",
     "water",
     "ice",
@@ -110,6 +111,7 @@ Elements = [
     "metal",
     "curse",
     "bless",
+	"spirit",
 	"gravity",
 	"sound",
     "almighty",
@@ -120,31 +122,33 @@ Elements = [
 ]
 
 elementEmoji = {
-	strike: "<:strike:877132710370480190>",
-	slash: "<:slash:877132710345338960> ",
-	pierce: "<:pierce:877132710315950101>",
-	
-	fire: "<:fire:877132709934301216>",
-	water: "<:water:877132710471147571>",
-	ice: "<:ice:877132710299181076>",
-	electric: "<:electric:877132710194348072>",
-	wind: "<:wind:877140815649075241>",
-	earth: "<:earth:877140476409577482>",
-	grass: "<:grass:877140500036075580>",
-	psychic: "<:psychic:877140522530140171>",
-	poison: "<:poison:906759861742760016>",
-	metal: "<:metal:906748877955268638>",
-	curse: "<:curse:906748923354443856>",
-	bless: "<:bless:903369721980813322>",
-	nuclear: "<:nuclear:906877350447300648>",
-	gravity: "🌍",
-	sound: "🎵",
-	
-	almighty: "<:almighty:906748842450509894>",
-	
-	status: "<:status:906877331711344721>",
-	heal: "<:heal:906758309351161907>",
-	passive: "<:passive:906874477210648576>"
+	strike: "<:strike:963413845764874290>",
+	slash: "<:slash:963413845244797029>",
+	pierce: "<:pierce:963413845337063424>",
+	explode: "<:explode:963413844544344155>",
+
+	fire: "<:fire:963413844825362532>",
+	water: "<:water:963413845886505011>",
+	ice: "<:ice:963413845186072576>",
+	electric: "<:electric:963413844733100042>",
+	wind: "<:wind:963413845848776714>",
+	earth: "<:earth:963413844670173225>",
+	grass: "<:grass:963413844879880243>",
+	psychic: "<:psychic:963413845500624896>",
+	poison: "<:poison:963413845353840681>",
+	metal: "<:metal:963413845131530240>",
+	curse: "<:curse:963413844531740684>",
+	bless: "<:bless:963413844628230254>",
+	spirit: '<:spirit:963413845265756171>',
+	nuclear: "<:nuclear:963413845156692028>",
+	gravity: "<:gravity:963413844951179314>",
+	sound: "<:sound:963413845517422642>",
+
+	almighty: "<:almighty:963413844326219787>",
+
+	status: "<:status:963413845693587497>",
+	heal: "<:heal:963413844972154900>",
+	passive: "<:passive:963413845253193758>"
 }
 
 elementColors = {
@@ -429,24 +433,22 @@ for (const i in folders) {
 
 
 client.on("guildCreate", (guild) => {
-	makeDirectory(`${dataPath}/json/${message.guild.id}`);
+	makeDirectory(`${dataPath}/json/${guild.id}`);
 
 	// Server Data
-	setUpFile(`${dataPath}/json/${message.guild.id}/server.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/blacksmiths.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/server.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/trials.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/parties.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/items.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/weapons.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/armors.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/blacksmiths.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/skills.json`)
 
 	// Character Data
-	setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
-	
-	// Battle Data
-	setUpFile(`${dataPath}/json/${message.guild.id}/battle-${message.channel.id}.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/characters.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/enemies.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/parties.json`)
 
 	//make an embed with a welcome message
 	let DiscordEmbed = new Discord.MessageEmbed()

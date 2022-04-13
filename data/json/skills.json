@@ -11,5 +11,18 @@
         "status": "burn",
         "statuschance": 5,
         "desc": "The user sets the foe alight, with a low chance to inflict burning."
+    },
+    "Spirit Drain": {
+        "name": "Spirit Drain",
+        "type": "almighty",
+        "atktype": "magic",
+        "pow": 35,
+        "hits": 1,
+        "acc": 100,
+        "cost": 20,
+        "costtype": "hp",
+        "target": "one",
+        "originalAuthor": "516359709779820544",
+        "desc": "The user drains the target's MP by any means necessary."
     }
 }

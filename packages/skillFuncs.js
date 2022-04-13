@@ -1,8 +1,3 @@
-const fs = require('fs');
-const enemyFuncs = require('./enemyFuncs.js');
-const utilityFuncs = require('./utilityFuncs.js');
-
-// Get the full embed of a skill
 function statusDesc(skillDefs) {
 	var finalText = '';
 	return finalText;
@@ -248,8 +243,9 @@ function skillDesc(skillDefs, skillName, server) {
 		if (skillDefs.originalAuthor === 'Default')
 			userTxt = 'Default/Official';
 		else {
-			let user = client.users.fetch(skillDefs.originalAuthor);
-			userTxt = user.username;
+			client.users.fetch(skillDefs.originalAuthor).then((user) => {
+				userTxt = user.username;
+			})
 		}
 	} else
 		userTxt = 'Default/Official';
@@ -273,13 +269,5 @@ function skillDesc(skillDefs, skillName, server) {
 module.exports = {
 	skillDesc: function(skill, id, serv) {
 		return skillDesc(skill, id, serv);
-	},
-	
-	applyExtra: function(skill, extra1, extra2, extra3) {
-		return applyExtra(skill, extra1, extra2, extra3);
-	},
-	
-	applyHealExtra: function(skill, extra1, extra2, extra3) {
-		return applyHealExtra(skill, extra1, extra2, extra3);
 	}
 }
