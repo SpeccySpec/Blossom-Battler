@@ -252,9 +252,40 @@ commands.editskill = new Command({
 	}
 })
 
+/*
+	SKILL LISTING
+					*/
 commands.listskills = new Command({
 	desc: `*Args: <Word: Element> <Num: Quick Page>*\nLists *all* existing skills.`,
 	section: "battle",
 	func: (message, args) => {
+		let array = []
+		for (const i in skillFile) {
+			let descTxt = '';
+			if (skillFile[i].passive) {
+				let pt = skillFile[i].passive;
+				descTxt = `Passive Type: __${pt.charAt(0).toUpperCase()+pt.slice(1)}__`;
+			} else if (skillFile[i].type.toLowerCase() == 'status') {
+				descTxt = 'A status skill.';
+			} else {
+				if (hasExtra(skillFile[i], 'ohko')) {
+					descTxt = `${skillFile[i].acc}% chance to instantly down the foe.`;
+				} else if (hasExtra(skillFile[i], 'stealmp')) {
+					descTxt = `Steal ${skillFile[i].pow}MP from the foe.`;
+				} else {
+					descTxt = `${skillFile[i].pow} Power and ${skillFile[i].acc}% Accuracy.`;
+				}
+			}
+
+			if (!args[0]) {
+				array.push({title: `${elementEmoji[skillFile[i].type]}${skillFile[i].name} (${i})`, desc: descTxt});
+				continue;
+			}
+
+			if (skillFile[i].type != args[0].toLowerCase()) continue;
+			array.push({title: `${elementEmoji[skillFile[i].type]}${skillFile[i].name} (${i})`, desc: descTxt});
+		}
+
+		listArray(message.channel, array, parseInt(args[1]));
 	}
 })

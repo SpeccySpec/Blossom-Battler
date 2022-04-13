@@ -404,6 +404,71 @@ elementList = () => {
 	return DiscordEmbed;
 }
 
+const backButton = new Discord.MessageButton({
+	style: 'SECONDARY',
+	label: 'Back',
+	emoji: '⬅️',
+	customId: 'back'
+})
+const forwardButton = new Discord.MessageButton({
+	style: 'SECONDARY',
+	label: 'Forward',
+	emoji: '➡️',
+	customId: 'forward'
+})
+
+listArray = async(channel, theArray, page) => {
+	const generateEmbed = async start => {
+		const current = theArray.slice(start, start + 10)
+		return new Discord.MessageEmbed({
+			title: `Showing results ${start + 1}-${start + current.length} out of ${theArray.length}`,
+			fields: await Promise.all(
+				current.map(async arrayDefs => ({
+					name: arrayDefs.title,
+					value: arrayDefs.desc,
+				}))
+			)
+		})
+	}
+
+	const canFitOnOnePage = theArray.length <= 10
+	const embedMessage = await channel.send({
+		embeds: [await generateEmbed(0)],
+		components: [new Discord.MessageActionRow({components: [backButton, forwardButton]})]
+	})
+
+	if (canFitOnOnePage) return
+
+	const collector = embedMessage.createMessageComponentCollector({
+		filter: ({user}) => true // fuck you and your (the sequel)
+	})
+
+//	let currentIndex = page*10;
+	let currentIndex = 0;
+	collector.on('collect', async interaction => {
+		if (interaction.customId === 'back') {
+			if (currentIndex - 10 < 0) {
+				currentIndex = theArray.length-10
+			} else {
+				currentIndex -= 10
+			}
+		} else {
+			if (currentIndex + 10 >= theArray.length) {
+				currentIndex = 0
+			} else {
+				currentIndex += 10
+			}
+		}
+
+		await interaction.update({
+			embeds: [await generateEmbed(currentIndex)],
+			components: [
+				new Discord.MessageActionRow({components: [backButton, forwardButton]})
+			]
+		})
+	})
+}
+
 // Global JSONs
 skillFile = setUpFile(`${dataPath}/json/skills.json`)
 
@@ -430,7 +495,6 @@ for (const i in folders) {
 		require(`${packPath}/${folders[i]}/${file}`);
 	}
 }
-
 
 client.on("guildCreate", (guild) => {
 	makeDirectory(`${dataPath}/json/${guild.id}`);

@@ -84,7 +84,7 @@ function makeExtra(skill, extra, func) {
 
 // Checks if the skill has an extra
 // just realise we dont need this
-function hasExtra(skill, extra) {
+hasExtra = (skill, extra) => {
 	if (!skill.extras) return false;
 	if (!skill.extras[extra]) return false;
 	return skill.extras[extra];
