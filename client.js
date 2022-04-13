@@ -492,7 +492,7 @@ Command = class {
 	call(message, rawargs) {
 		let args = []
 		for (const arg of this.args) {
-			const rawarg = rawargs.pop()
+			const rawarg = rawargs.shift()
 			if (rawarg) {
 				const parser = typeParsers[arg.type]
 				const parsedArg = parser ? parser({arg: rawarg, message}) : rawarg
@@ -515,7 +515,7 @@ Command = class {
 				return void message.channel.send({embeds: [DiscordEmbed]})
 			}
 		}
-		this.func(message, args.reverse())
+		this.func(message, args)
 	}
 
 	getFullDesc() {
