@@ -7,5 +7,13 @@
         "originalAuthor": "441198920668938260",
         "healhpmp": 120,
         "image": "https://cdn.discordapp.com/emojis/963788061731348510.webp"
+    },
+    "lmao": {
+        "name": "lmao",
+        "rarity": "rare",
+        "cost": 12,
+        "type": "skill",
+        "originalAuthor": "441198920668938260",
+        "skill": ""
     }
 }

@@ -73,9 +73,23 @@ if (tempSkill && tempSkill != '')
 // Daily Item - Resets at midnight
 dailyItem = {}
 
-let tempItem = fs.readFileSync(dataPath+'/dailyItem.txt', {flag: 'as+'});
+let tempItem = fs.readFileSync(dataPath+'/dailyitem.txt', {flag: 'as+'});
 if (tempItem && tempItem != '')
 	dailyItem = JSON.parse(tempItem);
+
+// Daily Weapon - Resets at midnight
+dailyWeapon = {}
+
+let tempWeapon = fs.readFileSync(dataPath+'/dailyweapon.txt', {flag: 'as+'});
+if (tempWeapon && tempWeapon != '')
+	dailyWeapon = JSON.parse(tempWeapon);
+
+// Daily Armor - Resets at midnight
+dailyArmor = {}
+
+let tempArmor = fs.readFileSync(dataPath+'/dailyarmor.json', {flag: 'as+'});
+if (tempArmor && tempArmor != '')
+	dailyArmor = JSON.parse(tempArmor);
 
 // Midnight Moment
 function midnightInMS() {
@@ -86,19 +100,27 @@ setTimeout(function() {
 	dailyQuote = 'none';
 	dailySkill = 'none';
 	dailyItem = {};
+	dailyWeapon = {};
+	dailyArmor = {};
 
 	fs.writeFileSync(dataPath+'/dailyquote.txt', '');
 	fs.writeFileSync(dataPath+'/dailyskill.txt', '');
-	fs.writeFileSync(dataPath+'/dailyItem.txt', '');
+	fs.writeFileSync(dataPath+'/dailyitem.txt', '');
+	fs.writeFileSync(dataPath+'/dailyweapon.txt', '');
+	fs.writeFileSync(dataPath+'/dailyarmor.json', '');
 
 	setTimeout(function() {
 		dailyQuote = 'none';
 		dailySkill = 'none';
 		dailyItem = {};
+		dailyWeapon = {};
+		dailyArmor = {};
 
 		fs.writeFileSync(dataPath+'/dailyquote.txt', '');
 		fs.writeFileSync(dataPath+'/dailyskill.txt', '');
-		fs.writeFileSync(dataPath+'/dailyItem.txt', '');
+		fs.writeFileSync(dataPath+'/dailyitem.txt', '');
+		fs.writeFileSync(dataPath+'/dailyweapon.txt', '');
+		fs.writeFileSync(dataPath+'/dailyarmor.json', '');
 	}, midnightInMS());
 }, midnightInMS());
 
