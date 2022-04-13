@@ -242,11 +242,8 @@ function skillDesc(skillDefs, skillName, server) {
 	if (skillDefs.originalAuthor) {
 		if (skillDefs.originalAuthor === 'Default')
 			userTxt = 'Default/Official';
-		else {
-			client.users.fetch(skillDefs.originalAuthor).then((user) => {
-				userTxt = user.username;
-			})
-		}
+		else
+			userTxt = `<@${skillDefs.originalAuthor}>`;
 	} else
 		userTxt = 'Default/Official';
 

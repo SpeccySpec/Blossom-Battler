@@ -57,14 +57,14 @@ http = require('http');
 hastebin = require('hastebin-gen');
 
 // Daily Quote - Resets at midnight
-let dailyQuote = 'none'
+dailyQuote = 'none'
 
 let tempQuote = fs.readFileSync(dataPath+'/dailyquote.txt', {flag: 'as+'});
 if (tempQuote && tempQuote != '')
 	dailyQuote = tempQuote.toString();
 
 // Daily Skill - Resets at midnight
-let dailySkill = 'none'
+dailySkill = 'none'
 
 let tempSkill = fs.readFileSync(dataPath+'/dailyskill.txt', {flag: 'as+'});
 if (tempSkill && tempSkill != '')

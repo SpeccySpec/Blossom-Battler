@@ -89,6 +89,8 @@ commands.registerskill = new Command({
 
         if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
 		if (args[0].length > 50) return message.channel.send(`${args[0]} is too long of a skill name.`);
+
+		if (skillFile[args[0]] && message.author.id != skillFile[args[0]].originalAuthor) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
 		
 		let cost = 0;
 		let costtype = 'mp';
@@ -459,8 +461,11 @@ commands.listskills = new Command({
 	}
 })
 
-commands.getskill = new Command({
-	desc: 'Gets a skill by name.',
+/*
+	DELETING SKILLS
+					  */
+commands.purgeskill = new Command({
+	desc: 'Deletes the skill in question. **YOU CANNOT GET IT BACK AFTER DELETION!**',
 	section: "battle",
 	args: [
 		{
@@ -470,17 +475,96 @@ commands.getskill = new Command({
 		}
 	],
 	func: (message, args) => {
-		if (skillFile[args[0]]) {
-			message.channel.send({embeds: [skillFuncs.skillDesc(skillFile[args[0]], skillFile[args[0]].name, message.guild.id)]})
+        if (skillFile[args[0]]) {
+			if (!utilityFuncs.RPGBotAdmin(message.author.id) && message.author.id != skillFile[args[0]].originalAuthor)
+				return message.channel.send("You have insufficient permissions to delete this skill as you don't own it.");
+
+			message.channel.send(`Are you **sure** you want to delete ${skillFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this skill.\n**Y/N**`);
+
+			let givenResponce = false
+			let collector = message.channel.createMessageCollector({ time: 15000 });
+			collector.on('collect', m => {
+				if (m.author.id == message.author.id) {
+					if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
+						message.channel.send(`${skillFile[args[0]].name} has been erased from existance.\n_The characters and enemies that know this skill should be checked in order to ensure that they do not have an invalid skill._`)
+						delete skillFile[args[0]];
+
+						fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+					} else message.channel.send(`${skillFile[args[0]].name} will not be deleted.`);
+
+					givenResponce = true
+					collector.stop()
+				}
+			});
+			collector.on('end', c => {
+				if (givenResponce == false) message.channel.send(`No response given.\n${skillFile[args[0]].name} will not be deleted.`);
+			});
 		} else {
-			message.channel.send(`${args[0]} is an invalid Skill Name!`)
+            message.channel.send(`${args[0]} is an invalid skill.`);
+            return
+        }
+	}
+})
+
+/*
+	DAILY SKILLS
+				  */
+commands.dailyskill = new Command({
+	desc: 'Any random skill can be set as a daily one! Test your luck to see if yours is here!',
+	section: "fun",
+	args: [],
+	func: (message, args) => {
+		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet!`);
+		if (!dailySkill) dailySkill = 'none';
+
+		let notice = 'Here is the daily skill, again.'
+		if (dailySkill === 'none') {
+			dailySkill = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
+
+			let authorTxt = skillFile[dailySkill].originalAuthor ? `<@!${skillFile[dailySkill].originalAuthor}>` : '<@776480348757557308>'
+			notice = `${authorTxt}, your skill is the daily skill for today!`;
 		}
+
+		setTimeout(function() {
+			if (skillFile[dailySkill]) {
+				let today = new Date();
+				let dd = String(today.getDate()).padStart(2, '0');
+				let mm = String(today.getMonth() + 1).padStart(2, '0');
+				let yyyy = today.getFullYear();
+
+				today = mm + '/' + dd + '/' + yyyy;
+				
+				if (mm === '12' && dd === '24')
+					today = 'Christmas Eve';
+				else if (mm === '12' && dd === '25')
+					today = 'Christmas';
+				else if (mm === '12' && dd === '26')
+					today = 'Boxing Day';
+				else if (mm === '12' && dd === '31')
+					today = "New Years' Eve";
+				else if (mm === '1' && dd === '1')
+					today = 'New Years';
+				else if (mm === '4' && dd === '1')
+					today = "April Fools' day";
+				else if (mm === '4' && dd === '17' && yyyy == '2022')
+					today = 'Easter (2022)';
+				else if (mm === '6' && dd === '2')
+					today = "<@516359709779820544>'s birthday";
+				else if (mm === '10' && dd === '31')
+					today = 'Halloween';		
+
+				fs.writeFileSync(dataPath+'/dailyskill.txt', dailySkill.toString());
+
+				let skillTxt = `**[${today}]**\n${notice}`
+				message.channel.send({content: skillTxt, embeds: [skillFuncs.skillDesc(skillFile[dailySkill], skillFile[dailySkill].name, message.guild.id)]});	
+			}
+		}, 500);
 	}
 })
 
 commands.randskill = new Command({
 	desc: 'Gets a random skill.',
-	section: "battle",
+	section: "fun",
 	args: [],
 	func: (message, args) => {
 		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet.`);
