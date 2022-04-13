@@ -1,4 +1,4 @@
-function itemDesc(itemDefs, itemName) {
+function itemDesc(itemDefs, itemName, message) {
     let finalText = "";
 
     if (itemDefs.cost && itemDefs.cost != 0) {
@@ -46,9 +46,7 @@ function itemDesc(itemDefs, itemName) {
 		if (itemDefs.originalAuthor === 'Default')
 			userTxt = 'Default/Official';
 		else {
-			client.users.fetch(itemDefs.originalAuthor).then((user) => {
-				userTxt = user.username;
-			})
+			userTxt = message.guild.members.cache.get(itemDefs.originalAuthor).user.username
 		}
 	} else
 		userTxt = 'Default/Official';
@@ -145,7 +143,7 @@ commands.registeritem = new Command({
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
 
-        message.channel.send({content: `${itemFile[args[0]].name} has been registered:`, embeds: [itemDesc(itemFile[args[0]], args[0])]})
+        message.channel.send({content: `${itemFile[args[0]].name} has been registered:`, embeds: [itemDesc(itemFile[args[0]], args[0], message)]})
     }
 })
 
@@ -166,7 +164,7 @@ commands.getitem = new Command({
 
         if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
 
-        message.channel.send({embeds: [itemDesc(itemFile[args[0]], args[0])]})
+        message.channel.send({embeds: [itemDesc(itemFile[args[0]], args[0], message)]})
     }
 })
 
@@ -363,5 +361,20 @@ commands.searchitems = new Command({
         if (array.length == 0) return message.channel.send(`No items found with the name ${args[0]}.`);
         
         listArray(message.channel, array, parseInt(args[1]));
+    }
+})
+
+commands.randitem = new Command({
+    desc: `Get a random item.`,
+    section: 'items',
+    args: [],
+    func: (message, args) => {
+        itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+
+        if (Object.keys(itemFile).length == 0) return message.channel.send(`No items have been added yet.`);
+
+        let item = Object.keys(itemFile)[Math.floor(Math.random() * Object.keys(itemFile).length)];
+        item = itemFile[item]
+        message.channel.send({content:`Congratulations! <@!${item.originalAuthor}>! ${itemTypeEmoji[item.type]} ${item.name} has been rolled!`, embeds: [itemDesc(item, item.name, message)]})
     }
 })
