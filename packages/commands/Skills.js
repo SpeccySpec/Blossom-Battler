@@ -1,7 +1,69 @@
 // Handle Skills
 commands.registerskill = new Command({
-	desc: `*Args: <Word: Name> {Num: Cost} {Word: CostType} <Num: Power> <Num: Acc> {Num: CritChance} <Num: Hits> <Word: Element> <Word: Targets> {Word: Status} {Num: StatusChance} "{Sentence: Description}"*\nRegister a skill to use in-battle! Characters can learn skills, items can utilise skills too. Skills can also have a number of extras, apply them with "rpg!applyextra".`,
+	desc: `Register a skill to use in-battle! Characters can learn skills, items can utilise skills too. Skills can also have a number of extras, apply them with "rpg!applyextra".`,
 	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Cost",
+			type: "Num",
+			forced: false
+		},
+		{
+			name: "Cost Type",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Power",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Accuracy",
+			type: "Decimal",
+			forced: true
+		},
+		{
+			name: "Critical Hit Chance",
+			type: "Decimal",
+			forced: false
+		},
+		{
+			name: "Hits",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Element",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Targets",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Status",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Status Chance",
+			type: "Decimal",
+			forced: false
+		},
+		{
+			name: "Description",
+			type: "Any",
+			forced: false
+		},
+	],
 	func: (message, args) => {
 		if (!args[0]) {
             const DiscordEmbed = new Discord.MessageEmbed()
@@ -111,8 +173,15 @@ commands.updateskills = new Command({
 							*/
 
 commands.listatkextras = new Command({
-	desc: '_Args <Num: Page>_\nList the possible extras you can give a skill.',
+	desc: 'List the possible extras you can give a skill.',
 	section: "battle",
+	args: [
+		{
+			name: "Page Number",
+			type: "Num",
+			forced: false
+		},
+	],
 	func: (message, args) => {
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
@@ -127,8 +196,10 @@ commands.listatkextras = new Command({
 		let firstOne = 0;
 		let lastOne = 5;
 
-		firstOne += 6*(parseInt(args[0])-1);
-		lastOne += 6*(parseInt(args[0])-1);
+		if (args[0]) {
+			firstOne += 6*(parseInt(args[0])-1);
+			lastOne += 6*(parseInt(args[0])-1);
+		}
 
 		for (let i = firstOne; i <= lastOne; i++) {
 			if (extras[i]) DiscordEmbed.fields.push(extras[i]);
@@ -139,8 +210,45 @@ commands.listatkextras = new Command({
 })
 
 commands.applyextra = new Command({
-	desc: `*Args: <Word: Skill Name> <Word: Extra> <Any: Var1> <Any: Var2> <Any: Var3> <Any: Var4> <Any: Var5>\nRegister a skill to use in-battle! Characters can learn skills, items can utilise skills too. Skills can also have a number of extras, apply them with "rpg!applyextra".`,
+	desc: 'A registered skill may have extra effects. These are called "extras". Apply an extra with this command, list all the ones possible with "listatkextras".',
 	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Extra",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Variable #1",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable #2",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable #3",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable #4",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable #5",
+			type: "Any",
+			forced: false
+		},
+	],
 	func: (message, args) => {
 		if (!args[0]) return message.channel.send('Please enter a valid skill name!')
 		if (!args[1]) return message.channel.send('Please enter a valid extra! You can list them all with rpg!listextras.')
@@ -158,12 +266,21 @@ commands.applyextra = new Command({
 })
 
 commands.clearextras = new Command({
-	desc: `*Args: <Word: Skill Name> <Word: Extra>*\nClears all extras of a specific type.`,
+	desc: 'Clears all extras of a specific type.',
 	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Extra",
+			type: "Word",
+			forced: true
+		},
+	],
 	func: (message, args) => {
-		if (!args[0]) return message.channel.send('Please enter a valid skill name!')
-		if (!args[1]) return message.channel.send('Please enter a valid extra! You can list them all with rpg!listextras.')
-
 		if (skillFile[args[0]]) {
 			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skillFile[args[0]].originalAuthor != message.author.id) {
 				return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
@@ -185,13 +302,26 @@ commands.clearextras = new Command({
 	EDIT SKILLS
 				 */
 commands.editskill = new Command({
-	desc: `*Args: <Word: Skill Name> <Word: Field> <Any: New Value>*\nEdit existing skills and change how they work in battle! If you're looking for extras, use "applyextra" and "clearextras" commands.`,
+	desc: `Edit existing skills and change how they work in battle! If you're looking for extras, use "applyextra" and "clearextras" commands.`,
 	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Field",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "New Value",
+			type: "Any",
+			forced: true
+		}
+	],
 	func: (message, args) => {
-		if (!args[0]) return message.channel.send('Please enter a valid skill name!')
-		if (!args[1]) return message.channel.send('Please enter a valid field!')
-		if (!args[2]) return message.channel.send('Please enter a value for the field.')
-
 		if (skillFile[args[0]]) {
 			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skillFile[args[0]].originalAuthor != message.author.id) {
 				return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
@@ -256,8 +386,15 @@ commands.editskill = new Command({
 	SKILL LISTING
 					*/
 commands.listskills = new Command({
-	desc: `*Args: <Word: Element> <Num: Quick Page>*\nLists *all* existing skills.`,
+	desc: 'Lists *all* existing skills.',
 	section: "battle",
+	args: [
+		{
+			name: "Element",
+			type: "Word",
+			forced: false
+		}
+	],
 	func: (message, args) => {
 		let array = []
 		for (const i in skillFile) {
