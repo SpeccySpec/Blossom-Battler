@@ -724,8 +724,20 @@ commands.foodimage = new Command({
 
 
 commands.food = new Command({
-	desc: `*Args: <Word: Main Category>*\nMake yourself food based on items.`,
+	desc: `Make yourself food based on items.`,
 	section: "food",
+	args: [
+		{
+			name: "Category",
+			type: "Word",
+			forced: true,
+		},
+		{
+			name: "Argument #1",
+			type: "Any",
+			multiple: true
+		}
+	],
 	func: (message, args) => {
 		makefood(message, args)
 	}
