@@ -8,7 +8,7 @@ function passiveDesc(skillDefs) {
 	return finalText;
 }
 
-function atkDesc(skillDefs, message) {
+function atkDesc(skillDefs) {
 	var finalText = '';
 
 	if (skillDefs.metronome) {
@@ -243,7 +243,9 @@ function skillDesc(skillDefs, skillName, server) {
 		if (skillDefs.originalAuthor === 'Default')
 			userTxt = 'Default/Official';
 		else {
-			userTxt = message.guild.members.cache.get(itemDefs.originalAuthor).user.username
+			client.users.fetch(skillDefs.originalAuthor).then((user) => {
+				userTxt = user.username;
+			})
 		}
 	} else
 		userTxt = 'Default/Official';

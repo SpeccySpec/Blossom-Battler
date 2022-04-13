@@ -458,3 +458,34 @@ commands.listskills = new Command({
 		listArray(message.channel, array, parseInt(args[1]));
 	}
 })
+
+commands.getskill = new Command({
+	desc: 'Gets a skill by name.',
+	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (skillFile[args[0]]) {
+			message.channel.send({embeds: [skillFuncs.skillDesc(skillFile[args[0]], skillFile[args[0]].name, message.guild.id)]})
+		} else {
+			message.channel.send(`${args[0]} is an invalid Skill Name!`)
+		}
+	}
+})
+
+commands.randskill = new Command({
+	desc: 'Gets a random skill.',
+	section: "battle",
+	args: [],
+	func: (message, args) => {
+		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet.`);
+
+		let skill = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
+		message.channel.send({embeds: [skillFuncs.skillDesc(skillFile[skill], skillFile[skill].name, message.guild.id)]})
+	}
+})
