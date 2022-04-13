@@ -404,7 +404,7 @@ elementList = () => {
 }
 
 typeParsers = {
-	Num: ({arg}) => {return parseInt(arg) || undefined},
+	Num: ({arg}) => {return isNaN(arg) ? undefined : parseInt(arg)},
 	Decimal: ({arg}) => {return parseFloat(arg) || undefined},
 	Word: (vars) => {return (typeParsers.Ping(vars) || typeParsers.Channel(vars)) ? undefined : vars.arg},
 	Ping: ({message}) => {return message.mentions.users.first()},
@@ -496,7 +496,7 @@ Command = class {
 			if (rawarg) {
 				const parser = typeParsers[arg.type]
 				const parsedArg = parser ? parser({arg: rawarg, message}) : rawarg
-				if (!parsedArg) return void message.channel.send(`Invalid argument for "${arg.name}", it has to be of type "${arg.type}".`)
+				if (parsedArg === undefined) return void message.channel.send(`Invalid argument for "${arg.name}", it has to be of type "${arg.type}".`)
 				args.push(parsedArg)
 				if (arg.multiple) {
 					for (const rawarg of rawargs) {
