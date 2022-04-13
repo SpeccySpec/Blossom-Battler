@@ -452,3 +452,15 @@ commands.getskill = new Command({
 		}
 	}
 })
+
+commands.randskill = new Command({
+	desc: 'Gets a random skill.',
+	section: "battle",
+	args: [],
+	func: (message, args) => {
+		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet.`);
+
+		let skill = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
+		message.channel.send({embeds: [skillFuncs.skillDesc(skillFile[skill], skillFile[skill].name, message.guild.id)]})
+	}
+})
