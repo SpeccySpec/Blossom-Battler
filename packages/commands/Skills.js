@@ -341,19 +341,23 @@ commands.editskill = new Command({
 				case 'acc':
 				case 'crit':
 					skillFile[args[0]][editField] = parseFloat(args[2]);
+					break;
 
 				case 'name':
 				case 'desc':
 					skillFile[args[0]][editField] = args[2];
+					break;
 
 				case 'status':
 					if (!utilityFuncs.inArray(args[2].toLowerCase(), statusEffects)) return message.channel.send(`${args[2].toLowerCase()} is an invalid status effect!`);
 					skillFile[args[0]].status = args[2].toLowerCase();
+					break;
 
 				case 'type':
 				case 'element':
 					if (!utilityFuncs.inArray(args[2].toLowerCase(), Elements)) return message.channel.send(`${args[2].toLowerCase()} is an invalid status effect!`);
 					skillFile[args[0]].type = args[2].toLowerCase();
+					break;
 
 				case 'atktype':
 				case 'contact':
@@ -361,6 +365,7 @@ commands.editskill = new Command({
 					let type = args[2].toLowerCase();
 					if (type != 'physical' && type != 'magic' && type != 'ranged') return message.channel.send(`${type} is an invalid form of contact! Try physical, magic or ranged.`);
 					skillFile[args[0]].atktype = type;
+					break;
 
 				case 'truename':
 					if (skillFile[args[2]]) {
@@ -376,6 +381,8 @@ commands.editskill = new Command({
 							}
 						}
 					}
+					
+					break;
 
 				default:
 					skillFile[args[0]][editField] = parseInt(args[2]);
@@ -392,6 +399,24 @@ commands.editskill = new Command({
 /*
 	SKILL LISTING
 					*/
+commands.getskill = new Command({
+	desc: 'List the data and information for the specified skill.',
+	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (skillFile[args[0]])
+			message.channel.send({content: `Here is the data for ${skillFile[args[0]].name}`, embeds: [skillFuncs.skillDesc(skillFile[args[0]], skillFile[args[0]].name, message.guild.id)]})
+		else
+			return message.channel.send(`${args[0]} is an invalid Skill Name!`)
+	}
+})
+
 commands.listskills = new Command({
 	desc: 'Lists *all* existing skills.',
 	section: "battle",

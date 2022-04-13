@@ -184,7 +184,7 @@ function skillDesc(skillDefs, skillName, server) {
 	} else if (skillDefs.type === 'passive') {
 		finalText += passiveDesc(skillDefs)
 	} else if (skillDefs.type != 'passive') {
-		finalText += atkDesc(skillDefs, message)
+		finalText += atkDesc(skillDefs)
 	}
 
 	if (skillDefs.atktype) {
