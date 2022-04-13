@@ -96,6 +96,8 @@ Elements = [
     "strike",
     "slash",
     "pierce",
+	"explode",
+
     "fire",
     "water",
     "ice",
@@ -109,6 +111,7 @@ Elements = [
     "metal",
     "curse",
     "bless",
+	"spirit",
 	"gravity",
 	"sound",
     "almighty",
@@ -119,31 +122,33 @@ Elements = [
 ]
 
 elementEmoji = {
-	strike: "<:strike:877132710370480190>",
-	slash: "<:slash:877132710345338960> ",
-	pierce: "<:pierce:877132710315950101>",
-	
-	fire: "<:fire:877132709934301216>",
-	water: "<:water:877132710471147571>",
-	ice: "<:ice:877132710299181076>",
-	electric: "<:electric:877132710194348072>",
-	wind: "<:wind:877140815649075241>",
-	earth: "<:earth:877140476409577482>",
-	grass: "<:grass:877140500036075580>",
-	psychic: "<:psychic:877140522530140171>",
-	poison: "<:poison:906759861742760016>",
-	metal: "<:metal:906748877955268638>",
-	curse: "<:curse:906748923354443856>",
-	bless: "<:bless:903369721980813322>",
-	nuclear: "<:nuclear:906877350447300648>",
-	gravity: "🌍",
-	sound: "🎵",
-	
-	almighty: "<:almighty:906748842450509894>",
-	
-	status: "<:status:906877331711344721>",
-	heal: "<:heal:906758309351161907>",
-	passive: "<:passive:906874477210648576>"
+	strike: "<:strike:963413845764874290>",
+	slash: "<:slash:963413845244797029>",
+	pierce: "<:pierce:963413845337063424>",
+	explode: "<:explode:963413844544344155>",
+
+	fire: "<:fire:963413844825362532>",
+	water: "<:water:963413845886505011>",
+	ice: "<:ice:963413845186072576>",
+	electric: "<:electric:963413844733100042>",
+	wind: "<:wind:963413845848776714>",
+	earth: "<:earth:963413844670173225>",
+	grass: "<:grass:963413844879880243>",
+	psychic: "<:psychic:963413845500624896>",
+	poison: "<:poison:963413845353840681>",
+	metal: "<:metal:963413845131530240>",
+	curse: "<:curse:963413844531740684>",
+	bless: "<:bless:963413844628230254>",
+	spirit: '<:spirit:963413845265756171>',
+	nuclear: "<:nuclear:963413845156692028>",
+	gravity: "<:gravity:963413844951179314>",
+	sound: "<:sound:963413845517422642>",
+
+	almighty: "<:almighty:963413844326219787>",
+
+	status: "<:status:963413845693587497>",
+	heal: "<:heal:963413844972154900>",
+	passive: "<:passive:963413845253193758>"
 }
 
 elementColors = {
@@ -357,9 +362,6 @@ setUpFile = (file) => {
 	return fileFile;
 }
 
-//global got json stuff
-skillFile = setUpFile(`${dataPath}/json/skills.json`)
-
 // makeDirectory
 makeDirectory = (dir) => {
 	let directories = [dir];
@@ -410,6 +412,74 @@ typeParsers = {
 	ID: arg => {},
 	Image: ({message}) => {return checkImage(message, undefined, message.attachments.first())}
 }
+
+const backButton = new Discord.MessageButton({
+	style: 'SECONDARY',
+	label: 'Back',
+	emoji: '⬅️',
+	customId: 'back'
+})
+const forwardButton = new Discord.MessageButton({
+	style: 'SECONDARY',
+	label: 'Forward',
+	emoji: '➡️',
+	customId: 'forward'
+})
+
+listArray = async(channel, theArray, page) => {
+	const generateEmbed = async start => {
+		const current = theArray.slice(start, start + 10)
+		return new Discord.MessageEmbed({
+			title: `Showing results ${start + 1}-${start + current.length} out of ${theArray.length}`,
+			fields: await Promise.all(
+				current.map(async arrayDefs => ({
+					name: arrayDefs.title,
+					value: arrayDefs.desc,
+				}))
+			)
+		})
+	}
+
+	const canFitOnOnePage = theArray.length <= 10
+	const embedMessage = await channel.send({
+		embeds: [await generateEmbed(0)],
+		components: [new Discord.MessageActionRow({components: [backButton, forwardButton]})]
+	})
+
+	if (canFitOnOnePage) return
+
+	const collector = embedMessage.createMessageComponentCollector({
+		filter: ({user}) => true // fuck you and your (the sequel)
+	})
+
+//	let currentIndex = page*10;
+	let currentIndex = 0;
+	collector.on('collect', async interaction => {
+		if (interaction.customId === 'back') {
+			if (currentIndex - 10 < 0) {
+				currentIndex = theArray.length-10
+			} else {
+				currentIndex -= 10
+			}
+		} else {
+			if (currentIndex + 10 >= theArray.length) {
+				currentIndex = 0
+			} else {
+				currentIndex += 10
+			}
+		}
+
+		await interaction.update({
+			embeds: [await generateEmbed(currentIndex)],
+			components: [
+				new Discord.MessageActionRow({components: [backButton, forwardButton]})
+			]
+		})
+	})
+}
+
+// Global JSONs
+skillFile = setUpFile(`${dataPath}/json/skills.json`)
 
 Command = class {
 	constructor(object) {
@@ -465,30 +535,37 @@ Command = class {
 
 commands = {}
 const commandFiles = fs.readdirSync(`${packPath}/commands`).filter(file => file.endsWith('.js'));
-
 for (const file of commandFiles) {
-	const command = require(`${packPath}/commands/${file}`);
+	let command = require(`${packPath}/commands/${file}`);
+}
+
+// Run this shit
+let folders = ['skills'] // there WILL be moreee
+
+for (const i in folders) {
+	let files = fs.readdirSync(`${packPath}/${folders[i]}`).filter(file => file.endsWith('.js'));
+	for (const file of files) {
+		require(`${packPath}/${folders[i]}/${file}`);
+	}
 }
 
 client.on("guildCreate", (guild) => {
-	makeDirectory(`${dataPath}/json/${message.guild.id}`);
+	makeDirectory(`${dataPath}/json/${guild.id}`);
 
 	// Server Data
-	setUpFile(`${dataPath}/json/${message.guild.id}/server.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/blacksmiths.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/server.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/trials.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/parties.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/items.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/weapons.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/armors.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/blacksmiths.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/skills.json`)
 
 	// Character Data
-	setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
-	setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
-	
-	// Battle Data
-	setUpFile(`${dataPath}/json/${message.guild.id}/battle-${message.channel.id}.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/characters.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/enemies.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/parties.json`)
 
 	//make an embed with a welcome message
 	let DiscordEmbed = new Discord.MessageEmbed()
