@@ -8,7 +8,7 @@ function passiveDesc(skillDefs) {
 	return finalText;
 }
 
-function atkDesc(skillDefs, message) {
+function atkDesc(skillDefs) {
 	var finalText = '';
 
 	if (skillDefs.metronome) {
@@ -184,7 +184,7 @@ function skillDesc(skillDefs, skillName, server) {
 	} else if (skillDefs.type === 'passive') {
 		finalText += passiveDesc(skillDefs)
 	} else if (skillDefs.type != 'passive') {
-		finalText += atkDesc(skillDefs, message)
+		finalText += atkDesc(skillDefs)
 	}
 
 	if (skillDefs.atktype) {
@@ -243,7 +243,9 @@ function skillDesc(skillDefs, skillName, server) {
 		if (skillDefs.originalAuthor === 'Default')
 			userTxt = 'Default/Official';
 		else {
-			userTxt = message.guild.members.cache.get(itemDefs.originalAuthor).user.username
+			client.users.fetch(skillDefs.originalAuthor).then((user) => {
+				userTxt = user.username;
+			})
 		}
 	} else
 		userTxt = 'Default/Official';

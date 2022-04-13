@@ -433,3 +433,22 @@ commands.listskills = new Command({
 		listArray(message.channel, array, parseInt(args[1]));
 	}
 })
+
+commands.getskill = new Command({
+	desc: 'Gets a skill by name.',
+	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (skillFile[args[0]]) {
+			message.channel.send({embeds: [skillFuncs.skillDesc(skillFile[args[0]], skillFile[args[0]].name, message.guild.id)]})
+		} else {
+			message.channel.send(`${args[0]} is an invalid Skill Name!`)
+		}
+	}
+})
