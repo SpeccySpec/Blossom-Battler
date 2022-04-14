@@ -246,7 +246,6 @@ commands.registeritem = new Command({
         switch (args[3].toLowerCase()) {
             case 'skill':
                 if (!skillFile[args[4]]) return message.channel.send(`${args[4]} is not a valid skill name.`);
-                if (skillFile[args[4]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send(`You cannot use a skill that you do not own.`);
                 amount = args[4]
                 break;
             case 'heal':
@@ -406,7 +405,6 @@ commands.edititem = new Command({
                 switch (args[2].toLowerCase()) {
                     case 'skill':
                         if (!skillFile[args[3]]) return message.channel.send(`${args[4]} is not a valid skill name.`);
-                        if (skillFile[args[3]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send(`You cannot use a skill that you do not own.`);
                         amount = args[3]
                         break;
                     case 'heal':
@@ -552,6 +550,7 @@ commands.itemimage = new Command({
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item.`);
+        if (itemFile[args[0]].originalAuthor != message.author.id && !message.member.hasPermission('ADMINISTRATOR')) return message.channel.send(`You can only set the image for your own items.`);
         if (!checkImage(message, args[1], message.attachments.first())) return message.channel.send(`${args[1]} is not a valid image.`);
 
         itemFile[args[0]].image = checkImage(message, args[1], message.attachments.first())
@@ -667,8 +666,6 @@ commands.registerweapon = new Command({
         let skill
         if (args[6]) {
             if (!skillFile[args[6]]) message.channel.send(`${args[6]} is not a valid skill. I'll still make this weapon regardless`);
-
-            if (skillFile[args[6]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this skill, therefore, you have insufficient permissions to use it. I'll still make this weapon regardless.");
             else skill = args[6];
         }
         
@@ -836,6 +833,7 @@ commands.weaponimage = new Command({
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
         if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon.`);
+        if (weaponFile[args[0]].originalAuthor != message.author.id && !message.member.hasPermission('ADMINISTRATOR')) return message.channel.send(`You can only set the image for your own weapons.`);
         if (!checkImage(message, args[1], message.attachments.first())) return message.channel.send(`${args[1]} is not a valid image.`);
 
         weaponFile[args[0]].image = checkImage(message, args[1], message.attachments.first())
@@ -901,7 +899,6 @@ commands.editweapon = new Command({
                 break;
             case 'skill':
                 if (!skillFile[arg[2]]) return message.channel.send(`${args[2]} is not a valid skill.`);
-                if (skillFile[args[2]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this skill, therefore, you have insufficient permissions to use it.");
                 weaponFile[args[0]].skill = args[2];
                 break;
             case 'element':
@@ -966,8 +963,6 @@ commands.registerarmor = new Command({
         let skill
         if (args[4]) {
             if (!skillFile[args[4]]) message.channel.send(`${args[4]} is not a valid skill. I'll still make this armor regardless`);
-
-            if (skillFile[args[4]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this skill, therefore, you have insufficient permissions to use it. I'll still make this armor regardless.");
             else skill = args[4];
         }
 
@@ -1132,6 +1127,7 @@ commands.armorimage = new Command({
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (!armorFile[args[0]]) return message.channel.send(`${args[0]} is not a valid armor.`);
+        if (armorFile[args[0]].originalAuthor != message.author.id) return message.channel.send(`You can't change the image of ${armorFile[args[0]].name}.`);
         if (!checkImage(message, args[1], message.attachments.first())) return message.channel.send(`${args[1]} is not a valid image.`);
 
         armorFile[args[0]].image = checkImage(message, args[1], message.attachments.first())
@@ -1194,7 +1190,6 @@ commands.editarmor = new Command({
                 break;
             case 'skill':
                 if (!skillFile[arg[2]]) return message.channel.send(`${args[2]} is not a valid skill.`);
-                if (skillFile[args[2]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this skill, therefore, you have insufficient permissions to use it.");
                 armorFile[args[0]].skill = args[2];
                 break;
             case 'image':
