@@ -391,7 +391,7 @@ commands.listfood = new Command({
 							image = foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image
 						} else if (foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image) {
 							for (j in foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image) {
-								image += `\n[${j}] (${foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image[j]})`
+								image += `\n[Image #${j}](${foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image[j]})`
 							}
 						}
 						array.push({title: foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].name, desc: `Author: *${id.user.username}*\nImage(s):${image}`})
@@ -458,7 +458,7 @@ commands.searchfood = new Command({
 						image = foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image
 					} else if (foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image) {
 						for (j in foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image) {
-							image += `\n[${j}] (${foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image[j]})`
+							image += `\n[${j}](${foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image[j]})`
 						}
 					}
 					array.push({title: foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].name, desc: `Author: *${id.user.username}*\nImage(s):${image}`})
