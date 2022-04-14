@@ -340,7 +340,146 @@ commands.foodprivacy = new Command({
     }
 })
 
+commands.listfood = new Command({
+	desc: 'Will make a list of food in a certain categories.',
+	section: 'food',
+	args: [
+		{
+			name: 'Category',
+			type: 'Word',
+			forced: true,
+		},
+		{
+			name: 'Subcategory',
+			type: 'Word',
+			forced: true,
+		},
+		{
+			name: 'User Filter',
+			type: 'Word',
+		},
+		{ 
+			name: 'Quick Page',
+			type: 'Num',
+		}
+	],
+	func: async (message, args) => {	
 
+		if (!checkCategories(args)) return setInvalidEmbed(message)
+
+		let array = []
+
+		if (!args[2] || args[2].toLowerCase() == 'official' || args[2].toLowerCase() == 'all') {
+			for (i in foodFiles[args[0].toLowerCase()]['official'][args[1].toLowerCase()]) {
+				array.push({title: foodFiles[args[0].toLowerCase()]['official'][args[1].toLowerCase()][i].name, desc: `Author: *Official*`})
+			}
+		}
+
+		if (!args[2] || (args[2] && args[2].toLowerCase() != 'official')) {
+			let users = await message.guild.members.fetch().catch(console.error);
+			users = users.filter(u => (foodFiles[args[0].toLowerCase()][u.id]))
+			users = users.filter(u => ((userPreferences[message.author.id] && !userPreferences[message.author.id].BlockedUsers.includes(u.id)) || !userPreferences[message.author.id]))
+
+			if(args[2] && args[2] == 'me') users = users.filter(u => (u.id == message.author.id))
+			if(args[2] && users.has(args[2])) users = users.filter(u => (u.id == args[2]))
+
+			users.forEach((id) => {
+				if (foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()]) {
+					for (i in foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()]) {
+						let image = ''
+						if (typeof foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image == 'string') {
+							image = foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image
+						} else if (foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image) {
+							for (j in foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image) {
+								image += `\n[${j}] (${foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image[j]})`
+							}
+						}
+						array.push({title: foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].name, desc: `Author: *${id.user.username}*\nImage(s):${image}`})
+					}
+				}
+			})
+		}
+
+		if (userPreferences[message.author.id] && userPreferences[message.author.id].BlockedPhrases) {
+			array = array.filter(f => {
+				for (i in userPreferences[message.author.id].BlockedPhrases) {
+					if (f.title.toLowerCase().includes(userPreferences[message.author.id].BlockedPhrases[i].toLowerCase())) return false
+				}
+				return true
+			})
+		}
+
+		if (array.length == 0) return message.channel.send(`There is no food in the **${args[0]} ${args[1]}** category.`)
+		
+		listArray(message.channel, array, args[3]);
+	}
+})
+
+commands.searchfood = new Command({
+	desc: 'Will search for food in a certain category with a selected phrase.',
+	section: 'food',
+	args: [
+		{
+			name: 'Category',
+			type: 'Word',
+			forced: true,
+		},
+		{
+			name: 'Subcategory',
+			type: 'Word',
+			forced: true,
+		},
+		{
+			name: 'Phrase',
+			type: 'Word',
+			forced: true,
+		}
+	],
+	func: async (message, args) => {
+		if (!checkCategories(args)) return setInvalidEmbed(message)
+
+		let array = []
+		
+		for (i in foodFiles[args[0].toLowerCase()]['official'][args[1].toLowerCase()]) {
+			if (!i.toLowerCase().includes(args[2].toLowerCase())) continue
+			array.push({title: foodFiles[args[0].toLowerCase()]['official'][args[1].toLowerCase()][i].name, desc: `Author: *Official*`})
+		}
+
+		let users = await message.guild.members.fetch().catch(console.error);
+		users = users.filter(u => (foodFiles[args[0].toLowerCase()][u.id]))
+		users = users.filter(u => ((userPreferences[message.author.id] && !userPreferences[message.author.id].BlockedUsers.includes(u.id)) || !userPreferences[message.author.id]))
+
+		users.forEach((id) => {
+			if (foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()]) {
+				for (i in foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()]) {
+					if (!i.toLowerCase().includes(args[2].toLowerCase())) continue
+					let image = ''
+					if (typeof foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image == 'string') {
+						image = foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image
+					} else if (foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image) {
+						for (j in foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image) {
+							image += `\n[${j}] (${foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image[j]})`
+						}
+					}
+					array.push({title: foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].name, desc: `Author: *${id.user.username}*\nImage(s):${image}`})
+				}
+			}
+		})
+
+		if (userPreferences[message.author.id] && userPreferences[message.author.id].BlockedPhrases) {
+			array = array.filter(f => {
+				for (i in userPreferences[message.author.id].BlockedPhrases) {
+					if (f.title.toLowerCase().includes(userPreferences[message.author.id].BlockedPhrases[i].toLowerCase())) return false
+				}
+				return true
+			})
+		}
+
+		if (array.length == 0) return message.channel.send(`There is no food in the **${args[0]} ${args[1]}** category with the phrase **${args[2]}**.`)
+
+		listArray(message.channel, array);
+	}
+})
 
 
 //preferences
@@ -375,16 +514,17 @@ commands.foodpreferences = new Command({
 
 		let value = args[1]
 
+		const preferences = userPreferences[message.author.id]
+
 		if (((ochance || uchance || ublock || pblock) && !value) || (!ochance && !uchance && !ublock & !pblock)) {
-			const preferences = userPreferences[message.author.id]
 			const oChan = Math.round(preferences.OfficialChance)
 			const uChan = Math.round(preferences.UserChance)
 			const indexOChan = makeBar(preferences.OfficialChance)
 			const indexUChan = makeBar(preferences.UserChance)
 
-			passOff()
+			passOff(preferences)
 
-			async function passOff() {
+			async function passOff(preferences) {
 				let userText = ''
 				for (let i = 0; i < preferences.BlockedUsers.length; i++) {
 					if (message.guild.members.cache.get(preferences.BlockedUsers[i]))
@@ -464,9 +604,6 @@ commands.foodpreferences = new Command({
 
 		fs.writeFileSync(`${dataPath}/json/food/S_preferences.json`, JSON.stringify(userPreferences, null, '    '));
 }})
-
-
-
 
 commands.foodcategories = new Command({
 	desc: `Shows all the food categories and subcategories.`,
@@ -797,7 +934,7 @@ async function makefood(message, args) {
 
 	let users = await message.guild.members.fetch().catch(console.error);
 	users = users.filter(u => (foodFiles[args[0].toLowerCase()][u.id]))
-	users = users.filter(u => ((userPreferences[message.author] && !userPreferences[message.author].BlockedUsers.includes(u.id)) || !userPreferences[message.author]))
+	users = users.filter(u => ((userPreferences[message.author.id] && !userPreferences[message.author.id].BlockedUsers.includes(u.id)) || !userPreferences[message.author.id]))
 
 	let food = {}
 

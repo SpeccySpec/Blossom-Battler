@@ -3,8 +3,6 @@
         "OfficialChance": 100,
         "UserChance": 100,
         "BlockedUsers": [],
-        "BlockedPhrases": [
-            "lmao"
-        ]
+        "BlockedPhrases": []
     }
 }
