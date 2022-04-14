@@ -71,7 +71,7 @@ function atkDesc(skillDefs) {
 	return finalText;
 }
 
-skillDesc = async(skillDefs, skillName, server) => {
+skillDesc = (skillDefs, skillName, server) => {
 	var finalText = ``;
 	if (skillDefs.pow && skillDefs.type != "status" && skillDefs.type != "passive") {
 		if (skillDefs.ohko && skillDefs.type != "heal")
@@ -243,7 +243,7 @@ skillDesc = async(skillDefs, skillName, server) => {
 		if (skillDefs.originalAuthor === 'Default')
 			userTxt = 'Default/Official';
 		else {
-			let user = await client.users.fetch(skillDefs.originalAuthor)
+			let user = client.users.fetch(skillDefs.originalAuthor)
 			userTxt = user.username
 		}
 	} else
@@ -258,15 +258,15 @@ skillDesc = async(skillDefs, skillName, server) => {
 
 	let color = elementColors[(typeof skillDefs.type === 'string') ? skillDefs.type : skillDefs.type[0]];
 
-	const DiscordEmbed = new Discord.MessageEmbed()
+	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(color)
 		.setTitle(`${type}${skillDefs.name ? skillDefs.name : skillName} *(${userTxt})*`)
-		.setDescription(`${finalText}`)
+		.setDescription(finalText ? finalText : 'Invalid Description :(')
 	return DiscordEmbed;
 }
 
 module.exports = {
-	skillDesc: async function(skill, id, serv) {
+	skillDesc: function(skill, id, serv) {
 		return skillDesc(skill, id, serv);
 	}
 }

@@ -24,5 +24,22 @@
         "target": "one",
         "originalAuthor": "516359709779820544",
         "desc": "The user drains the target's MP by any means necessary."
+    },
+    "Matarunda": {
+        "name": "Matarunda",
+        "type": "status",
+        "cost": 16,
+        "costtype": "MP",
+        "target": "allopposing",
+        "originalAuthor": "516359709779820544",
+        "statusses": {
+            "buff": [
+                [
+                    "atk",
+                    -1,
+                    100
+                ]
+            ]
+        }
     }
 }

@@ -64,7 +64,7 @@ commands.registerskill = new Command({
 			forced: false
 		},
 	],
-	func: async(message, args) => {
+	func: (message, args) => {
 		if (!args[0]) {
             const DiscordEmbed = new Discord.MessageEmbed()
                 .setColor('#0099ff')
@@ -181,6 +181,11 @@ commands.registerstatus = new Command({
 			forced: false
 		},
 		{
+			name: "Target Type",
+			type: "Word",
+			forced: true
+		},
+		{
 			name: "Status Type",
 			type: "Word",
 			forced: true
@@ -216,7 +221,17 @@ commands.registerstatus = new Command({
 			forced: false
 		},
 	],
-	func: async(message, args) => {
+	func: (message, args) => {
+		let skill = buildStatus(message, args)
+		if (!skill) return;
+
+		skillFile[args[0]] = skill;
+		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+		
+		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
+		console.log(embed)
+
+		message.channel.send({content: `${skill.name} has been registered:`, embeds: [embed]})
 	}
 })
 
@@ -275,7 +290,7 @@ commands.registerheal = new Command({
 			forced: false
 		},
 	],
-	func: async(message, args) => {
+	func: (message, args) => {
 	}
 })
 
@@ -334,7 +349,7 @@ commands.registerpassive = new Command({
 			forced: false
 		},
 	],
-	func: async(message, args) => {
+	func: (message, args) => {
 	}
 })
 
@@ -370,6 +385,43 @@ commands.listatkextras = new Command({
 		let extras = []
 		for (let i in extrasList) {
 			extras.push({name: `${extrasList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: extrasList[i].desc, inline: true});
+		}
+
+		let firstOne = 0;
+		let lastOne = 5;
+
+		if (args[0]) {
+			firstOne += 6*(args[0]-1);
+			lastOne += 6*(args[0]-1);
+		}
+
+		for (let i = firstOne; i <= lastOne; i++) {
+			if (extras[i]) DiscordEmbed.fields.push(extras[i]);
+		}
+
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
+commands.liststatusextras = new Command({
+	desc: 'List the possible extras you can give a __status__ skill.',
+	section: "battle",
+	args: [
+		{
+			name: "Page Number",
+			type: "Num",
+			forced: false
+		},
+	],
+	func: (message, args) => {
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle('List of Status Extras')
+			.setDescription('When using a status skill, skills can have extra effects! These are called extras, and can be added with the "applyextra" command.')
+
+		let extras = []
+		for (let i in statusList) {
+			extras.push({name: `${statusList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: statusList[i].desc, inline: true});
 		}
 
 		let firstOne = 0;
@@ -430,7 +482,7 @@ commands.applyextra = new Command({
 	],
 	func: (message, args) => {
 		if (!args[0]) return message.channel.send('Please enter a valid skill name!')
-		if (!args[1]) return message.channel.send('Please enter a valid extra! You can list them all with rpg!listextras.')
+		if (!args[1]) return message.channel.send('Please enter a valid extra! You can list them all with "listatkextras".')
 
 		if (skillFile[args[0]]) {
 			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skillFile[args[0]].originalAuthor != message.author.id) {
@@ -581,7 +633,7 @@ commands.getskill = new Command({
 			forced: true
 		}
 	],
-	func: async(message, args) => {
+	func: (message, args) => {
 		if (skillFile[args[0]])
 			message.channel.send({content: `Here is the data for ${skillFile[args[0]].name}`, embeds: [skillFuncs.skillDesc(skillFile[args[0]], skillFile[args[0]].name, message.guild.id)]})
 		else
@@ -705,7 +757,7 @@ commands.dailyskill = new Command({
 	desc: 'Any random skill can be set as a daily one! Test your luck to see if yours is here!',
 	section: "fun",
 	args: [],
-	func: async(message, args) => {
+	func: (message, args) => {
 		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet!`);
 		if (!dailySkill) dailySkill = 'none';
 
@@ -734,7 +786,7 @@ commands.randskill = new Command({
 	desc: 'Gets a random skill.',
 	section: "fun",
 	args: [],
-	func: async(message, args) => {
+	func: (message, args) => {
 		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet.`);
 
 		let skill = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];

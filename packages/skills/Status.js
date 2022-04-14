@@ -1,11 +1,14 @@
 statusList = {
-	ohko: {
-		name: "One Hit KO",
-		desc: '_<Chance>_\nInstantly defeats the foe at a <Chance>% chance.',
+	buff: {
+		name: "Stat Buff",
+		desc: "_<Stat> <Stages> <Chance>_\nWill buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (parseFloat(extra1) < 0) return message.channel.send("What's the point of using this skill if it never lands?");
+			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
+			if (!extra2) extra3 = '-1';
+			if (!extra3) extra3 = '100';
 
-			makeExtra(skill, "ohko", [parseFloat(extra1)]);
+			makeStatus(skill, "buff", [extra1.toLowerCase(), parseInt(extra2), parseFloat(extra3)]);
+			return true;
 		}
 	}
 }
@@ -29,10 +32,17 @@ hasStatus = (skill, extra) => {
 // Apply Extra Effects to an existing skill using the extrasList above.
 applyStatus = (message, skill, skillExtra, extra1, extra2, extra3, extra4, extra5) => {
 	if (!skill.statusses) skill.statusses = {};
-	if (!skillExtra || !statusList[skillExtra.toLowerCase()]) return message.channel.send("You're adding an invalid status type! Use the ''liststatus'' command to list all extras.");
+	if (!skillExtra || !statusList[skillExtra.toLowerCase()]) {
+		message.channel.send("You're adding an invalid status type! Use the ''liststatus'' command to list all extras.");
+		return false;
+	}
 
-	statusList[skillExtra.toLowerCase()].applyfunc(message, skill, extra1, extra2, extra3, extra4, extra5);
-	message.react('👍');
+	if (!statusList[skillExtra.toLowerCase()].applyfunc(message, skill, extra1, extra2, extra3, extra4, extra5)) {
+		message.channel.send("Something went wrong!");
+		return false;
+	}
+	
+	skill.done = true;
 	
 	/* === OLD EXTRAS HERE FOR REFERENCE ===
 
@@ -121,5 +131,26 @@ applyStatus = (message, skill, skillExtra, extra1, extra2, extra3, extra4, extra
 		return msg.channel.send('You inputted an invalid status type.');
 	*/
 
+	console.log("win")
 	return true;
+}
+
+buildStatus = (message, args) => {
+	let skill = {
+		name: args[0],
+		type: 'status',
+		cost: args[1],
+		costtype: args[2],
+		target: args[3],
+		originalAuthor: message.author.id
+	}
+
+	applyStatus(message, skill, args[4].toLowerCase(), args[5], args[6], args[7], args[8], args[9])
+	
+	if (skill.done) {
+		delete skill.done;
+		return skill;
+	} else {
+		return false
+	}
 }
