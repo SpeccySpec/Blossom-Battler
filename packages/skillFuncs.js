@@ -71,7 +71,7 @@ function atkDesc(skillDefs) {
 	return finalText;
 }
 
-function skillDesc(skillDefs, skillName, server) {
+skillDesc = async(skillDefs, skillName, server) => {
 	var finalText = ``;
 	if (skillDefs.pow && skillDefs.type != "status" && skillDefs.type != "passive") {
 		if (skillDefs.ohko && skillDefs.type != "heal")
@@ -242,8 +242,10 @@ function skillDesc(skillDefs, skillName, server) {
 	if (skillDefs.originalAuthor) {
 		if (skillDefs.originalAuthor === 'Default')
 			userTxt = 'Default/Official';
-		else
-			userTxt = `<@${skillDefs.originalAuthor}>`;
+		else {
+			let user = await client.users.cache.find(user => user.id === skillDefs.originalAuthor)
+			userTxt = user.username
+		}
 	} else
 		userTxt = 'Default/Official';
 

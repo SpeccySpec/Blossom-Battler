@@ -64,7 +64,7 @@ commands.registerskill = new Command({
 			forced: false
 		},
 	],
-	func: (message, args) => {
+	func: async(message, args) => {
 		if (!args[0]) {
             const DiscordEmbed = new Discord.MessageEmbed()
                 .setColor('#0099ff')
@@ -427,7 +427,7 @@ commands.getskill = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func: async(message, args) => {
 		if (skillFile[args[0]])
 			message.channel.send({content: `Here is the data for ${skillFile[args[0]].name}`, embeds: [skillFuncs.skillDesc(skillFile[args[0]], skillFile[args[0]].name, message.guild.id)]})
 		else
@@ -590,7 +590,7 @@ commands.dailyskill = new Command({
 	desc: 'Any random skill can be set as a daily one! Test your luck to see if yours is here!',
 	section: "fun",
 	args: [],
-	func: (message, args) => {
+	func: async(message, args) => {
 		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet!`);
 		if (!dailySkill) dailySkill = 'none';
 
@@ -643,7 +643,7 @@ commands.randskill = new Command({
 	desc: 'Gets a random skill.',
 	section: "fun",
 	args: [],
-	func: (message, args) => {
+	func: async(message, args) => {
 		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet.`);
 
 		let skill = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
