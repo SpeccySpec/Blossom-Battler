@@ -552,29 +552,6 @@ commands.editskill = new Command({
 					} else {
 						skillFile[args[2]] = utilityFuncs.cloneObj(skillFile[args[0]])
 						delete skillFile[args[0]]
-
-						itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
-						for (let item in itemFile) {
-							if (itemFile[item].skill == args[0]) {
-								itemFile[item].skill = args[2]
-							}
-						}
-						fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, '    '));
-
-						weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
-						for (let weapon in weaponFile) {
-							if (weaponFile[weapon].skill == args[0]) {
-								weaponFile[weapon].skill = args[2]
-							}
-						}
-						fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile, null, '    '));
-
-						armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armor.json`)
-						for (let armor in armorFile) {
-							if (armorFile[armor].skill == args[0]) {
-								armorFile[armor].skill = args[2]
-							}
-						}
 					}
 					
 					break;
@@ -701,47 +678,8 @@ commands.purgeskill = new Command({
 			collector.on('collect', m => {
 				if (m.author.id == message.author.id) {
 					if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
-						message.channel.send(`${skillFile[args[0]].name} has been erased from existance.\n`)
+						message.channel.send(`${skillFile[args[0]].name} has been erased from existance. You should be wary to look around. This removal caused things to not work like before.\n`)
 						delete skillFile[args[0]];
-
-						let itemWarning = {};
-						itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
-						itemWarning['Items'] = ''
-						for (let item in itemFile) {
-							if (itemFile[item].skill == args[0]) {
-								itemFile[item].skill = ''
-								itemWarning['Items'] += `\n**- ${itemFile[item].name}** *(${item})*`
-							}
-						}
-						fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, '    '));
-
-						weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
-						itemWarning['Weapons'] = ''
-						for (let weapon in weaponFile) {
-							if (weaponFile[weapon].skill == args[0]) {
-								weaponFile[weapon].skill = ''
-								itemWarning['Weapons'] += `\n**- ${weaponFile[weapon].name}** *(${weapon})*`
-							}
-						}
-						fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile, null, '    '));
-						
-						armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armor.json`)
-						itemWarning['Armor'] = ''
-						for (let armor in armorFile) {
-							if (armorFile[armor].skill == args[0]) {
-								armorFile[armor].skill = ''
-								itemWarning['Armor'] += `\n**- ${armorFile[armor].name}** *(${armor})*`
-							}
-						}
-						fs.writeFileSync(`${dataPath}/json/${message.guild.id}/armor.json`, JSON.stringify(armorFile, null, '    '));
-
-						if (itemWarning != {}) { 
-							message.channel.send(`**WARNING!**`)
-							for (let i in itemWarning) {
-								if (itemWarning[i] != '') message.channel.send(`**${i}** such as: ${itemWarning[i]}`)
-							}
-							message.channel.send(`had their skill deleted.`)
-						}
 
 						fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 					} else message.channel.send(`${skillFile[args[0]].name} will not be deleted.`);
