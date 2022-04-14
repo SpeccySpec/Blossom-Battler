@@ -376,13 +376,10 @@ commands.edititem = new Command({
             forced: true
         },
         {
-            name: "New Value 1",
+            name: "New Value #1",
             type: "Word",
-            forced: true
-        },
-        {
-            name: "New Value 2",
-            type: "Word",
+            forced: true,
+            multiple: true
         }
     ],
     func: (message, args) => {
@@ -440,7 +437,7 @@ commands.edititem = new Command({
                 break;
             case 'truename':
                 if (itemFile[args[2]]) {
-                    return message.channel.send(`An item called ${weaponFile[args[2]].name} (${args[2]}) already exists!`)
+                    return message.channel.send(`An item called ${itemFile[args[2]].name} (${args[2]}) already exists!`)
                 } else {
                     itemFile[args[2]] = utilityFuncs.cloneObj(itemFile[args[0]])
                     delete itemFile[args[0]]
@@ -1241,14 +1238,26 @@ commands.editarmor = new Command({
             case 'name':
             case 'desc':
                 armorFile[args[0]][editField] = args[2];
+                break;
+            case 'truename':
+                if (armorFile[args[2]]) {
+                    return message.channel.send(`An armor piece called ${armorFile[args[2]].name} (${args[2]}) already exists!`)
+                } else {
+                    armorFile[args[2]] = utilityFuncs.cloneObj(armorFile[args[0]])
+                    delete armorFile[args[0]]
+                }
+                break;
             case 'cost':
             case 'currency':
                 armorFile[args[0]].cost = Math.max(0, parseInt(args[2]));
+                break;
             case 'element':
                 if (!Elements.includes(args[2].toLowerCase())) return message.channel.send(`${args[2]} is not a valid element.`);
                 armorFile[args[0]][editField] = args[2].toLowerCase();
+                break;
             case 'end':
                 armorFile[args[0]][editField] = parseInt(args[2])
+                break;
             case 'skill':
                 if (!skillFile[arg[2]]) return message.channel.send(`${args[2]} is not a valid skill.`);
                 if (skillFile[args[2]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this skill, therefore, you have insufficient permissions to use it.");

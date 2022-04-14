@@ -3,10 +3,10 @@
         "name": "Sweet",
         "rarity": "sentient",
         "cost": 0,
-        "type": "healhpmp",
+        "type": "healmp",
         "originalAuthor": "441198920668938260",
-        "healhpmp": 120,
-        "image": "https://cdn.discordapp.com/emojis/963788061731348510.webp"
+        "image": "https://cdn.discordapp.com/emojis/963788061731348510.webp",
+        "healmp": 20
     },
     "lmao": {
         "name": "lmao",
