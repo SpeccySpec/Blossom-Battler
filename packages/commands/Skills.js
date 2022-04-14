@@ -161,6 +161,183 @@ commands.registerskill = new Command({
 	}
 })
 
+commands.registerstatus = new Command({
+	desc: `Register a status skill to use in-battle! Characters can learn skills, items can utilize skills too. Status skills usually apply positive effects to allies or negative effects to opponents.`,
+	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Cost",
+			type: "Num",
+			forced: false
+		},
+		{
+			name: "Cost Type",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Status Type",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Variable 1",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 2",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 3",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 4",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 5",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Description",
+			type: "Any",
+			forced: false
+		},
+	],
+	func: async(message, args) => {
+	}
+})
+
+commands.registerheal = new Command({
+	desc: `Register a heal skill to use in-battle! Characters can learn skills, items can utilize skills too.\n\nA healer is basically required in most battles. Healing skills are the skills most healers learn.`,
+	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Cost",
+			type: "Num",
+			forced: false
+		},
+		{
+			name: "Cost Type",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Heal Type",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Variable 1",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 2",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 3",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 4",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 5",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Description",
+			type: "Any",
+			forced: false
+		},
+	],
+	func: async(message, args) => {
+	}
+})
+
+commands.registerpassive = new Command({
+	desc: `Register a passive skill to use in-battle! Characters can learn skills, items can utilize skills too.\n\nPassive skills are certain effects that activate mid-battle or throughout the battle. These can be positive or negative, usually positive.`,
+	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Cost",
+			type: "Num",
+			forced: false
+		},
+		{
+			name: "Cost Type",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Passive Type",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Variable 1",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 2",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 3",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 4",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 5",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Description",
+			type: "Any",
+			forced: false
+		},
+	],
+	func: async(message, args) => {
+	}
+})
+
 /*
 commands.updateskills = new Command({
 	desc: 'Update all skills for this new version of Bloom Battler.',
