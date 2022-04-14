@@ -64,7 +64,7 @@ commands.registerskill = new Command({
 			forced: false
 		},
 	],
-	func: (message, args) => {
+	func: async(message, args) => {
 		if (!args[0]) {
             const DiscordEmbed = new Discord.MessageEmbed()
                 .setColor('#0099ff')
@@ -158,6 +158,183 @@ commands.registerskill = new Command({
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
 		message.channel.send({content: `${skillDefs.name} has been registered:`, embeds: [skillFuncs.skillDesc(skillDefs, skillDefs.name, message.guild.id)]})
+	}
+})
+
+commands.registerstatus = new Command({
+	desc: `Register a status skill to use in-battle! Characters can learn skills, items can utilize skills too. Status skills usually apply positive effects to allies or negative effects to opponents.`,
+	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Cost",
+			type: "Num",
+			forced: false
+		},
+		{
+			name: "Cost Type",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Status Type",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Variable 1",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 2",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 3",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 4",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 5",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Description",
+			type: "Any",
+			forced: false
+		},
+	],
+	func: async(message, args) => {
+	}
+})
+
+commands.registerheal = new Command({
+	desc: `Register a heal skill to use in-battle! Characters can learn skills, items can utilize skills too.\n\nA healer is basically required in most battles. Healing skills are the skills most healers learn.`,
+	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Cost",
+			type: "Num",
+			forced: false
+		},
+		{
+			name: "Cost Type",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Heal Type",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Variable 1",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 2",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 3",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 4",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 5",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Description",
+			type: "Any",
+			forced: false
+		},
+	],
+	func: async(message, args) => {
+	}
+})
+
+commands.registerpassive = new Command({
+	desc: `Register a passive skill to use in-battle! Characters can learn skills, items can utilize skills too.\n\nPassive skills are certain effects that activate mid-battle or throughout the battle. These can be positive or negative, usually positive.`,
+	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Cost",
+			type: "Num",
+			forced: false
+		},
+		{
+			name: "Cost Type",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Passive Type",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Variable 1",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 2",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 3",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 4",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 5",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Description",
+			type: "Any",
+			forced: false
+		},
+	],
+	func: async(message, args) => {
 	}
 })
 
@@ -427,7 +604,7 @@ commands.getskill = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func: async(message, args) => {
 		if (skillFile[args[0]])
 			message.channel.send({content: `Here is the data for ${skillFile[args[0]].name}`, embeds: [skillFuncs.skillDesc(skillFile[args[0]], skillFile[args[0]].name, message.guild.id)]})
 		else
@@ -620,7 +797,7 @@ commands.dailyskill = new Command({
 	desc: 'Any random skill can be set as a daily one! Test your luck to see if yours is here!',
 	section: "fun",
 	args: [],
-	func: (message, args) => {
+	func: async(message, args) => {
 		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet!`);
 		if (!dailySkill) dailySkill = 'none';
 
@@ -649,7 +826,7 @@ commands.randskill = new Command({
 	desc: 'Gets a random skill.',
 	section: "fun",
 	args: [],
-	func: (message, args) => {
+	func: async(message, args) => {
 		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet.`);
 
 		let skill = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
