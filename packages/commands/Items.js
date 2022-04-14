@@ -516,31 +516,7 @@ commands.dailyitem = new Command({
 
         setTimeout(function() {
             if (itemFile[dailyItem[message.guild.id]]) {
-                let today = new Date();
-                let dd = String(today.getDate()).padStart(2, '0');
-                let mm = String(today.getMonth() + 1).padStart(2, '0');
-                let yyyy = today.getFullYear();
-
-                today = mm + '/' + dd + '/' + yyyy;
-                
-                if (mm === '12' && dd === '24')
-                    today = 'Christmas Eve';
-                else if (mm === '12' && dd === '25')
-                    today = 'Christmas';
-                else if (mm === '12' && dd === '26')
-                    today = 'Boxing Day';
-                else if (mm === '12' && dd === '31')
-                    today = "New Years' Eve";
-                else if (mm === '1' && dd === '1')
-                    today = 'New Years';
-                else if (mm === '4' && dd === '1')
-                    today = "April Fools' day";
-                else if (mm === '4' && dd === '17' && yyyy == '2022')
-                    today = 'Easter (2022)';
-                else if (mm === '6' && dd === '2')
-                    today = "<@516359709779820544>'s birthday";
-                else if (mm === '10' && dd === '31')
-                    today = 'Halloween';		
+                let today = getCurrentDate();
 
                 fs.writeFileSync(dataPath+'/dailyitem.txt', JSON.stringify(dailyItem));
 
@@ -824,31 +800,7 @@ commands.dailyweapon = new Command({
 
         setTimeout(function() {
             if (weaponFile[dailyWeapon[message.guild.id]]) {
-                let today = new Date();
-                let dd = String(today.getDate()).padStart(2, '0');
-                let mm = String(today.getMonth() + 1).padStart(2, '0');
-                let yyyy = today.getFullYear();
-
-                today = mm + '/' + dd + '/' + yyyy;
-                
-                if (mm === '12' && dd === '24')
-                    today = 'Christmas Eve';
-                else if (mm === '12' && dd === '25')
-                    today = 'Christmas';
-                else if (mm === '12' && dd === '26')
-                    today = 'Boxing Day';
-                else if (mm === '12' && dd === '31')
-                    today = "New Years' Eve";
-                else if (mm === '1' && dd === '1')
-                    today = 'New Years';
-                else if (mm === '4' && dd === '1')
-                    today = "April Fools' day";
-                else if (mm === '4' && dd === '17' && yyyy == '2022')
-                    today = 'Easter (2022)';
-                else if (mm === '6' && dd === '2')
-                    today = "<@516359709779820544>'s birthday";
-                else if (mm === '10' && dd === '31')
-                    today = 'Halloween';		
+                let today = getCurrentDate();
 
                 fs.writeFileSync(dataPath+'/dailyweapon.txt', JSON.stringify(dailyWeapon));
 
@@ -1144,31 +1096,7 @@ commands.dailyarmor = new Command({
 
         setTimeout(function() {
             if (armorFile[dailyArmor[message.guild.id]]) {
-                let today = new Date();
-                let dd = String(today.getDate()).padStart(2, '0');
-                let mm = String(today.getMonth() + 1).padStart(2, '0');
-                let yyyy = today.getFullYear();
-
-                today = mm + '/' + dd + '/' + yyyy;
-                
-                if (mm === '12' && dd === '24')
-                    today = 'Christmas Eve';
-                else if (mm === '12' && dd === '25')
-                    today = 'Christmas';
-                else if (mm === '12' && dd === '26')
-                    today = 'Boxing Day';
-                else if (mm === '12' && dd === '31')
-                    today = "New Years' Eve";
-                else if (mm === '1' && dd === '1')
-                    today = 'New Years';
-                else if (mm === '4' && dd === '1')
-                    today = "April Fools' day";
-                else if (mm === '4' && dd === '17' && yyyy == '2022')
-                    today = 'Easter (2022)';
-                else if (mm === '6' && dd === '2')
-                    today = "<@516359709779820544>'s birthday";
-                else if (mm === '10' && dd === '31')
-                    today = 'Halloween';		
+                let today = getCurrentDate();
 
                 fs.writeFileSync(dataPath+'/dailyarmor.txt', JSON.stringify(dailyArmor));
 

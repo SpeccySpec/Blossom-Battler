@@ -501,7 +501,7 @@ commands.foodpreferences = new Command({
 			type: "Word"
 		}
 	],
-	func: (message, args) => {
+	func: async (message, args) => {
 
 		setupFileProfile(message.author.id, 'preferences', userPreferences)
 
@@ -522,48 +522,43 @@ commands.foodpreferences = new Command({
 			const indexOChan = makeBar(preferences.OfficialChance)
 			const indexUChan = makeBar(preferences.UserChance)
 
-			passOff(preferences)
-
-			async function passOff(preferences) {
-				let userText = ''
-				for (let i = 0; i < preferences.BlockedUsers.length; i++) {
-					if (message.guild.members.cache.get(preferences.BlockedUsers[i]))
-					userText += `\n- ${message.guild.members.cache.get(preferences.BlockedUsers[i]).user.tag}`
-				}
-				if (userText == '')
-				userText = 'None'
-
-				if (userText.length > 256) {
-					let link = await generateHastebin(userText)
-		
-					userText = `*Hastebin:\n${link}.*`
-				}
-
-				let phraseText = preferences.BlockedPhrases.length > 0 ? '' : 'None'
-				for (i in preferences.BlockedPhrases) {
-					phraseText += `\n- ${preferences.BlockedPhrases[i]}`
-				}
-
-				if (phraseText.length > 256) {
-					let link = await generateHastebin(phraseText)
-		
-					phraseText = `*Hastebin:\n${link}.*`
-				}
-
-				embed = new Discord.MessageEmbed()
-				.setColor('#0099ff')
-				.setTitle(`User preferences for ${message.author.username}`)
-				.setDescription(`If you want to set preferences, try:\n*official_chance <Number: Chance>* - Official Product Chance\n*user_chance <Number: Chance>* - User Product Chance\n*user_block <ID: User>* - Blocked Users\n*phrase_block <Word: Phrase>* - Blocked Phrases`)
-				.addFields(
-					{ name: 'Official Product Chance', value: `${oChan}% ${indexOChan}`, inline: true },
-					{ name: `User Product Chance`, value: `${uChan}% ${indexUChan}`, inline: false },
-					{ name: `Filtered Users`, value: `${userText}`, inline: true },
-					{ name: `Filtered Phrases`, value: `${phraseText}`, inline: true },
-				)
-
-				return message.channel.send({embeds: [embed]})
+			let userText = ''
+			for (let i = 0; i < preferences.BlockedUsers.length; i++) {
+				if (message.guild.members.cache.get(preferences.BlockedUsers[i]))
+				userText += `\n- ${message.guild.members.cache.get(preferences.BlockedUsers[i]).user.tag}`
 			}
-			return
+			if (userText == '')
+			userText = 'None'
+
+			if (userText.length > 256) {
+				let link = await generateHastebin(userText)
+		
+				userText = `*Hastebin:\n${link}.*`
+			}
+
+			let phraseText = preferences.BlockedPhrases.length > 0 ? '' : 'None'
+			for (i in preferences.BlockedPhrases) {
+				phraseText += `\n- ${preferences.BlockedPhrases[i]}`
+			}
+
+			if (phraseText.length > 256) {
+				let link = await generateHastebin(phraseText)
+		
+				phraseText = `*Hastebin:\n${link}.*`
+			}
+
+			embed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle(`User preferences for ${message.author.username}`)
+			.setDescription(`If you want to set preferences, try:\n*official_chance <Number: Chance>* - Official Product Chance\n*user_chance <Number: Chance>* - User Product Chance\n*user_block <ID: User>* - Blocked Users\n*phrase_block <Word: Phrase>* - Blocked Phrases`)
+			.addFields(
+				{ name: 'Official Product Chance', value: `${oChan}% ${indexOChan}`, inline: true },
+				{ name: `User Product Chance`, value: `${uChan}% ${indexUChan}`, inline: false },
+				{ name: `Filtered Users`, value: `${userText}`, inline: true },
+				{ name: `Filtered Phrases`, value: `${phraseText}`, inline: true },
+			)
+
+			return message.channel.send({embeds: [embed]})
 		}
 
 		if (pblock) {
@@ -589,7 +584,9 @@ commands.foodpreferences = new Command({
 				value = value.slice(3, -1)
 			}
 
-			if (client.users.cache.has(value)) { //Little Note for Felix: how could I made this work for all members, not just offline ones?
+			try {
+				client.users.fetch(value) //the main factor of erroring out is here
+
 				if (preferences.BlockedUsers.includes(value)) {
 					preferences.BlockedUsers.splice(preferences.BlockedUsers.indexOf(value), 1)
 					message.channel.send(`The user **${client.users.cache.get(value).username}** is no longer on your own blacklist.`)
@@ -597,7 +594,7 @@ commands.foodpreferences = new Command({
 					preferences.BlockedUsers.push(value)
 					message.channel.send(`The user **${client.users.cache.get(value).username}** is now on your own blacklist.`)
 				}
-			} else {
+			} catch (e) {
 				return message.channel.send(`The user **${value}** does not exist.`)
 			}
 		}

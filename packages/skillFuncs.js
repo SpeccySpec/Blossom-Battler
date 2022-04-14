@@ -243,7 +243,7 @@ skillDesc = async(skillDefs, skillName, server) => {
 		if (skillDefs.originalAuthor === 'Default')
 			userTxt = 'Default/Official';
 		else {
-			let user = await client.users.cache.find(user => user.id === skillDefs.originalAuthor)
+			let user = await client.users.fetch(skillDefs.originalAuthor)
 			userTxt = user.username
 		}
 	} else
@@ -261,12 +261,12 @@ skillDesc = async(skillDefs, skillName, server) => {
 	const DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(color)
 		.setTitle(`${type}${skillDefs.name ? skillDefs.name : skillName} *(${userTxt})*`)
-		.setDescription(finalText)
+		.setDescription(`${finalText}`)
 	return DiscordEmbed;
 }
 
 module.exports = {
-	skillDesc: function(skill, id, serv) {
+	skillDesc: async function(skill, id, serv) {
 		return skillDesc(skill, id, serv);
 	}
 }
