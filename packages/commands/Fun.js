@@ -293,8 +293,6 @@ commands.ship = new Command({
 			args[1] = args[0]
 			args[0] = message.author.username
 		}
-
-		let shipFile = setUpFile(`${dataPath}/json/ships.json`);
 		let shipCandidates = args;
 
 		let resulttext = "**Candidates:** \n"
