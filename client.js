@@ -107,21 +107,7 @@ setTimeout(function() {
 	fs.writeFileSync(dataPath+'/dailyskill.txt', '');
 	fs.writeFileSync(dataPath+'/dailyitem.txt', '');
 	fs.writeFileSync(dataPath+'/dailyweapon.txt', '');
-	fs.writeFileSync(dataPath+'/dailyarmor.json', '');
-
-	setTimeout(function() {
-		dailyQuote = 'none';
-		dailySkill = 'none';
-		dailyItem = {};
-		dailyWeapon = {};
-		dailyArmor = {};
-
-		fs.writeFileSync(dataPath+'/dailyquote.txt', '');
-		fs.writeFileSync(dataPath+'/dailyskill.txt', '');
-		fs.writeFileSync(dataPath+'/dailyitem.txt', '');
-		fs.writeFileSync(dataPath+'/dailyweapon.txt', '');
-		fs.writeFileSync(dataPath+'/dailyarmor.json', '');
-	}, midnightInMS());
+	fs.writeFileSync(dataPath+'/dailyarmor.txt', '');
 }, midnightInMS());
 
 // Elements
@@ -556,6 +542,19 @@ listArray = async(channel, theArray, page) => {
 
 // Global JSONs
 skillFile = setUpFile(`${dataPath}/json/skills.json`)
+
+shipFile = setUpFile(`${dataPath}/json/ships.json`);
+
+// 2 Week Moment
+function twoWeekInMS() {
+	return new Date().setDate(new Date().getDate() + 14) - new Date().getTime()
+}
+
+setTimeout(function() {
+	shipFile = {}
+
+	fs.writeFileSync(`${dataPath}/json/ships.json`, '{}');
+}, twoWeekInMS());
 
 Command = class {
 	constructor(object) {
