@@ -10,11 +10,13 @@ function itemDesc(itemDefs, itemName, message) {
             case 'skill':
                 if (itemDefs.skill != '') {
                     let type = ''
-                    if (typeof skillFile[itemDefs.skill].type === 'string')
-                        type = `${elementEmoji[skillFile[itemDefs.skill].type]}`;
-                    else if (typeof skillFile[itemDefs.skill].type === 'object') {
-                        for (const i in skillFile[itemDefs.skill].type) type += `${skillFile[itemDefs.skill].type[i]}`;
-                    }
+                    if (skillFile[itemDefs.skill]) {
+                        if (typeof skillFile[itemDefs.skill].type === 'string')
+                            type = `${elementEmoji[skillFile[itemDefs.skill].type]}`;
+                        else if (typeof skillFile[itemDefs.skill].type === 'object') {
+                            for (const i in skillFile[itemDefs.skill].type) type += `${skillFile[itemDefs.skill].type[i]}`;
+                        }
+                    }else type = `<:invalid:964148473295409155>`
 
                     finalText += `Casts **${type}${itemDefs.skill}** when used\n`;
                 }
@@ -84,11 +86,13 @@ function weaponDesc(weaponDefs, weaponName, message) {
 
     if (weaponDefs.skill && weaponDefs.skill != '') {
         let type = ''
-        if (typeof skillFile[weaponDefs.skill].type === 'string')
-            type = `${elementEmoji[skillFile[weaponDefs.skill].type]}`;
-        else if (typeof skillFile[weaponDefs.skill].type === 'object') {
-            for (const i in skillFile[weaponDefs.skill].type) type += `${skillFile[weaponDefs.skill].type[i]}`;
-        }
+        if (skillFIle[weaponDefs.skill]) {
+            if (typeof skillFile[weaponDefs.skill].type === 'string')
+                type = `${elementEmoji[skillFile[weaponDefs.skill].type]}`;
+            else if (typeof skillFile[weaponDefs.skill].type === 'object') {
+                for (const i in skillFile[weaponDefs.skill].type) type += `${skillFile[weaponDefs.skill].type[i]}`;
+            }
+        } else type = `<:invalid:964148473295409155>`
 
         finalText += `The user may cast **${type}${weaponDefs.skill}**\n`;
     }
@@ -133,11 +137,13 @@ function armorDesc(armorDefs, armorName, message) {
 
     if (armorDefs.skill && armorDefs.skill != '') {
         let type = ''
-        if (typeof skillFile[armorDefs.skill].type === 'string')
-            type = `${elementEmoji[skillFile[armorDefs.skill].type]}`;
-        else if (typeof skillFile[armorDefs.skill].type === 'object') {
-            for (const i in skillFile[armorDefs.skill].type) type += `${skillFile[armorDefs.skill].type[i]}`;
-        }
+        if (skillFIle[armorDefs.skill]) {
+            if (typeof skillFile[armorDefs.skill].type === 'string')
+                type = `${elementEmoji[skillFile[armorDefs.skill].type]}`;
+            else if (typeof skillFile[armorDefs.skill].type === 'object') {
+                for (const i in skillFile[armorDefs.skill].type) type += `${skillFile[armorDefs.skill].type[i]}`;
+            }
+        } else type = `<:invalid:964148473295409155>`
 
         finalText += `The user may cast **${type}${armorDefs.skill}**\n`;
     }
