@@ -86,7 +86,7 @@ function weaponDesc(weaponDefs, weaponName, message) {
 
     if (weaponDefs.skill && weaponDefs.skill != '') {
         let type = ''
-        if (skillFIle[weaponDefs.skill]) {
+        if (skillFile[weaponDefs.skill]) {
             if (typeof skillFile[weaponDefs.skill].type === 'string')
                 type = `${elementEmoji[skillFile[weaponDefs.skill].type]}`;
             else if (typeof skillFile[weaponDefs.skill].type === 'object') {
@@ -137,7 +137,7 @@ function armorDesc(armorDefs, armorName, message) {
 
     if (armorDefs.skill && armorDefs.skill != '') {
         let type = ''
-        if (skillFIle[armorDefs.skill]) {
+        if (skillFile[armorDefs.skill]) {
             if (typeof skillFile[armorDefs.skill].type === 'string')
                 type = `${elementEmoji[skillFile[armorDefs.skill].type]}`;
             else if (typeof skillFile[armorDefs.skill].type === 'object') {
@@ -1246,3 +1246,4 @@ commands.purgearmor = new Command({
             });
     }
 })
+
