@@ -169,8 +169,10 @@ function setInvalidEmbed(message, limit) {
 	return message.channel.send({embeds: [embed]})
 }
 
-const validExtensions = ['png', 'bmp', 'tiff', 'tif', 'gif', 'jpg', 'jpeg', 'apng', 'webp']
+validExtensions = ['png', 'bmp', 'tiff', 'tif', 'gif', 'jpg', 'jpeg', 'apng', 'webp']
 checkImage = (message, arg, image) => {
+	console.log(arg, image)
+	
 	if (image != undefined) {
 		if (!validExtensions.includes(image.url.split('.').pop())) {
 			message.channel.send(`The image you uploaded is not a valid image.`)
@@ -366,14 +368,14 @@ commands.foodpreferences = new Command({
 
 		const choice = args[0] && args[0].toLowerCase()
 
-		const ochanceAliases = choice && ochanceAliases.includes(choice)
-		const uchanceAliases = choice && uchanceAliases.includes(choice)
-		const ublockAliases = choice && ublockAliases.includes(choice)
-		const pblockAliases = choice && pblockAliases.includes(choice)
+		const ochance = choice && ochanceAliases.includes(choice)
+		const uchance = choice && uchanceAliases.includes(choice)
+		const ublock = choice && ublockAliases.includes(choice)
+		const pblock = choice && pblockAliases.includes(choice)
 
 		let value = args[1]
 
-		if (((ochanceAliases || uchanceAliases || ublockAliases || pblockAliases) && !value) || (!ochanceAliases && !uchanceAliases && !ublockAliases & !pblockAliases)) {
+		if (((ochance || uchance || ublock || pblock) && !value) || (!ochance && !uchance && !ublock & !pblock)) {
 			const preferences = userPreferences[message.author.id]
 			const oChan = Math.round(preferences.OfficialChance)
 			const uChan = Math.round(preferences.UserChance)
@@ -424,7 +426,7 @@ commands.foodpreferences = new Command({
 			return
 		}
 
-		if (pblockAliases) {
+		if (pblock) {
 			value = value.toLowerCase()
 			if (preferences.BlockedPhrases.includes(value)) {
                 preferences.BlockedPhrases.splice(preferences.BlockedPhrases.indexOf(value), 1)
@@ -433,21 +435,21 @@ commands.foodpreferences = new Command({
                 preferences.BlockedPhrases.push(value)
                 message.channel.send(`The phrase **${value}** is now on your own blacklist.`)
             }
-		} else if (ochanceAliases) {
+		} else if (ochance) {
 			value = Math.max(Math.min(parseInt(value), 100), 0)
 			preferences.OfficialChance = value
 			message.channel.send(`Your chance of food from the official category has been set to **${value}%**.`)
-		} else if (uchanceAliases) {
+		} else if (uchance) {
 			value = Math.max(Math.min(parseInt(value), 100), 0)
 			preferences.UserChance = value
 			message.channel.send(`Your chance of food from the users has been set to **${value}%**.`)
-		} else if (ublockAliases) {
+		} else if (ublock) {
 			//if it is a mention, convert it to an ID
 			if (value.startsWith('<@!') && value.endsWith('>')) {
 				value = value.slice(3, -1)
 			}
 
-			if (client.users.cache.has(value)) {
+			if (client.users.cache.has(value)) { //Little Note for Felix: how could I made this work for all members, not just offline ones?
 				if (preferences.BlockedUsers.includes(value)) {
 					preferences.BlockedUsers.splice(preferences.BlockedUsers.indexOf(value), 1)
 					message.channel.send(`The user **${client.users.cache.get(value).username}** is no longer on your own blacklist.`)
@@ -722,8 +724,20 @@ commands.foodimage = new Command({
 
 
 commands.food = new Command({
-	desc: `*Args: <Word: Main Category>*\nMake yourself food based on items.`,
+	desc: `Make yourself food based on items.`,
 	section: "food",
+	args: [
+		{
+			name: "Category",
+			type: "Word",
+			forced: true,
+		},
+		{
+			name: "Argument #1",
+			type: "Any",
+			multiple: true
+		}
+	],
 	func: (message, args) => {
 		makefood(message, args)
 	}

@@ -70,6 +70,27 @@ let tempSkill = fs.readFileSync(dataPath+'/dailyskill.txt', {flag: 'as+'});
 if (tempSkill && tempSkill != '')
 	dailySkill = tempSkill.toString();
 
+// Daily Item - Resets at midnight
+dailyItem = {}
+
+let tempItem = fs.readFileSync(dataPath+'/dailyitem.txt', {flag: 'as+'});
+if (tempItem && tempItem != '')
+	dailyItem = JSON.parse(tempItem);
+
+// Daily Weapon - Resets at midnight
+dailyWeapon = {}
+
+let tempWeapon = fs.readFileSync(dataPath+'/dailyweapon.txt', {flag: 'as+'});
+if (tempWeapon && tempWeapon != '')
+	dailyWeapon = JSON.parse(tempWeapon);
+
+// Daily Armor - Resets at midnight
+dailyArmor = {}
+
+let tempArmor = fs.readFileSync(dataPath+'/dailyarmor.json', {flag: 'as+'});
+if (tempArmor && tempArmor != '')
+	dailyArmor = JSON.parse(tempArmor);
+
 // Midnight Moment
 function midnightInMS() {
     return new Date().setHours(24, 0, 0, 0) - new Date().getTime()
@@ -78,16 +99,28 @@ function midnightInMS() {
 setTimeout(function() {
 	dailyQuote = 'none';
 	dailySkill = 'none';
+	dailyItem = {};
+	dailyWeapon = {};
+	dailyArmor = {};
 
 	fs.writeFileSync(dataPath+'/dailyquote.txt', '');
 	fs.writeFileSync(dataPath+'/dailyskill.txt', '');
+	fs.writeFileSync(dataPath+'/dailyitem.txt', '');
+	fs.writeFileSync(dataPath+'/dailyweapon.txt', '');
+	fs.writeFileSync(dataPath+'/dailyarmor.json', '');
 
 	setTimeout(function() {
 		dailyQuote = 'none';
 		dailySkill = 'none';
+		dailyItem = {};
+		dailyWeapon = {};
+		dailyArmor = {};
 
 		fs.writeFileSync(dataPath+'/dailyquote.txt', '');
 		fs.writeFileSync(dataPath+'/dailyskill.txt', '');
+		fs.writeFileSync(dataPath+'/dailyitem.txt', '');
+		fs.writeFileSync(dataPath+'/dailyweapon.txt', '');
+		fs.writeFileSync(dataPath+'/dailyarmor.json', '');
 	}, midnightInMS());
 }, midnightInMS());
 
@@ -270,6 +303,27 @@ statusEmojis = {
 	mirror: '<:mirror:929864689406582784>',
 	blind: '🕶️',
 	confusion: '☄️'
+}
+
+elementTechs = {
+	burn: ['water', 'earth', 'nuclear'],
+	bleed: ['slash', 'poison', 'nuclear'],
+	freeze: ['strike', 'fire', 'earth'],
+	paralyze: ['strike', 'slash', 'pierce'],
+	dizzy: ['psychic', 'earth', 'wind'],
+	sleep: ['all'],
+	despair: ['psychic', 'curse', 'grass'],
+	poison: ['slash', 'pierce', 'wind'],
+	brainwash: ['psychic', 'bless', 'curse'],
+	fear: ['psychic', 'curse', 'ice'],
+	rage: ['bless', 'ice', 'psychic'],
+	ego: ['ice', 'pierce', 'sound'],
+	silence: ['sound', 'poison', 'nuclear'],
+	dazed: ['strike', 'wind', 'water'],
+	hunger: ['strike', 'pierce', 'earth'],
+	illness: ['slash', 'poison', 'nuclear'],
+	mirror: ['strike', 'slash', 'pierce'],
+	blind: ['curse', 'bless', 'gravity']
 }
 
 // Enemy Habitats

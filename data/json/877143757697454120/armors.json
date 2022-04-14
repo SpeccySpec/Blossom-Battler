@@ -1,1 +1,10 @@
-{}
+{
+    "lmao": {
+        "name": "lmao",
+        "cost": 23,
+        "element": "fire",
+        "originalAuthor": "441198920668938260",
+        "skill": "Agi",
+        "end": "4"
+    }
+}

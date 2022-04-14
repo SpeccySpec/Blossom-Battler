@@ -3,8 +3,9 @@
         "name": "Sweet",
         "rarity": "sentient",
         "cost": 0,
-        "type": "material",
+        "type": "healhpmp",
         "originalAuthor": "441198920668938260",
-        "undefined": 60
+        "healhpmp": 10,
+        "image": "https://cdn.discordapp.com/emojis/963788061731348510.webp"
     }
 }
