@@ -190,6 +190,7 @@ function armorDesc(armorDefs, armorName, message) {
 commands.registeritem = new Command({
     desc: `Registers a new item to use in-battle! Characters can buy these items with currency in shops, and use them for various effects.`,
     section: 'items',
+    aliases: ['makeitem', 'regitem'],
     args: [
 		{
 			name: "Name",
@@ -327,6 +328,7 @@ commands.listitems = new Command({
 commands.purgeitem = new Command({
     desc: `Purges an item of your choice. **YOU CANNOT GET IT BACK AFTER DELETION!**`,
     section: 'items',
+    aliases: ['unregisteritem', 'itempurge', 'itemunregister', 'deleteitem', 'itemdelete'],
     args: [
         {
             name: "Name",
@@ -425,6 +427,7 @@ commands.purgeitem = new Command({
 commands.edititem = new Command({
     desc: `Edit existing items and change how they work in battle!`,
     section: 'items',
+    aliases: ['changeitem', 'itemedit', 'itemchange'],
     args: [
         {
             name: "Name",
@@ -580,6 +583,7 @@ commands.searchitems = new Command({
 commands.randitem = new Command({
     desc: `Get a random item.`,
     section: 'fun',
+    aliases: ['randomitem'],
     args: [],
     func: (message, args) => {
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
@@ -654,6 +658,7 @@ commands.itemimage = new Command({
 commands.purgeweapon = new Command({
     desc: `Purges a weapon of your choice. **YOU CANNOT GET IT BACK AFTER DELETION!**`,
     section: 'items',
+    aliases: ['weaponpurge', 'unregisterweapon', 'weaponunregister', 'deleteweapon', 'weapondelete'],
     args: [
         {
             name: "Name",
@@ -702,6 +707,7 @@ commands.purgeweapon = new Command({
 commands.registerweapon = new Command({
     desc: 'Creates a weapon to be equipped. They can be used in battle to grant certain effects or restore health.',
     section: 'items',
+    aliases: ['makeweapon', 'regweapon'],
     args: [
         {
             name: "Name",
@@ -849,7 +855,7 @@ commands.searchweapons = new Command({
 
         let array = []
         for (let weapon in weaponFile) {
-            if (weaponFile[weapon].name.includes(args[0])) {
+            if (weaponFile[weapon].name.includes(args[0]) || weapon.includes(args[0])) {
                 array.push({title: `${elementEmoji[weaponFile[weapon].element]} ${weaponFile[weapon].name} (${weapon})`, desc: `${weaponFile[weapon].melee && weaponFile[weapon].melee != 0 ? weaponFile[weapon].melee : `???`} Power Melee Attack`});
             }
         }
@@ -863,6 +869,7 @@ commands.searchweapons = new Command({
 commands.randweapon = new Command({
     desc: 'Gets a random weapon.',
     section: 'fun',
+    aliases: ['randomweapon'],
     args: [],
     func: (message, args) => {
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
@@ -937,6 +944,7 @@ commands.weaponimage = new Command({
 commands.editweapon = new Command({
     desc: `Edit existing weapons and change how they work!`,
     section: 'items',
+    aliases: ['weaponedit', 'changeweapon', 'weaponchange'],
     args: [
         {
             name: "Name",
@@ -1011,6 +1019,7 @@ commands.editweapon = new Command({
 commands.registerarmor = new Command({
     desc: 'Creates an armor piece to be equipped. They can be used in battle to grant certain effects or restore health.',
     section: 'items',
+    aliases: ['makearmor', 'regarmor'],
     args: [
         {
             name: "Name",
@@ -1094,7 +1103,7 @@ commands.getarmor = new Command({
     }
 })
 
-commands.listarmors = new Command({
+commands.listarmor = new Command({
     desc: 'Lists all armors.',
     section: 'items',
     args: [
@@ -1129,8 +1138,8 @@ commands.listarmors = new Command({
     }
 })
 
-commands.searcharmors = new Command({
-    desc: 'Searches for armors with the given name.',
+commands.searcharmor = new Command({
+    desc: 'Searches for armor with the given name.',
     section: 'items',
     args: [
         {
@@ -1144,7 +1153,7 @@ commands.searcharmors = new Command({
 
         let array = []
         for (let armor in armorFile) {
-            if (armorFile[armor].name.includes(args[0])) {
+            if (armorFile[armor].name.includes(args[0]) || armor.includes(args[0])) {
                 array.push({title: `${elementEmoji[armorFile[armor].element]} ${armorFile[armor].name} (${armor})`, desc: `Defensive Skill: ${armorFile[armor].skill && armorFile[armor].skill != '' ? armorFile[armor].skill : `None`}`});
             }
         }
@@ -1158,6 +1167,7 @@ commands.searcharmors = new Command({
 commands.randarmor = new Command({
     desc: 'Gets a random armor piece.',
     section: 'fun',
+    aliases: ['randomarmor'],
     args: [],
     func: (message, args) => {
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
@@ -1231,6 +1241,7 @@ commands.armorimage = new Command({
 commands.editarmor = new Command({
     desc: `Edit existing armor and change how they work!`,
     section: 'items',
+    aliases: ['armoredit', 'changearmor', 'armorchange'],
     args: [
         {
             name: "Name",
@@ -1299,6 +1310,7 @@ commands.editarmor = new Command({
 commands.purgearmor = new Command({
     desc: `Purges an armor of your choice. **YOU CANNOT GET IT BACK AFTER DELETION!**`,
     section: 'items',
+    aliases: ['armorpurge', 'unregisterarmor', 'armorunregister', 'deletearmor', 'armordelete'],
     args: [
         {
             name: "Name",
@@ -1341,6 +1353,7 @@ commands.purgearmor = new Command({
 commands.makecraftingrecipe = new Command({
     desc: `Creates a recipe for an item.`,
     section: 'items',
+    aliases: ['makerecipe', 'craftrecipe', 'makecraftrecipe', 'craftingrecipe'],
     args: [
         {
             name: "Result Type",
@@ -1483,6 +1496,7 @@ commands.makecraftingrecipe = new Command({
 commands.clearitemrecipe = new Command({
     desc: `Clears a recipe for an item.`,
     section: 'items',
+    aliases: ['clearrecipe', 'removerecipe'],
     args: [
         {
             name: 'Item Type',

@@ -1,7 +1,12 @@
 commands.guide = new Command({
-	desc: "*Args: <Num: Page Number>*\nHow do battles work here you ask? Well you've come to the right place! Read this guide to get all the know-hows about battling.",
+	desc: "How do battles work here you ask? Well you've come to the right place! Read this guide to get all the know-hows about battling.",
 	section: "battle",
-//	args: [["Number", "Page Number", true]], - [["Type", "What For", Boolean for Manditory]]
+	aliases: ["battleguide", "battleguide"],
+	args: [{
+		name: "Page Number",
+		type: "Num",
+		forced: true
+	}],
 	func: (message, args) => {
 		let pageNum = parseInt(args[0])
 		

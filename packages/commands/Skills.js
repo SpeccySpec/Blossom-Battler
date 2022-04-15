@@ -1,6 +1,7 @@
 // Handle Skills
 commands.registerskill = new Command({
 	desc: `Register a skill to use in-battle! Characters can learn skills, items can utilize skills too. Skills can also have a number of extras, apply them with "rpg!applyextra".`,
+	aliases: ['makeskill', 'regskill'],
 	section: "battle",
 	args: [
 		{
@@ -164,6 +165,7 @@ commands.registerskill = new Command({
 commands.registerstatus = new Command({
 	desc: `Register a status skill to use in-battle! Characters can learn skills, items can utilize skills too. Status skills usually apply positive effects to allies or negative effects to opponents.`,
 	section: "battle",
+	alias: ['regstatus', 'regstat', 'makestatus', 'makestat'],
 	args: [
 		{
 			name: "Skill Name",
@@ -238,6 +240,7 @@ commands.registerstatus = new Command({
 commands.registerheal = new Command({
 	desc: `Register a heal skill to use in-battle! Characters can learn skills, items can utilize skills too.\n\nA healer is basically required in most battles. Healing skills are the skills most healers learn.`,
 	section: "battle",
+	alias: ['regheal', 'makeheal'],
 	args: [
 		{
 			name: "Skill Name",
@@ -297,6 +300,7 @@ commands.registerheal = new Command({
 commands.registerpassive = new Command({
 	desc: `Register a passive skill to use in-battle! Characters can learn skills, items can utilize skills too.\n\nPassive skills are certain effects that activate mid-battle or throughout the battle. These can be positive or negative, usually positive.`,
 	section: "battle",
+	alias: ['regpass', 'makepass', 'makepassive'],
 	args: [
 		{
 			name: "Skill Name",
@@ -368,6 +372,7 @@ commands.updateskills = new Command({
 
 commands.listatkextras = new Command({
 	desc: 'List the possible extras you can give a skill.',
+	aliases: ['atkextras', 'extrasatk', 'listextrasatk'],
 	section: "battle",
 	args: [
 		{
@@ -405,6 +410,7 @@ commands.listatkextras = new Command({
 
 commands.liststatusextras = new Command({
 	desc: 'List the possible extras you can give a __status__ skill.',
+	aliases: ['statusextras', 'extrasstatus', 'listextrasstatus'],
 	section: "battle",
 	args: [
 		{
@@ -442,6 +448,7 @@ commands.liststatusextras = new Command({
 
 commands.applyextra = new Command({
 	desc: 'A registered skill may have extra effects. These are called "extras". Apply an extra with this command, list all the ones possible with "listatkextras".',
+	aliases: ['extraapply'],
 	section: "battle",
 	args: [
 		{
@@ -498,6 +505,7 @@ commands.applyextra = new Command({
 
 commands.clearextras = new Command({
 	desc: 'Clears all extras of a specific type.',
+	aliases: ['extrasclear'],
 	section: "battle",
 	args: [
 		{
@@ -535,6 +543,7 @@ commands.clearextras = new Command({
 commands.editskill = new Command({
 	desc: `Edit existing skills and change how they work in battle! If you're looking for extras, use "applyextra" and "clearextras" commands.`,
 	section: "battle",
+	aliases: ['changeskill', 'skilledit', 'skillchange'],
 	args: [
 		{
 			name: "Skill Name",
@@ -710,6 +719,7 @@ commands.searchskills = new Command({
 					  */
 commands.purgeskill = new Command({
 	desc: 'Deletes the skill in question. **YOU CANNOT GET IT BACK AFTER DELETION!**',
+	aliases: ['unregisterskill', 'skillpurge', 'skillunregister', 'deleteskill', 'skilldelete'],
 	section: "battle",
 	args: [
 		{
@@ -785,6 +795,7 @@ commands.dailyskill = new Command({
 commands.randskill = new Command({
 	desc: 'Gets a random skill.',
 	section: "fun",
+	aliases: ['randomskill'],
 	args: [],
 	func: (message, args) => {
 		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet.`);
@@ -801,6 +812,7 @@ commands.randskill = new Command({
 commands.listelements = new Command({
 	desc: 'Lists all the elements.',
 	section: "battle",
+	aliases: ['listelement', 'elementlist'],
 	args: [],
 	func: (message, args) => {
 		const DiscordEmbed = new Discord.MessageEmbed()
@@ -820,6 +832,7 @@ commands.listelements = new Command({
 commands.liststatus = new Command({
 	desc: 'Lists all the status effects.',
 	section: "battle",
+	aliases: ['liststatuses', 'statuslist'],
 	args: [],
 	func: (message, args) => {
 		const DiscordEmbed = new Discord.MessageEmbed()

@@ -17,6 +17,7 @@ commands.ping = new Command({
 commands.diceroll = new Command({
 	desc: "Rolls the specified amount of dice with the specified amount of sides.",
 	section: "fun",
+	aliases: ['dice'],
 	args: [
 		{
 			name: "Sides",
@@ -183,6 +184,7 @@ let quotes = [
 commands.quote = new Command({
 	desc: "Randomly select an inspirational quote from an Anime or Video Game.",
 	section: "fun",
+	aliases: ['randquote', 'randomquote'],
 	func: (message, args) => {
         let quoteText = quotes[Math.round(Math.random() * (quotes.length - 1))]
         let DiscordEmbed = new Discord.MessageEmbed()

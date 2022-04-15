@@ -592,6 +592,7 @@ Command = class {
 		this.section = object.section
 		this.func = object.func
 		this.args = object.args ?? []
+		this.aliases = object.aliases ?? []
 	}
 
 	call(message, rawargs) {
@@ -701,7 +702,17 @@ client.on("messageCreate", (message) => {
 	// Register commands
 	if (!message.content.startsWith(prefix)) return;
 	let args = [...message.content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
-	let command = commands[args.shift()];
+	let command = commands[args[0]];
+	if (!command) {
+		for (const i in commands) {
+			if (commands[i].aliases.includes(args[0])) {
+				command = commands[i];
+				break;
+			}
+		}
+	}
+
+	if (args.length > 1) args.shift()
 
 	if (!command) return message.channel.send("That command does not exist!");
 	command.call(message, args)
