@@ -9,7 +9,7 @@
                 "weapon",
                 "Buff"
             ],
-            "hidden": false,
+            "hidden": true,
             "items": {
                 "item": {
                     "Sweet": 6
