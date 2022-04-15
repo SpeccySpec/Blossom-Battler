@@ -144,6 +144,7 @@ commands.renameloot = new Command({
         if (args[1].length > 50) return message.channel.send(`${args[1]} is too long of a loot table name.`);
 
         lootFile[args[1]] = lootFile[args[0]]
+        lootFile[args[1]].name = args[1]
         delete lootFile[args[0]]
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/loot.json`, JSON.stringify(lootFile, null, 4))
