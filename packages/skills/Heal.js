@@ -135,7 +135,7 @@ applyHeal = (message, skill, skillExtra, extra1, extra2, extra3, extra4, extra5)
 buildHeal = (message, args) => {
 	let skill = {
 		name: args[0],
-		type: 'status',
+		type: 'heal',
 		cost: args[1],
 		costtype: args[2],
 		target: args[3],

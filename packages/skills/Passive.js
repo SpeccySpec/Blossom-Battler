@@ -5,7 +5,7 @@ passiveList = {
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Element>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <Percentage>!");
-			makePassive(skill, "boost", [parseInt(extra1)]);
+			makePassive(skill, "boost", [extra1.toLowerCase(), parseInt(extra2)]);
 			return true;
 		}
 	}
@@ -136,14 +136,11 @@ applyPassive = (message, skill, skillExtra, extra1, extra2, extra3, extra4, extr
 buildPassive = (message, args) => {
 	let skill = {
 		name: args[0],
-		type: 'status',
-		cost: args[1],
-		costtype: args[2],
-		target: args[3],
+		type: 'passive',
 		originalAuthor: message.author.id
 	}
 
-	applyPassive(message, skill, args[4].toLowerCase(), args[5], args[6], args[7], args[8], args[9])
+	applyPassive(message, skill, args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6])
 	
 	if (skill.done) {
 		delete skill.done;
