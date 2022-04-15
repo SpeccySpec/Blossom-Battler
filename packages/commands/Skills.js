@@ -631,10 +631,62 @@ commands.editskill = new Command({
 					}
 					
 					break;
+				
+				case 'levellock':
+				case 'level':
+				case 'lock':
+					let level = parseInt(args[2])
+					
+					if (level > 100) return message.channel.send(`${level} is too high a level lock!\n\n**[NOTICE]**\nConsider using the "levellock" command! It is faster for you, and for me.`)
+					
+					if (level <= 1)
+						delete skillFile[args[0]].levellock;
+					else
+						skillFile[args[0]].levellock = level;
+
+					message.channel.send(`**[NOTICE]**\nConsider using the "levellock" command! It is faster for you, and for me.`)
 
 				default:
 					skillFile[args[0]][editField] = args[2];
 			}
+
+			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+			message.react('👍');
+		} else {
+			return message.channel.send(`${args[0]} is an invalid Skill Name!`)
+		}
+	}
+})
+
+commands.levellock = new Command({
+	desc: "Skills can be locked to a certain level to restrict usage. This is usually done for higher levels. If you don't quite like the automatically assigned level lock, then you can use this command to change it.",
+	section: "battle",
+	aliases: ['lockskill', 'lvllock', 'skillock', 'lock'],
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Level Lock",
+			type: "Num",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (skillFile[args[0]]) {
+			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skillFile[args[0]].originalAuthor != message.author.id) {
+				return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
+			}
+
+			let level = parseInt(args[2])
+			if (level > 100) return message.channel.send(`${level} is too high a level lock!`)
+
+			if (level <= 1)
+				delete skillFile[args[0]].levellock;
+			else
+				skillFile[args[0]].levellock = level;
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');

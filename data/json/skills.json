@@ -28,7 +28,8 @@
             "stealmp": [
                 []
             ]
-        }
+        },
+        "levellock": null
     },
     "Matarunda": {
         "name": "Matarunda",
