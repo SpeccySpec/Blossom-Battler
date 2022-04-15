@@ -71,7 +71,7 @@ function atkDesc(skillDefs) {
 	return finalText;
 }
 
-function skillDesc(skillDefs, skillName, server) {
+skillDesc = (skillDefs, skillName, server) => {
 	var finalText = ``;
 	if (skillDefs.pow && skillDefs.type != "status" && skillDefs.type != "passive") {
 		if (skillDefs.ohko && skillDefs.type != "heal")
@@ -243,9 +243,8 @@ function skillDesc(skillDefs, skillName, server) {
 		if (skillDefs.originalAuthor === 'Default')
 			userTxt = 'Default/Official';
 		else {
-			client.users.fetch(skillDefs.originalAuthor).then((user) => {
-				userTxt = user.username;
-			})
+			let user = client.users.fetch(skillDefs.originalAuthor)
+			userTxt = user.username
 		}
 	} else
 		userTxt = 'Default/Official';
@@ -259,10 +258,10 @@ function skillDesc(skillDefs, skillName, server) {
 
 	let color = elementColors[(typeof skillDefs.type === 'string') ? skillDefs.type : skillDefs.type[0]];
 
-	const DiscordEmbed = new Discord.MessageEmbed()
+	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(color)
 		.setTitle(`${type}${skillDefs.name ? skillDefs.name : skillName} *(${userTxt})*`)
-		.setDescription(finalText)
+		.setDescription(finalText ? finalText : 'Invalid Description :(')
 	return DiscordEmbed;
 }
 

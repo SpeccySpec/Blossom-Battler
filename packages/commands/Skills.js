@@ -89,28 +89,30 @@ commands.registerskill = new Command({
 
         if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
 		if (args[0].length > 50) return message.channel.send(`${args[0]} is too long of a skill name.`);
+
+		if (skillFile[args[0]] && message.author.id != skillFile[args[0]].originalAuthor) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
 		
 		let cost = 0;
 		let costtype = 'mp';
 		if (args[1] && args[1] > 0) {
-			cost = parseInt(args[1]);
+			cost = args[1];
 			if (args[2] && utilityFuncs.inArray(args[2].toLowerCase(), costTypes)) costtype = args[2].toLowerCase();
 		}
 
 		// So much shit to check :(
 		if (!args[3]) return message.channel.send('Please enter a value for **Power**! Skills can have up to 2000 power.');
-		if (parseInt(args[3]) < 1) return message.channel.send('Skills with 0 power or less will not function!');
+		if (args[3] < 1) return message.channel.send('Skills with 0 power or less will not function!');
 		if (!isFinite(args[3])) return message.channel.send('Please enter a whole number for **Power**!')
 
 		if (!args[4]) return message.channel.send('Please enter a value for **Accuracy**! Skills can have up to 100 accuracy.');
-		if (parseFloat(args[4]) < 1) return message.channel.send('Skills with 0% accuracy or less will not function!');
+		if (args[4] < 1) return message.channel.send('Skills with 0% accuracy or less will not function!');
 		if (!isFinite(args[4])) return message.channel.send('Please enter a decimal or whole number for **Accuracy**!')
 
 		if (!args[5]) return message.channel.send('Please enter a value for **Critical Hit Chance**, or leave it at 0 for no critical hit.');
 		if (!isFinite(args[5])) return message.channel.send('Please enter a decimal or whole number for **Critical Hit Chance**!')
 
 		if (!args[6]) return message.channel.send('Please enter a value for **Hits**!');
-		if (parseInt(args[6]) < 1) return message.channel.send('Skills with 0 hits or less will not function!');
+		if (args[6] < 1) return message.channel.send('Skills with 0 hits or less will not function!');
 		if (!isFinite(args[6])) return message.channel.send('Please enter a whole number for **Hits**!')
 
 		if (!args[7] || !utilityFuncs.inArray(args[7].toLowerCase(), Elements)) {
@@ -126,16 +128,16 @@ commands.registerskill = new Command({
 			name: args[0],
 			type: args[7].toLowerCase(),
 			atktype: atype,
-			pow: parseInt(args[3]),
-			hits: parseInt(args[6]),
-			acc: Math.min(100, parseFloat(args[4])),
+			pow: args[3],
+			hits: args[6],
+			acc: Math.min(100, args[4]),
 			cost: cost,
 			costtype: costtype,
 			target: args[9].toLowerCase(),
 			originalAuthor: message.author.id
 		}
 
-		if (parseFloat(args[5]) > 0) skillDefs.crit = parseFloat(args[5]);
+		if (args[5] > 0) skillDefs.crit = args[5];
 
 		if (args[10] && args[10].toLowerCase() != 'none') {
 			if (!utilityFuncs.inArray(args[10].toLowerCase(), statusEffects)) {
@@ -147,15 +149,207 @@ commands.registerskill = new Command({
 			}
 
 			skillDefs.status = args[10].toLowerCase();
-			if (isFinite(args[11]) && parseFloat(args[11]) < 100) skillDefs.statuschance = parseFloat(args[11]);
+			if (isFinite(args[11]) && args[11] < 100) skillDefs.statuschance = args[11];
 		}
 
-		if (args[12]) skillDefs.desc = args[12]
+		if (args[12]) skillDefs.desc = args[12];
 
 		skillFile[args[0]] = skillDefs;
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
 		message.channel.send({content: `${skillDefs.name} has been registered:`, embeds: [skillFuncs.skillDesc(skillDefs, skillDefs.name, message.guild.id)]})
+	}
+})
+
+commands.registerstatus = new Command({
+	desc: `Register a status skill to use in-battle! Characters can learn skills, items can utilize skills too. Status skills usually apply positive effects to allies or negative effects to opponents.`,
+	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Cost",
+			type: "Num",
+			forced: false
+		},
+		{
+			name: "Cost Type",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Target Type",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Status Type",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Variable 1",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 2",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 3",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 4",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 5",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Description",
+			type: "Any",
+			forced: false
+		},
+	],
+	func: (message, args) => {
+		let skill = buildStatus(message, args)
+		if (!skill) return;
+
+		skillFile[args[0]] = skill;
+		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+		
+		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
+		console.log(embed)
+
+		message.channel.send({content: `${skill.name} has been registered:`, embeds: [embed]})
+	}
+})
+
+commands.registerheal = new Command({
+	desc: `Register a heal skill to use in-battle! Characters can learn skills, items can utilize skills too.\n\nA healer is basically required in most battles. Healing skills are the skills most healers learn.`,
+	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Cost",
+			type: "Num",
+			forced: false
+		},
+		{
+			name: "Cost Type",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Heal Type",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Variable 1",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 2",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 3",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 4",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 5",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Description",
+			type: "Any",
+			forced: false
+		},
+	],
+	func: (message, args) => {
+	}
+})
+
+commands.registerpassive = new Command({
+	desc: `Register a passive skill to use in-battle! Characters can learn skills, items can utilize skills too.\n\nPassive skills are certain effects that activate mid-battle or throughout the battle. These can be positive or negative, usually positive.`,
+	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Cost",
+			type: "Num",
+			forced: false
+		},
+		{
+			name: "Cost Type",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Passive Type",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Variable 1",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 2",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 3",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 4",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable 5",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Description",
+			type: "Any",
+			forced: false
+		},
+	],
+	func: (message, args) => {
 	}
 })
 
@@ -197,8 +391,45 @@ commands.listatkextras = new Command({
 		let lastOne = 5;
 
 		if (args[0]) {
-			firstOne += 6*(parseInt(args[0])-1);
-			lastOne += 6*(parseInt(args[0])-1);
+			firstOne += 6*(args[0]-1);
+			lastOne += 6*(args[0]-1);
+		}
+
+		for (let i = firstOne; i <= lastOne; i++) {
+			if (extras[i]) DiscordEmbed.fields.push(extras[i]);
+		}
+
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
+commands.liststatusextras = new Command({
+	desc: 'List the possible extras you can give a __status__ skill.',
+	section: "battle",
+	args: [
+		{
+			name: "Page Number",
+			type: "Num",
+			forced: false
+		},
+	],
+	func: (message, args) => {
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle('List of Status Extras')
+			.setDescription('When using a status skill, skills can have extra effects! These are called extras, and can be added with the "applyextra" command.')
+
+		let extras = []
+		for (let i in statusList) {
+			extras.push({name: `${statusList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: statusList[i].desc, inline: true});
+		}
+
+		let firstOne = 0;
+		let lastOne = 5;
+
+		if (args[0]) {
+			firstOne += 6*(args[0]-1);
+			lastOne += 6*(args[0]-1);
 		}
 
 		for (let i = firstOne; i <= lastOne; i++) {
@@ -251,7 +482,7 @@ commands.applyextra = new Command({
 	],
 	func: (message, args) => {
 		if (!args[0]) return message.channel.send('Please enter a valid skill name!')
-		if (!args[1]) return message.channel.send('Please enter a valid extra! You can list them all with rpg!listextras.')
+		if (!args[1]) return message.channel.send('Please enter a valid extra! You can list them all with "listatkextras".')
 
 		if (skillFile[args[0]]) {
 			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skillFile[args[0]].originalAuthor != message.author.id) {
@@ -332,28 +563,32 @@ commands.editskill = new Command({
 				case 'pow':
 				case 'power':
 				case 'strength':
-					let totalDmg = parseInt(args[2])*skillFile[args[0]].hits;
+					let totalDmg = args[2]*skillFile[args[0]].hits;
 					if (totalDmg > 2000) return message.channel.send(`The Power cap for skills is 2000! A skill of ${skillFile[args[0]].hits} hits can have a maximum of ${2000/skillFile[args[0]].hits} power!`);
-					if (parseInt(args[2]) < 0) return message.channel.send('Skills cannot go below 0 power.');
+					if (args[2] < 0) return message.channel.send('Skills cannot go below 0 power.');
 
-					skillFile[args[0]].pow = parseInt(args[2]);
+					skillFile[args[0]].pow = args[2];
 
 				case 'acc':
 				case 'crit':
-					skillFile[args[0]][editField] = parseFloat(args[2]);
+					skillFile[args[0]][editField] = args[2];
+					break;
 
 				case 'name':
 				case 'desc':
 					skillFile[args[0]][editField] = args[2];
+					break;
 
 				case 'status':
 					if (!utilityFuncs.inArray(args[2].toLowerCase(), statusEffects)) return message.channel.send(`${args[2].toLowerCase()} is an invalid status effect!`);
 					skillFile[args[0]].status = args[2].toLowerCase();
+					break;
 
 				case 'type':
 				case 'element':
 					if (!utilityFuncs.inArray(args[2].toLowerCase(), Elements)) return message.channel.send(`${args[2].toLowerCase()} is an invalid status effect!`);
 					skillFile[args[0]].type = args[2].toLowerCase();
+					break;
 
 				case 'atktype':
 				case 'contact':
@@ -361,6 +596,7 @@ commands.editskill = new Command({
 					let type = args[2].toLowerCase();
 					if (type != 'physical' && type != 'magic' && type != 'ranged') return message.channel.send(`${type} is an invalid form of contact! Try physical, magic or ranged.`);
 					skillFile[args[0]].atktype = type;
+					break;
 
 				case 'truename':
 					if (skillFile[args[2]]) {
@@ -368,17 +604,12 @@ commands.editskill = new Command({
 					} else {
 						skillFile[args[2]] = utilityFuncs.cloneObj(skillFile[args[0]])
 						delete skillFile[args[0]]
-
-						itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
-						for (let item in itemFile) {
-							if (itemFile[item].skill == args[0]) {
-								itemFile[item].skill = args[2]
-							}
-						}
 					}
+					
+					break;
 
 				default:
-					skillFile[args[0]][editField] = parseInt(args[2]);
+					skillFile[args[0]][editField] = args[2];
 			}
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
@@ -392,6 +623,24 @@ commands.editskill = new Command({
 /*
 	SKILL LISTING
 					*/
+commands.getskill = new Command({
+	desc: 'List the data and information for the specified skill.',
+	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (skillFile[args[0]])
+			message.channel.send({content: `Here is the data for ${skillFile[args[0]].name}`, embeds: [skillFuncs.skillDesc(skillFile[args[0]], skillFile[args[0]].name, message.guild.id)]})
+		else
+			return message.channel.send(`${args[0]} is an invalid Skill Name!`)
+	}
+})
+
 commands.listskills = new Command({
 	desc: 'Lists *all* existing skills.',
 	section: "battle",
@@ -430,6 +679,193 @@ commands.listskills = new Command({
 			array.push({title: `${elementEmoji[skillFile[i].type]}${skillFile[i].name} (${i})`, desc: descTxt});
 		}
 
-		listArray(message.channel, array, parseInt(args[1]));
+		listArray(message.channel, array, args[1]);
+	}
+})
+
+commands.searchskills = new Command({
+	desc: 'Searches for skills based on the phrase.',
+	section: "battle",
+	args: [
+		{
+			name: "Phrase",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let array = []
+		for (const i in skillFile) {
+			if (skillFile[i].name.includes(args[0])) {
+				array.push({title: `${elementEmoji[skillFile[i].type]}${skillFile[i].name} (${i})`, desc: `${skillFile[i].pow} Power and ${skillFile[i].acc}% Accuracy.`});
+			}
+		}
+
+		listArray(message.channel, array, args[1]);
+	}
+})
+
+/*
+	DELETING SKILLS
+					  */
+commands.purgeskill = new Command({
+	desc: 'Deletes the skill in question. **YOU CANNOT GET IT BACK AFTER DELETION!**',
+	section: "battle",
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+        if (skillFile[args[0]]) {
+			if (!utilityFuncs.RPGBotAdmin(message.author.id) && message.author.id != skillFile[args[0]].originalAuthor)
+				return message.channel.send("You have insufficient permissions to delete this skill as you don't own it.");
+
+			message.channel.send(`Are you **sure** you want to delete ${skillFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this skill.\n**Y/N**`);
+
+			let givenResponce = false
+			let collector = message.channel.createMessageCollector({ time: 15000 });
+			collector.on('collect', m => {
+				if (m.author.id == message.author.id) {
+					if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
+						message.channel.send(`${skillFile[args[0]].name} has been erased from existance. You should be wary to look around. This removal caused things to not work like before.\n`)
+						delete skillFile[args[0]];
+
+						fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+					} else message.channel.send(`${skillFile[args[0]].name} will not be deleted.`);
+
+					givenResponce = true
+					collector.stop()
+				}
+			});
+			collector.on('end', c => {
+				if (givenResponce == false) message.channel.send(`No response given.\n${skillFile[args[0]].name} will not be deleted.`);
+			});
+		} else {
+            message.channel.send(`${args[0]} is an invalid skill.`);
+            return
+        }
+	}
+})
+
+/*
+	DAILY SKILLS
+				  */
+commands.dailyskill = new Command({
+	desc: 'Any random skill can be set as a daily one! Test your luck to see if yours is here!',
+	section: "fun",
+	args: [],
+	func: (message, args) => {
+		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet!`);
+		if (!dailySkill) dailySkill = 'none';
+
+		let notice = 'Here is the daily skill, again.'
+		if (dailySkill === 'none') {
+			dailySkill = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
+
+			let authorTxt = skillFile[dailySkill].originalAuthor ? `<@!${skillFile[dailySkill].originalAuthor}>` : '<@776480348757557308>'
+			notice = `${authorTxt}, your skill is the daily skill for today!`;
+		}
+
+		setTimeout(function() {
+			if (skillFile[dailySkill]) {
+				let today = getCurrentDate();
+
+				fs.writeFileSync(dataPath+'/dailyskill.txt', dailySkill.toString());
+
+				let skillTxt = `**[${today}]**\n${notice}`
+				message.channel.send({content: skillTxt, embeds: [skillFuncs.skillDesc(skillFile[dailySkill], skillFile[dailySkill].name, message.guild.id)]});	
+			}
+		}, 500);
+	}
+})
+
+commands.randskill = new Command({
+	desc: 'Gets a random skill.',
+	section: "fun",
+	args: [],
+	func: (message, args) => {
+		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet.`);
+
+		let skill = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
+		message.channel.send({embeds: [skillFuncs.skillDesc(skillFile[skill], skillFile[skill].name, message.guild.id)]})
+	}
+})
+
+/*
+	GETTING ELEMENTS AND STATUSES
+									*/
+
+commands.listelements = new Command({
+	desc: 'Lists all the elements.',
+	section: "battle",
+	args: [],
+	func: (message, args) => {
+		const DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle('List of usable elements:')
+
+		let elementList = '';
+		for (let element in Elements) {
+			elementList += `${elementEmoji[Elements[element]]} ${Elements[element]}\n`;
+		}
+		
+		DiscordEmbed.setDescription(elementList)
+		message.channel.send({embeds: [DiscordEmbed]})
+	}
+})
+
+commands.liststatus = new Command({
+	desc: 'Lists all the status effects.',
+	section: "battle",
+	args: [],
+	func: (message, args) => {
+		const DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle('List of status effects:')
+			.setDescription('Status affects will affect fighters in-battle and can be fatal if not cured.')
+			.addFields()
+
+		let statusDesc = {
+			burn: '💥Take 1/10th of max HP damage each turn until cured, or you reach one hp. Halves ATK stat.',
+			bleed: '💥Take 1/10th of max HP damage each until cured, or the inflicted is defeated.',
+			freeze: '💥Immobilized for one turn.',
+			paralyze: '💥Immobilized for one turn.',
+			poison: '💥Take 1/10th of max HP damage each turn until cured, or you reach one hp. Halves MAG stat.',
+			dizzy: '🌀Accuracy of all skills halved for 3 turns.',
+			sleep: '🌀Immobilized for 2 turns, restore 1/20th of HP & MP while affected.',
+			despair: '🌀Lose 1/10th of max MP every turn until cured. Downs the inflicted once they reach 0MP.',
+			brainwash: '🌀Use a random move on the incorrect target for 2 turns.',
+			fear: '🌀50% chance to be immobilized but cured from the status.',
+			rage: '🌀Forced to use stronger melee attack on a random target for 2 turns.',
+			ego: '🌀Unnable to use heal skills for 3 turns.',
+			silence: '🌀Unable to use any magical skills for 2 turns.',
+			dazed: '💥Unable to use any physical skills for 2 turns.',
+			hunger: '💥ATK, MAG, AGL & PRC halved.',
+			illness: '💥Take 1/10th of max HP damage each turn until cured, or the inflicted is defeated. 1/3 chance to infect another party member next to you. Spreads amongst backup if in backup.',
+			infatuation: '🌀50% chance to hault attack. Stacks with other status effects.',
+			confusion: '🌀50% chance to damage self when attacking. Stacks with other status effects.',
+			mirror: '💥Immobilized for 3 turns. Repel magic skills.',
+			blind: '💥PRC and AGL halved.'
+		}
+
+		for (const i in statusEffects) {
+			let techTxt = ''
+			for (const k in elementTechs[statusEffects[i]]) {
+				if (elementTechs[statusEffects[i]][k] === 'all') {
+					techTxt = 'ALL';
+					break;
+				} else
+					techTxt += elementEmoji[elementTechs[statusEffects[i]][k]];
+			}
+			
+			if (techTxt === '') techTxt = 'NOTHING'
+
+			DiscordEmbed.fields.push({name: `${statusEmojis[statusEffects[i].toLowerCase()]}${statusEffects[i]}`, value: `_${techTxt} tech off of ${statusEmojis[statusEffects[i].toLowerCase()]}._\n${statusDesc[statusEffects[i].toLowerCase()]}`, inline: true})
+		}
+
+		message.channel.send({embeds: [DiscordEmbed]})
 	}
 })

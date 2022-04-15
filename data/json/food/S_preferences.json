@@ -2,9 +2,9 @@
     "441198920668938260": {
         "OfficialChance": 100,
         "UserChance": 100,
-        "BlockedUsers": [],
-        "BlockedPhrases": [
-            "lmao"
-        ]
+        "BlockedUsers": [
+            "710010530672279594"
+        ],
+        "BlockedPhrases": []
     }
 }

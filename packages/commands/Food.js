@@ -169,8 +169,10 @@ function setInvalidEmbed(message, limit) {
 	return message.channel.send({embeds: [embed]})
 }
 
-const validExtensions = ['png', 'bmp', 'tiff', 'tif', 'gif', 'jpg', 'jpeg', 'apng', 'webp']
+validExtensions = ['png', 'bmp', 'tiff', 'tif', 'gif', 'jpg', 'jpeg', 'apng', 'webp']
 checkImage = (message, arg, image) => {
+	console.log(arg, image)
+	
 	if (image != undefined) {
 		if (!validExtensions.includes(image.url.split('.').pop())) {
 			message.channel.send(`The image you uploaded is not a valid image.`)
@@ -338,7 +340,146 @@ commands.foodprivacy = new Command({
     }
 })
 
+commands.listfood = new Command({
+	desc: 'Will make a list of food in a certain categories.',
+	section: 'food',
+	args: [
+		{
+			name: 'Category',
+			type: 'Word',
+			forced: true,
+		},
+		{
+			name: 'Subcategory',
+			type: 'Word',
+			forced: true,
+		},
+		{
+			name: 'User Filter',
+			type: 'Word',
+		},
+		{ 
+			name: 'Quick Page',
+			type: 'Num',
+		}
+	],
+	func: async (message, args) => {	
 
+		if (!checkCategories(args)) return setInvalidEmbed(message)
+
+		let array = []
+
+		if (!args[2] || args[2].toLowerCase() == 'official' || args[2].toLowerCase() == 'all') {
+			for (i in foodFiles[args[0].toLowerCase()]['official'][args[1].toLowerCase()]) {
+				array.push({title: foodFiles[args[0].toLowerCase()]['official'][args[1].toLowerCase()][i].name, desc: `Author: *Official*`})
+			}
+		}
+
+		if (!args[2] || (args[2] && args[2].toLowerCase() != 'official')) {
+			let users = await message.guild.members.fetch().catch(console.error);
+			users = users.filter(u => (foodFiles[args[0].toLowerCase()][u.id]))
+			users = users.filter(u => ((userPreferences[message.author.id] && !userPreferences[message.author.id].BlockedUsers.includes(u.id)) || !userPreferences[message.author.id]))
+
+			if(args[2] && args[2] == 'me') users = users.filter(u => (u.id == message.author.id))
+			if(args[2] && users.has(args[2])) users = users.filter(u => (u.id == args[2]))
+
+			users.forEach((id) => {
+				if (foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()]) {
+					for (i in foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()]) {
+						let image = ''
+						if (typeof foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image == 'string') {
+							image = foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image
+						} else if (foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image) {
+							for (j in foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image) {
+								image += `\n[Image #${j}](${foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image[j]})`
+							}
+						}
+						array.push({title: foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].name, desc: `Author: *${id.user.username}*\nImage(s):${image}`})
+					}
+				}
+			})
+		}
+
+		if (userPreferences[message.author.id] && userPreferences[message.author.id].BlockedPhrases) {
+			array = array.filter(f => {
+				for (i in userPreferences[message.author.id].BlockedPhrases) {
+					if (f.title.toLowerCase().includes(userPreferences[message.author.id].BlockedPhrases[i].toLowerCase())) return false
+				}
+				return true
+			})
+		}
+
+		if (array.length == 0) return message.channel.send(`There is no food in the **${args[0]} ${args[1]}** category.`)
+		
+		listArray(message.channel, array, args[3]);
+	}
+})
+
+commands.searchfood = new Command({
+	desc: 'Will search for food in a certain category with a selected phrase.',
+	section: 'food',
+	args: [
+		{
+			name: 'Category',
+			type: 'Word',
+			forced: true,
+		},
+		{
+			name: 'Subcategory',
+			type: 'Word',
+			forced: true,
+		},
+		{
+			name: 'Phrase',
+			type: 'Word',
+			forced: true,
+		}
+	],
+	func: async (message, args) => {
+		if (!checkCategories(args)) return setInvalidEmbed(message)
+
+		let array = []
+		
+		for (i in foodFiles[args[0].toLowerCase()]['official'][args[1].toLowerCase()]) {
+			if (!i.toLowerCase().includes(args[2].toLowerCase())) continue
+			array.push({title: foodFiles[args[0].toLowerCase()]['official'][args[1].toLowerCase()][i].name, desc: `Author: *Official*`})
+		}
+
+		let users = await message.guild.members.fetch().catch(console.error);
+		users = users.filter(u => (foodFiles[args[0].toLowerCase()][u.id]))
+		users = users.filter(u => ((userPreferences[message.author.id] && !userPreferences[message.author.id].BlockedUsers.includes(u.id)) || !userPreferences[message.author.id]))
+
+		users.forEach((id) => {
+			if (foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()]) {
+				for (i in foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()]) {
+					if (!i.toLowerCase().includes(args[2].toLowerCase())) continue
+					let image = ''
+					if (typeof foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image == 'string') {
+						image = foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image
+					} else if (foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image) {
+						for (j in foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image) {
+							image += `\n[${j}](${foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].image[j]})`
+						}
+					}
+					array.push({title: foodFiles[args[0].toLowerCase()][id.id][args[1].toLowerCase()][i].name, desc: `Author: *${id.user.username}*\nImage(s):${image}`})
+				}
+			}
+		})
+
+		if (userPreferences[message.author.id] && userPreferences[message.author.id].BlockedPhrases) {
+			array = array.filter(f => {
+				for (i in userPreferences[message.author.id].BlockedPhrases) {
+					if (f.title.toLowerCase().includes(userPreferences[message.author.id].BlockedPhrases[i].toLowerCase())) return false
+				}
+				return true
+			})
+		}
+
+		if (array.length == 0) return message.channel.send(`There is no food in the **${args[0]} ${args[1]}** category with the phrase **${args[2]}**.`)
+
+		listArray(message.channel, array);
+	}
+})
 
 
 //preferences
@@ -360,71 +501,67 @@ commands.foodpreferences = new Command({
 			type: "Word"
 		}
 	],
-	func: (message, args) => {
+	func: async (message, args) => {
 
 		setupFileProfile(message.author.id, 'preferences', userPreferences)
 
 		const choice = args[0] && args[0].toLowerCase()
 
-		const ochanceAliases = choice && ochanceAliases.includes(choice)
-		const uchanceAliases = choice && uchanceAliases.includes(choice)
-		const ublockAliases = choice && ublockAliases.includes(choice)
-		const pblockAliases = choice && pblockAliases.includes(choice)
+		const ochance = choice && ochanceAliases.includes(choice)
+		const uchance = choice && uchanceAliases.includes(choice)
+		const ublock = choice && ublockAliases.includes(choice)
+		const pblock = choice && pblockAliases.includes(choice)
 
 		let value = args[1]
 
-		if (((ochanceAliases || uchanceAliases || ublockAliases || pblockAliases) && !value) || (!ochanceAliases && !uchanceAliases && !ublockAliases & !pblockAliases)) {
-			const preferences = userPreferences[message.author.id]
+		const preferences = userPreferences[message.author.id]
+
+		if (((ochance || uchance || ublock || pblock) && !value) || (!ochance && !uchance && !ublock & !pblock)) {
 			const oChan = Math.round(preferences.OfficialChance)
 			const uChan = Math.round(preferences.UserChance)
 			const indexOChan = makeBar(preferences.OfficialChance)
 			const indexUChan = makeBar(preferences.UserChance)
 
-			passOff()
-
-			async function passOff() {
-				let userText = ''
-				for (let i = 0; i < preferences.BlockedUsers.length; i++) {
-					if (message.guild.members.cache.get(preferences.BlockedUsers[i]))
-					userText += `\n- ${message.guild.members.cache.get(preferences.BlockedUsers[i]).user.tag}`
-				}
-				if (userText == '')
-				userText = 'None'
-
-				if (userText.length > 256) {
-					let link = await generateHastebin(userText)
-		
-					userText = `*Hastebin:\n${link}.*`
-				}
-
-				let phraseText = preferences.BlockedPhrases.length > 0 ? '' : 'None'
-				for (i in preferences.BlockedPhrases) {
-					phraseText += `\n- ${preferences.BlockedPhrases[i]}`
-				}
-
-				if (phraseText.length > 256) {
-					let link = await generateHastebin(phraseText)
-		
-					phraseText = `*Hastebin:\n${link}.*`
-				}
-
-				embed = new Discord.MessageEmbed()
-				.setColor('#0099ff')
-				.setTitle(`User preferences for ${message.author.username}`)
-				.setDescription(`If you want to set preferences, try:\n*official_chance <Number: Chance>* - Official Product Chance\n*user_chance <Number: Chance>* - User Product Chance\n*user_block <ID: User>* - Blocked Users\n*phrase_block <Word: Phrase>* - Blocked Phrases`)
-				.addFields(
-					{ name: 'Official Product Chance', value: `${oChan}% ${indexOChan}`, inline: true },
-					{ name: `User Product Chance`, value: `${uChan}% ${indexUChan}`, inline: false },
-					{ name: `Filtered Users`, value: `${userText}`, inline: true },
-					{ name: `Filtered Phrases`, value: `${phraseText}`, inline: true },
-				)
-
-				return message.channel.send({embeds: [embed]})
+			let userText = ''
+			for (let i = 0; i < preferences.BlockedUsers.length; i++) {
+				if (message.guild.members.cache.get(preferences.BlockedUsers[i]))
+				userText += `\n- ${message.guild.members.cache.get(preferences.BlockedUsers[i]).user.tag}`
 			}
-			return
+			if (userText == '')
+			userText = 'None'
+
+			if (userText.length > 256) {
+				let link = await generateHastebin(userText)
+		
+				userText = `*Hastebin:\n${link}.*`
+			}
+
+			let phraseText = preferences.BlockedPhrases.length > 0 ? '' : 'None'
+			for (i in preferences.BlockedPhrases) {
+				phraseText += `\n- ${preferences.BlockedPhrases[i]}`
+			}
+
+			if (phraseText.length > 256) {
+				let link = await generateHastebin(phraseText)
+		
+				phraseText = `*Hastebin:\n${link}.*`
+			}
+
+			embed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle(`User preferences for ${message.author.username}`)
+			.setDescription(`If you want to set preferences, try:\n*official_chance <Number: Chance>* - Official Product Chance\n*user_chance <Number: Chance>* - User Product Chance\n*user_block <ID: User>* - Blocked Users\n*phrase_block <Word: Phrase>* - Blocked Phrases`)
+			.addFields(
+				{ name: 'Official Product Chance', value: `${oChan}% ${indexOChan}`, inline: true },
+				{ name: `User Product Chance`, value: `${uChan}% ${indexUChan}`, inline: false },
+				{ name: `Filtered Users`, value: `${userText}`, inline: true },
+				{ name: `Filtered Phrases`, value: `${phraseText}`, inline: true },
+			)
+
+			return message.channel.send({embeds: [embed]})
 		}
 
-		if (pblockAliases) {
+		if (pblock) {
 			value = value.toLowerCase()
 			if (preferences.BlockedPhrases.includes(value)) {
                 preferences.BlockedPhrases.splice(preferences.BlockedPhrases.indexOf(value), 1)
@@ -433,21 +570,23 @@ commands.foodpreferences = new Command({
                 preferences.BlockedPhrases.push(value)
                 message.channel.send(`The phrase **${value}** is now on your own blacklist.`)
             }
-		} else if (ochanceAliases) {
+		} else if (ochance) {
 			value = Math.max(Math.min(parseInt(value), 100), 0)
 			preferences.OfficialChance = value
 			message.channel.send(`Your chance of food from the official category has been set to **${value}%**.`)
-		} else if (uchanceAliases) {
+		} else if (uchance) {
 			value = Math.max(Math.min(parseInt(value), 100), 0)
 			preferences.UserChance = value
 			message.channel.send(`Your chance of food from the users has been set to **${value}%**.`)
-		} else if (ublockAliases) {
+		} else if (ublock) {
 			//if it is a mention, convert it to an ID
 			if (value.startsWith('<@!') && value.endsWith('>')) {
 				value = value.slice(3, -1)
 			}
 
-			if (client.users.cache.has(value)) {
+			try {
+				client.users.fetch(value) //the main factor of erroring out is here
+
 				if (preferences.BlockedUsers.includes(value)) {
 					preferences.BlockedUsers.splice(preferences.BlockedUsers.indexOf(value), 1)
 					message.channel.send(`The user **${client.users.cache.get(value).username}** is no longer on your own blacklist.`)
@@ -455,16 +594,13 @@ commands.foodpreferences = new Command({
 					preferences.BlockedUsers.push(value)
 					message.channel.send(`The user **${client.users.cache.get(value).username}** is now on your own blacklist.`)
 				}
-			} else {
+			} catch (e) {
 				return message.channel.send(`The user **${value}** does not exist.`)
 			}
 		}
 
 		fs.writeFileSync(`${dataPath}/json/food/S_preferences.json`, JSON.stringify(userPreferences, null, '    '));
 }})
-
-
-
 
 commands.foodcategories = new Command({
 	desc: `Shows all the food categories and subcategories.`,
@@ -596,6 +732,7 @@ commands.renamefood = new Command({
 		//write to json
 		foodFiles[args[0].toLowerCase()][message.author.id][args[1].toLowerCase()][args[3].toLowerCase()] = foodFiles[args[0].toLowerCase()][message.author.id][args[1].toLowerCase()][args[2].toLowerCase()]
 		delete foodFiles[args[0].toLowerCase()][message.author.id][args[1].toLowerCase()][args[2].toLowerCase()]
+		foodFiles[args[0].toLowerCase()][message.author.id][args[1].toLowerCase()][args[3].toLowerCase()].name = args[3].toLowerCase()
 
 		fs.writeFileSync(`${dataPath}/json/food/${args[0].toLowerCase()}.json`, JSON.stringify(foodFiles[args[0].toLowerCase()], null, '    '));
 		message.channel.send(`The ${args[0].toLowerCase()} ${singularVerb[args[1].toLowerCase()]} item **${args[2].toLowerCase()}** has been renamed to **${args[3].toLowerCase()}**.`)
@@ -721,8 +858,20 @@ commands.foodimage = new Command({
 
 
 commands.food = new Command({
-	desc: `*Args: <Word: Main Category>*\nMake yourself food based on items.`,
+	desc: `Make yourself food based on items.`,
 	section: "food",
+	args: [
+		{
+			name: "Category",
+			type: "Word",
+			forced: true,
+		},
+		{
+			name: "Argument #1",
+			type: "Any",
+			multiple: true
+		}
+	],
 	func: (message, args) => {
 		makefood(message, args)
 	}
@@ -782,7 +931,7 @@ async function makefood(message, args) {
 
 	let users = await message.guild.members.fetch().catch(console.error);
 	users = users.filter(u => (foodFiles[args[0].toLowerCase()][u.id]))
-	users = users.filter(u => ((userPreferences[message.author] && !userPreferences[message.author].BlockedUsers.includes(u.id)) || !userPreferences[message.author]))
+	users = users.filter(u => ((userPreferences[message.author.id] && !userPreferences[message.author.id].BlockedUsers.includes(u.id)) || !userPreferences[message.author.id]))
 
 	let food = {}
 

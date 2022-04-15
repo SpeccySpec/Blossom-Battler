@@ -57,18 +57,39 @@ http = require('http');
 hastebin = require('hastebin-gen');
 
 // Daily Quote - Resets at midnight
-let dailyQuote = 'none'
+dailyQuote = 'none'
 
 let tempQuote = fs.readFileSync(dataPath+'/dailyquote.txt', {flag: 'as+'});
 if (tempQuote && tempQuote != '')
 	dailyQuote = tempQuote.toString();
 
 // Daily Skill - Resets at midnight
-let dailySkill = 'none'
+dailySkill = 'none'
 
 let tempSkill = fs.readFileSync(dataPath+'/dailyskill.txt', {flag: 'as+'});
 if (tempSkill && tempSkill != '')
 	dailySkill = tempSkill.toString();
+
+// Daily Item - Resets at midnight
+dailyItem = {}
+
+let tempItem = fs.readFileSync(dataPath+'/dailyitem.txt', {flag: 'as+'});
+if (tempItem && tempItem != '')
+	dailyItem = JSON.parse(tempItem);
+
+// Daily Weapon - Resets at midnight
+dailyWeapon = {}
+
+let tempWeapon = fs.readFileSync(dataPath+'/dailyweapon.txt', {flag: 'as+'});
+if (tempWeapon && tempWeapon != '')
+	dailyWeapon = JSON.parse(tempWeapon);
+
+// Daily Armor - Resets at midnight
+dailyArmor = {}
+
+let tempArmor = fs.readFileSync(dataPath+'/dailyarmor.json', {flag: 'as+'});
+if (tempArmor && tempArmor != '')
+	dailyArmor = JSON.parse(tempArmor);
 
 // Midnight Moment
 function midnightInMS() {
@@ -78,17 +99,15 @@ function midnightInMS() {
 setTimeout(function() {
 	dailyQuote = 'none';
 	dailySkill = 'none';
+	dailyItem = {};
+	dailyWeapon = {};
+	dailyArmor = {};
 
 	fs.writeFileSync(dataPath+'/dailyquote.txt', '');
 	fs.writeFileSync(dataPath+'/dailyskill.txt', '');
-
-	setTimeout(function() {
-		dailyQuote = 'none';
-		dailySkill = 'none';
-
-		fs.writeFileSync(dataPath+'/dailyquote.txt', '');
-		fs.writeFileSync(dataPath+'/dailyskill.txt', '');
-	}, midnightInMS());
+	fs.writeFileSync(dataPath+'/dailyitem.txt', '');
+	fs.writeFileSync(dataPath+'/dailyweapon.txt', '');
+	fs.writeFileSync(dataPath+'/dailyarmor.txt', '');
 }, midnightInMS());
 
 // Elements
@@ -270,6 +289,27 @@ statusEmojis = {
 	mirror: '<:mirror:929864689406582784>',
 	blind: '🕶️',
 	confusion: '☄️'
+}
+
+elementTechs = {
+	burn: ['water', 'earth', 'nuclear'],
+	bleed: ['slash', 'poison', 'nuclear'],
+	freeze: ['strike', 'fire', 'earth'],
+	paralyze: ['strike', 'slash', 'pierce'],
+	dizzy: ['psychic', 'earth', 'wind'],
+	sleep: ['all'],
+	despair: ['psychic', 'curse', 'grass'],
+	poison: ['slash', 'pierce', 'wind'],
+	brainwash: ['psychic', 'bless', 'curse'],
+	fear: ['psychic', 'curse', 'ice'],
+	rage: ['bless', 'ice', 'psychic'],
+	ego: ['ice', 'pierce', 'sound'],
+	silence: ['sound', 'poison', 'nuclear'],
+	dazed: ['strike', 'wind', 'water'],
+	hunger: ['strike', 'pierce', 'earth'],
+	illness: ['slash', 'poison', 'nuclear'],
+	mirror: ['strike', 'slash', 'pierce'],
+	blind: ['curse', 'bless', 'gravity']
 }
 
 // Enemy Habitats
@@ -500,8 +540,51 @@ listArray = async(channel, theArray, page) => {
 	})
 }
 
+getCurrentDate = () => {
+	let today = new Date();
+	let dd = String(today.getDate()).padStart(2, '0');
+	let mm = String(today.getMonth() + 1).padStart(2, '0');
+	let yyyy = today.getFullYear();
+
+	today = mm + '/' + dd + '/' + yyyy;
+
+	if (mm === '12' && dd === '24')
+		today = 'Christmas Eve';
+	else if (mm === '12' && dd === '25')
+		today = 'Christmas';
+	else if (mm === '12' && dd === '26')
+		today = 'Boxing Day';
+	else if (mm === '12' && dd === '31')
+		today = "New Years' Eve";
+	else if (mm === '1' && dd === '1')
+		today = 'New Years';
+	else if (mm === '4' && dd === '1')
+		today = "April Fools' day";
+	else if (mm === '4' && dd === '17' && yyyy == '2022')
+		today = 'Easter (2022)';
+	else if (mm === '6' && dd === '2')
+		today = "<@516359709779820544>'s birthday";
+	else if (mm === '10' && dd === '31')
+		today = 'Halloween';
+	
+	return today
+}
+
 // Global JSONs
 skillFile = setUpFile(`${dataPath}/json/skills.json`)
+
+shipFile = setUpFile(`${dataPath}/json/ships.json`);
+
+// 2 Week Moment
+function twoWeekInMS() {
+	return new Date().setDate(new Date().getDate() + 14) - new Date().getTime()
+}
+
+setTimeout(function() {
+	shipFile = {}
+
+	fs.writeFileSync(`${dataPath}/json/ships.json`, '{}');
+}, twoWeekInMS());
 
 Command = class {
 	constructor(object) {
