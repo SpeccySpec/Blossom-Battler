@@ -470,7 +470,7 @@ typeParsers = {
 	Decimal: ({arg}) => {return parseFloat(arg) || undefined},
 	Word: (vars) => {return (typeParsers.Ping(vars) || typeParsers.Channel(vars)) ? undefined : vars.arg},
 	Ping: ({message}) => {return message.mentions.users.first()},
-	Channel: arg => {}, //placeholders
+	Channel: ({message, arg}) => {return message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')) ? message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')).id : undefined},
 	ID: arg => {},
 	Image: ({message}) => {return checkImage(message, undefined, message.attachments.first())}
 }
@@ -663,6 +663,8 @@ client.on("guildCreate", (guild) => {
 	setUpFile(`${dataPath}/json/${guild.id}/armors.json`)
 	setUpFile(`${dataPath}/json/${guild.id}/blacksmiths.json`)
 	setUpFile(`${dataPath}/json/${guild.id}/skills.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/loot.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/chests.json`)
 
 	// Character Data
 	setUpFile(`${dataPath}/json/${guild.id}/characters.json`)
