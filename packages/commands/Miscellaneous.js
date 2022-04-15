@@ -3,6 +3,7 @@ const categories = {
 	fun: "Fun things to use, come try them out!",
 	food: "Tasty, tasty food! All for you to try out!",
 	items: "Items that you can use to do things!",
+	loot: "Loot that you can get from killing or pacifying enemies!",
 	shops: "Need Items? Open shops and sell them!",
 	battle: "The main part of Bloom Battler is well... the battles of course!",
 	all: "All of the existing commands"

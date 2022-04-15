@@ -364,9 +364,11 @@ commands.purgeitem = new Command({
                             for (const i in itemFile[item].recipe.recipe) {
                                 if (itemFile[item].recipe.recipe[i] == args[0]) {
                                     itemFile[item].recipe.recipe[i] = ''
+                                    itemFile[item].recipe.recipe[i-1] = ''
                                 }
                             }
                         }
+                        itemFile[item].recipe.recipe.filter(a => (a != ''))
                     }
                     weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
                     armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armor.json`)
@@ -380,9 +382,11 @@ commands.purgeitem = new Command({
                             for (const i in weaponFile[item].recipe.recipe) {
                                 if (weaponFile[item].recipe.recipe[i] == args[0]) {
                                     weaponFile[item].recipe.recipe[i] = ''
+                                    weaponFile[item].recipe.recipe[i-1] = ''
                                 }
                             }
                         }
+                        weaponFile[item].recipe.recipe.filter(a => (a != ''))
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile))
 
@@ -395,19 +399,48 @@ commands.purgeitem = new Command({
                             for (const i in armorFile[item].recipe.recipe) {
                                 if (armorFile[item].recipe.recipe[i] == args[0]) {
                                     armorFile[item].recipe.recipe[i] = ''
+                                    armorFile[item].recipe.recipe[i-1] = ''
                                 }
                             }
                         }
+                        armorFile[item].recipe.recipe.filter(a => (a != ''))
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/armor.json`, JSON.stringify(armorFile))
 
                     let warning = '**WARNING:**'
                     for (let type in warningText) {
                         if (warningText[type] != '') {
-                            warning += `\nThe following ${type} have recipes that use this item:\n${warningText[type]}`
+                            warning += `\nThe following ${type} have recipes that use this item:\n${warningText[type]}\n so they were removed.`
                         }
                     }
                     if (warning != '**WARNING:**') message.channel.send(warning)
+
+                    warning = ''
+                    warningText = {}
+                    warningText['loot'] = ''
+                    lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
+                    for (let item in lootFile) {
+                        for (const i in lootFile[item].items) {
+                            if (i % 4 == 3) {
+                                if (lootFile[item].items[i-2] == args[0] && lootFile[item].items[i-3] == 'item') {
+                                    warningText['loot'] += `- ${lootFile[item].name}\n`
+                                    lootFile[item].items[i-3] = ''
+                                    lootFile[item].items[i-2] = ''
+                                    lootFile[item].items[i-1] = ''
+                                    lootFile[item].items[i] = ''
+                                }
+                            }
+                        }
+                        lootFile[item].items.filter(a => (a != ''))
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/loot.json`, JSON.stringify(lootFile))
+
+                    for (let type in warningText) {
+                        if (warningText[type] != '') {
+                            warning += `\nThe following ${type} have loot that uses this item:\n${warningText[type]}\nso they were removed.`
+                        }
+                    }
+                    if (warning != '') message.channel.send(warning)
 
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
                 } else
@@ -682,6 +715,33 @@ commands.purgeweapon = new Command({
                 if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
                     message.channel.send(`${weaponFile[args[0]].name} has been erased from existance. The loot and chests that have this weapon should be checked in order to ensure that they do not have an invalid weapon.`)
                     delete weaponFile[args[0]]
+
+                    let warning = '**WARNING**'
+                    let warningText = {}
+                    warningText['loot'] = ''
+                    lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
+                    for (let item in lootFile) {
+                        for (const i in lootFile[item].items) {
+                            if (i % 4 == 3) {
+                                if (lootFile[item].items[i-2] == args[0] && lootFile[item].items[i-3] == 'weapon') {
+                                    warningText['loot'] += `- ${lootFile[item].name}\n`
+                                    lootFile[item].items[i-3] = ''
+                                    lootFile[item].items[i-2] = ''
+                                    lootFile[item].items[i-1] = ''
+                                    lootFile[item].items[i] = ''
+                                }
+                            }
+                        }
+                        lootFile[item].items.filter(a => (a != ''))
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/loot.json`, JSON.stringify(lootFile))
+
+                    for (let type in warningText) {
+                        if (warningText[type] != '') {
+                            warning += `\nThe following ${type} have loot that uses this weapon:\n${warningText[type]}\nso they were removed.`
+                        }
+                    }
+                    if (warning != '**WARNING:**') message.channel.send(warning)
 
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile, null, 4));
                 } else
@@ -1103,7 +1163,7 @@ commands.getarmor = new Command({
     }
 })
 
-commands.listarmor = new Command({
+commands.listarmors = new Command({
     desc: 'Lists all armors.',
     section: 'items',
     args: [
@@ -1138,7 +1198,7 @@ commands.listarmor = new Command({
     }
 })
 
-commands.searcharmor = new Command({
+commands.searcharmors = new Command({
     desc: 'Searches for armor with the given name.',
     section: 'items',
     args: [
@@ -1334,6 +1394,33 @@ commands.purgearmor = new Command({
                 if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
                     message.channel.send(`${armorFile[args[0]].name} has been erased from existance. The loot and chests that have this armor should be checked in order to ensure that they do not have an invalid armor.`)
                     delete armorFile[args[0]]
+
+                    let warning = '**WARNING**'
+                    let warningText = {}
+                    warningText['loot'] = ''
+                    lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
+                    for (let item in lootFile) {
+                        for (const i in lootFile[item].items) {
+                            if (i % 4 == 3) {
+                                if (lootFile[item].items[i-2] == args[0] && lootFile[item].items[i-3] == 'armor') {
+                                    warningText['loot'] += `- ${lootFile[item].name}\n`
+                                    lootFile[item].items[i-3] = ''
+                                    lootFile[item].items[i-2] = ''
+                                    lootFile[item].items[i-1] = ''
+                                    lootFile[item].items[i] = ''
+                                }
+                            }
+                        }
+                        lootFile[item].items.filter(a => (a != ''))
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/loot.json`, JSON.stringify(lootFile))
+
+                    for (let type in warningText) {
+                        if (warningText[type] != '') {
+                            warning += `\nThe following ${type} have loot that uses this armor:\n${warningText[type]}\nso they were removed.`
+                        }
+                    }
+                    if (warning != '**WARNING:**') message.channel.send(warning)
 
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/armors.json`, JSON.stringify(armorFile, null, 4));
                 } else
