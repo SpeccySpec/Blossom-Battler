@@ -702,6 +702,7 @@ client.on("messageCreate", (message) => {
 	// Register commands
 	if (!message.content.startsWith(prefix)) return;
 	let args = [...message.content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
+	if (args.length == 0) return message.channel.send(`No command specified!`);
 	let command = commands[args[0]];
 	if (!command) {
 		for (const i in commands) {
