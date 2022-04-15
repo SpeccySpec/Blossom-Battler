@@ -8,6 +8,16 @@
         "skill": "Agi",
         "melee": "12",
         "atk": "12",
-        "mag": "12"
+        "mag": "12",
+        "recipe": {
+            "amount": 1,
+            "shapeless": false,
+            "recipe": [
+                1,
+                "Sweet",
+                2,
+                "S"
+            ]
+        }
     }
 }

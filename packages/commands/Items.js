@@ -353,11 +353,11 @@ commands.purgeitem = new Command({
 
                     let warningText = {}
 
-                    warningText['recipes'] = ''
+                    warningText['item recipes'] = ''
                     for (let item in itemFile) {
                         if (itemFile[item].recipe) {
                             if (itemFile[item].recipe.recipe.includes(args[0])) {
-                                warningText['recipes'] += `- ${itemFile[item].name}\n`
+                                warningText['item recipes'] += `- ${itemFile[item].name}\n`
                             }
                             for (const i in itemFile[item].recipe.recipe) {
                                 if (itemFile[item].recipe.recipe[i] == args[0]) {
@@ -366,8 +366,46 @@ commands.purgeitem = new Command({
                             }
                         }
                     }
+                    weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
+                    armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armor.json`)
 
-                    if (warningText['recipes']) message.channel.send(`**WARNING:**\nThe following items have been updated to remove this item from their recipes:\n\`\`\`${warningText['recipes']}\`\`\``)
+                    warningText['weapon recipes'] = ''
+                    for (let item in weaponFile) {
+                        if (weaponFile[item].recipe) {
+                            if (weaponFile[item].recipe.recipe.includes(args[0])) {
+                                warningText['weapon recipes'] += `- ${weaponFile[item].name}\n`
+                            }
+                            for (const i in weaponFile[item].recipe.recipe) {
+                                if (weaponFile[item].recipe.recipe[i] == args[0]) {
+                                    weaponFile[item].recipe.recipe[i] = ''
+                                }
+                            }
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile))
+
+                    warningText['armor recipes'] = ''
+                    for (let item in armorFile) {
+                        if (armorFile[item].recipe) {
+                            if (armorFile[item].recipe.recipe.includes(args[0])) {
+                                warningText['armor recipes'] += `- ${armorFile[item].name}\n`
+                            }
+                            for (const i in armorFile[item].recipe.recipe) {
+                                if (armorFile[item].recipe.recipe[i] == args[0]) {
+                                    armorFile[item].recipe.recipe[i] = ''
+                                }
+                            }
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/armor.json`, JSON.stringify(armorFile))
+
+                    let warning = '**WARNING:**'
+                    for (let type in warningText) {
+                        if (warningText[type] != '') {
+                            warning += `\nThe following ${type} have recipes that use this item:\n${warningText[type]}`
+                        }
+                    }
+                    if (warning != '**WARNING:**') message.channel.send(warning)
 
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
                 } else
@@ -473,6 +511,31 @@ commands.edititem = new Command({
                             }
                         }
                     }
+
+                    weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
+                    armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armor.json`)
+
+                    for (let item in weaponFile) {
+                        if (weaponFile[item].recipe) {
+                            for (const i in weaponFile[item].recipe.recipe) {
+                                if (weaponFile[item].recipe.recipe[i] == args[0]) {
+                                    weaponFile[item].recipe.recipe[i] = args[2]
+                                }
+                            }
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile, null, 4));
+
+                    for (let item in armorFile) {
+                        if (armorFile[item].recipe) {
+                            for (const i in armorFile[item].recipe.recipe) {
+                                if (armorFile[item].recipe.recipe[i] == args[0]) {
+                                    armorFile[item].recipe.recipe[i] = args[2]
+                                }
+                            }
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/armor.json`, JSON.stringify(armorFile, null, 4));
                 }
                 break;
             case 'image':
@@ -1275,10 +1338,15 @@ commands.purgearmor = new Command({
     }
 })
 
-commands.makeitemrecipe = new Command({
+commands.makecraftingrecipe = new Command({
     desc: `Creates a recipe for an item.`,
     section: 'items',
     args: [
+        {
+            name: "Result Type",
+            type: "Word",
+            forced: true
+        },
         {
             name: "Result Item",
             type: "Word",
@@ -1296,19 +1364,39 @@ commands.makeitemrecipe = new Command({
     ],
     func: (message, args) => {
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+        weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
+        armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
-        if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
+        let itemDefs
 
-        if (itemFile[args[0]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to assign a recipe to it.")
+        if (args[0].toLowerCase() != 'item' && args[0].toLowerCase() != 'weapon' && args[0].toLowerCase() != 'armor') return message.channel.send(`${args[0]} is not a valid item type.`);
+
+        switch (args[0].toLowerCase()) {
+            case 'item':
+                if (!itemFile[args[1]]) return message.channel.send(`${args[1]} is not a valid item name.`);
+                if (itemFile[args[1]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to assign a recipe to it.")
+                itemDefs = itemFile[args[1]]
+                break;
+            case 'weapon':
+                if (!weaponFile[args[1]]) return message.channel.send(`${args[1]} is not a valid weapon name.`);
+                if (weaponFile[args[1]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this weapon, therefore, you have insufficient permissions to assign a recipe to it.")
+                itemDefs = weaponFile[args[1]]
+                break;
+            case 'armor':
+                if (!armorFile[args[1]]) return message.channel.send(`${args[1]} is not a valid armor name.`);
+                if (armorFile[args[1]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this armor, therefore, you have insufficient permissions to assign a recipe to it.")
+                itemDefs = armorFile[args[1]]
+                break;
+        }
 
         if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
 
-        args[1] = Math.max(1, parseInt(args[1]));
-        args[2] = (args[2] && (args[2] == 'true' || args[2] == 'yes' || args[2] == 'y' || args[2] == '1')) ? true : false
+        args[2] = Math.max(1, args[2]);
+        args[3] = (args[3] && (args[3] == 'true' || args[3] == 'yes' || args[3] == 'y' || args[3] == '1')) ? true : false
 
         const file = new Discord.MessageAttachment(`${dataPath}/images/Crafting_Grid.png`);
         const embed = new Discord.MessageEmbed()
-            .setTitle(`${itemFile[args[0]].name} Crafting Recipe`)
+            .setTitle(`${itemDefs.name} Crafting Recipe`)
             .setColor(0x00AE86)
             .setDescription(`How would you want people to craft this item? I'll give you tips.`)
             .addField("Placement", 'Top left grid is of ID 0, and it goes from left to right, top to bottom.', true)
@@ -1343,7 +1431,7 @@ commands.makeitemrecipe = new Command({
                             collector.stop()
                             break;
                         }
-                        if (margs[i] == args[0]) {
+                        if (margs[i] == args[1]) {
                             message.channel.send(`You cannot craft ${margs[i]} into itself.`);
                             givenResponce = true
                             collector.stop()
@@ -1362,21 +1450,32 @@ commands.makeitemrecipe = new Command({
                     collector.stop()
                 }
 
-                itemFile[args[0]].recipe = {
-                    amount: args[1],
-                    shapeless: args[2],
+                itemDefs.recipe = {
+                    amount: args[2],
+                    shapeless: args[3],
                     recipe: margs
                 }
+                
 
-                fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
+                switch (args[0].toLowerCase()) {
+                    case 'item':
+                        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
+                        break;
+                    case 'weapon':
+                        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile, null, 4));
+                        break;
+                    case 'armor':
+                        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/armor.json`, JSON.stringify(armorFile, null, 4));
+                        break;
+                }
 
-                message.channel.send(`${itemFile[args[0]].name} has been given a crafting recipe.`)
+                message.channel.send(`${itemDefs.name} has been given a crafting recipe.`)
                 givenResponce = true
                 collector.stop()
             }
 		});
 		collector.on('end', c => {
-			if (givenResponce == false) message.channel.send(`No response given.\n${itemFile[args[0]].name} will not have a crafting recipe.`);
+			if (givenResponce == false) message.channel.send(`No response given.\n${itemDefs.name} will not have a crafting recipe.`);
 		});
     }
 })
@@ -1386,6 +1485,11 @@ commands.clearitemrecipe = new Command({
     section: 'items',
     args: [
         {
+            name: 'Item Type',
+            type: 'Word',
+            forced: true
+        },
+        {
             name: "Item",
             type: "Word",
             forced: true
@@ -1393,17 +1497,42 @@ commands.clearitemrecipe = new Command({
     ],
     func: (message, args) => {
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+        weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
+        armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
-        if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
+        let itemDefs = null;
+        switch (args[0].toLowerCase()) {
+            case 'item':
+                if (!itemFile[args[1]]) return message.channel.send(`${args[1]} is not a valid item name.`);
+                if (itemFile[args[1]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to assign a recipe to it.")
+                itemDefs = itemFile[args[1]]
+                break;
+            case 'weapon':
+                if (!weaponFile[args[1]]) return message.channel.send(`${args[1]} is not a valid weapon name.`);
+                if (weaponFile[args[1]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this weapon, therefore, you have insufficient permissions to assign a recipe to it.")
+                itemDefs = weaponFile[args[1]]
+                break;
+            case 'armor':
+                if (!armorFile[args[1]]) return message.channel.send(`${args[1]} is not a valid armor name.`);
+                if (armorFile[args[1]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this armor, therefore, you have insufficient permissions to assign a recipe to it.")
+                itemDefs = armorFile[args[1]]
+                break;
+        }
 
-        if (itemFile[args[0]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to assign a recipe to it.")
+        itemDefs.recipe = null
 
-        if (!itemFile[args[0]].recipe) return message.channel.send(`${itemFile[args[0]].name} does not have a crafting recipe.`);
-        
-        delete itemFile[args[0]].recipe
+        switch (args[0].toLowerCase()) {
+            case 'item':
+                fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
+                break;
+            case 'weapon':
+                fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile, null, 4));
+                break;
+            case 'armor':
+                fs.writeFileSync(`${dataPath}/json/${message.guild.id}/armor.json`, JSON.stringify(armorFile, null, 4));
+                break;
+        }
 
-        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
-
-        message.channel.send(`${itemFile[args[0]].name} has had its recipe cleared.`)
+        message.channel.send(`${itemDefs.name} has had its crafting recipe removed.`)
     }
 })
