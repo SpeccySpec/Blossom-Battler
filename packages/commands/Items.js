@@ -351,6 +351,24 @@ commands.purgeitem = new Command({
                     message.channel.send(`${itemFile[args[0]].name} has been erased from existance. The loot and chests that have this item should be checked in order to ensure that they do not have an invalid item.`)
                     delete itemFile[args[0]]
 
+                    let warningText = {}
+
+                    warningText['recipes'] = ''
+                    for (let item in itemFile) {
+                        if (itemFile[item].recipe) {
+                            if (itemFile[item].recipe.recipe.includes(args[0])) {
+                                warningText['recipes'] += `- ${itemFile[item].name}\n`
+                            }
+                            for (const i in itemFile[item].recipe.recipe) {
+                                if (itemFile[item].recipe.recipe[i] == args[0]) {
+                                    itemFile[item].recipe.recipe[i] = ''
+                                }
+                            }
+                        }
+                    }
+
+                    if (warningText['recipes']) message.channel.send(`**WARNING:**\nThe following items have been updated to remove this item from their recipes:\n\`\`\`${warningText['recipes']}\`\`\``)
+
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
                 } else
                     message.channel.send(`${itemFile[args[0]].name} will not be deleted.`);
@@ -445,6 +463,16 @@ commands.edititem = new Command({
                 } else {
                     itemFile[args[2]] = utilityFuncs.cloneObj(itemFile[args[0]])
                     delete itemFile[args[0]]
+
+                    for (let item in itemFile) {
+                        if (itemFile[item].recipe) {
+                            for (const i in itemFile[item].recipe.recipe) {
+                                if (itemFile[item].recipe.recipe[i] == args[0]) {
+                                    itemFile[item].recipe.recipe[i] = args[2]
+                                }
+                            }
+                        }
+                    }
                 }
                 break;
             case 'image':
@@ -571,25 +599,25 @@ commands.purgeweapon = new Command({
         }
     ],
     func: (message, args) => {
-        itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+        weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
-        if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
+        if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon name.`);
 
-        if (itemFile[args[0]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to delete it.")
+        if (weaponFile[args[0]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this weapon, therefore, you have insufficient permissions to delete it.")
 
-        message.channel.send(`Are you **sure** you want to delete ${itemFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this item.\n**Y/N**`);
+        message.channel.send(`Are you **sure** you want to delete ${weaponFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this weapon.\n**Y/N**`);
 
         var givenResponce = false
         var collector = message.channel.createMessageCollector({ time: 15000 });
         collector.on('collect', m => {
             if (m.author.id == message.author.id) {
                 if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
-                    message.channel.send(`${itemFile[args[0]].name} has been erased from existance. The loot and chests that have this item should be checked in order to ensure that they do not have an invalid item.`)
-                    delete itemFile[args[0]]
+                    message.channel.send(`${weaponFile[args[0]].name} has been erased from existance. The loot and chests that have this weapon should be checked in order to ensure that they do not have an invalid weapon.`)
+                    delete weaponFile[args[0]]
 
-                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile, null, 4));
                 } else
-                    message.channel.send(`${itemFile[args[0]].name} will not be deleted.`);
+                    message.channel.send(`${weaponFile[args[0]].name} will not be deleted.`);
 
                     givenResponce = true
                     collector.stop()
@@ -597,7 +625,7 @@ commands.purgeweapon = new Command({
             });
             collector.on('end', c => {
                 if (givenResponce == false)
-                    message.channel.send(`No response given.\n${itemFile[args[0]].name} will not be deleted.`);
+                    message.channel.send(`No response given.\n${weaponFile[args[0]].name} will not be deleted.`);
             });
     }
 })
