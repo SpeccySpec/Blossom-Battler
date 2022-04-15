@@ -66,7 +66,7 @@
     "Fire Boost": {
         "name": "Fire Boost",
         "type": "passive",
-        "originalAuthor": "516359709779820544",
+        "originalAuthor": "441198920668938260",
         "passive": {
             "boost": [
                 [
@@ -75,5 +75,32 @@
                 ]
             ]
         }
+    },
+    "Fire Amp": {
+        "name": "Fire Amp",
+        "type": "passive",
+        "originalAuthor": "516359709779820544",
+        "passive": {
+            "boost": [
+                [
+                    "fire",
+                    30
+                ]
+            ]
+        }
+    },
+    "Agilao": {
+        "name": "Agilao",
+        "type": "fire",
+        "atktype": "magic",
+        "pow": 140,
+        "hits": 1,
+        "acc": 95,
+        "cost": 8,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "516359709779820544",
+        "crit": true,
+        "desc": "The user surrounds the foe in fire to strike, with a low chance to inflict burning."
     }
 }

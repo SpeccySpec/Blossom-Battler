@@ -38,9 +38,11 @@ module.exports = {
 	AdminList: adminList,
 	
 	RPGBotAdmin: function(id) {
+		/*
 		for (const i in adminList) {
 			if (id === adminList[i]) return true;
 		}
+		*/
 
 		return false	
 	},

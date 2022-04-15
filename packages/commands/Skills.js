@@ -45,6 +45,11 @@ commands.registerskill = new Command({
 			forced: true
 		},
 		{
+			name: "Attack Type",
+			type: "Word",
+			forced: true
+		},
+		{
 			name: "Targets",
 			type: "Word",
 			forced: true
@@ -687,6 +692,101 @@ commands.levellock = new Command({
 				delete skillFile[args[0]].levellock;
 			else
 				skillFile[args[0]].levellock = level;
+
+			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+			message.react('👍');
+		} else {
+			return message.channel.send(`${args[0]} is an invalid Skill Name!`)
+		}
+	}
+})
+
+/// what does THIS MEAN WHY IS IT BLUE
+// PreSkill Functions
+function setPreSkill(skill, preskill, lvl) {
+	if (!skill.preskills) skill.preskills = [];
+	skill.preskills.push([preskill, lvl]);
+
+	return [preskill, lvl];
+}
+
+let preSkillRequest = async(message, args, skill, preskill, id) => {
+	let user = await client.users.fetch(id);
+
+	if (preskill.originalAuthor == id) {
+		message.channel.send(`${user}, ${message.author} desires to make your skill, ${preskill.name}, the Pre-Skill for ${skill.name}. Will you accept?`);
+	} else {
+		message.channel.send(`${user}, ${message.author} desires to make your skill, ${skill.name}, have a Pre-Skill to ${preskill.name}. Will you accept?`);
+	}
+
+	let givenResponce = false;
+	let collector = message.channel.createMessageCollector({ time: 15000 });
+	collector.on('collect', m => {
+		if (m.author.id == id) {
+			if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
+				setPreSkill(skill, args[1], parseInt(args[2]));
+				message.channel.send(`${preskill.name} will be the Pre-Skill for ${skill.name}.`)
+				fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+			} else
+				message.channel.send(`The user has declined. ${preskill.name} will not be the Pre-Skill for ${skill.name}.`);
+
+			givenResponce = true
+			collector.stop()
+		}
+	});
+	collector.on('end', c => {
+		if (!givenResponce) message.channel.send(`No response given.\nThe user has declined.`);
+	});
+}
+
+commands.preskill = new Command({
+	desc: "Assign an Pre-Skill. This is a skill that characters will use at lower levels.",
+	section: "battle",
+	aliases: ['lockskill', 'lvllock', 'skillock', 'lock'],
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Target Skill",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Level",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Assign Evo-Skill",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Assign Level Lock",
+			type: "Word",
+			forced: false
+		}
+	],
+	func: (message, args) => {
+		if (skillFile[args[0]] && skillFile[args[1]]) {
+			if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
+				if (skillFile[args[0]].originalAuthor != message.author.id && skillFile[args[1]].originalAuthor != message.author.id) {
+					return message.channel.send(`You don't own ${skillFile[args[0]].name} or ${skillFile[args[1]].name}.`);
+				}
+
+				if (skillFile[args[0]].originalAuthor != message.author.id) {
+					return preSkillRequest(message, args, skillFile[args[0]], skillFile[args[1]], skillFile[args[0]].originalAuthor);
+				}
+
+				if (skillFile[args[1]].originalAuthor != message.author.id) {
+					return preSkillRequest(message, args, skillFile[args[0]], skillFile[args[1]], skillFile[args[1]].originalAuthor);
+				}
+			}
+
+			setPreSkill(skillFile[args[0]], skillFile[args[1]]);
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');

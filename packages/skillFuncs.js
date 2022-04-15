@@ -195,14 +195,21 @@ skillDesc = (skillDefs, skillName, server) => {
 		finalText += `**${attackString}** attack.\n`;
 	}
 
-	if (skillDefs.preSkill)
-		finalText += `**Previous Tier**: *${skillDefs.preSkill[0]}, LV${skillDefs.preSkill[1]}*\n`;
+	if (skillDefs.preskills) {
+		finalText += `Pre Skills:\n`
+		for (const i in skillDefs.preskills) {
+			finalText += `${skillDefs.preskills[i][0]}, Lv${skillDefs.preskills[i][1]}\n`
+		}
+	}
 
-	if (skillDefs.evoSkill)
-		finalText += `**Next Tier**: *${skillDefs.evoSkill[0]}, LV${skillDefs.evoSkill[1]}*\n`;
+	if (skillDefs.evoskills) {
+		finalText += `Evo Skills:\n`
+		for (const i in skillDefs.evoskills) {
+			finalText += `${skillDefs.evoskills[i][0]}, Lv${skillDefs.evoskills[i][1]}\n`
+		}
+	}
 
-	if (skillDefs.levelLock)
-		finalText += `🔒 *Skill Locked until level **${skillDefs.levelLock}***`;
+	if (skillDefs.levellock) finalText += `🔒 *Skill Locked until level **${skillDefs.levellock}***`;
 	
 	finalText += '\n'
 	
