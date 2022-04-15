@@ -1505,21 +1505,24 @@ commands.clearitemrecipe = new Command({
             case 'item':
                 if (!itemFile[args[1]]) return message.channel.send(`${args[1]} is not a valid item name.`);
                 if (itemFile[args[1]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to assign a recipe to it.")
+                if (!itemFile[args[1]].recipe) return message.channel.send(`${args[1]} does not have a recipe.`);
                 itemDefs = itemFile[args[1]]
                 break;
             case 'weapon':
                 if (!weaponFile[args[1]]) return message.channel.send(`${args[1]} is not a valid weapon name.`);
                 if (weaponFile[args[1]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this weapon, therefore, you have insufficient permissions to assign a recipe to it.")
+                if (!weaponFile[args[1]].recipe) return message.channel.send(`${args[1]} does not have a recipe.`);
                 itemDefs = weaponFile[args[1]]
                 break;
             case 'armor':
                 if (!armorFile[args[1]]) return message.channel.send(`${args[1]} is not a valid armor name.`);
                 if (armorFile[args[1]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this armor, therefore, you have insufficient permissions to assign a recipe to it.")
+                if (!armorFile[args[1]].recipe) return message.channel.send(`${args[1]} does not have a recipe.`);
                 itemDefs = armorFile[args[1]]
                 break;
         }
 
-        itemDefs.recipe = null
+        delete itemDefs.recipe
 
         switch (args[0].toLowerCase()) {
             case 'item':
