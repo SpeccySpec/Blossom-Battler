@@ -1275,7 +1275,7 @@ commands.purgearmor = new Command({
     }
 })
 
-commands.makecraftingrecipe = new Command({
+commands.makeitemrecipe = new Command({
     desc: `Creates a recipe for an item.`,
     section: 'items',
     args: [
@@ -1378,5 +1378,32 @@ commands.makecraftingrecipe = new Command({
 		collector.on('end', c => {
 			if (givenResponce == false) message.channel.send(`No response given.\n${itemFile[args[0]].name} will not have a crafting recipe.`);
 		});
+    }
+})
+
+commands.clearitemrecipe = new Command({
+    desc: `Clears a recipe for an item.`,
+    section: 'items',
+    args: [
+        {
+            name: "Item",
+            type: "Word",
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+
+        if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
+
+        if (itemFile[args[0]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to assign a recipe to it.")
+
+        if (!itemFile[args[0]].recipe) return message.channel.send(`${itemFile[args[0]].name} does not have a crafting recipe.`);
+        
+        delete itemFile[args[0]].recipe
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
+
+        message.channel.send(`${itemFile[args[0]].name} has had its recipe cleared.`)
     }
 })
