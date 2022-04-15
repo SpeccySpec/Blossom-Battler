@@ -294,6 +294,16 @@ commands.registerheal = new Command({
 		},
 	],
 	func: (message, args) => {
+		let skill = buildHeal(message, args)
+		if (!skill) return;
+
+		skillFile[args[0]] = skill;
+		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+
+		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
+		console.log(embed)
+
+		message.channel.send({content: `${skill.name} has been registered:`, embeds: [embed]})
 	}
 })
 
@@ -354,6 +364,16 @@ commands.registerpassive = new Command({
 		},
 	],
 	func: (message, args) => {
+		let skill = buildPassive(message, args)
+		if (!skill) return;
+
+		skillFile[args[0]] = skill;
+		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+
+		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
+		console.log(embed)
+
+		message.channel.send({content: `${skill.name} has been registered:`, embeds: [embed]})
 	}
 })
 
