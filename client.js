@@ -712,7 +712,7 @@ client.on("messageCreate", (message) => {
 		}
 	}
 
-	if (args.length > 1) args.shift()
+	if (args.length > 0) args.shift()
 
 	if (!command) return message.channel.send("That command does not exist!");
 	command.call(message, args)

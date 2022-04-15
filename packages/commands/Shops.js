@@ -22,7 +22,7 @@ commands.openshop = new Command({
 			multiple: true
 		}
 	],
-	section: "items",
+	section: "shops",
 	func: (message, args) => {
 		let shopData = setUpFile(`${dataPath}/json/${message.guild.id}/shops.json`);
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id) && !utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send("I've been told you were banned from using the RPG sections of the bot, sorry!")
