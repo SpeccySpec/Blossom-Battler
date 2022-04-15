@@ -87,7 +87,7 @@ if (tempWeapon && tempWeapon != '')
 // Daily Armor - Resets at midnight
 dailyArmor = {}
 
-let tempArmor = fs.readFileSync(dataPath+'/dailyarmor.json', {flag: 'as+'});
+let tempArmor = fs.readFileSync(dataPath+'/dailyarmor.txt', {flag: 'as+'});
 if (tempArmor && tempArmor != '')
 	dailyArmor = JSON.parse(tempArmor);
 
