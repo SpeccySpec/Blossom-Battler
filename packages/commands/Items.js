@@ -50,7 +50,7 @@ function itemDesc(itemDefs, itemName, message) {
 		if (itemDefs.originalAuthor === 'Default')
 			userTxt = 'Default/Official';
 		else {
-			userTxt = message.guild.members.cache.get(itemDefs.originalAuthor).user.username
+			try { userTxt = message.guild.members.cache.get(itemDefs.originalAuthor).user.username } catch (e) { userTxt = itemDefs.originalAuthor }
 		}
 	} else
 		userTxt = 'Default/Official';
@@ -107,7 +107,7 @@ function weaponDesc(weaponDefs, weaponName, message) {
 		if (weaponDefs.originalAuthor === 'Default')
 			userTxt = 'Default/Official';
 		else {
-			userTxt = message.guild.members.cache.get(weaponDefs.originalAuthor).user.username
+			try { userTxt = message.guild.members.cache.get(weaponDefs.originalAuthor).user.username } catch (e) { userTxt = weaponDefs.originalAuthor }
 		}
 	} else
 		userTxt = 'Default/Official';
@@ -158,7 +158,7 @@ function armorDesc(armorDefs, armorName, message) {
         if (armorDefs.originalAuthor === 'Default')
             userTxt = 'Default/Official';
         else {
-            userTxt = message.guild.members.cache.get(armorDefs.originalAuthor).user.username
+            try { userTxt = message.guild.members.cache.get(armorDefs.originalAuthor).user.username } catch (e) { userTxt = armorDefs.originalAuthor }
         }
     } else
         userTxt = 'Default/Official';
@@ -423,7 +423,6 @@ commands.purgeitem = new Command({
                         for (const i in lootFile[item].items) {
                             if (i % 4 == 3) {
                                 if (lootFile[item].items[i-2] == args[0] && lootFile[item].items[i-3] == 'item') {
-                                    warningText['loot'] += `- ${lootFile[item].name}\n`
                                     lootFile[item].items[i-3] = ''
                                     lootFile[item].items[i-2] = ''
                                     lootFile[item].items[i-1] = ''
@@ -431,13 +430,35 @@ commands.purgeitem = new Command({
                                 }
                             }
                         }
+                        if (lootFile[item].items.includes('')) warningText['loot'] += `- ${lootFile[item].name}\n`
+
                         lootFile[item].items.filter(a => (a != ''))
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/loot.json`, JSON.stringify(lootFile))
 
+                    warningText['chests'] = ''
+                    chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+                    for (let channel in chestFile) {
+                        for (let chest in chestFile[channel]) {
+                            if (chestFile[channel][chest].items && chestFile[channel][chest].items['item']) {
+                                for (let item in chestFile[channel][chest].items['item']) {
+                                    if (item = args[0]) {
+                                        warningText['chests'] += `- ${chestFile[channel][chest].name}\n`
+                                        delete chestFile[channel][chest].items['item'][item]
+                                    }
+                                }
+                                if (Object.keys(chestFile[channel][chest].items['item']).length == 0) {
+                                    delete chestFile[channel][chest].items['item']
+                                }
+                            }
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+                    
+
                     for (let type in warningText) {
                         if (warningText[type] != '') {
-                            warning += `\nThe following ${type} have loot that uses this item:\n${warningText[type]}\nso they were removed.`
+                            warning += `\nThe following ${type} have the item in use:\n${warningText[type]}\nso it was removed from them.`
                         }
                     }
                     if (warning != '') message.channel.send(warning)
@@ -572,6 +593,31 @@ commands.edititem = new Command({
                         }
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/armor.json`, JSON.stringify(armorFile, null, 4));
+
+                    lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
+                    for (let item in lootFile) {
+                        if (lootFile[item].items) {
+                            if (i % 4 == 1 && lootFIle[item].items[i-1] == 'item' && lootFile[item].items[i] == args[0]) {
+                                lootFile[item].items[i] = args[2]
+                            }
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/loot.json`, JSON.stringify(lootFile, null, 4));
+
+                    chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+                    for (let channel in chestFile) {
+                        for (let chest in chestFile[channel]) {
+                            if (chestFile[channel][chest].items && chestFile[channel][chest].items['item']) {
+                                for (let item in chestFile[channel][chest].items['item']) {
+                                    if (item = args[0]) {
+                                        chestFile[channel][chest].items['item'][args[2]] = chestFile[channel][chest].items['item'][item]
+                                        delete chestFile[channel][chest].items['item'][item]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
                 }
                 break;
             case 'image':
@@ -718,13 +764,15 @@ commands.purgeweapon = new Command({
 
                     let warning = '**WARNING**'
                     let warningText = {}
+
                     warningText['loot'] = ''
+                    warningText['chests'] = ''
                     lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
+                    chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
                     for (let item in lootFile) {
                         for (const i in lootFile[item].items) {
                             if (i % 4 == 3) {
                                 if (lootFile[item].items[i-2] == args[0] && lootFile[item].items[i-3] == 'weapon') {
-                                    warningText['loot'] += `- ${lootFile[item].name}\n`
                                     lootFile[item].items[i-3] = ''
                                     lootFile[item].items[i-2] = ''
                                     lootFile[item].items[i-1] = ''
@@ -732,13 +780,32 @@ commands.purgeweapon = new Command({
                                 }
                             }
                         }
+                        if (lootFile[item].items.includes('')) warningText['loot'] += `- ${lootFile[item].name}\n`
+
                         lootFile[item].items.filter(a => (a != ''))
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/loot.json`, JSON.stringify(lootFile))
 
+                    for (let channel in chestFile) {
+                        for (let chest in chestFile[channel]) {
+                            if (chestFile[channel][chest].items && chestFile[channel][chest].items['weapon']) {
+                                for (let item in chestFile[channel][chest].items['weapon']) {
+                                    if (item = args[0]) {
+                                        warningText['chests'] += `- ${chestFile[channel][chest].name}\n`
+                                        delete chestFile[channel][chest].items['weapon'][item]
+                                    }
+                                }
+                                if (Object.keys(chestFile[channel][chest].items['weapon']).length == 0) {
+                                    delete chestFile[channel][chest].items['weapon']
+                                }
+                            }
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+
                     for (let type in warningText) {
                         if (warningText[type] != '') {
-                            warning += `\nThe following ${type} have loot that uses this weapon:\n${warningText[type]}\nso they were removed.`
+                            warning += `\nThe following ${type} have the weapon in use:\n${warningText[type]}\nso it was removed from them.`
                         }
                     }
                     if (warning != '**WARNING:**') message.channel.send(warning)
@@ -1046,6 +1113,31 @@ commands.editweapon = new Command({
                 } else {
                     weaponFile[args[2]] = utilityFuncs.cloneObj(weaponFile[args[0]])
                     delete weaponFile[args[0]]
+
+                    lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
+                    for (let item in lootFile) {
+                        if (lootFile[item].items) {
+                            if (i % 4 == 1 && lootFIle[item].items[i-1] == 'weapon' && lootFile[item].items[i] == args[0]) {
+                                lootFile[item].items[i] = args[2]
+                            }
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/loot.json`, JSON.stringify(lootFile, null, 4));
+
+                    chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+                    for (let channel in chestFile) {
+                        for (let chest in chestFile[channel]) {
+                            if (chestFile[channel][chest].items && chestFile[channel][chest].items['weapon']) {
+                                for (let item in chestFile[channel][chest].items['weapon']) {
+                                    if (item = args[0]) {
+                                        chestFile[channel][chest].items['weapon'][args[2]] = chestFile[channel][chest].items['weapon'][item]
+                                        delete chestFile[channel][chest].items['weapon'][item]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
                 }
                 break;
             case 'image':
@@ -1337,6 +1429,31 @@ commands.editarmor = new Command({
                 } else {
                     armorFile[args[2]] = utilityFuncs.cloneObj(armorFile[args[0]])
                     delete armorFile[args[0]]
+
+                    lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
+                    for (let item in lootFile) {
+                        if (lootFile[item].items) {
+                            if (i % 4 == 1 && lootFIle[item].items[i-1] == 'armor' && lootFile[item].items[i] == args[0]) {
+                                lootFile[item].items[i] = args[2]
+                            }
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/loot.json`, JSON.stringify(lootFile, null, 4));
+
+                    chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+                    for (let channel in chestFile) {
+                        for (let chest in chestFile[channel]) {
+                            if (chestFile[channel][chest].items && chestFile[channel][chest].items['armor']) {
+                                for (let item in chestFile[channel][chest].items['armor']) {
+                                    if (item = args[0]) {
+                                        chestFile[channel][chest].items['armor'][args[2]] = chestFile[channel][chest].items['armor'][item]
+                                        delete chestFile[channel][chest].items['armor'][item]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
                 }
                 break;
             case 'cost':
@@ -1397,6 +1514,7 @@ commands.purgearmor = new Command({
 
                     let warning = '**WARNING**'
                     let warningText = {}
+
                     warningText['loot'] = ''
                     lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
                     for (let item in lootFile) {
@@ -1411,13 +1529,34 @@ commands.purgearmor = new Command({
                                 }
                             }
                         }
+                        if (lootFile[item].items.includes('')) warningText['loot'] += `- ${lootFile[item].name}\n`
+
                         lootFile[item].items.filter(a => (a != ''))
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/loot.json`, JSON.stringify(lootFile))
 
+                    warningText['chests'] = ''
+                    chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+                    for (let channel in chestFile) {
+                        for (let chest in chestFile[channel]) {
+                            if (chestFile[channel][chest].items && chestFile[channel][chest].items['armor']) {
+                                for (let item in chestFile[channel][chest].items['armor']) {
+                                    if (item = args[0]) {
+                                        warningText['chests'] += `- ${chestFile[channel][chest].name}\n`
+                                        delete chestFile[channel][chest].items['armor'][item]
+                                    }
+                                }
+                                if (Object.keys(chestFile[channel][chest].items['armor']).length == 0) {
+                                    delete chestFile[channel][chest].items['armor']
+                                }
+                            }
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+
                     for (let type in warningText) {
                         if (warningText[type] != '') {
-                            warning += `\nThe following ${type} have loot that uses this armor:\n${warningText[type]}\nso they were removed.`
+                            warning += `\nThe following ${type} have the armor in use:\n${warningText[type]}\nso it was removed from them.`
                         }
                     }
                     if (warning != '**WARNING:**') message.channel.send(warning)

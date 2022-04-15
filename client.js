@@ -87,7 +87,7 @@ if (tempWeapon && tempWeapon != '')
 // Daily Armor - Resets at midnight
 dailyArmor = {}
 
-let tempArmor = fs.readFileSync(dataPath+'/dailyarmor.json', {flag: 'as+'});
+let tempArmor = fs.readFileSync(dataPath+'/dailyarmor.txt', {flag: 'as+'});
 if (tempArmor && tempArmor != '')
 	dailyArmor = JSON.parse(tempArmor);
 
@@ -699,7 +699,8 @@ client.on("guildCreate", (guild) => {
 
 prefix = 'rpg!';
 client.on("messageCreate", (message) => {
-	makeDirectory(`${dataPath}/json/${message.guild.id}`);
+	if (message.channel.type !== 'DM') makeDirectory(`${dataPath}/json/${message.guild.id}`);
+	if (message.author.bot) return;
 
 	// Register commands
 	if (!message.content.startsWith(prefix)) return;

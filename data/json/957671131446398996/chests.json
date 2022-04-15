@@ -1,1 +1,27 @@
-{}
+{
+    "957671132457234556": {
+        "Yucky": {
+            "originalAuthor": "441198920668938260",
+            "name": "Yucky",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "weapon",
+                "Buff"
+            ],
+            "hidden": true,
+            "items": {
+                "item": {
+                    "Sweet": 6
+                },
+                "weapon": {
+                    "Buff": 2
+                },
+                "armor": {
+                    "Bluff": 10
+                }
+            },
+            "desc": "Fuck off"
+        }
+    }
+}
