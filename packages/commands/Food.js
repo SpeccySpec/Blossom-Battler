@@ -621,6 +621,7 @@ commands.foodcategories = new Command({
 commands.registerfood = new Command({
 	desc: `Register a food item.`,
 	section: "food",
+	aliases: ['foodregister', 'makefood', 'foodmake', 'regfood'],
 	args: [
 		{
 			name: "Main Category",

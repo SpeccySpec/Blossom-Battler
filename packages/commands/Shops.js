@@ -3,6 +3,7 @@
 // Leave this to me - Spectra
 commands.openshop = new Command({
 	desc: 'Opens a shop with <Name> at <Channel>, selling all of the <Items> listed!',
+	aliases: ['registershop', 'shopopen'],
 	args: [
 		{
 			name: "Name",

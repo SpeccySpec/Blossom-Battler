@@ -1,4 +1,32 @@
 {
+    "lmao": {
+        "name": "lmao",
+        "rarity": "rare",
+        "cost": 12,
+        "type": "skill",
+        "originalAuthor": "441198920668938260",
+        "skill": "Lmao"
+    },
+    "S": {
+        "name": "S",
+        "rarity": "common",
+        "cost": 100,
+        "type": "healmp",
+        "originalAuthor": "441198920668938260",
+        "healmp": 60,
+        "recipe": {
+            "amount": 3,
+            "shapeless": false,
+            "recipe": [
+                0,
+                "Sweet",
+                3,
+                "Sweet",
+                8,
+                "Sweet"
+            ]
+        }
+    },
     "Sweet": {
         "name": "Sweet",
         "rarity": "sentient",
@@ -7,13 +35,5 @@
         "originalAuthor": "441198920668938260",
         "image": "https://cdn.discordapp.com/emojis/963788061731348510.webp",
         "healmp": 20
-    },
-    "lmao": {
-        "name": "lmao",
-        "rarity": "rare",
-        "cost": 12,
-        "type": "skill",
-        "originalAuthor": "441198920668938260",
-        "skill": ""
     }
 }
