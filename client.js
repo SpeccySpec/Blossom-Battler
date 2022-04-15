@@ -713,7 +713,7 @@ client.on("messageCreate", (message) => {
 		}
 	}
 
-	if (args.length > 0) args.shift()
+	args.shift()
 
 	if (!command) return;
 	command.call(message, args)
