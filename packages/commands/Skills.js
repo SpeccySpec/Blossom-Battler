@@ -258,6 +258,11 @@ commands.registerheal = new Command({
 			forced: false
 		},
 		{
+			name: "Target Type",
+			type: "Word",
+			forced: true
+		},
+		{
 			name: "Heal Type",
 			type: "Word",
 			forced: true
@@ -316,16 +321,6 @@ commands.registerpassive = new Command({
 			name: "Skill Name",
 			type: "Word",
 			forced: true
-		},
-		{
-			name: "Cost",
-			type: "Num",
-			forced: false
-		},
-		{
-			name: "Cost Type",
-			type: "Word",
-			forced: false
 		},
 		{
 			name: "Passive Type",

@@ -23,7 +23,12 @@
         "costtype": "hp",
         "target": "one",
         "originalAuthor": "516359709779820544",
-        "desc": "The user drains the target's MP by any means necessary."
+        "desc": "The user drains the target's MP by any means necessary.",
+        "extras": {
+            "stealmp": [
+                []
+            ]
+        }
     },
     "Matarunda": {
         "name": "Matarunda",
@@ -38,6 +43,34 @@
                     "atk",
                     -1,
                     100
+                ]
+            ]
+        }
+    },
+    "Dia": {
+        "name": "Dia",
+        "type": "heal",
+        "cost": 4,
+        "costtype": "MP",
+        "target": "ally",
+        "originalAuthor": "516359709779820544",
+        "heal": {
+            "default": [
+                [
+                    40
+                ]
+            ]
+        }
+    },
+    "Fire Boost": {
+        "name": "Fire Boost",
+        "type": "passive",
+        "originalAuthor": "516359709779820544",
+        "passive": {
+            "boost": [
+                [
+                    "fire",
+                    15
                 ]
             ]
         }
