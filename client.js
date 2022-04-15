@@ -467,7 +467,7 @@ elementList = () => {
 
 typeParsers = {
 	Num: ({arg}) => {return isNaN(arg) ? undefined : parseInt(arg)},
-	Decimal: ({arg}) => {return isNaN(arg) ? undefined : parseFloat(arg)},
+	Decimal: ({arg}) => {return isNaN(arg) ? 0 : parseFloat(arg)},
 	Word: (vars) => {return (typeParsers.Ping(vars) || typeParsers.Channel(vars)) ? undefined : vars.arg},
 	Ping: ({message}) => {return message.mentions.users.first()},
 	Channel: ({message, arg}) => {return message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')) ? message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')).id : undefined},

@@ -196,25 +196,24 @@ skillDesc = (skillDefs, skillName, server) => {
 	}
 
 	if (skillDefs.preskills) {
-		finalText += `Pre Skills:\n`
+		finalText += '\nPre Skills:```diff\n'
 		for (const i in skillDefs.preskills) {
-			finalText += `${skillDefs.preskills[i][0]}, Lv${skillDefs.preskills[i][1]}\n`
+			finalText += `- ${skillDefs.preskills[i][0]}, Lv${skillDefs.preskills[i][1]}\n`
 		}
+		finalText += '```\n'
 	}
 
 	if (skillDefs.evoskills) {
-		finalText += `Evo Skills:\n`
+		finalText += '\nEvo Skills:```diff\n'
 		for (const i in skillDefs.evoskills) {
-			finalText += `${skillDefs.evoskills[i][0]}, Lv${skillDefs.evoskills[i][1]}\n`
+			finalText += `- ${skillDefs.evoskills[i][0]}, Lv${skillDefs.evoskills[i][1]}\n`
 		}
+		finalText += '```\n'
 	}
 
 	if (skillDefs.levellock) finalText += `🔒 *Skill Locked until level **${skillDefs.levellock}***`;
-	
-	finalText += '\n'
-	
-	if (skillDefs.desc)
-		finalText += `\n*${skillDefs.desc}*`;
+
+	if (skillDefs.desc) finalText += `\n*${skillDefs.desc}*`;
 	
 	finalText += '\n\n**Known By**:'
 

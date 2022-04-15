@@ -106,18 +106,12 @@ commands.registerskill = new Command({
 		}
 
 		// So much shit to check :(
-		if (!args[3]) return message.channel.send('Please enter a value for **Power**! Skills can have up to 2000 power.');
 		if (args[3] < 1) return message.channel.send('Skills with 0 power or less will not function!');
 		if (!isFinite(args[3])) return message.channel.send('Please enter a whole number for **Power**!')
 
-		if (!args[4]) return message.channel.send('Please enter a value for **Accuracy**! Skills can have up to 100 accuracy.');
 		if (args[4] < 1) return message.channel.send('Skills with 0% accuracy or less will not function!');
 		if (!isFinite(args[4])) return message.channel.send('Please enter a decimal or whole number for **Accuracy**!')
 
-		if (!args[5]) return message.channel.send('Please enter a value for **Critical Hit Chance**, or leave it at 0 for no critical hit.');
-		if (!isFinite(args[5])) return message.channel.send('Please enter a decimal or whole number for **Critical Hit Chance**!')
-
-		if (!args[6]) return message.channel.send('Please enter a value for **Hits**!');
 		if (args[6] < 1) return message.channel.send('Skills with 0 hits or less will not function!');
 		if (!isFinite(args[6])) return message.channel.send('Please enter a whole number for **Hits**!')
 
@@ -701,44 +695,6 @@ commands.levellock = new Command({
 	}
 })
 
-/// what does THIS MEAN WHY IS IT BLUE
-// PreSkill Functions
-function setPreSkill(skill, preskill, lvl) {
-	if (!skill.preskills) skill.preskills = [];
-	skill.preskills.push([preskill, lvl]);
-
-	return [preskill, lvl];
-}
-
-let preSkillRequest = async(message, args, skill, preskill, id) => {
-	let user = await client.users.fetch(id);
-
-	if (preskill.originalAuthor == id) {
-		message.channel.send(`${user}, ${message.author} desires to make your skill, ${preskill.name}, the Pre-Skill for ${skill.name}. Will you accept?`);
-	} else {
-		message.channel.send(`${user}, ${message.author} desires to make your skill, ${skill.name}, have a Pre-Skill to ${preskill.name}. Will you accept?`);
-	}
-
-	let givenResponce = false;
-	let collector = message.channel.createMessageCollector({ time: 15000 });
-	collector.on('collect', m => {
-		if (m.author.id == id) {
-			if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
-				setPreSkill(skill, args[1], parseInt(args[2]));
-				message.channel.send(`${preskill.name} will be the Pre-Skill for ${skill.name}.`)
-				fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
-			} else
-				message.channel.send(`The user has declined. ${preskill.name} will not be the Pre-Skill for ${skill.name}.`);
-
-			givenResponce = true
-			collector.stop()
-		}
-	});
-	collector.on('end', c => {
-		if (!givenResponce) message.channel.send(`No response given.\nThe user has declined.`);
-	});
-}
-
 commands.preskill = new Command({
 	desc: "Assign an Pre-Skill. This is a skill that characters will use at lower levels.",
 	section: "battle",
@@ -786,7 +742,7 @@ commands.preskill = new Command({
 				}
 			}
 
-			setPreSkill(skillFile[args[0]], skillFile[args[1]]);
+			setPreSkill(skillFile[args[0]], args[1], args[2]);
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
