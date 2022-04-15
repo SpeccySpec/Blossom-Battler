@@ -700,6 +700,7 @@ client.on("guildCreate", (guild) => {
 prefix = 'rpg!';
 client.on("messageCreate", (message) => {
 	if (message.channel.type !== 'DM') makeDirectory(`${dataPath}/json/${message.guild.id}`);
+	if (message.author.bot) return;
 
 	// Register commands
 	if (!message.content.startsWith(prefix)) return;
