@@ -12,7 +12,7 @@ commands.openshop = new Command({
 		},
 		{
 			name: "Channel",
-			type: "ID",
+			type: "Channel",
 			forced: true
 		},
 		{

@@ -271,3 +271,107 @@ commands.purgeloot = new Command({
         });
     }
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+commands.registerchest = new Command({
+    desc: 'Registers a chest to use for storing items, weapons or armors.',
+    section: 'chests',
+    aliases: ['makechest', 'regchest'],
+    args: [
+        {
+            name: "Name",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Channel",
+            type: "Channel",
+            forced: true
+        },
+        {
+            name: "Hidden",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Lock Type",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Lock Key",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Description",
+            type: "Word"
+        },
+        {
+            name: "Items (Type, Item, Amount) #1",
+            type: "Word"
+        }
+    ],
+    func: (message, args) => {
+        chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+
+        if (chestFile[args[0]] && chestFile[args[0]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this chest, therefore, you have insufficient permissions to overwrite it.")
+
+        let channel = args[1]
+
+        console.log(channel)
+
+        let hidden = args[2].toLowerCase() == 'true' || args[2].toLowerCase() == 'yes' || args[2].toLowerCase() == 'y' || args[2].toLowerCase() == '1'
+
+        let lockType = args[3].toLowerCase()
+        const validLockTypes = ['party', 'character', 'money', 'pet', 'item', 'weapon', 'armor', 'password', 'none']
+        if (!validLockTypes.includes(lockType)) return message.channel.send(`${args[3]} is not a valid lock type. Valid lock types are: \n-${validLockTypes.join('\n-')}`)
+
+        let lockKey = args[4]
+        if (lockType != 'none' && !lockKey) return message.channel.send("You must specify a lock key.")
+
+        itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+        weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
+        armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
+
+        switch (lockType) {
+            case 'party':
+            case 'character':
+            case 'pet':
+                return message.channel.send("This type of lock hasn't been implemented yet.")
+            case 'money':
+                if (isNaN(lockKey)) return message.channel.send("The lock key must be a number.")
+                lockKey = Math.max(0, parseInt(lockKey))
+            case 'item':
+                if (!itemFile[lockKey]) return message.channel.send("The item you specified does not exist.")
+                break;
+            case 'weapon':
+                if (!weaponFile[lockKey]) return message.channel.send("The weapon you specified does not exist.")
+                break;
+            case 'armor':
+                if (!armorFile[lockKey]) return message.channel.send("The armor you specified does not exist.")
+                break;
+            case 'password':
+                if (!lockKey) return message.channel.send("You must specify a password.")
+                break;
+        }
+
+        let description = args[5]
+
+        if (description) args.splice(0, 6)
+        else args.splice(0, 5)
+
+        message.channel.send("I would go with items now, but the creator is testing this feature.")
+    }
+})
