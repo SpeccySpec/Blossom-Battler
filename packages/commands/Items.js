@@ -1247,3 +1247,108 @@ commands.purgearmor = new Command({
     }
 })
 
+commands.makecraftingrecipe = new Command({
+    desc: `Creates a recipe for an item.`,
+    section: 'items',
+    args: [
+        {
+            name: "Result Item",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Result Quantity",
+            type: "Num",
+            forced: true
+        },
+        {
+            name: "Shapeless",
+            type: "Word"
+        }
+    ],
+    func: (message, args) => {
+        itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+
+        if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
+
+        if (itemFile[args[0]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to assign a recipe to it.")
+
+        if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
+
+        args[1] = Math.max(1, parseInt(args[1]));
+        args[2] = (args[2] && (args[2] == 'true' || args[2] == 'yes' || args[2] == 'y' || args[2] == '1')) ? true : false
+
+        const file = new Discord.MessageAttachment(`${dataPath}/images/Crafting_Grid.png`);
+        const embed = new Discord.MessageEmbed()
+            .setTitle(`${itemFile[args[0]].name} Crafting Recipe`)
+            .setColor(0x00AE86)
+            .setDescription(`How would you want people to craft this item? I'll give you tips.`)
+            .addField("Placement", 'Top left grid is of ID 0, and it goes from left to right, top to bottom.', true)
+            .addField("Quantity", `For each grid you can place only one item at a time.`, true)
+            .addField("Shapeless", `If your craft is shapeless, the order doesn't matter.`, true)
+            .addField("What to write", `*<Num: Placement #1> <Word: Item #1> {...}*\nFor each item, you need a placement number before it.`, true)
+            .setThumbnail('attachment://Crafting_Grid.png')
+
+        message.channel.send({embeds: [embed], files: [file]})
+
+        let givenResponce = false
+		let collector = message.channel.createMessageCollector({ time: 300000 });
+		collector.on('collect', m => {
+			if (m.author.id == message.author.id) {
+                let margs = [...m.content.matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
+                let nums = []
+                for (i in margs) {
+                    if (i % 2 == 0) {
+                        if (isNaN(margs[i])) { 
+                            message.channel.send(`${margs[i]} is not a valid number.`);
+                            givenResponce = true
+				            collector.stop()
+                            break;
+                        } else {
+                            margs[i] = Math.max(0, Math.min(8, parseInt(margs[i])))
+                            nums.push(margs[i])
+                        }
+                    } else {
+                        if (!itemFile[margs[i]]) {
+                            message.channel.send(`${margs[i]} is not a valid item name.`);
+                            givenResponce = true
+                            collector.stop()
+                            break;
+                        }
+                        if (margs[i] == args[0]) {
+                            message.channel.send(`You cannot craft ${margs[i]} into itself.`);
+                            givenResponce = true
+                            collector.stop()
+                            break;
+                        }
+                    }
+                }
+                if (margs.length % 2 == 1) {
+                    message.channel.send(`You need to have an even number of arguments.`);
+                    givenResponce = true
+                    collector.stop()
+                }
+                if (nums.length != new Set(nums).size) {
+                    message.channel.send(`You cannot place multiple items on the same grid.`);
+                    givenResponce = true
+                    collector.stop()
+                }
+
+                itemFile[args[0]].recipe = {
+                    amount: args[1],
+                    shapeless: args[2],
+                    recipe: margs
+                }
+
+                fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
+
+                message.channel.send(`${itemFile[args[0]].name} has been given a crafting recipe.`)
+                givenResponce = true
+                collector.stop()
+            }
+		});
+		collector.on('end', c => {
+			if (givenResponce == false) message.channel.send(`No response given.\n${itemFile[args[0]].name} will not have a crafting recipe.`);
+		});
+    }
+})

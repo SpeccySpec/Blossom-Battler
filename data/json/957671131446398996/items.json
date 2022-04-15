@@ -15,5 +15,25 @@
         "type": "skill",
         "originalAuthor": "441198920668938260",
         "skill": ""
+    },
+    "S": {
+        "name": "S",
+        "rarity": "common",
+        "cost": 100,
+        "type": "healmp",
+        "originalAuthor": "441198920668938260",
+        "healmp": 60,
+        "recipe": {
+            "amount": 3,
+            "shapeless": false,
+            "recipe": [
+                0,
+                "Sweet",
+                3,
+                "Sweet",
+                8,
+                "Sweet"
+            ]
+        }
     }
 }
