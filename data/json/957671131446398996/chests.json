@@ -9,18 +9,8 @@
                 "weapon",
                 "Buff"
             ],
-            "hidden": true,
-            "items": {
-                "item": {
-                    "Sweet": 6
-                },
-                "weapon": {
-                    "Buff": 2
-                },
-                "armor": {
-                    "Bluff": 10
-                }
-            },
+            "hidden": false,
+            "items": {},
             "desc": "Fuck off"
         }
     }
