@@ -267,6 +267,29 @@ statusEffects = [
 	"confusion"
 ]
 
+statusNames = {
+    burn: 'Burning',
+	bleed: 'Bleeding',
+    freeze: 'Freezing',
+    paralyze: 'Paralysis',
+	sleep: 'Sleeping',
+	dizzy: 'Dizziness',
+	despair: 'Despair',
+    poison: 'Poison',
+    brainwash: 'Brainwash',
+	fear: 'Fear',
+	rage: 'Rage',
+	ego: 'Ego',
+	silence: 'Silence',
+	dazed: 'Daze',
+	hunger: 'Hunger',
+	illness: 'Illness',
+	infatuation: 'Infatuation',
+	mirror: 'Mirror',
+	blind: 'Blindness',
+	confusion: 'Confusion'
+}
+
 statusEmojis = {
     burn: "🔥",
 	bleed: "<:bleed:906903499462307870>",
