@@ -465,6 +465,20 @@ elementList = () => {
 	return DiscordEmbed;
 }
 
+getServerUser = (user, message) => {
+    let userTxt = ''
+	if (user) {
+		if (user === 'Default')
+			userTxt = 'Default/Official';
+		else {
+			try { userTxt = message.guild.members.cache.get(user).user.username } catch (e) { userTxt = user }
+		}
+	} else
+		userTxt = 'Default/Official';
+
+    return userTxt;
+}
+
 typeParsers = {
 	Num: ({arg}) => {return isNaN(arg) ? undefined : parseInt(arg)},
 	Decimal: ({arg}) => {return isNaN(arg) ? 0 : parseFloat(arg)},

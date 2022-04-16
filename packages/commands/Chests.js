@@ -3,15 +3,7 @@ function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFil
     if (!weaponFile) weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
     if (!armorFile) armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
-    let userTxt = ''
-	if (chestDefs.originalAuthor) {
-		if (chestDefs.originalAuthor === 'Default')
-			userTxt = 'Default/Official';
-		else {
-			try { userTxt = message.guild.members.cache.get(chestDefs.originalAuthor).user.username } catch (e) { userTxt = chestDefs.originalAuthor }
-		}
-	} else
-		userTxt = 'Default/Official';
+    let userTxt = getServerUser(chestDefs.originalAuthor, message)
 
     let lockTxt = ''
     let lockTypeName = chestDefs.lock[0].charAt(0).toUpperCase() + chestDefs.lock[0].slice(1)
@@ -411,16 +403,6 @@ commands.purgechest = new Command({
         });
     }
 })
-
-/**
-            default:
-                return message.channel.send(`${args[1]} is not a valid field.`);
-            }
-
-        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile, null, 4));
-        message.react('👍');
-    }
-}) */
 
 commands.editchest = new Command({
     desc: `Edit an existing chest and change things about it!`,
