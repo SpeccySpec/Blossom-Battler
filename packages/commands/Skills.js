@@ -230,7 +230,6 @@ commands.registerstatus = new Command({
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 		
 		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
-		console.log(embed)
 
 		message.channel.send({content: `${skill.name} has been registered:`, embeds: [embed]})
 	}
@@ -305,7 +304,6 @@ commands.registerheal = new Command({
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
 		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
-		console.log(embed)
 
 		message.channel.send({content: `${skill.name} has been registered:`, embeds: [embed]})
 	}
@@ -365,7 +363,6 @@ commands.registerpassive = new Command({
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
 		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
-		console.log(embed)
 
 		message.channel.send({content: `${skill.name} has been registered:`, embeds: [embed]})
 	}
@@ -655,8 +652,6 @@ commands.editskill = new Command({
 								}
 							}
 							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/armors.json`, JSON.stringify(armorFile, null, '    '));
-
-							console.log(itemFile, weaponFile, armorFile)
 						}
 					}
 					
@@ -998,8 +993,6 @@ commands.purgeskill = new Command({
 								}
 							}
 							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/armors.json`, JSON.stringify(armorFile, null, '    '));
-
-							console.log(itemFile, weaponFile, armorFile)
 						}
 
 						fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
