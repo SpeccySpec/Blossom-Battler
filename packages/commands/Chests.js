@@ -576,8 +576,7 @@ commands.chestitems = new Command({
         let itemType = args[0].toLowerCase();
         const validTypes = ['item', 'weapon', 'armor', 'all']
         if (!validTypes.includes(itemType)) return message.channel.send(`${itemType} is not a valid item type. Valid item types are: \n- ${validTypes.join('\n- ')}`)
-        if(itemType != 'all' && !args[1]) return message.channel.send(`You must specify an item.`)
-        let itemName = args[1].toLowerCase();
+        let itemName
         let itemAmount
 
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
@@ -617,66 +616,52 @@ commands.chestitems = new Command({
                     itemAmount.push(args[i])
                 }
             }
-
-            //check if any of itemName is all, then remove other items of the type the itemName is in
-            let whattoremove = []
-            for (let i in itemName) {
-                if (itemName[i] == 'all') {
-                    whattoremove.push(itemType[i])
-                }
-            }
-            console.log(whattoremove)
-            for (let i in itemType) {
-                if (whattoremove.includes(itemType[i]) && itemType[i] != 'all') {
-                    itemName.splice(i, 1)
-                    itemType.splice(i, 1)
-                    itemAmount.splice(i, 1)
-                }
-            }
-                
-            console.log(itemType)
-            console.log(itemName)
-            console.log(itemAmount)
         }
-        
-        /*if (addRemove == 'remove') {
+
+        if (addRemove == 'remove') {
             if (itemType == 'all') {
-                for (let item in chestFile[args[0]][args[1]].items) {
+                for (let item in chest.items) {
                     const categories = ['weapon', 'armor', 'item']
                     for (i in categories) {
-                        if (chestFile[args[0]][args[1]].items[categories[i]]) {
-                            delete chestFile[args[0]][args[1]].items[categories[i]]
+                        if (chest.items[categories[i]]) {
+                            delete chest.items[categories[i]]
                         }
                     }
                 }
             } else {
-                if (!chestFile[args[0]][args[1]].items[itemType]) return message.channel.send(`There are no ${itemType} items in ${args[1]}.`);
-                if (itemName == 'all') {
-                    delete chestFile[args[0]][args[1]].items[itemType]
-                } else {
-                    if (!chestFile[args[0]][args[1]].items[itemType][itemName]) return message.channel.send(`There are no ${itemName} ${itemType} items in ${args[1]}.`);
-                    
-                    itemAmount = Math.min(chestFile[args[0]][args[1]].items[itemType][itemName], parseInt(itemAmount));
-                    chestFile[args[0]][args[1]].items[itemType][itemName] -= itemAmount;
+                for (let i in itemType) {
+                    if (!chest.items[itemType[i]]) return message.channel.send(`There are no ${itemType[i]} items in ${args[1]}.`);
+                    if (itemName[i] == 'all') {
+                        delete chest.items[itemType[i]]
+                    } else {
+                        if (!chest.items[itemType[i]][itemName[i]]) continue;
+                        
+                        itemAmount[i] = Math.min(chest.items[itemType[i]][itemName[i]], parseInt(itemAmount[i]));
+                        chest.items[itemType[i]][itemName[i]] -= itemAmount[i];
 
-                    if (chestFile[args[0]][args[1]].items[itemType][itemName] <= 0) {
-                        delete chestFile[args[0]][args[1]].items[itemType][itemName]
+                        if (chest.items[itemType[i]][itemName[i]] <= 0) {
+                            delete chest.items[itemType[i]][itemName[i]]
+                        }
                     }
                 }
             }
         } else {
             if (itemType == 'all') return message.channel.send(`You cannot add all items to a chest.`);
-            thingFile = setUpFile(`${dataPath}/json/${message.guild.id}/${itemType}s.json`)
+            if (itemName.includes('all')) return message.channel.send(`You cannot add all items to a chest.`);
 
-            if (!thingFile[itemName]) return message.channel.send(`${itemName} is not a valid ${itemType}.`);
+            for (let i in itemType) {
+                thingFile = setUpFile(`${dataPath}/json/${message.guild.id}/${itemType[i]}s.json`)
 
-            if (!chestFile[args[0]][args[1]].items[itemType]) chestFile[args[0]][args[1]].items[itemType] = {};
-            if (!chestFile[args[0]][args[1]].items[itemType][itemName]) chestFile[args[0]][args[1]].items[itemType][itemName] = 0;
+                if (!thingFile[itemName[i]]) return message.channel.send(`${itemName[i]} is not a valid ${itemType[i]}.`);
 
-            chestFile[args[0]][args[1]].items[itemType][itemName] += itemAmount;
-        }*/
+                if (!chest.items[itemType[i]]) chest.items[itemType[i]] = {};
+                if (!chest.items[itemType[i]][itemName[i]]) chest.items[itemType[i]][itemName[i]] = 0;
+
+                chest.items[itemType[i]][itemName[i]] += itemAmount[i];
+            }
+        }
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
-        message.channel.send(`Updated ${args[1]}'s items.`);
+        message.channel.send(`Updated ${chestName}'s items.`);
     }
 })
