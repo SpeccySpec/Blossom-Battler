@@ -23,6 +23,49 @@
                 }
             },
             "desc": "Fuck off"
+        },
+        "LootTest": {
+            "originalAuthor": "441198920668938260",
+            "name": "LootTest",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "none",
+                "a"
+            ],
+            "hidden": false,
+            "items": {
+                "loot": {
+                    "Beef": 1,
+                    "beef": 1,
+                    "a": 2
+                }
+            },
+            "desc": "Testing loot"
+        },
+        "itemTest": {
+            "originalAuthor": "441198920668938260",
+            "name": "itemTest",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "none",
+                "a"
+            ],
+            "hidden": false,
+            "items": {
+                "weapon": {
+                    "Buff": 553
+                },
+                "item": {
+                    "S": 3,
+                    "Sweet": 410
+                },
+                "armor": {
+                    "Bluff": 520
+                }
+            },
+            "desc": "Testing new Item thingy"
         }
     }
 }

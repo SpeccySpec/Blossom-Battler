@@ -76,7 +76,7 @@ function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFil
 }
 
 commands.registerchest = new Command({
-    desc: 'Registers a chest to use for storing items, weapons or armors.',
+    desc: 'Registers a chest to use for storing items, weapons or armors.\n*Items* should be written in the order as shown.\n\nI support loot tables too, with *Items* being written like *(\'Loot\', Name, Repeat Amount)*.',
     section: 'chests',
     aliases: ['makechest', 'regchest'],
     args: [
@@ -133,6 +133,7 @@ commands.registerchest = new Command({
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
+        lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
 
         switch (lockType) {
             case 'party':
@@ -160,30 +161,59 @@ commands.registerchest = new Command({
         let description = args[5]
 
         args.splice(0, 6)
+        const validTypes = ['item', 'weapon', 'armor', 'loot']
+        let itemsDef = []
+
+        let type
+
+        if (args.length % 3 != 0) return message.channel.send(`You didn't write the correct amount of fields.`)
 
         for (i in args) {
             if (i % 3 == 0) {
-                if (args[i].toLowerCase() != "item" && args[i].toLowerCase() != "weapon" && args[i].toLowerCase() != "armor") return message.channel.send(`${args[i]} is not a valid type.`)
-                args[i] = args[i].toLowerCase();
+                if (!validTypes.includes(args[i])) return message.channel.send(`${args[i]} is not a valid item type. Valid types are: \n- ${validTypes.join('\n- ')}`)
+                type = args[i].toLowerCase();
             }
-            else if (i % 3 == 1) {
-                if (args[i-1].toLowerCase() == "item") {
-                    if (!itemFile[args[i]]) return message.channel.send(`${args[i]} is not a valid item.`)
+            if (type != 'loot') {
+                if (i % 3 == 1) {
+                    itemsDef[i-1] = args[i-1].toLowerCase()
+
+                    if (args[i-1].toLowerCase() == "item") {
+                        if (!itemFile[args[i]]) return message.channel.send(`${args[i]} is not a valid item.`)
+                    }
+                    else if (args[i-1].toLowerCase() == "weapon") {
+                        if (!weaponFile[args[i]]) return message.channel.send(`${args[i]} is not a valid weapon.`)
+                    }
+                    else if (args[i-1].toLowerCase() == "armor") {
+                        if (!armorFile[args[i]]) return message.channel.send(`${args[i]} is not a valid armor.`)
+                    }
+                    itemsDef[i] = args[i]
                 }
-                else if (args[i-1].toLowerCase() == "weapon") {
-                    if (!weaponFile[args[i]]) return message.channel.send(`${args[i]} is not a valid weapon.`)
+                if (i % 3 == 2) {
+                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
+                    itemsDef[i] = Math.max(1, parseInt(args[i]))
                 }
-                else if (args[i-1].toLowerCase() == "armor") {
-                    if (!armorFile[args[i]]) return message.channel.send(`${args[i]} is not a valid armor.`)
+            } else {
+                if (i % 3 == 1)
+                    if (!lootFile[args[i]]) return message.channel.send(`${args[i]} is not a valid loot table.`)
+                if (i % 3 == 2) {
+                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
+                    args[i] = Math.max(1, parseInt(args[i]))
+                    if (args[i] > 10) return message.channel.send(`${args[i]} is too high.`)
+
+                    for (let j = 0; j < args[i]; j++) {
+                        if (lootFile[args[i-1]].items) {
+                            for (let k in lootFile[args[i-1]].items) {
+                                if (k % 4 == 3) {
+                                    itemsDef.push(lootFile[args[i-1]].items[k-3])
+                                    itemsDef.push(lootFile[args[i-1]].items[k-2])
+                                    itemsDef.push(lootFile[args[i-1]].items[k-1])
+                                }
+                            }
+                        }
+                    }
                 }
-            }
-            else if (i % 3 == 2) {
-                if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
-                args[i] = Math.max(1, parseInt(args[i]))
             }
         }
-
-        if (args.length % 3 != 0) return message.channel.send(`You didn't write the correct amount of fields.`)
     
         if (!chestFile[channel]) chestFile[channel] = {}
 
@@ -199,13 +229,13 @@ commands.registerchest = new Command({
 
         if (description && description.toLowerCase() != 'none') chestFile[channel][name].desc = description
 
-        if (args) {
-            for (i in args) {
+        if (itemsDef) {
+            for (i in itemsDef) {
                 if (i % 3 == 2) {
-                    if (!chestFile[channel][name].items[args[i-2]]) chestFile[channel][name].items[args[i-2]] = {}
+                    if (!chestFile[channel][name].items[itemsDef[i-2]]) chestFile[channel][name].items[itemsDef[i-2]] = {}
                     
-                    if (!chestFile[channel][name].items[args[i-2]][args[i-1]]) chestFile[channel][name].items[args[i-2]][args[i-1]] = 0
-                    chestFile[channel][name].items[args[i-2]][args[i-1]] += args[i]
+                    if (!chestFile[channel][name].items[itemsDef[i-2]][itemsDef[i-1]]) chestFile[channel][name].items[itemsDef[i-2]][itemsDef[i-1]] = 0
+                    chestFile[channel][name].items[itemsDef[i-2]][itemsDef[i-1]] += itemsDef[i]
                 }
             }
         }
