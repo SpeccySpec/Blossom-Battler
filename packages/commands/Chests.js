@@ -150,6 +150,7 @@ commands.registerchest = new Command({
             case 'money':
                 if (isNaN(lockKey)) return message.channel.send("The lock key must be a number.")
                 lockKey = Math.max(0, parseInt(lockKey))
+                break;
             case 'item':
                 if (!itemFile[lockKey]) return message.channel.send("The item you specified does not exist.")
                 break;
@@ -270,5 +271,412 @@ commands.getchest = new Command({
         else {
             message.channel.send({content: `Here's info on ${chest.name}:`, embeds: [chestDesc(chest, name, message)]})
         }
+    }
+})
+
+commands.listchests = new Command({
+    desc: `Lists all chests.`,
+    section: 'chests',
+    args: [
+        {
+            name: "Channel",
+            type: "Channel",
+        },
+        {
+            name: "Quick Page",
+            type: "Num"
+        }
+    ],
+    func: (message, args) => {
+        chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+
+        let array = []
+        for (let channel in chestFile) {
+            for (let chest in chestFile[channel]) {
+                let channelTxt = ''
+                try {
+                    channelTxt = `${message.guild.channels.cache.get(chestFile[channel][chest].channel).name} (${chestFile[channel][chest].channel})`
+                } catch (e) {
+                    channelTxt = `${chestFile[channel][chest].channel}`
+                }
+
+                let name = `${chestFile[channel][chest].name} (${chest})`
+
+                //check if hidden, if so, surround channelTxt and name in ||
+                if (chestFile[channel][chest].hidden) {
+                    channelTxt = `||${channelTxt}||`
+                    name = `||${name}||`
+                }
+
+    
+                array.push({title: name, desc: `located in ${channelTxt}`});
+            }
+        }
+
+        array.filter(e => !args[0] || (args[0] && e.desc.includes(args[0])))
+
+        if (array.length == 0) return message.channel.send(`No chests found.`);
+
+        listArray(message.channel, array, parseInt(args[1]));
+    }
+})
+
+commands.searchchests = new Command({
+    desc: `Searches for chests based on a phrase.`,
+    section: 'chests',
+    args: [
+        {
+            name: "Phrase",
+            type: "Word",
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+
+        let array = []
+        for (let channel in chestFile) {
+            for (let chest in chestFile[channel]) {
+                let name = `${chestFile[channel][chest].name} (${chest})`
+
+                if (!name.includes(args[0])) continue
+
+                let channelTxt = ''
+                try {
+                    channelTxt = `${message.guild.channels.cache.get(chestFile[channel][chest].channel).name} (${chestFile[channel][chest].channel})`
+                } catch (e) {
+                    channelTxt = `${chestFile[channel][chest].channel}`
+                }
+
+                //check if hidden, if so, surround channelTxt and name in ||
+                if (chestFile[channel][chest].hidden) {
+                    channelTxt = `||${channelTxt}||`
+                    name = `||${name}||`
+                }
+
+                array.push({title: name, desc: `located in ${channelTxt}`});
+            }
+        }
+
+        if (array.length == 0) return message.channel.send(`No chests found.`);
+
+        listArray(message.channel, array, 0);
+    }
+})
+
+commands.purgechest = new Command({
+    desc: `Purges a chest. **YOU CANNOT GET IT BACK AFTER DELETION!**`,
+    section: 'chests',
+    args: [
+        {
+            name: "Channel",
+            type: "Channel",
+            forced: true
+        },
+        {
+            name: "Chest",
+            type: "Word",
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+
+        if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);
+        if (!chestFile[args[0]][args[1]]) return message.channel.send(`${args[1]} is not a valid chest name.`);
+
+        if (chestFile[args[0]][args[1]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this chest, therefore, you have insufficient permissions to delete it.")
+
+        message.channel.send(`Are you **sure** you want to delete ${chestFile[args[0]][args[1]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this chest.\n**Y/N**`);
+
+        var givenResponce = false
+        var collector = message.channel.createMessageCollector({ time: 15000 });
+        collector.on('collect', m => {
+            if (m.author.id == message.author.id) {
+                if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
+                    message.channel.send(`${chestFile[args[0]][args[1]].name} has been erased from existance.`)
+                    delete chestFile[args[0]][args[1]]
+
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+                } else
+                    message.channel.send(`${chestFile[args[0]][args[1]].name} will not be deleted.`);
+
+                    givenResponce = true
+                    collector.stop()
+                }
+            });
+        collector.on('end', c => {
+            if (givenResponce == false)
+                message.channel.send(`No response given.\n${chestFile[args[0]][args[1]].name} will not be deleted.`);
+        });
+    }
+})
+
+/**
+            default:
+                return message.channel.send(`${args[1]} is not a valid field.`);
+            }
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile, null, 4));
+        message.react('👍');
+    }
+}) */
+
+commands.editchest = new Command({
+    desc: `Edit an existing chest and change things about it!`,
+    section: 'chests',
+    aliases: ['chestedit', 'changechest', 'chestchange'],
+    args: [
+        {
+            name: "Channel",
+            type: "Channel",
+            forced: true
+        },
+        {
+            name: "Chest",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Field",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Value #1",
+            type: "Word",
+            forced: true,
+            multiple: true
+        }
+    ],
+    func: (message, args) => {
+        chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+
+        if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);
+        if (!chestFile[args[0]][args[1]]) return message.channel.send(`${args[1]} is not a valid chest.`);
+        if (chestFile[args[0]][args[1]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send(`You cannot edit ${args[1]}.`);
+
+        //fields: element
+        let editField = args[2].toLowerCase();
+        switch (editField) {
+            case 'name':
+            case 'desc':
+                chestFile[args[0]][args[1]][editField] = args[3];
+                break;
+            case 'location':
+            case 'channel':
+                if (!message.guild.channels.cache.find(c => c.name == args[3] || c.id == args[3] || c.id == args[3].replace(/[<#>]/g, ''))) return message.channel.send(`${args[3]} is not a valid channel.`);
+                chestFile[args[0]][args[1]][editField] = args[3];
+
+                if (!chestFile[args[3]]) chestFile[args[3]] = {}
+                chestFile[args[3]][args[1]] = chestFile[args[0]][args[1]]
+                delete chestFile[args[0]][args[1]]
+                break;
+            case 'truename':
+                if (chestFile[args[0]] && chestFile[args[0]][args[3]]) {
+                    return message.channel.send(`A chest called ${chestFile[args[0]][args[3]].name} (${args[3]}) already exists in that channel!`)
+                } else {
+                    chestFile[args[0]][args[3]] = utilityFuncs.cloneObj(chestFile[args[0]][args[1]])
+                    delete chestFile[args[0]][args[1]]
+                }
+                break;
+            case 'spoiler':
+            case 'hidden':
+            case 'hide':
+                chestFile[args[0]][args[1]].hidden = !chestFile[args[0]][args[1]].hidden;
+                break;
+            case 'lock':
+                let lockType = args[3].toLowerCase()
+                const validLockTypes = ['party', 'character', 'money', 'pet', 'item', 'weapon', 'armor', 'password', 'none']
+                if (!validLockTypes.includes(lockType)) return message.channel.send(`${args[3]} is not a valid lock type. Valid lock types are: \n- ${validLockTypes.join('\n- ')}`)
+
+                let lockKey = args[4]
+                if (lockType != 'none' && !lockKey) return message.channel.send("You must specify a lock key.")
+
+                itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+                weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
+                armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
+
+                switch (lockType) {
+                    case 'party':
+                    case 'character':
+                    case 'pet':
+                        return message.channel.send("This type of lock hasn't been implemented yet.")
+                    case 'money':
+                        if (isNaN(lockKey)) return message.channel.send("The lock key must be a number.")
+                        lockKey = Math.max(0, parseInt(lockKey))
+                        break;
+                    case 'item':
+                        if (!itemFile[lockKey]) return message.channel.send("The item you specified does not exist.")
+                        break;
+                    case 'weapon':
+                        if (!weaponFile[lockKey]) return message.channel.send("The weapon you specified does not exist.")
+                        break;
+                    case 'armor':
+                        if (!armorFile[lockKey]) return message.channel.send("The armor you specified does not exist.")
+                        break;
+                    case 'password':
+                        if (!lockKey) return message.channel.send("You must specify a password.")
+                        break
+                }
+
+                chestFile[args[0]][args[1]].lock = [lockType, lockKey]
+                break;
+            default:
+                return message.channel.send(`${args[2]} is not a valid field.`);
+        }
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+        message.react('👍');
+    }
+})
+
+commands.chestitems = new Command({
+    desc: `Put or remove items into a chest.\nTo remove all items from a category, use *'all'* in *item name*. If all in general, use *'all'* in *item type*. *Item* should be written in the order as shown`,
+    section: 'chests',
+    aliases: ['chestitem'],
+    args: [
+        {
+            name: "Channel",
+            type: "Channel",
+            forced: true
+        },
+        {
+            name: "Chest",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Add/Remove",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Item (Type, Name, Amount) #1",
+            type: "Word",
+            forced: true,
+            multiple: true
+        }
+    ],
+    func: (message, args) => {
+        chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+
+        if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);
+        if (!chestFile[args[0]][args[1]]) return message.channel.send(`${args[1]} is not a valid chest.`);
+        if (chestFile[args[0]][args[1]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send(`You cannot edit ${args[1]}.`);
+
+        let chestName = args[1]
+        let chest = chestFile[args[0]][chestName]
+
+        let addRemove = args[2].toLowerCase();
+        if (addRemove != 'add' && addRemove != 'remove') return message.channel.send(`${args[2]} is not a valid add/remove type.`);
+
+        args.splice(0, 3)
+
+        let itemType = args[0].toLowerCase();
+        const validTypes = ['item', 'weapon', 'armor', 'all']
+        if (!validTypes.includes(itemType)) return message.channel.send(`${itemType} is not a valid item type. Valid item types are: \n- ${validTypes.join('\n- ')}`)
+        if(itemType != 'all' && !args[1]) return message.channel.send(`You must specify an item.`)
+        let itemName = args[1].toLowerCase();
+        let itemAmount
+
+        itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+        weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
+        armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
+        
+        if (itemType != 'all') {
+            itemType = []
+            itemName = []
+            itemAmount = []
+
+            if (args.length % 3 != 0) return message.channel.send(`You didn't write the correct amount of fields.`)
+
+            for (let i in args) {
+                if (i % 3 == 2) { 
+                    if (args[i-2].toLowerCase() != "item" && args[i-2].toLowerCase() != "weapon" && args[i-2].toLowerCase() != "armor") return message.channel.send(`${args[i-2]} is not a valid type.`)
+                    args[i-2] = args[i-2].toLowerCase();
+                    itemType.push(args[i-2])
+
+                    if (args[i-1].toLowerCase() != 'all') {
+                        if (args[i-2].toLowerCase() == "item") {
+                            if (!itemFile[args[i-1]]) return message.channel.send(`${args[i-1]} is not a valid item.`)
+                            itemName.push(args[i-1])
+                        }
+                        else if (args[i-2].toLowerCase() == "weapon") {
+                            if (!weaponFile[args[i-1]]) return message.channel.send(`${args[i-1]} is not a valid weapon.`)
+                            itemName.push(args[i-1])
+                        }
+                        else if (args[i-2].toLowerCase() == "armor") {
+                            if (!armorFile[args[i-1]]) return message.channel.send(`${args[i-1]} is not a valid armor.`)
+                            itemName.push(args[i-1])
+                        }
+                    } else itemName.push(args[i-1].toLowerCase())
+
+                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
+                    args[i] = Math.max(1, parseInt(args[i]))
+                    itemAmount.push(args[i])
+                }
+            }
+
+            //check if any of itemName is all, then remove other items of the type the itemName is in
+            let whattoremove = []
+            for (let i in itemName) {
+                if (itemName[i] == 'all') {
+                    whattoremove.push(itemType[i])
+                }
+            }
+            console.log(whattoremove)
+            for (let i in itemType) {
+                if (whattoremove.includes(itemType[i]) && itemType[i] != 'all') {
+                    itemName.splice(i, 1)
+                    itemType.splice(i, 1)
+                    itemAmount.splice(i, 1)
+                }
+            }
+                
+            console.log(itemType)
+            console.log(itemName)
+            console.log(itemAmount)
+        }
+        
+        /*if (addRemove == 'remove') {
+            if (itemType == 'all') {
+                for (let item in chestFile[args[0]][args[1]].items) {
+                    const categories = ['weapon', 'armor', 'item']
+                    for (i in categories) {
+                        if (chestFile[args[0]][args[1]].items[categories[i]]) {
+                            delete chestFile[args[0]][args[1]].items[categories[i]]
+                        }
+                    }
+                }
+            } else {
+                if (!chestFile[args[0]][args[1]].items[itemType]) return message.channel.send(`There are no ${itemType} items in ${args[1]}.`);
+                if (itemName == 'all') {
+                    delete chestFile[args[0]][args[1]].items[itemType]
+                } else {
+                    if (!chestFile[args[0]][args[1]].items[itemType][itemName]) return message.channel.send(`There are no ${itemName} ${itemType} items in ${args[1]}.`);
+                    
+                    itemAmount = Math.min(chestFile[args[0]][args[1]].items[itemType][itemName], parseInt(itemAmount));
+                    chestFile[args[0]][args[1]].items[itemType][itemName] -= itemAmount;
+
+                    if (chestFile[args[0]][args[1]].items[itemType][itemName] <= 0) {
+                        delete chestFile[args[0]][args[1]].items[itemType][itemName]
+                    }
+                }
+            }
+        } else {
+            if (itemType == 'all') return message.channel.send(`You cannot add all items to a chest.`);
+            thingFile = setUpFile(`${dataPath}/json/${message.guild.id}/${itemType}s.json`)
+
+            if (!thingFile[itemName]) return message.channel.send(`${itemName} is not a valid ${itemType}.`);
+
+            if (!chestFile[args[0]][args[1]].items[itemType]) chestFile[args[0]][args[1]].items[itemType] = {};
+            if (!chestFile[args[0]][args[1]].items[itemType][itemName]) chestFile[args[0]][args[1]].items[itemType][itemName] = 0;
+
+            chestFile[args[0]][args[1]].items[itemType][itemName] += itemAmount;
+        }*/
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+        message.channel.send(`Updated ${args[1]}'s items.`);
     }
 })
