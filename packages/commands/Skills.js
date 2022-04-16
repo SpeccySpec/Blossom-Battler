@@ -230,7 +230,6 @@ commands.registerstatus = new Command({
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 		
 		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
-		console.log(embed)
 
 		message.channel.send({content: `${skill.name} has been registered:`, embeds: [embed]})
 	}
@@ -305,7 +304,6 @@ commands.registerheal = new Command({
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
 		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
-		console.log(embed)
 
 		message.channel.send({content: `${skill.name} has been registered:`, embeds: [embed]})
 	}
@@ -365,7 +363,6 @@ commands.registerpassive = new Command({
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
 		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
-		console.log(embed)
 
 		message.channel.send({content: `${skill.name} has been registered:`, embeds: [embed]})
 	}
@@ -627,6 +624,35 @@ commands.editskill = new Command({
 					} else {
 						skillFile[args[2]] = utilityFuncs.cloneObj(skillFile[args[0]])
 						delete skillFile[args[0]]
+
+						let directoryList = fs.readdirSync(`${dataPath}/json`).filter(file => !isNaN(file));
+						
+						for (directory in directoryList) {
+							itemFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/items.json`);
+							weaponFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/weapons.json`);
+							armorFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/armors.json`);
+
+							for (item in itemFile) {
+								if (itemFile[item].skill == args[0]) {
+									itemFile[item].skill = args[2];
+								}
+							}
+							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/items.json`, JSON.stringify(itemFile, null, '    '));
+
+							for (weapon in weaponFile) {
+								if (weaponFile[weapon].skill == args[0]) {
+									weaponFile[weapon].skill = args[2];
+								}
+							}
+							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/weapons.json`, JSON.stringify(weaponFile, null, '    '));
+
+							for (armor in armorFile) {
+								if (armorFile[armor].skill == args[0]) {
+									armorFile[armor].skill = args[2];
+								}
+							}
+							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/armors.json`, JSON.stringify(armorFile, null, '    '));
+						}
 					}
 					
 					break;
@@ -939,6 +965,35 @@ commands.purgeskill = new Command({
 					if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
 						message.channel.send(`${skillFile[args[0]].name} has been erased from existance. You should be wary to look around. This removal caused things to not work like before.\n`)
 						delete skillFile[args[0]];
+
+						let directoryList = fs.readdirSync(`${dataPath}/json`).filter(file => !isNaN(file));
+						
+						for (directory in directoryList) {
+							itemFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/items.json`);
+							weaponFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/weapons.json`);
+							armorFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/armors.json`);
+
+							for (item in itemFile) {
+								if (itemFile[item].skill == args[0]) {
+									delete itemFile[item].skill;
+								}
+							}
+							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/items.json`, JSON.stringify(itemFile, null, '    '));
+
+							for (weapon in weaponFile) {
+								if (weaponFile[weapon].skill == args[0]) {
+									delete weaponFile[weapon].skill
+								}
+							}
+							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/weapons.json`, JSON.stringify(weaponFile, null, '    '));
+
+							for (armor in armorFile) {
+								if (armorFile[armor].skill == args[0]) {
+									delete armorFile[armor].skill
+								}
+							}
+							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/armors.json`, JSON.stringify(armorFile, null, '    '));
+						}
 
 						fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 					} else message.channel.send(`${skillFile[args[0]].name} will not be deleted.`);

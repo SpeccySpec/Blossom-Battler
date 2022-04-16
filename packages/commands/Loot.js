@@ -24,16 +24,8 @@ function lootDesc(lootDefs, lootName, message, itemFile, weaponFile, armorFile) 
         else if (i % 4 == 2) finalText += `(${lootDefs.items[i]}x) `;
         else finalText += `(${lootDefs.items[i]}% Chance)\n`;
     }
-
-    let userTxt = ''
-	if (lootDefs.originalAuthor) {
-		if (lootDefs.originalAuthor === 'Default')
-			userTxt = 'Default/Official';
-		else {
-			try { userTxt = message.guild.members.cache.get(lootDefs.originalAuthor).user.username } catch (e) { userTxt = lootDefs.originalAuthor }
-		}
-	} else
-		userTxt = 'Default/Official';
+    
+    let userTxt = getServerUser(lootDefs.originalAuthor, message);
 
     const DiscordEmbed = new Discord.MessageEmbed()
         .setColor('#00C917')

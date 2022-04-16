@@ -465,14 +465,18 @@ elementList = () => {
 	return DiscordEmbed;
 }
 
-typeParsers = {
-	Num: ({arg}) => {return isNaN(arg) ? undefined : parseInt(arg)},
-	Decimal: ({arg}) => {return isNaN(arg) ? 0 : parseFloat(arg)},
-	Word: (vars) => {return (typeParsers.Ping(vars) || typeParsers.Channel(vars)) ? undefined : vars.arg},
-	Ping: ({message}) => {return message.mentions.users.first()},
-	Channel: ({message, arg}) => {return message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')) ? message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')).id : undefined},
-	ID: arg => {},
-	Image: ({message}) => {return checkImage(message, undefined, message.attachments.first())}
+getServerUser = (user, message) => {
+    let userTxt = ''
+	if (user) {
+		if (user === 'Default')
+			userTxt = 'Default/Official';
+		else {
+			try { userTxt = message.guild.members.cache.get(user).user.username } catch (e) { userTxt = user }
+		}
+	} else
+		userTxt = 'Default/Official';
+
+    return userTxt;
 }
 
 const backButton = new Discord.MessageButton({
@@ -540,32 +544,27 @@ listArray = async(channel, theArray, page) => {
 	})
 }
 
+specialDates = {
+	"24 12": "Christmas Eve",
+	"25 12": "Christmas",
+	"26 12": "Boxing Day",
+	"31 12": "New Years' Eve",
+	"1 1": "New Years",
+	"1 4": "April Fools' day",
+	"2 6": "<@516359709779820544>'s birthday",
+	"31 10": "Halloween"
+}
+
 getCurrentDate = () => {
 	let today = new Date();
 	let dd = String(today.getDate()).padStart(2, '0');
 	let mm = String(today.getMonth() + 1).padStart(2, '0');
 	let yyyy = today.getFullYear();
 
-	today = mm + '/' + dd + '/' + yyyy;
+	today = specialDates[`${dd} ${mm}`] ?? dd + '/' + mm + '/' + yyyy;
 
-	if (mm === '12' && dd === '24')
-		today = 'Christmas Eve';
-	else if (mm === '12' && dd === '25')
-		today = 'Christmas';
-	else if (mm === '12' && dd === '26')
-		today = 'Boxing Day';
-	else if (mm === '12' && dd === '31')
-		today = "New Years' Eve";
-	else if (mm === '1' && dd === '1')
-		today = 'New Years';
-	else if (mm === '4' && dd === '1')
-		today = "April Fools' day";
-	else if (mm === '4' && dd === '17' && yyyy == '2022')
+	if (dd === '17' && mm === '4' && yyyy == '2022')
 		today = 'Easter (2022)';
-	else if (mm === '6' && dd === '2')
-		today = "<@516359709779820544>'s birthday";
-	else if (mm === '10' && dd === '31')
-		today = 'Halloween';
 	
 	return today
 }
@@ -586,17 +585,24 @@ setTimeout(function() {
 	fs.writeFileSync(`${dataPath}/json/ships.json`, '{}');
 }, twoWeekInMS());
 
-Command = class {
-	constructor(object) {
-		this.desc = object.desc
-		this.section = object.section
-		this.func = object.func
-		this.args = object.args ?? []
-		this.aliases = object.aliases ?? []
+typeParsers = {
+	Num: ({arg}) => {return isNaN(arg) ? undefined : parseInt(arg)},
+	Decimal: ({arg}) => {return isNaN(arg) ? undefined : parseFloat(arg)},
+	Word: (vars) => {return (typeParsers.Ping(vars) || typeParsers.Channel(vars)) ? undefined : vars.arg},
+	Ping: ({message}) => {return message.mentions.users.first()},
+	Channel: ({message, arg}) => {return message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')) ? message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')).id : undefined},
+	ID: arg => {},
+	Image: ({message}) => {return checkImage(message, undefined, message.attachments.first())}
+}
+
+ArgList = class {
+	constructor(args, desc) {
+		this.args = args ?? []
+		this.desc = desc ?? ""
 	}
 
-	call(message, rawargs) {
-		let args = []
+	parse(message, rawargs) {
+		const args = []
 		for (const arg of this.args) {
 			const rawarg = rawargs.shift()
 			if (rawarg) {
@@ -621,7 +627,7 @@ Command = class {
 				return void message.channel.send({embeds: [DiscordEmbed]})
 			}
 		}
-		this.func(message, args)
+		return args
 	}
 
 	getFullDesc() {
@@ -632,6 +638,20 @@ Command = class {
 			return argdesc
 		})
 		return args.length > 0 ? `*${args.join(" ")}*\n${this.desc}` : this.desc
+	}
+}
+
+Command = class extends ArgList {
+	constructor(object) {
+		super(object.args, object.desc)
+		this.section = object.section
+		this.func = object.func
+	}
+
+	call(message, rawargs) {
+		const args = this.parse(message, rawargs)
+		if (args)
+			this.func(message, args)
 	}
 }
 

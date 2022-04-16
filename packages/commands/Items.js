@@ -1,3 +1,21 @@
+function getRecipe(itemDefs) {
+    let finalText = '';
+
+    if (itemDefs.recipe) { 
+        finalText += `Can be ${itemDefs.recipe.shapeless ? `**shapelessly**` : ``} crafted from:\n`;
+        let itemTxt = {}
+        for (let i = 1; i <= itemDefs.recipe.recipe.length; i += 2) {
+            if (!itemTxt[itemDefs.recipe.recipe[i]]) itemTxt[itemDefs.recipe.recipe[i]] = 0;
+            itemTxt[itemDefs.recipe.recipe[i]] += 1;
+        }
+        for (let i in itemTxt) {
+            finalText += `- **${itemTxt[i]}x** ${i}\n`;
+        }
+    }
+
+    return finalText;
+}
+
 function itemDesc(itemDefs, itemName, message) {
     let finalText = "";
 
@@ -40,20 +58,15 @@ function itemDesc(itemDefs, itemName, message) {
                 finalText += `A **type of material** used in **item fusions** or **equipment upgrading**\n`;
         }
     }
-    finalText += '\n'
 
+    finalText += getRecipe(itemDefs)
+
+    finalText += '\n'
+    
     if (itemDefs.desc)
 		finalText += `\n*${itemDefs.desc}*`;
 
-    let userTxt = ''
-	if (itemDefs.originalAuthor) {
-		if (itemDefs.originalAuthor === 'Default')
-			userTxt = 'Default/Official';
-		else {
-			try { userTxt = message.guild.members.cache.get(itemDefs.originalAuthor).user.username } catch (e) { userTxt = itemDefs.originalAuthor }
-		}
-	} else
-		userTxt = 'Default/Official';
+    let userTxt = getServerUser(itemDefs.originalAuthor, message);
 
     const DiscordEmbed = new Discord.MessageEmbed()
         .setColor('#0099ff')
@@ -97,20 +110,14 @@ function weaponDesc(weaponDefs, weaponName, message) {
         finalText += `The user may cast **${type}${weaponDefs.skill}**\n`;
     }
 
+    finalText += getRecipe(weaponDefs)
+
     finalText += '\n'
 
     if (weaponDefs.desc)
         finalText += `\n*${weaponDefs.desc}*`;
 
-    let userTxt = ''
-	if (weaponDefs.originalAuthor) {
-		if (weaponDefs.originalAuthor === 'Default')
-			userTxt = 'Default/Official';
-		else {
-			try { userTxt = message.guild.members.cache.get(weaponDefs.originalAuthor).user.username } catch (e) { userTxt = weaponDefs.originalAuthor }
-		}
-	} else
-		userTxt = 'Default/Official';
+    let userTxt = getServerUser(weaponDefs.originalAuthor, message);
 
     let color = elementColors[weaponDefs.element];
 
@@ -148,20 +155,14 @@ function armorDesc(armorDefs, armorName, message) {
         finalText += `The user may cast **${type}${armorDefs.skill}**\n`;
     }
 
+    finalText += getRecipe(armorDefs)
+
     finalText += '\n'
 
     if (armorDefs.desc)
         finalText += `\n*${armorDefs.desc}*`;
 
-    let userTxt = ''
-    if (armorDefs.originalAuthor) {
-        if (armorDefs.originalAuthor === 'Default')
-            userTxt = 'Default/Official';
-        else {
-            try { userTxt = message.guild.members.cache.get(armorDefs.originalAuthor).user.username } catch (e) { userTxt = armorDefs.originalAuthor }
-        }
-    } else
-        userTxt = 'Default/Official';
+    let userTxt = getServerUser(armorDefs.originalAuthor, message);
 
     let color = elementColors[armorDefs.element];
 
