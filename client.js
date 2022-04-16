@@ -561,7 +561,7 @@ getCurrentDate = () => {
 	let mm = String(today.getMonth() + 1).padStart(2, '0');
 	let yyyy = today.getFullYear();
 
-	today = specialDates[`${dd} ${mm}`] ?? mm + '/' + dd + '/' + yyyy;
+	today = specialDates[`${dd} ${mm}`] ?? dd + '/' + mm + '/' + yyyy;
 
 	if (dd === '17' && mm === '4' && yyyy == '2022')
 		today = 'Easter (2022)';
