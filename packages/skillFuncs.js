@@ -267,12 +267,8 @@ skillDesc = (skillDefs, skillName, server) => {
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(color)
 		.setTitle(`${type}${skillDefs.name ? skillDefs.name : skillName} *(${userTxt})*`)
-		.setDescription(finalText ? finalText : 'Invalid Description :(')
+		.setDescription(finalText ?? 'Invalid Description :(')
 	return DiscordEmbed;
 }
 
-module.exports = {
-	skillDesc: function(skill, id, serv) {
-		return skillDesc(skill, id, serv);
-	}
-}
+module.exports = {skillDesc}
