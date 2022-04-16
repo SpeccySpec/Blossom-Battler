@@ -723,6 +723,10 @@ commands.preskill = new Command({
 	],
 	func: (message, args) => {
 		if (skillFile[args[0]] && skillFile[args[1]]) {
+			if (hasPreSkill(skillFile[args[0]], args[1])) {
+				return message.channel.send(`${skillFile[args[0]].name} already has a pre-skill for ${args[1]}!`)
+			}
+
 			if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
 				if (skillFile[args[0]].originalAuthor != message.author.id && skillFile[args[1]].originalAuthor != message.author.id) {
 					return message.channel.send(`You don't own ${skillFile[args[0]].name} or ${skillFile[args[1]].name}.`);
@@ -738,6 +742,11 @@ commands.preskill = new Command({
 			}
 
 			setPreSkill(skillFile[args[0]], args[1], args[2]);
+			if (args[3] && (args[3].toLowerCase() == 'y' || args[3].toLowerCase() == 'yes')) {
+				if (!hasEvoSkill(skillFile[args[1]], args[0])) {
+					setEvoSkill(skillFile[args[1]], args[0], args[2]-1);
+				}
+			}
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
@@ -780,6 +789,10 @@ commands.evoskill = new Command({
 	],
 	func: (message, args) => {
 		if (skillFile[args[0]] && skillFile[args[1]]) {
+			if (hasEvoSkill(skillFile[args[0]], args[1])) {
+				return message.channel.send(`${skillFile[args[0]].name} already has an evo-skill for ${args[1]}!`)
+			}
+
 			if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
 				if (skillFile[args[0]].originalAuthor != message.author.id && skillFile[args[1]].originalAuthor != message.author.id) {
 					return message.channel.send(`You don't own ${skillFile[args[0]].name} or ${skillFile[args[1]].name}.`);
@@ -796,7 +809,9 @@ commands.evoskill = new Command({
 
 			setEvoSkill(skillFile[args[0]], args[1], args[2]);
 			if (args[3] && (args[3].toLowerCase() == 'y' || args[3].toLowerCase() == 'yes')) {
-				setPreSkill(skillFile[args[1]], args[0], args[2]-1);
+				if (!hasPreSkill(skillFile[args[1]], args[0])) {
+					setPreSkill(skillFile[args[1]], args[0], args[2]-1);
+				}
 			}
 
 			if (args[4] && (args[4].toLowerCase() == 'y' || args[4].toLowerCase() == 'yes')) {

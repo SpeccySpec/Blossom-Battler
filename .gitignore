@@ -6,3 +6,4 @@ package.json
 data/dailyskill.txt
 *.txt
 *.json
+*.json
