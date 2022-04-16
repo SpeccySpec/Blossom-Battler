@@ -719,15 +719,14 @@ commands.preskill = new Command({
 			name: "Assign Evo-Skill",
 			type: "Word",
 			forced: false
-		},
-		{
-			name: "Assign Level Lock",
-			type: "Word",
-			forced: false
 		}
 	],
 	func: (message, args) => {
 		if (skillFile[args[0]] && skillFile[args[1]]) {
+			if (hasPreSkill(skillFile[args[0]], args[1])) {
+				return message.channel.send(`${skillFile[args[0]].name} already has a pre-skill for ${args[1]}!`)
+			}
+
 			if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
 				if (skillFile[args[0]].originalAuthor != message.author.id && skillFile[args[1]].originalAuthor != message.author.id) {
 					return message.channel.send(`You don't own ${skillFile[args[0]].name} or ${skillFile[args[1]].name}.`);
@@ -743,6 +742,81 @@ commands.preskill = new Command({
 			}
 
 			setPreSkill(skillFile[args[0]], args[1], args[2]);
+			if (args[3] && (args[3].toLowerCase() == 'y' || args[3].toLowerCase() == 'yes')) {
+				if (!hasEvoSkill(skillFile[args[1]], args[0])) {
+					setEvoSkill(skillFile[args[1]], args[0], args[2]-1);
+				}
+			}
+
+			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+			message.react('👍');
+		} else {
+			return message.channel.send(`${args[0]} is an invalid Skill Name!`)
+		}
+	}
+})
+
+commands.evoskill = new Command({
+	desc: "Assign an Evo-Skill. This is a skill that characters can learn when they level up! They are usually stronger versions of previous skills.",
+	section: "battle",
+	aliases: ['lockskill', 'lvllock', 'skillock', 'lock'],
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Target Skill",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Level",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Assign Pre-Skill",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Assign Level Lock",
+			type: "Word",
+			forced: false
+		}
+	],
+	func: (message, args) => {
+		if (skillFile[args[0]] && skillFile[args[1]]) {
+			if (hasEvoSkill(skillFile[args[0]], args[1])) {
+				return message.channel.send(`${skillFile[args[0]].name} already has an evo-skill for ${args[1]}!`)
+			}
+
+			if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
+				if (skillFile[args[0]].originalAuthor != message.author.id && skillFile[args[1]].originalAuthor != message.author.id) {
+					return message.channel.send(`You don't own ${skillFile[args[0]].name} or ${skillFile[args[1]].name}.`);
+				}
+
+				if (skillFile[args[0]].originalAuthor != message.author.id) {
+					return evoSkillRequest(message, args, skillFile[args[0]], skillFile[args[1]], skillFile[args[0]].originalAuthor);
+				}
+
+				if (skillFile[args[1]].originalAuthor != message.author.id) {
+					return evoSkillRequest(message, args, skillFile[args[0]], skillFile[args[1]], skillFile[args[1]].originalAuthor);
+				}
+			}
+
+			setEvoSkill(skillFile[args[0]], args[1], args[2]);
+			if (args[3] && (args[3].toLowerCase() == 'y' || args[3].toLowerCase() == 'yes')) {
+				if (!hasPreSkill(skillFile[args[1]], args[0])) {
+					setPreSkill(skillFile[args[1]], args[0], args[2]-1);
+				}
+			}
+
+			if (args[4] && (args[4].toLowerCase() == 'y' || args[4].toLowerCase() == 'yes')) {
+				skillFile[args[0]].levellock = args[2];
+			}
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
