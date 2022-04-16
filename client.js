@@ -479,16 +479,6 @@ getServerUser = (user, message) => {
     return userTxt;
 }
 
-typeParsers = {
-	Num: ({arg}) => {return isNaN(arg) ? undefined : parseInt(arg)},
-	Decimal: ({arg}) => {return isNaN(arg) ? 0 : parseFloat(arg)},
-	Word: (vars) => {return (typeParsers.Ping(vars) || typeParsers.Channel(vars)) ? undefined : vars.arg},
-	Ping: ({message}) => {return message.mentions.users.first()},
-	Channel: ({message, arg}) => {return message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')) ? message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')).id : undefined},
-	ID: arg => {},
-	Image: ({message}) => {return checkImage(message, undefined, message.attachments.first())}
-}
-
 const backButton = new Discord.MessageButton({
 	style: 'SECONDARY',
 	label: 'Back',
@@ -600,17 +590,24 @@ setTimeout(function() {
 	fs.writeFileSync(`${dataPath}/json/ships.json`, '{}');
 }, twoWeekInMS());
 
-Command = class {
-	constructor(object) {
-		this.desc = object.desc
-		this.section = object.section
-		this.func = object.func
-		this.args = object.args ?? []
-		this.aliases = object.aliases ?? []
+typeParsers = {
+	Num: ({arg}) => {return isNaN(arg) ? undefined : parseInt(arg)},
+	Decimal: ({arg}) => {return isNaN(arg) ? undefined : parseFloat(arg)},
+	Word: (vars) => {return (typeParsers.Ping(vars) || typeParsers.Channel(vars)) ? undefined : vars.arg},
+	Ping: ({message}) => {return message.mentions.users.first()},
+	Channel: ({message, arg}) => {return message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')) ? message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')).id : undefined},
+	ID: arg => {},
+	Image: ({message}) => {return checkImage(message, undefined, message.attachments.first())}
+}
+
+ArgList = class {
+	constructor(args, desc) {
+		this.args = args ?? []
+		this.desc = desc ?? ""
 	}
 
-	call(message, rawargs) {
-		let args = []
+	parse(message, rawargs) {
+		const args = []
 		for (const arg of this.args) {
 			const rawarg = rawargs.shift()
 			if (rawarg) {
@@ -635,7 +632,7 @@ Command = class {
 				return void message.channel.send({embeds: [DiscordEmbed]})
 			}
 		}
-		this.func(message, args)
+		return args
 	}
 
 	getFullDesc() {
@@ -646,6 +643,20 @@ Command = class {
 			return argdesc
 		})
 		return args.length > 0 ? `*${args.join(" ")}*\n${this.desc}` : this.desc
+	}
+}
+
+Command = class extends ArgList {
+	constructor(object) {
+		super(object.args, object.desc)
+		this.section = object.section
+		this.func = object.func
+	}
+
+	call(message, rawargs) {
+		const args = this.parse(message, rawargs)
+		if (args)
+			this.func(message, args)
 	}
 }
 
