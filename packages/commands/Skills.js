@@ -2,7 +2,7 @@
 commands.registerskill = new Command({
 	desc: `Register a skill to use in-battle! Characters can learn skills, items can utilize skills too. Skills can also have a number of extras, apply them with "rpg!applyextra".`,
 	aliases: ['makeskill', 'regskill'],
-	section: "battle",
+	section: "skills",
 	args: [
 		{
 			name: "Skill Name",
@@ -163,7 +163,7 @@ commands.registerskill = new Command({
 
 commands.registerstatus = new Command({
 	desc: `Register a status skill to use in-battle! Characters can learn skills, items can utilize skills too. Status skills usually apply positive effects to allies or negative effects to opponents.`,
-	section: "battle",
+	section: "skills",
 	alias: ['regstatus', 'regstat', 'makestatus', 'makestat'],
 	args: [
 		{
@@ -238,7 +238,7 @@ commands.registerstatus = new Command({
 
 commands.registerheal = new Command({
 	desc: `Register a heal skill to use in-battle! Characters can learn skills, items can utilize skills too.\n\nA healer is basically required in most battles. Healing skills are the skills most healers learn.`,
-	section: "battle",
+	section: "skills",
 	alias: ['regheal', 'makeheal'],
 	args: [
 		{
@@ -313,7 +313,7 @@ commands.registerheal = new Command({
 
 commands.registerpassive = new Command({
 	desc: `Register a passive skill to use in-battle! Characters can learn skills, items can utilize skills too.\n\nPassive skills are certain effects that activate mid-battle or throughout the battle. These can be positive or negative, usually positive.`,
-	section: "battle",
+	section: "skills",
 	alias: ['regpass', 'makepass', 'makepassive'],
 	args: [
 		{
@@ -374,7 +374,7 @@ commands.registerpassive = new Command({
 /*
 commands.updateskills = new Command({
 	desc: 'Update all skills for this new version of Bloom Battler.',
-	section: "battle",
+	section: "skills",
 	func: (message, args) => {
 	}
 })
@@ -387,7 +387,7 @@ commands.updateskills = new Command({
 commands.listatkextras = new Command({
 	desc: 'List the possible extras you can give a skill.',
 	aliases: ['atkextras', 'extrasatk', 'listextrasatk'],
-	section: "battle",
+	section: "skills",
 	args: [
 		{
 			name: "Page Number",
@@ -425,7 +425,7 @@ commands.listatkextras = new Command({
 commands.liststatusextras = new Command({
 	desc: 'List the possible extras you can give a __status__ skill.',
 	aliases: ['statusextras', 'extrasstatus', 'listextrasstatus'],
-	section: "battle",
+	section: "skills",
 	args: [
 		{
 			name: "Page Number",
@@ -463,7 +463,7 @@ commands.liststatusextras = new Command({
 commands.applyextra = new Command({
 	desc: 'A registered skill may have extra effects. These are called "extras". Apply an extra with this command, list all the ones possible with "listatkextras".',
 	aliases: ['extraapply'],
-	section: "battle",
+	section: "skills",
 	args: [
 		{
 			name: "Skill Name",
@@ -520,7 +520,7 @@ commands.applyextra = new Command({
 commands.clearextras = new Command({
 	desc: 'Clears all extras of a specific type.',
 	aliases: ['extrasclear'],
-	section: "battle",
+	section: "skills",
 	args: [
 		{
 			name: "Skill Name",
@@ -556,7 +556,7 @@ commands.clearextras = new Command({
 				 */
 commands.editskill = new Command({
 	desc: `Edit existing skills and change how they work in battle! If you're looking for extras, use "applyextra" and "clearextras" commands.`,
-	section: "battle",
+	section: "skills",
 	aliases: ['changeskill', 'skilledit', 'skillchange'],
 	args: [
 		{
@@ -659,7 +659,7 @@ commands.editskill = new Command({
 
 commands.levellock = new Command({
 	desc: "Skills can be locked to a certain level to restrict usage. This is usually done for higher levels. If you don't quite like the automatically assigned level lock, then you can use this command to change it.",
-	section: "battle",
+	section: "skills",
 	aliases: ['lockskill', 'lvllock', 'skillock', 'lock'],
 	args: [
 		{
@@ -697,7 +697,7 @@ commands.levellock = new Command({
 
 commands.preskill = new Command({
 	desc: "Assign an Pre-Skill. This is a skill that characters will use at lower levels.",
-	section: "battle",
+	section: "skills",
 	aliases: ['lockskill', 'lvllock', 'skillock', 'lock'],
 	args: [
 		{
@@ -758,7 +758,7 @@ commands.preskill = new Command({
 
 commands.evoskill = new Command({
 	desc: "Assign an Evo-Skill. This is a skill that characters can learn when they level up! They are usually stronger versions of previous skills.",
-	section: "battle",
+	section: "skills",
 	aliases: ['lockskill', 'lvllock', 'skillock', 'lock'],
 	args: [
 		{
@@ -831,7 +831,7 @@ commands.evoskill = new Command({
 					*/
 commands.getskill = new Command({
 	desc: 'List the data and information for the specified skill.',
-	section: "battle",
+	section: "skills",
 	args: [
 		{
 			name: "Skill Name",
@@ -849,7 +849,7 @@ commands.getskill = new Command({
 
 commands.listskills = new Command({
 	desc: 'Lists *all* existing skills.',
-	section: "battle",
+	section: "skills",
 	args: [
 		{
 			name: "Element",
@@ -891,7 +891,7 @@ commands.listskills = new Command({
 
 commands.searchskills = new Command({
 	desc: 'Searches for skills based on the phrase.',
-	section: "battle",
+	section: "skills",
 	args: [
 		{
 			name: "Phrase",
@@ -917,7 +917,7 @@ commands.searchskills = new Command({
 commands.purgeskill = new Command({
 	desc: 'Deletes the skill in question. **YOU CANNOT GET IT BACK AFTER DELETION!**',
 	aliases: ['unregisterskill', 'skillpurge', 'skillunregister', 'deleteskill', 'skilldelete'],
-	section: "battle",
+	section: "skills",
 	args: [
 		{
 			name: "Skill Name",
@@ -1008,7 +1008,7 @@ commands.randskill = new Command({
 
 commands.listelements = new Command({
 	desc: 'Lists all the elements.',
-	section: "battle",
+	section: "skills",
 	aliases: ['listelement', 'elementlist'],
 	args: [],
 	func: (message, args) => {
@@ -1028,7 +1028,7 @@ commands.listelements = new Command({
 
 commands.liststatus = new Command({
 	desc: 'Lists all the status effects.',
-	section: "battle",
+	section: "skills",
 	aliases: ['liststatuses', 'statuslist'],
 	args: [],
 	func: (message, args) => {
