@@ -140,117 +140,6 @@ const enmHabitats = [
 	"unknown"
 ]
 
-// Creates a Character.
-function writeChar(creator, server, name, health, magicpoints, attack, magic, perception, endurance, charisma, inteligence, agility, luck) {
-    var charPath = `${dataPath}/Characters/characters-${server}.json`
-    var charRead = fs.readFileSync(charPath, {flag: 'as+'});
-
-	if (!charRead || charRead === '') {
-		charRead = '{}';
-		fs.writeFileSync(charPath, charRead);
-	}
-
-    var charFile = JSON.parse(charRead);
-
-    charFile[name] = {
-		name: name,
-
-        // Only the owner can move this character, if they don't have admin permissions.
-        owner: creator.id,
-
-        // Level, HP and MP
-        level: 1,
-        hp: health,
-        mp: magicpoints,
-        maxhp: health,
-        maxmp: magicpoints,
-		basehp: health,
-		basemp: magicpoints,
-		
-		mpMeter: ['Magic Points', 'MP'],
-
-        // Status Effect
-        status: "none",
-        statusturns: 0,
-
-        // Melee Attack
-        melee: ["Strike Attack", "strike"],
-		weapon: "none",
-		armor: "none",
-
-        // Main stats
-        atk: attack ? attack : 1,
-        mag: magic ? magic : 1,
-        prc: perception ? perception : 1,
-        end: endurance ? endurance : 1,
-        chr: charisma ? charisma : 1,
-        int: inteligence ? inteligence : 1,
-        agl: agility ? agility : 1,
-        luk: luck ? luck : 1,
-        baseatk: attack ? attack : 1,
-        basemag: magic ? magic : 1,
-        baseprc: perception ? perception : 1,
-        baseend: endurance ? endurance : 1,
-        basechr: charisma ? charisma : 1,
-        baseint: inteligence ? inteligence : 1,
-        baseagl: agility ? agility : 1,
-        baseluk: luck ? luck : 1,
-
-        // Limit Break Meter, XP.
-        lb: 0,
-        xp: 0,
-        maxxp: 100,
-
-        // Affinities & Skills
-        weak: [],
-        resist: [],
-        block: [],
-        repel: [],
-        drain: [],
-        skills: [],
-		
-		// Quotes
-		meleequote: [],
-		physquote: [],
-		magquote: [],
-		strongquote: [],
-		critquote: [],
-		weakquote: [],
-		missquote: [],
-		blockquote: [],
-		repelquote: [],
-		drainquote: [],
-		resistquote: [],
-		hurtquote: [],
-		lbquote: [],
-		healquote: [],
-		helpedquote: [],
-		killquote: [],
-		deathquote: [],
-		
-		// Bio Info
-		bio: {
-			species: "",
-			age: "",
-			info: "",
-			
-			backstory: "",
-			likes: "",
-			dislikes: "",
-			fears: "",
-			
-			voice: "",
-			theme: ""
-		},
-		
-		// Trust
-		trust: {}
-    };
-
-    fs.writeFileSync(charPath, JSON.stringify(charFile, null, '    '));
-    console.log(`Written ${name}.`)
-}
-
 function writeTransformation(userDefs, trnsName, req, hpBuff, atkBuff, magBuff, prcBuff, endBuff, chrBuff, intBuff, aglBuff, lukBuff) {
 	if (!userDefs.transformations)
 		userDefs.transformations = {};
@@ -1041,10 +930,6 @@ function writeTC(msg, name, ally1, ally2, status, chance, targettype, hitcount, 
 
 // Export Functions
 module.exports = {
-	writeChar: function(creator, server, name, health, magicpoints, attack, magic, perception, endurance, charisma, inteligence, agility, luck) {
-		writeChar(creator, server, name, health, magicpoints, attack, magic, perception, endurance, charisma, inteligence, agility, luck)
-	},
-	
 	makeTransformation: function(userDefs, trnsName, req, auto, hpBuff, atkBuff, magBuff, prcBuff, endBuff, chrBuff, intBuff, aglBuff, lukBuff) {
 		writeTransformation(userDefs, trnsName, req, auto, hpBuff, atkBuff, magBuff, prcBuff, endBuff, chrBuff, intBuff, aglBuff, lukBuff)
 	},

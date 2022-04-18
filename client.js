@@ -481,8 +481,7 @@ elementList = () => {
 		.setTitle('List of usable elements:')
 
 	let elementTxt = ''
-	for (const i in Elements)
-		elementTxt += `${elementEmoji[Elements[i]]} **${[Elements[i]]}**\n`;
+	for (const i in Elements) elementTxt += `${elementEmoji[Elements[i]]} **${Elements[i].charAt(0).toUpperCase()+Elements[i].slice(1)}**\n`;
 	
 	DiscordEmbed.setDescription(elementTxt)
 	return DiscordEmbed;
@@ -685,7 +684,7 @@ for (const file of commandFiles) {
 }
 
 // Run this shit
-let folders = ['skills'] // there WILL be moreee
+let folders = ['skills', 'characters'] // i TOLD YOU there WILL be moreee
 
 for (const i in folders) {
 	let files = fs.readdirSync(`${packPath}/${folders[i]}`).filter(file => file.endsWith('.js'));
