@@ -1,4 +1,3 @@
-// Handle Skills
 commands.registerchar = new Command({
 	desc: `Register a character to use in-battle! Characters can learn skills, use items, and initiate in combat, along with wayyy more!.`,
 	aliases: ['registercharacter', 'makechar', 'regchar', 'regcharacter', 'charmake'],
@@ -67,7 +66,7 @@ commands.registerchar = new Command({
 	],
 	func: (message, args) => {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
-		
+
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (charFile[args[0]]) {
 			if (charFile[args[0]].owner != message.author.id) {
@@ -98,7 +97,57 @@ commands.registerchar = new Command({
 	}
 })
 
-// Handle Skills
+commands.nickname = new Command({
+	desc: `Change the character's nickname.`,
+	aliases: ['nick', 'shortname'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Nick Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+		
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+		charFile[args[0]].nickname = args[1]
+		message.channel.send(`👍 ${charFile[args[0]].name}'s nickname was changed to ${args[1]}.`)
+	}
+})
+
+commands.hidechar = new Command({
+	desc: 'Stops the character from being found in lists. You can still find them via "getchar".',
+	aliases: ['hide', 'secretchar'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+		
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+		charFile[args[0]].hidden = !charFile[args[0]].hidden;
+		message.channel.send(`👍 ${charFile[args[0]].name}'s visibility was toggled ${charFile[args[0]].hidden ? "on" : "off"}.`)
+	}
+})
+
 commands.mpmeter = new Command({
 	desc: `Change the character's MP Meter.`,
 	aliases: ['magicmeter'],
@@ -112,12 +161,12 @@ commands.mpmeter = new Command({
 		{
 			name: "Full Name",
 			type: "Word",
-			forced: false
+			forced: true
 		},
 		{
 			name: "Abreviated Name",
 			type: "Word",
-			forced: false
+			forced: true
 		}
 	],
 	func: (message, args) => {
