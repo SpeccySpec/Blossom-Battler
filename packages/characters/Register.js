@@ -16,7 +16,7 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
         maxmp: magicpoints,
 		basehp: health,
 		basemp: magicpoints,
-		
+
 		mpMeter: ['Magic Points', 'MP'],
 
         // Status Effect

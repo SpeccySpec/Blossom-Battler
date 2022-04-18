@@ -68,7 +68,7 @@ commands.registerchar = new Command({
 	func: (message, args) => {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 		
-		let charFile = setUpFile(`${dataPath}/json/${guild.id}/characters.json`);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (charFile[args[0]]) {
 			if (charFile[args[0]].owner != message.author.id) {
 				return message.channel.send(`${args[0]} already exists, and you don't own them. You cannot overwrite them.`);
@@ -95,5 +95,39 @@ commands.registerchar = new Command({
 
 		let charDefs = writeChar(message.author, message.guild, args[0], args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11]);
 		message.channel.send({content: `${args[0]} has been registered!`, embeds: [briefDescription(charDefs)]})
+	}
+})
+
+// Handle Skills
+commands.mpmeter = new Command({
+	desc: `Change the character's MP Meter.`,
+	aliases: ['magicmeter'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Full Name",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Abreviated Name",
+			type: "Word",
+			forced: false
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+		
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+		message.channel.send(`👍 ${charFile[args[0]].name}'s ${charFile[args[0]].mpMeter[1]} meter was changed to a ${args[2].toUpperCase()} meter. ${charFile[args[0]].name} uses ${args[1]} now.`)
+		charFile[args[0]].mpMeter = [args[1], args[2].toUpperCase()]
 	}
 })
