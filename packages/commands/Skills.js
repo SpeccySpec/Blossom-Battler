@@ -608,7 +608,6 @@ commands.editskill = new Command({
 				case 'type':
 				case 'element':
 					if (!utilityFuncs.inArray(args[2].toLowerCase(), Elements)) return message.channel.send(`${args[2].toLowerCase()} is an invalid element!`);
-					if (skillFile[args[0]].passive && args[2].toLowerCase() != 'passive') return message.channel.send('Passive skills cannot have an element other than Passive!');
 					if (skillFile[args[0]].statusses && args[2].toLowerCase() != 'status') {
 						delete skillFile[args[0]].statusses;
 					}
@@ -617,6 +616,9 @@ commands.editskill = new Command({
 					}
 					if (skillFile[args[0]].heal && args[2].toLowerCase() != 'heal') {
 						delete skillFile[args[0]].heal;
+					}
+					if (skillFile[args[0]].passive && args[2].toLowerCase() != 'passive') {
+						delete skillFile[args[0]].passive;
 					}
 					if (args[2].toLowerCase() == 'passive') {
 						if (!args[3]) return message.channel.send(`Passive skills require a passive type! You can see all types with "${getPrefix(message.guild.id)}passivetypes"`);
