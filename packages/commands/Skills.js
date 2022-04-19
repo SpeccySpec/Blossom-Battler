@@ -643,7 +643,7 @@ commands.editskill = new Command({
 				case 'atktype':
 				case 'contact':
 				case 'skilltype':
-					if (skillFile[args[0]].type == 'status' || skillFile[args[0]].type == 'heal' || skillFile[args[0]].type == 'passive') return message.channel.send(`${skillFile[args[0]].type} skills cannot have an attack type!`);
+					if (skillFile[args[0]].type == 'status' || skillFile[args[0]].type == 'heal' || skillFile[args[0]].type == 'passive') return message.channel.send(`These skills cannot have an attack type!`);
 					let type = args[2].toLowerCase();
 					if (type != 'physical' && type != 'magic' && type != 'ranged') return message.channel.send(`${type} is an invalid form of contact! Try physical, magic or ranged.`);
 					skillFile[args[0]].atktype = type;
