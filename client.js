@@ -174,7 +174,7 @@ elementColors = {
 	strike: '#ffc012',
 	slash: '#aba060',
 	pierce: '#e3c8ac',
-	
+
 	fire: '#ff425f',
 	water: '#8c19ff',
 	ice: '#5cf4ff',
@@ -190,13 +190,16 @@ elementColors = {
 	nuclear: '#5eb000',
 	gravity: '#030a96',
 	sound: '#15ff00',
-	
+
 	almighty: '#ffffff',
-	
+
 	status: '#0008ff',
 	heal: '#61ffab',
 	passive: '#ffa200'
 }
+
+// Affinities
+Affinities = ['superweak', 'weak', 'resist', 'block', 'repel', 'drain'];
 
 // Item
 itemTypes = [

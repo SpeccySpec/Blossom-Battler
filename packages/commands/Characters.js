@@ -122,6 +122,7 @@ commands.nickname = new Command({
 
 		charFile[args[0]].nickname = args[1]
 		message.channel.send(`👍 ${charFile[args[0]].name}'s nickname was changed to ${args[1]}.`)
+		fs.writeFileSync(`${dataPath}/json/${guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
 
@@ -145,6 +146,7 @@ commands.hidechar = new Command({
 
 		charFile[args[0]].hidden = !charFile[args[0]].hidden;
 		message.channel.send(`👍 ${charFile[args[0]].name}'s visibility was toggled ${charFile[args[0]].hidden ? "on" : "off"}.`)
+		fs.writeFileSync(`${dataPath}/json/${guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
 
@@ -178,5 +180,74 @@ commands.mpmeter = new Command({
 
 		message.channel.send(`👍 ${charFile[args[0]].name}'s ${charFile[args[0]].mpMeter[1]} meter was changed to a ${args[2].toUpperCase()} meter. ${charFile[args[0]].name} uses ${args[1]} now.`)
 		charFile[args[0]].mpMeter = [args[1], args[2].toUpperCase()]
+	}
+})
+
+commands.mainelement = new Command({
+	desc: "Changes the character's Main Element. A Main Element is an element that the character is proficient in. Skills with the main element as it's **sole** type will deal 1.1x damage when attacking enemies.",
+	aliases: ['setelement', 'setmainelement', 'changeelement', 'element', 'maintype', 'settype'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Main Element",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements)) return.channel.send({content: 'Please enter a valid element for **Main Element!**', embeds: [elementList()]});
+
+		charFile[args[0]].mainElement = args[1].toLowerCase();
+		message.channel.send(`👍 ${charFile[args[0]].name}'s main element is now ${args[1].charAt(0).toUpperCase()+args[1].slice(1)}`);
+		fs.writeFileSync(`${dataPath}/json/${guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+commands.setaffinity = new Command({
+	desc: "Changes the character's Main Element. A Main Element is an element that the character is proficient in. Skills with the main element as it's **sole** type will deal 1.1x damage when attacking enemies.",
+	aliases: ['seteffectiveness', 'affinity', 'effectiveness'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Element",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Affinity",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements)) return message.channel.send({content: 'Please enter a valid element for **Element!**', embeds: [elementList()]});
+		if (!utilityFuncs.inArray(args[2].toLowerCase(), Affinities)) return message.channel.send('Please enter a valid affinity!```diff\n+ SuperWeak\n+ Weak\n+ Normal\n+ Resist\n+ Block\n+ Repel\n+ Drain```');
+		if (args[1].toLowerCase() == 'almighty' || args[1].toLowerCase() == 'status' || args[1].toLowerCase() == 'passive' || args[1].toLowerCase() == 'heal') return message.channel.send(`You can't set ${args[1]} affinities!`);
+
+		if (!charFile[args[0]].affinities[args[2].toLowerCase()]) charFile[args[0]].affinities[args[2].toLowerCase()] = [];
+
+		charFile[args[0]].affinities[args[2].toLowerCase()].push(args[1].toLowerCase());
+		message.channel.send(`👍 ${charFile[args[0]].name} is now ${args[2]} to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}`);
+		fs.writeFileSync(`${dataPath}/json/${guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })

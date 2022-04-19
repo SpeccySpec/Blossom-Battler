@@ -65,12 +65,15 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
         maxxp: 100,
 
         // Affinities & Skills
-		superweak: [],
-        weak: [],
-        resist: [],
-        block: [],
-        repel: [],
-        drain: [],
+		affinities = {
+			superweak: [],
+			weak: [],
+			resist: [],
+			block: [],
+			repel: [],
+			drain: [],
+		},
+
         skills: [],
 		
 		// Quotes
