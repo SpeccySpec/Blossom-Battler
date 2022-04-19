@@ -569,7 +569,8 @@ commands.editskill = new Command({
 		{
 			name: "New Value",
 			type: "Any",
-			forced: true
+			forced: true,
+			multiple: true,
 		}
 	],
 	func: (message, args) => {
@@ -606,13 +607,43 @@ commands.editskill = new Command({
 
 				case 'type':
 				case 'element':
-					if (!utilityFuncs.inArray(args[2].toLowerCase(), Elements)) return message.channel.send(`${args[2].toLowerCase()} is an invalid status effect!`);
+					if (!utilityFuncs.inArray(args[2].toLowerCase(), Elements)) return message.channel.send(`${args[2].toLowerCase()} is an invalid element!`);
+					if (skillFile[args[0]].statusses && args[2].toLowerCase() != 'status') {
+						delete skillFile[args[0]].statusses;
+					}
+					if (skillFile[args[0]].extras && (args[2].toLowerCase() == 'status' || args[2].toLowerCase() == 'passive' || args[2].toLowerCase() == 'heal')) {
+						delete skillFile[args[0]].extras;
+					}
+					if (skillFile[args[0]].heal && args[2].toLowerCase() != 'heal') {
+						delete skillFile[args[0]].heal;
+					}
+					if (skillFile[args[0]].passive && args[2].toLowerCase() != 'passive') {
+						delete skillFile[args[0]].passive;
+					}
+					if (args[2].toLowerCase() == 'passive') {
+						if (!args[3]) return message.channel.send(`Passive skills require a passive type! You can see all types with "${getPrefix(message.guild.id)}passivetypes"`);
+
+						skillFile[args[0]] = {
+							name: skillFile[args[0]].name,
+							type: 'passive',
+							originalAuthor: message.author.id
+						}
+
+						applyPassive(message, skillFile[args[0]], args[3], args[4], args[5], args[6], args[7], args[8])
+
+						if (skill.done) {
+							delete skill.done;
+						} else {
+							return false;
+						}
+					}
 					skillFile[args[0]].type = args[2].toLowerCase();
 					break;
 
 				case 'atktype':
 				case 'contact':
 				case 'skilltype':
+					if (skillFile[args[0]].type == 'status' || skillFile[args[0]].type == 'heal' || skillFile[args[0]].type == 'passive') return message.channel.send(`These skills cannot have an attack type!`);
 					let type = args[2].toLowerCase();
 					if (type != 'physical' && type != 'magic' && type != 'ranged') return message.channel.send(`${type} is an invalid form of contact! Try physical, magic or ranged.`);
 					skillFile[args[0]].atktype = type;
@@ -624,6 +655,23 @@ commands.editskill = new Command({
 					} else {
 						skillFile[args[2]] = utilityFuncs.cloneObj(skillFile[args[0]])
 						delete skillFile[args[0]]
+
+						for (let i in skillFile) {
+							if (skillFile[i].evoskills) {
+								for (let j in skillFile[i].evoskills) {
+									if (skillFile[i].evoskills[j][0] == args[0]) {
+										skillFile[i].evoskills[j][0] = args[2];
+									}
+								}
+							}
+							if (skillFile[i].preskills) {
+								for (let j in skillFile[i].preskills) {
+									if (skillFile[i].preskills[j][0] == args[0]) {
+										skillFile[i].preskills[j][0] = args[2];
+									}
+								}
+							}
+						}
 
 						let directoryList = fs.readdirSync(`${dataPath}/json`).filter(file => !isNaN(file));
 						
@@ -670,7 +718,10 @@ commands.editskill = new Command({
 						skillFile[args[0]].levellock = level;
 
 					message.channel.send(`**[NOTICE]**\nConsider using the "levellock" command! It is faster for you, and for me.`)
-
+				case 'target':
+					if (!utilityFuncs.inArray(args[2].toLowerCase(), Targets)) return message.channel.send(`${args[2].toLowerCase()} is an invalid target!`);
+					if (skillFile[args[0]].type == 'passive') return message.channel.send('Passive skills cannot have a target!');
+					skillFile[args[0]].target = args[2].toLowerCase();
 				default:
 					skillFile[args[0]][editField] = args[2];
 			}
@@ -965,6 +1016,24 @@ commands.purgeskill = new Command({
 					if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
 						message.channel.send(`${skillFile[args[0]].name} has been erased from existance. You should be wary to look around. This removal caused things to not work like before.\n`)
 						delete skillFile[args[0]];
+
+						//check through every skill's evoskills and preskills. If each entry in them contains the skill, remove it.
+						for (const i in skillFile) {
+							if (skillFile[i].evoskills) {
+								for (const j in skillFile[i].evoskills) {
+									if (skillFile[i].evoskills[j][0] == args[0]) {
+										skillFile[i].evoskills.splice(j, 1);
+									}
+								}
+							}
+							if (skillFile[i].preskills) {
+								for (const j in skillFile[i].preskills) {
+									if (skillFile[i].preskills[j][0] == args[0]) {
+										skillFile[i].preskills.splice(j, 1);
+									}
+								}
+							}
+						}
 
 						let directoryList = fs.readdirSync(`${dataPath}/json`).filter(file => !isNaN(file));
 						
