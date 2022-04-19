@@ -47,7 +47,7 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
 			agl: agility ? agility : 1,
 			luk: luck ? luck : 1
 		},
-		
+
 		basestats: {
 			baseatk: attack ? attack : 1,
 			basemag: magic ? magic : 1,
@@ -65,7 +65,7 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
         maxxp: 100,
 
         // Affinities & Skills
-		affinities = {
+		affinities: {
 			superweak: [],
 			weak: [],
 			resist: [],

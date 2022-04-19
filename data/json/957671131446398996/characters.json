@@ -1,1 +1,109 @@
-{}
+{
+    "Valoria": {
+        "name": "Valoria",
+        "mainElement": "heal",
+        "owner": "516359709779820544",
+        "level": 1,
+        "hp": 35,
+        "mp": 35,
+        "maxhp": 35,
+        "maxmp": 35,
+        "basehp": 35,
+        "basemp": 35,
+        "mpMeter": [
+            "Magic Points",
+            "MP"
+        ],
+        "status": "none",
+        "statusturns": 0,
+        "melee": {
+            "name": "Strike Attack",
+            "type": "strike",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "weapon": {},
+        "armor": {},
+        "stats": {
+            "atk": 1,
+            "mag": 9,
+            "prc": 5,
+            "end": 5,
+            "chr": 7,
+            "int": 6,
+            "agl": 5,
+            "luk": 7
+        },
+        "basestats": {
+            "baseatk": 1,
+            "basemag": 9,
+            "baseprc": 5,
+            "baseend": 5,
+            "basechr": 7,
+            "baseint": 6,
+            "baseagl": 5,
+            "baseluk": 7
+        },
+        "lb": 0,
+        "xp": 0,
+        "maxxp": 100,
+        "affinities": {
+            "superweak": [],
+            "weak": [],
+            "resist": [],
+            "block": [],
+            "repel": [],
+            "drain": [
+                "spirit"
+            ]
+        },
+        "skills": [],
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "allyatkquote": [],
+            "lbquote": [],
+            "tcquote": [],
+            "strongquote": [],
+            "critquote": [],
+            "weakquote": [],
+            "missquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "resistquote": [],
+            "hurtquote": [],
+            "healquote": [],
+            "helpedquote": [],
+            "killquote": [],
+            "deathquote": [],
+            "allydeathquote": [],
+            "consolequote": [],
+            "imfinequote": []
+        },
+        "bio": {
+            "fullname": "",
+            "nickname": "",
+            "species": "",
+            "height": [
+                0,
+                "feet"
+            ],
+            "weight": [
+                0,
+                "pounds"
+            ],
+            "age": "",
+            "info": "",
+            "backstory": "",
+            "likes": "",
+            "dislikes": "",
+            "fears": "",
+            "voice": "",
+            "theme": ""
+        },
+        "trust": {}
+    }
+}

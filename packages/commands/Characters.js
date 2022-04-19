@@ -205,7 +205,7 @@ commands.mainelement = new Command({
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
-		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements)) return.channel.send({content: 'Please enter a valid element for **Main Element!**', embeds: [elementList()]});
+		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements)) return message.channel.send({content: 'Please enter a valid element for **Main Element!**', embeds: [elementList()]});
 
 		charFile[args[0]].mainElement = args[1].toLowerCase();
 		message.channel.send(`👍 ${charFile[args[0]].name}'s main element is now ${args[1].charAt(0).toUpperCase()+args[1].slice(1)}`);
@@ -213,8 +213,22 @@ commands.mainelement = new Command({
 	}
 })
 
+// Affinities
+hasAffinity = (charDefs, element, affinity) => {
+	if (element.toLowerCase() == 'almighty') return false;
+
+	if (!charDefs.affinities) return false;
+	if (!charDefs.affinities[affinity]) return false;
+
+	for (const aff of charDefs.affinities[affinity]) {
+		if (aff.toLowerCase() == element.toLowerCase()) return true;
+	}
+
+	return false;
+}
+
 commands.setaffinity = new Command({
-	desc: "Changes the character's Main Element. A Main Element is an element that the character is proficient in. Skills with the main element as it's **sole** type will deal 1.1x damage when attacking enemies.",
+	desc: "Characters can deal less or more damage to others depending on their affinities! Weakness affinities increase the damage output of skills, while resisting ones lower or nullify damage.",
 	aliases: ['seteffectiveness', 'affinity', 'effectiveness'],
 	section: "characters",
 	args: [
@@ -237,17 +251,36 @@ commands.setaffinity = new Command({
 	func: (message, args) => {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
+		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements)) return message.channel.send({content: 'Please enter a valid element for **Element!**', embeds: [elementList()]});
-		if (!utilityFuncs.inArray(args[2].toLowerCase(), Affinities)) return message.channel.send('Please enter a valid affinity!```diff\n+ SuperWeak\n+ Weak\n+ Normal\n+ Resist\n+ Block\n+ Repel\n+ Drain```');
+		if (!utilityFuncs.inArray(args[2].toLowerCase(), Affinities) && args[2].toLowerCase() != 'normal') return message.channel.send('Please enter a valid affinity!```diff\n+ SuperWeak\n+ Weak\n+ Normal\n+ Resist\n+ Block\n+ Repel\n+ Drain```');
 		if (args[1].toLowerCase() == 'almighty' || args[1].toLowerCase() == 'status' || args[1].toLowerCase() == 'passive' || args[1].toLowerCase() == 'heal') return message.channel.send(`You can't set ${args[1]} affinities!`);
 
-		if (!charFile[args[0]].affinities[args[2].toLowerCase()]) charFile[args[0]].affinities[args[2].toLowerCase()] = [];
+		if (hasAffinity(charFile[args[0]], args[1].toLowerCase(), args[2].toLowerCase())) return message.channel.send(`${charFile[args[0]].name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
 
-		charFile[args[0]].affinities[args[2].toLowerCase()].push(args[1].toLowerCase());
-		message.channel.send(`👍 ${charFile[args[0]].name} is now ${args[2]} to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}`);
-		fs.writeFileSync(`${dataPath}/json/${guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		// Clear Affinities
+		for (let a of Affinities) {
+			if (a && charFile[args[0]].affinities[a]) {
+				for (const k in charFile[args[0]].affinities[a]) {
+					if (charFile[args[0]].affinities[a][k].toLowerCase() === args[1].toLowerCase()) {
+						charFile[args[0]].affinities[a].splice(k, 1);
+						break;
+					}
+				}
+			}
+		}
+
+		// Apply Affinities (ignore if normal)
+		if (args[2].toLowerCase() != 'normal') {
+			if (!charFile[args[0]].affinities[args[2].toLowerCase()]) charFile[args[0]].affinities[args[2].toLowerCase()] = [];
+			charFile[args[0]].affinities[args[2].toLowerCase()].push(args[1].toLowerCase());
+		}
+
+		// Display Message
+		message.channel.send(`👍 ${charFile[args[0]].name} has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}`);
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
