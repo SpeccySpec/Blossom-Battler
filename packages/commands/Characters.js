@@ -315,3 +315,34 @@ commands.gainxp = new Command({
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
+
+commands.levelup = new Command({
+	desc: "Levels up a character.",
+	aliases: ['lvlup'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Levels",
+			type: "Num",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// Checks
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (args[1] <= 0) return message.channel.send("Don't even try it.");
+
+		// levelUpTimes function handles everything.
+		levelUpTimes(charFile[args[0]], false, args[1], message);
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})

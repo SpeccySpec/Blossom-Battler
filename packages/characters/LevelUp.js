@@ -163,7 +163,19 @@ lvlUpWithXpInMind = (charDefs, forceEvo, message) => {
 	if (!message) return;
 
 	let DiscordEmbed = briefDescription(charDefs);
-	DiscordEmbed.title = `${charDefs.name} levelled up${lvlCount ? '!' : lvlCount + 'times!'}`;
+	DiscordEmbed.title = `${charDefs.name} levelled up${(lvlCount <= 1) ? '!' : ' ' + lvlCount + ' times!'}`;
+//	DiscordEmbed.description = `_${charDefs.name}: "${selectQuote(charDefs, 'lvl')}"_\n\n${DiscordEmbed.description}`;
+	DiscordEmbed.description = `_${charDefs.name}: "ae"_\n\n**Level ${charDefs.level}**\n${DiscordEmbed.description}`;
+	message.channel.send({embeds: [DiscordEmbed]});
+}
+
+// Level up a set number of times
+levelUpTimes = (charDefs, forceEvo, times, message) => {
+	for (let i = 0; i < times; i++) levelUp(charDefs, forceEvo, message.guild.id);
+	if (!message) return;
+
+	let DiscordEmbed = briefDescription(charDefs);
+	DiscordEmbed.title = `${charDefs.name} levelled up${(times <= 1) ? '!' : ' ' + times + ' times!'}`;
 //	DiscordEmbed.description = `_${charDefs.name}: "${selectQuote(charDefs, 'lvl')}"_\n\n${DiscordEmbed.description}`;
 	DiscordEmbed.description = `_${charDefs.name}: "ae"_\n\n**Level ${charDefs.level}**\n${DiscordEmbed.description}`;
 	message.channel.send({embeds: [DiscordEmbed]});
