@@ -19,18 +19,18 @@ gainXp = (message, charDefs, xp) => {
 	lvlUpWithXpInMind(charDefs, false, message);
 }
 
-updateStats = (charDefs, server) => {
+updateStats = (charDefs, server, updateXp) => {
 	// Handle HP
 	if (charDefs.basehp > 1) {
 		let END = charDefs.basestats.baseend;
-		charDefs.hp = Math.floor(charDefs.basehp + ((charDefs.basehp/10)*charDefs.level) + ((END/2)*charDefs.level));
-		charDefs.maxhp = Math.floor(charDefs.basehp + ((charDefs.basehp/10)*charDefs.level) + ((END/2)*charDefs.level));
+		charDefs.hp = Math.floor(charDefs.basehp + ((charDefs.basehp/10)*(charDefs.level-1)) + ((END/2)*(charDefs.level-1)));
+		charDefs.maxhp = Math.floor(charDefs.basehp + ((charDefs.basehp/10)*(charDefs.level-1)) + ((END/2)*(charDefs.level-1)));
 	}
 
 	if (charDefs.basemp > 1) {
 		let INT = charDefs.basestats.baseint;
-		charDefs.mp = Math.floor(charDefs.basemp + ((charDefs.basemp/10)*charDefs.level) + ((INT/2)*charDefs.level));
-		charDefs.maxmp = Math.floor(charDefs.basemp + ((charDefs.basemp/10)*charDefs.level) + ((INT/2)*charDefs.level));
+		charDefs.mp = Math.floor(charDefs.basemp + ((charDefs.basemp/10)*(charDefs.level-1)) + ((INT/2)*(charDefs.level-1)));
+		charDefs.maxmp = Math.floor(charDefs.basemp + ((charDefs.basemp/10)*(charDefs.level-1)) + ((INT/2)*(charDefs.level-1)));
 	}
 
 	// Handle Stats
@@ -73,6 +73,11 @@ updateStats = (charDefs, server) => {
 
 			charDefs.stats[highestStats[i][0]] = Math.round(Math.min(99, charDefs.stats[highestStats[i][0]]));
 		}
+	}
+
+	charDefs.maxxp = 500;
+	if (updateXp && charDefs.level > 1) {
+		for (let i = 1; i < charDefs.level; i++) charDefs.maxxp += Math.round(charDefs.maxxp/6.5);
 	}
 }
 
@@ -155,8 +160,10 @@ levelDown = (charDefs, server) => {
 lvlUpWithXpInMind = (charDefs, forceEvo, message) => {
 	let lvlCount = 0;
 	while (charDefs.xp >= charDefs.maxxp) {
-		levelUp(charDefs, forceEvo, message.guild.id)
-		lvlCount++;
+		if (charDefs.level < 99) {
+			levelUp(charDefs, forceEvo, message.guild.id)
+			lvlCount++;
+		}
 	}
 
 	if (lvlCount <= 0) return;

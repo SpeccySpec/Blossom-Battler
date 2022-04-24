@@ -754,7 +754,7 @@ client.on("messageCreate", (message) => {
 	let command = commands[args[0]];
 	if (!command) {
 		for (const i in commands) {
-			if (commands[i].aliases.includes(args[0])) {
+			if (commands[i].aliases && commands[i].aliases.includes(args[0])) {
 				command = commands[i];
 				break;
 			}

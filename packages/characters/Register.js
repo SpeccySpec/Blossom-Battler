@@ -62,7 +62,7 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
         // Limit Break Meter, XP.
         lb: 0,
         xp: 0,
-        maxxp: 100,
+        maxxp: 500,
 
         // Affinities & Skills
 		affinities: {

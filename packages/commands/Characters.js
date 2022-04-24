@@ -309,6 +309,7 @@ commands.gainxp = new Command({
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 		if (args[1] <= 0) return message.channel.send("Don't even try it.");
+		if (charFile[args[0]].level >= 99) return message.channel.send(`${charFile[args[0]].name} cannot level up any further!`);
 
 		// gainXp function handles everything.
 		gainXp(message, charFile[args[0]], args[1]);
@@ -318,7 +319,7 @@ commands.gainxp = new Command({
 
 commands.levelup = new Command({
 	desc: "Levels up a character.",
-	aliases: ['lvlup'],
+	aliases: ['lvlup', 'gainlevel'],
 	section: "characters",
 	args: [
 		{
@@ -340,9 +341,158 @@ commands.levelup = new Command({
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 		if (args[1] <= 0) return message.channel.send("Don't even try it.");
+		if (charFile[args[0]].level >= 99) return message.channel.send(`${charFile[args[0]].name} cannot level up any further!`);
 
 		// levelUpTimes function handles everything.
 		levelUpTimes(charFile[args[0]], false, args[1], message);
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+commands.forcelevel = new Command({
+	desc: "Manually set a charater's level. This changes all their stats to the respective level.",
+	aliases: ['setlevel', 'forcelvl', 'setlvl'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Forced Level",
+			type: "Num",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// Checks
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (args[1] <= 0 || args[1] > 99) return message.channel.send("Don't even try it.");
+
+		// Actually force the Level
+		charFile[args[0]].level = args[1];
+		updateStats(charFile[args[0]], message.guild.id, true);
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+
+		// Send an Embed to notify us!
+		let DiscordEmbed = briefDescription(charFile[args[0]]);
+		DiscordEmbed.title = `${charFile[args[0]].name} was forced to Level ${args[1]}!`;
+		DiscordEmbed.description = `**Level ${charFile[args[0]].level}**\n${DiscordEmbed.description}`;
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
+// Melee Attacks!
+commands.setmelee = new Command({
+	desc: "A melee attack is a basic, low power skill, that you can use to save on resources or test a potentially risky plan.",
+	aliases: ['meleeattack', 'melee', 'changemelee'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Attack Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Element",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Power",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Accuracy",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Critical Hit Chance",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Status Effect",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Status Chance",
+			type: "Num",
+			forced: false
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// a LOT of checks :(
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+		// Some element and balancing checks
+		if (args[2].toLowerCase() != 'strike' && args[2].toLowerCase() != 'slash' && args[2].toLowerCase() != 'pierce' && args[2].toLowerCase() != 'explode') return message.channel.send('You can only use Physical Elements in melee attacks! _(Strike, Slash, Pierce, Explode)_');
+		if (args[3] > 80) return message.channel.send('Melee Attacks cannot go above **80 power**!')
+		if (args[5] > 15) return message.channel.send('Melee Attacks cannot go above **15% Critical Hit Chance**!')
+
+		// Make the Melee Attack
+		charFile[args[0]].melee = {
+			name: args[1],
+			type: args[2].toLowerCase(),
+			pow: args[3],
+			acc: args[4],
+			crit: args[5],
+		}
+
+		// Status Effects
+		if (args[6] && args[6].toLowerCase() != 'none') {
+			if (!utilityFuncs.inArray(args[6].toLowerCase(), statusEffects)) {
+				let str = `${args[6]} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
+				for (let i in statusEffects) str += `\n-${statusEffects[i]}`;
+				str += '```'
+
+				return message.channel.send(str)
+			}
+
+			charFile[args[0]].melee.status = args[6].toLowerCase();
+			if (isFinite(args[7]) && args[7] < 100) charFile[args[0]].melee.statuschance = args[7];
+		}
+
+		// Display Message
+		message.channel.send(`👍 ${charFile[args[0]].name}'s Melee Attack has been changed to **${elementEmoji[args[2].toLowerCase()]}${args[1]}**!`);
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+// Skill stuff!
+commands.learnskill = new Command({
+	desc: "Skills are attacks characters can use in battle! To make one, use the ''registerskill'' command! They can make or break a character or enemy.",
+	aliases: ['skilllearn', 'obtainskill'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Skill Names",
+			type: "Continuous",
+			forced: true
+		}
+	],
+	func: (message, args) => {
 	}
 })
