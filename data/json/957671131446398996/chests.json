@@ -66,6 +66,19 @@
                 }
             },
             "desc": "Testing new Item thingy"
+        },
+        "ringTest": {
+            "originalAuthor": "441198920668938260",
+            "name": "ringTest",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "none",
+                "a"
+            ],
+            "hidden": false,
+            "items": {},
+            "desc": "Testing new Item thingy"
         }
     }
 }

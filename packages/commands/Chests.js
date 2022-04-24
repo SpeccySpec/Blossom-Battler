@@ -59,6 +59,9 @@ function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFil
                 }
             }
         }
+        if (chestDefs.items['money']) {
+            itemText += `*Money:*\n ${chestDefs.items['money']}`
+        }
     }
 
     if (chestDefs.desc) itemText += `\n\n*${chestDefs.desc}*`
@@ -161,7 +164,7 @@ commands.registerchest = new Command({
         let description = args[5]
 
         args.splice(0, 6)
-        const validTypes = ['item', 'weapon', 'armor', 'loot']
+        const validTypes = ['item', 'weapon', 'armor', 'loot', 'money']
         let itemsDef = []
 
         let type
@@ -173,7 +176,7 @@ commands.registerchest = new Command({
                 if (!validTypes.includes(args[i])) return message.channel.send(`${args[i]} is not a valid item type. Valid types are: \n- ${validTypes.join('\n- ')}`)
                 type = args[i].toLowerCase();
             }
-            if (type != 'loot') {
+            if (type != 'loot' && type != 'money') {
                 if (i % 3 == 1) {
                     itemsDef[i-1] = args[i-1].toLowerCase()
 
@@ -192,7 +195,7 @@ commands.registerchest = new Command({
                     if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
                     itemsDef[i] = Math.max(1, parseInt(args[i]))
                 }
-            } else {
+            } else if (type == 'loot') {
                 if (i % 3 == 1)
                     if (!lootFile[args[i]]) return message.channel.send(`${args[i]} is not a valid loot table.`)
                 if (i % 3 == 2) {
@@ -211,6 +214,15 @@ commands.registerchest = new Command({
                             }
                         }
                     }
+                }
+            } else if (type == 'money') {
+                if (i % 3 == 1) {
+                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
+                    itemsDef[i-1] = args[i-1].toLowerCase()
+                    itemsDef[i] = parseInt(args[i])
+                }
+                if (i % 3 == 2) {
+                    itemsDef[i] = '-'
                 }
             }
         }
@@ -232,10 +244,16 @@ commands.registerchest = new Command({
         if (itemsDef) {
             for (i in itemsDef) {
                 if (i % 3 == 2) {
-                    if (!chestFile[channel][name].items[itemsDef[i-2]]) chestFile[channel][name].items[itemsDef[i-2]] = {}
-                    
-                    if (!chestFile[channel][name].items[itemsDef[i-2]][itemsDef[i-1]]) chestFile[channel][name].items[itemsDef[i-2]][itemsDef[i-1]] = 0
-                    chestFile[channel][name].items[itemsDef[i-2]][itemsDef[i-1]] += itemsDef[i]
+                    console.log(itemsDef[i-2])
+                    if (itemsDef[i-2] != 'money') {
+                        if (!chestFile[channel][name].items[itemsDef[i-2]]) chestFile[channel][name].items[itemsDef[i-2]] = {}
+                        
+                        if (!chestFile[channel][name].items[itemsDef[i-2]][itemsDef[i-1]]) chestFile[channel][name].items[itemsDef[i-2]][itemsDef[i-1]] = 0
+                        chestFile[channel][name].items[itemsDef[i-2]][itemsDef[i-1]] += itemsDef[i]
+                    } else {
+                        if (!chestFile[channel][name].items['money']) chestFile[channel][name].items['money'] = 0
+                        chestFile[channel][name].items['money'] += itemsDef[i-1]
+                    }
                 }
             }
         }
@@ -586,7 +604,7 @@ commands.chestitems = new Command({
         args.splice(0, 3)
 
         let itemType = args[0].toLowerCase();
-        const validTypes = ['item', 'weapon', 'armor', 'all']
+        const validTypes = ['item', 'weapon', 'armor', 'money', 'all']
         if (!validTypes.includes(itemType)) return message.channel.send(`${itemType} is not a valid item type. Valid item types are: \n- ${validTypes.join('\n- ')}`)
         let itemName
         let itemAmount
@@ -604,28 +622,34 @@ commands.chestitems = new Command({
 
             for (let i in args) {
                 if (i % 3 == 2) { 
-                    if (args[i-2].toLowerCase() != "item" && args[i-2].toLowerCase() != "weapon" && args[i-2].toLowerCase() != "armor") return message.channel.send(`${args[i-2]} is not a valid type.`)
+                    if (args[i-2].toLowerCase() != "item" && args[i-2].toLowerCase() != "weapon" && args[i-2].toLowerCase() != "armor" && args[i-2].toLowerCase() != "money") return message.channel.send(`${args[i-2]} is not a valid type.`)
                     args[i-2] = args[i-2].toLowerCase();
                     itemType.push(args[i-2])
 
-                    if (args[i-1].toLowerCase() != 'all') {
-                        if (args[i-2].toLowerCase() == "item") {
-                            if (!itemFile[args[i-1]]) return message.channel.send(`${args[i-1]} is not a valid item.`)
-                            itemName.push(args[i-1])
-                        }
-                        else if (args[i-2].toLowerCase() == "weapon") {
-                            if (!weaponFile[args[i-1]]) return message.channel.send(`${args[i-1]} is not a valid weapon.`)
-                            itemName.push(args[i-1])
-                        }
-                        else if (args[i-2].toLowerCase() == "armor") {
-                            if (!armorFile[args[i-1]]) return message.channel.send(`${args[i-1]} is not a valid armor.`)
-                            itemName.push(args[i-1])
-                        }
-                    } else itemName.push(args[i-1].toLowerCase())
+                    if (args[i-2].toLowerCase() != "money") {
+                        if (args[i-1].toLowerCase() != 'all') {
+                            if (args[i-2].toLowerCase() == "item") {
+                                if (!itemFile[args[i-1]]) return message.channel.send(`${args[i-1]} is not a valid item.`)
+                                itemName.push(args[i-1])
+                            }
+                            else if (args[i-2].toLowerCase() == "weapon") {
+                                if (!weaponFile[args[i-1]]) return message.channel.send(`${args[i-1]} is not a valid weapon.`)
+                                itemName.push(args[i-1])
+                            }
+                            else if (args[i-2].toLowerCase() == "armor") {
+                                if (!armorFile[args[i-1]]) return message.channel.send(`${args[i-1]} is not a valid armor.`)
+                                itemName.push(args[i-1])
+                            }
+                        } else itemName.push(args[i-1].toLowerCase())
 
-                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
-                    args[i] = Math.max(1, parseInt(args[i]))
-                    itemAmount.push(args[i])
+                        if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
+                        args[i] = Math.max(1, parseInt(args[i]))
+                        itemAmount.push(args[i])
+                    } else {
+                        if (isNaN(args[i-1])) return message.channel.send(`${args[i-1]} is not a valid number.`)
+                        args[i] = Math.max(0, parseInt(args[i-1]))
+                        itemAmount.push(parseInt(args[i-1]))
+                    }
                 }
             }
         }
@@ -633,7 +657,7 @@ commands.chestitems = new Command({
         if (addRemove == 'remove') {
             if (itemType == 'all') {
                 for (let item in chest.items) {
-                    const categories = ['weapon', 'armor', 'item']
+                    const categories = ['weapon', 'armor', 'item', 'money']
                     for (i in categories) {
                         if (chest.items[categories[i]]) {
                             delete chest.items[categories[i]]
@@ -642,17 +666,27 @@ commands.chestitems = new Command({
                 }
             } else {
                 for (let i in itemType) {
-                    if (!chest.items[itemType[i]]) return message.channel.send(`There are no ${itemType[i]} items in ${args[1]}.`);
-                    if (itemName[i] == 'all') {
-                        delete chest.items[itemType[i]]
-                    } else {
-                        if (!chest.items[itemType[i]][itemName[i]]) continue;
-                        
-                        itemAmount[i] = Math.min(chest.items[itemType[i]][itemName[i]], parseInt(itemAmount[i]));
-                        chest.items[itemType[i]][itemName[i]] -= itemAmount[i];
+                    if (itemType[i] != 'money') {
+                        if (!chest.items[itemType[i]]) return message.channel.send(`There are no ${itemType[i]} items in ${args[1]}.`);
+                        if (itemName[i] == 'all') {
+                            delete chest.items[itemType[i]]
+                        } else {
+                            if (!chest.items[itemType[i]][itemName[i]]) continue;
+                            
+                            itemAmount[i] = Math.min(chest.items[itemType[i]][itemName[i]], parseInt(itemAmount[i]));
+                            chest.items[itemType[i]][itemName[i]] -= itemAmount[i];
 
-                        if (chest.items[itemType[i]][itemName[i]] <= 0) {
-                            delete chest.items[itemType[i]][itemName[i]]
+                            if (chest.items[itemType[i]][itemName[i]] <= 0) {
+                                delete chest.items[itemType[i]][itemName[i]]
+                            }
+                        }
+                    } else {
+                        if (!chest.items['money']) return message.channel.send(`There are is no currency in ${args[1]}.`);
+                        itemAmount[i] = Math.min(chest.items['money'], parseInt(itemAmount[i]));
+                        chest.items['money'] -= itemAmount[i];
+
+                        if (chest.money <= 0) {
+                            delete chest['money']
                         }
                     }
                 }
@@ -662,14 +696,19 @@ commands.chestitems = new Command({
             if (itemName.includes('all')) return message.channel.send(`You cannot add all items to a chest.`);
 
             for (let i in itemType) {
-                thingFile = setUpFile(`${dataPath}/json/${message.guild.id}/${itemType[i]}s.json`)
+                if (itemType[i] != 'money') {
+                    thingFile = setUpFile(`${dataPath}/json/${message.guild.id}/${itemType[i]}s.json`)
 
-                if (!thingFile[itemName[i]]) return message.channel.send(`${itemName[i]} is not a valid ${itemType[i]}.`);
+                    if (!thingFile[itemName[i]]) return message.channel.send(`${itemName[i]} is not a valid ${itemType[i]}.`);
 
-                if (!chest.items[itemType[i]]) chest.items[itemType[i]] = {};
-                if (!chest.items[itemType[i]][itemName[i]]) chest.items[itemType[i]][itemName[i]] = 0;
+                    if (!chest.items[itemType[i]]) chest.items[itemType[i]] = {};
+                    if (!chest.items[itemType[i]][itemName[i]]) chest.items[itemType[i]][itemName[i]] = 0;
 
-                chest.items[itemType[i]][itemName[i]] += itemAmount[i];
+                    chest.items[itemType[i]][itemName[i]] += itemAmount[i];
+                } else {
+                    if (!chest.items[itemType[i]]) chest.items[itemType[i]] = 0;
+                    chest.items[itemType[i]] += itemAmount[i];
+                }
             }
         }
 
