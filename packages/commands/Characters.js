@@ -72,7 +72,7 @@ commands.registerchar = new Command({
 			if (charFile[args[0]].owner != message.author.id) {
 				return message.channel.send(`${args[0]} already exists, and you don't own them. You cannot overwrite them.`);
 			} else {
-				return message.channel.send(`${args[0]} already exists, so I'll overwrite them for you.`);
+				message.channel.send(`${args[0]} already exists, so I'll overwrite them for you.`);
 			}
 		}
 
@@ -285,11 +285,6 @@ commands.setaffinity = new Command({
 	}
 })
 
-// XP and Levels
-gainXp = (message, charDefs, xp) => {
-	
-}
-
 commands.gainxp = new Command({
 	desc: "Gives XP to a character. Enough XP can cause the character to level up! __Affected by the XP Rate of the server__.",
 	aliases: ['xpup', 'getxp'],
@@ -313,6 +308,7 @@ commands.gainxp = new Command({
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (args[1] <= 0) return message.channel.send("Don't even try it.");
 
 		// gainXp function handles everything.
 		gainXp(message, charFile[args[0]], args[1]);

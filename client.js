@@ -199,6 +199,7 @@ elementColors = {
 }
 
 // Affinities
+stats = ['atk', 'mag', 'prc', 'end', 'chr', 'int', 'agl', 'luk']
 Affinities = ['superweak', 'weak', 'resist', 'block', 'repel', 'drain'];
 
 // Item
@@ -596,7 +597,6 @@ getCurrentDate = () => {
 
 // Global JSONs
 skillFile = setUpFile(`${dataPath}/json/skills.json`)
-
 shipFile = setUpFile(`${dataPath}/json/ships.json`);
 
 // 2 Week Moment
@@ -700,7 +700,7 @@ client.on("guildCreate", (guild) => {
 	makeDirectory(`${dataPath}/json/${guild.id}`);
 
 	// Server Data
-	setUpFile(`${dataPath}/json/${guild.id}/server.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/settings.json`)
 	setUpFile(`${dataPath}/json/${guild.id}/trials.json`)
 	setUpFile(`${dataPath}/json/${guild.id}/parties.json`)
 	setUpFile(`${dataPath}/json/${guild.id}/items.json`)

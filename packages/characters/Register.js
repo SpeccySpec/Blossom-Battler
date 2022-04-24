@@ -97,6 +97,7 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
 			helpedquote: [],
 			killquote: [],
 			deathquote: [],
+			lvlquote: [],
 			allydeathquote: [],
 			consolequote: [],
 			imfinequote: []

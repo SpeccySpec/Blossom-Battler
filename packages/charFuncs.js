@@ -1,145 +1,3 @@
-// Require
-const Discord = require('discord.js');
-const Voice = require('@discordjs/voice');
-const Builders = require('@discordjs/builders');
-const fs = require('fs');
-
-const skillFuncs = require('./skillFuncs.js');
-
-// Path to 'data' folder
-const dataPath = './data'
-
-// Elements
-const Elements = [
-    "strike",
-    "slash",
-    "pierce",
-    "fire",
-    "water",
-    "ice",
-    "electric",
-    "wind",
-    "earth",
-    "grass",
-    "psychic",
-    "poison",
-    "nuclear",
-    "metal",
-    "curse",
-    "bless",
-	"gravity",
-	"sound",
-    "almighty",
-
-    "status",
-    "heal",
-    "passive"
-]
-
-const elementEmoji = {
-	strike: "<:strike:877132710370480190>",
-	slash: "<:slash:877132710345338960> ",
-	pierce: "<:pierce:877132710315950101>",
-	
-	fire: "<:fire:877132709934301216>",
-	water: "<:water:877132710471147571>",
-	ice: "<:ice:877132710299181076>",
-	electric: "<:electric:877132710194348072>",
-	wind: "<:wind:877140815649075241>",
-	earth: "<:earth:877140476409577482>",
-	grass: "<:grass:877140500036075580>",
-	psychic: "<:psychic:877140522530140171>",
-	poison: "<:poison:906759861742760016>",
-	metal: "<:metal:906748877955268638>",
-	curse: "<:curse:906748923354443856>",
-	bless: "<:bless:903369721980813322>",
-	nuclear: "<:nuclear:906877350447300648>",
-	gravity: "🌍",
-	sound: "🎵",
-	
-	almighty: "<:almighty:906748842450509894>",
-	
-	status: "<:status:906877331711344721>",
-	heal: "<:heal:906758309351161907>",
-	passive: "<:passive:906874477210648576>"
-}
-
-// Item
-const itemTypes = [
-	"weapon",
-	"heal",
-	"healmp",
-	"healhpmp"
-]
-
-const itemTypeEmoji = {
-	weapon: "🔪",
-
-	heal: "🌀",
-	healmp: "⭐",
-	healhpmp: "🔰"
-}
-
-// Status Effects
-const statusEffects = [
-    "burn",
-	"bleed",
-    "freeze",
-    "paralyze",
-	"dizzy",
-	"sleep",
-	"despair",
-    "poison",
-    "brainwash",
-	"fear",
-	"rage",
-	"ego",
-	"silence",
-	"dazed",
-	"hunger",
-	"illness",
-	"infatuation",
-	"mirror",
-	"blind",
-	"confusion"
-]
-
-const statusEmojis = {
-    burn: "🔥",
-	bleed: "<:bleed:906903499462307870>",
-    freeze: "❄",
-    paralyze: "⚡",
-	sleep: "💤",
-	dizzy: "💫",
-	despair: "💦",
-    poison: "<:poison:906903499961434132>",
-	dizzy: "💫",
-    brainwash: "🦆",
-	fear: "👁",
-	rage: "<:rage:906903500053696532>",
-	ego: "🎭",
-	silence: '<:silence:905238069207240734>',
-	dazed: '✨',
-	hunger: '🍪',
-	illness: '🤢',
-	infatuation: '❣️',
-	mirror: '<:mirror:929864689406582784>',
-	blind: '🕶️',
-	confusion: '☄️'
-}
-
-// Enemy Habitats
-const enmHabitats = [
-	"grasslands",
-	"forests",
-	"swamps",
-	"mountains",
-	"caverns",
-	"volcanic",
-	"icy",
-	"unknown"
-]
-
 function writeTransformation(userDefs, trnsName, req, hpBuff, atkBuff, magBuff, prcBuff, endBuff, chrBuff, intBuff, aglBuff, lukBuff) {
 	if (!userDefs.transformations)
 		userDefs.transformations = {};
@@ -169,54 +27,41 @@ function writeTransformation(userDefs, trnsName, req, hpBuff, atkBuff, magBuff, 
 
 // FUNCTIONS
 function canTransform(userDefs, allySide, oppSide, trans) {
-	if (userDefs.level < 70)
-		return false;
+	if (userDefs.level < 70) return false;
+	if (!userDefs.transformations) return false;
+	if (!userDefs.transformations[trans]) return false;
 
-	if (!userDefs.transformations)
-		return false;
-	
-	if (!userDefs.transformations[trans])
-		return false;
-	
 	var transDefs = userDefs.transformations[trans];
-	
-	if (!transDefs.requirement)
-		return false;
-	
+	if (!transDefs.requirement) return true;
+
 	switch(transDefs.requirement.toLowerCase()) {
 		case 'allydown':
 			for (const i in allySide) {
-				if (allySide[i].hp <= 0)
-					return true;
+				if (allySide[i].hp <= 0) return true;
 			}
 			break;
 		
 		case 'onlystanding':
-			if (allySide.length <= 1)
-				return true;
+			if (allySide.length <= 1) return true;
 			break;
 		
 		case 'belowhalfhp':
-			if (userDefs.hp <= userDefs.maxhp/2)
-				return true;
+			if (userDefs.hp <= userDefs.maxhp/2) return true;
 			break;
 		
 		case 'outofmp':
-			if (userDefs.mp <= 0)
-				return true;
+			if (userDefs.mp <= 0) return true;
 			break;
 		
 		case 'leaderdown':
 			for (const i in allySide) {
-				if (allySide[i].hp <= 0 && allySide[i].leader)
-					return true;
+				if (allySide[i].hp <= 0 && allySide[i].leader) return true;
 			}
 			break;
 		
 		case 'trusteddown':
 			for (const i in allySide) {
-				if (allySide[i].hp <= 0 && userDefs.trust[allySide[i].truename] && userDefs.trust[allySide[i].truename].level >= 10)
-					return true;
+				if (allySide[i].hp <= 0 && userDefs.trust[allySide[i].truename] && userDefs.trust[allySide[i].truename].level >= 10) return true;
 			}
 			break;
 		
@@ -512,231 +357,6 @@ function equippedCharm(charDefs, charm) {
 	}
 	
 	return false
-}
-
-function levelUp(charDefs, forceEvo, server) {
-	if (charDefs.level >= 99) {
-		charDefs.xp = charDefs.maxxp - 1
-		console.log(`LevelUp: ${charDefs.name} cannot level up further.`)
-		return false
-	}
-
-	// Level Up!
-	charDefs.level = Math.min(99, charDefs.level+1);
-
-	// Higher HP
-	charDefs.hp = charDefs.basehp
-	charDefs.mp = charDefs.basemp
-	charDefs.maxhp = charDefs.basehp
-	charDefs.maxmp = charDefs.basemp
-
-	for (let k = 1; k < charDefs.level; k++) {
-		if (charDefs.basehp > 1) {
-			charDefs.hp = Math.floor(charDefs.hp + (charDefs.basehp/10) + (charDefs.baseend/2))
-			charDefs.maxhp = Math.floor(charDefs.maxhp + (charDefs.basehp/10) + (charDefs.baseend/2))
-		}
-		
-		if (charDefs.basemp > 1) {
-			charDefs.mp = Math.floor(charDefs.mp + (charDefs.basemp/10) + (charDefs.baseint/2))
-			charDefs.maxmp = Math.floor(charDefs.maxmp + (charDefs.basemp/10) + (charDefs.baseint/2))
-		}
-	}
-
-	console.log(`LevelUp: ${charDefs.name} levelled up to level ${charDefs.level}.`)
-
-	let servPath = dataPath+'/Server Settings/server.json'
-	let servRead = fs.readFileSync(servPath, {flag: 'as+'});
-	let servFile = JSON.parse(servRead);
-	
-	var stats = ['atk', 'mag', 'prc', 'end', 'chr', 'int', 'agl', 'luk']
-
-	if (servFile[server].levelUpFormula && servFile[server].levelUpFormula === 'percent') {
-		for (const i in stats) {
-			let baseStat = charDefs[`base${stats[i]}`]
-			charDefs[stats[i]] = Math.min(99, Math.round(baseStat * (1 + ((charDefs.level-1) * 0.091))))
-		}
-	} else if (servFile[server].levelUpFormula && servFile[server].levelUpFormula === 'assist') {
-		for (const i in stats) {
-			let baseStat = charDefs[`base${stats[i]}`]
-			charDefs[stats[i]] = Math.min(99, Math.round((baseStat+3) * (1 + ((charDefs.level-1) * 0.06751))))
-		}
-	} else {
-		charDefs.atk = charDefs.baseatk
-		charDefs.mag = charDefs.basemag
-		charDefs.prc = charDefs.baseprc
-		charDefs.end = charDefs.baseend
-		charDefs.chr = charDefs.basechr
-		charDefs.int = charDefs.baseint
-		charDefs.agl = charDefs.baseagl
-		charDefs.luk = charDefs.baseluk
-
-		let highestStats = [
-			["atk", charDefs.baseatk],
-			["mag", charDefs.basemag],
-			["prc", charDefs.baseprc],
-			["end", charDefs.baseend],
-			["chr", charDefs.basechr],
-			["int", charDefs.baseint],
-			["agl", charDefs.baseagl],
-			["luk", charDefs.baseluk]
-		];
-
-		highestStats.sort(function(a, b) {return  a[1] - b[1]})
-
-		for (let k = 1; k < charDefs.level; k++) {
-			for (let i in highestStats) {
-				if (i > highestStats.length-4)
-					charDefs[highestStats[i][0]]++;
-				else if (i <= 1) {
-					if (k%3 == 1)
-						charDefs[highestStats[i][0]]++;
-				} else {
-					if (k%2 == 1)
-						charDefs[highestStats[i][0]]++;
-				}
-
-				charDefs[highestStats[i][0]] = Math.min(99, charDefs[highestStats[i][0]])
-			}
-		}
-	}
-
-	charDefs.xp -= +charDefs.maxxp
-	charDefs.maxxp += Math.round(charDefs.maxxp/6.5)
-	
-	// Check Skills
-	if (charDefs.lvlUpQueue) {
-		for (const i in charDefs.lvlUpQueue) {
-			if (charDefs.lvlUpQueue[i][1] == charDefs.level) {
-				charDefs.skills.push(charDefs.lvlUpQueue[i][0])
-			}
-		}
-	}
-	
-	if (forceEvo == true) {
-		let skillPath = dataPath+'/skills.json'
-		let skillRead = fs.readFileSync(skillPath, {flag: 'as+'});
-		let skillFile = JSON.parse(skillRead);
-
-		for (const i in charDefs.skills) {
-			if (skillFile[charDefs.skills[i]] && skillFile[charDefs.skills[i]].evoSkill) {
-				var skillDefs = skillFile[charDefs.skills[i]]
-
-				if (charDefs.level == skillDefs.evoSkill[1])
-					charDefs.skills[i] = skillDefs.evoSkill[0];
-			}
-		}
-	} else {
-		if (!charDefs.autoLearn) return;
-
-		var checkSkills = []
-		for (const i in charDefs.autoLearn) {
-			if (charDefs.autoLearn[i] && charDefs.skills[parseInt(i)]) {
-				checkSkills.push([charDefs.skills[parseInt(i)], parseInt(i)])
-			}
-		}
-
-		let skillPath = dataPath+'/skills.json'
-		let skillRead = fs.readFileSync(skillPath, {flag: 'as+'});
-		let skillFile = JSON.parse(skillRead);
-
-		for (const i in checkSkills) {
-			if (skillFile[checkSkills[i][0]] && skillFile[checkSkills[i][0]].evoSkill) {
-				var skillDefs = skillFile[checkSkills[i][0]]
-				
-				if (charDefs.level == skillDefs.evoSkill[1]) charDefs.skills[checkSkills[i][1]] = skillDefs.evoSkill[0];
-			}
-		}
-	}
-}
-
-function levelDown(charDefs, server) {
-	if (charDefs.level <= 1) {
-		charDefs.xp = 1
-		console.log(`LevelUp: ${charDefs.name} cannot level down further.`)
-		return false
-	}
-
-	// Level Up!
-	charDefs.level = Math.max(1, charDefs.level-1);
-
-	// Higher HP
-	charDefs.hp = charDefs.basehp
-	charDefs.mp = charDefs.basemp
-	charDefs.maxhp = charDefs.basehp
-	charDefs.maxmp = charDefs.basemp
-
-	for (let k = 1; k < charDefs.level; k++) {
-		if (charDefs.basehp > 1) {
-			charDefs.hp = Math.floor(charDefs.hp + (charDefs.basehp/10) + (charDefs.baseend/2))
-			charDefs.maxhp = Math.floor(charDefs.maxhp + (charDefs.basehp/10) + (charDefs.baseend/2))
-		}
-		
-		if (charDefs.basemp > 1) {
-			charDefs.mp = Math.floor(charDefs.mp + (charDefs.basemp/10) + (charDefs.baseint/2))
-			charDefs.maxmp = Math.floor(charDefs.maxmp + (charDefs.basemp/10) + (charDefs.baseint/2))
-		}
-	}
-	
-	console.log(`LevelUp: ${charDefs.name} levelled down to level ${charDefs.level}.`)
-	
-	let servPath = dataPath+'/Server Settings/server.json'
-	let servRead = fs.readFileSync(servPath, {flag: 'as+'});
-	let servFile = JSON.parse(servRead);
-
-	var stats = ['atk', 'mag', 'prc', 'end', 'chr', 'int', 'agl', 'luk']
-
-	if (servFile[server].levelUpFormula && servFile[server].levelUpFormula === 'percent') {
-		for (const i in stats) {
-			let baseStat = charDefs[`base${stats[i]}`]
-			charDefs[stats[i]] = Math.min(99, Math.round(baseStat * (1 + ((charDefs.level-1) * 0.091))))
-		}
-	} else if (servFile[server].levelUpFormula && servFile[server].levelUpFormula === 'assist') {
-		for (const i in stats) {
-			let baseStat = charDefs[`base${stats[i]}`]
-			charDefs[stats[i]] = Math.min(99, Math.round((baseStat+3) * (1 + ((charDefs.level-1) * 0.06751))))
-		}
-	} else {
-		charDefs.atk = charDefs.baseatk
-		charDefs.mag = charDefs.basemag
-		charDefs.prc = charDefs.baseprc
-		charDefs.end = charDefs.baseend
-		charDefs.chr = charDefs.basechr
-		charDefs.int = charDefs.baseint
-		charDefs.agl = charDefs.baseagl
-		charDefs.luk = charDefs.baseluk
-
-		let highestStats = [
-			["atk", charDefs.baseatk],
-			["mag", charDefs.basemag],
-			["prc", charDefs.baseprc],
-			["end", charDefs.baseend],
-			["chr", charDefs.basechr],
-			["int", charDefs.baseint],
-			["agl", charDefs.baseagl],
-			["luk", charDefs.baseluk]
-		];
-
-		highestStats.sort(function(a, b) {return  a[1] - b[1]})
-
-		for (let k = 1; k < charDefs.level; k++) {
-			for (let i in highestStats) {
-				if (i > highestStats.length-4)
-					charDefs[highestStats[i][0]]++;
-				else if (i <= 1) {
-					if (k%3 == 1)
-						charDefs[highestStats[i][0]]++;
-				} else {
-					if (k%2 == 1)
-						charDefs[highestStats[i][0]]++;
-				}
-
-				charDefs[highestStats[i][0]] = Math.min(99, charDefs[highestStats[i][0]])
-			}
-		}
-	}
-
-	charDefs.xp = 0
-	charDefs.maxxp -= Math.round(charDefs.maxxp/6.5)
 }
 
 // Trust
@@ -1136,14 +756,6 @@ module.exports = {
 	
 	hasteamCombo: function(charName, allyName, server) {
 		return hasteamCombo(charName, allyName, server)
-	},
-	
-	lvlUp: function(charDefs, forceEvo, server) {
-		levelUp(charDefs, forceEvo, server)
-	},
-	
-	lvlDown: function(charDefs, server) {
-		levelDown(charDefs, server)
 	},
 	
 	initTrust: function(charDefs, targName) {
