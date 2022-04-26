@@ -477,6 +477,17 @@ commands.setmelee = new Command({
 })
 
 // Skill stuff!
+knowsSkill = (charDefs, skill) => {
+	if (!charDefs.skills) return null;
+	if (charDefs.skills.length <= 0) return null;
+
+	for (const i in charDefs.skills) {
+		if (charDefs.skills[i] === skill) return i;
+	}
+
+	return null;
+}
+
 commands.learnskill = new Command({
 	desc: "Skills are attacks characters can use in battle! To make one, use the ''registerskill'' command! They can make or break a character or enemy.",
 	aliases: ['skilllearn', 'obtainskill'],
@@ -494,5 +505,126 @@ commands.learnskill = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// a LOT of checks :(
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+		// Let's learn skills!
+		let learnString = `👍 ${args[0]} learned `
+
+		for (let i = 1; i < args.length-1; i++) {
+			if (knowsSkill(charFile[args[0]], args[i])) return message.channel.send(`${args[0]} already knows ${args[i]}!\n\n**[TIP]**\n_Don't enter two of the same skill!_`);
+
+			if (skillFile[args[i]]) {
+				if (skillFile[args[i]].levellock) {
+					if (charFile[args[0]].level < skillFile[args[i]].levellock) return message.channel.send(`${charFile[args[0]].name} is level ${charFile[args[0]].level}, but must be level ${skillFile[args[i]].levellock} to learn ${skillFile[args[i]].name}!`);
+				}
+
+				learnString += (skillFile[args[i]].name ? skillFile[args[i]].name : args[i])
+				charFile[args[0]].skills.push(args[i])
+				skillLearn.push(args[i])
+
+				if (i == args.length-2)
+					learnString += ' and '
+				else if (i >= args.length-1)
+					learnString += '!'
+				else
+					learnString += ', '
+			} else
+				return message.channel.send(`${args[i]} isn't a valid skill.`);
+		}
+
+		if (!charFile[args[0]].creator && charFile[args[0]].skills.length > 8) return message.channel.send("You cannot have more than 8 skills!");
+		message.channel.send(learnString);
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+commands.replaceskill = new Command({
+	desc: "Changes a skill a character or enemy knows from one to another.",
+	aliases: ['changeskill'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "New Skill Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// a LOT of checks :(
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+		// Do we know the skill
+		if (!skillFile[args[1]]) return message.channel.send('Invalid skill to replace! Remember that these are case sensitive.');
+		if (!skillFile[args[2]]) return message.channel.send('Invalid skill to replace with! Remember that these are case sensitive.');
+		if (!knowsSkill(charFile[args[0]], args[1])) return message.channel.send(`${charFile[args[0]].name} doesn't know ${args[1]}!`);
+
+		// Level Lock
+		if (skillFile[args[2]].levellock) {
+			if (charFile[args[0]].level < skillFile[args[2]].levellock) return message.channel.send(`${charFile[args[0]].name} is level ${charFile[args[0]].level}, but must be level ${skillFile[args[2]].levellock} to learn ${skillFile[args[2]].name}!`);
+		}
+
+		// Let's replace it
+		let num = knowsSkill(charFile[args[0]], args[1])
+		charFile[args[0]].skills[num] = args[2]
+
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+commands.forgetskill = new Command({
+	desc: "Removes a character's skill.",
+	aliases: ['loseskill', 'amnesia', 'removeskill'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// a LOT of checks :(
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+		// Do we know the skill
+		if (!skillFile[args[1]]) return message.channel.send('Invalid skill to replace! Remember that these are case sensitive.');
+		if (!knowsSkill(charFile[args[0]], args[1])) return message.channel.send(`${charFile[args[0]].name} doesn't know ${args[1]}!`);
+
+		// Let's kill it!
+		let num = knowsSkill(charFile[args[0]], args[1])
+		charFile[args[0]].skills.splice(num, i)
+
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
