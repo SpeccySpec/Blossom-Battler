@@ -75,6 +75,7 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
 		},
 
         skills: [],
+		autolearn: [],
 		
 		// Quotes
 		quotes: {

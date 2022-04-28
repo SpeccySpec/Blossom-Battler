@@ -513,9 +513,10 @@ commands.learnskill = new Command({
 		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
 		// Let's learn skills!
-		let learnString = `👍 ${args[0]} learned `
+		let learnString = `👍 ${args[0]} learned `;
+		let skillLearn = [];
 
-		for (let i = 1; i < args.length-1; i++) {
+		for (let i = 1; i < args.length; i++) {
 			if (knowsSkill(charFile[args[0]], args[i])) return message.channel.send(`${args[0]} already knows ${args[i]}!\n\n**[TIP]**\n_Don't enter two of the same skill!_`);
 
 			if (skillFile[args[i]]) {
@@ -623,6 +624,126 @@ commands.forgetskill = new Command({
 		// Let's kill it!
 		let num = knowsSkill(charFile[args[0]], args[1])
 		charFile[args[0]].skills.splice(num, i)
+
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+commands.autolearn = new Command({
+	desc: "Removes a character's skill.",
+	aliases: ['autoskill', 'autoevo'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// some checks
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+		// Do we know the skill
+		if (!skillFile[args[1]]) return message.channel.send('Invalid skill to replace! Remember that these are case sensitive.');
+		if (!knowsSkill(charFile[args[0]], args[1])) return message.channel.send(`${charFile[args[0]].name} doesn't know ${args[1]}!`);
+
+		// Auto Learn
+		if (!charFile[args[0]].autolearn) charFile[args[0]].autolearn = {};
+
+		// Let's allow it to auto evolve
+		let num = knowsSkill(charFile[args[0]], args[1]);
+		charFile[args[0]].autolearn[num] = !charFile[args[0]].autolearn[num];
+		message.channel.send(`${charFile[args[0]].name}'s ${skillFile[args[1]].name} automatic evolution has been toggled to ${charFile[args[0]].autolearn[num] ? 'On' : 'Off'}!`);
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+// Leader Skills
+commands.leaderskill = new Command({
+	desc: "A Leader Skill is a skill characters activate for the entire team when they are at the front of a party. This can have various effects on the characters reccomended to use, the skills reccomended to use, the playstyle of your party and more!",
+	aliases: ['setleaderskill', 'leadskill', 'frontskill', 'orderskill'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Leader Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Leader Skill Type",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Variable #1",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Variable #2",
+			type: "Num",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// checkie
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+		// ok here goes nothing
+		charFile[args[0]].leaderskill = {
+			name: args[1],
+			type: args[2].toLowerCase()
+		}
+
+		switch(args[2].toLowerCase()) {
+			case 'boost':
+			case 'discount':
+			case 'crit':
+				if (args[3].toLowerCase() === "magic" || arg[3].toLowerCase() === "physical")
+					if (args[4] > 10) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for a ${args[3]} affecting leader skill is 10%.`);
+				else {
+					if (!utilityFuncs.inArray(args[3].toLowerCase(), Elements)) return message.channel.send({content: `${args[3]} is an invalid element! Try one of these.`, embeds: [elementList()]});
+					if (args[4] > 30) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for this leader skill is 30%.`);
+				}
+
+				if (args[4] < 1) return message.channel.send(`${args[4]}% is too low a boost :/`);
+				break;
+
+			case 'status':
+				if (!utilityFuncs.inArray(args[3].toLowerCase(), statusEffects)) return message.channel.send({content: `${args[3]} is an invalid status effect!`);
+				if (args[4] > 25) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for this leader skill is 25%.`);
+				if (args[4] < 1) return message.channel.send(`${args[4]}% is too low a boost :/`);
+				break;
+
+			case 'buff':
+				if (!utilityFuncs.inArray(args[3].toLowerCase(), stats)) return message.channel.send({content: `${args[3]} is an invalid stat!`);
+				if (args[4] > 3) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for this leader skill is 3.`);
+				if (args[4] < 1) return message.channel.send(`${args[4]}% is too low a boost :/`);
+				break;
+		}
+
+		charFile[args[0]].leaderskill.var1 = args[3];
+		charFile[args[0]].leaderskill.var2 = args[4];
 
 		message.react('👍');
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
