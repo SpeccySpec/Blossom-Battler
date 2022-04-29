@@ -69,7 +69,7 @@ commands.registerchar = new Command({
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (charFile[args[0]]) {
-			if (charFile[args[0]].owner != message.author.id) {
+			if (!message.member.permissions.serialize().ADMINISTRATOR && charFile[args[0]].owner != message.author.id) {
 				return message.channel.send(`${args[0]} already exists, and you don't own them. You cannot overwrite them.`);
 			} else {
 				message.channel.send(`${args[0]} already exists, so I'll overwrite them for you.`);
@@ -826,13 +826,13 @@ commands.setlb = new Command({
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
-
-        if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
+	
+		if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
 		if (args[1].length > 50) return message.channel.send(`${args[1]} is too long of a skill name.`);
-
+	
 		// So much shit to check :(
 		if (args[2] > 4 || args[2] < 1) return message.channel.send('Invalid Limit Break Level! Please enter one from 1-4.');
-
+	
 		let powerBounds = [450, 600, 750, 900];
 		let percentBounds = [100, 200, 300, 4-0];
 		let levelLocks = [20, 48, 69, 85];
@@ -841,20 +841,20 @@ commands.setlb = new Command({
 		} else {
 			if (args[2] > 1) return message.channel.send('Please enter Limit Breaks chronologically, starting from Level 1.');
 		}
-
+	
 		if (charFile[args[0]].level < levelLocks[args[2]-1]) return message.channel.send(`${charFile[args[0]].name} is level ${charFile[args[0]].level}, but they must be at level ${levelLocks[args[2]-1]} to obtain a level ${args[2]} limit break.`);
-
+	
 		if (args[3] < percentBounds[args[2]-1]) return message.channel.send(`Level ${args[2]} Limit Breaks costs cannot be lower than ${percentBounds[args[2]-1]} LB%.`);
-
+	
 		if (args[4] < 1) return message.channel.send('Limit Break Skills with 0 power or less will not function!');
 		if (args[4] > powerBounds[args[2]-1]) return message.channel.send(`Level ${args[2]} Limit Breaks cannot exceed ${powerBounds[args[2]-1]} power.`);
 		if (!isFinite(args[3])) return message.channel.send('Please enter a whole number for **Power**!');
-
+	
 		if (args[6] < 1) return message.channel.send('Skills with 0 hits or less will not function!');
 		if (!isFinite(args[6])) return message.channel.send('Please enter a whole number for **Hits**!')
-
+	
 		if (!args[7] || !utilityFuncs.inArray(args[7].toLowerCase(), Targets)) return message.channel.send('Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n-SpreadOpposing\n- SpreadAllies```')
-
+	
 		let skillDefs = {
 			name: args[1],
 			level: args[2],
@@ -864,28 +864,135 @@ commands.setlb = new Command({
 			target: args[7].toLowerCase(),
 			originalAuthor: message.author.id
 		}
-
+	
 		if (args[5] > 0) skillDefs.crit = args[5];
-
+	
 		if (args[8] && args[8].toLowerCase() != 'none') {
 			if (!utilityFuncs.inArray(args[8].toLowerCase(), statusEffects)) {
 				let str = `${args[8]} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
 				for (let i in statusEffects) str += `\n-${statusEffects[i]}`;
 				str += '```'
-
-				return message.channel.send(str)
+						return message.channel.send(str)
 			}
-
-			skillDefs.status = args[8].toLowerCase();
+					skillDefs.status = args[8].toLowerCase();
 			if (isFinite(args[9]) && args[9] < 100) skillDefs.statuschance = args[11];
 		}
-
+	
 		if (args[10]) skillDefs.desc = args[10];
 		
 		if (!charFile[args[0]].lb) charFile[args[0]].lb = {};
 		charFile[args[0]].lb[args[2]] = skillDefs;
-
+	
 		message.react('👍');
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+commands.changestats = new Command({
+	desc: "Change the stats of a character.",
+	aliases: ['setstats', 'changestat', 'setstat'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Base HP",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base MP",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Strength",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Magic",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Perception",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Endurance",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Charisma",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Intelligence",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Agility",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Luck",
+			type: "Num",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (charFile[args[0]]) {
+			if (!message.member.permissions.serialize().ADMINISTRATOR && charFile[args[0]].owner != message.author.id)
+				return message.channel.send(`${args[0]} already exists, and you don't own them. You cannot change their stats.`);
+		}
+
+		if ((args[1] + args[2]) > 70) return message.channel.send(`The maximum total points for HP and MP is 70! Currently, you have ${args[1]+args[2]}.`);
+	
+		let bst = 0;
+		for (let i = 3; i < args.length-1; i++) {
+			if (args[i]) {
+				if (args[i] <= 0) return message.channel.send("You can't have a stat that is less than 0!");
+				if (args[i] > 10) return message.channel.send("You can't have a stat that is more than 10!");
+				bst += args[i];
+			}
+		}
+
+		if (bst > 45) return message.channel.send(`45 is the maximum amount of points across stats! Currently, you have ${bst}.`)
+		if (bst < 30) message.channel.send(`${bst}BST is... sort of concerning. I-I won't stop you.`)
+
+		charFile[args[0]].basehp = args[1];
+		charFile[args[0]].basemp = args[2];
+		charFile[args[0]].basestats = {
+			baseatk: args[3] != 0 ? args[3] : 1,
+			basemag: args[4] != 0 ? args[4] : 1,
+			baseprc: args[5] != 0 ? args[5] : 1,
+			baseend: args[6] != 0 ? args[6] : 1,
+			basechr: args[7] != 0 ? args[7] : 1,
+			baseint: args[8] != 0 ? args[8] : 1,
+			baseagl: args[9] != 0 ? args[9] : 1,
+			baseluk: args[10] != 0 ? args[10] : 1
+		}
+
+		updateStats(charFile[args[0]], message.guild.id, true);
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		
+		// Send an Embed to notify us!
+		let DiscordEmbed = briefDescription(charFile[args[0]]);
+		DiscordEmbed.title = `${charFile[args[0]].name}'s stats have been changed!`;
+		DiscordEmbed.description = `**Level ${charFile[args[0]].level}**\n${DiscordEmbed.description}`;
+		message.channel.send({embeds: [DiscordEmbed]});
 	}
 })
