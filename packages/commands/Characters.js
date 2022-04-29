@@ -730,13 +730,13 @@ commands.leaderskill = new Command({
 				break;
 
 			case 'status':
-				if (!utilityFuncs.inArray(args[3].toLowerCase(), statusEffects)) return message.channel.send({content: `${args[3]} is an invalid status effect!`);
+				if (!utilityFuncs.inArray(args[3].toLowerCase(), statusEffects)) return message.channel.send({content: `${args[3]} is an invalid status effect!`});
 				if (args[4] > 25) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for this leader skill is 25%.`);
 				if (args[4] < 1) return message.channel.send(`${args[4]}% is too low a boost :/`);
 				break;
 
 			case 'buff':
-				if (!utilityFuncs.inArray(args[3].toLowerCase(), stats)) return message.channel.send({content: `${args[3]} is an invalid stat!`);
+				if (!utilityFuncs.inArray(args[3].toLowerCase(), stats)) return message.channel.send({content: `${args[3]} is an invalid stat!`});
 				if (args[4] > 3) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for this leader skill is 3.`);
 				if (args[4] < 1) return message.channel.send(`${args[4]}% is too low a boost :/`);
 				break;
