@@ -679,6 +679,7 @@ commands.editskill = new Command({
 							itemFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/items.json`);
 							weaponFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/weapons.json`);
 							armorFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/armors.json`);
+							charFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/characters.json`);
 
 							for (item in itemFile) {
 								if (itemFile[item].skill == args[0]) {
@@ -700,6 +701,16 @@ commands.editskill = new Command({
 								}
 							}
 							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/armors.json`, JSON.stringify(armorFile, null, '    '));
+
+							for (character in charFile) {
+								if (charFile[character].skills) {
+									for (skill in charFile[character].skills) {
+										if (charFile[character].skills[skill] == args[0]) {
+											charFile[character].skills[skill] = args[2];
+										}
+									}
+								}
+							}
 						}
 					}
 					
@@ -1041,6 +1052,7 @@ commands.purgeskill = new Command({
 							itemFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/items.json`);
 							weaponFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/weapons.json`);
 							armorFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/armors.json`);
+							charFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/characters.json`);
 
 							for (item in itemFile) {
 								if (itemFile[item].skill == args[0]) {
@@ -1062,6 +1074,18 @@ commands.purgeskill = new Command({
 								}
 							}
 							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/armors.json`, JSON.stringify(armorFile, null, '    '));
+
+							for (char in charFile) {
+								if (charFile[char].skills) {
+									for (skill in charFile[char].skills) {
+										if (charFile[char].skills[skill] == args[0]) {
+											charFile[char].skills[skill] = '';
+										}
+									}
+									charFile[char].skills = charFile[char].skills.filter(skill => skill != '');
+								}
+							}
+							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/characters.json`, JSON.stringify(charFile, null, '    '));
 						}
 
 						fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));

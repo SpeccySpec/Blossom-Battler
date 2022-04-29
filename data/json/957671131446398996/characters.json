@@ -3,11 +3,11 @@
         "name": "Valoria",
         "mainElement": "heal",
         "owner": "516359709779820544",
-        "level": 1,
-        "hp": 35,
-        "mp": 35,
-        "maxhp": 35,
-        "maxmp": 35,
+        "level": 20,
+        "hp": 149,
+        "mp": 158,
+        "maxhp": 149,
+        "maxmp": 158,
         "basehp": 35,
         "basemp": 35,
         "mpMeter": [
@@ -26,14 +26,14 @@
         "weapon": {},
         "armor": {},
         "stats": {
-            "atk": 1,
-            "mag": 9,
-            "prc": 5,
-            "end": 5,
-            "chr": 7,
-            "int": 6,
-            "agl": 5,
-            "luk": 7
+            "atk": 8,
+            "mag": 29,
+            "prc": 12,
+            "end": 15,
+            "chr": 27,
+            "int": 16,
+            "agl": 15,
+            "luk": 27
         },
         "basestats": {
             "baseatk": 1,
@@ -47,7 +47,7 @@
         },
         "lb": 0,
         "xp": 0,
-        "maxxp": 100,
+        "maxxp": 7572,
         "affinities": {
             "superweak": [],
             "weak": [],
