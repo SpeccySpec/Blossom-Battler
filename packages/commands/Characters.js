@@ -97,6 +97,34 @@ commands.registerchar = new Command({
 	}
 })
 
+commands.getchar = new Command({
+	desc: "Lists a character's stats, skills and more!",
+	aliases: ['findchar', 'charinfo', 'chardesc'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Level",
+			type: "Num",
+			forced: false
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+
+		// Alright, let's get the character!
+		let DiscordEmbed = longDescription(charFile[args[0]], args[1] ?? charFile[args[0]].level, message.guild.id);
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
 commands.nickname = new Command({
 	desc: `Change the character's nickname.`,
 	aliases: ['nick', 'shortname'],
@@ -726,7 +754,7 @@ commands.leaderskill = new Command({
 			case 'boost':
 			case 'discount':
 			case 'crit':
-				if (args[3].toLowerCase() === "magic" || arg[3].toLowerCase() === "physical")
+				if (args[3].toLowerCase() === "magic" || args[3].toLowerCase() === "physical")
 					if (args[4] > 10) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for a ${args[3]} affecting leader skill is 10%.`);
 				else {
 					if (!utilityFuncs.inArray(args[3].toLowerCase(), Elements)) return message.channel.send({content: `${args[3]} is an invalid element! Try one of these.`, embeds: [elementList()]});
@@ -872,7 +900,8 @@ commands.setlb = new Command({
 				let str = `${args[8]} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
 				for (let i in statusEffects) str += `\n-${statusEffects[i]}`;
 				str += '```'
-						return message.channel.send(str)
+
+				return message.channel.send(str);
 			}
 					skillDefs.status = args[8].toLowerCase();
 			if (isFinite(args[9]) && args[9] < 100) skillDefs.statuschance = args[11];

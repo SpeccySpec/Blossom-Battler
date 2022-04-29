@@ -198,9 +198,19 @@ elementColors = {
 	passive: '#ffa200'
 }
 
-// Affinities
-stats = ['atk', 'mag', 'prc', 'end', 'chr', 'int', 'agl', 'luk']
 Affinities = ['superweak', 'weak', 'resist', 'block', 'repel', 'drain'];
+
+affinityEmoji = {
+	deadly: '<:deadly:963413916879319072>',
+	superweak: '<:supereffective:963413917198082048>',
+	weak: '<:effective:963413917038694401>',
+	resist: '<:resist:963413917185491014>',
+	block: '<:block:963413916191432764>',
+	repel: '<:repel:963413917063860234>',
+	drain: '<:drain:963413916959010896>'
+}
+
+stats = ['atk', 'mag', 'prc', 'end', 'chr', 'int', 'agl', 'luk']
 
 // Item
 itemTypes = [
