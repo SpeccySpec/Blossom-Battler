@@ -377,6 +377,13 @@ commands.forcelevel = new Command({
 		// Actually force the Level
 		charFile[args[0]].level = args[1];
 		updateStats(charFile[args[0]], message.guild.id, true);
+
+		//check every skill. if skill exists, check its level lock. If level lock is lower, set it to '', and then filter later
+		for (let skill in charFile[args[0]].skills) {
+			if (charFile[args[0]].skills[skill].levelLock < args[1]) charFile[args[0]].skills[skill] = '';
+		}
+		charFile[args[0]].skills = charFile[args[0]].skills.filter(skill => skill != '');
+
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 
 		// Send an Embed to notify us!
@@ -736,7 +743,7 @@ commands.leaderskill = new Command({
 				break;
 
 			case 'buff':
-				if (!utilityFuncs.inArray(args[3].toLowerCase(), stats)) return message.channel.send({content: `${args[3]} is an invalid stat!`);
+				if (!utilityFuncs.inArray(args[3].toLowerCase(), stats)) return message.channel.send({content: `${args[3]} is an invalid stat!`});
 				if (args[4] > 3) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for this leader skill is 3.`);
 				if (args[4] < 1) return message.channel.send(`${args[4]}% is too low a boost :/`);
 				break;
