@@ -377,6 +377,13 @@ commands.forcelevel = new Command({
 		// Actually force the Level
 		charFile[args[0]].level = args[1];
 		updateStats(charFile[args[0]], message.guild.id, true);
+
+		//check every skill. if skill exists, check its level lock. If level lock is lower, set it to '', and then filter later
+		for (let skill in charFile[args[0]].skills) {
+			if (charFile[args[0]].skills[skill].levelLock < args[1]) charFile[args[0]].skills[skill] = '';
+		}
+		charFile[args[0]].skills = charFile[args[0]].skills.filter(skill => skill != '');
+
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 
 		// Send an Embed to notify us!
