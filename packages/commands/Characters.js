@@ -631,7 +631,7 @@ commands.forgetskill = new Command({
 })
 
 commands.autolearn = new Command({
-	desc: "Removes a character's skill.",
+	desc: "Allows this skill to be automatically evolved when levelling up based on the skill's Evo-Skill.",
 	aliases: ['autoskill', 'autoevo'],
 	section: "characters",
 	args: [
@@ -730,7 +730,7 @@ commands.leaderskill = new Command({
 				break;
 
 			case 'status':
-				if (!utilityFuncs.inArray(args[3].toLowerCase(), statusEffects)) return message.channel.send({content: `${args[3]} is an invalid status effect!`);
+				if (!utilityFuncs.inArray(args[3].toLowerCase(), statusEffects)) return message.channel.send({content: `${args[3]} is an invalid status effect!`});
 				if (args[4] > 25) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for this leader skill is 25%.`);
 				if (args[4] < 1) return message.channel.send(`${args[4]}% is too low a boost :/`);
 				break;
@@ -744,6 +744,139 @@ commands.leaderskill = new Command({
 
 		charFile[args[0]].leaderskill.var1 = args[3];
 		charFile[args[0]].leaderskill.var2 = args[4];
+
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+// Limit Break skills
+commands.setlb = new Command({
+	desc: "A Limit Break is a powerful skill exclusive to each character that they can pull off if the conditions are met. They cannot be executed if Limit Breaks are disabled for that server.",
+	aliases: ['setlimitbreak', 'makelb', 'makelimitbreak'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Limit Break Name",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Limit Break Level",
+			type: "Num",
+			forced: false
+		},
+		{
+			name: "LB% Required",
+			type: "Num",
+			forced: false
+		},
+		{
+			name: "Power",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Critical Hit Chance",
+			type: "Decimal",
+			forced: false
+		},
+		{
+			name: "Hits",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Targets",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Status",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Status Chance",
+			type: "Decimal",
+			forced: false
+		},
+		{
+			name: "Description",
+			type: "Any",
+			forced: false
+		},
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// checkie
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+        if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
+		if (args[1].length > 50) return message.channel.send(`${args[1]} is too long of a skill name.`);
+
+		// So much shit to check :(
+		if (args[2] > 4 || args[2] < 1) return message.channel.send('Invalid Limit Break Level! Please enter one from 1-4.');
+
+		let powerBounds = [450, 600, 750, 900];
+		let percentBounds = [100, 200, 300, 4-0];
+		let levelLocks = [20, 48, 69, 85];
+		if (charFile[args[0]].lb) {
+			if (!charFile[args[0]][args[2]-1].lb) return message.channel.send(`Please enter Limit Breaks chronologically! You do not have a level ${args[2]-1} Limit Break.`);
+		} else {
+			if (args[2] > 1) return message.channel.send('Please enter Limit Breaks chronologically, starting from Level 1.');
+		}
+
+		if (charFile[args[0]].level < levelLocks[args[2]-1]) return message.channel.send(`${charFile[args[0]].name} is level ${charFile[args[0]].level}, but they must be at level ${levelLocks[args[2]-1]} to obtain a level ${args[2]} limit break.`);
+
+		if (args[3] < percentBounds[args[2]-1]) return message.channel.send(`Level ${args[2]} Limit Breaks costs cannot be lower than ${percentBounds[args[2]-1]} LB%.`);
+
+		if (args[4] < 1) return message.channel.send('Limit Break Skills with 0 power or less will not function!');
+		if (args[4] > powerBounds[args[2]-1]) return message.channel.send(`Level ${args[2]} Limit Breaks cannot exceed ${powerBounds[args[2]-1]} power.`);
+		if (!isFinite(args[3])) return message.channel.send('Please enter a whole number for **Power**!');
+
+		if (args[6] < 1) return message.channel.send('Skills with 0 hits or less will not function!');
+		if (!isFinite(args[6])) return message.channel.send('Please enter a whole number for **Hits**!')
+
+		if (!args[7] || !utilityFuncs.inArray(args[7].toLowerCase(), Targets)) return message.channel.send('Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n-SpreadOpposing\n- SpreadAllies```')
+
+		let skillDefs = {
+			name: args[1],
+			level: args[2],
+			pow: args[4],
+			cost: args[3],
+			hits: args[6],
+			target: args[7].toLowerCase(),
+			originalAuthor: message.author.id
+		}
+
+		if (args[5] > 0) skillDefs.crit = args[5];
+
+		if (args[8] && args[8].toLowerCase() != 'none') {
+			if (!utilityFuncs.inArray(args[8].toLowerCase(), statusEffects)) {
+				let str = `${args[8]} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
+				for (let i in statusEffects) str += `\n-${statusEffects[i]}`;
+				str += '```'
+
+				return message.channel.send(str)
+			}
+
+			skillDefs.status = args[8].toLowerCase();
+			if (isFinite(args[9]) && args[9] < 100) skillDefs.statuschance = args[11];
+		}
+
+		if (args[10]) skillDefs.desc = args[10];
+		
+		if (!charFile[args[0]].lb) charFile[args[0]].lb = {};
+		charFile[args[0]].lb[args[2]] = skillDefs;
 
 		message.react('👍');
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));

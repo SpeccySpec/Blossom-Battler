@@ -71,29 +71,7 @@ commands.registerskill = new Command({
 		},
 	],
 	func: (message, args) => {
-		if (!args[0]) {
-            const DiscordEmbed = new Discord.MessageEmbed()
-                .setColor('#0099ff')
-                .addFields(
-                    { name: `${prefix}registerskill`, value: `*Args: <Word: Name> {Num: Cost} {Word: CostType} <Num: Power> <Num: Acc> {Num: CritChance} <Num: Hits> <Word: Element> <Word: Targets> {Word: Status} {Num: StatusChance} "{Sentence: Description}"*\nCreates a skill to be used in battle. \nThese skills have certain properties that can change how they're used.\n\nAllow me to explain`, inline: false },
-                    { name: 'Cost', value: "To be used in combination with the next one.", inline: true },
-                    { name: 'CostType', value: "HP, MP, HP% or MP%. For example, if I set cost to 5, and costtype to MP%, it would take 5% of my MP.", inline: true },
-                    { name: 'Power', value: "Self Explanitory. \nA little insight on how damage is calculated, somewhat similar to the Persona series.", inline: true },
-                    { name: 'Accuracy', value: "A chance out of 100 that the move lands. Modified by user perception and enemy agility.", inline: true },
-                    { name: 'Critical Hit Chance', value: "The chance that this move is a critical hit out of 100. Modified by user and enemy luck.", inline: true },
-                    { name: 'Hit Count', value: 'The amount of hits this move does. Generally, moves with more hits have less power.', inline: true },
-                    { name: 'Element', value: "The element this skill is. This is either Strike, Slash, Pierce, Fire, Water, Ice, Electric, Wind, Earth, Grass, Psychic, Poison, Nuclear, Metal, Curse, Bless, Almighty, Heal, with Status and Passive relegated to alternate commands.", inline: true },
-                    { name: 'Physical or Magic?', value: "If this skill is physical it will use the user's Strength stat, otherwise, Magic.", inline: true },
-                    { name: 'Target', value: "Whether this targets all foes or one foe, maybe even all allies depending on the skill. The target types are 'one', 'allopposing', 'ally', 'allallies', 'caster' and 'everyone'", inline: true },
-                    { name: 'Status Affliction', value: "The status effect this skill can inflict.", inline: true },
-                    { name: 'Status Chance', value: "Chance this skill has to inflict a status effect (will do nothing if 'Status Affliction' is 'none'.", inline: true },
-                    { name: 'Description', value: "This Skills's description. Try to explain what the move does, so your friends can imagine it! Enclose this value in quotation marks.", inline: true },
-                )
-            message.channel.send({embeds: [DiscordEmbed]});
-            return false;
-		}
-
-        if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
+		if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
 		if (args[0].length > 50) return message.channel.send(`${args[0]} is too long of a skill name.`);
 
 		if (skillFile[args[0]] && message.author.id != skillFile[args[0]].originalAuthor) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
