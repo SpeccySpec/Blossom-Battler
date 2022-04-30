@@ -121,7 +121,7 @@ commands.getchar = new Command({
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 
 		// Alright, let's get the character!
-		let DiscordEmbed = longDescription(charFile[args[0]], args[1] ?? charFile[args[0]].level, message.guild.id);
+		let DiscordEmbed = longDescription(charFile[args[0]], args[1] ?? charFile[args[0]].level, message.guild.id, message);
 		message.channel.send({embeds: [DiscordEmbed]});
 	}
 })
@@ -1155,7 +1155,7 @@ commands.changestats = new Command({
 commands.updatecharacters = new Command({
 	desc: "Updates characters!",
 	aliases: ['updatechars', 'fixchars', 'interoperability'],
-	section: "characters",
+	section: "moderation",
 	args: [],
 	func: (message, args) => {
 		if (!utilityFuncs.RPGBotAdmin(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are not a hardcoded admin of this bot.`);
@@ -1303,6 +1303,55 @@ commands.purgechar = new Command({
 			if (givenResponce == false)
 				message.channel.send(`No response given.\n${charFile[args[0]].name} will not be deleted.`);
 		});
+	}
+})
+
+commands.randchar = new Command({
+	desc: `Get a random character.`,
+	section: 'fun',
+	aliases: ['randomchar'],
+	args: [],
+	func: (message, args) => {
+		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
+
+		if (Object.keys(charFile).length == 0) return message.channel.send(`No characters have been added yet.`);
+		
+		let char = Object.keys(charFile)[Math.floor(Math.random() * Object.keys(charFile).length)];
+
+		let DiscordEmbed = longDescription(charFile[char], charFile[char].level, message.guild.id, message);
+		message.channel.send({content:`Congratulations, ${message.guild.members.cache.get(charFile[char].owner).user.username}! ${elementEmoji[charFile[char].mainElement]} ${charFile[char].name} has been rolled!`, embeds: [DiscordEmbed]})
+	}
+})
+
+commands.dailychar = new Command({
+	desc: 'Any random character can be set as a daily one! Test your luck to see if yours is here!',
+	section: "fun",
+	args: [],
+	func: (message, args) => {
+		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
+
+		if (Object.keys(charFile).length == 0) return message.channel.send(`No characters have been added yet!`);
+		if (!dailyChar) dailyChar = {};
+
+		let notice = 'Here is the daily character, again.'
+		if (!dailyChar[message.guild.id]) {
+			dailyChar[message.guild.id] = Object.keys(charFile)[Math.floor(Math.random() * Object.keys(charFile).length)];
+
+			let authorTxt = charFile[dailyChar[message.guild.id]].originalAuthor ? `<@!${charFile[dailyChar[message.guild.id]].originalAuthor}>` : '<@776480348757557308>'
+			notice = `${authorTxt}, your character is the daily character for today!`;
+		}
+
+		setTimeout(function() {
+			if (charFile[dailyChar[message.guild.id]]) {
+				let today = getCurrentDate();
+
+				fs.writeFileSync(dataPath+'/dailychar.txt', JSON.stringify(dailyChar));
+
+				let charTxt = `**[${today}]**\n${notice}`
+				let DiscordEmbed = longDescription(charFile[dailyChar[message.guild.id]], charFile[dailyChar[message.guild.id]].level, message.guild.id, message);
+				message.channel.send({content: charTxt, embeds: [DiscordEmbed]});
+			}
+		}, 500);
 	}
 })
 

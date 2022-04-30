@@ -165,7 +165,7 @@ const affinityScores = {
 	[6]: "Are you sure this is a person and not a WALL?"
 }
 
-longDescription = (charDefs, level, server) => {
+longDescription = (charDefs, level, server, message) => {
 	let char = objClone(charDefs);
 	let dispLevel = '';
 
@@ -176,16 +176,18 @@ longDescription = (charDefs, level, server) => {
 		dispLevel = `(At Level ${level})`;
 	}
 
+	let userTxt = getServerUser(char.owner, message);
+
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(elementColors[char.mainElement])
-		.setTitle(`${elementEmoji[char.mainElement]}${char.name} ${dispLevel}`)
+		.setTitle(`${elementEmoji[char.mainElement]}${char.name} ${dispLevel} *(${userTxt})*`)
 
 	if (char.leaderskill) DiscordEmbed.setDescription(`**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} toward ${char.leaderskill.var1.toUpperCase()}`);
 
 	// Here come the various fields!
 
 	// Stats
-	let statDesc = `Level ${char.level}\n${char.hp}/${char.maxhp}HP\n${char.mp}/${char.maxmp}MP\n${char.xp}/${char.maxxp}XP\n`;
+	let statDesc = `Level ${char.level}\n${char.hp}/${char.maxhp}HP\n${char.mp}/${char.maxmp}${char.mpMeter ? char.mpMeter[1] : 'MP'}\n${char.xp}/${char.maxxp}XP\n`;
 	for (const i in char.stats) statDesc += `\n${char.stats[i]}${i.toUpperCase()}`;
 	DiscordEmbed.fields.push({ name: 'Stats', value: statDesc, inline: true });
 	
