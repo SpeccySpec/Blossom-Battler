@@ -10,13 +10,13 @@ longBio = (char, server) => {
 
 	if (char.bio.info) {
 		let infoTxt = char.bio.info;
-		if (infoTxt.length > 100) infoTxt = `${infoTxt.slice(0, 100)}_..._`
+		if (infoTxt.length > 175) infoTxt = `${infoTxt.slice(0, 175)}_..._`
 		finalTxt += `**<Info>** ${infoTxt}\n`;
 	}
 
 	if (char.bio.backstory) {
 		let infoTxt = char.bio.backstory;
-		if (infoTxt.length > 120) infoTxt = `${infoTxt.slice(0, 120)}_..._`
+		if (infoTxt.length > 250) infoTxt = `${infoTxt.slice(0, 250)}_..._`
 		finalTxt += `**<Backstory>** ${infoTxt}\n`;
 	}
 
