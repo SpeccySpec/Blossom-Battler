@@ -1194,20 +1194,40 @@ commands.updatecharacters = new Command({
 				consolequote: charFile[i].consolequote,
 				imfinequote: charFile[i].imfinequote
 			}
+			
+			// Leader SKills
+			if (charFile[i].leaderSkill) {
+				charFile[i].leaderskill = {
+					name: charFile[i].leaderSkill.name,
+					type: charFile[i].leaderSkill.type,
+					var1: charFile[i].leaderSkill.target,
+					var2: charFile[i].leaderSkill.percent
+				}
+			}
+
+			// LBs
+			if (!charFile[i].lb) charFile[i].lb = {};
+
+			for (let k = 1; k < 4; k++) {
+				if (charFile[i][`lb${k}`]) charFile[i].lb[k] = charFile[i][`lb${k}`];
+			}
 
 			// Bio Info
 			charFile[i].bio.height = [0, "feet"]
 			charFile[i].bio.weight = [0, "pounds"]
-			
+
+			// Update Stats, for certain changes in new BB.
 			updateStats(charFile[i], message.guild.id, true);
 		}
 		
 		// delete old shit
 		for (let i in charFile) {
 			delete charFile[i].autoLearn;
-			for (let k of Affinities) delete charFile[i][k];
+			delete charFile[i].leaderSkill;
 			for (let k of stats) delete charFile[i][k];
+			for (let k of Affinities) delete charFile[i][k];
 			for (let k of stats) delete charFile[i][`base${k}`];
+			for (let k = 1; k < 4; k++) delete charFile[i][`lb${k}`];
 			for (let k in charFile[i].quotes) delete charFile[i][k];
 		}
 

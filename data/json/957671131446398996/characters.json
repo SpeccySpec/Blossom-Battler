@@ -232,36 +232,6 @@
                 "level": 2
             }
         },
-        "lb1": {
-            "name": "RestoringLight",
-            "class": "heal",
-            "pow": 200,
-            "cost": 100,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb2": {
-            "name": "SongOfHealing",
-            "class": "heal",
-            "pow": 300,
-            "cost": 200,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb3": {
-            "name": "RevitalizingMelody",
-            "class": "heal",
-            "pow": 400,
-            "cost": 300,
-            "status": "none",
-            "statuschance": 0
-        },
-        "leaderSkill": {
-            "name": "Perseverance",
-            "type": "buff",
-            "target": "mag",
-            "percent": 1
-        },
         "charms": [
             "FragileHeart"
         ],
@@ -438,13 +408,37 @@
                 "%ALLY%... it was... quite a hit..."
             ]
         },
-        "statusaffinities": {
-            "block": [
-                "ego"
-            ],
-            "weak": [
-                "burn"
-            ]
+        "leaderskill": {
+            "name": "Perseverance",
+            "type": "buff",
+            "var1": "mag",
+            "var2": 1
+        },
+        "lb": {
+            "1": {
+                "name": "RestoringLight",
+                "class": "heal",
+                "pow": 200,
+                "cost": 100,
+                "status": "none",
+                "statuschance": 0
+            },
+            "2": {
+                "name": "SongOfHealing",
+                "class": "heal",
+                "pow": 300,
+                "cost": 200,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "RevitalizingMelody",
+                "class": "heal",
+                "pow": 400,
+                "cost": 300,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "Lanagu": {
@@ -622,12 +616,6 @@
             "What? Did you expect another result?"
         ],
         "weapon": {},
-        "leaderSkill": {
-            "name": "ShadowEyes",
-            "type": "buff",
-            "target": "prc",
-            "percent": 1
-        },
         "charms": [],
         "curCharms": [],
         "mainElement": "curse",
@@ -761,7 +749,14 @@
                 "%ENEMY%, This marks your end of the free trial of being alive.",
                 "You're in for a bad time!"
             ]
-        }
+        },
+        "leaderskill": {
+            "name": "ShadowEyes",
+            "type": "buff",
+            "var1": "prc",
+            "var2": 1
+        },
+        "lb": {}
     },
     "Permic": {
         "name": "Permic",
@@ -796,14 +791,6 @@
             "It seems.",
             "...You're okay, right...?"
         ],
-        "lb1": {
-            "name": "Hellfire",
-            "class": "atk",
-            "pow": 200,
-            "cost": 100,
-            "status": "burn",
-            "statuschance": 10
-        },
         "bio": {
             "info": "Permic is a dragon that was previously a lizard because of an experiment. He's mostly rude and stubborn, but can be nice at times. He has dark red scales, grey fingerless gloves, and pink shoes.",
             "backstory": "Permic used to be a lizard, rather than a dragon, for 13 years. Then, just after his 14th birthday, he wandered off to a strange lab. He was dosed with some suspicious medicine, but didn't feel anything, so he went to bed. The next morning, however, he felt different. He had horns on his head and he had gained the ability to breathe fire (He always had the pyrokinesis abilities since he was a lizard dw about that). He had been turned into a dragon. His first reaction was to find a way to get back into his older form, but he hasn't been able to do so. He has gotten used to this new form, however he does still look for ways to get back to his older form.",
@@ -965,29 +952,7 @@
                 "level": 2
             }
         },
-        "lb2": {
-            "name": "LavaPlunge",
-            "class": "atk",
-            "pow": 400,
-            "cost": 150,
-            "status": "none",
-            "statuschance": 0
-        },
-        "leaderSkill": {
-            "name": "FlamingPride",
-            "type": "status",
-            "target": "burn",
-            "percent": 10
-        },
         "weapon": {},
-        "lb3": {
-            "name": "FlamingDestiny",
-            "class": "atk",
-            "pow": 600,
-            "cost": 200,
-            "status": "burn",
-            "statuschance": 30
-        },
         "lb4": {
             "name": "EternalBurning",
             "class": "atk",
@@ -1122,6 +1087,38 @@
                 "I'll try my best to persevere.",
                 "I appreciate your kindness greatly, %ALLY%."
             ]
+        },
+        "leaderskill": {
+            "name": "FlamingPride",
+            "type": "status",
+            "var1": "burn",
+            "var2": 10
+        },
+        "lb": {
+            "1": {
+                "name": "Hellfire",
+                "class": "atk",
+                "pow": 200,
+                "cost": 100,
+                "status": "burn",
+                "statuschance": 10
+            },
+            "2": {
+                "name": "LavaPlunge",
+                "class": "atk",
+                "pow": 400,
+                "cost": 150,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "FlamingDestiny",
+                "class": "atk",
+                "pow": 600,
+                "cost": 200,
+                "status": "burn",
+                "statuschance": 30
+            }
         }
     },
     "Dusk": {
@@ -1173,30 +1170,6 @@
                 "pounds"
             ],
             "gender": "other"
-        },
-        "lb1": {
-            "name": "Rapier Arts",
-            "class": "atk",
-            "pow": 400,
-            "cost": 100,
-            "status": "bleed",
-            "statuschance": 20
-        },
-        "lb2": {
-            "name": "Rapier Storm",
-            "class": "atk",
-            "pow": 600,
-            "cost": 230,
-            "status": "bleed",
-            "statuschance": 20
-        },
-        "lb3": {
-            "name": "Shadow Slashes",
-            "class": "atk",
-            "pow": 800,
-            "cost": 300,
-            "status": "bleed",
-            "statuschance": 20
         },
         "trust": {
             "Firestorm": {
@@ -1314,12 +1287,6 @@
             "statuschance": 33
         },
         "dodgequote": [],
-        "leaderSkill": {
-            "name": "Courage",
-            "type": "buff",
-            "target": "atk",
-            "percent": 1
-        },
         "charms": [],
         "curCharms": [],
         "mainElement": "slash",
@@ -1423,6 +1390,38 @@
             ],
             "consolequote": [],
             "imfinequote": []
+        },
+        "leaderskill": {
+            "name": "Courage",
+            "type": "buff",
+            "var1": "atk",
+            "var2": 1
+        },
+        "lb": {
+            "1": {
+                "name": "Rapier Arts",
+                "class": "atk",
+                "pow": 400,
+                "cost": 100,
+                "status": "bleed",
+                "statuschance": 20
+            },
+            "2": {
+                "name": "Rapier Storm",
+                "class": "atk",
+                "pow": 600,
+                "cost": 230,
+                "status": "bleed",
+                "statuschance": 20
+            },
+            "3": {
+                "name": "Shadow Slashes",
+                "class": "atk",
+                "pow": 800,
+                "cost": 300,
+                "status": "bleed",
+                "statuschance": 20
+            }
         }
     },
     "Euphorica": {
@@ -1454,22 +1453,6 @@
             "Mamakakaja",
             "NukeAmp"
         ],
-        "lb1": {
-            "name": "Gooey Explosion",
-            "class": "atk",
-            "pow": 150,
-            "cost": 100,
-            "status": "poison",
-            "statuschance": 25
-        },
-        "lb2": {
-            "name": "Gooey Downfall",
-            "class": "atk",
-            "pow": 350,
-            "cost": 200,
-            "status": "poison",
-            "statuschance": 40
-        },
         "weapon": {},
         "bio": {
             "info": "A gooey cyan blob with a nuclear core, hailing from space. They communicate in splishy noises, frequent splishing indicates excitement.",
@@ -1614,23 +1597,9 @@
                 "level": 1
             }
         },
-        "leaderSkill": {
-            "name": "Intramural Core",
-            "type": "status",
-            "target": "freeze",
-            "percent": 10
-        },
         "charms": [],
         "curCharms": [],
         "mainElement": "nuclear",
-        "lb3": {
-            "name": "ViscousMizzle",
-            "class": "atk",
-            "pow": 500,
-            "cost": 300,
-            "status": "poison",
-            "statuschance": 70
-        },
         "nickname": "Euphy",
         "mpMeter": [
             "Magic Points",
@@ -1705,6 +1674,38 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
+        },
+        "leaderskill": {
+            "name": "Intramural Core",
+            "type": "status",
+            "var1": "freeze",
+            "var2": 10
+        },
+        "lb": {
+            "1": {
+                "name": "Gooey Explosion",
+                "class": "atk",
+                "pow": 150,
+                "cost": 100,
+                "status": "poison",
+                "statuschance": 25
+            },
+            "2": {
+                "name": "Gooey Downfall",
+                "class": "atk",
+                "pow": 350,
+                "cost": 200,
+                "status": "poison",
+                "statuschance": 40
+            },
+            "3": {
+                "name": "ViscousMizzle",
+                "class": "atk",
+                "pow": 500,
+                "cost": 300,
+                "status": "poison",
+                "statuschance": 70
+            }
         }
     },
     "Croato": {
@@ -1871,12 +1872,6 @@
             }
         },
         "weapon": {},
-        "leaderSkill": {
-            "name": "Persistence",
-            "type": "buff",
-            "target": "end",
-            "percent": 1
-        },
         "charms": [],
         "curCharms": [],
         "mainElement": "water",
@@ -1961,7 +1956,14 @@
             "killquote": [],
             "deathquote": [],
             "lvlquote": []
-        }
+        },
+        "leaderskill": {
+            "name": "Persistence",
+            "type": "buff",
+            "var1": "end",
+            "var2": 1
+        },
+        "lb": {}
     },
     "Flara": {
         "name": "Flara",
@@ -1992,14 +1994,6 @@
             "InvigI",
             "DragonicRage"
         ],
-        "lb1": {
-            "name": "Frozen Blastation",
-            "pow": 320,
-            "cost": 110,
-            "status": "Freeze",
-            "statuschance": 50,
-            "class": "atk"
-        },
         "dodgequote": [
             "Just look at me, no one can beat my speed!",
             "You're predictable",
@@ -2010,14 +2004,6 @@
             "Watch out, you don't want to piss me the fuck off",
             "What? Stared at my body too long to focus?"
         ],
-        "lb2": {
-            "name": "FrozenPast",
-            "pow": 450,
-            "cost": 255,
-            "status": "Freeze",
-            "statuschance": 60,
-            "class": "atk"
-        },
         "bio": {
             "info": "A tall gray dragon with an initial cold aura to her that can break away with trust. While she is the only Winteriz alive, she wants to at least make sure she would have some sort of offspring.\n\n<Advantages> Long flights, unaffected by the cold, can grab smaller items with her tail.\n\n<Disadvantage> completely vulnerable to spices, very susceptible to heat, cannot use ice outside of battles.",
             "backstory": "The last dragon from a distant region where winters are brutal.She can only hope she lives long enough to pass down her line becore her untimely death.",
@@ -2042,14 +2028,6 @@
             "\"flara": "Flara is the last dragon from a distant region where winters are brutal. She was just barely able to have actually made it through avoiding people hunting after her for the scales on her body. Despite many hardships, she was able to find a group of people for where she could gather up much of her strength and in turn help them when the help is needed."
         },
         "weapon": {},
-        "lb3": {
-            "name": "CryogenicFlare",
-            "class": "atk",
-            "pow": 670,
-            "cost": 450,
-            "status": "freeze",
-            "statuschance": 60
-        },
         "trust": {
             "Harcvuk": {
                 "value": 0,
@@ -2166,12 +2144,6 @@
                 "nextLevel": 200,
                 "level": 6
             }
-        },
-        "leaderSkill": {
-            "name": "DragonicKnowledge",
-            "type": "discount",
-            "target": "magic",
-            "percent": 10
         },
         "charms": [
             "ShamanStone"
@@ -2322,6 +2294,38 @@
             ],
             "consolequote": [],
             "imfinequote": []
+        },
+        "leaderskill": {
+            "name": "DragonicKnowledge",
+            "type": "discount",
+            "var1": "magic",
+            "var2": 10
+        },
+        "lb": {
+            "1": {
+                "name": "Frozen Blastation",
+                "pow": 320,
+                "cost": 110,
+                "status": "Freeze",
+                "statuschance": 50,
+                "class": "atk"
+            },
+            "2": {
+                "name": "FrozenPast",
+                "pow": 450,
+                "cost": 255,
+                "status": "Freeze",
+                "statuschance": 60,
+                "class": "atk"
+            },
+            "3": {
+                "name": "CryogenicFlare",
+                "class": "atk",
+                "pow": 670,
+                "cost": 450,
+                "status": "freeze",
+                "statuschance": 60
+            }
         }
     },
     "Bomo": {
@@ -2343,7 +2347,7 @@
             "acc": 95,
             "crit": 15
         },
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 270978,
         "skills": [
@@ -2519,14 +2523,6 @@
             ],
             "gender": "male"
         },
-        "lb1": {
-            "name": "Chaotic Lightning",
-            "pow": 300,
-            "cost": 100,
-            "status": "paralyze",
-            "statuschance": 50,
-            "class": "atk"
-        },
         "strikequote": [
             "Found the weak spot!"
         ],
@@ -2612,30 +2608,8 @@
                 "level": 1
             }
         },
-        "lb2": {
-            "name": "Plasmatic Rush",
-            "class": "atk",
-            "pow": 600,
-            "cost": 250,
-            "status": "paralyze",
-            "statuschance": 10
-        },
-        "leaderSkill": {
-            "name": "SpeedSpark",
-            "type": "buff",
-            "target": "agl",
-            "percent": 1
-        },
         "charms": [],
         "curCharms": [],
-        "lb3": {
-            "name": "Sharp Zap",
-            "class": "atk",
-            "pow": 400,
-            "cost": 300,
-            "status": "paralyze",
-            "statuschance": 100
-        },
         "lb4": {
             "name": "Thunderstorm",
             "class": "atk",
@@ -2780,6 +2754,38 @@
                 "Tis but a scratch.",
                 "I'll be absolutely fine!"
             ]
+        },
+        "leaderskill": {
+            "name": "SpeedSpark",
+            "type": "buff",
+            "var1": "agl",
+            "var2": 1
+        },
+        "lb": {
+            "1": {
+                "name": "Chaotic Lightning",
+                "pow": 300,
+                "cost": 100,
+                "status": "paralyze",
+                "statuschance": 50,
+                "class": "atk"
+            },
+            "2": {
+                "name": "Plasmatic Rush",
+                "class": "atk",
+                "pow": 600,
+                "cost": 250,
+                "status": "paralyze",
+                "statuschance": 10
+            },
+            "3": {
+                "name": "Sharp Zap",
+                "class": "atk",
+                "pow": 400,
+                "cost": 300,
+                "status": "paralyze",
+                "statuschance": 100
+            }
         }
     },
     "Brainfreeze": {
@@ -2819,14 +2825,6 @@
             "Ehehehehe. It’s funny to watch you fail.",
             "It's not that rare for you to make a mistake. Your entire existence is a mistake."
         ],
-        "lb1": {
-            "name": "UltCelestialWinter",
-            "pow": 250,
-            "cost": 150,
-            "status": "Freeze",
-            "statuschance": 50,
-            "class": "atk"
-        },
         "bio": {
             "info": "Brainfreeze is an Intelligent and mysterious Goat with a mysterious story. He masters in cryokinesis and even gives off a cold aura if one is too close. Despite of mastering cryokinesis, He only uses its real power in a lash strike out of anger. This Move is known as the Heaven Piercing Wall. Those who faced it were never heard from again.",
             "backstory": "",
@@ -2905,21 +2903,7 @@
                 "level": 1
             }
         },
-        "leaderSkill": {
-            "name": "ElementalBoost",
-            "type": "boost",
-            "target": "ice",
-            "percent": 10
-        },
         "weapon": {},
-        "lb2": {
-            "name": "SnowGrave",
-            "class": "atk",
-            "pow": 450,
-            "cost": 200,
-            "status": "freeze",
-            "statuschance": 100
-        },
         "charms": [],
         "curCharms": [],
         "mainElement": "ice",
@@ -3077,6 +3061,30 @@
             "allydeathquote": [
                 "You should have watched your step, %ALLY%."
             ]
+        },
+        "leaderskill": {
+            "name": "ElementalBoost",
+            "type": "boost",
+            "var1": "ice",
+            "var2": 10
+        },
+        "lb": {
+            "1": {
+                "name": "UltCelestialWinter",
+                "pow": 250,
+                "cost": 150,
+                "status": "Freeze",
+                "statuschance": 50,
+                "class": "atk"
+            },
+            "2": {
+                "name": "SnowGrave",
+                "class": "atk",
+                "pow": 450,
+                "cost": 200,
+                "status": "freeze",
+                "statuschance": 100
+            }
         }
     },
     "Sutela": {
@@ -3278,12 +3286,6 @@
             "GrubberflysElegy"
         ],
         "mainElement": "spirit",
-        "leaderSkill": {
-            "name": "PhantomSupport",
-            "type": "buff",
-            "target": "mag",
-            "percent": 1
-        },
         "mpMeter": [
             "SpiritTechLife",
             "STL"
@@ -3670,7 +3672,14 @@
                 "**L:** Tis but a scratch.",
                 "**S:** ...I don't know anymore... [he would sob...]"
             ]
-        }
+        },
+        "leaderskill": {
+            "name": "PhantomSupport",
+            "type": "buff",
+            "var1": "mag",
+            "var2": 1
+        },
+        "lb": {}
     },
     "Lena": {
         "name": "Lena",
@@ -3701,20 +3710,6 @@
             "Makarakarn",
             "PoisonPunish"
         ],
-        "lb1": {
-            "name": "Leafstorm",
-            "pow": 400,
-            "cost": 100,
-            "status": "bleed",
-            "statuschance": 5
-        },
-        "lb2": {
-            "name": "GrassCannon",
-            "pow": 700,
-            "cost": 205,
-            "status": "dizzy",
-            "statuschance": 20
-        },
         "dodgequote": [],
         "weapon": {},
         "bio": {
@@ -3853,12 +3848,6 @@
             "MP"
         ],
         "armor": {},
-        "leaderSkill": {
-            "name": "PowerOfGrassimps!",
-            "type": "boost",
-            "target": "grass",
-            "percent": 25
-        },
         "stats": {
             "atk": 24,
             "mag": 76,
@@ -3918,6 +3907,28 @@
             "killquote": [],
             "deathquote": [],
             "lvlquote": []
+        },
+        "leaderskill": {
+            "name": "PowerOfGrassimps!",
+            "type": "boost",
+            "var1": "grass",
+            "var2": 25
+        },
+        "lb": {
+            "1": {
+                "name": "Leafstorm",
+                "pow": 400,
+                "cost": 100,
+                "status": "bleed",
+                "statuschance": 5
+            },
+            "2": {
+                "name": "GrassCannon",
+                "pow": 700,
+                "cost": 205,
+                "status": "dizzy",
+                "statuschance": 20
+            }
         }
     },
     "Firestorm": {
@@ -3963,22 +3974,6 @@
             "Not even close!",
             "What da dog doin’?"
         ],
-        "lb1": {
-            "name": "DivingAxeKick",
-            "class": "atk",
-            "pow": 300,
-            "cost": 100,
-            "status": "dizzy",
-            "statuschance": 50
-        },
-        "lb2": {
-            "name": "NeckJab",
-            "class": "atk",
-            "pow": 450,
-            "cost": 200,
-            "status": "dizzy",
-            "statuschance": 90
-        },
         "weapon": {},
         "bio": {
             "backstory": "",
@@ -4053,22 +4048,8 @@
                 "level": 1
             }
         },
-        "leaderSkill": {
-            "name": "ElementalBoost",
-            "type": "boost",
-            "target": "fire",
-            "percent": 10
-        },
         "charms": [],
         "curCharms": [],
-        "lb3": {
-            "name": "MagmaEruption",
-            "class": "atk",
-            "pow": 650,
-            "cost": 300,
-            "status": "burn",
-            "statuschance": 95
-        },
         "lb4": {
             "name": "Firestorm",
             "class": "atk",
@@ -4427,6 +4408,38 @@
                 "I. Am. Fine.",
                 "…"
             ]
+        },
+        "leaderskill": {
+            "name": "ElementalBoost",
+            "type": "boost",
+            "var1": "fire",
+            "var2": 10
+        },
+        "lb": {
+            "1": {
+                "name": "DivingAxeKick",
+                "class": "atk",
+                "pow": 300,
+                "cost": 100,
+                "status": "dizzy",
+                "statuschance": 50
+            },
+            "2": {
+                "name": "NeckJab",
+                "class": "atk",
+                "pow": 450,
+                "cost": 200,
+                "status": "dizzy",
+                "statuschance": 90
+            },
+            "3": {
+                "name": "MagmaEruption",
+                "class": "atk",
+                "pow": 650,
+                "cost": 300,
+                "status": "burn",
+                "statuschance": 95
+            }
         }
     },
     "Nighthug": {
@@ -4566,7 +4579,8 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "lb": {}
     },
     "Patella": {
         "name": "Patella",
@@ -4667,30 +4681,6 @@
                 "nextLevel": 280,
                 "level": 10
             }
-        },
-        "lb1": {
-            "name": "BloodWithdrawal",
-            "class": "atk",
-            "pow": 250,
-            "cost": 110,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb2": {
-            "name": "EssenceGatheral",
-            "class": "atk",
-            "pow": 520,
-            "cost": 220,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb3": {
-            "name": "BodyRemoval",
-            "class": "atk",
-            "pow": 770,
-            "cost": 330,
-            "status": "none",
-            "statuschance": 0
         },
         "charms": [
             "Reservationist",
@@ -4843,6 +4833,32 @@
                 "Sis, I'm as fine as a cocoa bean on a sunday.. ..Which means yes, thanks for asking.",
                 "Your concern is cute."
             ]
+        },
+        "lb": {
+            "1": {
+                "name": "BloodWithdrawal",
+                "class": "atk",
+                "pow": 250,
+                "cost": 110,
+                "status": "none",
+                "statuschance": 0
+            },
+            "2": {
+                "name": "EssenceGatheral",
+                "class": "atk",
+                "pow": 520,
+                "cost": 220,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "BodyRemoval",
+                "class": "atk",
+                "pow": 770,
+                "cost": 330,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "Lacrimal": {
@@ -4923,36 +4939,6 @@
                 "nextLevel": 100,
                 "level": 1
             }
-        },
-        "leaderSkill": {
-            "name": "FairFury",
-            "type": "boost",
-            "target": "physical",
-            "percent": 10
-        },
-        "lb1": {
-            "name": "Smack Em - Lackem",
-            "class": "atk",
-            "pow": 360,
-            "cost": 100,
-            "status": "dizzy",
-            "statuschance": 25
-        },
-        "lb2": {
-            "name": "Pummel O' Mega",
-            "class": "atk",
-            "pow": 600,
-            "cost": 250,
-            "status": "dizzy",
-            "statuschance": 45
-        },
-        "lb3": {
-            "name": "HeftyWhoop-OutPlatter",
-            "class": "atk",
-            "pow": 600,
-            "cost": 350,
-            "status": "none",
-            "statuschance": 0
         },
         "lb4": {
             "name": "Flinch off Any Day",
@@ -5036,6 +5022,38 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
+        },
+        "leaderskill": {
+            "name": "FairFury",
+            "type": "boost",
+            "var1": "physical",
+            "var2": 10
+        },
+        "lb": {
+            "1": {
+                "name": "Smack Em - Lackem",
+                "class": "atk",
+                "pow": 360,
+                "cost": 100,
+                "status": "dizzy",
+                "statuschance": 25
+            },
+            "2": {
+                "name": "Pummel O' Mega",
+                "class": "atk",
+                "pow": 600,
+                "cost": 250,
+                "status": "dizzy",
+                "statuschance": 45
+            },
+            "3": {
+                "name": "HeftyWhoop-OutPlatter",
+                "class": "atk",
+                "pow": 600,
+                "cost": 350,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "Rattle": {
@@ -5134,12 +5152,6 @@
                 "level": 2
             }
         },
-        "leaderSkill": {
-            "name": "CursedAura",
-            "type": "boost",
-            "target": "fire",
-            "percent": 12
-        },
         "weapon": {},
         "charms": [],
         "curCharms": [],
@@ -5205,7 +5217,14 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "leaderskill": {
+            "name": "CursedAura",
+            "type": "boost",
+            "var1": "fire",
+            "var2": 12
+        },
+        "lb": {}
     },
     "DJ": {
         "name": "DJ",
@@ -5302,37 +5321,7 @@
                 "level": 1
             }
         },
-        "leaderSkill": {
-            "name": "EverHell",
-            "type": "discount",
-            "target": "magic",
-            "percent": 50
-        },
         "leader": true,
-        "lb1": {
-            "name": "HellPower",
-            "class": "atk",
-            "pow": 550,
-            "cost": 100,
-            "status": "burn",
-            "statuschance": 125
-        },
-        "lb2": {
-            "name": "HellsReign",
-            "class": "atk",
-            "pow": 800,
-            "cost": 225,
-            "status": "burn",
-            "statuschance": 150
-        },
-        "lb3": {
-            "name": "HellsSupremacy",
-            "class": "atk",
-            "pow": 1000,
-            "cost": 295,
-            "status": "burn",
-            "statuschance": 175
-        },
         "lb4": {
             "name": "HellsRulerUltimate",
             "class": "atk",
@@ -5432,6 +5421,38 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
+        },
+        "leaderskill": {
+            "name": "EverHell",
+            "type": "discount",
+            "var1": "magic",
+            "var2": 50
+        },
+        "lb": {
+            "1": {
+                "name": "HellPower",
+                "class": "atk",
+                "pow": 550,
+                "cost": 100,
+                "status": "burn",
+                "statuschance": 125
+            },
+            "2": {
+                "name": "HellsReign",
+                "class": "atk",
+                "pow": 800,
+                "cost": 225,
+                "status": "burn",
+                "statuschance": 150
+            },
+            "3": {
+                "name": "HellsSupremacy",
+                "class": "atk",
+                "pow": 1000,
+                "cost": 295,
+                "status": "burn",
+                "statuschance": 175
+            }
         }
     },
     "Harcvuk": {
@@ -5614,30 +5635,6 @@
             "DE"
         ],
         "armor": {},
-        "lb1": {
-            "name": "BladeVoidSlash",
-            "class": "atk",
-            "pow": 200,
-            "cost": 100,
-            "status": "bleed",
-            "statuschance": 20
-        },
-        "lb2": {
-            "name": "BladeBlast",
-            "class": "atk",
-            "pow": 400,
-            "cost": 200,
-            "status": "paralyze",
-            "statuschance": 20
-        },
-        "lb3": {
-            "name": "WorthyVoiding",
-            "class": "atk",
-            "pow": 600,
-            "cost": 300,
-            "status": "poison",
-            "statuschance": 10
-        },
         "teamCombo": {
             "Miles": "BladingArmBlast"
         },
@@ -5871,6 +5868,32 @@
                 "No need to worry, friend. I'll be fine.",
                 "This isn't getting me too much. I think I'll be fine."
             ]
+        },
+        "lb": {
+            "1": {
+                "name": "BladeVoidSlash",
+                "class": "atk",
+                "pow": 200,
+                "cost": 100,
+                "status": "bleed",
+                "statuschance": 20
+            },
+            "2": {
+                "name": "BladeBlast",
+                "class": "atk",
+                "pow": 400,
+                "cost": 200,
+                "status": "paralyze",
+                "statuschance": 20
+            },
+            "3": {
+                "name": "WorthyVoiding",
+                "class": "atk",
+                "pow": 600,
+                "cost": 300,
+                "status": "poison",
+                "statuschance": 10
+            }
         }
     },
     "Sun": {
@@ -6113,7 +6136,8 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "lb": {}
     },
     "Ira": {
         "name": "Ira",
@@ -6292,36 +6316,6 @@
             "...I-",
             "W-w-what...?"
         ],
-        "lb1": {
-            "name": "MegaHeal",
-            "class": "heal",
-            "pow": 150,
-            "cost": 100,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb2": {
-            "name": "SuperDia",
-            "class": "heal",
-            "pow": 300,
-            "cost": 200,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb3": {
-            "name": "PsycheHeal",
-            "class": "heal",
-            "pow": 400,
-            "cost": 350,
-            "status": "none",
-            "statuschance": 0
-        },
-        "leaderSkill": {
-            "name": "Healer'sGift",
-            "type": "boost",
-            "target": "heal",
-            "percent": 12
-        },
         "lb4": {
             "name": "GaiaHealing",
             "class": "heal",
@@ -6467,6 +6461,38 @@
                 "I-I think I'm fine...!",
                 "[Pant] Th-thank you for checking on me, %ALLY%..."
             ]
+        },
+        "leaderskill": {
+            "name": "Healer'sGift",
+            "type": "boost",
+            "var1": "heal",
+            "var2": 12
+        },
+        "lb": {
+            "1": {
+                "name": "MegaHeal",
+                "class": "heal",
+                "pow": 150,
+                "cost": 100,
+                "status": "none",
+                "statuschance": 0
+            },
+            "2": {
+                "name": "SuperDia",
+                "class": "heal",
+                "pow": 300,
+                "cost": 200,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "PsycheHeal",
+                "class": "heal",
+                "pow": 400,
+                "cost": 350,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "Turi": {
@@ -6489,7 +6515,7 @@
             "crit": 15
         },
         "weapon": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 554210,
         "skills": [
@@ -6705,36 +6731,6 @@
                 "level": 1
             }
         },
-        "leaderSkill": {
-            "name": "DutyOfLight",
-            "type": "buff",
-            "target": "prc",
-            "percent": 1
-        },
-        "lb1": {
-            "name": "HolyEmbrace",
-            "class": "heal",
-            "pow": 170,
-            "cost": 100,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb2": {
-            "name": "CalmingLight",
-            "class": "heal",
-            "pow": 240,
-            "cost": 150,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb3": {
-            "name": "ChimkenNuggies",
-            "class": "heal",
-            "pow": 360,
-            "cost": 200,
-            "status": "none",
-            "statuschance": 0
-        },
         "lb4": {
             "name": "Light'sEmbrace",
             "class": "heal",
@@ -6829,6 +6825,38 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
+        },
+        "leaderskill": {
+            "name": "DutyOfLight",
+            "type": "buff",
+            "var1": "prc",
+            "var2": 1
+        },
+        "lb": {
+            "1": {
+                "name": "HolyEmbrace",
+                "class": "heal",
+                "pow": 170,
+                "cost": 100,
+                "status": "none",
+                "statuschance": 0
+            },
+            "2": {
+                "name": "CalmingLight",
+                "class": "heal",
+                "pow": 240,
+                "cost": 150,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "ChimkenNuggies",
+                "class": "heal",
+                "pow": 360,
+                "cost": 200,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "Alt": {
@@ -6851,7 +6879,7 @@
             "crit": 15
         },
         "weapon": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 1810,
         "skills": [],
@@ -6953,7 +6981,7 @@
             "crit": 15
         },
         "weapon": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 1810,
         "skills": [],
@@ -7055,7 +7083,7 @@
             "crit": 15
         },
         "weapon": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 1810,
         "skills": [],
@@ -7357,7 +7385,8 @@
                 "I'm doing fine.",
                 "Thank you for checking..."
             ]
-        }
+        },
+        "lb": {}
     },
     "Tsuki": {
         "name": "Tsuki",
@@ -7452,40 +7481,10 @@
                 "level": 2
             }
         },
-        "leaderSkill": {
-            "name": "LegendaryTies",
-            "type": "boost",
-            "target": "water",
-            "percent": 20
-        },
         "dodgequote": [
             "[They smugly look at the attacker with mocking eyes]",
             "[Smirk]"
         ],
-        "lb1": {
-            "name": "SolarBlade",
-            "class": "attack",
-            "pow": 325,
-            "cost": 100,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb2": {
-            "name": "GigaImpact",
-            "class": "attack",
-            "pow": 450,
-            "cost": 200,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb3": {
-            "name": "WaterSpout",
-            "class": "attack",
-            "pow": 650,
-            "cost": 300,
-            "status": "none",
-            "statuschance": 0
-        },
         "lb4": {
             "name": "PrimalFury",
             "class": "attack",
@@ -7629,6 +7628,38 @@
             "lvlquote": [
                 "[They purr in satisfaction]"
             ]
+        },
+        "leaderskill": {
+            "name": "LegendaryTies",
+            "type": "boost",
+            "var1": "water",
+            "var2": 20
+        },
+        "lb": {
+            "1": {
+                "name": "SolarBlade",
+                "class": "attack",
+                "pow": 325,
+                "cost": 100,
+                "status": "none",
+                "statuschance": 0
+            },
+            "2": {
+                "name": "GigaImpact",
+                "class": "attack",
+                "pow": 450,
+                "cost": 200,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "WaterSpout",
+                "class": "attack",
+                "pow": 650,
+                "cost": 300,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "Sulba": {
@@ -7747,7 +7778,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Taletan": {
         "name": "Taletan",
@@ -7872,7 +7904,8 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "lb": {}
     },
     "Melarue": {
         "name": "Melarue",
@@ -8000,12 +8033,6 @@
             "I Am Many Steps Ahead.",
             "I Only Make The Most Logical Move."
         ],
-        "leaderSkill": {
-            "name": "ArtificialKindness",
-            "type": "discount",
-            "target": "magic",
-            "percent": 6
-        },
         "charms": [],
         "curCharms": [],
         "mainElement": "electric",
@@ -8134,7 +8161,14 @@
             ],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "leaderskill": {
+            "name": "ArtificialKindness",
+            "type": "discount",
+            "var1": "magic",
+            "var2": 6
+        },
+        "lb": {}
     },
     "Axel": {
         "name": "Axel",
@@ -8268,12 +8302,6 @@
             "You won't catch me falling to your pitiful attack!",
             "I didn't even move that time-"
         ],
-        "leaderSkill": {
-            "name": "ArtificialAssault",
-            "type": "boost",
-            "target": "psychic",
-            "percent": 10
-        },
         "charms": [],
         "curCharms": [],
         "mainElement": "slash",
@@ -8365,7 +8393,14 @@
             ],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "leaderskill": {
+            "name": "ArtificialAssault",
+            "type": "boost",
+            "var1": "psychic",
+            "var2": 10
+        },
+        "lb": {}
     },
     "Hurricane": {
         "name": "Hurricane",
@@ -8490,12 +8525,6 @@
                 "level": 1
             }
         },
-        "leaderSkill": {
-            "name": "NinjaSkills",
-            "type": "buff",
-            "target": "agl",
-            "percent": 1
-        },
         "dodgequote": [
             "Ha! I’m too fast for you!~ 🍃",
             "Can’t hit me!",
@@ -8506,22 +8535,6 @@
         ],
         "charms": [],
         "curCharms": [],
-        "lb1": {
-            "name": "AwayWithTheLeaves",
-            "class": "atk",
-            "pow": 350,
-            "cost": 100,
-            "status": "dizzy",
-            "statuschance": 50
-        },
-        "lb2": {
-            "name": "GiantNinjastar",
-            "class": "atk",
-            "pow": 500,
-            "cost": 190,
-            "status": "bleed",
-            "statuschance": 99
-        },
         "mainElement": "grass",
         "nickname": "🍃Forest Guardian🍃",
         "mpMeter": [
@@ -8662,6 +8675,30 @@
             "allydeathquote": [
                 "Shoot- %ALLY%. I’ll make sure your defeat wasn’t in vain."
             ]
+        },
+        "leaderskill": {
+            "name": "NinjaSkills",
+            "type": "buff",
+            "var1": "agl",
+            "var2": 1
+        },
+        "lb": {
+            "1": {
+                "name": "AwayWithTheLeaves",
+                "class": "atk",
+                "pow": 350,
+                "cost": 100,
+                "status": "dizzy",
+                "statuschance": 50
+            },
+            "2": {
+                "name": "GiantNinjastar",
+                "class": "atk",
+                "pow": 500,
+                "cost": 190,
+                "status": "bleed",
+                "statuschance": 99
+            }
         }
     },
     "Morisonu": {
@@ -8759,12 +8796,6 @@
                 "nextLevel": 160,
                 "level": 4
             }
-        },
-        "leaderSkill": {
-            "name": "TacticalMind",
-            "type": "discount",
-            "target": "physical",
-            "percent": 10
         },
         "dodgequote": [
             "Woah....that was close...",
@@ -8911,7 +8942,14 @@
                 "Yeah, I'll be fine",
                 "Yeah, I can still go on"
             ]
-        }
+        },
+        "leaderskill": {
+            "name": "TacticalMind",
+            "type": "discount",
+            "var1": "physical",
+            "var2": 10
+        },
+        "lb": {}
     },
     "Karuma": {
         "name": "Karuma",
@@ -9071,7 +9109,8 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "lb": {}
     },
     "Miles": {
         "name": "Miles",
@@ -9359,7 +9398,8 @@
                 "Oh don't worry about me. I can handle it.",
                 "I'll be fine. %ENEMY% won't be able to take me down **that** easily."
             ]
-        }
+        },
+        "lb": {}
     },
     "Frosta": {
         "name": "Frosta",
@@ -9511,7 +9551,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Frylo": {
         "name": "Frylo",
@@ -9706,7 +9747,8 @@
                 "yay! I feel stronger!"
             ],
             "allydeathquote": []
-        }
+        },
+        "lb": {}
     },
     "John": {
         "name": "John",
@@ -9931,7 +9973,8 @@
                 "**I can feel myself getting stronger.. it's only a matter of time..**"
             ],
             "allydeathquote": []
-        }
+        },
+        "lb": {}
     },
     "DemonicDesire": {
         "name": "DemonicDesire",
@@ -10041,14 +10084,6 @@
             }
         },
         "dodgequote": [],
-        "lb1": {
-            "name": "TheUltimateFuckYou",
-            "class": "atk",
-            "pow": 200,
-            "cost": 100,
-            "status": "none",
-            "statuschance": 0
-        },
         "charms": [],
         "curCharms": [],
         "mainElement": "fire",
@@ -10156,6 +10191,16 @@
                 "Wow.",
                 "Cmon, I know you can provide more for us! Fine I guess i'll do it myself"
             ]
+        },
+        "lb": {
+            "1": {
+                "name": "TheUltimateFuckYou",
+                "class": "atk",
+                "pow": 200,
+                "cost": 100,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "Barista": {
@@ -10230,20 +10275,6 @@
             "gender": ""
         },
         "trust": {},
-        "leaderSkill": {
-            "name": "Godly Aura",
-            "type": "buff",
-            "target": "all",
-            "percent": 3
-        },
-        "lb1": {
-            "name": "Punishment",
-            "class": "atk",
-            "pow": 300,
-            "cost": 120,
-            "status": "dizzy",
-            "statuschance": 50
-        },
         "charms": [],
         "curCharms": [],
         "mpMeter": [
@@ -10315,6 +10346,22 @@
             ],
             "lvlquote": [],
             "allydeathquote": []
+        },
+        "leaderskill": {
+            "name": "Godly Aura",
+            "type": "buff",
+            "var1": "all",
+            "var2": 3
+        },
+        "lb": {
+            "1": {
+                "name": "Punishment",
+                "class": "atk",
+                "pow": 300,
+                "cost": 120,
+                "status": "dizzy",
+                "statuschance": 50
+            }
         }
     },
     "Pointy": {
@@ -10400,39 +10447,9 @@
                 "level": 1
             }
         },
-        "leaderSkill": {
-            "name": "ONYOURKNEES",
-            "type": "boost",
-            "target": "magic",
-            "percent": 99
-        },
-        "lb1": {
-            "name": "IWIN",
-            "class": "atk",
-            "pow": 500,
-            "cost": 100,
-            "status": "bleed",
-            "statuschance": 100
-        },
-        "lb2": {
-            "name": "YOURMOTHER",
-            "class": "atk",
-            "pow": 800,
-            "cost": 150,
-            "status": "bleed",
-            "statuschance": 100
-        },
         "dodgequote": [
             "It's not that rare for you to make a mistake. Your entire existence is a mistake."
         ],
-        "lb3": {
-            "name": "BITCH",
-            "class": "atk",
-            "pow": 700,
-            "cost": 200,
-            "status": "dizzy",
-            "statuschance": 50
-        },
         "lb4": {
             "name": "Ahellbreaksloose",
             "class": "atk",
@@ -10553,6 +10570,38 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
+        },
+        "leaderskill": {
+            "name": "ONYOURKNEES",
+            "type": "boost",
+            "var1": "magic",
+            "var2": 99
+        },
+        "lb": {
+            "1": {
+                "name": "IWIN",
+                "class": "atk",
+                "pow": 500,
+                "cost": 100,
+                "status": "bleed",
+                "statuschance": 100
+            },
+            "2": {
+                "name": "YOURMOTHER",
+                "class": "atk",
+                "pow": 800,
+                "cost": 150,
+                "status": "bleed",
+                "statuschance": 100
+            },
+            "3": {
+                "name": "BITCH",
+                "class": "atk",
+                "pow": 700,
+                "cost": 200,
+                "status": "dizzy",
+                "statuschance": 50
+            }
         }
     },
     "Rulue": {
@@ -10608,22 +10657,6 @@
         "dodgequote": [
             "How are you try to hit a Queen!"
         ],
-        "lb1": {
-            "name": "FightingQueen",
-            "class": "atk",
-            "pow": 500,
-            "cost": 100,
-            "status": "dizzy",
-            "statuschance": 30
-        },
-        "lb2": {
-            "name": "QueenlyDance",
-            "class": "atk",
-            "pow": 700,
-            "cost": 150,
-            "status": "brainwash",
-            "statuschance": 40
-        },
         "charms": [],
         "curCharms": [],
         "mainElement": "strike",
@@ -10711,6 +10744,24 @@
             ],
             "lvlquote": [],
             "allydeathquote": []
+        },
+        "lb": {
+            "1": {
+                "name": "FightingQueen",
+                "class": "atk",
+                "pow": 500,
+                "cost": 100,
+                "status": "dizzy",
+                "statuschance": 30
+            },
+            "2": {
+                "name": "QueenlyDance",
+                "class": "atk",
+                "pow": 700,
+                "cost": 150,
+                "status": "brainwash",
+                "statuschance": 40
+            }
         }
     },
     "DoppelgangerArle": {
@@ -10807,28 +10858,6 @@
             }
         },
         "dodgequote": [],
-        "lb1": {
-            "name": "Ragnarok",
-            "class": "atk",
-            "pow": 500,
-            "cost": 150,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb2": {
-            "name": "Armageddon",
-            "class": "atk",
-            "pow": 800,
-            "cost": 300,
-            "status": "silence",
-            "statuschance": 999
-        },
-        "leaderSkill": {
-            "name": "IllusionEnvelopedInDarkness",
-            "type": "boost",
-            "target": "magic",
-            "percent": 12
-        },
         "charms": [],
         "curCharms": [],
         "mainElement": "bless",
@@ -10907,6 +10936,30 @@
             ],
             "lvlquote": [],
             "allydeathquote": []
+        },
+        "leaderskill": {
+            "name": "IllusionEnvelopedInDarkness",
+            "type": "boost",
+            "var1": "magic",
+            "var2": 12
+        },
+        "lb": {
+            "1": {
+                "name": "Ragnarok",
+                "class": "atk",
+                "pow": 500,
+                "cost": 150,
+                "status": "none",
+                "statuschance": 0
+            },
+            "2": {
+                "name": "Armageddon",
+                "class": "atk",
+                "pow": 800,
+                "cost": 300,
+                "status": "silence",
+                "statuschance": 999
+            }
         }
     },
     "Agonia": {
@@ -10929,7 +10982,7 @@
             "crit": 15
         },
         "weapon": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 851369,
         "skills": [
@@ -11041,7 +11094,7 @@
             "crit": 15
         },
         "weapon": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 1133480,
         "skills": [
@@ -11251,36 +11304,6 @@
                 "level": 1
             }
         },
-        "leaderSkill": {
-            "name": "AncientPower",
-            "type": "buff",
-            "target": "atk",
-            "percent": 1
-        },
-        "lb1": {
-            "name": "Trident Wave",
-            "class": "atk",
-            "pow": 200,
-            "cost": 100,
-            "status": "bleed",
-            "statuschance": 20
-        },
-        "lb2": {
-            "name": "Sea Of Wrath",
-            "class": "atk",
-            "pow": 400,
-            "cost": 200,
-            "status": "bleed",
-            "statuschance": 40
-        },
-        "lb3": {
-            "name": "Megaton Shark Crunch",
-            "class": "atk",
-            "pow": 550,
-            "cost": 300,
-            "status": "bleed",
-            "statuschance": 60
-        },
         "lb4": {
             "name": "Wrath of the Ancients",
             "class": "atk",
@@ -11409,6 +11432,38 @@
             "allydeathquote": [
                 "%ALLY%! NOOO!"
             ]
+        },
+        "leaderskill": {
+            "name": "AncientPower",
+            "type": "buff",
+            "var1": "atk",
+            "var2": 1
+        },
+        "lb": {
+            "1": {
+                "name": "Trident Wave",
+                "class": "atk",
+                "pow": 200,
+                "cost": 100,
+                "status": "bleed",
+                "statuschance": 20
+            },
+            "2": {
+                "name": "Sea Of Wrath",
+                "class": "atk",
+                "pow": 400,
+                "cost": 200,
+                "status": "bleed",
+                "statuschance": 40
+            },
+            "3": {
+                "name": "Megaton Shark Crunch",
+                "class": "atk",
+                "pow": 550,
+                "cost": 300,
+                "status": "bleed",
+                "statuschance": 60
+            }
         }
     },
     "FleetwayHarcvuk": {
@@ -11521,7 +11576,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Bayrero": {
         "name": "Bayrero",
@@ -11700,41 +11756,11 @@
             }
         },
         "mainElement": "pierce",
-        "leaderSkill": {
-            "name": "PrehistoricBuff",
-            "type": "buff",
-            "target": "atk",
-            "percent": 1
-        },
         "nickname": "Rero",
         "dodgequote": [
             "Keep trying, keep trying.",
             "I'm slow. You've gotta work on your aim..."
         ],
-        "lb1": {
-            "name": "ShredOfFossils",
-            "class": "atk",
-            "pow": 300,
-            "cost": 120,
-            "status": "bleed",
-            "statuschance": 13
-        },
-        "lb2": {
-            "name": "DinosaurRush",
-            "class": "atk",
-            "pow": 600,
-            "cost": 240,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb3": {
-            "name": "PrehistoricRumble",
-            "class": "atk",
-            "pow": 800,
-            "cost": 360,
-            "status": "none",
-            "statuschance": 0
-        },
         "lb4": {
             "name": "ABiteOfThePast",
             "class": "atk",
@@ -11882,6 +11908,38 @@
                 "[Pant] I'm, okay...",
                 "I'm just grateful I'm still here, %ALLY%."
             ]
+        },
+        "leaderskill": {
+            "name": "PrehistoricBuff",
+            "type": "buff",
+            "var1": "atk",
+            "var2": 1
+        },
+        "lb": {
+            "1": {
+                "name": "ShredOfFossils",
+                "class": "atk",
+                "pow": 300,
+                "cost": 120,
+                "status": "bleed",
+                "statuschance": 13
+            },
+            "2": {
+                "name": "DinosaurRush",
+                "class": "atk",
+                "pow": 600,
+                "cost": 240,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "PrehistoricRumble",
+                "class": "atk",
+                "pow": 800,
+                "cost": 360,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "Iku": {
@@ -11908,7 +11966,7 @@
             "crit": 15
         },
         "weapon": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 1133480,
         "skills": [],
@@ -12043,12 +12101,6 @@
             ]
         },
         "trust": {},
-        "leaderSkill": {
-            "name": "BlueBlur",
-            "type": "buff",
-            "target": "agl",
-            "percent": 3
-        },
         "mainElement": "wind",
         "charms": [],
         "curCharms": [],
@@ -12102,7 +12154,14 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "leaderskill": {
+            "name": "BlueBlur",
+            "type": "buff",
+            "var1": "agl",
+            "var2": 3
+        },
+        "lb": {}
     },
     "Dawn": {
         "name": "Dawn",
@@ -12181,12 +12240,6 @@
             }
         },
         "mainElement": "pierce",
-        "leaderSkill": {
-            "name": "GlowingRapier",
-            "type": "crit",
-            "target": "physical",
-            "percent": 10
-        },
         "charms": [],
         "curCharms": [],
         "armor": {},
@@ -12248,7 +12301,14 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "leaderskill": {
+            "name": "GlowingRapier",
+            "type": "crit",
+            "var1": "physical",
+            "var2": 10
+        },
+        "lb": {}
     },
     "Terrly": {
         "name": "Terrly",
@@ -12337,36 +12397,6 @@
         },
         "nickname": "Terry",
         "mainElement": "earth",
-        "leaderSkill": {
-            "name": "CrystalClear",
-            "type": "buff",
-            "target": "prc",
-            "percent": 1
-        },
-        "lb1": {
-            "name": "CrystalSwarm",
-            "class": "atk",
-            "pow": 350,
-            "cost": 100,
-            "status": "bleed",
-            "statuschance": 10
-        },
-        "lb2": {
-            "name": "GroundShatter",
-            "class": "atk",
-            "pow": 600,
-            "cost": 175,
-            "status": "bleed",
-            "statuschance": 10
-        },
-        "lb3": {
-            "name": "DiamondBreaker",
-            "class": "atk",
-            "pow": 800,
-            "cost": 350,
-            "status": "bleed",
-            "statuschance": 20
-        },
         "charms": [],
         "curCharms": [],
         "armor": {},
@@ -12425,6 +12455,38 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
+        },
+        "leaderskill": {
+            "name": "CrystalClear",
+            "type": "buff",
+            "var1": "prc",
+            "var2": 1
+        },
+        "lb": {
+            "1": {
+                "name": "CrystalSwarm",
+                "class": "atk",
+                "pow": 350,
+                "cost": 100,
+                "status": "bleed",
+                "statuschance": 10
+            },
+            "2": {
+                "name": "GroundShatter",
+                "class": "atk",
+                "pow": 600,
+                "cost": 175,
+                "status": "bleed",
+                "statuschance": 10
+            },
+            "3": {
+                "name": "DiamondBreaker",
+                "class": "atk",
+                "pow": 800,
+                "cost": 350,
+                "status": "bleed",
+                "statuschance": 20
+            }
         }
     },
     "PVPSandbag": {
@@ -12526,7 +12588,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Monum": {
         "name": "Monum",
@@ -12724,7 +12787,8 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "lb": {}
     },
     "Nahalo": {
         "name": "Nahalo",
@@ -12840,7 +12904,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Evergreen": {
         "name": "Evergreen",
@@ -12961,7 +13026,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "GravenIdol": {
         "name": "GravenIdol",
@@ -13078,7 +13144,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Testent": {
         "name": "Testent",
@@ -13183,7 +13250,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Lophari": {
         "name": "Lophari",
@@ -13297,7 +13365,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Wish": {
         "name": "Wish",
@@ -13375,12 +13444,6 @@
                 "tpmax": 10,
                 "level": 1
             }
-        },
-        "leaderSkill": {
-            "name": "EvasionWish",
-            "type": "buff",
-            "target": "agl",
-            "percent": 1
         },
         "dodgequote": [
             "🎵 Hey hey hey\n\nyou're not a bowling ball\n\nI am not the pin of your luck 🎵",
@@ -13543,7 +13606,14 @@
                 "Nothing will not never seem to stop the wish maker, hee haa!",
                 "🎵 It's all as fine as a fresh avocado\n\nbut hey, who am I to judge? 🎵"
             ]
-        }
+        },
+        "leaderskill": {
+            "name": "EvasionWish",
+            "type": "buff",
+            "var1": "agl",
+            "var2": 1
+        },
+        "lb": {}
     },
     "Golena": {
         "name": "Golena",
@@ -13633,30 +13703,6 @@
         },
         "mainElement": "heal",
         "dodgequote": [],
-        "lb1": {
-            "name": "DivineRecovery",
-            "class": "heal",
-            "pow": 190,
-            "cost": 120,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb2": {
-            "name": "BlessedLight",
-            "class": "heal",
-            "pow": 290,
-            "cost": 230,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb3": {
-            "name": "HolyHeal",
-            "class": "heal",
-            "pow": 350,
-            "cost": 325,
-            "status": "none",
-            "statuschance": 0
-        },
         "lb4": {
             "name": "AlmightyCure",
             "class": "heal",
@@ -13772,6 +13818,32 @@
                 "Yeah, I'm alright....",
                 "Don't focus on me......keep it on the enemy....."
             ]
+        },
+        "lb": {
+            "1": {
+                "name": "DivineRecovery",
+                "class": "heal",
+                "pow": 190,
+                "cost": 120,
+                "status": "none",
+                "statuschance": 0
+            },
+            "2": {
+                "name": "BlessedLight",
+                "class": "heal",
+                "pow": 290,
+                "cost": 230,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "HolyHeal",
+                "class": "heal",
+                "pow": 350,
+                "cost": 325,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "TheNeeding": {
@@ -13902,7 +13974,8 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "lb": {}
     },
     "Anti-Sky": {
         "name": "Anti-Sky",
@@ -14035,7 +14108,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Carlo": {
         "name": "Carlo",
@@ -14127,12 +14201,6 @@
         "mainElement": "pierce",
         "charms": [],
         "curCharms": [],
-        "leaderSkill": {
-            "name": "DarkCurse",
-            "type": "boost",
-            "target": "curse",
-            "percent": 20
-        },
         "dodgequote": [
             "..That was close..."
         ],
@@ -14207,7 +14275,14 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "leaderskill": {
+            "name": "DarkCurse",
+            "type": "boost",
+            "var1": "curse",
+            "var2": 20
+        },
+        "lb": {}
     },
     "Viridian": {
         "name": "Viridian",
@@ -14396,7 +14471,8 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "lb": {}
     },
     "Exetior": {
         "name": "Exetior",
@@ -14415,8 +14491,8 @@
         "melee": {
             "name": "HardPunch",
             "type": "strike",
-            "pow": 30,
-            "acc": 95,
+            "pow": 80,
+            "acc": 100,
             "crit": 15
         },
         "weapon": {},
@@ -14508,12 +14584,6 @@
         ],
         "teamCombo": {
             "Negagen": "DemonicBond"
-        },
-        "leaderSkill": {
-            "name": "Determination",
-            "type": "discount",
-            "target": "physical",
-            "percent": 10
         },
         "stats": {
             "atk": 36,
@@ -14621,7 +14691,14 @@
                 "You'll suffer later, we have a battle to win."
             ],
             "imfinequote": []
-        }
+        },
+        "leaderskill": {
+            "name": "Determination",
+            "type": "discount",
+            "var1": "physical",
+            "var2": 10
+        },
+        "lb": {}
     },
     "Fang": {
         "name": "Fang",
@@ -14648,7 +14725,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 169664433,
         "skills": [
@@ -14867,7 +14944,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "goth": {
         "name": "goth",
@@ -14894,7 +14972,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 2318215,
         "skills": [
@@ -15157,7 +15235,8 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "lb": {}
     },
     "Lanagu(C)": {
         "name": "Lanagu(C)",
@@ -15254,12 +15333,6 @@
         "mainElement": "curse",
         "charms": [],
         "curCharms": [],
-        "leaderSkill": {
-            "name": "ShadowSight",
-            "type": "buff",
-            "target": "prc",
-            "percent": 1
-        },
         "dodgequote": [
             "[You though that was at its mark?](<https://youtu.be/lhckuhUxcgA%22>)"
         ],
@@ -15323,7 +15396,14 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "leaderskill": {
+            "name": "ShadowSight",
+            "type": "buff",
+            "var1": "prc",
+            "var2": 1
+        },
+        "lb": {}
     },
     "Flara(C)": {
         "name": "Flara(C)",
@@ -15479,7 +15559,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "ShadowHarcvuk": {
         "name": "ShadowHarcvuk",
@@ -15593,7 +15674,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Neon": {
         "name": "Neon",
@@ -15732,7 +15814,8 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "lb": {}
     },
     "Bow-(Non-Canon)": {
         "name": "Bow-(Non-Canon)",
@@ -15759,7 +15842,16 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {
+            "1": {
+                "name": "The-Absolute-Probably-Biggest-Blast-He-Can-Do-(Very-Small)-Blast-Or-Something-Idk-Where-He-Learned-This",
+                "class": "atk",
+                "pow": 280,
+                "cost": 1.2341423142324132e+92,
+                "status": "none",
+                "statuschance": 0
+            }
+        },
         "xp": 0,
         "maxxp": 31674,
         "skills": [
@@ -15788,20 +15880,6 @@
             ]
         },
         "trust": {},
-        "lb1": {
-            "name": "The-Absolute-Probably-Biggest-Blast-He-Can-Do-(Very-Small)-Blast-Or-Something-Idk-Where-He-Learned-This",
-            "class": "atk",
-            "pow": 280,
-            "cost": 1.2341423142324132e+92,
-            "status": "none",
-            "statuschance": 0
-        },
-        "leaderSkill": {
-            "name": "SQUID-GAMES-‼️",
-            "type": "discount",
-            "target": "magic",
-            "percent": 1
-        },
         "charms": [],
         "curCharms": [],
         "mainElement": "strike",
@@ -15863,6 +15941,12 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
+        },
+        "leaderskill": {
+            "name": "SQUID-GAMES-‼️",
+            "type": "discount",
+            "var1": "magic",
+            "var2": 1
         }
     },
     "Valk": {
@@ -15890,7 +15974,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 982349,
         "skills": [
@@ -16040,7 +16124,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 2318215,
         "skills": [
@@ -16147,7 +16231,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 4741253,
         "skills": [
@@ -16270,7 +16354,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 82956663,
         "skills": [],
@@ -16451,7 +16535,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Treebunch": {
         "name": "Treebunch",
@@ -16478,7 +16563,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 2318215,
         "skills": [
@@ -16581,7 +16666,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 500,
         "skills": [],
@@ -16840,7 +16925,8 @@
             ],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "lb": {}
     },
     "Sungon": {
         "name": "Sungon",
@@ -16867,7 +16953,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 3561208,
         "skills": [
@@ -16991,7 +17077,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 500,
         "skills": [],
@@ -17118,12 +17204,6 @@
             "powers/abilities": "Bones: One of Sans' and Papyrus' signature ability is to summon bones to attack their opponent. While Papyrus' were usually easy to dodge, Sans can summon large groups of them easily and with great speed, making them harder to predict and dodge by comparison. Sans can also summon blue bones that only damage people if they're moving when they touch the bones.\n\nSoul Manipulation: Blue Mode: Another of the skeleton brothers' signature attack, Blue Mode grants Sans the ability to make enemy souls affected by gravity. While affected by Blue Mode, enemies have their movement heavily restricted, and are only able to jump to move. Sans can also use this to telekinetically lift and move his opponent, letting him slam them around with his mind.\n\nKarma: A side effect of Sans' attacks, Karmic Retribution acts as poison for the soul, whittling down an enemy's health once Sans hits them. While it only drains a little at a time, it's drain increases based on how many sins the opponent has committed.\nTeleportation: Somehow, Sans obtained the ability to teleport, which he often uses as a shortcut to get places quicker. However, in battle, Sans uses it to move his foe straight into a new attack once his old one ends, making him far more unpredictable."
         },
         "trust": {},
-        "leaderSkill": {
-            "name": "Sansness",
-            "type": "buff",
-            "target": "agl",
-            "percent": 3
-        },
         "mainElement": "curse",
         "stats": {
             "atk": 34,
@@ -17170,7 +17250,14 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "leaderskill": {
+            "name": "Sansness",
+            "type": "buff",
+            "var1": "agl",
+            "var2": 3
+        },
+        "lb": {}
     },
     "Nitori": {
         "name": "Nitori",
@@ -17277,41 +17364,11 @@
             }
         },
         "mainElement": "water",
-        "leaderSkill": {
-            "name": "MechanicIngenuity",
-            "type": "buff",
-            "target": "end",
-            "percent": 2
-        },
         "dodgequote": [
             "Quick as a jiffy!",
             "This is an absolute steal!",
             "Where are you aiming?"
         ],
-        "lb1": {
-            "name": "BurstBubbleDragon",
-            "class": "atk",
-            "pow": 280,
-            "cost": 100,
-            "status": "paralyze",
-            "statuschance": 10
-        },
-        "lb2": {
-            "name": "FlySanpeiFight",
-            "class": "atk",
-            "pow": 570,
-            "cost": 200,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb3": {
-            "name": "SuperScope3D",
-            "class": "atk",
-            "pow": 620,
-            "cost": 280,
-            "status": "none",
-            "statuschance": 0
-        },
         "teamCombo": {
             "Gura": "TsunamicDeluge"
         },
@@ -17447,6 +17504,38 @@
             "imfinequote": [
                 "It's alright sworn friend, they just damaged my machine a bit..."
             ]
+        },
+        "leaderskill": {
+            "name": "MechanicIngenuity",
+            "type": "buff",
+            "var1": "end",
+            "var2": 2
+        },
+        "lb": {
+            "1": {
+                "name": "BurstBubbleDragon",
+                "class": "atk",
+                "pow": 280,
+                "cost": 100,
+                "status": "paralyze",
+                "statuschance": 10
+            },
+            "2": {
+                "name": "FlySanpeiFight",
+                "class": "atk",
+                "pow": 570,
+                "cost": 200,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "SuperScope3D",
+                "class": "atk",
+                "pow": 620,
+                "cost": 280,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "Golena(C)": {
@@ -17592,7 +17681,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "BowButAwesome": {
         "name": "BowButAwesome",
@@ -17647,30 +17737,6 @@
             ]
         },
         "trust": {},
-        "lb1": {
-            "name": "MetalBarSmack",
-            "class": "atk",
-            "pow": 130,
-            "cost": 130,
-            "status": "none",
-            "statuschance": 40
-        },
-        "lb2": {
-            "name": "None",
-            "class": "atk",
-            "pow": null,
-            "cost": 458,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb3": {
-            "name": "HarderMetalBarSmack",
-            "class": "atk",
-            "pow": 320,
-            "cost": 460,
-            "status": "none",
-            "statuschance": 0
-        },
         "hidden": true,
         "mainElement": "strike",
         "lb4": {
@@ -17744,6 +17810,32 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
+        },
+        "lb": {
+            "1": {
+                "name": "MetalBarSmack",
+                "class": "atk",
+                "pow": 130,
+                "cost": 130,
+                "status": "none",
+                "statuschance": 40
+            },
+            "2": {
+                "name": "None",
+                "class": "atk",
+                "pow": null,
+                "cost": 458,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "HarderMetalBarSmack",
+                "class": "atk",
+                "pow": 320,
+                "cost": 460,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "Kirby": {
@@ -17771,7 +17863,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 312667,
         "skills": [],
@@ -17992,7 +18084,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "BowButAwesome-498041248616153098": {
         "name": "BowButAwesome-498041248616153098",
@@ -18047,30 +18140,6 @@
             ]
         },
         "trust": {},
-        "lb1": {
-            "name": "MetalBarSmack",
-            "class": "atk",
-            "pow": 130,
-            "cost": 130,
-            "status": "none",
-            "statuschance": 40
-        },
-        "lb2": {
-            "name": "None",
-            "class": "atk",
-            "pow": {},
-            "cost": 458,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb3": {
-            "name": "HarderMetalBarSmack",
-            "class": "atk",
-            "pow": 320,
-            "cost": 460,
-            "status": "none",
-            "statuschance": 0
-        },
         "hidden": true,
         "mainElement": "strike",
         "lb4": {
@@ -18144,6 +18213,32 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
+        },
+        "lb": {
+            "1": {
+                "name": "MetalBarSmack",
+                "class": "atk",
+                "pow": 130,
+                "cost": 130,
+                "status": "none",
+                "statuschance": 40
+            },
+            "2": {
+                "name": "None",
+                "class": "atk",
+                "pow": {},
+                "cost": 458,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "HarderMetalBarSmack",
+                "class": "atk",
+                "pow": 320,
+                "cost": 460,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "Ramia": {
@@ -18175,24 +18270,6 @@
             "SpiritLeech",
             "WebTrap"
         ],
-        "lb1": {
-            "name": "TangledWebs",
-            "class": "atk",
-            "pow": 150,
-            "cost": 100,
-            "status": "paralysis",
-            "statuschance": 20,
-            "hits": 2
-        },
-        "lb2": {
-            "name": "IntertwinedLacework",
-            "class": "atk",
-            "pow": 180,
-            "cost": 200,
-            "status": "paralysis",
-            "statuschance": 20,
-            "hits": 3
-        },
         "dodgequote": [
             "Missed me!",
             "Are you blind?",
@@ -18229,15 +18306,6 @@
             ],
             "gender": "female",
             "\"2'7''\"": "2'7''"
-        },
-        "lb3": {
-            "name": "ConvoluteGossamer",
-            "class": "atk",
-            "pow": 200,
-            "cost": 300,
-            "status": "paralysis",
-            "statuschance": 20,
-            "hits": 4
         },
         "trust": {
             "Harcvuk": {
@@ -18344,12 +18412,6 @@
         "weapon": {},
         "charms": [],
         "curCharms": [],
-        "leaderSkill": {
-            "name": "LuckyShot",
-            "type": "crit",
-            "target": "physical",
-            "percent": 10
-        },
         "mainElement": "poison",
         "mpMeter": [
             "Magic Points",
@@ -18464,6 +18526,41 @@
             ],
             "consolequote": [],
             "imfinequote": []
+        },
+        "leaderskill": {
+            "name": "LuckyShot",
+            "type": "crit",
+            "var1": "physical",
+            "var2": 10
+        },
+        "lb": {
+            "1": {
+                "name": "TangledWebs",
+                "class": "atk",
+                "pow": 150,
+                "cost": 100,
+                "status": "paralysis",
+                "statuschance": 20,
+                "hits": 2
+            },
+            "2": {
+                "name": "IntertwinedLacework",
+                "class": "atk",
+                "pow": 180,
+                "cost": 200,
+                "status": "paralysis",
+                "statuschance": 20,
+                "hits": 3
+            },
+            "3": {
+                "name": "ConvoluteGossamer",
+                "class": "atk",
+                "pow": 200,
+                "cost": 300,
+                "status": "paralysis",
+                "statuschance": 20,
+                "hits": 4
+            }
         }
     },
     "Creator": {
@@ -18588,7 +18685,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Bow_(Old)": {
         "name": "Bow_(Old)",
@@ -18765,30 +18863,6 @@
         ],
         "nickname": "Dumb stupid mf",
         "armor": {},
-        "lb1": {
-            "name": "BasicPunch",
-            "class": "atk",
-            "pow": 6,
-            "cost": 400,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb2": {
-            "name": "BasicPunches",
-            "class": "atk",
-            "pow": 2,
-            "cost": 1300,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb3": {
-            "name": "3BasicPunches",
-            "class": "atk",
-            "pow": 10,
-            "cost": 42500,
-            "status": "none",
-            "statuschance": 0
-        },
         "lb4": {
             "name": "4BasicPunches",
             "class": "atk",
@@ -19150,6 +19224,32 @@
             ],
             "consolequote": [],
             "imfinequote": []
+        },
+        "lb": {
+            "1": {
+                "name": "BasicPunch",
+                "class": "atk",
+                "pow": 6,
+                "cost": 400,
+                "status": "none",
+                "statuschance": 0
+            },
+            "2": {
+                "name": "BasicPunches",
+                "class": "atk",
+                "pow": 2,
+                "cost": 1300,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "3BasicPunches",
+                "class": "atk",
+                "pow": 10,
+                "cost": 42500,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "Bow": {
@@ -19327,30 +19427,6 @@
         ],
         "nickname": "Dumb stupid mf",
         "armor": {},
-        "lb1": {
-            "name": "BasicPunch",
-            "class": "atk",
-            "pow": 6,
-            "cost": 400,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb2": {
-            "name": "BasicPunches",
-            "class": "atk",
-            "pow": 2,
-            "cost": 1300,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb3": {
-            "name": "3BasicPunches",
-            "class": "atk",
-            "pow": 10,
-            "cost": 42500,
-            "status": "none",
-            "statuschance": 0
-        },
         "lb4": {
             "name": "4BasicPunches",
             "class": "atk",
@@ -19720,6 +19796,32 @@
             ],
             "consolequote": [],
             "imfinequote": []
+        },
+        "lb": {
+            "1": {
+                "name": "BasicPunch",
+                "class": "atk",
+                "pow": 6,
+                "cost": 400,
+                "status": "none",
+                "statuschance": 0
+            },
+            "2": {
+                "name": "BasicPunches",
+                "class": "atk",
+                "pow": 2,
+                "cost": 1300,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "3BasicPunches",
+                "class": "atk",
+                "pow": 10,
+                "cost": 42500,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "UnoriginalRain": {
@@ -19742,7 +19844,7 @@
             "crit": 15
         },
         "weapon": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 615066353,
         "skills": [
@@ -19771,12 +19873,6 @@
             "gender": "male"
         },
         "trust": {},
-        "leaderSkill": {
-            "name": "Test",
-            "type": "discount",
-            "target": "psychic",
-            "percent": 50
-        },
         "charms": [],
         "curCharms": [],
         "mainElement": "psychic",
@@ -19856,6 +19952,12 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
+        },
+        "leaderskill": {
+            "name": "Test",
+            "type": "discount",
+            "var1": "psychic",
+            "var2": 50
         }
     },
     "Nazier": {
@@ -19946,12 +20048,6 @@
                 "level": 2
             }
         },
-        "leaderSkill": {
-            "name": "WeaponMastery",
-            "type": "boost",
-            "target": "slash",
-            "percent": 25
-        },
         "stats": {
             "atk": 38,
             "mag": 26,
@@ -20010,7 +20106,14 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "leaderskill": {
+            "name": "WeaponMastery",
+            "type": "boost",
+            "var1": "slash",
+            "var2": 25
+        },
+        "lb": {}
     },
     "Trecko": {
         "name": "Trecko",
@@ -20162,7 +20265,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Jelly": {
         "name": "Jelly",
@@ -20305,7 +20409,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Bow(ShadowHarcvuk)": {
         "name": "Bow(ShadowHarcvuk)",
@@ -20427,7 +20532,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Foresa": {
         "name": "Foresa",
@@ -20454,7 +20560,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 4741253,
         "skills": [
@@ -20626,7 +20732,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 122599343,
         "maxxp": 615066353,
         "skills": [
@@ -20781,12 +20887,6 @@
         "dodgequote": [
             "Hah! You don't stand a chance!"
         ],
-        "leaderSkill": {
-            "name": "MoraleBoost",
-            "type": "buff",
-            "target": "agl",
-            "percent": 1
-        },
         "stats": {
             "atk": 63,
             "mag": 34,
@@ -20810,7 +20910,6 @@
         "affinities": {
             "weak": [
                 "curse",
-                "fire",
                 "water"
             ],
             "resist": [
@@ -20878,7 +20977,14 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "leaderskill": {
+            "name": "MoraleBoost",
+            "type": "buff",
+            "var1": "agl",
+            "var2": 1
+        },
+        "lb": {}
     },
     "OldDarko": {
         "name": "OldDarko",
@@ -21001,7 +21107,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Mumei": {
         "name": "Mumei",
@@ -21120,12 +21227,6 @@
         },
         "nickname": "Meimei",
         "mainElement": "slash",
-        "leaderSkill": {
-            "name": "AncientWisdom",
-            "type": "crit",
-            "target": "physical",
-            "percent": 10
-        },
         "teamCombo": {
             "Gura": "Civilization'sWrath",
             "Valoria": "Runesplosion"
@@ -21251,7 +21352,14 @@
             "imfinequote": [
                 "I'm alright friend."
             ]
-        }
+        },
+        "leaderskill": {
+            "name": "AncientWisdom",
+            "type": "crit",
+            "var1": "physical",
+            "var2": 10
+        },
+        "lb": {}
     },
     "Pank": {
         "name": "Pank",
@@ -21483,7 +21591,8 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "lb": {}
     },
     "Arrow": {
         "name": "Arrow",
@@ -21553,30 +21662,6 @@
             "How about you start trying to hit\n\nHit on some bitches",
             "Close one, I almost cared for a second."
         ],
-        "lb1": {
-            "name": "None",
-            "class": "atk",
-            "pow": {},
-            "cost": {},
-            "status": "none",
-            "statuschance": {}
-        },
-        "lb2": {
-            "name": "None",
-            "class": "atk",
-            "pow": {},
-            "cost": {},
-            "status": "none",
-            "statuschance": {}
-        },
-        "lb3": {
-            "name": "FlameNuke",
-            "class": "atk",
-            "pow": 440,
-            "cost": 370,
-            "status": "no",
-            "statuschance": {}
-        },
         "stats": {
             "atk": 41,
             "mag": 22,
@@ -21843,6 +21928,32 @@
             "imfinequote": [
                 "I'm not fine, but fuck it i'll live probably"
             ]
+        },
+        "lb": {
+            "1": {
+                "name": "None",
+                "class": "atk",
+                "pow": {},
+                "cost": {},
+                "status": "none",
+                "statuschance": {}
+            },
+            "2": {
+                "name": "None",
+                "class": "atk",
+                "pow": {},
+                "cost": {},
+                "status": "none",
+                "statuschance": {}
+            },
+            "3": {
+                "name": "FlameNuke",
+                "class": "atk",
+                "pow": 440,
+                "cost": 370,
+                "status": "no",
+                "statuschance": {}
+            }
         }
     },
     "Fele": {
@@ -21870,7 +21981,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 4741253,
         "skills": [
@@ -22060,20 +22171,6 @@
                 "level": 2
             }
         },
-        "leaderSkill": {
-            "name": "UnfortunatelyYourMother",
-            "type": "discount",
-            "target": "magic",
-            "percent": 99
-        },
-        "lb1": {
-            "name": "EtherealExcalibur",
-            "class": "atk",
-            "pow": 550,
-            "cost": 100,
-            "status": "dizzy",
-            "statuschance": 999
-        },
         "dodgequote": [
             "You suck.",
             "Not good enough.",
@@ -22081,22 +22178,6 @@
             "Denied!",
             "Fuck off."
         ],
-        "lb2": {
-            "name": "HellHathNoFury",
-            "class": "atk",
-            "pow": 800,
-            "cost": 200,
-            "status": "burn",
-            "statuschance": 999
-        },
-        "lb3": {
-            "name": "OneMillionDeaths",
-            "class": "atk",
-            "pow": 1000,
-            "cost": 300,
-            "status": "fear",
-            "statuschance": 999
-        },
         "lb4": {
             "name": "Die.",
             "class": "atk",
@@ -22242,6 +22323,38 @@
             "allydeathquote": [
                 "...[In visible agitation]"
             ]
+        },
+        "leaderskill": {
+            "name": "UnfortunatelyYourMother",
+            "type": "discount",
+            "var1": "magic",
+            "var2": 99
+        },
+        "lb": {
+            "1": {
+                "name": "EtherealExcalibur",
+                "class": "atk",
+                "pow": 550,
+                "cost": 100,
+                "status": "dizzy",
+                "statuschance": 999
+            },
+            "2": {
+                "name": "HellHathNoFury",
+                "class": "atk",
+                "pow": 800,
+                "cost": 200,
+                "status": "burn",
+                "statuschance": 999
+            },
+            "3": {
+                "name": "OneMillionDeaths",
+                "class": "atk",
+                "pow": 1000,
+                "cost": 300,
+                "status": "fear",
+                "statuschance": 999
+            }
         }
     },
     "Ayumi": {
@@ -22415,39 +22528,9 @@
                 "dislike": 160
             }
         },
-        "leaderSkill": {
-            "name": "ColdJudgement",
-            "type": "boost",
-            "target": "strike",
-            "percent": 25
-        },
-        "lb1": {
-            "name": "OverBreaker",
-            "class": "atk",
-            "pow": 300,
-            "cost": 100,
-            "status": "fear",
-            "statuschance": 20
-        },
         "dodgequote": [
             "Evasion successful, initiating a counterattack."
         ],
-        "lb2": {
-            "name": "UtterBrutality",
-            "class": "atk",
-            "pow": 600,
-            "cost": 200,
-            "status": "fear",
-            "statuschance": 40
-        },
-        "lb3": {
-            "name": "RuthlessBeatdown",
-            "class": "atk",
-            "pow": 800,
-            "cost": 300,
-            "status": "fear",
-            "statuschance": 60
-        },
         "lb4": {
             "name": "HeartlessDesolation",
             "class": "atk",
@@ -22596,6 +22679,38 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
+        },
+        "leaderskill": {
+            "name": "ColdJudgement",
+            "type": "boost",
+            "var1": "strike",
+            "var2": 25
+        },
+        "lb": {
+            "1": {
+                "name": "OverBreaker",
+                "class": "atk",
+                "pow": 300,
+                "cost": 100,
+                "status": "fear",
+                "statuschance": 20
+            },
+            "2": {
+                "name": "UtterBrutality",
+                "class": "atk",
+                "pow": 600,
+                "cost": 200,
+                "status": "fear",
+                "statuschance": 40
+            },
+            "3": {
+                "name": "RuthlessBeatdown",
+                "class": "atk",
+                "pow": 800,
+                "cost": 300,
+                "status": "fear",
+                "statuschance": 60
+            }
         }
     },
     "Rosy": {
@@ -22623,7 +22738,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 4741253,
         "skills": [
@@ -22744,7 +22859,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 500,
         "skills": [],
@@ -22850,7 +22965,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 122599343,
         "maxxp": 615066353,
         "skills": [
@@ -23003,36 +23118,6 @@
                 "level": 19
             }
         },
-        "leaderSkill": {
-            "name": "CryAboutIt",
-            "type": "buff",
-            "target": "mag",
-            "percent": 1
-        },
-        "lb1": {
-            "name": "HydroVortex",
-            "class": "atk",
-            "pow": 400,
-            "cost": 150,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb2": {
-            "name": "AquaticHell",
-            "class": "atk",
-            "pow": 600,
-            "cost": 300,
-            "status": "none",
-            "statuschance": 0
-        },
-        "lb3": {
-            "name": "MaxGeyser",
-            "class": "atk",
-            "pow": 800,
-            "cost": 450,
-            "status": "none",
-            "statuschance": 0
-        },
         "lb4": {
             "name": "MassBoilingBubbleBarrage",
             "class": "atk",
@@ -23116,6 +23201,38 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
+        },
+        "leaderskill": {
+            "name": "CryAboutIt",
+            "type": "buff",
+            "var1": "mag",
+            "var2": 1
+        },
+        "lb": {
+            "1": {
+                "name": "HydroVortex",
+                "class": "atk",
+                "pow": 400,
+                "cost": 150,
+                "status": "none",
+                "statuschance": 0
+            },
+            "2": {
+                "name": "AquaticHell",
+                "class": "atk",
+                "pow": 600,
+                "cost": 300,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "MaxGeyser",
+                "class": "atk",
+                "pow": 800,
+                "cost": 450,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "Rainbow": {
@@ -23266,12 +23383,6 @@
             "This isn't even a 'bruh moment' anymore, what the actual fuck is wrong with you and your aim?",
             "[Ultra Instinct Theme briefly plays]"
         ],
-        "leaderSkill": {
-            "name": "EnergyBoost",
-            "type": "discount",
-            "target": "psychic",
-            "percent": 20
-        },
         "charms": [
             "GrubberflysElegy"
         ],
@@ -23283,14 +23394,6 @@
             "RingPower",
             "<:RING:965554823527292938>"
         ],
-        "lb1": {
-            "name": "FusionPunch",
-            "class": "atk",
-            "pow": 400,
-            "cost": 100,
-            "status": "none",
-            "statuschance": 0
-        },
         "nickname": "Rain",
         "armor": {},
         "stats": {
@@ -23445,6 +23548,22 @@
                 "You okay, %ALLY%?"
             ],
             "imfinequote": []
+        },
+        "leaderskill": {
+            "name": "EnergyBoost",
+            "type": "discount",
+            "var1": "psychic",
+            "var2": 20
+        },
+        "lb": {
+            "1": {
+                "name": "FusionPunch",
+                "class": "atk",
+                "pow": 400,
+                "cost": 100,
+                "status": "none",
+                "statuschance": 0
+            }
         }
     },
     "WhyDidIGiveAMassiveNameToATESTChar": {
@@ -23472,7 +23591,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 122599343,
         "maxxp": 615066353,
         "skills": [
@@ -23576,7 +23695,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 122599343,
         "maxxp": 615066353,
         "skills": [
@@ -23755,7 +23874,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Yanna": {
         "name": "Yanna",
@@ -23867,12 +23987,6 @@
         "charms": [],
         "curCharms": [],
         "mainElement": "spirit",
-        "leaderSkill": {
-            "name": "Angel-DevilPower",
-            "type": "buff",
-            "target": "mag",
-            "percent": 1
-        },
         "dodgequote": [
             "Denied!",
             "Damn you suck."
@@ -24007,7 +24121,14 @@
                 "Ha. I'll be okay.",
                 "Tis but a scratch."
             ]
-        }
+        },
+        "leaderskill": {
+            "name": "Angel-DevilPower",
+            "type": "buff",
+            "var1": "mag",
+            "var2": 1
+        },
+        "lb": {}
     },
     "Shadow": {
         "name": "Shadow",
@@ -24034,7 +24155,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 169664433,
         "skills": [
@@ -24068,12 +24189,6 @@
         },
         "trust": {},
         "mainElement": "nuclear",
-        "leaderSkill": {
-            "name": "UltimateLifeform",
-            "type": "discount",
-            "target": "magic",
-            "percent": 10
-        },
         "stats": {
             "atk": 98,
             "mag": 50,
@@ -24127,6 +24242,12 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
+        },
+        "leaderskill": {
+            "name": "UltimateLifeform",
+            "type": "discount",
+            "var1": "magic",
+            "var2": 10
         }
     },
     "Silver": {
@@ -24154,7 +24275,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 169664433,
         "skills": [
@@ -24367,7 +24488,8 @@
             "allydeathquote": [],
             "consolequote": [],
             "imfinequote": []
-        }
+        },
+        "lb": {}
     },
     "Sky(B)": {
         "name": "Sky(B)",
@@ -24398,30 +24520,6 @@
             "SwiftStrike",
             "Meteorfall"
         ],
-        "lb1": {
-            "name": "SpiritBlade",
-            "class": "atk",
-            "pow": 300,
-            "cost": 125,
-            "status": "dizzy",
-            "statuschance": 20
-        },
-        "lb2": {
-            "name": "EarthShatteringStrike",
-            "class": "atk",
-            "pow": 500,
-            "cost": 250,
-            "status": "dizzy",
-            "statuschance": 40
-        },
-        "lb3": {
-            "name": "FinalStrike",
-            "class": "atk",
-            "pow": 700,
-            "cost": 375,
-            "status": "dizzy",
-            "statuschance": 60
-        },
         "dodgequote": [
             "Denied!",
             "Try harder next time!",
@@ -24691,12 +24789,6 @@
                 "nextLevel": 120,
                 "level": 2
             }
-        },
-        "leaderSkill": {
-            "name": "Warrior'sPride",
-            "type": "discount",
-            "target": "physical",
-            "percent": 10
         },
         "transformations": {
             "A Lone Warrior": {
@@ -25083,6 +25175,38 @@
                 "I'm good %ALLY%, don't get your panties in a wad over me.",
                 "C'mon, you didn't think that was enough to take me down did you?"
             ]
+        },
+        "leaderskill": {
+            "name": "Warrior'sPride",
+            "type": "discount",
+            "var1": "physical",
+            "var2": 10
+        },
+        "lb": {
+            "1": {
+                "name": "SpiritBlade",
+                "class": "atk",
+                "pow": 300,
+                "cost": 125,
+                "status": "dizzy",
+                "statuschance": 20
+            },
+            "2": {
+                "name": "EarthShatteringStrike",
+                "class": "atk",
+                "pow": 500,
+                "cost": 250,
+                "status": "dizzy",
+                "statuschance": 40
+            },
+            "3": {
+                "name": "FinalStrike",
+                "class": "atk",
+                "pow": 700,
+                "cost": 375,
+                "status": "dizzy",
+                "statuschance": 60
+            }
         }
     },
     "Sky": {
@@ -25114,30 +25238,6 @@
             "Swordbreaker",
             "SpiritCharge"
         ],
-        "lb1": {
-            "name": "SpiritBlade",
-            "class": "atk",
-            "pow": 300,
-            "cost": 125,
-            "status": "dizzy",
-            "statuschance": 20
-        },
-        "lb2": {
-            "name": "EarthShatteringStrike",
-            "class": "atk",
-            "pow": 500,
-            "cost": 250,
-            "status": "dizzy",
-            "statuschance": 40
-        },
-        "lb3": {
-            "name": "FinalStrike",
-            "class": "atk",
-            "pow": 700,
-            "cost": 375,
-            "status": "dizzy",
-            "statuschance": 60
-        },
         "dodgequote": [
             "Denied!",
             "Try harder next time!",
@@ -25407,12 +25507,6 @@
                 "nextLevel": 120,
                 "level": 2
             }
-        },
-        "leaderSkill": {
-            "name": "Warrior'sPride",
-            "type": "discount",
-            "target": "physical",
-            "percent": 10
         },
         "transformations": {
             "A Lone Warrior": {
@@ -25799,6 +25893,38 @@
                 "I'm good %ALLY%, don't get your panties in a wad over me.",
                 "C'mon, you didn't think that was enough to take me down did you?"
             ]
+        },
+        "leaderskill": {
+            "name": "Warrior'sPride",
+            "type": "discount",
+            "var1": "physical",
+            "var2": 10
+        },
+        "lb": {
+            "1": {
+                "name": "SpiritBlade",
+                "class": "atk",
+                "pow": 300,
+                "cost": 125,
+                "status": "dizzy",
+                "statuschance": 20
+            },
+            "2": {
+                "name": "EarthShatteringStrike",
+                "class": "atk",
+                "pow": 500,
+                "cost": 250,
+                "status": "dizzy",
+                "statuschance": 40
+            },
+            "3": {
+                "name": "FinalStrike",
+                "class": "atk",
+                "pow": 700,
+                "cost": 375,
+                "status": "dizzy",
+                "statuschance": 60
+            }
         }
     },
     "Sakuya": {
@@ -25821,7 +25947,7 @@
             "crit": 15
         },
         "weapon": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 40561289,
         "skills": [
@@ -26059,7 +26185,8 @@
             "helpedquote": [],
             "killquote": [],
             "deathquote": []
-        }
+        },
+        "lb": {}
     },
     "Cirno": {
         "name": "Cirno",
@@ -26081,7 +26208,7 @@
             "crit": 15
         },
         "weapon": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 1133480,
         "skills": [
@@ -26200,7 +26327,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 4741253,
         "skills": [],
@@ -26297,7 +26424,7 @@
             "crit": 15
         },
         "weapon": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 1133480,
         "skills": [],
@@ -26408,7 +26535,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 0,
         "maxxp": 82956663,
         "skills": [
@@ -26508,7 +26635,7 @@
         },
         "weapon": {},
         "armor": {},
-        "lb": 0,
+        "lb": {},
         "xp": 1,
         "maxxp": 500,
         "skills": [
