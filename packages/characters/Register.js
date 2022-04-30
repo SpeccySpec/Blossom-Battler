@@ -169,7 +169,7 @@ longDescription = (charDefs, level, server) => {
 
 	if (level && char.level != level && server) {
 		char.level = level;
-		updateStats(char, server, false);
+		updateStats(char, server, true);
 
 		dispLevel = `(At Level ${level})`;
 	}
@@ -183,7 +183,7 @@ longDescription = (charDefs, level, server) => {
 	// Here come the various fields!
 
 	// Stats
-	let statDesc = `${char.hp}/${char.maxhp}HP\n${char.mp}/${char.maxmp}MP\n${char.xp}/${char.maxxp}XP\n`;
+	let statDesc = `Level ${char.level}\n${char.hp}/${char.maxhp}HP\n${char.mp}/${char.maxmp}MP\n${char.xp}/${char.maxxp}XP\n`;
 	for (const i in char.stats) statDesc += `\n${char.stats[i]}${i.toUpperCase()}`;
 	DiscordEmbed.fields.push({ name: 'Stats', value: statDesc, inline: true });
 	
