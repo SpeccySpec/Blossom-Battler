@@ -231,6 +231,16 @@ longDescription = (charDefs, level, server) => {
 		for (const i in char.affinities[affinity]) charAffs += `${elementEmoji[char.affinities[affinity][i]]}${affinityEmoji[affinity]}\n`;
 	}
 
+	// Status Affinities
+	if (char.statusaffinities) {
+		let statAffs = '';
+		for (const affinity in char.statusaffinities) {
+			for (const i in char.statusaffinities[affinity]) statAffs += `${statusEmojis[char.statusaffinities[affinity][i]]}${affinityEmoji[affinity]}\n`;
+		}
+
+		if (statAffs != '') charAffs += `\n\n${statAffs}`;
+	}
+
 	if (charAffs != '') DiscordEmbed.fields.push({ name: 'Affinities', value: charAffs, inline: true });
 
 	// Ae

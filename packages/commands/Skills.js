@@ -921,6 +921,11 @@ commands.listskills = new Command({
 			name: "Element",
 			type: "Word",
 			forced: false
+		},
+		{
+			name: "User",
+			type: "Ping",
+			forced: false
 		}
 	],
 	func: (message, args) => {
@@ -942,12 +947,13 @@ commands.listskills = new Command({
 				}
 			}
 
-			if (!args[0]) {
+			if ((!args[0] || args[0].toLowerCase() === 'none') && (!args[1] || args[1].toLowerCase() === 'none')) {
 				array.push({title: `${elementEmoji[skillFile[i].type]}${skillFile[i].name} (${i})`, desc: descTxt});
 				continue;
 			}
 
-			if (skillFile[i].type != args[0].toLowerCase()) continue;
+			if ((!args[0] || args[0].toLowerCase() === 'none') && skillFile[i].type != args[0].toLowerCase()) continue;
+			if (!args[1] && message.mentions.users.first() && skillFile[i].type != message.mentions.users.first().id) continue;
 			array.push({title: `${elementEmoji[skillFile[i].type]}${skillFile[i].name} (${i})`, desc: descTxt});
 		}
 

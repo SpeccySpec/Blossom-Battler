@@ -125,6 +125,43 @@ commands.getchar = new Command({
 	}
 })
 
+commands.listchars = new Command({
+	desc: 'Lists *all* existing characters.',
+	section: "skills",
+	args: [
+		{
+			name: "Element",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "User",
+			type: "Ping",
+			forced: false
+		}
+	],
+	func: (message, args) => {
+		let array = [];
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		for (const i in charFile) {
+			if (charFile[i].hidden) continue;
+			let descTxt = `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}MP`;
+
+			if ((!args[0] || args[0].toLowerCase() === 'none') && (!args[1] || args[1].toLowerCase() === 'none')) {
+				array.push({title: `${elementEmoji[charFile[i].mainElement]}${charFile[i].name} (${i})`, desc: descTxt});
+				continue;
+			}
+
+			if ((!args[0] || args[0].toLowerCase() === 'none') && charFile[i].mainElement != args[0].toLowerCase()) continue;
+			if (!args[1] && message.mentions.users.first() && skillFile[i].type != message.mentions.users.first().id) continue;
+			array.push({title: `${elementEmoji[charFile[i].mainElement]}${charFile[i].name} (${i})`, desc: descTxt});
+		}
+
+		listArray(message.channel, array, args[1]);
+	}
+})
+
 commands.nickname = new Command({
 	desc: `Change the character's nickname.`,
 	aliases: ['nick', 'shortname'],
@@ -255,6 +292,19 @@ hasAffinity = (charDefs, element, affinity) => {
 	return false;
 }
 
+hasStatusAffinity = (charDefs, element, affinity) => {
+	if (element.toLowerCase() == 'almighty') return false;
+
+	if (!charDefs.statusaffinities) return false;
+	if (!charDefs.statusaffinities[affinity]) return false;
+
+	for (const aff of charDefs.statusaffinities[affinity]) {
+		if (aff.toLowerCase() == element.toLowerCase()) return true;
+	}
+
+	return false;
+}
+
 commands.setaffinity = new Command({
 	desc: "Characters can deal less or more damage to others depending on their affinities! Weakness affinities increase the damage output of skills, while resisting ones lower or nullify damage.",
 	aliases: ['seteffectiveness', 'affinity', 'effectiveness'],
@@ -283,28 +333,62 @@ commands.setaffinity = new Command({
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
-		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements)) return message.channel.send({content: 'Please enter a valid element for **Element!**', embeds: [elementList()]});
-		if (!utilityFuncs.inArray(args[2].toLowerCase(), Affinities) && args[2].toLowerCase() != 'normal') return message.channel.send('Please enter a valid affinity!```diff\n+ SuperWeak\n+ Weak\n+ Normal\n+ Resist\n+ Block\n+ Repel\n+ Drain```');
-		if (args[1].toLowerCase() == 'almighty' || args[1].toLowerCase() == 'status' || args[1].toLowerCase() == 'passive' || args[1].toLowerCase() == 'heal') return message.channel.send(`You can't set ${args[1]} affinities!`);
 
-		if (hasAffinity(charFile[args[0]], args[1].toLowerCase(), args[2].toLowerCase())) return message.channel.send(`${charFile[args[0]].name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
+		// Element Affinities
+		if (utilityFuncs.inArray(args[1].toLowerCase(), Elements)) {
+			if (!utilityFuncs.inArray(args[2].toLowerCase(), Affinities) && args[2].toLowerCase() != 'normal') return message.channel.send('Please enter a valid affinity!```diff\n+ SuperWeak\n+ Weak\n+ Normal\n+ Resist\n+ Block\n+ Repel\n+ Drain```');
+			if (args[1].toLowerCase() == 'almighty' || args[1].toLowerCase() == 'status' || args[1].toLowerCase() == 'passive' || args[1].toLowerCase() == 'heal') return message.channel.send(`You can't set ${args[1]} affinities!`);
 
-		// Clear Affinities
-		for (let a of Affinities) {
-			if (a && charFile[args[0]].affinities[a]) {
-				for (const k in charFile[args[0]].affinities[a]) {
-					if (charFile[args[0]].affinities[a][k].toLowerCase() === args[1].toLowerCase()) {
-						charFile[args[0]].affinities[a].splice(k, 1);
-						break;
+			if (hasAffinity(charFile[args[0]], args[1].toLowerCase(), args[2].toLowerCase())) return message.channel.send(`${charFile[args[0]].name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
+
+			// Clear Affinities
+			for (let a of Affinities) {
+				if (a && charFile[args[0]].affinities[a]) {
+					for (const k in charFile[args[0]].affinities[a]) {
+						if (charFile[args[0]].affinities[a][k].toLowerCase() === args[1].toLowerCase()) {
+							charFile[args[0]].affinities[a].splice(k, 1);
+							break;
+						}
 					}
 				}
 			}
-		}
 
-		// Apply Affinities (ignore if normal)
-		if (args[2].toLowerCase() != 'normal') {
-			if (!charFile[args[0]].affinities[args[2].toLowerCase()]) charFile[args[0]].affinities[args[2].toLowerCase()] = [];
-			charFile[args[0]].affinities[args[2].toLowerCase()].push(args[1].toLowerCase());
+			// Apply Affinities (ignore if normal)
+			if (args[2].toLowerCase() != 'normal') {
+				if (!charFile[args[0]].affinities[args[2].toLowerCase()]) charFile[args[0]].affinities[args[2].toLowerCase()] = [];
+				charFile[args[0]].affinities[args[2].toLowerCase()].push(args[1].toLowerCase());
+			}
+		// Status Affinities
+		} else if (utilityFuncs.inArray(args[1].toLowerCase(), statusEffects)) {
+			if (!charFile[args[0]].statusaffinities) charFile[args[0]].statusaffinities = {};
+
+			if ((!utilityFuncs.inArray(args[2].toLowerCase(), Affinities) && args[2].toLowerCase() != 'normal') || args[2].toLowerCase() === 'superweak' || args[2].toLowerCase() === 'repel' || args[2].toLowerCase() === 'drain') return message.channel.send('Please enter a valid affinity!```diff\n+ Weak\n+ Normal\n+ Resist\n+ Block```');
+			if (args[1].toLowerCase() == 'infatuation' || args[1].toLowerCase() == 'confusion' || args[1].toLowerCase() == 'mirror') return message.channel.send(`You can't set ${args[1]} affinities!`);
+
+			if (hasStatusAffinity(charFile[args[0]], args[1].toLowerCase(), args[2].toLowerCase())) return message.channel.send(`${charFile[args[0]].name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
+
+			// Clear Affinities
+			for (let a of Affinities) {
+				if (charFile[args[0]].statusaffinities[a]) {
+					if (a && charFile[args[0]].statusaffinities[a]) {
+						for (const k in charFile[args[0]].statusaffinities[a]) {
+							if (charFile[args[0]].statusaffinities[a][k].toLowerCase() === args[1].toLowerCase()) {
+								charFile[args[0]].statusaffinities[a].splice(k, 1);
+								break;
+							}
+						}
+					}
+				}
+			}
+
+			// Apply Affinities (ignore if normal)
+			if (args[2].toLowerCase() != 'normal') {
+				if (!charFile[args[0]].statusaffinities[args[2].toLowerCase()]) charFile[args[0]].statusaffinities[args[2].toLowerCase()] = [];
+				charFile[args[0]].statusaffinities[args[2].toLowerCase()].push(args[1].toLowerCase());
+			}
+		// Neither entered.
+		} else {
+			return message.channel.send('Please enter a valid element or status effect to resist!');
 		}
 
 		// Display Message
@@ -1023,5 +1107,113 @@ commands.changestats = new Command({
 		DiscordEmbed.title = `${charFile[args[0]].name}'s stats have been changed!`;
 		DiscordEmbed.description = `**Level ${charFile[args[0]].level}**\n${DiscordEmbed.description}`;
 		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
+commands.updatecharacters = new Command({
+	desc: "Updates characters!",
+	aliases: ['updatechars', 'fixchars', 'interoperability'],
+	section: "characters",
+	args: [],
+	func: (message, args) => {
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		for (let i in charFile) {
+			charFile[i].name = i;
+
+			// Melee Attack
+			charFile[i].melee = {
+				name: charFile[i].melee[0],
+				type: charFile[i].melee[1],
+				pow: 30,
+				acc: 95,
+				crit: 15
+			}
+
+			// Weapons and Armor
+			charFile[i].weapon = {}
+			charFile[i].armor = {}
+
+			// Main stats
+			charFile[i].stats = {
+				atk: charFile[i].atk,
+				mag: charFile[i].mag,
+				prc: charFile[i].prc,
+				end: charFile[i].end,
+				chr: charFile[i].chr,
+				int: charFile[i].int,
+				agl: charFile[i].agl,
+				luk: charFile[i].luk
+			}
+
+			charFile[i].basestats = {
+				baseatk: charFile[i].baseatk,
+				basemag: charFile[i].basemag,
+				baseprc: charFile[i].baseprc,
+				baseend: charFile[i].baseend,
+				basechr: charFile[i].basechr,
+				baseint: charFile[i].baseint,
+				baseagl: charFile[i].baseagl,
+				baseluk: charFile[i].baseluk
+			}
+
+			// Affinities & Skills
+			charFile[i].affinities = {
+				superweak: charFile[i].superweak,
+				weak: charFile[i].weak,
+				resist: charFile[i].resist,
+				block: charFile[i].block,
+				repel: charFile[i].repel,
+				drain: charFile[i].drain
+			}
+
+			charFile[i].autolearn = charFile[i].autoLearn
+				
+			// Quotes
+			charFile[i].quotes = {
+				meleequote: charFile[i].meleequote,
+				physquote: charFile[i].physquote,
+				magquote: charFile[i].magquote,
+				allyatkquote: charFile[i].allyatkquote,
+				lbquote: charFile[i].lbquote,
+				tcquote: charFile[i].tcquote,
+				strongquote: charFile[i].strongquote,
+				critquote: charFile[i].critquote,
+				weakquote: charFile[i].weakquote,
+				missquote: charFile[i].missquote,
+				blockquote: charFile[i].blockquote,
+				repelquote: charFile[i].repelquote,
+				drainquote: charFile[i].drainquote,
+				resistquote: charFile[i].resistquote,
+				hurtquote: charFile[i].hurtquote,
+				healquote: charFile[i].healquote,
+				helpedquote: charFile[i].helpedquote,
+				killquote: charFile[i].killquote,
+				deathquote: charFile[i].deathquote,
+				lvlquote: charFile[i].lvlquote,
+				allydeathquote: charFile[i].allydeathquote,
+				consolequote: charFile[i].consolequote,
+				imfinequote: charFile[i].imfinequote
+			}
+
+			// Bio Info
+			charFile[i].bio.height = [0, "feet"]
+			charFile[i].bio.weight = [0, "pounds"]
+			
+			updateStats(charFile[i], message.guild.id, true);
+		}
+		
+		// delete old shit
+		for (let i in charFile) {
+			delete charFile[i].autoLearn;
+			for (let k of Affinities) delete charFile[i][k];
+			for (let k of stats) delete charFile[i][k];
+			for (let k of stats) delete charFile[i][`base${k}`];
+			for (let k in charFile[i].quotes) delete charFile[i][k];
+		}
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		
+		// Send an Embed to notify us!
+		message.channel.send('Characters have been updated from an older version to a newer one!');
 	}
 })
