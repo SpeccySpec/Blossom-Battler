@@ -1563,7 +1563,6 @@ commands.getbio = new Command({
 		}
 	],
 	func: (message, args) => {
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
