@@ -60,7 +60,7 @@ function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFil
             }
         }
         if (chestDefs.items['money']) {
-            itemText += `*Money:*\n ${chestDefs.items['money']}`
+            itemText += `*Money:*\n ${chestDefs.items['money']} ${getCurrency(message.guild.id)}s`
         }
     }
 
@@ -685,7 +685,7 @@ commands.chestitems = new Command({
                             }
                         }
                     } else {
-                        if (!chest.items['money']) return message.channel.send(`There are is no currency in ${args[1]}.`);
+                        if (!chest.items['money']) return message.channel.send(`There are no ${getCurrency(message.guild.id)}s in ${args[1]}.`);
                         itemAmount[i] = Math.min(chest.items['money'], parseInt(itemAmount[i]));
                         chest.items['money'] -= itemAmount[i];
 

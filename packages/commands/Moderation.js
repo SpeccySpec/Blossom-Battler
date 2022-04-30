@@ -235,3 +235,27 @@ commands.unban = new Command({
         }
     }
 })
+
+commands.currency = new Command({
+    desc: 'Change the currency for the server.',
+    section: 'moderation',
+    aliases: ['setcurrency', 'setmoney', 'setmoneytype'],
+    args: [
+        {
+            name: 'Currency',
+            type: 'Word',
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        let settings = setUpSettings(message.guild.id)
+
+        if (utilityFuncs.isAdmin(message)) {
+            settings['currency'] = args[0]
+            fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+            message.channel.send('Currency set to ' + args[0])
+        } else {
+            return message.channel.send('You do not have permission to change the currency!')
+        }
+    }
+})

@@ -20,7 +20,7 @@ function itemDesc(itemDefs, itemName, message) {
     let finalText = "";
 
     if (itemDefs.cost && itemDefs.cost != 0) {
-        finalText += `Costs **${itemDefs.cost}**\n`;
+        finalText += `Costs **${itemDefs.cost}** ${getCurrency(message.guild.id)}s\n`;
     }
 
     if (itemDefs.type) {
@@ -82,7 +82,7 @@ function weaponDesc(weaponDefs, weaponName, message) {
     let finalText = "";
 
     if (weaponDefs.cost && weaponDefs.cost != 0) {
-        finalText += `Costs **${weaponDefs.cost}**\n`;
+        finalText += `Costs **${weaponDefs.cost}** ${getCurrency(message.guild.id)}s\n`;
     }
 
     if (weaponDefs.melee) {
@@ -135,7 +135,7 @@ function armorDesc(armorDefs, armorName, message) {
     let finalText = "";
 
     if (armorDefs.cost && armorDefs.cost != 0) {
-        finalText += `Costs **${armorDefs.cost}**\n`;
+        finalText += `Costs **${armorDefs.cost}** ${getCurrency(message.guild.id)}s\n`;
     }
 
     if (armorDefs.end) {
