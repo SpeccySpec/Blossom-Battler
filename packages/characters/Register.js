@@ -141,6 +141,30 @@ let usesPercent = {
 	discount: true
 }
 
+const affinityScores = {
+	deadly: -4,
+	superweak: -2,
+	weak: -1,
+	resist: 1,
+	block: 1.5,
+	repel: 1.5,
+	drain: 1.5,
+
+	[-6]: "Even glass survies more hits.",
+	[-5]: "Extremely likely to get hurt a lot.",
+	[-4]: "A fragile individual.",
+	[-3]: "Easily hurt, but could survive.",
+	[-2]: "May get hurt a little, but it's fine.",
+	[-1]: "Not really weak, but not resistant either.",
+	[0]: "Perfectly balanced, as all things should be.",
+	[1]: "Not really resistant, but not weak either.",
+	[2]: "Your average fighter.",
+	[3]: "The tanker.",
+	[4]: "An impenetrable individual.",
+	[5]: "Don't even bother attacking this guy.",
+	[6]: "Are you sure this is a person and not a WALL?"
+}
+
 longDescription = (charDefs, level, server) => {
 	let char = objClone(charDefs);
 	let dispLevel = '';
@@ -156,7 +180,7 @@ longDescription = (charDefs, level, server) => {
 		.setColor(elementColors[char.mainElement])
 		.setTitle(`${elementEmoji[char.mainElement]}${char.name} ${dispLevel}`)
 
-	if (char.leaderskill) DiscordEmbed.setDescription(`**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} toward ${char.leaderskill.var1.toUpperCase()}*`);
+	if (char.leaderskill) DiscordEmbed.setDescription(`**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} toward ${char.leaderskill.var1.toUpperCase()}`);
 
 	// Here come the various fields!
 
@@ -208,19 +232,31 @@ longDescription = (charDefs, level, server) => {
 	}
 
 	// Affinities
+	let affinityscore = 0
 	let charAffs = '';
 	for (const affinity in char.affinities) {
-		for (const i in char.affinities[affinity]) charAffs += `${elementEmoji[char.affinities[affinity][i]]}${affinityEmoji[affinity]}\n`;
+		for (const i in char.affinities[affinity]) {
+			affinityscore += affinityScores[affinity]
+			charAffs += `${elementEmoji[char.affinities[affinity][i]]}${affinityEmoji[affinity]}\n`;
+		}
 	}
+	const scorecomment = affinityScores[(affinityscore > 0 ? Math.ceil : Math.floor)(affinityscore)]
+	charAffs += `Score: **${affinityscore}**\n*${scorecomment}*`
 
 	// Status Affinities
 	if (char.statusaffinities) {
+		let statusaffinityscore = 0
 		let statAffs = '';
 		for (const affinity in char.statusaffinities) {
-			for (const i in char.statusaffinities[affinity]) statAffs += `${statusEmojis[char.statusaffinities[affinity][i]]}${affinityEmoji[affinity]}\n`;
+			for (const i in char.statusaffinities[affinity]) {
+				statusaffinityscore += affinityScores[affinity]
+				statAffs += `${statusEmojis[char.statusaffinities[affinity][i]]}${affinityEmoji[affinity]}\n`;
+			}
 		}
-
-		if (statAffs != '') charAffs += `\n\n${statAffs}`;
+		if (statAffs != '') {
+			const scorecomment = affinityScores[(statusaffinityscore > 0 ? Math.ceil : Math.floor)(statusaffinityscore)]
+			charAffs += `\n\n${statAffs}Score: **${statusaffinityscore}**\n*${scorecomment}*`
+		};
 	}
 
 	if (charAffs != '') DiscordEmbed.fields.push({ name: 'Affinities', value: charAffs, inline: true });

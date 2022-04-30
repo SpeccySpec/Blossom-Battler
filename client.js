@@ -422,7 +422,8 @@ costTypes = [
 quoteTypes = ['melee', 'phys', 'mag', 'allyatk', 'lb', 'tc', 'strong', 'badatk', 'landed', 'miss', 'superweak', 'weak', 'hurt', 'resist', 'block', 'repel', 'drain', 'dodge', 'kill', 'pacify', 'allydeath', 'heal', 'helped', 'console', 'imfine', 'lvl']
 
 getPrefix = (server) => {
-	return 'rpg!' // for now
+	let settings = setUpSettings(server)
+	return settings['prefix']
 }
 
 // Clone Object
@@ -709,11 +710,72 @@ for (const i in folders) {
 	}
 }
 
+setUpSettings = (guild) => {
+	let settings = setUpFile(`${dataPath}/json/${guild}/settings.json`)
+
+	if (Object.keys(settings).length === 0) {
+		settings = {
+			prefix: 'rpg!',
+			mechanics: {
+				limitbreaks: false,
+				teamcombos: false,
+				onemores: false,
+				stataffinties: false,
+				charms: false,
+				leaderskills: false,
+				transformations: false
+			},
+			caps: {
+				levelcap: 99,
+				hpmpcap: 70,
+				statcap: 99,
+				basestatcap: 10,
+				bstcap: 45,
+				skillamount: 8,
+				transformations: {
+					hpmpcap: 10,
+					statcap: 99,
+					basestatcap: 10,
+					bstcap: 15
+				}
+			},
+			rates: {
+				xprate: 1,
+				trustrate: 1,
+				goldchance: 0.01,
+				affinities: {
+					deadly: 4.2,
+					superweak: 2.1,
+					weak: 1.5,
+					resist: 0.5,
+					repel: 1,
+					drain: 1,
+				}
+			},
+			formulas: {
+				damageFormula: "persona",
+				levelUpFormula: "original",
+				xpCalcFormula: "original"
+			},
+			currency: 'BB Token',
+			pvpstuff: {},
+			banned: [],
+			themes: {},
+			encountered: [],
+			desc: ""
+		}
+
+		fs.writeFileSync(`${dataPath}/json/${guild}/settings.json`, JSON.stringify(settings, null, 4))
+	}
+
+	return settings
+}
+
 client.on("guildCreate", (guild) => {
 	makeDirectory(`${dataPath}/json/${guild.id}`);
 
 	// Server Data
-	setUpFile(`${dataPath}/json/${guild.id}/settings.json`)
+	setUpSettings(guild.id)
 	setUpFile(`${dataPath}/json/${guild.id}/trials.json`)
 	setUpFile(`${dataPath}/json/${guild.id}/parties.json`)
 	setUpFile(`${dataPath}/json/${guild.id}/items.json`)
@@ -755,12 +817,12 @@ client.on("guildCreate", (guild) => {
 		.then(() => channel.send({embeds: [DiscordEmbed]}))
 })
 
-prefix = 'rpg!';
 client.on("messageCreate", (message) => {
 	if (message.channel.type !== 'DM') makeDirectory(`${dataPath}/json/${message.guild.id}`);
 	if (message.author.bot) return;
 
 	// Register commands
+	prefix = getPrefix(message.guild.id)
 	if (!message.content.startsWith(prefix)) return;
 	let args = [...message.content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
 	if (args.length == 0) return;
