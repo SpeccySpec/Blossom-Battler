@@ -5,14 +5,7 @@ commands.settings = new Command({
     args: [],
     func: (message, args) => {
         let settings = setUpSettings(message.guild.id)
-
-        /**{
-        "formulas": {
-            "damageFormula": "persona",
-            "levelUpFormula": "original",
-            "xpCalcFormula": "original"
-        }
-        } */
+        
         let mechanicText = ''
         for (const i in settings['mechanics']) {
             switch (i) {
@@ -66,25 +59,6 @@ commands.settings = new Command({
         for (const i in settings['rates']['affinities']) {
             affinityRateText += `**${affinityEmoji[i]} ${i.charAt(0).toUpperCase() + i.slice(1)} Affinity Rate**: ${settings['rates']['affinities'][i]}x\n`
         }
-
-        /**
-		// LvlUp Formula
-		if (!servStuff.levelUpFormula) {
-			servStuff.levelUpFormula = 'original'
-			fs.writeFileSync(servPath, JSON.stringify(servFile, null, '    '));
-		}
-
-		let lvlFormulas = {
-			percent: 'BaseStat * (1 + ((Level-1) * 0.091))',
-			assist: '(BaseStat+3) * (1 + ((Level-1) * 0.06751))',
-			original: 'No Specific Formula'
-		}
-
-		let lvlArray = servStuff.levelUpFormula.split('');
-		lvlArray[0] = lvlArray[0].toUpperCase()
-		let lvlString = lvlArray.join('');
-		
-		DiscordEmbed.fields.push({name: 'Level Up Formula', value: lvlString + '\n`' + lvlFormulas[servStuff.levelUpFormula] + '`', inline: true}) */
 
         let dForText = ''
         let damageFormulas = {
