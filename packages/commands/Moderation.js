@@ -18,7 +18,7 @@ commands.settings = new Command({
                 case 'onemores':
                     mechanicText += `**One Mores**: ${settings['mechanics'][i] == true ? 'Enabled' : 'Disabled'}\n`
                     break
-                case 'stataffinties':
+                case 'stataffinities':
                     mechanicText += `**Status Affinities**: ${settings['mechanics'][i] == true ? 'Enabled' : 'Disabled'}\n`
                     break
                 case 'leaderskills':
@@ -544,7 +544,7 @@ commands.mechanics = new Command({
                 'limitbreaks': 'Limit Breaks',
                 'teamcombos': 'Team Combos',
                 'onemores': 'One Mores',
-                'stataffinties': 'Stat Affinities',
+                'stataffinities': 'Status Affinities',
                 'charms': 'Charms',
                 'leaderskills': 'Leader Skills',
                 'transformations': 'Transformations'
@@ -554,7 +554,7 @@ commands.mechanics = new Command({
                 case 'limitbreaks':
                 case 'teamcombos':
                 case 'onemores':
-                case 'stataffinties':
+                case 'stataffinities':
                 case 'charms':
                 case 'leaderskills':
                 case 'transformations':
@@ -563,7 +563,7 @@ commands.mechanics = new Command({
                     message.channel.send(fullNames[args[0].toLowerCase()] + ' are now ' + (settings['mechanics'][args[0].toLowerCase()] ? 'enabled' : 'disabled'))
                     break
                 default:
-                    message.channel.send('Invalid mechanic! Valid mechanics are: limitbreaks, teamcombos, onemores, stataffinties, charms, leaderskills, transformations')
+                    message.channel.send('Invalid mechanic! Valid mechanics are: limitbreaks, teamcombos, onemores, stataffinities, charms, leaderskills, transformations')
                     break
             }
         } else {

@@ -736,7 +736,7 @@ setUpSettings = (guild) => {
 				limitbreaks: false,
 				teamcombos: false,
 				onemores: false,
-				stataffinties: false,
+				stataffinities: false,
 				charms: false,
 				leaderskills: false,
 				transformations: false

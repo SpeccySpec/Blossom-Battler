@@ -434,7 +434,7 @@ commands.setaffinity = new Command({
 		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
 		// Element Affinities
 		if (utilityFuncs.inArray(args[1].toLowerCase(), Elements)) {
@@ -462,6 +462,7 @@ commands.setaffinity = new Command({
 			}
 		// Status Affinities
 		} else if (utilityFuncs.inArray(args[1].toLowerCase(), statusEffects)) {
+			if (setUpSettings(message.guild.id).mechanics.stataffinities === false) return message.channel.send("Status Affinities are disabled for this server.");
 			if (!charFile[args[0]].statusaffinities) charFile[args[0]].statusaffinities = {};
 
 			if ((!utilityFuncs.inArray(args[2].toLowerCase(), Affinities) && args[2].toLowerCase() != 'normal') || args[2].toLowerCase() === 'superweak' || args[2].toLowerCase() === 'repel' || args[2].toLowerCase() === 'drain') return message.channel.send('Please enter a valid affinity!```diff\n+ Weak\n+ Normal\n+ Resist\n+ Block```');
