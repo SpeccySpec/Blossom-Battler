@@ -63,16 +63,15 @@ commands.settings = new Command({
             affinityRateText += `**${affinityEmoji[i]} ${i.charAt(0).toUpperCase() + i.slice(1)} Affinity Rate**: ${settings['rates']['affinities'][i]}x\n`
         }
 
-        let dForText = ''
+        let formulaText = ''
         let damageFormulas = {
             'persona': '5*√(Attack/Endurance * Skill Power)',
             'pokemon': '(((2*level)/5+2)*Power*Attack/Endurance)/50+2',
             'custom': 'uhhhh Spectra you handle this'
         }
 
-        dForText += `${settings['formulas']['damageFormula'].charAt(0).toUpperCase() + settings['formulas']['damageFormula'].slice(1)}\n\`${damageFormulas[settings['formulas']['damageFormula']]}\``
+        formulaText += `**Damage Formula:**\n${settings['formulas']['damageFormula'].charAt(0).toUpperCase() + settings['formulas']['damageFormula'].slice(1)}\n\`${damageFormulas[settings['formulas']['damageFormula']]}\``
 
-        let lvlUpText = ''
         let levelUpFormulas = {
             'original': 'No Specific Formula',
             'assist': '(BaseStat+3) * (1 + ((Level-1) * 0.06751))',
@@ -80,15 +79,44 @@ commands.settings = new Command({
             'custom': 'uhhhh Spectra you handle this'
         }
 
-        lvlUpText += `${settings['formulas']['levelUpFormula'].charAt(0).toUpperCase() + settings['formulas']['levelUpFormula'].slice(1)}\n\`${levelUpFormulas[settings['formulas']['levelUpFormula']]}\``
+        formulaText += `\n**Level Up Formula**\n${settings['formulas']['levelUpFormula'].charAt(0).toUpperCase() + settings['formulas']['levelUpFormula'].slice(1)}\n\`${levelUpFormulas[settings['formulas']['levelUpFormula']]}\``
 
-        let xpCalcText = ''
         let xpCalcFormulas = {
             'original': 'No Specific Formula',
             'custom': 'uhhhh Spectra you handle this'
         }
 
-        xpCalcText += `${settings['formulas']['xpCalcFormula'].charAt(0).toUpperCase() + settings['formulas']['xpCalcFormula'].slice(1)}\n\`${xpCalcFormulas[settings['formulas']['xpCalcFormula']]}\``
+        formulaText += `\n**XP Requirement Formula**\n${settings['formulas']['xpCalcFormula'].charAt(0).toUpperCase() + settings['formulas']['xpCalcFormula'].slice(1)}\n\`${xpCalcFormulas[settings['formulas']['xpCalcFormula']]}\``
+
+        let rateText = ''
+        for (const i in settings['rates']) {
+            switch (i) {
+                case 'mainelement':
+                    rateText += `**Main Element Damage Rate**: ${settings['rates'][i]}x\n`
+                    break
+                case 'crit':
+                    rateText += `**Critical Damage Rate**: ${settings['rates'][i]}x\n`
+                    break
+                case 'xprate':
+                    rateText += `**XP Rate**: ${settings['rates'][i]}x\n`
+                    break
+                case 'trustrate':
+                    rateText += `**Trust Rate**: ${settings['rates'][i]}x\n`
+                    break
+                case 'goldchance':
+                    rateText += `**Golden Enemy Chance**: ${settings['rates'][i]}%\n`
+                    break
+                case 'tech':
+                    if (settings['mechanics']['technicaldamage'] == true) {
+                        rateText += `**Technical Damage Rate**: ${settings['rates'][i]}x\n`
+                    }
+                    break
+            }
+        }
+
+        let miscText = ''
+        miscText += `**Prefix**: ${settings['prefix']}\n`
+        miscText += `**Currency**: ${settings['currency']}, ${settings['currency']}s\n`
 
         let DiscordEmbed = new Discord.MessageEmbed()
             .setColor('#0099ff')
@@ -96,17 +124,9 @@ commands.settings = new Command({
             .addField('Mechanics', `${mechanicText}`, true)
             .addField('Caps', `${capText}`, true)
             .addField('Affinity Rates', `${affinityRateText}`, true)
-            .addField('Prefix', `${settings['prefix']}`, true)
-            .addField('Currency', `${settings['currency']}, ${settings['currency']}s`, true)
-            .addField('Main Element Damage Rate', `${settings['rates']['mainelement']}x`, true)
-            .addField('Critical Damage Rate', `${settings['rates']['crit']}x`, true)
-            .addField('Technical Damage Rate', `${settings['rates']['tech']}x`, true)
-            .addField('XP Rate', `${settings['rates']['xprate']}x`, true)
-            .addField('Trust Rate', `${settings['rates']['trustrate']}x`, true)
-            .addField('Golden Enemy Chance', `${settings['rates']['goldchance']}%`, true)
-            .addField('Damage Formula', `${dForText}`, true)
-            .addField('Level Up Formula', `${lvlUpText}`, true)
-            .addField('XP Requirement Formula', `${xpCalcText}`, true)
+            .addField('Formulas', `${formulaText}`, true)
+            .addField('Rates', `${rateText}`, true)
+            .addField('Misc', `${miscText}`, true)
 
             if (settings['mechanics']['transformations'] == true) {
                 let transformationText = ''
@@ -405,13 +425,13 @@ commands.levelupformula = new Command({
     }
 })
 
-commands.xpcalcformula = new Command({
-    desc: 'Change the xp calculation formula for the server.',
+commands.xprequirementformula = new Command({
+    desc: 'Change the xp requirement formula for the server.',
     section: 'moderation',
-    aliases: ['setxpcalcformula', 'setxpcalcform', 'setxpcalc'],
+    aliases: ['setxprequirementformula', 'setxprequirementform', 'setxprequirement'],
     args: [
         {
-            name: 'XP Calculation Formula',
+            name: 'XP Requirement Formula',
             type: 'Word',
             forced: true
         },
@@ -430,18 +450,18 @@ commands.xpcalcformula = new Command({
             }
 
             if (args[0].toLowerCase() != 'original' && args[0].toLowerCase() != 'custom') {
-                return message.channel.send('Invalid xp calculation formula! Valid formulas are: original, custom')
+                return message.channel.send('Invalid xp requirement formula! Valid formulas are: original, custom')
             }
 
             if (args[0].toLowerCase() == 'custom') {
-                return message.channel.send('Custom xp calculation formulas are not yet supported!')
+                return message.channel.send('Custom xp requirement formulas are not yet supported!')
             }
 
             settings['formulas']['xpCalcFormula'] = xpCalcFormulas[args[0].toLowerCase()]
             fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
-            message.channel.send('XP calculation formula set to ' + args[0].charAt(0).toUpperCase() + args[0].slice(1) + '\n\`' + xpCalcFormulas[args[0].toLowerCase()] + '\`')
+            message.channel.send('XP requirement formula set to ' + args[0].charAt(0).toUpperCase() + args[0].slice(1) + '\n\`' + xpCalcFormulas[args[0].toLowerCase()] + '\`')
         } else {
-            return message.channel.send('You do not have permission to change the xp calculation formula!')
+            return message.channel.send('You do not have permission to change the xp requirement formula!')
         }
     }
 })
@@ -599,6 +619,7 @@ commands.techrate = new Command({
     ],
     func: (message, args) => {
         let settings = setUpSettings(message.guild.id)
+        if (settings.mechanics.technicaldamage == false) return message.channel.send('Technical damage is not enabled for this server!')
 
         if (utilityFuncs.isAdmin(message)) {
             if (args[0] < 1) {
@@ -731,6 +752,7 @@ commands.transformationcaps = new Command({
     ],
     func: (message, args) => {
         let settings = setUpSettings(message.guild.id)
+        if (settings.mechanics.transformations == false) return message.channel.send('Transformations are not enabled!')
 
         if (utilityFuncs.isAdmin(message)) {
             const fullNames = {
