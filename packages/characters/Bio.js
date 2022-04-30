@@ -3,6 +3,7 @@ longBio = (char, server) => {
 	if (char.nickname) finalTxt += `**<Nickname>** ${char.nickname}\n`;
 	if (char.bio.fullname) finalTxt += `**<Full Name>** ${char.bio.fullname}\n`;
 	if (char.bio.species) finalTxt += `**<Species>** ${char.bio.species}\n`;
+	if (char.bio.gender) finalTxt += `**<Gender>** ${char.bio.gender == 'male' ? `<:male:970044964870434836>` : char.bio.gender == 'male' ? `<:female:970044964992090142>` : 'Other'}\n`
 	if (char.bio.height) finalTxt += `**<Height>** ${typeof char.bio.height == 'object' ? `${char.bio.height[0]}'${char.bio.height[1]}"`: `${char.bio.height}m`}\n`;
 	if (char.bio.weight) finalTxt += `**<Weight>** ${char.bio.weight}lb\n`;
 	if (char.bio.age) finalTxt += `**<Age>** ${char.bio.age} Years Old\n`;
@@ -58,6 +59,8 @@ shortBio = (char, sect, server) => {
 			bioTxt = `${char.bio[sect]}lb`;
 		} else if (sect == 'age') {
 			bioTxt = `${char.bio[sect]} Years Old`;
+		} else if (sect == 'gender') {
+			bioTxt = `${char.bio[sect] == 'male' ? `<:male:970044964870434836>` : char.bio[sect] == 'male' ? `<:female:970044964992090142>` : 'Other'}`
 		} else {
 			bioTxt = char.bio[sect];
 		}

@@ -1725,6 +1725,8 @@ commands.setbioinfo = new Command({
 				if (isNaN(args[2])) return message.channel.send('Invalid age! Please enter a number.');
 				charFile[args[0]].bio.age = parseInt(args[2]);
 				break;
+			case "gender":
+				charFile[args[0]].bio.age = args[2].toLowerCase() != "male" && args[2].toLowerCase() != "female" ? 'other' : args[2].toLowerCase()
 			default:
 				if (!charFile[args[0]].bio.custom) charFile[args[0]].bio.custom = {};
 				if (args[2].toLowerCase() == 'none') args[2] = '';
