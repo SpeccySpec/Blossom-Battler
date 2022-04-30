@@ -85,9 +85,9 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
 			fullname: "",
 			nickname: "",
 			species: "",
-			height: [0, "feet"],
-			weight: [0, "pounds"],
-			age: "",
+			height: [4, 0],
+			weight: 0,
+			age: 10,
 			info: "",
 
 			backstory: "",
@@ -96,7 +96,9 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
 			fears: "",
 
 			voice: "",
-			theme: ""
+			theme: "",
+
+			custom: {}
 		},
 		
 		// Trust

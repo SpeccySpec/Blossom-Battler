@@ -204,7 +204,7 @@ commands.hidechar = new Command({
 	],
 	func: (message, args) => {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
-		
+
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
@@ -1192,8 +1192,9 @@ commands.updatecharacters = new Command({
 			}
 
 			// Bio Info
-			charFile[i].bio.height = [0, "feet"]
-			charFile[i].bio.weight = [0, "pounds"]
+			charFile[i].bio.height = [4, 0]
+			charFile[i].bio.weight = 0
+			charFile[i].bio.age = 10
 
 			// Update Stats, for certain changes in new BB.
 			updateStats(charFile[i], message.guild.id, true);
@@ -1402,5 +1403,42 @@ commands.getquotes = new Command({
 
 			listArray(message.channel, array, 1);
 		}
+	}
+})
+
+commands.getbio = new Command({
+	desc: "Lists a character's information, backstory, age, ect",
+	aliases: ['bio', 'charbio' 'characterbio'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Section",
+			type: "Word",
+			forced: false
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+
+		// Alright, let's get the character!
+		var DiscordEmbed;
+		if (!args[1]) {
+			DiscordEmbed = longBio(charFile[args[0]], message.guild.id);
+		} else {
+			if (!charFile[args[0]].bio[args[1].toLowerCase()] && (charFile[args[0]].bio.custom && !charFile[args[0]].bio.custom[args[1].toLowerCase()])) 
+				return message.channel.send("Invalid Bio Section!");
+
+			DiscordEmbed = shortBio(charFile[args[0]], args[1].toLowerCase(), message.guild.id);
+		}
+
+		message.channel.send({embeds: [DiscordEmbed]});
 	}
 })
