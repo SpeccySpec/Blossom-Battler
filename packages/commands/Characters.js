@@ -1681,13 +1681,8 @@ commands.setbioinfo = new Command({
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 
-		/**bio: {
-			custom: {}
-		}, */
-
 		if (!utilityFuncs.isAdmin(message) && !charFile[args[0]].owner == message.author.id) return message.channel.send('You are not the owner of this character!');
 
-		//check for each field. If it's fillname, ninckmane or species, require a string. If it's weight require a decimal.
 		switch (args[1].toLowerCase()) {
 			case "fullname":
 			case "nickname":

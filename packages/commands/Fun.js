@@ -391,12 +391,10 @@ commands.randship = new Command({
 	func: (message, args) => {
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
+		if (Object.keys(charFile).length < 1) return message.channel.send("There are not enough characters to ship together.");
+
 		let char1 = Object.keys(charFile)[Math.floor(Math.random() * Object.keys(charFile).length)]
 		let char2 = Object.keys(charFile)[Math.floor(Math.random() * Object.keys(charFile).length)]
-
-		while (char1 == char2) {
-			char2 = charFile[Math.floor(Math.random() * charFile.length)]
-		}
 
 		if (!args[0]) args[0] = charFile[char1].name
 		args[1] = charFile[char2].name
