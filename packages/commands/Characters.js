@@ -1167,35 +1167,14 @@ commands.updatecharacters = new Command({
 			}
 
 			charFile[i].autolearn = charFile[i].autoLearn
-				
+
 			// Quotes
-			charFile[i].quotes = {
-				meleequote: charFile[i].meleequote,
-				physquote: charFile[i].physquote,
-				magquote: charFile[i].magquote,
-				allyatkquote: charFile[i].allyatkquote,
-				lbquote: charFile[i].lbquote,
-				tcquote: charFile[i].tcquote,
-				strongquote: charFile[i].strongquote,
-				critquote: charFile[i].critquote,
-				weakquote: charFile[i].weakquote,
-				missquote: charFile[i].missquote,
-				blockquote: charFile[i].blockquote,
-				repelquote: charFile[i].repelquote,
-				drainquote: charFile[i].drainquote,
-				resistquote: charFile[i].resistquote,
-				hurtquote: charFile[i].hurtquote,
-				healquote: charFile[i].healquote,
-				helpedquote: charFile[i].helpedquote,
-				killquote: charFile[i].killquote,
-				deathquote: charFile[i].deathquote,
-				lvlquote: charFile[i].lvlquote,
-				allydeathquote: charFile[i].allydeathquote,
-				consolequote: charFile[i].consolequote,
-				imfinequote: charFile[i].imfinequote
+			if (!charFile[i].quotes) charFile[i].quotes = {};
+			for (const k in quoteTypes) {
+				charFile[i].quotes[`${quoteTypes[k]}quote`] = charFile[i][`${quoteTypes[k]}quote`];
 			}
 			
-			// Leader SKills
+			// Leader Skills
 			if (charFile[i].leaderSkill) {
 				charFile[i].leaderskill = {
 					name: charFile[i].leaderSkill.name,
@@ -1228,12 +1207,200 @@ commands.updatecharacters = new Command({
 			for (let k of Affinities) delete charFile[i][k];
 			for (let k of stats) delete charFile[i][`base${k}`];
 			for (let k = 1; k < 4; k++) delete charFile[i][`lb${k}`];
-			for (let k in charFile[i].quotes) delete charFile[i][k];
+			for (let k of quoteTypes) delete charFile[i][`${k}quote`];
 		}
 
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
-		
+
 		// Send an Embed to notify us!
 		message.channel.send('Characters have been updated from an older version to a newer one!');
+	}
+})
+
+// Quotes... oh boy.
+selectQuote = (char, quote, neverEmpty) => {
+	let emptyTxt = neverEmpty ? 'No quotes in this section!' : '';
+
+	if (!char.quotes[`${quote}quote`]) return emptyTxt;
+	if (char.quotes[`${quote}quote`].length < 1) return emptyTxt;
+
+	let randQuote = Math.round(Math.random() * (char.quotes[`${quote}quote`].length-1));
+	return `_${char.name}: "${char.quotes[`${quote}quote`][randQuote]}"_`;
+}
+
+commands.setquote = new Command({
+	desc: "Quotes are things characters will say in battle! This can help give them more personality and uniqueness.",
+	aliases: ['makequote', 'sq'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Quote Type",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "The Quote",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// a LOT of checks :(
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+		if (args[2].length > 120) return message.channel.send('This quote is too long!');
+
+		if (!utilityFuncs.inArray(args[1].toLowerCase(), quoteTypes)) {
+			let quoteStr = '```diff\n';
+			for (let quote of quoteTypes) quoteStr += `- ${quoteTypes}`;
+			quoteStr += '```';
+
+			return message.channel.send(`Invalid Quote Type! Try one of these:${quoteTypes}`);
+		}
+
+		if (!charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`]) charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`] = [];
+		charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`].push(args[2]);
+
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+commands.clearquote = new Command({
+	desc: 'Removes a quote, group of quotes or all quotes from a character.',
+	aliases: ['clearquotes', 'cq'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Quote Type",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Quote ID",
+			type: "Num",
+			forced: false
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// a LOT of checks :(
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+		if (!args[1]) {
+			message.channel.send('**[WARNING]**\nAre you sure? **YOU CANNOT GET THESE BACK!**')
+			
+			let givenResponce = false
+			let collector = message.channel.createMessageCollector({ time: 15000 });
+			collector.on('collect', m => {
+				if (m.author.id == message.author.id) {
+					if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
+						m.react('👍');
+						message.react('👍');
+
+						for (const i in quoteTypes) charFile[args[0]].quotes[`${quoteTypes[i]}quote`] = [];
+						fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+					} else {
+						m.react('👍');
+						message.react('👍');
+						message.channel.send(`${charFile[args[0]]} will not be cleansed of their quotes.`);
+					}
+				}
+			});
+			collector.on('end', c => {
+				if (givenResponce == false) message.channel.send("I'll... take that as a no.");
+			});
+		} else {
+			if (!utilityFuncs.inArray(args[1].toLowerCase(), quoteTypes)) {
+				let quoteStr = '```diff\n';
+				for (let quote of quoteTypes) quoteStr += `- ${quoteTypes}`;
+				quoteStr += '```';
+
+				return message.channel.send(`Invalid Quote Type! Try one of these:${quoteTypes}`);
+			}
+
+			if (args[2]) {
+				if (!charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`]) charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`] = [];
+				charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`].splice(args[2], 1);
+			} else {
+				charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`] = [];
+			}
+
+			message.react('👍');
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		}
+	}
+})
+
+commands.getquotes = new Command({
+	desc: "View a character's quotes.",
+	aliases: ['seequotes'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Quote Type",
+			type: "Word",
+			forced: false
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// a LOT of checks :(
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+
+		if (args[1]) {
+			if (!utilityFuncs.inArray(args[1].toLowerCase(), quoteTypes)) {
+				let quoteStr = '```diff\n';
+				for (let quote of quoteTypes) quoteStr += `- ${quoteTypes}`;
+				quoteStr += '```';
+
+				return message.channel.send(`Invalid Quote Type! Try one of these:${quoteTypes}`);
+			}
+
+			if (!charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`] || !charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`][0]) return message.channel.send('This Quote Type has no quotes!');
+
+			let array = [];
+			for (let i in charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`])
+				array.push({title: `**[${i}]**`, desc: `_"${charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`][i]}"_`});
+
+			listArray(message.channel, array, 1);
+		} else {
+			let array = [];
+			for (let quote of quoteTypes) {
+				let quoteTxt = '';
+				if (!charFile[args[0]].quotes[`${quote}quote`])
+					quoteTxt = 'No quotes for this section!';
+				else
+					quoteTxt = selectQuote(charFile[args[0]], quote, true);
+
+				array.push({title: `${quote.charAt(0).toUpperCase()+quote.slice(1)}`, desc: quoteTxt});
+			}
+
+			listArray(message.channel, array, 1);
+		}
 	}
 })

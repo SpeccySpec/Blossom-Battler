@@ -78,31 +78,7 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
 		autolearn: [],
 		
 		// Quotes
-		quotes: {
-			meleequote: [],
-			physquote: [],
-			magquote: [],
-			allyatkquote: [],
-			lbquote: [],
-			tcquote: [],
-			strongquote: [],
-			critquote: [],
-			weakquote: [],
-			missquote: [],
-			blockquote: [],
-			repelquote: [],
-			drainquote: [],
-			resistquote: [],
-			hurtquote: [],
-			healquote: [],
-			helpedquote: [],
-			killquote: [],
-			deathquote: [],
-			lvlquote: [],
-			allydeathquote: [],
-			consolequote: [],
-			imfinequote: []
-		},
+		quotes: {},
 
 		// Bio Info
 		bio: {
@@ -126,6 +102,9 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
 		// Trust
 		trust: {}
     };
+
+	//im lazy
+	for (const i in quoteTypes) charFile[name].quotes[`${quoteTypes[i]}quote`] = [];
 
     fs.writeFileSync(`${dataPath}/json/${guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	return charFile[name];
@@ -220,8 +199,9 @@ longDescription = (charDefs, level, server) => {
 					lbDesc += '\n\n';
 				}
 			}
-
-			DiscordEmbed.fields.push({ name: 'Limit Breaks', value: lbDesc, inline: true });
+			
+			if (lbDesc != '')
+				DiscordEmbed.fields.push({ name: 'Limit Breaks', value: lbDesc, inline: true });
 		}
 	}
 
