@@ -758,9 +758,29 @@ setUpSettings = (guild) => {
 				xpCalcFormula: "original"
 			},
 			currency: 'BB Token',
-			pvpstuff: {},
+			pvpstuff: {
+				none: {},
+				metronome: {},
+				randskills: {},
+				randstats: {},
+				charfuck: {}
+			},
 			banned: [],
-			themes: {},
+			themes: {
+				battle: [],
+				advantage: [],
+				disadvantage: [],
+				bossfight: [],
+				miniboss: [],
+				strongfoe: [],
+				finalboss: [],
+				colosseum: [],
+				colosseumstrong: [],
+				pvp: [],
+				victory: [],
+				colosseumvictory: [],
+				loss: []
+			},
 			encountered: [],
 			desc: ""
 		}
