@@ -437,6 +437,11 @@ getPrefix = (server) => {
 	return settings['prefix']
 }
 
+getCurrency = (server) => {
+	let settings = setUpSettings(server)
+	return settings['currency']
+}
+
 // Clone Object
 objClone = (source) => {
 	if (Object.prototype.toString.call(source) === '[object Array]') {

@@ -25,7 +25,7 @@ module.exports = {
 	},
 	
 	isBanned: function(id, server) {
-		setUpSettings(server)
+		let settings = setUpSettings(server)
 		return settings['banned'].includes(id)
 	},
 	

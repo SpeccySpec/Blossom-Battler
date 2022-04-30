@@ -60,7 +60,7 @@ function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFil
             }
         }
         if (chestDefs.items['money']) {
-            itemText += `*Money:*\n ${chestDefs.items['money']}`
+            itemText += `*Money:*\n ${chestDefs.items['money']} ${getCurrency(message.guild.id)}s`
         }
     }
 
@@ -121,7 +121,7 @@ commands.registerchest = new Command({
         if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
 
-        if (chestFile[args[0]] && chestFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("You do not own this chest, therefore, you have insufficient permissions to overwrite it.")
+        if (chestFile[args[0]] && chestFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this chest, therefore, you have insufficient permissions to overwrite it.")
 
         let name = args[0]
         let channel = args[1]
@@ -297,7 +297,7 @@ commands.getchest = new Command({
         let chest = chestFile[channel][name]
 
         if (chest.hidden) {
-            if (chest.originalAuthor != message.author.id && !isAdmin(message)) {
+            if (chest.originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) {
                 const discordEmbed = new Discord.MessageEmbed()
                     .setColor(0x00AE86)
                     .setTitle(`${chest.name} is hidden`)
@@ -427,7 +427,7 @@ commands.purgechest = new Command({
         if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);
         if (!chestFile[args[0]][args[1]]) return message.channel.send(`${args[1]} is not a valid chest name.`);
 
-        if (chestFile[args[0]][args[1]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("You do not own this chest, therefore, you have insufficient permissions to delete it.")
+        if (chestFile[args[0]][args[1]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this chest, therefore, you have insufficient permissions to delete it.")
 
         message.channel.send(`Are you **sure** you want to delete ${chestFile[args[0]][args[1]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this chest.\n**Y/N**`);
 
@@ -487,7 +487,7 @@ commands.editchest = new Command({
 
         if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);
         if (!chestFile[args[0]][args[1]]) return message.channel.send(`${args[1]} is not a valid chest.`);
-        if (chestFile[args[0]][args[1]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send(`You cannot edit ${args[1]}.`);
+        if (chestFile[args[0]][args[1]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send(`You cannot edit ${args[1]}.`);
 
         //fields: element
         let editField = args[2].toLowerCase();
@@ -597,7 +597,7 @@ commands.chestitems = new Command({
 
         if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);
         if (!chestFile[args[0]][args[1]]) return message.channel.send(`${args[1]} is not a valid chest.`);
-        if (chestFile[args[0]][args[1]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send(`You cannot edit ${args[1]}.`);
+        if (chestFile[args[0]][args[1]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send(`You cannot edit ${args[1]}.`);
 
         let chestName = args[1]
         let chest = chestFile[args[0]][chestName]
@@ -685,7 +685,7 @@ commands.chestitems = new Command({
                             }
                         }
                     } else {
-                        if (!chest.items['money']) return message.channel.send(`There are is no currency in ${args[1]}.`);
+                        if (!chest.items['money']) return message.channel.send(`There are no ${getCurrency(message.guild.id)}s in ${args[1]}.`);
                         itemAmount[i] = Math.min(chest.items['money'], parseInt(itemAmount[i]));
                         chest.items['money'] -= itemAmount[i];
 

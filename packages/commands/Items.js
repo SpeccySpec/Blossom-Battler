@@ -20,7 +20,7 @@ function itemDesc(itemDefs, itemName, message) {
     let finalText = "";
 
     if (itemDefs.cost && itemDefs.cost != 0) {
-        finalText += `Costs **${itemDefs.cost}**\n`;
+        finalText += `Costs **${itemDefs.cost}** ${getCurrency(message.guild.id)}s\n`;
     }
 
     if (itemDefs.type) {
@@ -82,7 +82,7 @@ function weaponDesc(weaponDefs, weaponName, message) {
     let finalText = "";
 
     if (weaponDefs.cost && weaponDefs.cost != 0) {
-        finalText += `Costs **${weaponDefs.cost}**\n`;
+        finalText += `Costs **${weaponDefs.cost}** ${getCurrency(message.guild.id)}s\n`;
     }
 
     if (weaponDefs.melee) {
@@ -135,7 +135,7 @@ function armorDesc(armorDefs, armorName, message) {
     let finalText = "";
 
     if (armorDefs.cost && armorDefs.cost != 0) {
-        finalText += `Costs **${armorDefs.cost}**\n`;
+        finalText += `Costs **${armorDefs.cost}** ${getCurrency(message.guild.id)}s\n`;
     }
 
     if (armorDefs.end) {
@@ -226,7 +226,7 @@ commands.registeritem = new Command({
         if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
-        if (itemFile[args[0]] && itemFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("This item exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
+        if (itemFile[args[0]] && itemFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("This item exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
 
         if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
 		if (args[0].length > 50) return message.channel.send(`${args[0]} is too long of an item name.`);
@@ -344,7 +344,7 @@ commands.purgeitem = new Command({
 
         if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
 
-        if (itemFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to delete it.")
+        if (itemFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to delete it.")
 
         message.channel.send(`Are you **sure** you want to delete ${itemFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this item.\n**Y/N**`);
 
@@ -508,7 +508,7 @@ commands.edititem = new Command({
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
-        if (itemFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send(`You cannot edit ${args[0]}.`);
+        if (itemFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send(`You cannot edit ${args[0]}.`);
 
         let editField = args[1].toLowerCase();
         switch (editField) {
@@ -756,7 +756,7 @@ commands.purgeweapon = new Command({
 
         if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon name.`);
 
-        if (weaponFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("You do not own this weapon, therefore, you have insufficient permissions to delete it.")
+        if (weaponFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this weapon, therefore, you have insufficient permissions to delete it.")
 
         message.channel.send(`Are you **sure** you want to delete ${weaponFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this weapon.\n**Y/N**`);
 
@@ -886,7 +886,7 @@ commands.registerweapon = new Command({
         //treat it similarly as the registeritem command
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
-        if (weaponFile[args[0]] && weaponFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("This weapon exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
+        if (weaponFile[args[0]] && weaponFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("This weapon exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
 
         if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
 		if (args[0].length > 50) return message.channel.send(`${args[0]} is too long of a weapon name.`);
@@ -1102,7 +1102,7 @@ commands.editweapon = new Command({
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
         if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon.`);
-        if (weaponFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send(`You cannot edit ${args[0]}.`);
+        if (weaponFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send(`You cannot edit ${args[0]}.`);
 
         //fields: element
         let editField = args[1].toLowerCase();
@@ -1215,7 +1215,7 @@ commands.registerarmor = new Command({
         if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
-        if (armorFile[args[0]] && armorFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("This armor exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
+        if (armorFile[args[0]] && armorFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("This armor exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
 
         if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
         if (args[0].length > 50) return message.channel.send(`${args[0]} is too long of an armor name.`);
@@ -1427,7 +1427,7 @@ commands.editarmor = new Command({
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (!armorFile[args[0]]) return message.channel.send(`${args[0]} is not a valid armor.`);
-        if (armorFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send(`You cannot edit ${args[0]}.`);
+        if (armorFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send(`You cannot edit ${args[0]}.`);
 
         let editField = args[1].toLowerCase();
         switch (editField) {
@@ -1513,7 +1513,7 @@ commands.purgearmor = new Command({
 
         if (!armorFile[args[0]]) return message.channel.send(`${args[0]} is not a valid armor name.`);
 
-        if (armorFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("You do not own this armor, therefore, you have insufficient permissions to delete it.")
+        if (armorFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this armor, therefore, you have insufficient permissions to delete it.")
 
         message.channel.send(`Are you **sure** you want to delete ${armorFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this armor.\n**Y/N**`);
 
@@ -1627,17 +1627,17 @@ commands.makecraftingrecipe = new Command({
         switch (args[0].toLowerCase()) {
             case 'item':
                 if (!itemFile[args[1]]) return message.channel.send(`${args[1]} is not a valid item name.`);
-                if (itemFile[args[1]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to assign a recipe to it.")
+                if (itemFile[args[1]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to assign a recipe to it.")
                 itemDefs = itemFile[args[1]]
                 break;
             case 'weapon':
                 if (!weaponFile[args[1]]) return message.channel.send(`${args[1]} is not a valid weapon name.`);
-                if (weaponFile[args[1]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("You do not own this weapon, therefore, you have insufficient permissions to assign a recipe to it.")
+                if (weaponFile[args[1]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this weapon, therefore, you have insufficient permissions to assign a recipe to it.")
                 itemDefs = weaponFile[args[1]]
                 break;
             case 'armor':
                 if (!armorFile[args[1]]) return message.channel.send(`${args[1]} is not a valid armor name.`);
-                if (armorFile[args[1]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("You do not own this armor, therefore, you have insufficient permissions to assign a recipe to it.")
+                if (armorFile[args[1]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this armor, therefore, you have insufficient permissions to assign a recipe to it.")
                 itemDefs = armorFile[args[1]]
                 break;
         }
@@ -1759,19 +1759,19 @@ commands.clearitemrecipe = new Command({
         switch (args[0].toLowerCase()) {
             case 'item':
                 if (!itemFile[args[1]]) return message.channel.send(`${args[1]} is not a valid item name.`);
-                if (itemFile[args[1]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to assign a recipe to it.")
+                if (itemFile[args[1]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to assign a recipe to it.")
                 if (!itemFile[args[1]].recipe) return message.channel.send(`${args[1]} does not have a recipe.`);
                 itemDefs = itemFile[args[1]]
                 break;
             case 'weapon':
                 if (!weaponFile[args[1]]) return message.channel.send(`${args[1]} is not a valid weapon name.`);
-                if (weaponFile[args[1]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("You do not own this weapon, therefore, you have insufficient permissions to assign a recipe to it.")
+                if (weaponFile[args[1]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this weapon, therefore, you have insufficient permissions to assign a recipe to it.")
                 if (!weaponFile[args[1]].recipe) return message.channel.send(`${args[1]} does not have a recipe.`);
                 itemDefs = weaponFile[args[1]]
                 break;
             case 'armor':
                 if (!armorFile[args[1]]) return message.channel.send(`${args[1]} is not a valid armor name.`);
-                if (armorFile[args[1]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("You do not own this armor, therefore, you have insufficient permissions to assign a recipe to it.")
+                if (armorFile[args[1]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this armor, therefore, you have insufficient permissions to assign a recipe to it.")
                 if (!armorFile[args[1]].recipe) return message.channel.send(`${args[1]} does not have a recipe.`);
                 itemDefs = armorFile[args[1]]
                 break;
