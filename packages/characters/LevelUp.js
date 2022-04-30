@@ -64,20 +64,22 @@ updateStats = (charDefs, server, updateXp) => {
 
 		for (let i in highestStats) {
 			if (i > highestStats.length-4)
-				charDefs.stats[highestStats[i][0]] += charDefs.level;
+				charDefs.stats[highestStats[i][0]] += (charDefs.level-1);
 			else if (i <= 1) {
-				charDefs.stats[highestStats[i][0]] += charDefs.level/3;
+				charDefs.stats[highestStats[i][0]] += (charDefs.level-1)/3;
 			} else {
-				charDefs.stats[highestStats[i][0]] += charDefs.level/2;
+				charDefs.stats[highestStats[i][0]] += (charDefs.level-1)/2;
 			}
 
 			charDefs.stats[highestStats[i][0]] = Math.round(Math.min(99, charDefs.stats[highestStats[i][0]]));
 		}
 	}
 
-	charDefs.maxxp = 500;
-	if (updateXp && charDefs.level > 1) {
-		for (let i = 1; i < charDefs.level; i++) charDefs.maxxp += Math.round(charDefs.maxxp/6.5);
+	if (updateXp) {
+		charDefs.maxxp = 500;
+		if (charDefs.level > 1) {
+			for (let i = 1; i < charDefs.level; i++) charDefs.maxxp += Math.round(charDefs.maxxp/6.5);
+		}
 	}
 }
 
