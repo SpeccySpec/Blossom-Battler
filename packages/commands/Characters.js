@@ -70,7 +70,7 @@ commands.registerchar = new Command({
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (charFile[args[0]]) {
-			if (!isAdmin(message) && charFile[args[0]].owner != message.author.id) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) {
 				return message.channel.send(`${args[0]} already exists, and you don't own them. You cannot overwrite them.`);
 			} else {
 				message.channel.send(`${args[0]} already exists, so I'll overwrite them for you.`);
@@ -95,6 +95,77 @@ commands.registerchar = new Command({
 
 		let charDefs = writeChar(message.author, message.guild, args[0], args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11]);
 		message.channel.send({content: `${args[0]} has been registered!`, embeds: [briefDescription(charDefs)]})
+	}
+})
+
+commands.changetruename = new Command({
+	desc: `Rename a character's true name.`,
+	aliases: ['changetruename', 'changename', 'changenamechange'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "New Name",
+			type: "Word",
+			forced: true
+		},
+	],
+	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} does not exist!`);
+		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+
+		if (args[1] == "" || args[1] == " ") return message.channel.send('Invalid new character name! Please enter an actual name.');
+
+		if (charFile[args[1]]) return message.channel.send(`${args[1]} already exists!`);
+
+		charFile[args[1]] = charFile[args[0]];
+		delete charFile[args[0]];
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		message.channel.send(`${args[0]} has been renamed to ${args[1]}!`);
+	}
+})
+
+
+commands.renamechar = new Command({
+	desc: `Change a character's display name.`,
+	aliases: ['renamecharacter', 'renamechar', 'charname', 'charnamechange'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "New Name",
+			type: "Word",
+			forced: true
+		},
+	],
+	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} does not exist!`);
+		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+
+		if (args[1] == "" || args[1] == " ") return message.channel.send('Invalid new character name! Please enter an actual name.');
+
+		charFile[args[0]].name = args[1];
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		message.channel.send(`${args[0]}'s name has been changed to ${args[1]}!`);
 	}
 })
 
@@ -210,7 +281,7 @@ commands.nickname = new Command({
 		
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
 		charFile[args[0]].nickname = args[1]
 		message.channel.send(`👍 ${charFile[args[0]].name}'s nickname was changed to ${args[1]}.`)
@@ -235,7 +306,7 @@ commands.hidechar = new Command({
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
 		charFile[args[0]].hidden = !charFile[args[0]].hidden;
 		message.channel.send(`👍 ${charFile[args[0]].name}'s visibility was toggled ${charFile[args[0]].hidden ? "on" : "off"}.`)
@@ -270,7 +341,7 @@ commands.mpmeter = new Command({
 		
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
 		message.channel.send(`👍 ${charFile[args[0]].name}'s ${charFile[args[0]].mpMeter[1]} meter was changed to a ${args[2].toUpperCase()} meter. ${charFile[args[0]].name} uses ${args[1]} now.`)
 		charFile[args[0]].mpMeter = [args[1], args[2].toUpperCase()]
@@ -299,7 +370,7 @@ commands.mainelement = new Command({
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements)) return message.channel.send({content: 'Please enter a valid element for **Main Element!**', embeds: [elementList()]});
 
 		charFile[args[0]].mainElement = args[1].toLowerCase();
@@ -363,7 +434,7 @@ commands.setaffinity = new Command({
 		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
 		// Element Affinities
 		if (utilityFuncs.inArray(args[1].toLowerCase(), Elements)) {
@@ -451,7 +522,7 @@ commands.gainxp = new Command({
 		// Checks
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 		if (args[1] <= 0) return message.channel.send("Don't even try it.");
 		if (charFile[args[0]].level >= 99) return message.channel.send(`${charFile[args[0]].name} cannot level up any further!`);
 
@@ -484,7 +555,7 @@ commands.levelup = new Command({
 		// Checks
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 		if (args[1] <= 0) return message.channel.send("Don't even try it.");
 		if (charFile[args[0]].level >= 99) return message.channel.send(`${charFile[args[0]].name} cannot level up any further!`);
 
@@ -517,7 +588,7 @@ commands.forcelevel = new Command({
 		// Checks
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 		if (args[1] <= 0 || args[1] > 99) return message.channel.send("Don't even try it.");
 
 		// Actually force the Level
@@ -594,7 +665,7 @@ commands.setmelee = new Command({
 		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
 		// Some element and balancing checks
 		if (args[2].toLowerCase() != 'strike' && args[2].toLowerCase() != 'slash' && args[2].toLowerCase() != 'pierce' && args[2].toLowerCase() != 'explode') return message.channel.send('You can only use Physical Elements in melee attacks! _(Strike, Slash, Pierce, Explode)_');
@@ -665,7 +736,7 @@ commands.learnskill = new Command({
 		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
 		// Let's learn skills!
 		let learnString = `👍 ${args[0]} learned `;
@@ -728,7 +799,7 @@ commands.replaceskill = new Command({
 		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
 		// Do we know the skill
 		if (!skillFile[args[1]]) return message.channel.send('Invalid skill to replace! Remember that these are case sensitive.');
@@ -772,7 +843,7 @@ commands.forgetskill = new Command({
 		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
 		// Do we know the skill
 		if (!skillFile[args[1]]) return message.channel.send('Invalid skill to replace! Remember that these are case sensitive.');
@@ -810,7 +881,7 @@ commands.autolearn = new Command({
 		// some checks
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
 		// Do we know the skill
 		if (!skillFile[args[1]]) return message.channel.send('Invalid skill to replace! Remember that these are case sensitive.');
@@ -866,7 +937,7 @@ commands.leaderskill = new Command({
 		// checkie
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
 		// ok here goes nothing
 		charFile[args[0]].leaderskill = {
@@ -978,7 +1049,7 @@ commands.setlb = new Command({
 		// checkie
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 	
 		if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
 		if (args[1].length > 50) return message.channel.send(`${args[1]} is too long of a skill name.`);
@@ -1109,7 +1180,7 @@ commands.changestats = new Command({
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (charFile[args[0]]) {
-			if (!isAdmin(message) && charFile[args[0]].owner != message.author.id)
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id)
 				return message.channel.send(`${args[0]} already exists, and you don't own them. You cannot change their stats.`);
 		}
 
@@ -1279,7 +1350,7 @@ commands.purgechar = new Command({
 
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character name.`);
 
-		if (charFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("You do not own this character, therefore, you have insufficient permissions to delete it.")
+		if (charFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this character, therefore, you have insufficient permissions to delete it.")
 
 		message.channel.send(`Are you **sure** you want to delete ${charFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this character.\n**Y/N**`);
 
@@ -1394,7 +1465,7 @@ commands.setquote = new Command({
 		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
 		if (args[2].length > 120) return message.channel.send('This quote is too long!');
 
@@ -1442,7 +1513,7 @@ commands.clearquote = new Command({
 		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
 		if (!args[1]) {
 			message.channel.send('**[WARNING]**\nAre you sure? **YOU CANNOT GET THESE BACK!**')
