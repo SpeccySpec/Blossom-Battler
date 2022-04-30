@@ -1237,6 +1237,50 @@ commands.updatecharacters = new Command({
 	}
 })
 
+commands.purgechar = new Command({
+	desc: `Deletes a character. **YOU CANNOT GET IT BACK AFTER DELETION!**`,
+	section: 'characters',
+	aliases: ['unregisterchar', 'charpurge', 'charunregister', 'deletechar', 'chardelete'],
+	args: [
+		{
+			name: "Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
+		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
+
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character name.`);
+
+		if (charFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("You do not own this character, therefore, you have insufficient permissions to delete it.")
+
+		message.channel.send(`Are you **sure** you want to delete ${charFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this character.\n**Y/N**`);
+
+		var givenResponce = false
+		var collector = message.channel.createMessageCollector({ time: 15000 });
+		collector.on('collect', m => {
+			if (m.author.id == message.author.id) {
+				if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
+					message.channel.send(`${charFile[args[0]].name} has been erased from existance.`)
+					delete charFile[args[0]]
+
+					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, 4));
+				} else
+					message.channel.send(`${charFile[args[0]].name} will not be deleted.`);
+				
+				givenResponce = true
+				collector.stop()
+			}
+		});
+		collector.on('end', c => {
+			if (givenResponce == false)
+				message.channel.send(`No response given.\n${charFile[args[0]].name} will not be deleted.`);
+		});
+	}
+})
+
 // Quotes... oh boy.
 selectQuote = (char, quote, neverEmpty) => {
 	let emptyTxt = neverEmpty ? 'No quotes in this section!' : '';
