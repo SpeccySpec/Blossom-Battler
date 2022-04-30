@@ -1195,6 +1195,7 @@ commands.updatecharacters = new Command({
 			charFile[i].bio.height = [4, 0]
 			charFile[i].bio.weight = 0
 			charFile[i].bio.age = 10
+			charFile[i].bio.custom = {}
 
 			// Update Stats, for certain changes in new BB.
 			updateStats(charFile[i], message.guild.id, true);
