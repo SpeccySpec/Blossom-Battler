@@ -610,6 +610,7 @@ getCurrentDate = () => {
 // Global JSONs
 skillFile = setUpFile(`${dataPath}/json/skills.json`)
 shipFile = setUpFile(`${dataPath}/json/ships.json`);
+pmdFile = setUpFile(`${dataPath}/json/PMDQuestions.json`);
 
 // 2 Week Moment
 function twoWeekInMS() {

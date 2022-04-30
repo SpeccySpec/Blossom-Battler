@@ -376,3 +376,179 @@ commands.ship = new Command({
 		]})
 	}
 })
+
+commands.pmdquiz = new Command({
+	desc: "Play a PMD quiz!",
+	section: "fun",
+	aliases: ["pmd", "pokemonquiz", "pokemonmysterydungeon", "pokemonmysterydungeonquiz"],
+	args: [
+		{
+			name: "Category (Red/Blue, Time/Darkness, Sky, All)",
+			type: "Word",
+			forced: true,
+		},
+		{
+			name: "Question Amount",
+			type: "Num",
+		}
+	],
+	func: (message, args) => {
+		//check for invalid category
+		const acceptedCategories = ["red", "blue", "time", "darkness", "sky", "all"]
+		if (!acceptedCategories.includes(args[0].toLowerCase())) return message.channel.send(`This category is invalid! Please use one of the following: ${acceptedCategories.join(", ")}`)
+
+		let questionArray = []
+		if (args[0].toLowerCase() == "red" || args[0].toLowerCase() == "blue" || args[0].toLowerCase() == "all") {
+			for (const i in pmdFile["Red and Blue Rescue Team"]) {
+				questionArray.push({[i]: pmdFile["Red and Blue Rescue Team"][i]})
+			}
+		}
+		else if (args[0].toLowerCase() == "time" || args[0].toLowerCase() == "darkness" || args[0].toLowerCase() == "all") {
+			for (const i in pmdFile["Explorers Of Time And Darkness"]) {
+				questionArray.push({[i]: pmdFile["Explorers Of Time And Darkness"][i]})
+			}
+		}
+		else if (args[0].toLowerCase() == "sky" || args[0].toLowerCase() == "all") {
+			for (const i in pmdFile["Explorers Of Sky"]) {
+				questionArray.push({[i]: pmdFile["Explorers Of Sky"][i]})
+			}
+		}
+
+		if (!args[1]) args[1] = 8
+		args[1] = Math.min(Math.max(args[1], 1), questionArray.length + 1)
+
+		let pickedQuestion = questionArray[Math.floor(Math.random() * questionArray.length)]
+		questionArray.splice(questionArray.indexOf(pickedQuestion), 1)
+
+		let questionNumber = 1
+		let availableAnswerNums = Object.keys(Object.values(pickedQuestion)[0]).length - 1
+
+		message.channel.send(processQuestion(message, pickedQuestion, questionNumber))
+
+		let personalities = {}
+
+		let collector = message.channel.createMessageCollector({ time: 1000000000 });
+		collector.on('collect', m => {
+			if (m.author.id == message.author.id) {
+				if (parseInt(m.content.toLowerCase()) || m.content.toLowerCase() == 0) {
+					let answerNum = parseInt(m.content.toLowerCase())
+
+					if (answerNum > availableAnswerNums || answerNum < 0) {
+						m.channel.send(`That's not a valid answer! Please enter a number between 0 and ${availableAnswerNums}`)
+					} else {
+						let answers = Object.values(Object.values(pickedQuestion)[0])[answerNum]
+						for (i in answers) {
+							if (personalities[i] == undefined) personalities[i] = 0
+							personalities[i] += answers[i]
+						}
+						
+						questionNumber++
+						if (questionNumber <= args[1]) {
+							pickedQuestion = questionArray[Math.floor(Math.random() * questionArray.length)]
+							questionArray.splice(questionArray.indexOf(pickedQuestion), 1)
+							availableAnswerNums = Object.keys(Object.values(pickedQuestion)[0]).length - 1
+							message.channel.send(processQuestion(message, pickedQuestion, questionNumber))
+						} else if (questionNumber == args[1] + 1) {
+							availableAnswerNums = 1
+							pickedQuestion = {"Are you male or female?": {
+								"Male.": {
+									"Male": 0.1
+								},
+								"Female.": {
+									"Female": 0.1
+								}
+							}}
+							message.channel.send(processQuestion(message, pickedQuestion, questionNumber))
+						} else {
+							collector.stop()
+
+							const dominantTrait = Object.keys(personalities).reduce((a, b) => personalities[a] > personalities[b] ? a : b)
+							
+							const resultPokemon = {
+								"Male": {"Lonely": "Bulbasaur", 
+										"Docile": "Charmander", "Quirky": "Squirtle",
+										"Brave": "Pikachu", "Calm": "Chikorita", 
+										"Timid": "Cyndaquil", "Jolly": "Totodile",
+										"Relaxed": "Phanty", "Quiet": "Treecko",
+										"Hardy": "Torchic", "Rash": "Mudkip",
+										"Bold": "Turtwig", "Naive": "Chimchar",
+										"Impish": "Piplup", "Hasty": "Shinx",
+										"Sassy": "Riolu"},
+								"Female": { "Docile": "Bulbasaur",
+										"Brave": "Charmander", "Bold": "Squirtle",
+										"Hasty": "Pikachu", "Relaxed": "Vulpix",
+										"Jolly": "Eevee", "Quiet": "Chikorita",
+										"Calm": "Cyndaquil", "Sassy": "Totodile",
+										"Hardy": "Treecko", "Rash": "Torchic",
+										"Lonely": "Mudkip", "Naive": "Skitty",
+										"Timid": "Turtwig", "Impish": "Chimchar",
+										"Quirky": "Piplup"}
+								}
+
+							let pickedPokemon
+
+							if (personalities["Male"]) {
+								pickedPokemon = resultPokemon["Male"][dominantTrait]
+							} else if (personalities["Female"]) {
+								pickedPokemon = resultPokemon["Female"][dominantTrait]
+							}
+
+							const personalityDescriptions = {
+								"Bold": `You're so brave, and you never back down from anything! And you're also gutsy and brash in a way that others aren't! You're not shy about asking to take home all the leftovers at restaurants, right? If someone's treating you to dinner, you have no problem with ordering lots of good stuff! And you aren't fazed by doing things that most others would think twice about doing. Perhaps you don't even notice when others are upset with you! You know, you have the potential to become a truly great person...because you'll be the last one standing!`,
+								"Brave": `You don't know the meaning of fear! You're not afraid to keep moving forward in the face of danger. You also have a strong sense of justice and can't turn a blind eye to someone in trouble. But you sometimes push your own personal sense of justice a little too hard. Be careful that you don't get too pushy!`,
+								"Calm": `You're very compassionate and considerate, and you put friends ahead of yourself. You're so generous and kindhearted that you can laugh, forgive, and forget when your friends make mistakes. But be aware that your compassion can sometimes get the best of you, putting you too far behind everyone else!`,
+								"Docile": `You're quite sensitive to others! You listen attentively and respectfully, and you're quick to pick up on things. Because you're so good at listening, do you find that your friends tell you their problems and concerns often? Perhaps people laugh at you sometimes for being so earnest and not recognizing jokes for what they are.But you're honestly surprised and bashful about this aspect of yourself...And then honestly laugh about it!`,
+								"Hardy": `You're so determined! You don't whine or feel sorry for yourself, and you never need help with anything. You also have a strong sense of responsibility. You work toward your goals steadily and never require attention along the way. Your resilient spirit is the only thing you need to guide you toward your goals. But be careful! You risk wearing yourself out if you work too long all on your own! You should recognize that sometimes you need help from friends.`,
+								"Hasty": `You talk quickly! You eat quickly! You walk quickly! People often see you as a hard worker because you're always moving around so fast! But be careful! If you always rush so fast, you may make mistakes more often than others do. And what a waste that would be! Relax every now and then with a nice, deep breath!`,
+								"Impish": `You really like to play a lot! And you enjoy eating a lot! You love competition, but you hate losing. Your personality seems crystal clear to others. With you, what you see is what you get! You cheer others with your dazzling smile. But you may be afraid of showing what's in your heart and revealing your true self. You may not want to keep your worries to yourself. You're only human, so ask your friends for advice when you need it.`,
+								"Jolly": `You have a good sense of humor, and you're compassionate. You're always making others around you laugh. You have a sunny, positive outlook, and you have a vitality that raises the lowest spirits to giddy heights! Yet, for all your great cheer, you're also open to tears...But you bounce between laughter and tears so easily! What an adventure life must be like for you, bouncing around like that all day!`,
+								"Lonely": `At least a little bit! You might find that surprising, but do you think it might be a little true? You know what they say, though...We're all a bit lonely every now and then! You probably keep this fact of life to yourself, though. But if there's one thing that brings us all together...it's our need to go it solo!`,
+								"Naive": `You're so open and innocent! What a strong sense of curiosity you have! And you state your opinions purely, sharing exactly what you think. You also have an artistic spirit that isn't restrained by social conventions! You startle people with your spontaneity and vision. But when you overdo it, other people can have a hard time keeping up with you...Have you noticed people looking at you oddly? As if for no apparent reason?`,
+								"Quiet": `And very calm! You're great with numbers, and you analyze information before making decisions. You rarely make mistakes, because you make decisions so calmly and rationally. You also may find it hard to guess what others are thinking, and they may find you a touch cold at times. You may not want to keep your feelings to yourself so much of the time.`,
+								"Quirky": `You want to be on the cutting edge of fashion! You want to own all the latest stuff, right? But you grow bored of your old things and only like new things! You're true to your emotions, and you follow your desires. People have a hard time keeping up with you because you change so quickly. You may want to reflect upon how your words and actions affect others.`,
+								"Rash": `You seem to be even a bit hasty at times! You may run out of your house an forget to lock the door once in a while. And you may leave things like umbrellas behind when you leave places. Maybe you even dash outside in your slippers every now and then! Perhaps you even wear your shirts inside out all the time! Oh, is that even rasher than you really are? So sorry! But know that your friends think your funny little flubs are adorable! Oh, wait! One more thing! You also sometimes reveal your friends' secrets by accidents, don't you! Sorry. Had to be said!`,
+								"Relaxed": `You're so casual, leisurely, and carefree.You don't rush or stress yourself out, and you don't worry about anything. You like to take a seat and kick up your feet! You definitely have an easygoing personality, and you don't sweat the details. People naturally flock to you because they find you to be a free spirit, which is so refreshing!`,
+								"Sassy": `Or at least somewhat sassy! You don't like taking orders. You're a little rebellious and like to disagree. You're a lone wolf! You like to keep your distance from groups and go off to do things on your own. Older folks may be ones who find you the most disagreeable, even selfish. But people younger than you tend to really admire you!`,
+								"Timid": `You're quite gentle! You're sometimes a little shy about new things, aren't you? Do you miss out on some experiences because you get worried about the newness of the challenge? Of course, there's also a great benefit in being cautious, isn't there? After all, it keeps you nice and safe! You live life at your own speed, with no hurries and no worries!`,
+							}
+
+							const file = new Discord.MessageAttachment(`${dataPath}/images/pokemon/${pickedPokemon}_Portrait.webp`);
+							return message.channel.send({embeds: [new Discord.MessageEmbed()
+								.setColor('#ff06aa')
+								.setTitle(`You are a ${pickedPokemon}`)
+								.setDescription(`_You seem to be the **${dominantTrait}**_ type.\n\n${personalityDescriptions[dominantTrait]}`)
+								.setThumbnail(`attachment://${pickedPokemon}_Portrait.webp`)
+							], files: [file]})
+						}
+					}
+				} else if (m.content.toLowerCase() == "stop" || m.content.toLowerCase() == "end" || m.content.toLowerCase() == "cancel") {
+					message.channel.send("Cancelling the quiz for you.")
+					return collector.stop()
+				} else {
+					message.channel.send("That's not the correct answer! Please try again.")
+				}
+			}
+		})
+	}
+})
+
+function processQuestion(message, question, number) {
+	let questionName = Object.keys(question)[0]
+	let questionText = Object.values(question)[0]
+
+	let answers = []
+	let answerNum = 0
+
+	for (const i in questionText) {
+		answers.push(`**${answerNum}**: ${i}`)
+		answerNum++
+	}
+
+	return {embeds: [new Discord.MessageEmbed()
+		.setColor('#ff06aa')
+		.setTitle(`${number}${number == 1 ? "st" : number == 2 ? "nd" : number == 3 ? "rd" : "th"} Question:`)
+		.setDescription(questionName)
+		.addField("Answers", answers.join("\n"))
+		.setFooter("Type the number of the answer you want to pick.")
+	]}
+}
