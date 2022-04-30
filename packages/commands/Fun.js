@@ -377,6 +377,7 @@ commands.ship = new Command({
 	}
 })
 
+let inQuestion = {}
 commands.pmdquiz = new Command({
 	desc: "Play a PMD quiz!",
 	section: "fun",
@@ -393,6 +394,8 @@ commands.pmdquiz = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (inQuestion[message.author.id]) return message.channel.send("Finish your current quiz first!");
+
 		//check for invalid category
 		const acceptedCategories = ["red", "blue", "time", "darkness", "sky", "all"]
 		if (!acceptedCategories.includes(args[0].toLowerCase())) return message.channel.send(`This category is invalid! Please use one of the following: ${acceptedCategories.join(", ")}`)
@@ -424,6 +427,7 @@ commands.pmdquiz = new Command({
 		let availableAnswerNums = Object.keys(Object.values(pickedQuestion)[0]).length - 1
 
 		message.channel.send(processQuestion(message, pickedQuestion, questionNumber))
+		inQuestion[message.author.id] = true;
 
 		let personalities = {}
 
@@ -511,6 +515,8 @@ commands.pmdquiz = new Command({
 								"Sassy": `Or at least somewhat sassy! You don't like taking orders. You're a little rebellious and like to disagree. You're a lone wolf! You like to keep your distance from groups and go off to do things on your own. Older folks may be ones who find you the most disagreeable, even selfish. But people younger than you tend to really admire you!`,
 								"Timid": `You're quite gentle! You're sometimes a little shy about new things, aren't you? Do you miss out on some experiences because you get worried about the newness of the challenge? Of course, there's also a great benefit in being cautious, isn't there? After all, it keeps you nice and safe! You live life at your own speed, with no hurries and no worries!`,
 							}
+
+							delete inQuestion[message.author.id];
 
 							const file = new Discord.MessageAttachment(`${dataPath}/images/pokemon/${pickedPokemon}_Portrait.webp`);
 							return message.channel.send({embeds: [new Discord.MessageEmbed()
