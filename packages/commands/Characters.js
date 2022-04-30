@@ -163,6 +163,31 @@ commands.listchars = new Command({
 	}
 })
 
+commands.searchchars = new Command({
+	desc: 'Searches for characters by phrase.',
+	section: "characters",
+	args: [
+		{
+			name: "Phrase",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let array = [];
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		for (const i in charFile) {
+			if (charFile[i].hidden) continue;
+			if (charFile[i].name.toLowerCase().includes(args[0].toLowerCase()) || i.toLowerCase().includes(args[0].toLowerCase())) {
+				array.push({title: `${elementEmoji[charFile[i].mainElement]}${charFile[i].name} (${i})`, desc: `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}MP`});
+			}
+		}
+
+		listArray(message.channel, array);
+	}
+})
+
 commands.nickname = new Command({
 	desc: `Change the character's nickname.`,
 	aliases: ['nick', 'shortname'],
