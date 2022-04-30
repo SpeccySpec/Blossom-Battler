@@ -529,6 +529,7 @@ commands.pmdquiz = new Command({
 					}
 				} else if (m.content.toLowerCase() == "stop" || m.content.toLowerCase() == "end" || m.content.toLowerCase() == "cancel") {
 					message.channel.send("Cancelling the quiz for you.")
+					delete inQuestion[message.author.id];
 					return collector.stop()
 				} else {
 					message.channel.send("That's not the correct answer! Please try again.")
