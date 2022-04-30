@@ -169,6 +169,7 @@ const affinityScores = {
 longDescription = (charDefs, level, server, message) => {
 	let char = objClone(charDefs);
 	let dispLevel = '';
+	let settings = setUpFile(`${dataPath}/json/${server}/settings.json`);
 
 	if (level && char.level != level && server) {
 		char.level = level;
@@ -183,7 +184,7 @@ longDescription = (charDefs, level, server, message) => {
 		.setColor(elementColors[char.mainElement])
 		.setTitle(`${elementEmoji[char.mainElement]}${char.name} ${dispLevel} *(${userTxt})*`)
 
-	if (char.leaderskill) DiscordEmbed.setDescription(`**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} toward ${char.leaderskill.var1.toUpperCase()}`);
+	if (char.leaderskill && settings.mechanics.leaderskills) DiscordEmbed.setDescription(`**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} toward ${char.leaderskill.var1.toUpperCase()}`);
 
 	// Here come the various fields!
 
@@ -214,7 +215,6 @@ longDescription = (charDefs, level, server, message) => {
 
 	DiscordEmbed.fields.push({ name: 'Skills', value: skillDesc, inline: true });
 
-	let settings = setUpFile(`${dataPath}/json/${server}/settings.json`);
 	// Limit Breaks
 	if (settings.mechanics.limitbreaks) {
 		let lbDesc = '';
@@ -261,7 +261,7 @@ longDescription = (charDefs, level, server, message) => {
 		}
 	}
 	if (charAffs != '') DiscordEmbed.fields.push({ name: 'Affinities', value: charAffs, inline: true });
-	
+
 	// Ae
 	return DiscordEmbed;
 }
