@@ -251,6 +251,30 @@ commands.currency = new Command({
         let settings = setUpSettings(message.guild.id)
 
         if (utilityFuncs.isAdmin(message)) {
+            if (message.mentions.users.first())
+            return message.channel.send("Don't ping others with this, that's just mean.");
+            else if (args[0].toLowerCase() == 'dick')
+                return message.channel.send("Not funny enough to let you do this, you clown.");
+            else if (args[0].toLowerCase() == 'balls')
+                return message.channel.send("You're either ballin', playing with balls, or being stopped by Bloom Battler... you sick human being.");
+            else if (args[0].toLowerCase() == 'vagina')
+                return message.channel.send("Yeah okay... No.");
+            else if (args[0].toLowerCase() == 'women' || args[0].toLowerCase() == 'woman')
+                return message.channel.send("This is no harem.");
+            else if (args[0].toLowerCase() == 'sex' || args[0].toLowerCase() == 'ass' || args[0].toLowerCase() == 'doggy-style' || args[0].toLowerCase() == 'doggystyle')
+                return message.channel.send("No you can't have sex with a robot, even if they had the capability to.");
+            else {
+                let currencyText = args[0].toLowerCase()
+                const inapropriateWords = ['dick', 'balls', 'penis', 'vagina', 'pussy', 'fuck', 'shit', 'nigga', 'n-word', 'nigger', 'rape', 'porn', 'hentai', 'ass', 'tit', 'breast']
+
+                for (const i in inapropriateWords) {
+                    if (currencyText === inapropriateWords[i]) {
+                        message.channel.send("This word is too inapropriate. Sorry.");
+                        return
+                    }
+                }
+            }
+
             settings['currency'] = args[0]
             fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
             message.channel.send('Currency set to ' + args[0])
@@ -413,6 +437,283 @@ commands.xpcalcformula = new Command({
             message.channel.send('XP calculation formula set to ' + args[0].charAt(0).toUpperCase() + args[0].slice(1) + '\n\`' + xpCalcFormulas[args[0].toLowerCase()] + '\`')
         } else {
             return message.channel.send('You do not have permission to change the xp calculation formula!')
+        }
+    }
+})
+
+commands.xprate = new Command({
+    desc: 'Change the xp rate for the server.',
+    section: 'moderation',
+    aliases: ['setxprate', 'setxp'],
+    args: [
+        {
+            name: 'XP Rate',
+            type: 'Decimal',
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        let settings = setUpSettings(message.guild.id)
+
+        if (utilityFuncs.isAdmin(message)) {
+            if (args[0] < 0) {
+                return message.channel.send('XP rate cannot be less than 0!')
+            }
+
+            settings['rates']['xprate'] = args[0]
+            fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+            message.channel.send('XP rate set to ' + args[0] + 'x')
+        } else {
+            return message.channel.send('You do not have permission to change the xp rate!')
+        }
+    }
+})
+
+commands.trustrate = new Command({
+    desc: 'Change the trust rate for the server.',
+    section: 'moderation',
+    aliases: ['settrustrate', 'settrust'],
+    args: [
+        {
+            name: 'Trust Rate',
+            type: 'Decimal',
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        let settings = setUpSettings(message.guild.id)
+
+        if (utilityFuncs.isAdmin(message)) {
+            if (args[0] < 0) {
+                return message.channel.send('Trust rate cannot be less than 0!')
+            }
+
+            settings['rates']['trustrate'] = args[0]
+            fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+            message.channel.send('Trust rate set to ' + args[0] + 'x')
+        } else {
+            return message.channel.send('You do not have permission to change the trust rate!')
+        }
+    }
+})
+
+commands.goldenchance = new Command({
+    desc: 'Change the chance of golden enemies appearing in battles for the server.',
+    section: 'moderation',
+    aliases: ['setgoldenchance', 'setgolden', 'goldchance', 'setgoldchance', 'setgold'],
+    args: [
+        {
+            name: 'Golden Enemy Chance',
+            type: 'Decimal',
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        let settings = setUpSettings(message.guild.id)
+
+        if (utilityFuncs.isAdmin(message)) {
+            if (args[0] < 0 || args[0] > 100) {
+                return message.channel.send('Golden enemy chance must be between 0 and 100!')
+            }
+
+            settings['rates']['goldchance'] = args[0]
+            fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+            message.channel.send('Golden enemy chance set to ' + args[0] + '%')
+        } else {
+            return message.channel.send('You do not have permission to change the golden enemy chance!')
+        }
+    }
+})
+
+commands.mechanics = new Command({
+    desc: 'Change the mechanics for the server.',
+    section: 'moderation',
+    aliases: ['setmechanics', 'setmechanic', 'setmech'],
+    args: [
+        {
+            name: 'Mechanic',
+            type: 'Word',
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        let settings = setUpSettings(message.guild.id)
+
+        if (utilityFuncs.isAdmin(message)) {
+            const fullNames = {
+                'limitbreaks': 'Limit Breaks',
+                'teamcombos': 'Team Combos',
+                'onemores': 'One Mores',
+                'stataffinties': 'Stat Affinities',
+                'charms': 'Charms',
+                'leaderskills': 'Leader Skills',
+                'transformations': 'Transformations'
+            }
+
+            switch (args[0].toLowerCase()) {
+                case 'limitbreaks':
+                case 'teamcombos':
+                case 'onemores':
+                case 'stataffinties':
+                case 'charms':
+                case 'leaderskills':
+                case 'transformations':
+                    settings['mechanics'][args[0].toLowerCase()] = !settings['mechanics'][args[0].toLowerCase()]
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+                    message.channel.send(fullNames[args[0].toLowerCase()] + ' are now ' + (settings['mechanics'][args[0].toLowerCase()] ? 'enabled' : 'disabled'))
+                    break
+                default:
+                    message.channel.send('Invalid mechanic! Valid mechanics are: limitbreaks, teamcombos, onemores, stataffinties, charms, leaderskills, transformations')
+                    break
+            }
+        } else {
+            return message.channel.send('You do not have permission to change the mechanics!')
+        }
+    }
+})
+
+commands.caps = new Command({
+    desc: 'Change the caps for the server.',
+    section: 'moderation',
+    aliases: ['setcaps', 'setcap', 'setcapamount', 'setcapamounts', 'setcapamounts'],
+    args: [
+        {
+            name: 'Cap',
+            type: 'Word',
+            forced: true
+        },
+        {
+            name: 'Amount',
+            type: 'Num',
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        let settings = setUpSettings(message.guild.id)
+
+        if (utilityFuncs.isAdmin(message)) {
+            const fullNames = {
+                'levelcap': 'Level Cap',
+                'hpmpcap': 'HP+MP Cap',
+                'statcap': 'Stat Cap',
+                'basestatcap': 'Base Stat Cap',
+                'bstcap': 'Base Stat Total Cap',
+                'skillamount': 'Skill Amount'
+            }
+
+            switch (args[0].toLowerCase()) {
+                case 'levelcap':
+                case 'hpmpcap':
+                case 'statcap':
+                case 'basestatcap':
+                case 'bstcap':
+                case 'skillamount':
+                    settings['caps'][args[0].toLowerCase()] = args[1]
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+                    message.channel.send(fullNames[args[0].toLowerCase()] + ' set to ' + args[1])
+                    break
+                default:
+                    message.channel.send('Invalid cap! Valid caps are: levelcap, hpmpcap, statcap, basestatcap, bstcap, skillamount')
+                    break
+            }
+        } else {
+            return message.channel.send('You do not have permission to change the caps!')
+        }
+    }
+})
+
+commands.transformationcaps = new Command({
+    desc: 'Change the transformation caps for the server.',
+    section: 'moderation',
+    aliases: ['settransformationcaps', 'settransformationcap', 'settransformationcapamount', 'settransformationcapamounts', 'settransformationcapamounts'],
+    args: [
+        {
+            name: 'Cap',
+            type: 'Word',
+            forced: true
+        },
+        {
+            name: 'Amount',
+            type: 'Num',
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        let settings = setUpSettings(message.guild.id)
+
+        if (utilityFuncs.isAdmin(message)) {
+            const fullNames = {
+                'hpmpcap': 'HP+MP Cap',
+                'statcap': 'Stat Cap',
+                'basestatcap': 'Base Stat Cap',
+                'bstcap': 'Base Stat Total Cap'
+            }
+
+            switch (args[0].toLowerCase()) {
+                case 'hpmpcap':
+                case 'statcap':
+                case 'basestatcap':
+                case 'bstcap':
+                    settings['caps']['transformations'][args[0].toLowerCase()] = args[1]
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+                    message.channel.send(fullNames[args[0].toLowerCase()] + ' set to ' + args[1])
+                    break
+                default:
+                    message.channel.send('Invalid cap! Valid caps are: hpmpcap, statcap, basestatcap, bstcap')
+                    break
+            }
+        } else {
+            return message.channel.send('You do not have permission to change the caps!')
+        }
+    }
+})
+
+commands.affinityrates = new Command({
+    desc: 'Change the affinity damage rates for the server.',
+    section: 'moderation',
+    aliases: ['setaffinityrates', 'setaffinityrate', 'setaffinityrateamount', 'setaffinityrateamounts', 'setaffinityrateamounts'],
+    args: [
+        {
+            name: 'Affinity',
+            type: 'Word',
+            forced: true
+        },
+        {
+            name: 'Rate',
+            type: 'Decimal',
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        let settings = setUpSettings(message.guild.id)
+
+        if (utilityFuncs.isAdmin(message)) {
+            const fullNames = {
+                'deadly': 'Deadly',
+                'superweak': 'Super Weak',
+                'weak': 'Weak',
+                'resist': 'Resist',
+                'repel': 'Repel',
+                'drain': 'Drain'
+            }
+
+            switch (args[0].toLowerCase()) {
+                case 'deadly':
+                case 'superweak':
+                case 'weak':
+                case 'resist':
+                case 'repel':
+                case 'drain':
+                    settings['rates']['affinities'][args[0].toLowerCase()] = args[1]
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+                    message.channel.send(fullNames[args[0].toLowerCase()] + 'damage rate set to ' + args[1])
+                    break
+                default:
+                    message.channel.send('Invalid affinity! Valid affinities are: deadly, superweak, weak, resist, repel, drain')
+                    break
+            }
+        } else {
+            return message.channel.send('You do not have permission to change the affinity rates!')
         }
     }
 })
