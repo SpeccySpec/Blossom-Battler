@@ -418,7 +418,7 @@ commands.pmdquiz = new Command({
 		}
 
 		if (!args[1]) args[1] = 8
-		args[1] = Math.min(Math.max(args[1], 1), questionArray.length + 1)
+		args[1] = Math.min(Math.max(args[1], 1), questionArray.length)
 
 		let pickedQuestion = questionArray[Math.floor(Math.random() * questionArray.length)]
 		questionArray.splice(questionArray.indexOf(pickedQuestion), 1)
