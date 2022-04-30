@@ -254,50 +254,8 @@ const footerTexts = [
 	]
 ]
 
-commands.ship = new Command({
-	desc: "Ship yourself with someone... or ship two separate people, or more! It's funny, trust me.",
-	args: [
-		{
-			name: "Person #1",
-			type: "Any",
-			forced: true
-		},
-		{
-			name: "Person #2",
-			type: "Any",
-			multiple: true
-		}
-	],
-	section: "fun",
-	func: (message, args) => {
-		if (!args[0]) return message.channel.send(`Please specify at least one person who you want to ship yourself with, or two if you want to ship two different people.`);
-
-		// Undefined
-		let allUndefined = true;
-		for (const i in args) {
-			if (args[i].toLowerCase() != 'undefined') { allUndefined = false; break; }
-		}
-
-		if (allUndefined) {
-			let resulttext = "**Candidates:** \n"
-			for (const i in args) resulttext += `:small_orange_diamond: ${args[i]} \n`;
-
-			const DiscordEmbed = new Discord.MessageEmbed()
-				.setColor('#ff06aa')
-				.setTitle('undefined')
-				.setDescription(`${resulttext}\n**NaN%** ${':black_medium_square:'.repeat(10)}`)
-				.setFooter('undefined')
-			message.channel.send({embeds: [DiscordEmbed]})
-			return false
-		}
-
-		if (!args[1]) {
-			args[1] = args[0]
-			args[0] = message.author.username
-		}
-		let shipCandidates = args;
-
-		let resulttext = "**Candidates:** \n"
+function evaluateShip(shipCandidates, message) {
+	let resulttext = "**Candidates:** \n"
 		let splicedName = ""
 
 		for (i in shipCandidates) {
@@ -374,6 +332,76 @@ commands.ship = new Command({
 			.setDescription(`${resulttext}\n**${love}%** ${loveLevel}`)
 			.setFooter(footerText)
 		]})
+}
+
+commands.ship = new Command({
+	desc: "Ship yourself with someone... or ship two separate people, or more! It's funny, trust me.",
+	args: [
+		{
+			name: "Person #1",
+			type: "Any",
+			forced: true
+		},
+		{
+			name: "Person #2",
+			type: "Any",
+			multiple: true
+		}
+	],
+	section: "fun",
+	func: (message, args) => {
+		if (!args[0]) return message.channel.send(`Please specify at least one person who you want to ship yourself with, or two if you want to ship two different people.`);
+
+		// Undefined
+		let allUndefined = true;
+		for (const i in args) {
+			if (args[i].toLowerCase() != 'undefined') { allUndefined = false; break; }
+		}
+
+		if (allUndefined) {
+			let resulttext = "**Candidates:** \n"
+			for (const i in args) resulttext += `:small_orange_diamond: ${args[i]} \n`;
+
+			const DiscordEmbed = new Discord.MessageEmbed()
+				.setColor('#ff06aa')
+				.setTitle('undefined')
+				.setDescription(`${resulttext}\n**NaN%** ${':black_medium_square:'.repeat(10)}`)
+				.setFooter('undefined')
+			message.channel.send({embeds: [DiscordEmbed]})
+			return false
+		}
+
+		if (!args[1]) {
+			args[1] = args[0]
+			args[0] = message.author.username
+		}
+
+		evaluateShip(args, message)
+	}
+})
+
+commands.randship = new Command({
+	desc: "Ship random characters together.",
+	section: "fun",
+	aliases: ["randmoship"],
+	args: [{
+		name: "Person #1",
+		type: "Word",
+	}],
+	func: (message, args) => {
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		let char1 = Object.keys(charFile)[Math.floor(Math.random() * Object.keys(charFile).length)]
+		let char2 = Object.keys(charFile)[Math.floor(Math.random() * Object.keys(charFile).length)]
+
+		while (char1 == char2) {
+			char2 = charFile[Math.floor(Math.random() * charFile.length)]
+		}
+
+		if (!args[0]) args[0] = charFile[char1].name
+		args[1] = charFile[char2].name
+
+		evaluateShip(args, message)
 	}
 })
 
