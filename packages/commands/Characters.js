@@ -1133,6 +1133,7 @@ commands.updatecharacters = new Command({
 	section: "characters",
 	args: [],
 	func: (message, args) => {
+		if (!utilityFuncs.RPGBotAdmin(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are not a hardcoded admin of this bot.`);
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		for (let i in charFile) {
 			charFile[i].name = i;
