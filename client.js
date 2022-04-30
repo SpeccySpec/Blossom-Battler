@@ -779,7 +779,8 @@ setUpSettings = (guild) => {
 				metronome: {},
 				randskills: {},
 				randstats: {},
-				charfuck: {}
+				charfuck: {},
+				enemies: {}
 			},
 			banned: [],
 			themes: {

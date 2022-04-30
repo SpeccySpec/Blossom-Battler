@@ -56,3 +56,63 @@ commands.guide = new Command({
 		}
 	}
 })
+
+commands.pvpleaderboards = new Command({
+	desc: "View the leaderboards for the different gamemodes.",
+	section: "battle",
+	aliases: ["pvpleaderboards", "pvpleaders", "pvpwinners", 'leaderboards', 'leaders', 'winners'],
+	args: [{
+		name: "Gamemode",
+		type: "Word",
+	}],
+	func: (message, args) => {
+		settings = setUpSettings(message.guild.id)
+
+		if (!settings['pvpstuff'] || settings['pvpstuff'].length <= 2) {
+			settings['pvpstuff'] = {
+				none: {},
+				metronome: {},
+				randskills: {},
+				randstats: {},
+				charfuck: {},
+				enemies: {}
+			} 
+			
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+		}
+
+		let gamemode = "none"
+		if (args[0]) {
+			if (args[0].toLowerCase() === "metronome" || args[0].toLowerCase() === "randskills" || args[0].toLowerCase() === "randstats" || args[0].toLowerCase() === "charfuck") {
+				gamemode = args[0].toLowerCase()
+			}
+		}
+
+		let leaderBoard = []
+		for (const i in settings['pvpstuff'][gamemode]) {
+			leaderBoard.push([i, settings['pvpstuff'][gamemode][i]])
+		}
+
+		leaderBoard.sort(function(a, b) {return b[1].points - a[1].points});
+
+		let leaderText = ""
+		for (const i in leaderBoard) {
+			let boardUser = client.users.fetch(leaderBoard[i][0])
+			boardUser.then(function(user) {
+				leaderText += `${+i+1}: ${user.username} (${leaderBoard[i][1].points} points)\n`;
+			})
+		}
+
+		if (gamemode === "none") {gamemode = "regular"}
+
+		setTimeout(function() {
+			if (leaderText == "") {leaderText = "No Users on the leaderboard."}
+
+			const DiscordEmbed = new Discord.MessageEmbed()
+				.setColor('#b4eb34')
+				.setTitle(`${message.guild.name}'s ${gamemode} leaderboard`)
+				.setDescription(`${leaderText}`)
+			message.channel.send({embeds: [DiscordEmbed]})
+		},	500)
+	}
+})
