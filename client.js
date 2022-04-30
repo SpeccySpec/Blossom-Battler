@@ -183,6 +183,7 @@ elementColors = {
 	strike: '#ffc012',
 	slash: '#aba060',
 	pierce: '#e3c8ac',
+	explode: '#FF5900',
 
 	fire: '#ff425f',
 	water: '#8c19ff',
@@ -196,6 +197,7 @@ elementColors = {
 	metal: '#d6d6d6',
 	curse: '#7a1730',
 	bless: '#fff4cc',
+	spirit: '#F3C6FF',
 	nuclear: '#5eb000',
 	gravity: '#030a96',
 	sound: '#15ff00',
