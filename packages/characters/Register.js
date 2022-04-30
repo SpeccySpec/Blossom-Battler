@@ -214,24 +214,21 @@ longDescription = (charDefs, level, server, message) => {
 
 	DiscordEmbed.fields.push({ name: 'Skills', value: skillDesc, inline: true });
 
+	let settings = setUpFile(`${dataPath}/json/${server}/settings.json`);
 	// Limit Breaks
-	if (server) {
-		let settings = setUpFile(`${dataPath}/json/${server}/settings.json`);
+	if (settings.mechanics.limitbreaks) {
+		let lbDesc = '';
 
-		if (settings.limitbreaks) {
-			let lbDesc = '';
-
-			if (char.lb && char.lb[1]) {
-				for (const i in char.lb) {
-					lbDesc += `**${i}: ${char.lb[i].name}**\n_${char.lb[i].pow} Power, ${char.lb[i].cost}LB%_`;
-					if (char.lb[i].hits > 1) lbDesc += `_, ${char.lb[i].hits} Hits_`;
-					lbDesc += '\n\n';
-				}
+		if (char.lb && char.lb[1]) {
+			for (const i in char.lb) {
+				lbDesc += `**${i}: ${char.lb[i].name}**\n_${char.lb[i].pow} Power, ${char.lb[i].cost}LB%_`;
+				if (char.lb[i].hits > 1) lbDesc += `_, ${char.lb[i].hits} Hits_`;
+				lbDesc += '\n\n';
 			}
-			
-			if (lbDesc != '')
-				DiscordEmbed.fields.push({ name: 'Limit Breaks', value: lbDesc, inline: true });
 		}
+		
+		if (lbDesc != '')
+			DiscordEmbed.fields.push({ name: 'Limit Breaks', value: lbDesc, inline: true });
 	}
 
 	// Affinities
@@ -247,23 +244,24 @@ longDescription = (charDefs, level, server, message) => {
 	charAffs += `Score: **${affinityscore}**\n*${scorecomment}*`
 
 	// Status Affinities
-	if (char.statusaffinities) {
-		let statusaffinityscore = 0
-		let statAffs = '';
-		for (const affinity in char.statusaffinities) {
-			for (const i in char.statusaffinities[affinity]) {
-				statusaffinityscore += affinityScores[affinity]
-				statAffs += `${statusEmojis[char.statusaffinities[affinity][i]]}${affinityEmoji[affinity]}\n`;
+	if (settings.mechanics.stataffinities) {
+		if (char.statusaffinities) {
+			let statusaffinityscore = 0
+			let statAffs = '';
+			for (const affinity in char.statusaffinities) {
+				for (const i in char.statusaffinities[affinity]) {
+					statusaffinityscore += affinityScores[affinity]
+					statAffs += `${statusEmojis[char.statusaffinities[affinity][i]]}${affinityEmoji[affinity]}\n`;
+				}
 			}
+			if (statAffs != '') {
+				const scorecomment = affinityScores[(statusaffinityscore > 0 ? Math.ceil : Math.floor)(statusaffinityscore)]
+				charAffs += `\n\n${statAffs}Score: **${statusaffinityscore}**\n*${scorecomment}*`
+			};
 		}
-		if (statAffs != '') {
-			const scorecomment = affinityScores[(statusaffinityscore > 0 ? Math.ceil : Math.floor)(statusaffinityscore)]
-			charAffs += `\n\n${statAffs}Score: **${statusaffinityscore}**\n*${scorecomment}*`
-		};
 	}
-
 	if (charAffs != '') DiscordEmbed.fields.push({ name: 'Affinities', value: charAffs, inline: true });
-
+	
 	// Ae
 	return DiscordEmbed;
 }
