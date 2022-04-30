@@ -25,8 +25,8 @@ commands.openshop = new Command({
 	section: "shops",
 	func: (message, args) => {
 		let shopData = setUpFile(`${dataPath}/json/${message.guild.id}/shops.json`);
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id) && !utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send("I've been told you were banned from using the RPG sections of the bot, sorry!")
-        if (!message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You lack sufficient permissions, I'm so sorry!");
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send("I've been told you were banned from using the RPG sections of the bot, sorry!")
+        if (!isAdmin(message)) return message.channel.send("You lack sufficient permissions, I'm so sorry!");
 
         if (!args[1]) {
             const DiscordEmbed = new Discord.MessageEmbed()

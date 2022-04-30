@@ -57,7 +57,7 @@ commands.registerloot = new Command({
     func: (message, args) => {
         lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
 
-        if (lootFile[args[0]] && message.author.id != lootFile[args[0]].originalAuthor && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
+        if (lootFile[args[0]] && message.author.id != lootFile[args[0]].originalAuthor && !isAdmin(message)) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
 
         if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
 		if (args[0].length > 50) return message.channel.send(`${args[0]} is too long of a loot table name.`);
@@ -129,7 +129,7 @@ commands.renameloot = new Command({
         lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
 
         if (!lootFile[args[0]]) return message.channel.send(`${args[0]} does not exist.`)
-        if (lootFile[args[0]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send(`${args[0]} exists already and cannot be renamed because you don't own it!`)
+        if (lootFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send(`${args[0]} exists already and cannot be renamed because you don't own it!`)
         if (lootFile[args[1]]) return message.channel.send(`${args[1]} already exists.`)
 
         if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
@@ -237,7 +237,7 @@ commands.purgeloot = new Command({
 
         if (!lootFile[args[0]]) return message.channel.send(`${args[0]} is not a valid loot table name.`);
 
-        if (lootFile[args[0]].originalAuthor != message.author.id && !message.member.permissions.serialize().ADMINISTRATOR) return message.channel.send("You do not own this loot table, therefore, you have insufficient permissions to delete it.")
+        if (lootFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("You do not own this loot table, therefore, you have insufficient permissions to delete it.")
 
         message.channel.send(`Are you **sure** you want to delete ${lootFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this loot table.\n**Y/N**`);
 

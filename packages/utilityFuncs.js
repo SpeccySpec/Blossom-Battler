@@ -25,20 +25,18 @@ module.exports = {
 	},
 	
 	isBanned: function(id, server) {
-		let servFile = setUpFile(`${dataPath}/json/${server}/server.json`)
-		if (!servFile || !servFile.banned) return false;
-
-		for (const i in servFile.banned) {
-			if (id === servFile.banned) return true;
-		}
-		
-		return false
+		setUpSettings(server)
+		return settings['banned'].includes(id)
 	},
 	
 	AdminList: adminList,
 	
 	RPGBotAdmin: function(id) {
 		return adminList.includes(id)	
+	},
+
+	isAdmin: function(message) {
+		return message.member.permissions.serialize().ADMINISTRATOR || this.RPGBotAdmin(message.author.id)
 	},
 	
 	roundToDecimals: function(num, places) {
