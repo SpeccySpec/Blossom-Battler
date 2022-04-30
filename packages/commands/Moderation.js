@@ -24,6 +24,9 @@ commands.settings = new Command({
                 case 'leaderskills':
                     mechanicText += `**Leader Skills**: ${settings['mechanics'][i] == true ? 'Enabled' : 'Disabled'}\n`
                     break
+                case 'technicaldamage':
+                    mechanicText += `**Technical Damage**: ${settings['mechanics'][i] == true ? 'Enabled' : 'Disabled'}\n`
+                    break
                 case 'charms':
                 case 'transformations':
                     mechanicText += `**${i.charAt(0).toUpperCase() + i.slice(1)}**: ${settings['mechanics'][i] == true ? 'Enabled' : 'Disabled'}\n`
@@ -96,6 +99,8 @@ commands.settings = new Command({
             .addField('Prefix', `${settings['prefix']}`, true)
             .addField('Currency', `${settings['currency']}, ${settings['currency']}s`, true)
             .addField('Main Element Damage Rate', `${settings['rates']['mainelement']}x`, true)
+            .addField('Critical Damage Rate', `${settings['rates']['crit']}x`, true)
+            .addField('Technical Damage Rate', `${settings['rates']['tech']}x`, true)
             .addField('XP Rate', `${settings['rates']['xprate']}x`, true)
             .addField('Trust Rate', `${settings['rates']['trustrate']}x`, true)
             .addField('Golden Enemy Chance', `${settings['rates']['goldchance']}%`, true)
@@ -553,6 +558,62 @@ commands.mainelementrate = new Command({
     }
 })
 
+commands.critrate = new Command({
+    desc: 'Change the critical hit damage rate in battles for the server.',
+    section: 'moderation',
+    aliases: ['setcritrate', 'setcrit', 'setcritical', 'setcriticalrate', 'setcriticalhit', 'setcriticalhitrate'],
+    args: [
+        {
+            name: 'Critical Hit Damage Rate',
+            type: 'Decimal',
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        let settings = setUpSettings(message.guild.id)
+
+        if (utilityFuncs.isAdmin(message)) {
+            if (args[0] < 1.1) {
+                return message.channel.send('Critical hit damage rate cannot be less than 1!')
+            }
+
+            settings['rates']['crit'] = args[0]
+            fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+            message.channel.send('Critical hit damage rate set to ' + args[0] + 'x')
+        } else {
+            return message.channel.send('You do not have permission to change the critical hit damage rate!')
+        }
+    }
+})
+
+commands.techrate = new Command({
+    desc: 'Change the technical damage rate in battles for the server.',
+    section: 'moderation',
+    aliases: ['settechrate', 'settech', 'settechnical', 'settechnicalrate', 'settechnicaldamage', 'settechnicaldamagerate'],
+    args: [
+        {
+            name: 'Technical Damage Rate',
+            type: 'Decimal',
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        let settings = setUpSettings(message.guild.id)
+
+        if (utilityFuncs.isAdmin(message)) {
+            if (args[0] < 1) {
+                return message.channel.send('Technical damage rate cannot be less than 1!')
+            }
+
+            settings['rates']['tech'] = args[0]
+            fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+            message.channel.send('Technical damage rate set to ' + args[0] + 'x')
+        } else {
+            return message.channel.send('You do not have permission to change the technical damage rate!')
+        }
+    }
+})
+
 commands.mechanics = new Command({
     desc: 'Change the mechanics for the server.',
     section: 'moderation',
@@ -575,7 +636,8 @@ commands.mechanics = new Command({
                 'stataffinities': 'Status Affinities',
                 'charms': 'Charms',
                 'leaderskills': 'Leader Skills',
-                'transformations': 'Transformations'
+                'transformations': 'Transformations',
+                'technicaldamage': 'Technical Damage',
             }
 
             switch (args[0].toLowerCase()) {
@@ -586,6 +648,7 @@ commands.mechanics = new Command({
                 case 'charms':
                 case 'leaderskills':
                 case 'transformations':
+                case 'technicaldamage':
                     settings['mechanics'][args[0].toLowerCase()] = !settings['mechanics'][args[0].toLowerCase()]
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
                     message.channel.send(fullNames[args[0].toLowerCase()] + ' are now ' + (settings['mechanics'][args[0].toLowerCase()] ? 'enabled' : 'disabled'))

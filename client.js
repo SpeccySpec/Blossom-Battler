@@ -739,7 +739,8 @@ setUpSettings = (guild) => {
 				stataffinities: false,
 				charms: false,
 				leaderskills: false,
-				transformations: false
+				transformations: false,
+				technicaldamage: false,
 			},
 			caps: {
 				levelcap: 99,
@@ -760,6 +761,8 @@ setUpSettings = (guild) => {
 				trustrate: 1,
 				goldchance: 0.01,
 				mainelement: 1.1,
+				crit: 1.5,
+				tech: 1.1,
 				affinities: {
 					deadly: 4.2,
 					superweak: 2.1,

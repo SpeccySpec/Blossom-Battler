@@ -1164,6 +1164,7 @@ commands.liststatus = new Command({
 	aliases: ['liststatuses', 'statuslist'],
 	args: [],
 	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
 		const DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
 			.setTitle('List of status effects:')
@@ -1194,18 +1195,22 @@ commands.liststatus = new Command({
 		}
 
 		for (const i in statusEffects) {
-			let techTxt = ''
-			for (const k in elementTechs[statusEffects[i]]) {
-				if (elementTechs[statusEffects[i]][k] === 'all') {
-					techTxt = 'ALL';
-					break;
-				} else
-					techTxt += elementEmoji[elementTechs[statusEffects[i]][k]];
-			}
-			
-			if (techTxt === '') techTxt = 'NOTHING'
+			if (settings.mechanics.technicaldamage) {
+				let techTxt = ''
+				for (const k in elementTechs[statusEffects[i]]) {
+					if (elementTechs[statusEffects[i]][k] === 'all') {
+						techTxt = 'ALL';
+						break;
+					} else
+						techTxt += elementEmoji[elementTechs[statusEffects[i]][k]];
+				}
+				
+				if (techTxt === '') techTxt = 'NOTHING'
 
-			DiscordEmbed.fields.push({name: `${statusEmojis[statusEffects[i].toLowerCase()]}${statusEffects[i]}`, value: `_${techTxt} tech off of ${statusEmojis[statusEffects[i].toLowerCase()]}._\n${statusDesc[statusEffects[i].toLowerCase()]}`, inline: true})
+				DiscordEmbed.fields.push({name: `${statusEmojis[statusEffects[i].toLowerCase()]}${statusEffects[i]}`, value: `_${techTxt} tech off of ${statusEmojis[statusEffects[i].toLowerCase()]}._\n${statusDesc[statusEffects[i].toLowerCase()]}`, inline: true})
+			} else {
+				DiscordEmbed.fields.push({name: `${statusEmojis[statusEffects[i].toLowerCase()]}${statusEffects[i]}`, value: `${statusDesc[statusEffects[i].toLowerCase()]}`, inline: true})
+			}
 		}
 
 		message.channel.send({embeds: [DiscordEmbed]})
