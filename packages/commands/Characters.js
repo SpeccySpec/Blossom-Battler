@@ -1653,3 +1653,86 @@ commands.getbio = new Command({
 		message.channel.send({embeds: [DiscordEmbed]});
 	}
 })
+
+commands.setbioinfo = new Command({
+	desc: "Sets a character's information, backstory, age, ect",
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Section",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Info",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+
+		/**bio: {
+			custom: {}
+		}, */
+
+		if (!utilityFuncs.isAdmin(message) && !charFile[args[0]].owner == message.author.id) return message.channel.send('You are not the owner of this character!');
+
+		//check for each field. If it's fillname, ninckmane or species, require a string. If it's weight require a decimal.
+		switch (args[1].toLowerCase()) {
+			case "fullname":
+			case "nickname":
+			case "species":
+			case "info":
+			case "backstory":
+			case "likes":
+			case "dislikes":
+			case "fears":
+			case "voice":
+			case "theme":
+				if (args[1].toLowerCase() == 'none') args[2] = '';
+				charFile[args[0]].bio[args[1].toLowerCase()] = args[2];
+				break;
+			case "weight":
+				if (args[2].toLowerCase() == 'none') args[2] = 0;
+				if (isNaN(args[2])) return message.channel.send('Invalid weight! Please enter a decimal.');
+				charFile[args[0]].bio.weight = parseFloat(args[2]);
+				break;
+			case "height":
+				if (args[2].toLowerCase() == 'none') args[2] = [0, 0];
+				if (isNaN(args[2])) {
+					let split = args[2].split('\'');
+					if (split.length == 1) {
+						charFile[args[0]].bio.height = parseFloat(split[0]);
+					} else {
+						charFile[args[0]].bio.height = [parseFloat(split[0]), parseFloat(split[1].replace('"', ''))];
+					}
+				} else {
+					return message.channel.send('Invalid Height! Please enter in the format `feet/inches` or `meters`.');
+				}
+				break;
+			case "age":
+				if (args[2].toLowerCase() == 'none') args[2] = 0;
+				if (isNaN(args[2])) return message.channel.send('Invalid age! Please enter a number.');
+				charFile[args[0]].bio.age = parseInt(args[2]);
+				break;
+			default:
+				if (!charFile[args[0]].bio.custom) charFile[args[0]].bio.custom = {};
+				if (args[2].toLowerCase() == 'none') args[2] = '';
+				charFile[args[0]].bio.custom[args[1]] = args[2];
+				if (charFile[args[0]].bio.custom[args[1]] == '') delete charFile[args[0]].bio.custom[args[1]];
+				break;
+		}
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})

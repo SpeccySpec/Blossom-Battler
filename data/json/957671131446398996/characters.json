@@ -2690,26 +2690,29 @@
         ],
         "weapon": {},
         "bio": {
-            "info": "A man with three spirits of separate identity, mind, and control. Likes to explore places. Preferred to be alone, but now is willing to be with people. Still guilty for things out of control, but no longer as worried. He's like a magnet for people.\n<Name Meaning> Sutela is comprised of three people's names' parts: **Su**nburn, **Te**mpus and **La**ut. However as a word it translates to __trick__, like a __cover up__, which he used to hide his secrets earlier.\n\n<Clothing> Western hat, fluffy adventurer jacket with logos of Yaretzan mountains, white performance split-toe socks, black leather combat boots",
+            "info": "A man with three spirits of separate identity, mind, and control. Likes to explore places. Preferred to be alone, but now is willing to be with people. Still guilty for things out of control, but no longer as worried. He's like a magnet for people.",
             "backstory": "He was born with multi-spirituality, from weakness. __The Ascended__, finally born. It was a secret kept to his parents. He was __forced to__ not reveal it. Yet he gathered friends with it. But at 16, it was revealed, from __rumors__.\n\n```The Ascended, from Mythology of Ventrah: someone on an ͢i͢l͢l͢e͢g͢a͢l͢ state of ascension, growing in spiritual force. ͢N͢e͢v͢e͢r͢ ͢m͢e͢a͢n͢t͢ ͢t͢o͢ ͢e͢x͢i͢s͢t͢, met with hatred.\nMaturity, harmony, and confidence, grants them infinitude.``` \n\nVentrah locals were ready for a hunt, by greed, and is still active. He had to __run away__. (Yaretza - dimensional travel).",
             "voice": "\n__Neutral (Sunburn)__: Pheonix Wright (Ace Attorney)\n__Laut__: Commander Shepard (Mass Effect)\n__Tempus__: Cuphead (The Cuphead Show!)",
-            "theme": "[TBA]\n\n<Debunking a Myth>  Despite having an axolotl's parts, and their species being able to regenerate limbs, Sutela can not achieve that feat, as the other 2 species are the majority of his genetic mess.",
+            "theme": "[TBA]",
             "species": "Red Panda? [Jack of Multiple Species]",
             "age": 18,
             "likes": "Peace and quiet (unless used to chaos), tea, solitude (sometimes), friends (when solitude inapplicable)",
             "dislikes": "The feeling of weakness, disruptions of his normal lives, overly bad jokes, seeing people being in pain",
-            "fears": "__To be found again__ by ones with a specific intent, horror-like situations\n\n<Passive Abilities>\n__From a Red Panda__: Incredible Jump Height, Dexterity and Balance\n__From an Axolotl__: Water Breathing, Incredible Swimming Ability\n__From a Panda__: Slow Metabolism, Sturdiness",
+            "fears": "__To be found again__ by ones with a specific intent, horror-like situations",
             "appearance": "https://cdn.discordapp.com/attachments/937053847661187103/965372177396428850/Sutela.png",
             "height": [
-                0,
-                "feet"
+                3,
+                9
             ],
-            "weight": [
-                0,
-                "pounds"
-            ],
+            "weight": 0,
             "\"a": "A man of three identities, with the ability of changing between them, on accident. Tho they're pretty subtle right now, they can strengthen in a way or another. 3'9 in height, a guy that likes to explore on his own, or not try and spend time with the group. He prefers to be alone because of identity issues and how he believes it can hurt other people. A man of regrets, feeling guilty for a lot of things, but with great ways to cover that up, as a trick, hence 'Sutela'. A stoic, distant person with trust issues, hence why he likes to leave groups whenever he feels like it.\n\nEDIT: As of now he is getting a lot better with himself. He still hides stuff but he is going to be a lot more open about it.",
-            "gender": "male"
+            "gender": "male",
+            "custom": {
+                "debunking a myth": "Despite having an axolotl's parts, and their species being able to regenerate limbs, Sutela can not achieve that feat, as the other 2 species are the majority of his genetic mess.",
+                "passive abilities": "\n__From a Red Panda__: Incredible Jump Height, Dexterity and Balance\n__From an Axolotl__: Water Breathing, Incredible Swimming Ability\n__From a Panda__: Slow Metabolism, Sturdiness",
+                "name meaning": "Sutela is comprised of three people's names' parts: **Su**nburn, **Te**mpus and **La**ut. However as a word it translates to __trick__, like a __cover up__, which he used to hide his secrets earlier.",
+                "clothing": "Western hat, fluffy adventurer jacket with logos of Yaretzan mountains, white performance split-toe socks, black leather combat boots"
+            }
         },
         "strikequote": [],
         "trust": {

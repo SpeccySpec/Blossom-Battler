@@ -1,10 +1,11 @@
 longBio = (char, server) => {
-	let finalTxt = `<Name> ${char.name}\n`;
-	if (char.nickname) finalTxt += `<Nickname> ${char.nickname}\n`;
-	if (char.bio.species) finalTxt += `<Species> ${char.bio.species}\n`;
-	if (char.bio.height) finalTxt += `<Height> ${char.bio.height[0]}'${char.bio.height[1]}"\n`;
-	if (char.bio.weight) finalTxt += `<Height> ${char.bio.weight}lb\n`;
-	if (char.bio.age) finalTxt += `<Age> ${char.bio.age} Years Old\n`;
+	let finalTxt = `**<Name>** ${char.name}\n`;
+	if (char.nickname) finalTxt += `**<Nickname>** ${char.nickname}\n`;
+	if (char.bio.fullname) finalTxt += `**<Full Name>** ${char.bio.fullname}\n`;
+	if (char.bio.species) finalTxt += `**<Species>** ${char.bio.species}\n`;
+	if (char.bio.height) finalTxt += `**<Height>** ${typeof char.bio.height == 'object' ? `${char.bio.height[0]}'${char.bio.height[1]}"`: `${char.bio.height}m`}\n`;
+	if (char.bio.weight) finalTxt += `**<Weight>** ${char.bio.weight}lb\n`;
+	if (char.bio.age) finalTxt += `**<Age>** ${char.bio.age} Years Old\n`;
 
 	finalTxt += '\n';
 
@@ -22,23 +23,23 @@ longBio = (char, server) => {
 
 	finalTxt += '\n';
 
-	if (char.bio.likes) finalTxt += `<Likes> ${char.bio.likes}\n`;
-	if (char.bio.dislikes) finalTxt += `<Dislikes> ${char.bio.dislikes}\n`;
-	if (char.bio.fears) finalTxt += `<Fears> ${char.bio.fears}\n`;
+	if (char.bio.likes) finalTxt += `**<Likes>** ${char.bio.likes}\n`;
+	if (char.bio.dislikes) finalTxt += `**<Dislikes>** ${char.bio.dislikes}\n`;
+	if (char.bio.fears) finalTxt += `**<Fears>** ${char.bio.fears}\n`;
 
 	if (char.bio.custom) {
 		finalTxt += '\n';
 		for (const i in char.bio.custom) {
 			let infoTxt = char.bio.custom[i];
 			if (infoTxt.length > 150) infoTxt = `${infoTxt.slice(0, 150)}_..._`
-			finalTxt += `<${i}> ${infoTxt}\n`;
+			finalTxt += `**<${i}>** ${infoTxt}\n`;
 		}
 	}
 
 	finalTxt += '\n';
 	
-	if (char.bio.voice) finalTxt += `<Voice> ${char.bio.voice}\n`;
-	if (char.bio.theme) finalTxt += `<Theme(s)> ${char.bio.theme}\n`;
+	if (char.bio.voice) finalTxt += `**<Voice>** ${char.bio.voice}\n`;
+	if (char.bio.theme) finalTxt += `**<Theme(s)>** ${char.bio.theme}\n`;
 
 	return new Discord.MessageEmbed()
 		.setColor('#12de6a')
@@ -48,10 +49,19 @@ longBio = (char, server) => {
 
 shortBio = (char, sect, server) => {
 	var bioTxt;
-	if (char.bio.custom)
+	if (char.bio.custom[sect])
 		bioTxt = char.bio.custom[sect] ?? char.bio[sect];
-	else
-		bioTxt = char.bio[sect];
+	else {
+		if (sect == 'height') {
+			bioTxt = `${typeof char.bio[sect] == 'object' ? `${char.bio[sect][0]}'${char.bio[sect][1]}"`: `${char.bio[sect]}m`}`;
+		} else if (sect == 'weight') {
+			bioTxt = `${char.bio[sect]}lb`;
+		} else if (sect == 'age') {
+			bioTxt = `${char.bio[sect]} Years Old`;
+		} else {
+			bioTxt = char.bio[sect];
+		}
+	}
 
 	return new Discord.MessageEmbed()
 		.setColor('#12de6a')
