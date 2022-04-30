@@ -1408,7 +1408,7 @@ commands.getquotes = new Command({
 
 commands.getbio = new Command({
 	desc: "Lists a character's information, backstory, age, ect",
-	aliases: ['bio', 'charbio' 'characterbio'],
+	aliases: ['bio', 'charbio', 'characterbio'],
 	section: "characters",
 	args: [
 		{
