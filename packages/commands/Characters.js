@@ -65,6 +65,7 @@ commands.registerchar = new Command({
 		},
 	],
 	func: (message, args) => {
+		let settings = setUpFile(message.guild.id)
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -79,18 +80,18 @@ commands.registerchar = new Command({
 
 		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements)) message.channel.send({content: 'Please enter a valid element for **Main Element!**', embeds: [elementList()]});
 
-		if ((args[2] + args[3]) > 70) return message.channel.send(`The maximum total points for HP and MP is 70! Currently, you have ${args[2]+args[3]}.`);
+		if ((args[2] + args[3]) > settings.caps.hpmpcap) return message.channel.send(`The maximum total points for HP and MP is 70! Currently, you have ${args[2]+args[3]}.`);
 
 		let bst = 0;
 		for (let i = 4; i < args.length-1; i++) {
 			if (args[i]) {
 				if (args[i] <= 0) return message.channel.send("You can't have a stat that is less than 0!");
-				if (args[i] > 10) return message.channel.send("You can't have a stat that is more than 10!");
+				if (args[i] > settings.caps.basestatcap) return message.channel.send("You can't have a stat that is more than 10!");
 				bst += args[i];
 			}
 		}
 
-		if (bst > 45) return message.channel.send(`45 is the maximum amount of points across stats! Currently, you have ${bst}.`)
+		if (bst > settings.caps.bstcap) return message.channel.send(`${settings.caps.bstcap} is the maximum amount of points across stats! Currently, you have ${bst}.`)
 		if (bst < 30) message.channel.send(`${bst}BST is... sort of concerning. I-I won't stop you.`)
 
 		let charDefs = writeChar(message.author, message.guild, args[0], args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11]);
@@ -517,6 +518,7 @@ commands.gainxp = new Command({
 		}
 	],
 	func: (message, args) => {
+		let settings = setUpFile(message.guild.id)
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -525,7 +527,7 @@ commands.gainxp = new Command({
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 		if (args[1] <= 0) return message.channel.send("Don't even try it.");
-		if (charFile[args[0]].level >= 99) return message.channel.send(`${charFile[args[0]].name} cannot level up any further!`);
+		if (charFile[args[0]].level >= settings.caps.levelcap) return message.channel.send(`${charFile[args[0]].name} cannot level up any further!`);
 
 		// gainXp function handles everything.
 		gainXp(message, charFile[args[0]], args[1]);
@@ -550,6 +552,7 @@ commands.levelup = new Command({
 		}
 	],
 	func: (message, args) => {
+		let settings = setUpFile(message.guild.id)
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -558,7 +561,7 @@ commands.levelup = new Command({
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 		if (args[1] <= 0) return message.channel.send("Don't even try it.");
-		if (charFile[args[0]].level >= 99) return message.channel.send(`${charFile[args[0]].name} cannot level up any further!`);
+		if (charFile[args[0]].level >= settings.caps.levelcap) return message.channel.send(`${charFile[args[0]].name} cannot level up any further!`);
 
 		// levelUpTimes function handles everything.
 		levelUpTimes(charFile[args[0]], false, args[1], message);
@@ -583,6 +586,7 @@ commands.forcelevel = new Command({
 		}
 	],
 	func: (message, args) => {
+		let settings = setUpFile(message.guild.id)
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -590,7 +594,7 @@ commands.forcelevel = new Command({
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
-		if (args[1] <= 0 || args[1] > 99) return message.channel.send("Don't even try it.");
+		if (args[1] <= 0 || args[1] > settings.caps.levelcap) return message.channel.send("Don't even try it.");
 
 		// Actually force the Level
 		charFile[args[0]].level = args[1];
@@ -731,6 +735,7 @@ commands.learnskill = new Command({
 		}
 	],
 	func: (message, args) => {
+		let settings = setUpFile(message.guild.id)
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -765,7 +770,7 @@ commands.learnskill = new Command({
 				return message.channel.send(`${args[i]} isn't a valid skill.`);
 		}
 
-		if (!charFile[args[0]].creator && charFile[args[0]].skills.length > 8) return message.channel.send("You cannot have more than 8 skills!");
+		if (!charFile[args[0]].creator && charFile[args[0]].skills.length > settings.caps.skillamount) return message.channel.send("You cannot have more than 8 skills!");
 		message.channel.send(learnString);
 
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
@@ -932,6 +937,7 @@ commands.leaderskill = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (setUpSettings(message.guild.id).mechanics.leaderSkills == false) return message.channel.send('Leader Skills are disabled on this server.');
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -1177,6 +1183,7 @@ commands.changestats = new Command({
 		}
 	],
 	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -1186,18 +1193,18 @@ commands.changestats = new Command({
 				return message.channel.send(`${args[0]} already exists, and you don't own them. You cannot change their stats.`);
 		}
 
-		if ((args[1] + args[2]) > 70) return message.channel.send(`The maximum total points for HP and MP is 70! Currently, you have ${args[1]+args[2]}.`);
+		if ((args[1] + args[2]) > settings.caps.hpmpcap) return message.channel.send(`The maximum total points for HP and MP is ${settings.caps.hpmpcap}! Currently, you have ${args[1]+args[2]}.`);
 	
 		let bst = 0;
 		for (let i = 3; i < args.length-1; i++) {
 			if (args[i]) {
 				if (args[i] <= 0) return message.channel.send("You can't have a stat that is less than 0!");
-				if (args[i] > 10) return message.channel.send("You can't have a stat that is more than 10!");
+				if (args[i] > settings.caps.basestatcap) return message.channel.send("You can't have a stat that is more than 10!");
 				bst += args[i];
 			}
 		}
 
-		if (bst > 45) return message.channel.send(`45 is the maximum amount of points across stats! Currently, you have ${bst}.`)
+		if (bst > settings.caps.bstcap) return message.channel.send(`${settings.caps.bstcap} is the maximum amount of points across stats! Currently, you have ${bst}.`)
 		if (bst < 30) message.channel.send(`${bst}BST is... sort of concerning. I-I won't stop you.`)
 
 		charFile[args[0]].basehp = args[1];

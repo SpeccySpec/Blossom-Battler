@@ -95,7 +95,7 @@ commands.settings = new Command({
             .addField('Affinity Rates', `${affinityRateText}`, true)
             .addField('Prefix', `${settings['prefix']}`, true)
             .addField('Currency', `${settings['currency']}, ${settings['currency']}s`, true)
-            .addField('_ _', `_ _`, false)
+            .addField('Main Element Damage Rate', `${settings['rates']['mainelement']}x`, true)
             .addField('XP Rate', `${settings['rates']['xprate']}x`, true)
             .addField('Trust Rate', `${settings['rates']['trustrate']}x`, true)
             .addField('Golden Enemy Chance', `${settings['rates']['goldchance']}%`, true)
@@ -521,6 +521,34 @@ commands.goldenchance = new Command({
             message.channel.send('Golden enemy chance set to ' + args[0] + '%')
         } else {
             return message.channel.send('You do not have permission to change the golden enemy chance!')
+        }
+    }
+})
+
+commands.mainelementrate = new Command({
+    desc: 'Change the character main element damage rate in battles for the server.',
+    section: 'moderation',
+    aliases: ['setmainelementrate', 'setmainelement', 'setmain', 'setmainrate', 'setmainelementrate', 'setmainelement'],
+    args: [
+        {
+            name: 'Main Element Damage Rate',
+            type: 'Decimal',
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        let settings = setUpSettings(message.guild.id)
+
+        if (utilityFuncs.isAdmin(message)) {
+            if (args[0] < 1) {
+                return message.channel.send('Main element damage rate cannot be less than 1!')
+            }
+
+            settings['rates']['mainelement'] = args[0]
+            fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+            message.channel.send('Main element damage rate set to ' + args[0] + '%')
+        } else {
+            return message.channel.send('You do not have permission to change the main element damage rate!')
         }
     }
 })

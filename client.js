@@ -759,6 +759,7 @@ setUpSettings = (guild) => {
 				xprate: 1,
 				trustrate: 1,
 				goldchance: 0.01,
+				mainelement: 1.1,
 				affinities: {
 					deadly: 4.2,
 					superweak: 2.1,

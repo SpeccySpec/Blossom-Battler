@@ -20,6 +20,7 @@ gainXp = (message, charDefs, xp) => {
 }
 
 updateStats = (charDefs, server, updateXp) => {
+	let settings = setUpFile(server)
 	// Handle HP
 	if (charDefs.basehp > 1) {
 		let END = charDefs.basestats.baseend;
@@ -33,15 +34,12 @@ updateStats = (charDefs, server, updateXp) => {
 		charDefs.maxmp = Math.floor(charDefs.basemp + ((charDefs.basemp/10)*(charDefs.level-1)) + ((INT/2)*(charDefs.level-1)));
 	}
 
-	// Handle Stats
-	let settings = setUpFile(`${dataPath}/json/${server}/settings.json`);
-
-	if (settings.lvlformula && settings.lvlformula === 'percent') {
+	if (settings.formulas.lvlformula && settings.formulas.lvlformula === 'percent') {
 		for (const i in stats) {
 			let baseStat = charDefs.basestats[`base${stats[i]}`]
 			charDefs[stats[i]] = Math.min(99, Math.round(baseStat * (1 + ((charDefs.level-1) * 0.091))))
 		}
-	} else if (settings.lvlformula && settings.lvlformula === 'assist') {
+	} else if (settings.formulas.lvlformula && settings.formulas.lvlformula === 'assist') {
 		for (const i in stats) {
 			let baseStat = charDefs.basestats[`base${stats[i]}`]
 			charDefs[stats[i]] = Math.min(99, Math.round((baseStat+3) * (1 + ((charDefs.level-1) * 0.06751))))
@@ -71,7 +69,7 @@ updateStats = (charDefs, server, updateXp) => {
 				charDefs.stats[highestStats[i][0]] += (charDefs.level-1)/2;
 			}
 
-			charDefs.stats[highestStats[i][0]] = Math.round(Math.min(99, charDefs.stats[highestStats[i][0]]));
+			charDefs.stats[highestStats[i][0]] = Math.round(Math.min(settings.caps.statcap, charDefs.stats[highestStats[i][0]]));
 		}
 	}
 
@@ -84,14 +82,16 @@ updateStats = (charDefs, server, updateXp) => {
 }
 
 levelUp = (charDefs, forceEvo, server) => {
-	if (charDefs.level >= 99) {
+	let settings = setUpFile(server)
+
+	if (charDefs.level >= settings.caps.levelcap) {
 		charDefs.xp = charDefs.maxxp - 1
 		console.log(`LevelUp: ${charDefs.name} cannot level up further.`)
 		return false
 	}
 
 	// Level Up!
-	charDefs.level = Math.min(99, charDefs.level+1);
+	charDefs.level = Math.min(settings.caps.levelcap, charDefs.level+1);
 
 	// Update Stats
 	console.log(`LevelUp: ${charDefs.name} levelled up to level ${charDefs.level}.`)
