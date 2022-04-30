@@ -259,3 +259,160 @@ commands.currency = new Command({
         }
     }
 })
+
+commands.description = new Command({
+    desc: 'Change the description for the server.',
+    section: 'moderation',
+    aliases: ['setdescription', 'setdesc'],
+    args: [
+        {
+            name: 'Description',
+            type: 'Word',
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+        let settings = setUpSettings(message.guild.id)
+
+        if (utilityFuncs.isAdmin(message)) {
+            if (args[0].length > 1024) {
+                return message.channel.send('Description is too long!')
+            }
+            if (args[0] == '' || args[0] == ' ' || args[0] == 'none') {
+                settings['desc'] = ''
+            } else {
+                settings['desc'] = args[0]
+            }
+            fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+            message.channel.send('Description set to ' + args[0])
+        } else {
+            return message.channel.send('You do not have permission to change the description!')
+        }
+    }
+})
+
+commands.damageformula = new Command({
+    desc: 'Change the damage formula for the server.',
+    section: 'moderation',
+    aliases: ['setdamageformula', 'setdamageform', 'setdamage'],
+    args: [
+        {
+            name: 'Damage Formula',
+            type: 'Word',
+            forced: true
+        },
+        {
+            name: 'Formula',
+            type: 'Word',
+        }
+    ],
+    func: (message, args) => {
+        let settings = setUpSettings(message.guild.id)
+
+        if (utilityFuncs.isAdmin(message)) {
+            let damageFormulas = {
+                'persona': '5*√(Attack/Endurance * Skill Power)',
+                'pokemon': '(((2*level)/5+2)*Power*Attack/Endurance)/50+2',
+                'custom': 'uhhhh Spectra you handle this'
+            }
+
+            if (args[0].toLowerCase() != 'persona' && args[0].toLowerCase() != 'pokemon' && args[0].toLowerCase() != 'custom') {
+                return message.channel.send('Invalid damage formula! Valid formulas are: persona, pokemon, custom')
+            }
+
+            if (args[0].toLowerCase() == 'custom') {
+                return message.channel.send('Custom damage formulas are not yet supported!')
+            }
+
+            settings['formulas']['damageFormula'] = damageFormulas[args[0].toLowerCase()]
+            fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+            message.channel.send('Damage formula set to ' + args[0].charAt(0).toUpperCase() + args[0].slice(1) + '\n\`' + damageFormulas[args[0].toLowerCase()] + '\`')
+        } else {
+            return message.channel.send('You do not have permission to change the damage formula!')
+        }
+    }
+})
+
+commands.levelupformula = new Command({
+    desc: 'Change the level up formula for the server.',
+    section: 'moderation',
+    aliases: ['setlevelupformula', 'setlevelupform', 'setlevelup'],
+    args: [
+        {
+            name: 'Level Up Formula',
+            type: 'Word',
+            forced: true
+        },
+        {
+            name: 'Formula',
+            type: 'Word',
+        }
+    ],
+    func: (message, args) => {
+        let settings = setUpSettings(message.guild.id)
+
+        if (utilityFuncs.isAdmin(message)) {
+            let levelUpFormulas = {
+                'original': 'No Specific Formula',
+                'assist': '(BaseStat+3) * (1 + ((Level-1) * 0.06751))',
+                'percent': 'BaseStat * (1 + ((Level-1) * 0.091))',
+                'custom': 'uhhhh Spectra you handle this'
+            }
+
+            if (args[0].toLowerCase() != 'original' && args[0].toLowerCase() != 'assist' && args[0].toLowerCase() != 'percent' && args[0].toLowerCase() != 'custom') {
+                return message.channel.send('Invalid level up formula! Valid formulas are: original, assist, percent, custom')
+            }
+
+            if (args[0].toLowerCase() == 'custom') {
+                return message.channel.send('Custom level up formulas are not yet supported!')
+            }
+
+            settings['formulas']['levelUpFormula'] = levelUpFormulas[args[0].toLowerCase()]
+            fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+            message.channel.send('Level up formula set to ' + args[0].charAt(0).toUpperCase() + args[0].slice(1) + '\n\`' + levelUpFormulas[args[0].toLowerCase()] + '\`')
+        } else {
+            return message.channel.send('You do not have permission to change the level up formula!')
+        }
+    }
+})
+
+commands.xpcalcformula = new Command({
+    desc: 'Change the xp calculation formula for the server.',
+    section: 'moderation',
+    aliases: ['setxpcalcformula', 'setxpcalcform', 'setxpcalc'],
+    args: [
+        {
+            name: 'XP Calculation Formula',
+            type: 'Word',
+            forced: true
+        },
+        {   
+            name: 'Formula',
+            type: 'Word',
+        }
+    ],
+    func: (message, args) => {
+        let settings = setUpSettings(message.guild.id)
+
+        if (utilityFuncs.isAdmin(message)) {
+            let xpCalcFormulas = {
+                'original': 'No Specific Formula',
+                'custom': 'uhhhh Spectra you handle this'
+            }
+
+            if (args[0].toLowerCase() != 'original' && args[0].toLowerCase() != 'custom') {
+                return message.channel.send('Invalid xp calculation formula! Valid formulas are: original, custom')
+            }
+
+            if (args[0].toLowerCase() == 'custom') {
+                return message.channel.send('Custom xp calculation formulas are not yet supported!')
+            }
+
+            settings['formulas']['xpCalcFormula'] = xpCalcFormulas[args[0].toLowerCase()]
+            fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+            message.channel.send('XP calculation formula set to ' + args[0].charAt(0).toUpperCase() + args[0].slice(1) + '\n\`' + xpCalcFormulas[args[0].toLowerCase()] + '\`')
+        } else {
+            return message.channel.send('You do not have permission to change the xp calculation formula!')
+        }
+    }
+})
