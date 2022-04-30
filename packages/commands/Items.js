@@ -223,6 +223,7 @@ commands.registeritem = new Command({
         }
 	],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (itemFile[args[0]] && itemFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("This item exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
@@ -338,6 +339,7 @@ commands.purgeitem = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
@@ -502,6 +504,7 @@ commands.edititem = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
@@ -722,6 +725,7 @@ commands.itemimage = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item.`);
@@ -747,6 +751,7 @@ commands.purgeweapon = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
         if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon name.`);
@@ -877,6 +882,7 @@ commands.registerweapon = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         //treat it similarly as the registeritem command
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
@@ -1056,6 +1062,7 @@ commands.weaponimage = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
         if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon.`);
@@ -1091,6 +1098,7 @@ commands.editweapon = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
         if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon.`);
@@ -1204,6 +1212,7 @@ commands.registerarmor = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (armorFile[args[0]] && armorFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("This armor exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
@@ -1378,6 +1387,7 @@ commands.armorimage = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (!armorFile[args[0]]) return message.channel.send(`${args[0]} is not a valid armor.`);
@@ -1413,6 +1423,7 @@ commands.editarmor = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (!armorFile[args[0]]) return message.channel.send(`${args[0]} is not a valid armor.`);
@@ -1497,6 +1508,7 @@ commands.purgearmor = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (!armorFile[args[0]]) return message.channel.send(`${args[0]} is not a valid armor name.`);
@@ -1603,6 +1615,7 @@ commands.makecraftingrecipe = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
@@ -1737,6 +1750,7 @@ commands.clearitemrecipe = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)

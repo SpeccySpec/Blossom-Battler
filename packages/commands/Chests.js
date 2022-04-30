@@ -118,6 +118,7 @@ commands.registerchest = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
 
         if (chestFile[args[0]] && chestFile[args[0]].originalAuthor != message.author.id && !isAdmin(message)) return message.channel.send("You do not own this chest, therefore, you have insufficient permissions to overwrite it.")
@@ -420,6 +421,7 @@ commands.purgechest = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
 
         if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);
@@ -480,6 +482,7 @@ commands.editchest = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
 
         if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);
@@ -589,6 +592,7 @@ commands.chestitems = new Command({
         }
     ],
     func: (message, args) => {
+        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
 
         if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);

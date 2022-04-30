@@ -65,6 +65,7 @@ commands.registerchar = new Command({
 		},
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -179,6 +180,7 @@ commands.nickname = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 		
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -203,6 +205,7 @@ commands.hidechar = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -237,6 +240,7 @@ commands.mpmeter = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 		
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -265,6 +269,7 @@ commands.mainelement = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -327,6 +332,7 @@ commands.setaffinity = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// a LOT of checks :(
@@ -414,6 +420,7 @@ commands.gainxp = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// Checks
@@ -446,6 +453,7 @@ commands.levelup = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// Checks
@@ -478,6 +486,7 @@ commands.forcelevel = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// Checks
@@ -554,6 +563,7 @@ commands.setmelee = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// a LOT of checks :(
@@ -624,6 +634,7 @@ commands.learnskill = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// a LOT of checks :(
@@ -686,6 +697,7 @@ commands.replaceskill = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// a LOT of checks :(
@@ -729,6 +741,7 @@ commands.forgetskill = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// a LOT of checks :(
@@ -766,6 +779,7 @@ commands.autolearn = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// some checks
@@ -821,6 +835,7 @@ commands.leaderskill = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// checkie
@@ -932,6 +947,7 @@ commands.setlb = new Command({
 		},
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// checkie
@@ -1063,6 +1079,7 @@ commands.changestats = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -1252,6 +1269,7 @@ commands.setquote = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// a LOT of checks :(
@@ -1299,6 +1317,7 @@ commands.clearquote = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// a LOT of checks :(
@@ -1368,6 +1387,7 @@ commands.getquotes = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// a LOT of checks :(
@@ -1424,6 +1444,7 @@ commands.getbio = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
