@@ -956,3 +956,210 @@ commands.dailyenemyquote = new Command({
 		}, 500);
 	}
 })
+
+commands.setnegotiation = new Command({
+	desc: "Allows an enemy to be pacified in-battle.",
+	section: "enemies",
+	aliases: ['setneg'],
+	args: [
+		{
+			name: "Enemy Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Special",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Amount",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Description",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Action",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`You are banned from using this command.`);
+		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You do not have permission to use this command.`);
+
+		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
+
+		if (!enemyFile.negotiate)
+			enemyFile.negotiate = [];
+
+		let isExistent = false;
+		//check if there is a negotiation with the same name
+		for (const i in enemyFile.negotiate) {
+			if (enemyFile.negotiate[i].name == args[1]) {
+				isExistent = true;
+				enemyFile.negotiate[i].desc = args[4];
+				enemyFile.negotiate[i].action = args[5];
+				enemyFile.negotiate[i].convince = parseFloat(args[3]);
+				if (args[3] != 'none')
+					enemyFile.negotiate[i].special = args[2].toLowerCase();
+			}
+		}
+
+		if (!isExistent) {
+			enemyFile.negotiate.push({
+				name: args[1],
+				desc: args[4],
+				action: args[5],
+				convince: parseFloat(args[3])
+			})
+
+			if (args[3] != 'none')
+				enemyFile.negotiate.special = args[2].toLowerCase();
+		}
+
+		message.channel.send(`${args[0]}'s negotiation named ${args[1]} has been set.`);
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+	}
+})
+
+commands.clearnegotiation = new Command({
+	desc: "Clears an enemy's negotiation.",
+	section: "enemies",
+	aliases: ['clearneg'],
+	args: [
+		{
+			name: "Enemy Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`You are banned from using this command.`);
+		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You do not have permission to use this command.`);
+
+		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
+
+		if (!enemyFile.negotiate || enemyFile.negotiate == []) return message.channel.send(`${args[0]} has no negotiations.`);
+
+		if (args[1] == 'all') {
+			enemyFile.negotiate = [];
+			message.channel.send(`${args[0]}'s negotiations have been cleared.`);
+		}
+		else {
+			for (const i in enemyFile.negotiate) {
+				if (enemyFile.negotiate[i].name == args[1]) {
+					enemyFile.negotiate.splice(i, 1);
+					message.channel.send(`${args[0]}'s negotiation named ${args[1]} has been cleared.`);
+				}
+			}
+		}
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+	}
+})
+
+commands.setpetvalues = new Command({
+	desc: "Allows an enemy to be used as a pet after pacified a certain amount of times.",
+	section: "enemies",
+	args: [
+		{
+			name: "Enemy Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Required",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Attack",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Magic",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Endurance",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Skill",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`You are banned from using this command.`);
+		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You do not have permission to use this command.`);
+
+		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
+
+		for (let i = 1; i < 5; i++) {
+			args[i] = parseInt(args[i]) < 1 ? 1 : parseInt(args[i]);
+		}
+
+		if (!skillFile[args[5]]) return message.channel.send(`${args[5]} is not a valid skill.`);
+
+		if (!enemyFile[args[0]].negotiateDefs) enemyFile[args[0]].negotiateDefs = {};
+		enemyFile[args[0]].negotiateDefs = {
+			required: args[1],
+			qualities: {
+				atk: args[2],
+				mag: args[3],
+				end: args[4],
+				skill: args[5]
+			}
+		}
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		message.channel.send(`${args[0]}'s pet values have been set.`);
+	}
+})
+
+commands.clearpervalues = new Command({
+	desc: "Clears an enemy's pet values.",
+	section: "enemies",
+	args: [
+		{
+			name: "Enemy Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`You are banned from using this command.`);
+		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You do not have permission to use this command.`);
+
+		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
+
+		if (enemyFile[args[0]].negotiateDefs) delete enemyFile[args[0]].negotiateDefs;
+		else return message.channel.send(`${args[0]} doesn't have a pet values.`);
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		message.channel.send(`${args[0]}'s pet values have been cleared.`);
+	}
+})

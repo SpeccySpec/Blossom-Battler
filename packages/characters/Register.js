@@ -318,8 +318,8 @@ longDescription = (charDefs, level, server, message) => {
 			qualityString += `${enmQualities.atk} ATK\n`
 		if (enmQualities.mag)
 			qualityString += `${enmQualities.mag} MAG\n`
-		if (enmQualities.def)
-			qualityString += `${enmQualities.def} DEF\n`
+		if (enmQualities.end)
+			qualityString += `${enmQualities.end} END\n`
 
 		if (enmQualities.skill) {
 			let specialskill = ''

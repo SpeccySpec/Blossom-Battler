@@ -191,7 +191,7 @@
             "qualities": {
                 "atk": 1,
                 "mag": 4,
-                "def": 1,
+                "end": 1,
                 "skill": "FreezingAir"
             }
         },
@@ -603,7 +603,7 @@
             "qualities": {
                 "atk": 4,
                 "mag": 4,
-                "def": 3,
+                "end": 3,
                 "skill": "RockThrow"
             }
         },
@@ -675,7 +675,7 @@
             "qualities": {
                 "atk": 2,
                 "mag": 7,
-                "def": 4,
+                "end": 4,
                 "skill": "Mamakanda"
             }
         },
@@ -755,7 +755,7 @@
             "qualities": {
                 "atk": 16,
                 "mag": 0,
-                "def": 5,
+                "end": 5,
                 "skill": "BrainBite"
             }
         },
@@ -834,7 +834,7 @@
             "qualities": {
                 "atk": 4,
                 "mag": 4,
-                "def": 4,
+                "end": 4,
                 "skill": "Secrete"
             }
         },
@@ -914,7 +914,7 @@
             "qualities": {
                 "atk": 6,
                 "mag": 6,
-                "def": 6,
+                "end": 6,
                 "skill": "GooWave"
             }
         },
@@ -988,7 +988,7 @@
             "qualities": {
                 "atk": 1,
                 "mag": 7,
-                "def": 1,
+                "end": 1,
                 "skill": "Hanama"
             }
         },
@@ -1054,7 +1054,7 @@
             "qualities": {
                 "atk": 0,
                 "mag": 10,
-                "def": 9,
+                "end": 9,
                 "skill": "Charge"
             }
         },
@@ -1258,7 +1258,7 @@
             "qualities": {
                 "atk": 2,
                 "mag": 11,
-                "def": 5,
+                "end": 5,
                 "skill": "Mahanama"
             }
         },
@@ -1630,7 +1630,7 @@
             "qualities": {
                 "atk": 3,
                 "mag": 9,
-                "def": 6,
+                "end": 6,
                 "skill": "ConfusingMist"
             }
         },
@@ -2185,7 +2185,7 @@
             "qualities": {
                 "atk": 15,
                 "mag": 0,
-                "def": 1,
+                "end": 1,
                 "skill": "RapidKicks"
             }
         },
@@ -2432,7 +2432,7 @@
             "qualities": {
                 "atk": 5,
                 "mag": 5,
-                "def": 3,
+                "end": 3,
                 "skill": "Aques"
             }
         },
@@ -2516,7 +2516,7 @@
             "qualities": {
                 "atk": 2,
                 "mag": 10,
-                "def": 2,
+                "end": 2,
                 "skill": "TidalWave"
             }
         },
@@ -3957,7 +3957,7 @@
             "qualities": {
                 "atk": 3,
                 "mag": 8,
-                "def": 6,
+                "end": 6,
                 "skill": "Bufudyne"
             }
         },
@@ -4027,7 +4027,7 @@
             "qualities": {
                 "atk": 0,
                 "mag": 10,
-                "def": 9,
+                "end": 9,
                 "skill": "Mabufudyne"
             }
         },
@@ -4109,7 +4109,7 @@
             "qualities": {
                 "atk": 1,
                 "mag": 16,
-                "def": 0,
+                "end": 0,
                 "skill": "Makarakarn"
             }
         },
@@ -4326,7 +4326,7 @@
             "qualities": {
                 "atk": 6,
                 "mag": 0,
-                "def": 2,
+                "end": 2,
                 "skill": "IceFang"
             }
         },
@@ -4398,7 +4398,7 @@
             "qualities": {
                 "atk": 3,
                 "mag": 0,
-                "def": 0,
+                "end": 0,
                 "skill": "0"
             }
         },
@@ -4456,7 +4456,7 @@
             "qualities": {
                 "atk": 8,
                 "mag": 2,
-                "def": 4,
+                "end": 4,
                 "skill": "FrostBreath"
             }
         },
@@ -4531,7 +4531,7 @@
             "qualities": {
                 "atk": 5,
                 "mag": 1,
-                "def": 2,
+                "end": 2,
                 "skill": "PoisonFang"
             }
         },
@@ -4605,7 +4605,7 @@
             "qualities": {
                 "atk": 3,
                 "mag": 7,
-                "def": 2,
+                "end": 2,
                 "skill": "Debilitate"
             }
         },
@@ -4687,7 +4687,7 @@
             "qualities": {
                 "atk": 6,
                 "mag": 1,
-                "def": 6,
+                "end": 6,
                 "skill": "Clawswipe"
             }
         },
@@ -4894,7 +4894,7 @@
             "qualities": {
                 "atk": 0,
                 "mag": 20,
-                "def": 0,
+                "end": 0,
                 "skill": "Mabufudyne"
             }
         },
@@ -4959,7 +4959,7 @@
             "qualities": {
                 "atk": 3,
                 "mag": 7,
-                "def": 1,
+                "end": 1,
                 "skill": "Kougaon"
             }
         },
@@ -5367,7 +5367,7 @@
             "qualities": {
                 "atk": 13,
                 "mag": 0,
-                "def": 6,
+                "end": 6,
                 "skill": "FatalEnd"
             }
         },
@@ -5456,7 +5456,7 @@
             "qualities": {
                 "atk": 16,
                 "mag": 1,
-                "def": 8,
+                "end": 8,
                 "skill": "BraveBlade"
             }
         },
@@ -5527,7 +5527,7 @@
             "qualities": {
                 "atk": 3,
                 "mag": 15,
-                "def": 1,
+                "end": 1,
                 "skill": "Megido"
             }
         },
@@ -5582,7 +5582,7 @@
             "qualities": {
                 "atk": 2,
                 "mag": 20,
-                "def": 6,
+                "end": 6,
                 "skill": "Psyshot"
             }
         },
@@ -5670,7 +5670,7 @@
             "qualities": {
                 "atk": 4,
                 "mag": 15,
-                "def": 6,
+                "end": 6,
                 "skill": "Psionize"
             }
         },
@@ -5756,7 +5756,7 @@
             "qualities": {
                 "atk": 4,
                 "mag": 15,
-                "def": 6,
+                "end": 6,
                 "skill": "MarinKarin"
             }
         },
@@ -5826,7 +5826,7 @@
             "qualities": {
                 "atk": 6,
                 "mag": 6,
-                "def": 6,
+                "end": 6,
                 "skill": "DizzyingMist"
             }
         },
@@ -6111,7 +6111,7 @@
             "qualities": {
                 "atk": 25,
                 "mag": 8,
-                "def": 14,
+                "end": 14,
                 "skill": "Undead-Like_(Newborn)"
             }
         },
@@ -6264,7 +6264,7 @@
             "qualities": {
                 "atk": 2,
                 "mag": 8,
-                "def": 5,
+                "end": 5,
                 "skill": "Kouha"
             }
         },
@@ -6346,7 +6346,7 @@
             "qualities": {
                 "atk": 8,
                 "mag": 20,
-                "def": 14,
+                "end": 14,
                 "skill": "Kouga"
             }
         },
@@ -6426,7 +6426,7 @@
             "qualities": {
                 "atk": 15,
                 "mag": 32,
-                "def": 21,
+                "end": 21,
                 "skill": "Kougaon"
             }
         },
@@ -6573,7 +6573,7 @@
             "qualities": {
                 "atk": 4,
                 "mag": 4,
-                "def": 5,
+                "end": 5,
                 "skill": "ShadowStrike"
             }
         },
@@ -6647,7 +6647,7 @@
             "qualities": {
                 "atk": 0,
                 "mag": 5,
-                "def": 1,
+                "end": 1,
                 "skill": "Madokusei"
             }
         },
@@ -6714,7 +6714,7 @@
             "qualities": {
                 "atk": 5,
                 "mag": 12,
-                "def": 6,
+                "end": 6,
                 "skill": "Dokudyne"
             }
         },
@@ -6789,7 +6789,7 @@
             "qualities": {
                 "atk": 6,
                 "mag": 0,
-                "def": 1,
+                "end": 1,
                 "skill": "ToxinaBruiser"
             }
         },
@@ -6871,7 +6871,7 @@
             "qualities": {
                 "atk": 7,
                 "mag": 2,
-                "def": 0,
+                "end": 0,
                 "skill": "UnseenSlashes"
             }
         },
@@ -7014,7 +7014,7 @@
             "qualities": {
                 "atk": 3,
                 "mag": 9,
-                "def": 4,
+                "end": 4,
                 "skill": "Mavisunda"
             }
         },
@@ -7106,7 +7106,7 @@
             "qualities": {
                 "atk": 13,
                 "mag": 0,
-                "def": 2,
+                "end": 2,
                 "skill": "TerraCrunch"
             }
         },
@@ -7182,7 +7182,7 @@
             "qualities": {
                 "atk": 4,
                 "mag": 4,
-                "def": 4,
+                "end": 4,
                 "skill": "Mavisunda"
             }
         },
@@ -7261,7 +7261,7 @@
             "qualities": {
                 "atk": 1,
                 "mag": 9,
-                "def": 3,
+                "end": 3,
                 "skill": "CrystalLazer"
             }
         },
@@ -7390,7 +7390,7 @@
             "qualities": {
                 "atk": 0,
                 "mag": 10,
-                "def": 8,
+                "end": 8,
                 "skill": "Mediarama"
             }
         },
@@ -7471,7 +7471,7 @@
             "qualities": {
                 "atk": 3,
                 "mag": 10,
-                "def": 2,
+                "end": 2,
                 "skill": "Ziodyne"
             }
         },
@@ -7634,7 +7634,7 @@
             "qualities": {
                 "atk": 15,
                 "mag": 1,
-                "def": 2,
+                "end": 2,
                 "skill": "TripleCrunch"
             }
         },
@@ -7893,7 +7893,7 @@
             "qualities": {
                 "atk": 1,
                 "mag": 9,
-                "def": 3,
+                "end": 3,
                 "skill": "CrystalLightshow"
             }
         },
@@ -8051,7 +8051,7 @@
             "qualities": {
                 "atk": 1,
                 "mag": 12,
-                "def": 2,
+                "end": 2,
                 "skill": "GleamingFire"
             }
         },
@@ -8119,7 +8119,7 @@
             "qualities": {
                 "atk": 1,
                 "mag": 7,
-                "def": 2,
+                "end": 2,
                 "skill": "SilencedDark"
             }
         },
@@ -8187,7 +8187,7 @@
             "qualities": {
                 "atk": 4,
                 "mag": 8,
-                "def": 5,
+                "end": 5,
                 "skill": "FantasySwords"
             }
         },
@@ -8256,7 +8256,7 @@
             "qualities": {
                 "atk": 1,
                 "mag": 7,
-                "def": 2,
+                "end": 2,
                 "skill": "HeavyShot"
             }
         },
@@ -8329,7 +8329,7 @@
             "qualities": {
                 "atk": 4,
                 "mag": 4,
-                "def": 6,
+                "end": 6,
                 "skill": "Sandstorm"
             }
         },
@@ -8407,7 +8407,7 @@
             "qualities": {
                 "atk": 3,
                 "mag": 10,
-                "def": 2,
+                "end": 2,
                 "skill": "Lick"
             }
         },
@@ -8691,7 +8691,7 @@
             "qualities": {
                 "atk": 12,
                 "mag": 6,
-                "def": 12,
+                "end": 12,
                 "skill": "Waterfall"
             }
         },
@@ -8769,7 +8769,7 @@
             "qualities": {
                 "atk": 12,
                 "mag": 30,
-                "def": 18,
+                "end": 18,
                 "skill": "EarthDance"
             }
         },
@@ -8850,7 +8850,7 @@
             "qualities": {
                 "atk": 3,
                 "mag": 9,
-                "def": 1,
+                "end": 1,
                 "skill": "Mamakakaja"
             }
         },
@@ -8937,7 +8937,7 @@
             "qualities": {
                 "atk": 15,
                 "mag": 4,
-                "def": 9,
+                "end": 9,
                 "skill": "HeatOfRage"
             }
         },
@@ -9031,7 +9031,7 @@
             "qualities": {
                 "atk": 10,
                 "mag": 16,
-                "def": 10,
+                "end": 10,
                 "skill": "NightmareSurround"
             }
         },
@@ -9131,7 +9131,7 @@
             "qualities": {
                 "atk": 4,
                 "mag": 12,
-                "def": 10,
+                "end": 10,
                 "skill": "KingsBurn"
             }
         },
@@ -9232,7 +9232,7 @@
             "qualities": {
                 "atk": 12,
                 "mag": 16,
-                "def": 13,
+                "end": 13,
                 "skill": "Heartburn"
             }
         },
@@ -9327,7 +9327,7 @@
             "qualities": {
                 "atk": 14,
                 "mag": 10,
-                "def": 9,
+                "end": 9,
                 "skill": "BlindlessStrike"
             }
         },
@@ -9430,7 +9430,7 @@
             "qualities": {
                 "atk": 7,
                 "mag": 15,
-                "def": 20,
+                "end": 20,
                 "skill": "StomachDraining"
             }
         },
@@ -9517,7 +9517,7 @@
             "qualities": {
                 "atk": 13,
                 "mag": 23,
-                "def": 8,
+                "end": 8,
                 "skill": "BurningStare"
             }
         },
@@ -9702,7 +9702,7 @@
             "qualities": {
                 "atk": 0,
                 "mag": 0,
-                "def": 20,
+                "end": 20,
                 "skill": "Rakunda"
             }
         },

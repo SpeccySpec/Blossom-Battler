@@ -700,7 +700,13 @@ commands.editskill = new Command({
 										}
 									}
 								}
+								if (enemyFile[enemy].negotiateDefs) {
+									if (enemyFile[enemy].negotiateDefs.skill == args[0]) {
+										enemyFile[enemy].negotiateDefs.skill = args[2];
+									}
+								}
 							}
+							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
 						}
 					}
 					
@@ -1092,6 +1098,11 @@ commands.purgeskill = new Command({
 										}
 									}
 									enemyFile[enemy].skills = enemyFile[enemy].skills.filter(skill => skill != '');
+								}
+								if (enemyFile[enemy].negotiateDefs) {
+									if (enemyFile[enemy].negotiateDefs.skill == args[0]) {
+										delete enemyFile[enemy].negotiateDefs.skill;
+									}
 								}
 							}
 							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
