@@ -322,27 +322,27 @@ statusNames = {
 }
 
 statusEmojis = {
-    burn: "🔥",
-	bleed: "<:bleed:906903499462307870>",
-    freeze: "❄",
-    paralyze: "⚡",
-	sleep: "💤",
-	dizzy: "💫",
-	despair: "💦",
-    poison: "<:poison:906903499961434132>",
-	dizzy: "💫",
-    brainwash: "🦆",
-	fear: "👁",
-	rage: "<:rage:906903500053696532>",
-	ego: "🎭",
-	silence: '<:silence:905238069207240734>',
-	dazed: '✨',
-	hunger: '🍪',
+    burn: "<:burn:963387466423873607>",
+	bleed: "<:bleed:963387466323206174>",
+    freeze: "<:freeze:963387466885259324>",
+    paralyze: "<:electric:962465467400851518>",
+	sleep: "<:sleep:963389074213847070>",
+	dizzy: "<:dizzy:963387466935570444>",
+	despair: "<:despair:963387466574856242>",
+    poison: "<:poison:963389074146738216>",
+    brainwash: "<:brainwash:963387466230956044>",
+	fear: "<:fear:963387466918813747>",
+	rage: "🗯️",
+	ego: "<:ego:963387466788794380>",
+	silence: '<:silence:963389866983440456>',
+	dazed: '<:dazed:963387466235134013>',
+	hunger: '<:hunger:963387467002675261>',
 	illness: '🤢',
 	infatuation: '❣️',
-	mirror: '<:mirror:929864689406582784>',
-	blind: '🕶️',
-	confusion: '☄️'
+	mirror: '<:mirror:963389073974755358>',
+	blind: '<:blind:963387466570690560>',
+	confusion: '<:confusion:963387466541330472>',
+	happy: '🙂'
 }
 
 elementTechs = {
@@ -357,13 +357,14 @@ elementTechs = {
 	brainwash: ['psychic', 'bless', 'curse'],
 	fear: ['psychic', 'curse', 'ice'],
 	rage: ['bless', 'ice', 'psychic'],
-	ego: ['ice', 'pierce', 'sound'],
+	ego: ['ice', 'sound', 'spirit'],
 	silence: ['sound', 'poison', 'nuclear'],
 	dazed: ['strike', 'wind', 'water'],
 	hunger: ['strike', 'pierce', 'earth'],
 	illness: ['slash', 'poison', 'nuclear'],
-	mirror: ['strike', 'slash', 'pierce'],
-	blind: ['curse', 'bless', 'gravity']
+	mirror: ['strike', 'slash', 'pierce', 'explode'],
+	blind: ['curse', 'bless', 'gravity'],
+	happy: ['curse', 'poison', 'spirit']
 }
 
 // Enemy Habitats
@@ -631,7 +632,7 @@ setUpUserData = (user) => {
 
 	if (Object.keys(userdata).length === 0) {
 		userdata = {
-			exports = {}
+			exports: {}
 		}
 
 		fs.writeFileSync(`${dataPath}/userdata/${user}.json`, JSON.stringify(settings, null, 4))
