@@ -1193,6 +1193,36 @@ commands.leaderskill = new Command({
 	}
 })
 
+commands.clearleaderskill = new Command({
+	desc: "Clears the leader skill of a character.",
+	aliases: ['clearls', 'clearleaderskill', 'clearfrontskill', 'clearorderskill'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (setUpSettings(message.guild.id).mechanics.leaderSkills == false) return message.channel.send('Leader Skills are disabled on this server.');
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// checkie
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+		// ok here goes nothing
+		if (!charFile[args[0]].leaderskill) return message.channel.send('This character does not have a leader skill.');
+		delete charFile[args[0]].leaderskill;
+
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
 // Limit Break skills
 commands.setlb = new Command({
 	desc: "A Limit Break is a powerful skill exclusive to each character that they can pull off if the conditions are met. They cannot be executed if Limit Breaks are disabled for that server.",
@@ -1337,6 +1367,62 @@ commands.setlb = new Command({
 		}
 	}
 })
+
+commands.clearlb = new Command({
+	desc: 'Clears a character\'s limit breaks.',
+	section: 'characters',
+	aliases: ['clearlimitbreak', 'clearlimitbreaks'],
+	args: [
+		{
+			name: 'Character',
+			type: 'Word',
+			forced: true
+		},
+		{
+			name: "Limit Break Level",
+			type: "Num",
+			forced: false
+		}
+	],
+	func: (message, args) => {
+		if (setUpSettings(message.guild.id).mechanics.limitbreaks === false) return message.channel.send("Limit Breaks are disabled for this server.");
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let thingDefs = ''
+	
+		if (charFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+			thingDefs = charFile;
+		} else if (enemyFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to assign a limit break to ${args[0]}.`);
+			thingDefs = enemyFile;
+		} else return message.channel.send(`${args[0]} doesn't exist!`);
+
+		if (thingDefs[args[0]].lb && thingDefs[args[0]].lb != {}) {
+			if (args[1]) {
+				if (args[1] > 0 && args[1] <= Object.keys(thingDefs[args[0]].lb).length) {
+					for (let i = args[1]; i <= Object.keys(thingDefs[args[0]].lb).length + 1; i++) {
+						console.log(i);
+						delete thingDefs[args[0]].lb[i];
+					}
+				} else return message.channel.send(`Limit Break level ${args[1]} does not exist for ${args[0]}.`);
+			} else {
+				delete thingDefs[args[0]].lb;
+			}
+		} else return message.channel.send(`${args[0]} doesn't have any limit breaks!`);
+
+		if (thingDefs[args[0]].type) {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		} else {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		}
+		message.channel.send(`${args[0]}'s limit breaks have been cleared.`);
+	}
+})
+
 
 commands.changestats = new Command({
 	desc: "Change the stats of a character.",
