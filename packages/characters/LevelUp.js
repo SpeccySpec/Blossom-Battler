@@ -20,7 +20,8 @@ gainXp = (message, charDefs, xp) => {
 }
 
 updateStats = (charDefs, server, updateXp) => {
-	let settings = setUpFile(server)
+	let settings = setUpSettings(server);
+
 	// Handle HP
 	if (charDefs.basehp > 1) {
 		let END = charDefs.basestats.baseend;
@@ -34,12 +35,12 @@ updateStats = (charDefs, server, updateXp) => {
 		charDefs.maxmp = Math.floor(charDefs.basemp + ((charDefs.basemp/10)*(charDefs.level-1)) + ((INT/2)*(charDefs.level-1)));
 	}
 
-	if (settings.formulas.lvlformula && settings.formulas.lvlformula === 'percent') {
+	if (settings.formulas && settings.formulas.levelUpFormula && settings.formulas.levelUpFormula === 'percent') {
 		for (const i in stats) {
 			let baseStat = charDefs.basestats[`base${stats[i]}`]
 			charDefs[stats[i]] = Math.min(99, Math.round(baseStat * (1 + ((charDefs.level-1) * 0.091))))
 		}
-	} else if (settings.formulas.lvlformula && settings.formulas.lvlformula === 'assist') {
+	} else if (settings.formulas && settings.formulas.levelUpFormula && settings.formulas.levelUpFormula === 'assist') {
 		for (const i in stats) {
 			let baseStat = charDefs.basestats[`base${stats[i]}`]
 			charDefs[stats[i]] = Math.min(99, Math.round((baseStat+3) * (1 + ((charDefs.level-1) * 0.06751))))

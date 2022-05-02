@@ -65,7 +65,7 @@ commands.registerchar = new Command({
 		},
 	],
 	func: (message, args) => {
-		let settings = setUpFile(message.guild.id)
+		let settings = setUpSettings(message.guild.id)
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -518,7 +518,7 @@ commands.gainxp = new Command({
 		}
 	],
 	func: (message, args) => {
-		let settings = setUpFile(message.guild.id)
+		let settings = setUpSettings(message.guild.id)
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -552,7 +552,7 @@ commands.levelup = new Command({
 		}
 	],
 	func: (message, args) => {
-		let settings = setUpFile(message.guild.id)
+		let settings = setUpSettings(message.guild.id)
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -586,7 +586,7 @@ commands.forcelevel = new Command({
 		}
 	],
 	func: (message, args) => {
-		let settings = setUpFile(message.guild.id)
+		let settings = setUpSettings(message.guild.id)
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -735,7 +735,7 @@ commands.learnskill = new Command({
 		}
 	],
 	func: (message, args) => {
-		let settings = setUpFile(message.guild.id)
+		let settings = setUpSettings(message.guild.id)
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -1325,20 +1325,24 @@ commands.updatecharacters = new Command({
 		}
 		
 		// delete old shit
-		for (let i in charFile) {
-			delete charFile[i].autoLearn;
-			delete charFile[i].leaderSkill;
-			for (let k of stats) delete charFile[i][k];
-			for (let k of Affinities) delete charFile[i][k];
-			for (let k of stats) delete charFile[i][`base${k}`];
-			for (let k = 1; k < 4; k++) delete charFile[i][`lb${k}`];
-			for (let k of quoteTypes) delete charFile[i][`${k}quote`];
-		}
+		setTimeout(function() {
+			for (let i in charFile) {
+				delete charFile[i].autoLearn;
+				delete charFile[i].leaderSkill;
+				for (let k of stats) delete charFile[i][k];
+				for (let k of Affinities) delete charFile[i][k];
+				for (let k of stats) delete charFile[i][`base${k}`];
+				for (let k = 1; k < 4; k++) delete charFile[i][`lb${k}`];
+				for (let k of quoteTypes) delete charFile[i][`${k}quote`];
+			}
 
-		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+			setTimeout(function() {
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 
-		// Send an Embed to notify us!
-		message.channel.send('Characters have been updated from an older version to a newer one!');
+				// Send an Embed to notify us!
+				message.channel.send('Characters have been updated from an older version to a newer one!');
+			}, 300);
+		}, 300);
 	}
 })
 
@@ -1359,7 +1363,7 @@ commands.purgechar = new Command({
 
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character name.`);
 
-		if (charFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this character, therefore, you have insufficient permissions to delete it.")
+		if (charFile[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this character, therefore, you have insufficient permissions to delete it.")
 
 		message.channel.send(`Are you **sure** you want to delete ${charFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this character.\n**Y/N**`);
 
