@@ -1405,7 +1405,6 @@ commands.clearlb = new Command({
 			if (args[1]) {
 				if (args[1] > 0 && args[1] <= Object.keys(thingDefs[args[0]].lb).length) {
 					for (let i = args[1]; i <= Object.keys(thingDefs[args[0]].lb).length + 1; i++) {
-						console.log(i);
 						delete thingDefs[args[0]].lb[i];
 					}
 				} else return message.channel.send(`Limit Break level ${args[1]} does not exist for ${args[0]}.`);
