@@ -300,6 +300,8 @@ statusEffects = [
 	"infatuation",
 	"blind",
 	"confusion",
+	"irradiation",
+	"sensitive",
 
 	// Positive Statusses
 	"happy",
@@ -326,6 +328,8 @@ statusNames = {
 	infatuation: 'Infatuation',
 	blind: 'Blindness',
 	confusion: 'Confusion',
+	irradiation: 'Irradiation',
+	sensitive: 'Sensitive',
 
 	// Positive Statusses
 	happy: 'Happiness',
@@ -353,6 +357,8 @@ statusEmojis = {
 	mirror: '<:mirror:963389073974755358>',
 	blind: '<:blind:963387466570690560>',
 	confusion: '<:confusion:963387466541330472>',
+	irradiation: '☣️',
+	sensitive: '😖',
 	happy: '🙂'
 }
 
@@ -375,6 +381,8 @@ elementTechs = {
 	illness: ['slash', 'poison', 'nuclear'],
 	mirror: ['strike', 'slash', 'pierce', 'explode'],
 	blind: ['curse', 'bless', 'gravity'],
+	irradiation: ['fire', 'nuclear', 'water'],
+	sensitive: ['spirit', 'psychic', 'wind'],
 	happy: ['curse', 'poison', 'spirit']
 }
 
@@ -652,25 +660,25 @@ setUpUserData = (user) => {
 	return userdata
 }
 
-const backButton = new Discord.MessageButton({
+backButton = new Discord.MessageButton({
 	style: 'SECONDARY',
 	label: 'Back',
 	emoji: '⬅️',
 	customId: 'back'
 })
-const forwardButton = new Discord.MessageButton({
+forwardButton = new Discord.MessageButton({
 	style: 'SECONDARY',
 	label: 'Forward',
 	emoji: '➡️',
 	customId: 'forward'
 })
-const cancelButton = new Discord.MessageButton({
+cancelButton = new Discord.MessageButton({
 	style: 'SECONDARY',
 	label: 'Cancel',
 	emoji: '⏸️',
 	customId: 'cancel'
 })
-const pageButton = new Discord.MessageButton({
+pageButton = new Discord.MessageButton({
 	style: 'SECONDARY',
 	label: 'Page',
 	emoji: '#️⃣',
@@ -708,7 +716,7 @@ listArray = async(channel, theArray, author) => {
 		if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
 			if (interaction.customId === 'back') {
 				if (currentIndex - 10 < 0) {
-					currentIndex = theArray.length-10
+					currentIndex = theArray.length - (theArray.length % 10)
 				} else {
 					currentIndex -= 10
 				}

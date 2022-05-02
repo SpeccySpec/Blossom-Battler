@@ -1145,7 +1145,7 @@ commands.setpetvalues = new Command({
 	}
 })
 
-commands.clearpervalues = new Command({
+commands.clearpetvalues = new Command({
 	desc: "Clears an enemy's pet values.",
 	section: "enemies",
 	args: [

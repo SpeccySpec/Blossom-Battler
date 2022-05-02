@@ -1228,6 +1228,8 @@ commands.liststatus = new Command({
 			confusion: '🌀50% chance to damage self when attacking. Stacks with other status effects.',
 			mirror: '💥Immobilized for 3 turns. Repel magic skills.',
 			blind: '💥PRC and AGL halved.',
+			irradiation: '💥Switch 2 random stats for 3 turns.',
+			sensitive: '🌀Debuff a random stat evey hit taken for 3 turns.',
 			happy: '🌀Positive Status Effect. LUK and AGL increased, PRC decreased. Can still be teched on your opponents.'
 		}
 

@@ -18,6 +18,165 @@ const aliases = {
 	miscellaneous: "misc"	
 }
 
+async function sendHelp(message, commandsInCategories) {
+	let index = 0
+	let category = Object.keys(commandsInCategories)[index]
+	let description = categories[category]
+	let categoryCommands = commandsInCategories[category]
+	let categoryCommandsIndex = 0
+
+	let categoryList = Object.keys(commandsInCategories)
+
+	const generateEmbed = async () => {
+		const current = categoryCommands.slice(categoryCommandsIndex, categoryCommandsIndex + 12)
+		return new Discord.MessageEmbed({
+			color: '#0099ff',
+			title: 'List of Commands',
+			description: `**${category.toUpperCase()}** - ${description}`,
+			fields: await Promise.all(
+				current.map(async arrayDefs => ({
+					name: arrayDefs[0],
+					value: arrayDefs[1],
+					inline: true
+				}))
+			)
+		})
+	}
+
+	let embedMessage = '' 
+	let selectionmenu = ''
+	if (categoryList.length > 1) {
+		selectionmenu = new Discord.MessageSelectMenu()
+			.setCustomId('select')
+			.setPlaceholder('Nothing selected')
+			
+		for (let i = 0; i < categoryList.length; i++) {
+			selectionmenu.addOptions([
+				{
+					label: categoryList[i].charAt(0).toUpperCase() + categoryList[i].slice(1),
+					description: categories[categoryList[i]],
+					value: i.toString()
+				}
+			])
+		}
+		
+		embedMessage = await message.channel.send({
+			embeds: [await generateEmbed(0)],
+			components: [
+				{
+					type: 1,
+					components: [selectionmenu]
+				},
+				{
+					type: 1,
+					components: [backButton, forwardButton, cancelButton]
+				}
+			]
+		})
+	} else {
+		embedMessage = await message.channel.send({
+			embeds: [await generateEmbed(0)],
+			components: [new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]})]
+		})
+	}
+
+	const collector = embedMessage.createMessageComponentCollector({
+		filter: ({user}) => true
+	})
+
+	collector.on('collect', async interaction => {
+		if (interaction.component.customId != 'cancel' && interaction.component.customId != 'select') {
+			if (interaction.customId === 'forward') {
+				categoryCommandsIndex += 12
+
+				if (categoryCommandsIndex >= categoryCommands.length) {
+					index++
+
+					if (index >= categoryList.length) {
+						index = 0
+					}
+					category = Object.keys(commandsInCategories)[index]
+					description = categories[category]
+					categoryCommands = commandsInCategories[category]
+					categoryCommandsIndex = 0
+				}
+			} else if (interaction.customId === 'back') {
+				categoryCommandsIndex -= 12
+
+				if (categoryCommandsIndex < 0) {
+					index--
+
+					if (index < 0) {
+						index = categoryList.length-1
+					}
+					category = Object.keys(commandsInCategories)[index]
+					description = categories[category]
+					categoryCommands = commandsInCategories[category]
+					categoryCommandsIndex = categoryCommands.length - (categoryCommands.length % 12)
+				}
+			}
+
+			if (categoryList.length > 1) {
+				await interaction.update({
+					embeds: [await generateEmbed(0)],
+					components: [
+						{
+							type: 1,
+							components: [selectionmenu]
+						},
+						{
+							type: 1,
+							components: [backButton, forwardButton, cancelButton]
+						}
+					]
+				})
+			} else {
+				await interaction.update({
+					embeds: [await generateEmbed(0)],
+					components: [
+						new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]}),
+					]
+				})
+			}
+		} else if (interaction.component.customId === 'cancel') {
+			collector.stop()
+			await interaction.update({
+			embeds: [await generateEmbed(0)],
+			components: []
+			})
+		} else {
+			index = parseInt(interaction.values[0])
+			category = Object.keys(commandsInCategories)[index]
+			description = categories[category]
+			categoryCommands = commandsInCategories[category]
+			categoryCommandsIndex = 0
+
+			if (categoryList.length > 1) {
+				await interaction.update({
+					embeds: [await generateEmbed(0)],
+					components: [
+						{
+							type: 1,
+							components: [selectionmenu]
+						},
+						{
+							type: 1,
+							components: [backButton, forwardButton, cancelButton]
+						}
+					]
+				})
+			} else {
+				await interaction.update({
+					embeds: [await generateEmbed(0)],
+					components: [
+						new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]}),
+					]
+				})
+			}
+		}
+	})
+}
+
 commands.help = new Command({
 	desc: "Lists all of Bloom Battler's commands.",
 	section: "misc",
@@ -40,12 +199,25 @@ commands.help = new Command({
 			let description = categories[category]
 			if (!description)
 				return void commands.help.call(message, [])
-			DiscordEmbed.setDescription(description)
-			for (const i in commands) {
-				const command = commands[i]
-				if (command.section == category || category == 'all') {
-					const value = command.getFullDesc()
-					DiscordEmbed.fields.push({name: `${getPrefix(message.guild.id)}${i}`, value, inline: true})
+			DiscordEmbed.setDescription(`**${category.toUpperCase()}** - ${description}`)
+
+			let commandsList = []
+			for (let command in commands) {
+				if (commands[command].section == category || category == "all") {
+					commandsList.push([`${getPrefix(message.guild.id)}${command}`, commands[command].section, commands[command].getFullDesc()])
+				}
+			}
+
+			if (commandsList.length > 15) {
+				let commandsByCategory = {}
+				for (let command of commandsList) {
+					if (!commandsByCategory[command[1]]) commandsByCategory[command[1]] = []
+					commandsByCategory[command[1]].push([command[0], command[2]])
+				}
+				return sendHelp(message, commandsByCategory)
+			} else {
+				for (let i = 0; i < commandsList.length; i++) {
+					DiscordEmbed.addField(commandsList[i][0], commandsList[i][2], true)
 				}
 			}
 		} else {
