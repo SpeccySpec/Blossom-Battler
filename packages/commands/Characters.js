@@ -168,7 +168,7 @@ commands.changetruename = new Command({
 
 
 commands.renamechar = new Command({
-	desc: `Change a character's display name.`,
+	desc: `Change a character/enemy's display name.`,
 	aliases: ['renamecharacter', 'renamechar', 'charname', 'charnamechange'],
 	section: "characters",
 	args: [
@@ -188,16 +188,27 @@ commands.renamechar = new Command({
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let thingDefs = ''
 
-		if (!charFile[args[0]]) return message.channel.send(`${args[0]} does not exist!`);
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+		if (charFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+			thingDefs = charFile;
+		} else if (enemyFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to rename ${args[0]}.`);
+			thingDefs = enemyFile;
+		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		if (args[1] == "" || args[1] == " ") return message.channel.send('Invalid new character name! Please enter an actual name.');
-		if (args[0] === args[1]) return message.channel.send("...What's the point...?");
+		if (thingDefs[args[0]].name === args[1]) return message.channel.send("...What's the point...?");
 
-		charFile[args[0]].name = args[1];
+		thingDefs[args[0]].name = args[1];
 
-		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		if (thingDefs[args[0]].type) {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		} else {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		}
 		message.channel.send(`${args[0]}'s name has been changed to ${args[1]}!`);
 	}
 })
