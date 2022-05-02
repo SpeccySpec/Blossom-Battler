@@ -1,10 +1,11 @@
 const enemyFuncs = require("../enemyFuncs");
 
-function writeEnemy(creator, guild, name, level, health, magicpoints, experience, attack, magic, perception, endurance, charisma, intelligence, agility, luck, type, description) {
+function writeEnemy(creator, guild, name, mainelement, level, health, magicpoints, experience, attack, magic, perception, endurance, charisma, intelligence, agility, luck, type, description) {
     let enemyFile = setUpFile(`${dataPath}/json/${guild.id}/enemies.json`);
 
     enemyFile[name] = {
         name: name,
+		mainElement: mainelement,
 
         // Only the owner can move this character, if they don't have admin permissions.
         owner: creator.id,
@@ -113,6 +114,11 @@ commands.registerenemy = new Command({
 			forced: true
 		},
 		{
+			name: "Main Element",
+			type: "Word",
+			forced: true
+		},
+		{
 			name: "Level",
 			type: "Num",
 			forced: true
@@ -198,14 +204,16 @@ commands.registerenemy = new Command({
 			message.channel.send(`${args[0]} already exists, so I'll overwrite them for you.`);
 		}
 
+		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements) || args[1].toLowerCase() == "almighty") return message.channel.send(`${args[1]} is not a valid main element that an enemy can have.`);
+
 		//from arg 1 to arg 12, make sure they are above zero, and change them to 1 if it's the case
-		for (let i = 1; i < 13; i++) {
+		for (let i = 2; i < 14; i++) {
 			args[i] = args[i] > 0 ? args[i] : 1;
 		}
 
-		if (args[13] && args[13].toLowerCase() != 'none' && !utilityFuncs.inArray(args[13].toLowerCase(), enemyTypes)) return message.channel.send({content: 'Please enter a valid enemy type!', embeds: [enemyTypeList()]});
+		if (args[14] && args[14].toLowerCase() != 'none' && !utilityFuncs.inArray(args[14].toLowerCase(), enemyTypes)) return message.channel.send({content: 'Please enter a valid enemy type!', embeds: [enemyTypeList()]});
 
-		let enemyDefs = writeEnemy(message.author, message.guild, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], args[12], args[13] ? args[13].toLowerCase() : 'none', args[14] ? args[14] : '');
+		let enemyDefs = writeEnemy(message.author, message.guild, args[0], args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], args[12], args[13], args[14] ? args[14].toLowerCase() : 'none', args[15] ? args[15] : '');
 		message.channel.send({content: `${args[0]} has been registered!`, embeds: [briefDescription(enemyDefs)]})
 	}
 })
@@ -303,6 +311,7 @@ commands.updateenemies = new Command({
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		for (let i in enemyFile) {
 			enemyFile[i].name = i;
+			if (!enemyFile[i].mainElement) enemyFile[i].mainElement = 'strike';
 
 			enemyFile[i].owner = enemyFile[i].creator;
 			delete enemyFile[i].creator;

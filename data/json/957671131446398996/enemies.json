@@ -45,6 +45,7 @@
         "deathquote": [
             "I was holding back."
         ],
+        "mainElement": "strike",
         "owner": "903808201437364286",
         "xp": 86392053,
         "stats": {
@@ -126,6 +127,7 @@
             "..."
         ],
         "name": "EggmanNega",
+        "mainElement": "strike",
         "xp": 864352,
         "stats": {
             "atk": 55,
@@ -218,6 +220,7 @@
             }
         ],
         "name": "Miniscle",
+        "mainElement": "strike",
         "xp": 301,
         "stats": {
             "atk": 5,
@@ -272,6 +275,7 @@
             "...Can't... run..."
         ],
         "name": "Moltescle",
+        "mainElement": "strike",
         "xp": 30,
         "stats": {
             "atk": 2,
@@ -322,6 +326,7 @@
             "..."
         ],
         "name": "Murk",
+        "mainElement": "strike",
         "xp": 8753,
         "stats": {
             "atk": 9,
@@ -378,6 +383,7 @@
             "...Scary... Scary..."
         ],
         "name": "Shimite",
+        "mainElement": "strike",
         "xp": 1963,
         "stats": {
             "atk": 31,
@@ -433,6 +439,7 @@
             "...Scary... Scary..."
         ],
         "name": "Glimbat",
+        "mainElement": "strike",
         "xp": 1963,
         "stats": {
             "atk": 30,
@@ -483,6 +490,7 @@
         ],
         "name": "Sacriful",
         "image": "Sacriful",
+        "mainElement": "strike",
         "xp": 50,
         "stats": {
             "atk": 25,
@@ -532,6 +540,7 @@
         ],
         "name": "GlowingCrystal",
         "image": "GlowingCrystal",
+        "mainElement": "strike",
         "xp": 201044,
         "stats": {
             "atk": 30,
@@ -600,6 +609,7 @@
         },
         "name": "Mosstone",
         "image": "Mosstone",
+        "mainElement": "strike",
         "xp": 2532,
         "stats": {
             "atk": 45,
@@ -671,6 +681,7 @@
         },
         "name": "Spiritual",
         "image": "Spiritual",
+        "mainElement": "strike",
         "xp": 10000,
         "stats": {
             "atk": 42,
@@ -750,6 +761,7 @@
         },
         "name": "Croconite",
         "image": "Croconite",
+        "mainElement": "strike",
         "xp": 19594,
         "stats": {
             "atk": 50,
@@ -828,6 +840,7 @@
         },
         "name": "Toxiplant",
         "image": "Toxiplant",
+        "mainElement": "strike",
         "xp": 7542,
         "stats": {
             "atk": 30,
@@ -907,6 +920,7 @@
         },
         "name": "Noxiherb",
         "image": "Noxiherb",
+        "mainElement": "strike",
         "xp": 8429,
         "stats": {
             "atk": 30,
@@ -929,6 +943,79 @@
             "drain": [
                 "water",
                 "poison"
+            ]
+        },
+        "quotes": {},
+        "lb": {},
+        "type": "none"
+    },
+    "Grassimp": {
+        "level": 14,
+        "hp": 200,
+        "mp": 100,
+        "melee": {
+            "name": "Strike Attack",
+            "type": "strike",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "skills": [
+            "Hanama",
+            "Mahana",
+            "Magna",
+            "Lunge"
+        ],
+        "image": "Grassimp",
+        "journal": "Defenseless bug that hides under bushes. They warm up to other people very quickly, and never intend to hurt others. They love being held & pet, and nuzzle others to show their trust. During the summers, they bloom & hand out the blueberries produced to friends & trusted allies.",
+        "dreams": [
+            "...Food... Food...",
+            "...Scary... Scary...",
+            "...Run... Run...",
+            "...Find... Shelter..."
+        ],
+        "loot": "Grassimp",
+        "negotiate": [
+            {
+                "name": "Pet",
+                "desc": "Pet the Grassimp.",
+                "action": "%PLAYER% pets the Grassimp! It's satisfied.",
+                "convince": 100
+            }
+        ],
+        "negotiateDefs": {
+            "required": 4,
+            "qualities": {
+                "atk": 1,
+                "mag": 7,
+                "def": 1,
+                "skill": "Hanama"
+            }
+        },
+        "name": "Grassimp",
+        "mainElement": "strike",
+        "xp": 1252,
+        "stats": {
+            "atk": 18,
+            "mag": 18,
+            "prc": 16,
+            "end": 19,
+            "chr": 11,
+            "int": 12,
+            "agl": 12,
+            "luk": 17
+        },
+        "affinities": {
+            "weak": [
+                "fire"
+            ],
+            "resist": [
+                "grass"
+            ],
+            "block": [],
+            "repel": [],
+            "drain": [
+                "water"
             ]
         },
         "quotes": {},
@@ -982,6 +1069,7 @@
         ],
         "name": "Mossimp",
         "image": "Mossimp",
+        "mainElement": "strike",
         "xp": 5314,
         "stats": {
             "atk": 41,
@@ -1039,6 +1127,7 @@
         "loot": "Grassimp",
         "name": "GreatMossimp",
         "image": "GreatMossimp",
+        "mainElement": "strike",
         "xp": 33251,
         "stats": {
             "atk": 25,
@@ -1098,6 +1187,7 @@
         "loot": "Grassimp",
         "name": "MassiveMossimp",
         "image": "MassiveMossimp",
+        "mainElement": "strike",
         "xp": 78342,
         "stats": {
             "atk": 46,
@@ -1176,6 +1266,7 @@
             }
         ],
         "name": "Grassage",
+        "mainElement": "strike",
         "xp": 3422,
         "stats": {
             "atk": 13,
@@ -1230,6 +1321,7 @@
         ],
         "name": "Mosscreep",
         "image": "Mosscreep",
+        "mainElement": "strike",
         "xp": 1242,
         "stats": {
             "atk": 23,
@@ -1279,6 +1371,7 @@
         ],
         "name": "Reactite",
         "image": "Reactite",
+        "mainElement": "strike",
         "xp": 1192,
         "stats": {
             "atk": 10,
@@ -1326,6 +1419,7 @@
         ],
         "name": "Mossknight",
         "image": "Mossknight",
+        "mainElement": "strike",
         "xp": 1201,
         "stats": {
             "atk": 24,
@@ -1380,6 +1474,7 @@
         ],
         "name": "Folly",
         "image": "Folly",
+        "mainElement": "strike",
         "xp": 2000,
         "stats": {
             "atk": 10,
@@ -1455,6 +1550,7 @@
             }
         ],
         "image": "Enigstone",
+        "mainElement": "strike",
         "xp": 2124,
         "stats": {
             "atk": 20,
@@ -1534,6 +1630,7 @@
             }
         },
         "image": "Mystone",
+        "mainElement": "strike",
         "xp": 4533,
         "stats": {
             "atk": 12,
@@ -1594,6 +1691,7 @@
         ],
         "name": "Nymbulous",
         "image": "Nymbulous",
+        "mainElement": "strike",
         "xp": 14532,
         "stats": {
             "atk": 15,
@@ -1653,6 +1751,7 @@
         ],
         "name": "Sandmound",
         "image": "Sandmound",
+        "mainElement": "strike",
         "xp": 210,
         "stats": {
             "atk": 12,
@@ -1711,6 +1810,7 @@
         ],
         "name": "Sandifly",
         "image": "Sandifly",
+        "mainElement": "strike",
         "xp": 190,
         "stats": {
             "atk": 12,
@@ -1771,6 +1871,7 @@
         ],
         "name": "MasterMiniscle",
         "image": "MasterMiniscle",
+        "mainElement": "strike",
         "xp": 600,
         "stats": {
             "atk": 21,
@@ -1823,6 +1924,7 @@
             "..."
         ],
         "name": "Memoiru",
+        "mainElement": "strike",
         "xp": 6576,
         "stats": {
             "atk": 19,
@@ -1876,6 +1978,7 @@
         ],
         "name": "Monia",
         "image": "Monia",
+        "mainElement": "strike",
         "xp": 1923,
         "stats": {
             "atk": 15,
@@ -1944,6 +2047,7 @@
                 "convince": 20
             }
         ],
+        "mainElement": "strike",
         "xp": 7653,
         "stats": {
             "atk": 18,
@@ -2018,6 +2122,7 @@
                 "convince": -25
             }
         ],
+        "mainElement": "strike",
         "xp": 1404932,
         "stats": {
             "atk": 24,
@@ -2095,6 +2200,7 @@
         ],
         "name": "Agilitop",
         "image": "Agilitop",
+        "mainElement": "strike",
         "xp": 4352,
         "stats": {
             "atk": 35,
@@ -2150,6 +2256,7 @@
         ],
         "name": "Topium",
         "image": "Topium",
+        "mainElement": "strike",
         "xp": 24000,
         "stats": {
             "atk": 36,
@@ -2204,6 +2311,7 @@
         ],
         "name": "Flarebubble",
         "image": "Flarebubble",
+        "mainElement": "strike",
         "xp": 1999,
         "stats": {
             "atk": 16,
@@ -2260,6 +2368,7 @@
         ],
         "name": "Ghasty",
         "image": "Ghasty",
+        "mainElement": "strike",
         "xp": 13221,
         "stats": {
             "atk": 40,
@@ -2343,6 +2452,7 @@
             }
         ],
         "name": "Nyamo",
+        "mainElement": "strike",
         "xp": 4232,
         "stats": {
             "atk": 22,
@@ -2427,6 +2537,7 @@
         ],
         "name": "Nyamush",
         "image": "Nyamush",
+        "mainElement": "strike",
         "xp": 4034,
         "stats": {
             "atk": 35,
@@ -2484,6 +2595,7 @@
         ],
         "name": "ViolentNyamo",
         "image": "ViolentNyamo",
+        "mainElement": "strike",
         "xp": 2433,
         "stats": {
             "atk": 25,
@@ -2542,6 +2654,7 @@
         ],
         "name": "ViolentNyamush",
         "image": "ViolentNyamush",
+        "mainElement": "strike",
         "xp": 2532,
         "stats": {
             "atk": 22,
@@ -2601,6 +2714,7 @@
         ],
         "name": "NyamoWarrior",
         "image": "NyamoWarrior",
+        "mainElement": "strike",
         "xp": 6462,
         "stats": {
             "atk": 29,
@@ -2661,6 +2775,7 @@
         ],
         "name": "VolatileWarrior",
         "image": "VolatileWarrior",
+        "mainElement": "strike",
         "xp": 12342,
         "stats": {
             "atk": 29,
@@ -2723,6 +2838,7 @@
         ],
         "name": "Hydruu",
         "image": "Hydruu",
+        "mainElement": "strike",
         "xp": 23523,
         "stats": {
             "atk": 27,
@@ -2801,6 +2917,7 @@
         ],
         "name": "Nyamem",
         "image": "Nyamem",
+        "mainElement": "strike",
         "xp": 34302,
         "stats": {
             "atk": 32,
@@ -2864,6 +2981,7 @@
         ],
         "name": "InfectedNyamem",
         "image": "InfectedNyamem",
+        "mainElement": "strike",
         "xp": 43566,
         "stats": {
             "atk": 30,
@@ -2925,6 +3043,7 @@
         ],
         "name": "Evergreen",
         "image": "Evergreen",
+        "mainElement": "strike",
         "xp": 29534,
         "stats": {
             "atk": 20,
@@ -2986,6 +3105,7 @@
         ],
         "name": "Mawler",
         "image": "Mawler",
+        "mainElement": "strike",
         "xp": 19421,
         "stats": {
             "atk": 36,
@@ -3045,6 +3165,7 @@
         ],
         "name": "GravenIdol",
         "image": "GravenIdol",
+        "mainElement": "strike",
         "xp": 39643,
         "stats": {
             "atk": 45,
@@ -3111,6 +3232,7 @@
             "...Light..."
         ],
         "name": "InfectedVessel",
+        "mainElement": "strike",
         "xp": 45964,
         "stats": {
             "atk": 40,
@@ -3175,6 +3297,7 @@
         ],
         "name": "RefinedVessel",
         "image": "RefinedVessel",
+        "mainElement": "strike",
         "xp": 68394,
         "stats": {
             "atk": 47,
@@ -3230,6 +3353,7 @@
         "dreams": [],
         "name": "TheLuminosity",
         "image": "Luminosity",
+        "mainElement": "strike",
         "xp": 112942,
         "stats": {
             "atk": 46,
@@ -3293,6 +3417,7 @@
         "dreams": [],
         "name": "ElderLuminosity",
         "image": "Luminosity",
+        "mainElement": "strike",
         "xp": 200000,
         "stats": {
             "atk": 81,
@@ -3339,6 +3464,7 @@
         "loot": "Metalic",
         "name": "Hitten",
         "image": "Hitten",
+        "mainElement": "strike",
         "xp": 7532,
         "stats": {
             "atk": 50,
@@ -3395,6 +3521,7 @@
         "loot": "Metalic",
         "name": "Eleku",
         "image": "Eleku",
+        "mainElement": "strike",
         "xp": 4312,
         "stats": {
             "atk": 23,
@@ -3445,6 +3572,7 @@
         ],
         "loot": "Metalic",
         "name": "Minet",
+        "mainElement": "strike",
         "xp": 284,
         "stats": {
             "atk": 35,
@@ -3489,6 +3617,7 @@
         "loot": "Metalic",
         "name": "Lazerite",
         "image": "Lazerite",
+        "mainElement": "strike",
         "xp": 4854,
         "stats": {
             "atk": 10,
@@ -3539,6 +3668,7 @@
         "loot": "Metalic",
         "name": "Windite",
         "image": "Windite",
+        "mainElement": "strike",
         "xp": 4400,
         "stats": {
             "atk": 10,
@@ -3591,6 +3721,7 @@
         "loot": "Metalic",
         "name": "Frostite",
         "image": "Frostite",
+        "mainElement": "strike",
         "xp": 5000,
         "stats": {
             "atk": 10,
@@ -3644,6 +3775,7 @@
         "loot": "Metalic",
         "name": "Mossite",
         "image": "Mossite",
+        "mainElement": "strike",
         "xp": 4450,
         "stats": {
             "atk": 10,
@@ -3699,6 +3831,7 @@
         "loot": "Metalic",
         "name": "Aquatite",
         "image": "Aquatite",
+        "mainElement": "strike",
         "xp": 4450,
         "stats": {
             "atk": 10,
@@ -3756,6 +3889,7 @@
         "loot": "Metalic",
         "name": "BigStriker",
         "image": "BigStriker",
+        "mainElement": "strike",
         "xp": 29532,
         "stats": {
             "atk": 45,
@@ -3831,6 +3965,7 @@
             }
         ],
         "name": "Frostimp",
+        "mainElement": "strike",
         "xp": 5965,
         "stats": {
             "atk": 43,
@@ -3907,6 +4042,7 @@
         ],
         "name": "Verglasimp",
         "image": "Verglasimp",
+        "mainElement": "strike",
         "xp": 8533,
         "stats": {
             "atk": 20,
@@ -3982,6 +4118,7 @@
         ],
         "name": "Frostsage",
         "image": "Frostsage",
+        "mainElement": "strike",
         "xp": 7542,
         "stats": {
             "atk": 30,
@@ -4040,6 +4177,7 @@
         "loot": "Ice",
         "name": "Icifli",
         "image": "Icifli",
+        "mainElement": "strike",
         "xp": 5965,
         "stats": {
             "atk": 50,
@@ -4117,6 +4255,7 @@
         ],
         "name": "Snowamor",
         "image": "Snowamor",
+        "mainElement": "strike",
         "xp": 65350,
         "stats": {
             "atk": 50,
@@ -4187,6 +4326,7 @@
             }
         },
         "image": "Howlice",
+        "mainElement": "strike",
         "xp": 10001,
         "stats": {
             "atk": 40,
@@ -4258,6 +4398,7 @@
             }
         },
         "image": "Arftic",
+        "mainElement": "strike",
         "xp": 1,
         "stats": {
             "atk": 5,
@@ -4330,6 +4471,7 @@
         ],
         "name": "FrostTunneler",
         "image": "FrostTunneler",
+        "mainElement": "strike",
         "xp": 53232,
         "stats": {
             "atk": 40,
@@ -4398,6 +4540,7 @@
         ],
         "name": "Robat",
         "image": "Robat",
+        "mainElement": "strike",
         "xp": 6001,
         "stats": {
             "atk": 50,
@@ -4483,6 +4626,7 @@
         ],
         "name": "Mechanium",
         "image": "Mechanium",
+        "mainElement": "strike",
         "xp": 95824,
         "stats": {
             "atk": 60,
@@ -4551,6 +4695,7 @@
             }
         ],
         "name": "Foxbot",
+        "mainElement": "strike",
         "xp": 8543,
         "stats": {
             "atk": 49,
@@ -4607,6 +4752,7 @@
             }
         ],
         "name": "ReignitedFlare",
+        "mainElement": "strike",
         "xp": 215244,
         "stats": {
             "atk": 50,
@@ -4672,6 +4818,7 @@
             }
         ],
         "name": "RechargedSpark",
+        "mainElement": "strike",
         "xp": 253322,
         "stats": {
             "atk": 40,
@@ -4747,6 +4894,7 @@
             }
         },
         "name": "RefinedFrost",
+        "mainElement": "strike",
         "xp": 354323,
         "stats": {
             "atk": 49,
@@ -4810,6 +4958,7 @@
                 "skill": "Kougaon"
             }
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 1670,
         "stats": {
@@ -4865,6 +5014,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 8423,
         "stats": {
@@ -4914,6 +5064,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 7943,
         "stats": {
@@ -4961,6 +5112,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 10032,
         "stats": {
@@ -5028,6 +5180,7 @@
                 "convince": 3
             }
         ],
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 100020,
         "stats": {
@@ -5080,6 +5233,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 1,
         "stats": {
@@ -5140,6 +5294,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 1,
         "stats": {
@@ -5211,6 +5366,7 @@
                 "skill": "FatalEnd"
             }
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 20546,
         "stats": {
@@ -5299,6 +5455,7 @@
                 "skill": "BraveBlade"
             }
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 193423,
         "stats": {
@@ -5370,6 +5527,7 @@
             }
         },
         "name": "ExplosiveDice",
+        "mainElement": "strike",
         "xp": 7500,
         "stats": {
             "atk": 40,
@@ -5448,6 +5606,7 @@
             }
         ],
         "name": "Psibo",
+        "mainElement": "strike",
         "xp": 9543,
         "stats": {
             "atk": 13,
@@ -5531,6 +5690,7 @@
             }
         ],
         "name": "Psiobo",
+        "mainElement": "strike",
         "xp": 9543,
         "stats": {
             "atk": 13,
@@ -5604,6 +5764,7 @@
             }
         ],
         "name": "Psiodynebo",
+        "mainElement": "strike",
         "xp": 954323,
         "stats": {
             "atk": 30,
@@ -5674,6 +5835,7 @@
             }
         ],
         "name": "Periphe",
+        "mainElement": "strike",
         "xp": 15423,
         "stats": {
             "atk": 20,
@@ -5731,6 +5893,7 @@
             }
         ],
         "name": "Chesty",
+        "mainElement": "strike",
         "xp": 17423,
         "stats": {
             "atk": 65,
@@ -5783,6 +5946,7 @@
         ],
         "journal": "The first form of what those hundreds of years ago feared. Awoken by the 3 cores of those robots, they will strike down the first things they see.",
         "dreams": [],
+        "mainElement": "strike",
         "xp": 354323,
         "stats": {
             "atk": 53,
@@ -5839,6 +6003,7 @@
         ],
         "journal": "The final form of what those hundreds of years ago feared. It exists to combat The Luminosity.",
         "dreams": [],
+        "mainElement": "strike",
         "xp": 1802432,
         "stats": {
             "atk": 54,
@@ -5887,6 +6052,7 @@
         "journal": "Winged beasts from another world.",
         "dreams": [],
         "name": "ViperWing",
+        "mainElement": "strike",
         "xp": 85332,
         "stats": {
             "atk": 40,
@@ -5952,6 +6118,7 @@
                 "convince": 25
             }
         ],
+        "mainElement": "strike",
         "owner": "441198920668938260",
         "xp": 195809,
         "stats": {
@@ -6021,6 +6188,7 @@
         },
         "diety": true,
         "image": "Nyamem",
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 185000,
         "stats": {
@@ -6096,6 +6264,7 @@
             }
         },
         "loot": "LychyDrops",
+        "mainElement": "strike",
         "owner": "441198920668938260",
         "xp": 128,
         "stats": {
@@ -6177,6 +6346,7 @@
             }
         },
         "loot": "LychenImpDrops",
+        "mainElement": "strike",
         "owner": "441198920668938260",
         "xp": 1956,
         "stats": {
@@ -6256,6 +6426,7 @@
             }
         },
         "loot": "LychenAngelDrops",
+        "mainElement": "strike",
         "owner": "441198920668938260",
         "xp": 4152,
         "stats": {
@@ -6324,6 +6495,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "441198920668938260",
         "xp": 154204,
         "stats": {
@@ -6400,6 +6572,7 @@
                 "skill": "ShadowStrike"
             }
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 135000,
         "stats": {
@@ -6474,6 +6647,7 @@
             }
         },
         "loot": "Monia",
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 50000,
         "stats": {
@@ -6539,6 +6713,7 @@
                 "skill": "Dokudyne"
             }
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 545232,
         "stats": {
@@ -6614,6 +6789,7 @@
             }
         },
         "loot": "Monia",
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 168100,
         "stats": {
@@ -6694,6 +6870,7 @@
                 "skill": "UnseenSlashes"
             }
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 195000,
         "stats": {
@@ -6761,6 +6938,7 @@
                 "convince": -20
             }
         ],
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 431023,
         "stats": {
@@ -6836,6 +7014,7 @@
             }
         },
         "loot": "Toxiplant",
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 32312,
         "stats": {
@@ -6926,6 +7105,7 @@
                 "skill": "TerraCrunch"
             }
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 35422,
         "stats": {
@@ -7001,6 +7181,7 @@
                 "skill": "Mavisunda"
             }
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 168000,
         "stats": {
@@ -7079,6 +7260,7 @@
                 "skill": "CrystalLazer"
             }
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 175000,
         "stats": {
@@ -7133,6 +7315,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 95483,
         "stats": {
@@ -7208,6 +7391,7 @@
         },
         "loot": "Mushi",
         "image": "Mushi",
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 10069,
         "stats": {
@@ -7286,6 +7470,7 @@
                 "skill": "Ziodyne"
             }
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 215000,
         "stats": {
@@ -7365,6 +7550,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 210000,
         "stats": {
@@ -7448,6 +7634,7 @@
             }
         },
         "loot": "Mushi",
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 394371,
         "stats": {
@@ -7496,6 +7683,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 259500,
         "stats": {
@@ -7565,6 +7753,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 432123,
         "stats": {
@@ -7620,6 +7809,7 @@
         ],
         "journal": "An ancient husk, reanimated by a ghostly being. Without feeling, it cannot be negotiated with, to calm it briefly, you must defeat it in battle.",
         "dreams": [],
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 1432231,
         "stats": {
@@ -7702,6 +7892,7 @@
                 "skill": "CrystalLightshow"
             }
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 373232,
         "stats": {
@@ -7759,6 +7950,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 205000,
         "stats": {
@@ -7858,6 +8050,7 @@
                 "skill": "GleamingFire"
             }
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 243221,
         "stats": {
@@ -7925,6 +8118,7 @@
                 "skill": "SilencedDark"
             }
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 280000,
         "stats": {
@@ -7992,6 +8186,7 @@
                 "skill": "FantasySwords"
             }
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 1505283,
         "stats": {
@@ -8060,6 +8255,7 @@
                 "skill": "HeavyShot"
             }
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 180000,
         "stats": {
@@ -8132,6 +8328,7 @@
                 "skill": "Sandstorm"
             }
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 193000,
         "stats": {
@@ -8209,6 +8406,7 @@
                 "skill": "Lick"
             }
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 95231,
         "stats": {
@@ -8265,6 +8463,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 240000,
         "stats": {
@@ -8316,6 +8515,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 1,
         "stats": {
@@ -8358,6 +8558,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 1,
         "stats": {
@@ -8409,6 +8610,7 @@
             "required": 5
         },
         "loot": "GrifflareDrops",
+        "mainElement": "strike",
         "owner": "441198920668938260",
         "xp": 254082,
         "stats": {
@@ -8489,6 +8691,7 @@
             }
         },
         "loot": "WestoneDrops",
+        "mainElement": "strike",
         "owner": "441198920668938260",
         "xp": 99382,
         "stats": {
@@ -8567,6 +8770,7 @@
         },
         "loot": "FlowSproutDrops",
         "image": "FlowSprout",
+        "mainElement": "strike",
         "owner": "441198920668938260",
         "xp": 195325,
         "stats": {
@@ -8645,6 +8849,7 @@
                 "skill": "Mamakakaja"
             }
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 757530,
         "stats": {
@@ -8733,6 +8938,7 @@
         },
         "loot": "EcossnorDrops",
         "image": "Ecossnor",
+        "mainElement": "strike",
         "owner": "441198920668938260",
         "xp": 79763,
         "stats": {
@@ -8826,6 +9032,7 @@
         },
         "loot": "DearmydaDrops",
         "image": "Dearmyda",
+        "mainElement": "strike",
         "owner": "441198920668938260",
         "xp": 67956,
         "stats": {
@@ -8925,6 +9132,7 @@
         },
         "loot": "AlgittoseciDrops",
         "image": "Algittoseci",
+        "mainElement": "strike",
         "owner": "441198920668938260",
         "xp": 73590,
         "stats": {
@@ -9025,6 +9233,7 @@
         },
         "loot": "PrutisotteDrops",
         "image": "Prutisotte",
+        "mainElement": "strike",
         "owner": "441198920668938260",
         "xp": 82560,
         "stats": {
@@ -9119,6 +9328,7 @@
         },
         "loot": "LariamestimDrops",
         "image": "Lariamestim",
+        "mainElement": "strike",
         "owner": "441198920668938260",
         "xp": 69324,
         "stats": {
@@ -9221,6 +9431,7 @@
         },
         "loot": "SoytebiDrops",
         "image": "Soytebi",
+        "mainElement": "strike",
         "owner": "441198920668938260",
         "xp": 89352,
         "stats": {
@@ -9307,6 +9518,7 @@
         },
         "loot": "TerponiteusDrops",
         "image": "Terponiteus",
+        "mainElement": "strike",
         "owner": "441198920668938260",
         "xp": 72867,
         "stats": {
@@ -9365,6 +9577,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 954939,
         "stats": {
@@ -9413,6 +9626,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 632123,
         "stats": {
@@ -9487,6 +9701,7 @@
                 "skill": "Rakunda"
             }
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 753204,
         "stats": {
@@ -9544,6 +9759,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "532291526634635285",
         "xp": 3000000,
         "stats": {
@@ -9603,6 +9819,7 @@
         ],
         "journal": "A somewhat familiar hedgehog(?), overrun with a weird multicoloured power. He wields an energy-based scythe and will show no mercy.",
         "dreams": [],
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 347075,
         "stats": {
@@ -9661,6 +9878,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 18491,
         "stats": {
@@ -9715,6 +9933,7 @@
         "negotiateDefs": {
             "required": 5
         },
+        "mainElement": "strike",
         "owner": "516359709779820544",
         "xp": 4593203,
         "stats": {
@@ -9737,151 +9956,5 @@
         "quotes": {},
         "lb": {},
         "type": "boss"
-    },
-    "Grassimp": {
-        "level": 14,
-        "hp": 200,
-        "mp": 100,
-        "melee": {
-            "name": "Strike Attack",
-            "type": "strike",
-            "pow": 30,
-            "acc": 95,
-            "crit": 15
-        },
-        "skills": [
-            "Hanama",
-            "Mahana",
-            "Magna",
-            "Lunge"
-        ],
-        "image": "https://cdn.discordapp.com/attachments/964627492143001700/970665154918367232/grassimp.png",
-        "journal": "Defenseless bug that hides under bushes. They warm up to other people very quickly, and never intend to hurt others. They love being held & pet, and nuzzle others to show their trust. During the summers, they bloom & hand out the blueberries produced to friends & trusted allies.",
-        "dreams": [
-            "...Food... Food...",
-            "...Scary... Scary...",
-            "...Run... Run...",
-            "...Find... Shelter..."
-        ],
-        "loot": "Grassimp",
-        "negotiate": [
-            {
-                "name": "Pet",
-                "desc": "Pet the Grassimp.",
-                "action": "%PLAYER% pets the Grassimp! It's satisfied.",
-                "convince": 100
-            }
-        ],
-        "negotiateDefs": {
-            "required": 4,
-            "qualities": {
-                "atk": 1,
-                "mag": 7,
-                "def": 1,
-                "skill": "Hanama"
-            }
-        },
-        "name": "Grassimp",
-        "xp": 1252,
-        "stats": {
-            "atk": 18,
-            "mag": 18,
-            "prc": 16,
-            "end": 19,
-            "chr": 11,
-            "int": 12,
-            "agl": 12,
-            "luk": 17
-        },
-        "affinities": {
-            "weak": [
-                "fire"
-            ],
-            "resist": [
-                "grass"
-            ],
-            "block": [],
-            "repel": [],
-            "drain": [
-                "water"
-            ]
-        },
-        "quotes": {},
-        "lb": {},
-        "type": "none"
-    },
-    "Astrid": {
-        "name": "Astrid",
-        "owner": "441198920668938260",
-        "level": 80,
-        "hp": 6750,
-        "mp": 4200,
-        "status": "none",
-        "statusturns": 0,
-        "melee": {
-            "name": "Strike Attack",
-            "type": "strike",
-            "pow": 30,
-            "acc": 95,
-            "crit": 15
-        },
-        "stats": {
-            "atk": 36,
-            "mag": 94,
-            "prc": 75,
-            "end": 23,
-            "chr": 62,
-            "int": 71,
-            "agl": 43,
-            "luk": 82
-        },
-        "lb": {},
-        "xp": 265420,
-        "affinities": {
-            "superweak": [],
-            "weak": [],
-            "resist": [],
-            "block": [],
-            "repel": [],
-            "drain": []
-        },
-        "skills": [],
-        "quotes": {
-            "meleequote": [],
-            "physquote": [],
-            "magquote": [],
-            "allyatkquote": [],
-            "lbquote": [],
-            "tcquote": [],
-            "strongquote": [],
-            "badatkquote": [],
-            "landedquote": [],
-            "missquote": [],
-            "superweakquote": [],
-            "weakquote": [],
-            "hurtquote": [],
-            "resistquote": [],
-            "blockquote": [],
-            "repelquote": [],
-            "drainquote": [],
-            "dodgequote": [],
-            "killquote": [],
-            "pacifyquote": [],
-            "allydeathquote": [],
-            "healquote": [],
-            "helpedquote": [],
-            "consolequote": [],
-            "imfinequote": [],
-            "lvlquote": []
-        },
-        "dreams": [],
-        "negotiate": [],
-        "negotiateDefs": {
-            "required": 5
-        },
-        "loot": "",
-        "image": "",
-        "type": "deity",
-        "journal": "A Grassimp that has evolved further than any other Grassimp in history. This Grassimp came to be known as 'Astrid: Goddess of the Grassimps'. Some of her other names were 'Grassimp Goddess Astrid', 'Forest Deity', and 'Lady Luck'. She is known to watch over the Grassimps closely in any forests she may reside in, one of the ways to encounter her was by caring for the Grassimps in the forest, bringing with it a blessing from her for your conscious goodness to the Grassimps, while the other was hurting a large number of Grassimps, and perhaps even killing them, summoning her wrath, and bringing with it a curse from her for your inherent evilness to the Grassimps."
     }
 }

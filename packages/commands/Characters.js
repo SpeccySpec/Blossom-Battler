@@ -260,13 +260,19 @@ commands.listchars = new Command({
 		let array = [];
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
-		const validTypes = ['element', 'user', 'level', 'leaderskill', 'limitbreaks', 'charms', 'transformations'];
+		const validTypes = ['element', 'superweak', 'weak', 'resist', 'block', 'repel', 'drain', 'user', 'level', 'leaderskill', 'limitbreaks', 'charms', 'transformations'];
 
 		if (args[0]) {
 			args[0] = args[0].toLowerCase();
 
 			switch (args[0].toLowerCase()) {
 				case 'element':
+				case 'superweak':
+				case 'weak':
+				case 'resist':
+				case 'block':
+				case 'repel':
+				case 'drain':
 					if (!args[1]) return message.channel.send(`You need to specify what you look for...`);
 					args[1] = args[1].toLowerCase();
 					if (!utilityFuncs.inArray(args[1], Elements)) return message.channel.send('Invalid element! Please enter a valid element.');
@@ -316,6 +322,14 @@ commands.listchars = new Command({
 			switch (args[0]) {
 				case 'element':
 					if (charFile[i].mainElement != args[1]) continue;
+					break;
+				case 'superweak':
+				case 'weak':
+				case 'resist':
+				case 'block':
+				case 'repel':
+				case 'drain':
+					if (!charFile[i].affinities[args[0]] || (charFile[i].affinities[args[0]] && !charFile[i].affinities[args[0]].includes(args[1]))) continue;
 					break;
 				case 'user':
 					if (charFile[i].owner != args[1]) continue;
