@@ -584,22 +584,30 @@ commands.setaffinity = new Command({
 
 		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let thingDefs = ''
+	
+		if (charFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+			thingDefs = charFile;
+		} else if (enemyFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to assign a main element to ${args[0]}.`);
+			thingDefs = enemyFile;
+		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		// Element Affinities
 		if (utilityFuncs.inArray(args[1].toLowerCase(), Elements)) {
 			if (!utilityFuncs.inArray(args[2].toLowerCase(), Affinities) && args[2].toLowerCase() != 'normal') return message.channel.send('Please enter a valid affinity!```diff\n+ SuperWeak\n+ Weak\n+ Normal\n+ Resist\n+ Block\n+ Repel\n+ Drain```');
 			if (args[1].toLowerCase() == 'almighty' || args[1].toLowerCase() == 'status' || args[1].toLowerCase() == 'passive' || args[1].toLowerCase() == 'heal') return message.channel.send(`You can't set ${args[1]} affinities!`);
 
-			if (hasAffinity(charFile[args[0]], args[1].toLowerCase(), args[2].toLowerCase())) return message.channel.send(`${charFile[args[0]].name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
+			if (hasAffinity(thingDefs[args[0]], args[1].toLowerCase(), args[2].toLowerCase())) return message.channel.send(`${thingDefs[args[0]].name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
 
 			// Clear Affinities
 			for (let a of Affinities) {
-				if (a && charFile[args[0]].affinities[a]) {
-					for (const k in charFile[args[0]].affinities[a]) {
-						if (charFile[args[0]].affinities[a][k].toLowerCase() === args[1].toLowerCase()) {
-							charFile[args[0]].affinities[a].splice(k, 1);
+				if (a && thingDefs[args[0]].affinities[a]) {
+					for (const k in thingDefs[args[0]].affinities[a]) {
+						if (thingDefs[args[0]].affinities[a][k].toLowerCase() === args[1].toLowerCase()) {
+							thingDefs[args[0]].affinities[a].splice(k, 1);
 							break;
 						}
 					}
@@ -608,26 +616,26 @@ commands.setaffinity = new Command({
 
 			// Apply Affinities (ignore if normal)
 			if (args[2].toLowerCase() != 'normal') {
-				if (!charFile[args[0]].affinities[args[2].toLowerCase()]) charFile[args[0]].affinities[args[2].toLowerCase()] = [];
-				charFile[args[0]].affinities[args[2].toLowerCase()].push(args[1].toLowerCase());
+				if (!thingDefs[args[0]].affinities[args[2].toLowerCase()]) thingDefs[args[0]].affinities[args[2].toLowerCase()] = [];
+				thingDefs[args[0]].affinities[args[2].toLowerCase()].push(args[1].toLowerCase());
 			}
 		// Status Affinities
 		} else if (utilityFuncs.inArray(args[1].toLowerCase(), statusEffects)) {
 			if (setUpSettings(message.guild.id).mechanics.stataffinities === false) return message.channel.send("Status Affinities are disabled for this server.");
-			if (!charFile[args[0]].statusaffinities) charFile[args[0]].statusaffinities = {};
+			if (!thingDefs[args[0]].statusaffinities) thingDefs[args[0]].statusaffinities = {};
 
 			if ((!utilityFuncs.inArray(args[2].toLowerCase(), Affinities) && args[2].toLowerCase() != 'normal') || args[2].toLowerCase() === 'superweak' || args[2].toLowerCase() === 'repel' || args[2].toLowerCase() === 'drain') return message.channel.send('Please enter a valid affinity!```diff\n+ Weak\n+ Normal\n+ Resist\n+ Block```');
 			if (args[1].toLowerCase() == 'infatuation' || args[1].toLowerCase() == 'confusion' || args[1].toLowerCase() == 'mirror') return message.channel.send(`You can't set ${args[1]} affinities!`);
 
-			if (hasStatusAffinity(charFile[args[0]], args[1].toLowerCase(), args[2].toLowerCase())) return message.channel.send(`${charFile[args[0]].name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
+			if (hasStatusAffinity(thingDefs[args[0]], args[1].toLowerCase(), args[2].toLowerCase())) return message.channel.send(`${thingDefs[args[0]].name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
 
 			// Clear Affinities
 			for (let a of Affinities) {
-				if (charFile[args[0]].statusaffinities[a]) {
-					if (a && charFile[args[0]].statusaffinities[a]) {
-						for (const k in charFile[args[0]].statusaffinities[a]) {
-							if (charFile[args[0]].statusaffinities[a][k].toLowerCase() === args[1].toLowerCase()) {
-								charFile[args[0]].statusaffinities[a].splice(k, 1);
+				if (thingDefs[args[0]].statusaffinities[a]) {
+					if (a && thingDefs[args[0]].statusaffinities[a]) {
+						for (const k in thingDefs[args[0]].statusaffinities[a]) {
+							if (thingDefs[args[0]].statusaffinities[a][k].toLowerCase() === args[1].toLowerCase()) {
+								thingDefs[args[0]].statusaffinities[a].splice(k, 1);
 								break;
 							}
 						}
@@ -637,8 +645,8 @@ commands.setaffinity = new Command({
 
 			// Apply Affinities (ignore if normal)
 			if (args[2].toLowerCase() != 'normal') {
-				if (!charFile[args[0]].statusaffinities[args[2].toLowerCase()]) charFile[args[0]].statusaffinities[args[2].toLowerCase()] = [];
-				charFile[args[0]].statusaffinities[args[2].toLowerCase()].push(args[1].toLowerCase());
+				if (!thingDefs[args[0]].statusaffinities[args[2].toLowerCase()]) thingDefs[args[0]].statusaffinities[args[2].toLowerCase()] = [];
+				thingDefs[args[0]].statusaffinities[args[2].toLowerCase()].push(args[1].toLowerCase());
 			}
 		// Neither entered.
 		} else {
@@ -646,8 +654,12 @@ commands.setaffinity = new Command({
 		}
 
 		// Display Message
-		message.channel.send(`👍 ${charFile[args[0]].name} has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}`);
-		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		message.channel.send(`👍 ${thingDefs[args[0]].name} has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}`);
+		if (thingDefs[args[0]].type) {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		} else {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		}
 	}
 })
 

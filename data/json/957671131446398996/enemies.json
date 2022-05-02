@@ -1020,7 +1020,12 @@
         },
         "quotes": {},
         "lb": {},
-        "type": "none"
+        "type": "none",
+        "statusaffinities": {
+            "block": [
+                "ego"
+            ]
+        }
     },
     "Mossimp": {
         "level": 48,
