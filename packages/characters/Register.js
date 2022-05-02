@@ -351,6 +351,8 @@ longDescription = (charDefs, level, server, message) => {
 }
 
 imageFile = (char) => {
-	let file = new Discord.MessageAttachment(`${dataPath}/images/enemies/${char.image}.png`);
-	return file
+	if (char.image && char.image != '') {
+		let file = new Discord.MessageAttachment(`${dataPath}/images/enemies/${char.image}.png`);
+		return file
+	}
 }

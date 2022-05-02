@@ -246,13 +246,13 @@ commands.listchars = new Command({
 	section: "characters",
 	args: [
 		{
-			name: "Element",
+			name: "Type",
 			type: "Word",
 			forced: false
 		},
 		{
-			name: "User",
-			type: "Ping",
+			name: "Variable",
+			type: "Any",
 			forced: false
 		}
 	],
@@ -260,19 +260,87 @@ commands.listchars = new Command({
 		let array = [];
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
+		const validTypes = ['element', 'user', 'level', 'leaderskill', 'limitbreaks', 'charms', 'transformations'];
+
+		if (args[0]) {
+			args[0] = args[0].toLowerCase();
+
+			switch (args[0].toLowerCase()) {
+				case 'element':
+					if (!args[1]) return message.channel.send(`You need to specify what you look for...`);
+					args[1] = args[1].toLowerCase();
+					if (!utilityFuncs.inArray(args[1], Elements)) return message.channel.send('Invalid element! Please enter a valid element.');
+					break;
+				case 'user':
+					if (!args[1]) return message.channel.send(`You need to specify what you look for...`);
+					args[1] = args[1].toLowerCase();
+					if (args[1].startsWith('<@') && args[1].endsWith('>')) {
+						let user = message.guild.members.cache.find(m => m.id == args[1].slice(2, -1));
+						if (!user) return message.channel.send('Invalid user! Please enter a valid user.');
+						args[1] = user.id;
+					} else if (args[1].startsWith('<@!') && args[1].endsWith('>')) {
+						let user = message.guild.members.cache.find(m => m.id == args[1].slice(3, -1));
+						if (!user) return message.channel.send('Invalid user! Please enter a valid user.');
+						args[1] = user.id;
+					}
+
+					if (!args[1].includes('@') && message.mentions.members.size == 0) {
+						let user = message.guild.members.cache.find(m => m.id == args[1]);
+						if (!user) return message.channel.send('Invalid user! Please enter a valid user.');
+					}
+
+					if (message.mentions.members.size > 0) {
+						args[1] = message.mentions.members.first().id;
+					}
+					break;
+				case 'level':
+					if (!args[1]) return message.channel.send(`You need to specify what you look for...`);
+					args[1] = args[1].toLowerCase();
+					if (isNaN(args[1])) return message.channel.send('Invalid level! Please enter a valid level.');
+					args[1] = parseInt(args[1]);
+					break;
+				case 'leaderskill':
+				case 'limitbreaks':
+				case 'charms':
+				case 'transformations':
+					break;
+				default:
+					return message.channel.send('Invalid type! Valid types are: `element`, `user`, `level`, `leaderskill`, `limitbreaks`, `charms`, `transformations`.');
+			}
+		}
+
 		for (const i in charFile) {
 			if (charFile[i].hidden) continue;
 			let descTxt = `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}MP`;
 
-			if ((!args[0] || args[0].toLowerCase() === 'none') && (!args[1] || args[1].toLowerCase() === 'none')) {
-				array.push({title: `${elementEmoji[charFile[i].mainElement]}${charFile[i].name} (${i})`, desc: descTxt});
-				continue;
+			switch (args[0]) {
+				case 'element':
+					if (charFile[i].mainElement != args[1]) continue;
+					break;
+				case 'user':
+					if (charFile[i].owner != args[1]) continue;
+					break;
+				case 'level':
+					if (charFile[i].level != args[1]) continue;
+					break;
+				case 'leaderskill':
+					if (!charFile[i].leaderskill || Object.keys(charFile[i].leaderskill).length == 0) continue;
+					break;
+				case 'limitbreaks':
+					if (!charFile[i].lb || Object.keys(charFile[i].lb).length == 0) continue;
+					break;
+				case 'charms':
+					if (!charFile[i].charms || charFile[i].charms.length == 0) continue;
+					break;
+				case 'transformations':
+					if (!charFile[i].transformations || Object.keys(charFile[i].transformations).length == 0) continue;
+					break;
 			}
 
-			if ((!args[0] || args[0].toLowerCase() === 'none') && charFile[i].mainElement != args[0].toLowerCase()) continue;
-			if (!args[1] && message.mentions.users.first() && charFile[i].type != message.mentions.users.first().id) continue;
 			array.push({title: `${elementEmoji[charFile[i].mainElement]}${charFile[i].name} (${i})`, desc: descTxt});
 		}
+
+		if (array.length == 0) return message.channel.send('No characters found!');
 
 		listArray(message.channel, array, args[1]);
 	}
@@ -298,6 +366,8 @@ commands.searchchars = new Command({
 				array.push({title: `${elementEmoji[charFile[i].mainElement]}${charFile[i].name} (${i})`, desc: `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}MP`});
 			}
 		}
+
+		if (array.length == 0) return message.channel.send('No characters found!');
 
 		listArray(message.channel, array);
 	}

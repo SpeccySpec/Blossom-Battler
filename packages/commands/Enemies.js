@@ -240,7 +240,11 @@ commands.journal = new Command({
 				if (enemyFile[args[0]].image && (enemyFile[args[0]].image.includes(`https://`) || enemyFile[args[0]].image.includes(`http://`))) {
 					message.author.send({content: `Since you're an administrator, I will send the journal to you.`, embeds: [DiscordEmbed]});
 				} else {
-					message.author.send({content: `Since you're an administrator, I will send the journal to you.`, embeds: [DiscordEmbed], files: [imageFile(enemyFile[args[0]])]});
+					if (enemyFile[args[0]].image != '') {
+						message.author.send({content: `Since you're an administrator, I will send the journal to you.`, embeds: [DiscordEmbed], files: [imageFile(enemyFile[args[0]])]});
+					} else {
+						message.author.send({content: `Since you're an administrator, I will send the journal to you.`, embeds: [DiscordEmbed]});
+					}
 				}
 			}
 		} else {
@@ -248,7 +252,11 @@ commands.journal = new Command({
 			if (enemyFile[args[0]].image && (enemyFile[args[0]].image.includes(`https://`) || enemyFile[args[0]].image.includes(`http://`))) {
 				message.channel.send({embeds: [DiscordEmbed]});
 			} else {
-				message.channel.send({embeds: [DiscordEmbed], files: [imageFile(enemyFile[args[0]])]});
+				if (enemyFile[args[0]].image != '') {
+					message.channel.send({embeds: [DiscordEmbed], files: [imageFile(enemyFile[args[0]])]});
+				} else {
+					message.channel.send({embeds: [DiscordEmbed]});
+				}
 			}
 		}
 	}

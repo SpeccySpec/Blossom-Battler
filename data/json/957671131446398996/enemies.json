@@ -9809,5 +9809,79 @@
         "quotes": {},
         "lb": {},
         "type": "none"
+    },
+    "Astrid": {
+        "name": "Astrid",
+        "owner": "441198920668938260",
+        "level": 80,
+        "hp": 6750,
+        "mp": 4200,
+        "status": "none",
+        "statusturns": 0,
+        "melee": {
+            "name": "Strike Attack",
+            "type": "strike",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "stats": {
+            "atk": 36,
+            "mag": 94,
+            "prc": 75,
+            "end": 23,
+            "chr": 62,
+            "int": 71,
+            "agl": 43,
+            "luk": 82
+        },
+        "lb": {},
+        "xp": 265420,
+        "affinities": {
+            "superweak": [],
+            "weak": [],
+            "resist": [],
+            "block": [],
+            "repel": [],
+            "drain": []
+        },
+        "skills": [],
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "allyatkquote": [],
+            "lbquote": [],
+            "tcquote": [],
+            "strongquote": [],
+            "badatkquote": [],
+            "landedquote": [],
+            "missquote": [],
+            "superweakquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "dodgequote": [],
+            "killquote": [],
+            "pacifyquote": [],
+            "allydeathquote": [],
+            "healquote": [],
+            "helpedquote": [],
+            "consolequote": [],
+            "imfinequote": [],
+            "lvlquote": []
+        },
+        "dreams": [],
+        "negotiate": [],
+        "negotiateDefs": {
+            "required": 5
+        },
+        "loot": "",
+        "image": "",
+        "type": "deity",
+        "journal": "A Grassimp that has evolved further than any other Grassimp in history. This Grassimp came to be known as 'Astrid: Goddess of the Grassimps'. Some of her other names were 'Grassimp Goddess Astrid', 'Forest Deity', and 'Lady Luck'. She is known to watch over the Grassimps closely in any forests she may reside in, one of the ways to encounter her was by caring for the Grassimps in the forest, bringing with it a blessing from her for your conscious goodness to the Grassimps, while the other was hurting a large number of Grassimps, and perhaps even killing them, summoning her wrath, and bringing with it a curse from her for your inherent evilness to the Grassimps."
     }
 }
