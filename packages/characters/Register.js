@@ -153,6 +153,10 @@ const affinityScores = {
 	repel: 1.5,
 	drain: 1.5,
 
+	[-10]: "Please stop.",
+	[-9]: "A bunch of useless atoms.",
+	[-8]: "A corpse.",
+	[-7]: "Are you sure they are still alive by now?",
 	[-6]: "Even glass survies more hits.",
 	[-5]: "Extremely likely to get hurt a lot.",
 	[-4]: "A fragile individual.",
@@ -165,7 +169,11 @@ const affinityScores = {
 	[3]: "The tanker.",
 	[4]: "An impenetrable individual.",
 	[5]: "Don't even bother attacking this guy.",
-	[6]: "Are you sure this is a person and not a WALL?"
+	[6]: "Are you sure this is a person and not a WALL?",
+	[7]: "Probably the protagonist of the story.",
+	[8]: "How about you learn the word balance?",
+	[9]: "Ever heard of weak affinities?",
+	[10]: "Plot armor v2."
 }
 
 longDescription = (charDefs, level, server, message) => {
@@ -249,7 +257,7 @@ longDescription = (charDefs, level, server, message) => {
 		}
 	}
 	const scorecomment = affinityScores[(affinityscore > 0 ? Math.ceil : Math.floor)(affinityscore)]
-	charAffs += `Score: **${affinityscore}**\n*${scorecomment}*`
+	charAffs += `Score: **${affinityscore}**\n*${scorecomment ?? "..."}*`
 
 	// Status Affinities
 	if (settings.mechanics.stataffinities) {
@@ -264,7 +272,7 @@ longDescription = (charDefs, level, server, message) => {
 			}
 			if (statAffs != '') {
 				const scorecomment = affinityScores[(statusaffinityscore > 0 ? Math.ceil : Math.floor)(statusaffinityscore)]
-				charAffs += `\n\n${statAffs}Score: **${statusaffinityscore}**\n*${scorecomment}*`
+				charAffs += `\n\n${statAffs}Score: **${statusaffinityscore}**\n*${scorecomment ?? "..."}*`
 			};
 		}
 	}
