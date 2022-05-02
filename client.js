@@ -635,7 +635,7 @@ setUpUserData = (user) => {
 			exports: {}
 		}
 
-		fs.writeFileSync(`${dataPath}/userdata/${user}.json`, JSON.stringify(settings, null, 4))
+		fs.writeFileSync(`${dataPath}/userdata/${user}.json`, JSON.stringify(userdata, null, 4))
 	}
 
 	return userdata
