@@ -260,7 +260,9 @@ commands.listchars = new Command({
 		let array = [];
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
-		const validTypes = ['element', 'superweak', 'weak', 'resist', 'block', 'repel', 'drain', 'user', 'level', 'leaderskill', 'limitbreaks', 'charms', 'transformations'];
+		const validTypes = ['element', 'superweak', 'weak', 'resist', 'block', 'repel', 'drain', 'user', 'level', 'leaderskills', 'limitbreaks', 'charms', 'transformations'];
+
+		let settings = setUpSettings(message.guild.id);
 
 		if (args[0]) {
 			args[0] = args[0].toLowerCase();
@@ -275,7 +277,8 @@ commands.listchars = new Command({
 				case 'drain':
 					if (!args[1]) return message.channel.send(`You need to specify what you look for...`);
 					args[1] = args[1].toLowerCase();
-					if (!utilityFuncs.inArray(args[1], Elements)) return message.channel.send('Invalid element! Please enter a valid element.');
+					if (!utilityFuncs.inArray(args[1], Elements) && !utilityFuncs.inArray(args[1], statusEffects)) return message.channel.send(`${args[1]} is not a valid status or element!`);
+					if (utilityFuncs.inArray(args[1], statusEffects) && !settings.mechanics.stataffinities) return message.channel.send(`Status affinities are not enabled on this server!`);
 					break;
 				case 'user':
 					if (!args[1]) return message.channel.send(`You need to specify what you look for...`);
@@ -305,13 +308,14 @@ commands.listchars = new Command({
 					if (isNaN(args[1])) return message.channel.send('Invalid level! Please enter a valid level.');
 					args[1] = parseInt(args[1]);
 					break;
-				case 'leaderskill':
+				case 'leaderskills':
 				case 'limitbreaks':
 				case 'charms':
 				case 'transformations':
+					if (!settings.mechanics[args[0]]) return message.channel.send(`${args[0]} are not enabled on this server!`);
 					break;
 				default:
-					return message.channel.send('Invalid type! Valid types are: `element`, `user`, `level`, `leaderskill`, `limitbreaks`, `charms`, `transformations`.');
+					return message.channel.send('Invalid type! Valid types are: `element`, `superweak`, `weak`, `resist`, `block`, `repel`, `drain`, `user`, `level`, `leaderskills`, `limitbreaks`, `charms`, `transformations`');
 			}
 		}
 
@@ -329,7 +333,11 @@ commands.listchars = new Command({
 				case 'block':
 				case 'repel':
 				case 'drain':
-					if (!charFile[i].affinities[args[0]] || (charFile[i].affinities[args[0]] && !charFile[i].affinities[args[0]].includes(args[1]))) continue;
+					if (utilityFuncs.inArray(args[1], Elements)) {
+						if (!charFile[i].affinities[args[0]] || (charFile[i].affinities[args[0]] && !charFile[i].affinities[args[0]].includes(args[1]))) continue;
+					} else if (utilityFuncs.inArray(args[1], statusEffects)) {
+						if (!charFile[i].statusaffinities[args[0]] || (charFile[i].statusaffinities[args[0]] && !charFile[i].statusaffinities[args[0]].includes(args[1]))) continue;
+					}
 					break;
 				case 'user':
 					if (charFile[i].owner != args[1]) continue;
@@ -497,13 +505,28 @@ commands.mainelement = new Command({
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
-		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements)) return message.channel.send({content: 'Please enter a valid element for **Main Element!**', embeds: [elementList()]});
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let thingDefs = ''
 
-		charFile[args[0]].mainElement = args[1].toLowerCase();
-		message.channel.send(`👍 ${charFile[args[0]].name}'s main element is now ${args[1].charAt(0).toUpperCase()+args[1].slice(1)}`);
-		fs.writeFileSync(`${dataPath}/json/${guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		if (charFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+			thingDefs = charFile;
+		} else if (enemyFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to assign a main element to ${args[0]}.`);
+			thingDefs = enemyFile;
+		} else return message.channel.send(`${args[0]} doesn't exist!`);
+
+		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements)) return message.channel.send({content: 'Please enter a valid element for **Main Element!**', embeds: [elementList()]});
+		if (args[1].toLowerCase() == 'almighty' && !thingDefs[args[0]].type) return message.channel.send(`${args[0]} can't have Almighty as their main element!`);
+
+		thingDefs[args[0]].mainElement = args[1].toLowerCase();
+		message.channel.send(`👍 ${thingDefs[args[0]].name}'s main element is now ${args[1].charAt(0).toUpperCase()+args[1].slice(1)}`);
+		
+		if (thingDefs[args[0]].type) {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		} else {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		}
 	}
 })
 

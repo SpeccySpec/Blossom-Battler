@@ -1,5 +1,3 @@
-const enemyFuncs = require("../enemyFuncs");
-
 function writeEnemy(creator, guild, name, mainelement, level, health, magicpoints, experience, attack, magic, perception, endurance, charisma, intelligence, agility, luck, type, description) {
     let enemyFile = setUpFile(`${dataPath}/json/${guild.id}/enemies.json`);
 
@@ -248,7 +246,7 @@ commands.journal = new Command({
 				if (enemyFile[args[0]].image && (enemyFile[args[0]].image.includes(`https://`) || enemyFile[args[0]].image.includes(`http://`))) {
 					message.author.send({content: `Since you're an administrator, I will send the journal to you.`, embeds: [DiscordEmbed]});
 				} else {
-					if (enemyFile[args[0]].image != '') {
+					if (enemyFile[args[0]].image && enemyFile[args[0]].image != '') {
 						message.author.send({content: `Since you're an administrator, I will send the journal to you.`, embeds: [DiscordEmbed], files: [imageFile(enemyFile[args[0]])]});
 					} else {
 						message.author.send({content: `Since you're an administrator, I will send the journal to you.`, embeds: [DiscordEmbed]});
@@ -260,7 +258,7 @@ commands.journal = new Command({
 			if (enemyFile[args[0]].image && (enemyFile[args[0]].image.includes(`https://`) || enemyFile[args[0]].image.includes(`http://`))) {
 				message.channel.send({embeds: [DiscordEmbed]});
 			} else {
-				if (enemyFile[args[0]].image != '') {
+				if (enemyFile[args[0]].image && enemyFile[args[0]].image != '') {
 					message.channel.send({embeds: [DiscordEmbed], files: [imageFile(enemyFile[args[0]])]});
 				} else {
 					message.channel.send({embeds: [DiscordEmbed]});
@@ -614,5 +612,138 @@ commands.enemyjournal = new Command({
 
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
 		message.channel.send(`${args[0]}'s journal entry has been changed!`)
+	}
+})
+
+commands.listenemies = new Command({
+	desc: 'Lists *all* enemies in the server.',
+	section: 'enemies',
+	args: [
+		{
+			name: "Type",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Variable",
+			type: "Any",
+			forced: false
+		}
+	],
+	func: (message, args) => {
+		let array = [];
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+
+		const validTypes = ['element', 'superweak', 'weak', 'resist', 'block', 'repel', 'drain', 'level', 'limitbreaks'];
+
+		let settings = setUpSettings(message.guild.id);
+
+		if (args[0]) {
+			args[0] = args[0].toLowerCase();
+
+			switch (args[0].toLowerCase()) {
+				case 'element':
+				case 'superweak':
+				case 'weak':
+				case 'resist':
+				case 'block':
+				case 'repel':
+				case 'drain':
+					if (!args[1]) return message.channel.send(`You need to specify what you look for...`);
+					args[1] = args[1].toLowerCase();
+					if (!utilityFuncs.inArray(args[1], Elements) && !utilityFuncs.inArray(args[1], statusEffects)) return message.channel.send(`${args[1]} is not a valid status or element!`);
+					if (utilityFuncs.inArray(args[1], statusEffects) && !settings.mechanics.stataffinities) return message.channel.send(`Status affinities are not enabled on this server!`);
+					break;
+				case 'level':
+					if (!args[1]) return message.channel.send(`You need to specify what you look for...`);
+					args[1] = args[1].toLowerCase();
+					if (isNaN(args[1])) return message.channel.send('Invalid level! Please enter a valid level.');
+					args[1] = parseInt(args[1]);
+					break;
+				case 'limitbreaks':
+					if (!settings.mechanics[args[0]]) return message.channel.send(`${args[0]} are not enabled on this server!`);
+					break;
+				default:
+					return message.channel.send('Invalid type! Valid types are: `element`, `superweak`, `weak`, `resist`, `block`, `repel`, `drain`, `level`, `limitbreaks`');
+			}
+		}
+
+		for (const i in enemyFile) {
+			let descTxt = `${enemyFile[i].hp}HP, ${enemyFile[i].mp}MP`;
+			let title = `${elementEmoji[enemyFile[i].mainElement]}${enemyFile[i].name} (${i})`;
+
+			switch (args[0]) {
+				case 'element':
+					if (enemyFile[i].mainElement != args[1]) continue;
+					break;
+				case 'superweak':
+				case 'weak':
+				case 'resist':
+				case 'block':
+				case 'repel':
+				case 'drain':
+					if (utilityFuncs.inArray(args[1], Elements)) {
+						if (!enemyFile[i].affinities[args[0]] || (enemyFile[i].affinities[args[0]] && !enemyFile[i].affinities[args[0]].includes(args[1]))) continue;
+					} else if (utilityFuncs.inArray(args[1], statusEffects)) {
+						if (!enemyFile[i].statusaffinities[args[0]] || (enemyFile[i].statusaffinities[args[0]] && !enemyFile[i].statusaffinities[args[0]].includes(args[1]))) continue;
+					}
+					break;
+				case 'level':
+					if (enemyFile[i].level != args[1]) continue;
+					break;
+				case 'limitbreaks':
+					if (!enemyFile[i].lb || Object.keys(enemyFile[i].lb).length == 0) continue;
+					break;
+			}
+
+			if (!enemyFuncs.encounteredEnemy(i, message.guild.id)) {
+				title = `||${title}||`;
+				descTxt = `||${descTxt}||`;
+			}
+
+			if (enemyFile[i].type == 'miniboss' || enemyFile[i].type == 'boss' || enemyFile[i].type == 'bigboss' || enemyFile[i].type == 'deity') title = `<:warning:878094052208296007>${title}`;
+
+			array.push({title: title, desc: descTxt});
+		}
+
+		if (array.length == 0) return message.channel.send('No enemies found!');
+
+		listArray(message.channel, array, args[1]);
+	}
+})
+
+commands.searchenemies = new Command({
+	desc: 'Searches for enemies by phrase.',
+	section: "enemies",
+	args: [
+		{
+			name: "Phrase",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let array = [];
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+
+		for (const i in enemyFile) {
+			if (enemyFile[i].name.toLowerCase().includes(args[0].toLowerCase()) || i.toLowerCase().includes(args[0].toLowerCase())) {
+				let descTxt = `${enemyFile[i].hp}HP, ${enemyFile[i].mp}MP`;
+				let title = `${elementEmoji[enemyFile[i].mainElement]}${enemyFile[i].name} (${i})`;
+
+				if (!enemyFuncs.encounteredEnemy(i, message.guild.id)) {
+					title = `||${title}||`;
+					descTxt = `||${descTxt}||`;
+				}
+
+				if (enemyFile[i].type == 'miniboss' || enemyFile[i].type == 'boss' || enemyFile[i].type == 'bigboss' || enemyFile[i].type == 'deity') title = `<:warning:878094052208296007>${title}`;
+
+				array.push({title: title, desc: descTxt});
+			}
+		}
+
+		if (array.length == 0) return message.channel.send('No enemies found!');
+
+		listArray(message.channel, array);
 	}
 })
