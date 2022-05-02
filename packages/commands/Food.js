@@ -355,10 +355,6 @@ commands.listfood = new Command({
 		{
 			name: 'User Filter',
 			type: 'Word',
-		},
-		{ 
-			name: 'Quick Page',
-			type: 'Num',
 		}
 	],
 	func: async (message, args) => {	
@@ -409,7 +405,7 @@ commands.listfood = new Command({
 
 		if (array.length == 0) return message.channel.send(`There is no food in the **${args[0]} ${args[1]}** category.`)
 		
-		listArray(message.channel, array, args[3]);
+		listArray(message.channel, array, message.author.id);
 	}
 })
 
@@ -475,7 +471,7 @@ commands.searchfood = new Command({
 
 		if (array.length == 0) return message.channel.send(`There is no food in the **${args[0]} ${args[1]}** category with the phrase **${args[2]}**.`)
 
-		listArray(message.channel, array);
+		listArray(message.channel, array, message.author.id);
 	}
 })
 

@@ -358,7 +358,7 @@ commands.listchests = new Command({
 
         if (array.length == 0) return message.channel.send(`No chests found.`);
 
-        listArray(message.channel, array, parseInt(args[1]));
+        listArray(message.channel, array, message.author.id);
     }
 })
 
@@ -401,7 +401,7 @@ commands.searchchests = new Command({
 
         if (array.length == 0) return message.channel.send(`No chests found.`);
 
-        listArray(message.channel, array, 0);
+        listArray(message.channel, array, message.author.id);
     }
 })
 

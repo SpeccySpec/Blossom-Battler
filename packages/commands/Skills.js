@@ -975,7 +975,7 @@ commands.listskills = new Command({
 			array.push({title: `${elementEmoji[skillFile[i].type]}${skillFile[i].name} (${i})`, desc: descTxt});
 		}
 
-		listArray(message.channel, array, args[1]);
+		listArray(message.channel, array, message.author.id);
 	}
 })
 
@@ -997,7 +997,7 @@ commands.searchskills = new Command({
 			}
 		}
 
-		listArray(message.channel, array, args[1]);
+		listArray(message.channel, array, message.author.id);
 	}
 })
 

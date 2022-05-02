@@ -323,7 +323,7 @@ commands.listitems = new Command({
 
         if (array.length == 0) return message.channel.send(`No items found.`);
 
-        listArray(message.channel, array, parseInt(args[1]));
+        listArray(message.channel, array, message.author.id);
     }
 })
 
@@ -659,7 +659,7 @@ commands.searchitems = new Command({
 
         if (array.length == 0) return message.channel.send(`No items found with the phrase ${args[0]}.`);
         
-        listArray(message.channel, array, parseInt(args[1]));
+        listArray(message.channel, array, message.author.id);
     }
 })
 
@@ -970,7 +970,7 @@ commands.listweapons = new Command({
 
         if (array.length == 0) return message.channel.send(`No weapons found.`);
 
-        listArray(message.channel, array, parseInt(args[1]));
+        listArray(message.channel, array, message.author.id);
     }
 })
 
@@ -996,7 +996,7 @@ commands.searchweapons = new Command({
 
         if (array.length == 0) return message.channel.send(`No weapons found with the phrase ${args[0]}.`);
 
-        listArray(message.channel, array);
+        listArray(message.channel, array, message.author.id);
     }
 })
 
@@ -1296,7 +1296,7 @@ commands.listarmors = new Command({
 
         if (array.length == 0) return message.channel.send(`No armors found.`);
 
-        listArray(message.channel, array, parseInt(args[1]));
+        listArray(message.channel, array, message.author.id);
     }
 })
 
@@ -1322,7 +1322,7 @@ commands.searcharmors = new Command({
 
         if (array.length == 0) return message.channel.send(`No armors found with the phrase ${args[0]}.`);
 
-        listArray(message.channel, array);
+        listArray(message.channel, array, message.author.id);
     }
 })
 

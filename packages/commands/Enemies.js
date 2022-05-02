@@ -708,7 +708,7 @@ commands.listenemies = new Command({
 
 		if (array.length == 0) return message.channel.send('No enemies found!');
 
-		listArray(message.channel, array, args[1]);
+		listArray(message.channel, array, message.author.id);
 	}
 })
 
@@ -744,7 +744,7 @@ commands.searchenemies = new Command({
 
 		if (array.length == 0) return message.channel.send('No enemies found!');
 
-		listArray(message.channel, array);
+		listArray(message.channel, array, message.author.id);
 	}
 })
 

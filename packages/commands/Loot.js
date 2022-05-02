@@ -201,7 +201,7 @@ commands.listloots = new Command({
 
         if (array.length == 0) return message.channel.send(`No loot tables found.`);
 
-        listArray(message.channel, array, parseInt(args[0]));
+        listArray(message.channel, array, message.author.id);
     }
 })
 
@@ -231,7 +231,7 @@ commands.searchloots = new Command({
 
         if (array.length == 0) return message.channel.send(`No loot tables found with the phrase ${args[0]}.`);
 
-        listArray(message.channel, array, parseInt(args[1]));
+        listArray(message.channel, array, message.author.id);
     }
 })
 

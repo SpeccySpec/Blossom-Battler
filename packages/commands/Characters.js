@@ -364,7 +364,7 @@ commands.listchars = new Command({
 
 		if (array.length == 0) return message.channel.send('No characters found!');
 
-		listArray(message.channel, array, args[1]);
+		listArray(message.channel, array, message.author.id);
 	}
 })
 
@@ -391,7 +391,7 @@ commands.searchchars = new Command({
 
 		if (array.length == 0) return message.channel.send('No characters found!');
 
-		listArray(message.channel, array);
+		listArray(message.channel, array, message.author.id);
 	}
 })
 
@@ -1863,7 +1863,7 @@ commands.getquotes = new Command({
 			for (let i in thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`])
 				array.push({title: `**[${i}]**`, desc: `_"${thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`][i]}"_`});
 
-			listArray(message.channel, array, 1);
+			listArray(message.channel, array, message.author.id);
 		} else {
 			let array = [];
 			for (let quote of quoteTypes) {
@@ -1876,7 +1876,7 @@ commands.getquotes = new Command({
 				array.push({title: `${quote.charAt(0).toUpperCase()+quote.slice(1)}`, desc: quoteTxt});
 			}
 
-			listArray(message.channel, array, 1);
+			listArray(message.channel, array, message.author.id);
 		}
 	}
 })

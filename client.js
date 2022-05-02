@@ -5,7 +5,6 @@
 
 //Discord.JS initiation.
 Discord = require('discord.js');
-Voice = require('@discordjs/voice');
 Builders = require('@discordjs/builders');
 client = new Discord.Client({
 	intents: [
@@ -14,7 +13,6 @@ client = new Discord.Client({
 		Discord.Intents.FLAGS.GUILD_MESSAGES,
 		Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
 		Discord.Intents.FLAGS.DIRECT_MESSAGES,
-		Discord.Intents.FLAGS.GUILD_VOICE_STATES
 	],
 	partials: [
 		'MESSAGE',
@@ -47,11 +45,6 @@ fs = require('fs');
 
 //Request, for requesting files
 request = require('request');
-
-// Voice Shit
-ffmpeg = require('ffmpeg-static');
-ytdl = require('ytdl-core');
-http = require('http');
 
 //hatebin, for converting long walls of text into links
 hastebin = require('hastebin-gen');
@@ -635,21 +628,6 @@ setUpSettings = (guild) => {
 				enemies: {}
 			},
 			banned: [],
-			themes: {
-				battle: [],
-				advantage: [],
-				disadvantage: [],
-				bossfight: [],
-				miniboss: [],
-				strongfoe: [],
-				finalboss: [],
-				colosseum: [],
-				colosseumstrong: [],
-				pvp: [],
-				victory: [],
-				colosseumvictory: [],
-				loss: []
-			},
 			encountered: [],
 			desc: ""
 		}
@@ -686,8 +664,20 @@ const forwardButton = new Discord.MessageButton({
 	emoji: '➡️',
 	customId: 'forward'
 })
+const cancelButton = new Discord.MessageButton({
+	style: 'SECONDARY',
+	label: 'Cancel',
+	emoji: '⏸️',
+	customId: 'cancel'
+})
+const pageButton = new Discord.MessageButton({
+	style: 'SECONDARY',
+	label: 'Page',
+	emoji: '#️⃣',
+	customId: 'page'
+})
 
-listArray = async(channel, theArray, page) => {
+listArray = async(channel, theArray, author) => {
 	const generateEmbed = async start => {
 		const current = theArray.slice(start, start + 10)
 		return new Discord.MessageEmbed({
@@ -704,38 +694,79 @@ listArray = async(channel, theArray, page) => {
 	const canFitOnOnePage = theArray.length <= 10
 	const embedMessage = await channel.send({
 		embeds: [await generateEmbed(0)],
-		components: [new Discord.MessageActionRow({components: [backButton, forwardButton]})]
+		components: [new Discord.MessageActionRow({components: [backButton, forwardButton, pageButton, cancelButton]})]
 	})
 
 	if (canFitOnOnePage) return
 
 	const collector = embedMessage.createMessageComponentCollector({
-		filter: ({user}) => true // fuck you and your (the sequel)
+		filter: ({user}) => user.id == author
 	})
 
-//	let currentIndex = page*10;
 	let currentIndex = 0;
 	collector.on('collect', async interaction => {
-		if (interaction.customId === 'back') {
-			if (currentIndex - 10 < 0) {
-				currentIndex = theArray.length-10
-			} else {
-				currentIndex -= 10
+		if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
+			if (interaction.customId === 'back') {
+				if (currentIndex - 10 < 0) {
+					currentIndex = theArray.length-10
+				} else {
+					currentIndex -= 10
+				}
+			} else if (interaction.customId === 'forward') {
+				if (currentIndex + 10 >= theArray.length) {
+					currentIndex = 0
+				} else {
+					currentIndex += 10
+				}
 			}
-		} else {
-			if (currentIndex + 10 >= theArray.length) {
-				currentIndex = 0
-			} else {
-				currentIndex += 10
-			}
-		}
 
-		await interaction.update({
+			await interaction.update({
+				embeds: [await generateEmbed(currentIndex)],
+				components: [
+					new Discord.MessageActionRow({components: [backButton, forwardButton, pageButton, cancelButton]}),
+				]
+			})
+		} else if (interaction.component.customId === 'page') {
+			channel.send(`Please enter the page number you want to go to.`)
+			const pageCollector = channel.createMessageCollector({
+				time: 3000
+			})
+
+			await new Promise((resolve, reject) => {
+				pageCollector.on('collect', async pageInteraction => {
+					if (pageInteraction.author.id == author) {
+						try {
+							const page = parseInt(pageInteraction.content) - 1
+							if (page > -1 && page <= Math.floor(theArray.length / 10)) {
+								currentIndex = page * 10
+								await interaction.update({
+									embeds: [await generateEmbed(currentIndex)],
+									components: [
+										new Discord.MessageActionRow({components: [backButton, forwardButton, pageButton, cancelButton]}),
+									]
+								})
+								pageCollector.stop()
+								resolve()
+							} else {
+								channel.send(`Please enter a valid page number.`)
+								pageCollector.stop()
+								resolve()
+							}
+						} catch (err) {
+							channel.send('Please enter a valid page number.')
+							pageCollector.stop()
+							resolve()
+						}
+					}
+				})
+			})
+		} else {
+			collector.stop()
+			await interaction.update({
 			embeds: [await generateEmbed(currentIndex)],
-			components: [
-				new Discord.MessageActionRow({components: [backButton, forwardButton]})
-			]
-		})
+			components: []
+			})
+		}
 	})
 }
 
