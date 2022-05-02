@@ -243,7 +243,7 @@ commands.getchar = new Command({
 
 commands.listchars = new Command({
 	desc: 'Lists *all* existing characters.',
-	section: "skills",
+	section: "characters",
 	args: [
 		{
 			name: "Element",
