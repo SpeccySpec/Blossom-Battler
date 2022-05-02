@@ -591,7 +591,7 @@ commands.setaffinity = new Command({
 			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
 			thingDefs = charFile;
 		} else if (enemyFile[args[0]]) {
-			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to assign a main element to ${args[0]}.`);
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to assign an affinity to ${args[0]}.`);
 			thingDefs = enemyFile;
 		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
@@ -829,10 +829,17 @@ commands.setmelee = new Command({
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
-		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let thingDefs = ''
+	
+		if (charFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+			thingDefs = charFile;
+		} else if (enemyFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to assign a melee to ${args[0]}.`);
+			thingDefs = enemyFile;
+		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		// Some element and balancing checks
 		if (args[2].toLowerCase() != 'strike' && args[2].toLowerCase() != 'slash' && args[2].toLowerCase() != 'pierce' && args[2].toLowerCase() != 'explode') return message.channel.send('You can only use Physical Elements in melee attacks! _(Strike, Slash, Pierce, Explode)_');
@@ -840,7 +847,7 @@ commands.setmelee = new Command({
 		if (args[5] > 15) return message.channel.send('Melee Attacks cannot go above **15% Critical Hit Chance**!')
 
 		// Make the Melee Attack
-		charFile[args[0]].melee = {
+		thingDefs[args[0]].melee = {
 			name: args[1],
 			type: args[2].toLowerCase(),
 			pow: args[3],
@@ -858,13 +865,17 @@ commands.setmelee = new Command({
 				return message.channel.send(str)
 			}
 
-			charFile[args[0]].melee.status = args[6].toLowerCase();
-			if (isFinite(args[7]) && args[7] < 100) charFile[args[0]].melee.statuschance = args[7];
+			thingDefs[args[0]].melee.status = args[6].toLowerCase();
+			if (isFinite(args[7]) && args[7] < 100) thingDefs[args[0]].melee.statuschance = args[7];
 		}
 
 		// Display Message
-		message.channel.send(`👍 ${charFile[args[0]].name}'s Melee Attack has been changed to **${elementEmoji[args[2].toLowerCase()]}${args[1]}**!`);
-		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		message.channel.send(`👍 ${thingDefs[args[0]].name}'s Melee Attack has been changed to **${elementEmoji[args[2].toLowerCase()]}${args[1]}**!`);
+		if (thingDefs[args[0]].type) {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		} else {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		}
 	}
 })
 
@@ -901,25 +912,32 @@ commands.learnskill = new Command({
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
-		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let thingDefs = ''
+	
+		if (charFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+			thingDefs = charFile;
+		} else if (enemyFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to assign a skill for ${args[0]}.`);
+			thingDefs = enemyFile;
+		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		// Let's learn skills!
 		let learnString = `👍 ${args[0]} learned `;
 		let skillLearn = [];
 
 		for (let i = 1; i < args.length; i++) {
-			if (knowsSkill(charFile[args[0]], args[i])) return message.channel.send(`${args[0]} already knows ${args[i]}!\n\n**[TIP]**\n_Don't enter two of the same skill!_`);
+			if (knowsSkill(thingDefs[args[0]], args[i])) return message.channel.send(`${args[0]} already knows ${args[i]}!\n\n**[TIP]**\n_Don't enter two of the same skill!_`);
 
 			if (skillFile[args[i]]) {
 				if (skillFile[args[i]].levellock) {
-					if (charFile[args[0]].level < skillFile[args[i]].levellock) return message.channel.send(`${charFile[args[0]].name} is level ${charFile[args[0]].level}, but must be level ${skillFile[args[i]].levellock} to learn ${skillFile[args[i]].name}!`);
+					if (!thingDefs[0].type && thingDefs[args[0]].level < skillFile[args[i]].levellock) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but must be level ${skillFile[args[i]].levellock} to learn ${skillFile[args[i]].name}!`);
 				}
 
 				learnString += (skillFile[args[i]].name ? skillFile[args[i]].name : args[i])
-				charFile[args[0]].skills.push(args[i])
+				thingDefs[args[0]].skills.push(args[i])
 				skillLearn.push(args[i])
 
 				if (i == args.length-2)
@@ -932,10 +950,14 @@ commands.learnskill = new Command({
 				return message.channel.send(`${args[i]} isn't a valid skill.`);
 		}
 
-		if (!charFile[args[0]].creator && charFile[args[0]].skills.length > settings.caps.skillamount) return message.channel.send("You cannot have more than 8 skills!");
+		if (!thingDefs[args[0]].creator && thingDefs[args[0]].skills.length > settings.caps.skillamount) return message.channel.send("You cannot have more than 8 skills!");
 		message.channel.send(learnString);
 
-		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		if (thingDefs[args[0]].type) {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		} else {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		}
 	}
 })
 
@@ -964,27 +986,38 @@ commands.replaceskill = new Command({
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
-		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let thingDefs = ''
+	
+		if (charFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+			thingDefs = charFile;
+		} else if (enemyFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to replace a skill for ${args[0]}.`);
+			thingDefs = enemyFile;
+		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		// Do we know the skill
 		if (!skillFile[args[1]]) return message.channel.send('Invalid skill to replace! Remember that these are case sensitive.');
 		if (!skillFile[args[2]]) return message.channel.send('Invalid skill to replace with! Remember that these are case sensitive.');
-		if (!knowsSkill(charFile[args[0]], args[1])) return message.channel.send(`${charFile[args[0]].name} doesn't know ${args[1]}!`);
+		if (!knowsSkill(thingDefs[args[0]], args[1])) return message.channel.send(`${thingDefs[args[0]].name} doesn't know ${args[1]}!`);
 
 		// Level Lock
 		if (skillFile[args[2]].levellock) {
-			if (charFile[args[0]].level < skillFile[args[2]].levellock) return message.channel.send(`${charFile[args[0]].name} is level ${charFile[args[0]].level}, but must be level ${skillFile[args[2]].levellock} to learn ${skillFile[args[2]].name}!`);
+			if (!thingDefs[0].type && thingDefs[args[0]].level < skillFile[args[2]].levellock) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but must be level ${skillFile[args[2]].levellock} to learn ${skillFile[args[2]].name}!`);
 		}
 
 		// Let's replace it
-		let num = knowsSkill(charFile[args[0]], args[1])
-		charFile[args[0]].skills[num] = args[2]
+		let num = knowsSkill(thingDefs[args[0]], args[1])
+		thingDefs[args[0]].skills[num] = args[2]
 
 		message.react('👍');
-		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		if (thingDefs[args[0]].type) {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		} else {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		}
 	}
 })
 
@@ -1008,21 +1041,32 @@ commands.forgetskill = new Command({
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
-		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let thingDefs = ''
+	
+		if (charFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+			thingDefs = charFile;
+		} else if (enemyFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to remove a skill for ${args[0]}.`);
+			thingDefs = enemyFile;
+		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		// Do we know the skill
 		if (!skillFile[args[1]]) return message.channel.send('Invalid skill to replace! Remember that these are case sensitive.');
-		if (!knowsSkill(charFile[args[0]], args[1])) return message.channel.send(`${charFile[args[0]].name} doesn't know ${args[1]}!`);
+		if (!knowsSkill(thingDefs[args[0]], args[1])) return message.channel.send(`${thingDefs[args[0]].name} doesn't know ${args[1]}!`);
 
 		// Let's kill it!
-		let num = knowsSkill(charFile[args[0]], args[1])
-		charFile[args[0]].skills.splice(num, i)
+		let num = knowsSkill(thingDefs[args[0]], args[1])
+		thingDefs[args[0]].skills.splice(num, i)
 
 		message.react('👍');
-		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		if (thingDefs[args[0]].type) {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		} else {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		}
 	}
 })
 
@@ -1216,10 +1260,17 @@ commands.setlb = new Command({
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
-		// checkie
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let thingDefs = ''
+	
+		if (charFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+			thingDefs = charFile;
+		} else if (enemyFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to assign a limit break to ${args[0]}.`);
+			thingDefs = enemyFile;
+		} else return message.channel.send(`${args[0]} doesn't exist!`);
 	
 		if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
 		if (args[1].length > 50) return message.channel.send(`${args[1]} is too long of a skill name.`);
@@ -1230,13 +1281,13 @@ commands.setlb = new Command({
 		let powerBounds = [450, 600, 750, 900];
 		let percentBounds = [100, 200, 300, 4-0];
 		let levelLocks = [20, 48, 69, 85];
-		if (charFile[args[0]].lb) {
-			if (!charFile[args[0]][args[2]-1].lb) return message.channel.send(`Please enter Limit Breaks chronologically! You do not have a level ${args[2]-1} Limit Break.`);
+		if (thingDefs[args[0]].lb) {
+			if (!thingDefs[args[0]][args[2]-1].lb) return message.channel.send(`Please enter Limit Breaks chronologically! You do not have a level ${args[2]-1} Limit Break.`);
 		} else {
 			if (args[2] > 1) return message.channel.send('Please enter Limit Breaks chronologically, starting from Level 1.');
 		}
 	
-		if (charFile[args[0]].level < levelLocks[args[2]-1]) return message.channel.send(`${charFile[args[0]].name} is level ${charFile[args[0]].level}, but they must be at level ${levelLocks[args[2]-1]} to obtain a level ${args[2]} limit break.`);
+		if (thingDefs[args[0]].level < levelLocks[args[2]-1]) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but they must be at level ${levelLocks[args[2]-1]} to obtain a level ${args[2]} limit break.`);
 	
 		if (args[3] < percentBounds[args[2]-1]) return message.channel.send(`Level ${args[2]} Limit Breaks costs cannot be lower than ${percentBounds[args[2]-1]} LB%.`);
 	
@@ -1275,11 +1326,15 @@ commands.setlb = new Command({
 	
 		if (args[10]) skillDefs.desc = args[10];
 		
-		if (!charFile[args[0]].lb) charFile[args[0]].lb = {};
-		charFile[args[0]].lb[args[2]] = skillDefs;
+		if (!thingDefs[args[0]].lb) thingDefs[args[0]].lb = {};
+		thingDefs[args[0]].lb[args[2]] = skillDefs;
 	
 		message.react('👍');
-		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		if (thingDefs[args[0]].type) {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		} else {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		}
 	}
 })
 
@@ -1583,7 +1638,9 @@ commands.dailychar = new Command({
 		if (!dailyChar[message.guild.id]) {
 			dailyChar[message.guild.id] = Object.keys(charFile)[Math.floor(Math.random() * Object.keys(charFile).length)];
 
-			let authorTxt = charFile[dailyChar[message.guild.id]].originalAuthor ? `<@!${charFile[dailyChar[message.guild.id]].originalAuthor}>` : '<@776480348757557308>'
+			console.log(`${message.guild.name} has set their daily character to ${dailyChar[message.guild.id]}`)
+
+			let authorTxt = charFile[dailyChar[message.guild.id]].owner ? `<@!${charFile[dailyChar[message.guild.id]].owner}>` : '<@776480348757557308>'
 			notice = `${authorTxt}, your character is the daily character for today!`;
 		}
 
@@ -1591,7 +1648,7 @@ commands.dailychar = new Command({
 			if (charFile[dailyChar[message.guild.id]]) {
 				let today = getCurrentDate();
 
-				fs.writeFileSync(dataPath+'/dailychar.txt', JSON.stringify(dailyChar));
+				fs.writeFileSync(dataPath+'/dailycharacter.txt', JSON.stringify(dailyChar));
 
 				let charTxt = `**[${today}]**\n${notice}`
 				let DiscordEmbed = longDescription(charFile[dailyChar[message.guild.id]], charFile[dailyChar[message.guild.id]].level, message.guild.id, message);
@@ -1637,10 +1694,17 @@ commands.setquote = new Command({
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
-		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let thingDefs = ''
+	
+		if (charFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+			thingDefs = charFile;
+		} else if (enemyFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to assign a quote to ${args[0]}.`);
+			thingDefs = enemyFile;
+		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		if (args[2].length > 120) return message.channel.send('This quote is too long!');
 
@@ -1652,11 +1716,15 @@ commands.setquote = new Command({
 			return message.channel.send(`Invalid Quote Type! Try one of these:${quoteTypes}`);
 		}
 
-		if (!charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`]) charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`] = [];
-		charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`].push(args[2]);
+		if (!thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`]) thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`] = [];
+		thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`].push(args[2]);
 
 		message.react('👍');
-		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		if (thingDefs[args[0]].type) {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		} else {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		}
 	}
 })
 
@@ -1685,10 +1753,17 @@ commands.clearquote = new Command({
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
-		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let thingDefs = ''
+	
+		if (charFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+			thingDefs = charFile;
+		} else if (enemyFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to remove a quote to ${args[0]}.`);
+			thingDefs = enemyFile;
+		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		if (!args[1]) {
 			message.channel.send('**[WARNING]**\nAre you sure? **YOU CANNOT GET THESE BACK!**')
@@ -1701,12 +1776,16 @@ commands.clearquote = new Command({
 						m.react('👍');
 						message.react('👍');
 
-						for (const i in quoteTypes) charFile[args[0]].quotes[`${quoteTypes[i]}quote`] = [];
-						fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+						for (const i in quoteTypes) thingDefs[args[0]].quotes[`${quoteTypes[i]}quote`] = [];
+						if (thingDefs[args[0]].type) {
+							fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+						} else {
+							fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+						}
 					} else {
 						m.react('👍');
 						message.react('👍');
-						message.channel.send(`${charFile[args[0]]} will not be cleansed of their quotes.`);
+						message.channel.send(`${thingDefs[args[0]]} will not be cleansed of their quotes.`);
 					}
 				}
 			});
@@ -1723,14 +1802,18 @@ commands.clearquote = new Command({
 			}
 
 			if (args[2]) {
-				if (!charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`]) charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`] = [];
-				charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`].splice(args[2], 1);
+				if (!thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`]) thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`] = [];
+				thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`].splice(args[2], 1);
 			} else {
-				charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`] = [];
+				thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`] = [];
 			}
 
 			message.react('👍');
-			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+			if (thingDefs[args[0]].type) {
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+			} else {
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+			}
 		}
 	}
 })
@@ -1755,9 +1838,17 @@ commands.getquotes = new Command({
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
-		// a LOT of checks :(
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let thingDefs = ''
+	
+		if (charFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+			thingDefs = charFile;
+		} else if (enemyFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to assign a main element to ${args[0]}.`);
+			thingDefs = enemyFile;
+		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		if (args[1]) {
 			if (!utilityFuncs.inArray(args[1].toLowerCase(), quoteTypes)) {
@@ -1768,21 +1859,21 @@ commands.getquotes = new Command({
 				return message.channel.send(`Invalid Quote Type! Try one of these:${quoteTypes}`);
 			}
 
-			if (!charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`] || !charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`][0]) return message.channel.send('This Quote Type has no quotes!');
+			if (!thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`] || !thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`][0]) return message.channel.send('This Quote Type has no quotes!');
 
 			let array = [];
-			for (let i in charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`])
-				array.push({title: `**[${i}]**`, desc: `_"${charFile[args[0]].quotes[`${args[1].toLowerCase()}quote`][i]}"_`});
+			for (let i in thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`])
+				array.push({title: `**[${i}]**`, desc: `_"${thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`][i]}"_`});
 
 			listArray(message.channel, array, 1);
 		} else {
 			let array = [];
 			for (let quote of quoteTypes) {
 				let quoteTxt = '';
-				if (!charFile[args[0]].quotes[`${quote}quote`])
+				if (!thingDefs[args[0]].quotes[`${quote}quote`])
 					quoteTxt = 'No quotes for this section!';
 				else
-					quoteTxt = selectQuote(charFile[args[0]], quote, true);
+					quoteTxt = selectQuote(thingDefs[args[0]], quote, true);
 
 				array.push({title: `${quote.charAt(0).toUpperCase()+quote.slice(1)}`, desc: quoteTxt});
 			}

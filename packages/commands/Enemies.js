@@ -747,3 +747,104 @@ commands.searchenemies = new Command({
 		listArray(message.channel, array);
 	}
 })
+
+commands.purgeenemy = new Command({
+	desc: `Deletes an enemy. **YOU CANNOT GET IT BACK AFTER DELETION!**`,
+	section: 'enemies',
+	aliases: ['unregisterenemy', 'enemypurge', 'enemyunregister', 'deleteenemy', 'enemydelete'],
+	args: [
+		{
+			name: "Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (!utilityFuncs.isAdmin(message)) return message.channel.send("You do not have sufficient permissions to delete enemies.");
+		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
+
+		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy name.`);
+
+		message.channel.send(`Are you **sure** you want to delete ${enemyFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this enemy.\n**Y/N**`);
+
+		var givenResponce = false
+		var collector = message.channel.createMessageCollector({ time: 15000 });
+		collector.on('collect', m => {
+			if (m.author.id == message.author.id) {
+				if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
+					message.channel.send(`${enemyFile[args[0]].name} has been erased from existance.`)
+					delete enemyFile[args[0]]
+
+					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, 4));
+				} else
+					message.channel.send(`${enemyFile[args[0]].name} will not be deleted.`);
+				
+				givenResponce = true
+				collector.stop()
+			}
+		});
+		collector.on('end', c => {
+			if (givenResponce == false)
+				message.channel.send(`No response given.\n${enemyFile[args[0]].name} will not be deleted.`);
+		});
+	}
+})
+
+commands.randenemy = new Command({
+	desc: `Get a random enemy.`,
+	section: 'fun',
+	aliases: ['randomenemy'],
+	args: [],
+	func: (message, args) => {
+		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
+		
+		let enemies = Object.keys(enemyFile);
+
+		enemies = enemies.filter(enemy => enemyFuncs.encounteredEnemy(enemy, message.guild.id));
+		if (enemies.length == 0) return message.channel.send(`No enemies that have been encountered are added yet!`);
+
+		let enemy = enemies[Math.floor(Math.random() * enemies.length)];
+
+		let DiscordEmbed = longDescription(enemyFile[enemy], enemyFile[enemy].level, message.guild.id, message);
+		if (enemyFile[enemy].image && (enemyFile[enemy].image.includes(`https://`) || enemyFile[enemy].image.includes(`http://`))) {
+			message.channel.send({content: `${message.author.username}, you rolled a ${elementEmoji[enemyFile[enemy].mainElement]} ${enemyFile[enemy].name}!`, embeds: [DiscordEmbed]});
+		} else {
+			if (enemyFile[enemy].image && enemyFile[enemy].image != '') {
+				message.channel.send({content: `${message.author.username}, you rolled a ${elementEmoji[enemyFile[enemy].mainElement]} ${enemyFile[enemy].name}!`, embeds: [DiscordEmbed], files: [imageFile(enemyFile[enemy])]});
+			} else {
+				message.channel.send({content: `${message.author.username}, you rolled a ${elementEmoji[enemyFile[enemy].mainElement]} ${enemyFile[enemy].name}!`, embeds: [DiscordEmbed]});
+			}
+		}
+	}
+})
+
+commands.dailyenemy = new Command({
+	desc: 'Any random enemy can be set as a daily one! Test your luck to see if one you desire is here!',
+	section: "fun",
+	args: [],
+	func: (message, args) => {
+		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
+
+		if (Object.keys(enemyFile).length == 0) return message.channel.send(`No enemies have been added yet!`);
+		if (!dailyEnemy) dailyEnemy = {};
+
+		let notice = 'Here is the daily enemy, again.'
+		if (!dailyEnemy[message.guild.id]) {
+			dailyEnemy[message.guild.id] = Object.keys(enemyFile)[Math.floor(Math.random() * Object.keys(enemyFile).length)];
+
+			notice = `The enemy for today is ${enemyFile[dailyEnemy[message.guild.id]].name}!`;
+		}
+
+		setTimeout(function() {
+			if (enemyFile[dailyEnemy[message.guild.id]]) {
+				let today = getCurrentDate();
+
+				fs.writeFileSync(dataPath+'/dailyenemy.txt', JSON.stringify(dailyEnemy));
+
+				let enemyTxt = `**[${today}]**\n${notice}`
+				let DiscordEmbed = longDescription(enemyFile[dailyEnemy[message.guild.id]], enemyFile[dailyEnemy[message.guild.id]].level, message.guild.id, message);
+				message.channel.send({content: enemyTxt, embeds: [DiscordEmbed]});
+			}
+		}, 500);
+	}
+})

@@ -98,6 +98,13 @@ let tempCharacter = fs.readFileSync(dataPath+'/dailycharacter.txt', {flag: 'as+'
 if (tempCharacter && tempCharacter != '')
 dailyChar = JSON.parse(tempCharacter);
 
+// Daily Enemy - Resets at midnight
+dailyEnemy = {}
+
+let tempEnemy = fs.readFileSync(dataPath+'/dailyenemy.txt', {flag: 'as+'});
+if (tempEnemy && tempEnemy != '')
+dailyEnemy = JSON.parse(tempEnemy);
+
 // Midnight Moment
 function midnightInMS() {
     return new Date().setHours(24, 0, 0, 0) - new Date().getTime()
@@ -110,6 +117,7 @@ setTimeout(function() {
 	dailyWeapon = {};
 	dailyArmor = {};
 	dailyChar = {};
+	dailyEnemy = {};
 
 	fs.writeFileSync(dataPath+'/dailyquote.txt', '');
 	fs.writeFileSync(dataPath+'/dailyskill.txt', '');
@@ -117,6 +125,7 @@ setTimeout(function() {
 	fs.writeFileSync(dataPath+'/dailyweapon.txt', '');
 	fs.writeFileSync(dataPath+'/dailyarmor.txt', '');
 	fs.writeFileSync(dataPath+'/dailycharacter.txt', '');
+	fs.writeFileSync(dataPath+'/dailyenemy.txt', '');
 }, midnightInMS());
 
 // Elements

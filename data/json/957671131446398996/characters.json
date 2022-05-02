@@ -24007,19 +24007,33 @@
             "baseluk": 3
         },
         "affinities": {
-            "weak": [
-                "psychic",
-                "electric"
-            ],
-            "resist": [
-                "strike"
-            ],
-            "block": [
-                "curse",
-                "gravity"
-            ],
+            "weak": [],
+            "resist": [],
+            "block": [],
             "repel": [],
-            "drain": []
+            "drain": [],
+            "superweak": [
+                "psychic",
+                "electric",
+                "strike",
+                "curse",
+                "gravity",
+                "slash",
+                "pierce",
+                "explode",
+                "fire",
+                "water",
+                "ice",
+                "wind",
+                "earth",
+                "grass",
+                "poison",
+                "nuclear",
+                "metal",
+                "bless",
+                "spirit",
+                "sound"
+            ]
         },
         "autolearn": {
             "true": true
@@ -24051,7 +24065,28 @@
             "consolequote": [],
             "imfinequote": []
         },
-        "lb": {}
+        "lb": {},
+        "statusaffinities": {
+            "weak": [
+                "burn",
+                "bleed",
+                "freeze",
+                "paralyze",
+                "dizzy",
+                "sleep",
+                "despair",
+                "brainwash",
+                "fear",
+                "rage",
+                "ego",
+                "silence",
+                "dazed",
+                "hunger",
+                "illness",
+                "blind",
+                "happy"
+            ]
+        }
     },
     "Sky(B)": {
         "name": "Sky(B)",
