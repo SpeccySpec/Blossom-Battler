@@ -2012,7 +2012,6 @@ commands.setbioinfo = new Command({
 		{
 			name: "Info",
 			type: "Word",
-			forced: true
 		}
 	],
 	func: (message, args) => {
@@ -2023,6 +2022,8 @@ commands.setbioinfo = new Command({
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 
 		if (!utilityFuncs.isAdmin(message) && !charFile[args[0]].owner == message.author.id) return message.channel.send('You are not the owner of this character!');
+
+		if (args[1].toLowerCase() != 'appearance' && !args[2]) return message.channel.send('You need to enter a value to set!');
 
 		switch (args[1].toLowerCase()) {
 			case "fullname":
@@ -2035,7 +2036,7 @@ commands.setbioinfo = new Command({
 			case "fears":
 			case "voice":
 			case "theme":
-				if (args[1].toLowerCase() == 'none') args[2] = '';
+				if (args[2].toLowerCase() == 'none') args[2] = '';
 				charFile[args[0]].bio[args[1].toLowerCase()] = args[2];
 				break;
 			case "weight":
@@ -2063,6 +2064,14 @@ commands.setbioinfo = new Command({
 				break;
 			case "gender":
 				charFile[args[0]].bio.age = args[2].toLowerCase() != "male" && args[2].toLowerCase() != "female" ? 'other' : args[2].toLowerCase()
+			case "appearance":
+				if (args[2].toLowerCase() != 'none') {
+					if (!checkImage(message, args[2], message.attachments.first())) return message.channel.send(`${args[2]} is not a valid image.`);
+					charFile[args[0]].bio.appearance = checkImage(message, args[2], message.attachments.first());
+				} else {
+					charFile[args[0]].bio.appearance = '';
+				}
+				break;
 			default:
 				if (!charFile[args[0]].bio.custom) charFile[args[0]].bio.custom = {};
 				if (args[2].toLowerCase() == 'none') args[2] = '';
