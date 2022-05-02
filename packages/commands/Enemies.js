@@ -870,7 +870,13 @@ commands.setimage = new Command({
 		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You do not have permission to use this command.`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy name.`);
 
-		if (!checkImage(message, args[1], message.attachments.first())) return message.channel.send(`${args[1]} is not a valid image.`);
+		if (args[1].toLowerCase() != 'none')
+			if (!checkImage(message, args[1], message.attachments.first())) return message.channel.send(`${args[1]} is not a valid image.`);
+		else {
+			enemyFile[args[0]].image = '';
+			message.channel.send(`${args[0]}'s image has been removed.`);
+			return fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, 4));
+		}
 
 		enemyFile[args[0]].image = checkImage(message, args[1], message.attachments.first());
 
