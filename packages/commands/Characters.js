@@ -126,6 +126,7 @@ commands.changetruename = new Command({
 		if (args[1] == "" || args[1] == " ") return message.channel.send('Invalid new character name! Please enter an actual name.');
 
 		if (charFile[args[1]]) return message.channel.send(`${args[1]} already exists!`);
+		if (args[0] === args[1]) return message.channel.send("...What's the point...?");
 
 		charFile[args[1]] = charFile[args[0]];
 		delete charFile[args[0]];
@@ -162,6 +163,7 @@ commands.renamechar = new Command({
 		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
 
 		if (args[1] == "" || args[1] == " ") return message.channel.send('Invalid new character name! Please enter an actual name.');
+		if (args[0] === args[1]) return message.channel.send("...What's the point...?");
 
 		charFile[args[0]].name = args[1];
 
@@ -227,7 +229,7 @@ commands.listchars = new Command({
 			}
 
 			if ((!args[0] || args[0].toLowerCase() === 'none') && charFile[i].mainElement != args[0].toLowerCase()) continue;
-			if (!args[1] && message.mentions.users.first() && skillFile[i].type != message.mentions.users.first().id) continue;
+			if (!args[1] && message.mentions.users.first() && charFile[i].type != message.mentions.users.first().id) continue;
 			array.push({title: `${elementEmoji[charFile[i].mainElement]}${charFile[i].name} (${i})`, desc: descTxt});
 		}
 
@@ -1743,6 +1745,109 @@ commands.setbioinfo = new Command({
 				break;
 		}
 		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+// ae
+commands.exportchar = new Command({
+	desc: "Exports a character so you can use them in another server!",
+	aliases: ['movechar', 'keepchar'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let userdata = setUpUserData(message.author.id);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.isAdmin(message) && !charFile[args[0]].owner == message.author.id) return message.channel.send('You are not the owner of this character!');
+
+		// Alright, let's get the character!
+		userdata.exports[args[0]] = charFile[args[0]];
+		message.channel.send(`Exported ${charFile[args[0]]}! Now you can import them to other servers using "exportchar"!`);
+
+		fs.writeFileSync(`${dataPath}/userdata/${message.author.id}.json`, JSON.stringify(settings, null, 4));
+	}
+})
+
+commands.exportname = new Command({
+	desc: "Changes an export character's truename from the ''exportchar'' command.",
+	aliases: ['exportcharname', 'exportnamechance'],
+	section: "characters",
+	args: [
+		{
+			name: "Export",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "New Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+		let userdata = setUpUserData(message.author.id);
+		
+		if (!userdata.exports[args[0]]) {
+			let charList = '```diff\n';
+			for (const i in userdata.exports) charList += `- ${i}\n`;
+			charList += '```'
+
+			return message.channel.send(`${args[0]} has not been exported! Did you mean:${charList}`);
+		}
+
+		// Check for Duplicates
+		userdata.exports[args[1]] = objClone(userdata.exports[args[0]]);
+		delete userdata.exports[args[0]]
+
+		// Alright, let's get the character's name changed.
+		message.channel.send(`Changed ${args[0]} to ${args[1]}.`);
+		fs.writeFileSync(`${dataPath}/userdata/${message.author.id}.json`, JSON.stringify(settings, null, 4));
+	}
+})
+
+commands.importchar = new Command({
+	desc: "Imports a character from the ''exportchar'' command.",
+	aliases: ['takechar', 'enterchar'],
+	section: "characters",
+	args: [
+		{
+			name: "Export",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let userdata = setUpUserData(message.author.id);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		
+		if (!userdata.exports[args[0]]) {
+			let charList = '```diff\n';
+			for (const i in userdata.exports) charList += `- ${i}\n`;
+			charList += '```'
+
+			return message.channel.send(`${args[0]} has not been exported! Did you mean:${charList}`);
+		}
+
+		// Check for Duplicates
+		let charname = args[0];
+		while (charFile[charname]) charname = `${args[0]}-Import`;
+
+		// Alright, let's get the character!
+		charFile[charname] = userdata.exports[args[0]];
+		message.channel.send(`Imported ${userdata.exports[args[0]].name} as ${charname}! Now you can use them in this server!`);
+
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })

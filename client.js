@@ -287,9 +287,12 @@ statusEffects = [
 	"hunger",
 	"illness",
 	"infatuation",
-	"mirror",
 	"blind",
-	"confusion"
+	"confusion",
+
+	// Positive Statusses
+	"happy",
+	"mirror"
 ]
 
 statusNames = {
@@ -310,9 +313,12 @@ statusNames = {
 	hunger: 'Hunger',
 	illness: 'Illness',
 	infatuation: 'Infatuation',
-	mirror: 'Mirror',
 	blind: 'Blindness',
-	confusion: 'Confusion'
+	confusion: 'Confusion',
+
+	// Positive Statusses
+	happy: 'Happiness',
+	mirror: 'Mirror'
 }
 
 statusEmojis = {
@@ -534,6 +540,106 @@ getServerUser = (user, message) => {
     return userTxt;
 }
 
+setUpSettings = (guild) => {
+	let settings = setUpFile(`${dataPath}/json/${guild}/settings.json`)
+
+	if (Object.keys(settings).length === 0) {
+		settings = {
+			prefix: 'rpg!',
+			mechanics: {
+				limitbreaks: false,
+				teamcombos: false,
+				onemores: false,
+				stataffinities: false,
+				charms: false,
+				leaderskills: false,
+				transformations: false,
+				technicaldamage: false,
+			},
+			caps: {
+				levelcap: 99,
+				hpmpcap: 70,
+				statcap: 99,
+				basestatcap: 10,
+				bstcap: 45,
+				skillamount: 8,
+				transformations: {
+					hpmpcap: 10,
+					statcap: 99,
+					basestatcap: 10,
+					bstcap: 15
+				}
+			},
+			rates: {
+				xprate: 1,
+				trustrate: 1,
+				goldchance: 0.01,
+				mainelement: 1.1,
+				crit: 1.5,
+				tech: 1.1,
+				affinities: {
+					deadly: 4.2,
+					superweak: 2.1,
+					weak: 1.5,
+					resist: 0.5,
+					repel: 1,
+					drain: 1,
+				}
+			},
+			formulas: {
+				damageFormula: "persona",
+				levelUpFormula: "original",
+				xpCalcFormula: "original"
+			},
+			currency: 'BB Token',
+			pvpstuff: {
+				none: {},
+				metronome: {},
+				randskills: {},
+				randstats: {},
+				charfuck: {},
+				enemies: {}
+			},
+			banned: [],
+			themes: {
+				battle: [],
+				advantage: [],
+				disadvantage: [],
+				bossfight: [],
+				miniboss: [],
+				strongfoe: [],
+				finalboss: [],
+				colosseum: [],
+				colosseumstrong: [],
+				pvp: [],
+				victory: [],
+				colosseumvictory: [],
+				loss: []
+			},
+			encountered: [],
+			desc: ""
+		}
+
+		fs.writeFileSync(`${dataPath}/json/${guild}/settings.json`, JSON.stringify(settings, null, 4))
+	}
+
+	return settings
+}
+
+setUpUserData = (user) => {
+	let userdata = setUpFile(`${dataPath}/userdata/${user}.json`)
+
+	if (Object.keys(userdata).length === 0) {
+		userdata = {
+			exports = {}
+		}
+
+		fs.writeFileSync(`${dataPath}/userdata/${user}.json`, JSON.stringify(settings, null, 4))
+	}
+
+	return userdata
+}
+
 const backButton = new Discord.MessageButton({
 	style: 'SECONDARY',
 	label: 'Back',
@@ -724,92 +830,6 @@ for (const i in folders) {
 	for (const file of files) {
 		require(`${packPath}/${folders[i]}/${file}`);
 	}
-}
-
-setUpSettings = (guild) => {
-	let settings = setUpFile(`${dataPath}/json/${guild}/settings.json`)
-
-	if (Object.keys(settings).length === 0) {
-		settings = {
-			prefix: 'rpg!',
-			mechanics: {
-				limitbreaks: false,
-				teamcombos: false,
-				onemores: false,
-				stataffinities: false,
-				charms: false,
-				leaderskills: false,
-				transformations: false,
-				technicaldamage: false,
-			},
-			caps: {
-				levelcap: 99,
-				hpmpcap: 70,
-				statcap: 99,
-				basestatcap: 10,
-				bstcap: 45,
-				skillamount: 8,
-				transformations: {
-					hpmpcap: 10,
-					statcap: 99,
-					basestatcap: 10,
-					bstcap: 15
-				}
-			},
-			rates: {
-				xprate: 1,
-				trustrate: 1,
-				goldchance: 0.01,
-				mainelement: 1.1,
-				crit: 1.5,
-				tech: 1.1,
-				affinities: {
-					deadly: 4.2,
-					superweak: 2.1,
-					weak: 1.5,
-					resist: 0.5,
-					repel: 1,
-					drain: 1,
-				}
-			},
-			formulas: {
-				damageFormula: "persona",
-				levelUpFormula: "original",
-				xpCalcFormula: "original"
-			},
-			currency: 'BB Token',
-			pvpstuff: {
-				none: {},
-				metronome: {},
-				randskills: {},
-				randstats: {},
-				charfuck: {},
-				enemies: {}
-			},
-			banned: [],
-			themes: {
-				battle: [],
-				advantage: [],
-				disadvantage: [],
-				bossfight: [],
-				miniboss: [],
-				strongfoe: [],
-				finalboss: [],
-				colosseum: [],
-				colosseumstrong: [],
-				pvp: [],
-				victory: [],
-				colosseumvictory: [],
-				loss: []
-			},
-			encountered: [],
-			desc: ""
-		}
-
-		fs.writeFileSync(`${dataPath}/json/${guild}/settings.json`, JSON.stringify(settings, null, 4))
-	}
-
-	return settings
 }
 
 client.on("guildCreate", (guild) => {

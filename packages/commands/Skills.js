@@ -1191,7 +1191,8 @@ commands.liststatus = new Command({
 			infatuation: '🌀50% chance to hault attack. Stacks with other status effects.',
 			confusion: '🌀50% chance to damage self when attacking. Stacks with other status effects.',
 			mirror: '💥Immobilized for 3 turns. Repel magic skills.',
-			blind: '💥PRC and AGL halved.'
+			blind: '💥PRC and AGL halved.',
+			happy: '🌀Positive Status Effect. LUK and AGL increased, PRC decreased. Can still be teched on your opponents.'
 		}
 
 		for (const i in statusEffects) {
