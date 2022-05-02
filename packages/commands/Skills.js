@@ -658,6 +658,7 @@ commands.editskill = new Command({
 							weaponFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/weapons.json`);
 							armorFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/armors.json`);
 							charFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/characters.json`);
+							enemyFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/enemies.json`);
 
 							for (item in itemFile) {
 								if (itemFile[item].skill == args[0]) {
@@ -685,6 +686,17 @@ commands.editskill = new Command({
 									for (skill in charFile[character].skills) {
 										if (charFile[character].skills[skill] == args[0]) {
 											charFile[character].skills[skill] = args[2];
+										}
+									}
+								}
+							}
+							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/characters.json`, JSON.stringify(charFile, null, '    '));
+
+							for (enemy in enemyFile) {
+								if (enemyFile[enemy].skills) {
+									for (skill in enemyFile[enemy].skills) {
+										if (enemyFile[enemy].skills[skill] == args[0]) {
+											enemyFile[enemy].skills[skill] = args[2];
 										}
 									}
 								}
@@ -1037,6 +1049,7 @@ commands.purgeskill = new Command({
 							weaponFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/weapons.json`);
 							armorFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/armors.json`);
 							charFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/characters.json`);
+							enemyFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/enemies.json`);
 
 							for (item in itemFile) {
 								if (itemFile[item].skill == args[0]) {
@@ -1070,6 +1083,18 @@ commands.purgeskill = new Command({
 								}
 							}
 							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/characters.json`, JSON.stringify(charFile, null, '    '));
+
+							for (enemy in enemyFile) {
+								if (enemyFile[enemy].skills) {
+									for (skill in enemyFile[enemy].skills) {
+										if (enemyFile[enemy].skills[skill] == args[0]) {
+											enemyFile[enemy].skills[skill] = '';
+										}
+									}
+									enemyFile[enemy].skills = enemyFile[enemy].skills.filter(skill => skill != '');
+								}
+							}
+							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
 						}
 
 						fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));

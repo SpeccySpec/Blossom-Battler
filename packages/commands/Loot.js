@@ -143,6 +143,18 @@ commands.renameloot = new Command({
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/loot.json`, JSON.stringify(lootFile, null, 4))
 
+        let directoryList = fs.readdirSync(`${dataPath}/json`).filter(file => !isNaN(file));
+						
+		for (directory in directoryList) {
+            enemyFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/enemies.json`)
+
+            for (enemy in enemyFile) {
+                if (enemyFile[enemy].loot == args[0]) enemyFile[enemy].loot = args[1]
+            }
+
+            fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/enemies.json`, JSON.stringify(enemyFile, null, 4))
+        }
+
         message.channel.send(`${args[0]} has been renamed to ${args[1]}:`)
     }
 })
@@ -253,6 +265,17 @@ commands.purgeloot = new Command({
                     delete lootFile[args[0]]
 
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/loot.json`, JSON.stringify(lootFile, null, 4));
+
+                    let directoryList = fs.readdirSync(`${dataPath}/json`).filter(file => !isNaN(file));
+                    for (directory in directoryList) {
+                        enemyFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/enemies.json`)
+            
+                        for (enemy in enemyFile) {
+                            if (enemyFile[enemy].loot == args[0]) enemyFile[enemy].loot = ''
+                        }
+            
+                        fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/enemies.json`, JSON.stringify(enemyFile, null, 4))
+                    }
                 } else
                     message.channel.send(`${lootFile[args[0]].name} will not be deleted.`);
 

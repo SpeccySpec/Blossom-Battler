@@ -114,14 +114,16 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
 }
 
 briefDescription = (char) => {
-	let statDesc = `${char.hp}/${char.maxhp}HP\n${char.mp}/${char.maxmp}MP\n`
+	let statDesc = ''
+	if (!char.type) statDesc += `${char.hp}/${char.maxhp}HP\n${char.mp}/${char.maxmp}MP\n`
+	else statDesc += `${char.hp}HP\n${char.mp}MP\n${char.xp}XP\n`
 	for (const i in char.stats) {
 		statDesc += `\n${char.stats[i]}${i.toUpperCase()}`
 	}
 
 	return new Discord.MessageEmbed()
-		.setColor(elementColors[char.mainElement])
-		.setTitle(`${elementEmoji[char.mainElement]}${char.name}'s Stats:`)
+		.setColor(!char.type ? elementColors[char.mainElement] : enemyTypeColors[char.type])
+		.setTitle(`${!char.type ? elementEmoji[char.mainElement] : ''}${char.name}'s Stats:`)
 		.setDescription(statDesc)
 }
 
@@ -181,15 +183,21 @@ longDescription = (charDefs, level, server, message) => {
 	let userTxt = getServerUser(char.owner, message);
 
 	let DiscordEmbed = new Discord.MessageEmbed()
-		.setColor(elementColors[char.mainElement])
-		.setTitle(`${elementEmoji[char.mainElement]}${char.name} ${dispLevel} *(${userTxt})*`)
+		.setColor(!char.type ? elementColors[char.mainElement] : enemyTypeColors[char.type])
+		.setTitle(`${!char.type ? elementEmoji[char.mainElement] : ''}${char.name} ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
 
-	if (char.leaderskill && settings.mechanics.leaderskills) DiscordEmbed.setDescription(`**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} toward ${char.leaderskill.var1.toUpperCase()}`);
+	let desc = ''
+	if (char.leaderskill && settings.mechanics.leaderskills) desc += `**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} toward ${char.leaderskill.var1.toUpperCase()}`
+	if (char.journal) desc += `\n${char.journal ? `\n\n${char.journal}` : ''}`
+
+	DiscordEmbed.setDescription(desc);
 
 	// Here come the various fields!
 
 	// Stats
-	let statDesc = `Level ${char.level}\n${char.hp}/${char.maxhp}HP\n${char.mp}/${char.maxmp}${char.mpMeter ? char.mpMeter[1] : 'MP'}\n${char.xp}/${char.maxxp}XP\n`;
+	let statDesc = ''
+	if (!char.type) statDesc += `Level ${char.level}\n${char.hp}/${char.maxhp}HP\n${char.mp}/${char.maxmp}${char.mpMeter ? char.mpMeter[1] : 'MP'}\n${char.xp}/${char.maxxp}XP\n`;
+	else statDesc += `Level ${char.level}\n${char.hp}HP\n${char.mp}MP\n${char.xp}XP\n`;
 	for (const i in char.stats) statDesc += `\n${char.stats[i]}${i.toUpperCase()}`;
 	DiscordEmbed.fields.push({ name: 'Stats', value: statDesc, inline: true });
 	
@@ -262,6 +270,87 @@ longDescription = (charDefs, level, server, message) => {
 	}
 	if (charAffs != '') DiscordEmbed.fields.push({ name: 'Affinities', value: charAffs, inline: true });
 
+	let enmLoot = ``
+	if (char.loot && char.loot != '') {
+		let lootFile = setUpFile(`${dataPath}/json/${server}/loot.json`)
+
+		if (lootFile[char.loot]) {
+			lootDefs = lootFile[char.loot]
+
+			itemFile = setUpFile(`${dataPath}/json/${server}/items.json`)
+			weaponFile = setUpFile(`${dataPath}/json/${server}/weapons.json`)
+			armorFile = setUpFile(`${dataPath}/json/${server}/armors.json`)
+
+			for (const i in lootDefs.items) {
+				if (i % 4 == 0) enmLoot += `- **${lootDefs.items[i]}:** `
+				else if (i % 4 == 1) {
+					switch (lootDefs.items[i-1]) {
+						case "item":
+							enmLoot += `${itemFile[lootDefs.items[i]].name ? itemFile[lootDefs.items[i]].name : lootDefs.items[i]} `;
+							break;
+						case "weapon":
+							enmLoot += `${weaponFile[lootDefs.items[i]].name ? weaponFile[lootDefs.items[i]].name : lootDefs.items[i]} `;
+							break;
+						case "armor":
+							enmLoot += `${armorFile[lootDefs.items[i]].name ? armorFile[lootDefs.items[i]].name : lootDefs.items[i]} `;
+							break;
+					}
+				}
+				else if (i % 4 == 2) enmLoot += `(${lootDefs.items[i]}x)\n`;
+			}
+		}
+	}
+	if (enmLoot != '') DiscordEmbed.fields.push({ name: 'Loot', value: enmLoot, inline: true });
+
+	if (char.negotiateDefs && char.negotiateDefs.qualities) {
+		let enmQualities = char.negotiateDefs.qualities
+		let qualityString = ''
+		
+		if (enmQualities.atk)
+			qualityString += `${enmQualities.atk} ATK\n`
+		if (enmQualities.mag)
+			qualityString += `${enmQualities.mag} MAG\n`
+		if (enmQualities.def)
+			qualityString += `${enmQualities.def} DEF\n`
+
+		if (enmQualities.skill) {
+			let specialskill = ''
+			if (!skillFile[enmQualities.skill]) {
+				specialskill += `🛑 Invalid Skill (${enmQualities.skill})\n`;
+			} else {
+				let type = typeof skillFile[enmQualities.skill].type == 'object' ? elementEmojis[skillFile[enmQualities.skill].type[0]] : elementEmoji[skillFile[enmQualities.skill].type];
+				specialskill += `${type}${skillFile[enmQualities.skill].name}\n`;
+			}
+			qualityString += `\n**Special**\n${specialskill}`
+		}
+
+		if (qualityString != '') DiscordEmbed.fields.push({ name: `Pet Qualities`, value: qualityString, inline: true });
+	}
+
+	if (char.negotiate) {
+		let negDefs = char.negotiate
+		let negString = ''
+		for (const i in char.negotiate)
+			negString += `\n**${i}**: **${negDefs[i].name}**\n*${negDefs[i].desc}*\n*+${negDefs[i].convince ? negDefs[i].convince : 0}%*`;
+		
+		if (negString != '') DiscordEmbed.fields.push({ name: `Pacifying Tactics`, value: negString, inline: true });
+	}
+
+	if (char.image && char.image != '') {
+		let file = ''
+		if (char.image.includes('https://') || char.image.includes('http://')) {
+			DiscordEmbed.setThumbnail(char.image)
+		} else {
+			file = new Discord.MessageAttachment(`${dataPath}/images/enemies/${char.image}.png`); 
+			DiscordEmbed.setThumbnail(`attachment://${char.image}.png`)
+		}
+	}
+
 	// Ae
 	return DiscordEmbed;
+}
+
+imageFile = (char) => {
+	let file = new Discord.MessageAttachment(`${dataPath}/images/enemies/${char.image}.png`);
+	return file
 }

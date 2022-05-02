@@ -49,7 +49,7 @@ commands.registerchar = new Command({
 			forced: true
 		},
 		{
-			name: "Base Inteligence",
+			name: "Base Intelligence",
 			type: "Num",
 			forced: true
 		},
@@ -78,6 +78,12 @@ commands.registerchar = new Command({
 			}
 		}
 
+		let enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (enmFile[args[0]]) {
+			message.channel.send(`${enmFile[0]} already exists as an enemy. I'll add (Character) to the end of the name for you.`);
+			enmFile[0] += '(Character)';
+		}
+
 		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements)) message.channel.send({content: 'Please enter a valid element for **Main Element!**', embeds: [elementList()]});
 
 		if ((args[2] + args[3]) > settings.caps.hpmpcap) return message.channel.send(`The maximum total points for HP and MP is 70! Currently, you have ${args[2]+args[3]}.`);
@@ -100,12 +106,12 @@ commands.registerchar = new Command({
 })
 
 commands.changetruename = new Command({
-	desc: `Rename a character's true name.`,
+	desc: `Rename a character/enemy's true name.`,
 	aliases: ['changetruename', 'changename', 'changenamechange'],
 	section: "characters",
 	args: [
 		{
-			name: "Character Name",
+			name: "Name",
 			type: "Word",
 			forced: true
 		},
@@ -117,21 +123,45 @@ commands.changetruename = new Command({
 	],
 	func: (message, args) => {
 		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
-		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		if (!charFile[args[0]]) return message.channel.send(`${args[0]} does not exist!`);
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let thingDefs = ''
+
+		if (charFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+			thingDefs = charFile;
+		} else if (enemyFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to rename ${args[0]}.`);
+			thingDefs = enemyFile;
+		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		if (args[1] == "" || args[1] == " ") return message.channel.send('Invalid new character name! Please enter an actual name.');
 
-		if (charFile[args[1]]) return message.channel.send(`${args[1]} already exists!`);
+		if (thingDefs[args[1]]) return message.channel.send(`${args[1]} already exists!`);
 		if (args[0] === args[1]) return message.channel.send("...What's the point...?");
 
-		charFile[args[1]] = charFile[args[0]];
-		delete charFile[args[0]];
+		if (thingDefs[args[0]].type) {
+			if (charFile[args[1]]) return message.channel.send(`${args[1]} already exists as a character! I cannot let you rename the enemy for access reasons.`);
+		} else {
+			if (enemyFile[args[1]]) return message.channel.send(`${args[1]} already exists as an enemy! I cannot let you rename the character for access reasons.`);
+		}
 
-		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		thingDefs[args[1]] = thingDefs[args[0]];
+		delete thingDefs[args[0]];
+
+		if (thingDefs[args[1]].type) {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+			let settings = setUpSettings(message.guild.id);
+			for (i in settings.encountered) {
+				if (settings.encountered[i] == args[0]) settings.encountered[i] = args[1];
+			}
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, '    '));
+		} else {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		}
+
 		message.channel.send(`${args[0]} has been renamed to ${args[1]}!`);
 	}
 })
@@ -313,7 +343,7 @@ commands.hidechar = new Command({
 
 		charFile[args[0]].hidden = !charFile[args[0]].hidden;
 		message.channel.send(`👍 ${charFile[args[0]].name}'s visibility was toggled ${charFile[args[0]].hidden ? "on" : "off"}.`)
-		fs.writeFileSync(`${dataPath}/json/${guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
 

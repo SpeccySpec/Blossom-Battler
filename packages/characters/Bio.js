@@ -42,10 +42,15 @@ longBio = (char, server) => {
 	if (char.bio.voice) finalTxt += `**<Voice>** ${char.bio.voice}\n`;
 	if (char.bio.theme) finalTxt += `**<Theme(s)>** ${char.bio.theme}\n`;
 
-	return new Discord.MessageEmbed()
+
+	let embed = new Discord.MessageEmbed()
 		.setColor('#12de6a')
 		.setTitle(`${char.name}'s Bio`)
 		.setDescription(finalTxt)
+
+		if (char.bio.appearance) embed.setThumbnail(char.bio.appearance);
+
+	return embed;
 }
 
 shortBio = (char, sect, server) => {

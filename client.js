@@ -439,6 +439,21 @@ costTypes = [
 
 quoteTypes = ['melee', 'phys', 'mag', 'allyatk', 'lb', 'tc', 'strong', 'badatk', 'landed', 'miss', 'superweak', 'weak', 'hurt', 'resist', 'block', 'repel', 'drain', 'dodge', 'kill', 'pacify', 'allydeath', 'heal', 'helped', 'console', 'imfine', 'lvl']
 
+enemyTypes = [
+	'miniboss',
+	'boss',
+	'bigboss',
+	'deity'
+]
+
+enemyTypeColors = {
+	none: '#00FF24',
+	miniboss: '#F6FF00',
+	boss: '#FF9000',
+	bigboss: '#FF0000',
+	deity: '#FFFFFF'
+}
+
 getPrefix = (server) => {
 	let settings = setUpSettings(server)
 	return settings['prefix']

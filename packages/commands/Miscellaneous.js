@@ -8,7 +8,8 @@ const categories = {
 	chests: "Chests for storing whatever item, weapon or armor you want! Or to get some goodies.",
 	shops: "Need Items? Open shops and sell them!",
 	skills: "Can't fight without the various attacks now, can ya?",
-	characters: "Characters! The ones who will fell evil and succeed in their quests! I hope.",
+	characters: "Characters! The ones who will feel evil and succeed in their quests! I hope.",
+	enemies: "Enemies! The ones that you will fight to the death! I hope you don't get killed!",
 	battle: "The main part of Bloom Battler is well... the battles of course!",
 	all: "All of the existing commands"
 }

@@ -588,22 +588,9 @@ module.exports = {
 	},
 	
 	encounteredEnemy: function(enmName, server) {
-		var servPath = dataPath+'/Server Settings/server.json'
-        var servRead = fs.readFileSync(servPath);
-        var servFile = JSON.parse(servRead);
+		let settings = setUpSettings(server)
 		
-		if (!servFile[server].encountered) {
-			servFile[server].encountered = []
-			fs.writeFileSync(servPath, JSON.stringify(servFile, null, '    '));
-			return false
-		}
-		
-		for (const i in servFile[server].encountered) {
-			if (servFile[server].encountered[i] == enmName)
-				return true;
-		}
-		
-		return false
+		return settings.encountered.includes(enmName)
 	},
 
 	makePet: function(enm) {

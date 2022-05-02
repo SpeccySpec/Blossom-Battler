@@ -5455,7 +5455,8 @@
                 "status": "poison",
                 "statuschance": 10
             }
-        }
+        },
+        "hidden": true
     },
     "Sun": {
         "name": "Sun",
