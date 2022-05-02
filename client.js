@@ -57,7 +57,7 @@ http = require('http');
 hastebin = require('hastebin-gen');
 
 // Daily Quote - Resets at midnight
-dailyQuote = 'none'
+dailyQuote = {}
 
 let tempQuote = fs.readFileSync(dataPath+'/dailyquote.txt', {flag: 'as+'});
 if (tempQuote && tempQuote != '')
@@ -105,19 +105,27 @@ let tempEnemy = fs.readFileSync(dataPath+'/dailyenemy.txt', {flag: 'as+'});
 if (tempEnemy && tempEnemy != '')
 dailyEnemy = JSON.parse(tempEnemy);
 
+// Daily Enemy Quote - Resets at midnight
+dailyEnemyQuote = {}
+
+let tempEnemyQuote = fs.readFileSync(dataPath+'/dailyenemyquote.txt', {flag: 'as+'});
+if (tempEnemyQuote && tempEnemyQuote != '')
+dailyEnemyQuote = JSON.parse(tempEnemyQuote);
+
 // Midnight Moment
 function midnightInMS() {
     return new Date().setHours(24, 0, 0, 0) - new Date().getTime()
 }
 
 setTimeout(function() {
-	dailyQuote = 'none';
+	dailyQuote = {};
 	dailySkill = 'none';
 	dailyItem = {};
 	dailyWeapon = {};
 	dailyArmor = {};
 	dailyChar = {};
 	dailyEnemy = {};
+	dailyEnemyQuote = {};
 
 	fs.writeFileSync(dataPath+'/dailyquote.txt', '');
 	fs.writeFileSync(dataPath+'/dailyskill.txt', '');
@@ -126,6 +134,7 @@ setTimeout(function() {
 	fs.writeFileSync(dataPath+'/dailyarmor.txt', '');
 	fs.writeFileSync(dataPath+'/dailycharacter.txt', '');
 	fs.writeFileSync(dataPath+'/dailyenemy.txt', '');
+	fs.writeFileSync(dataPath+'/dailyenemyquote.txt', '');
 }, midnightInMS());
 
 // Elements

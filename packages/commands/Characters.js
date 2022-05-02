@@ -1638,8 +1638,6 @@ commands.dailychar = new Command({
 		if (!dailyChar[message.guild.id]) {
 			dailyChar[message.guild.id] = Object.keys(charFile)[Math.floor(Math.random() * Object.keys(charFile).length)];
 
-			console.log(`${message.guild.name} has set their daily character to ${dailyChar[message.guild.id]}`)
-
 			let authorTxt = charFile[dailyChar[message.guild.id]].owner ? `<@!${charFile[dailyChar[message.guild.id]].owner}>` : '<@776480348757557308>'
 			notice = `${authorTxt}, your character is the daily character for today!`;
 		}
@@ -1880,6 +1878,83 @@ commands.getquotes = new Command({
 
 			listArray(message.channel, array, 1);
 		}
+	}
+})
+
+commands.randcharquote = new Command({
+	desc: "Get a random quote from any character.",
+	aliases: ['randquote', 'randomcharaquote'],
+	section: "fun",
+	args: [],
+	func: (message, args) => {
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (Object.keys(charFile).length == 0) return message.channel.send(`No characters have been added yet!`);
+		
+		let possibleQuotes = []
+		for (const i in quoteTypes) {
+			for (const k in charFile) {
+				if (!charFile[k].hidden && charFile[k][`quotes`] && charFile[k][`quotes`][`${quoteTypes[i]}quote`] && charFile[k][`quotes`][`${quoteTypes[i]}quote`].length > 1) {
+					possibleQuotes.push([k, quoteTypes[i], charFile[k][`quotes`][`${quoteTypes[i]}quote`][utilityFuncs.randNum(charFile[k][`quotes`][`${quoteTypes[i]}quote`].length-1)]])
+				}
+			}
+		}
+		if (possibleQuotes.length == 0) return message.channel.send(`No quotes found!`);
+
+		let quoteData = possibleQuotes[utilityFuncs.randNum(possibleQuotes.length-1)]   
+		let randQuote = `"*${quoteData[2]}*"\n**${quoteData[0]}**, ${quoteData[1].toUpperCase()} Quote`;
+
+		const DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#4b02c9')
+			.setTitle("Random Quote.")
+			.setDescription(randQuote)
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
+commands.dailycharquote = new Command({
+	desc: "Any random character quote can be set as a daily one! Test your luck to see if your character's is here!",
+	section: "fun",
+	args: [],
+	func: (message, args) => {
+		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
+		if (Object.keys(charFile).length == 0) return message.channel.send(`No characters have been added yet!`);
+
+		let possibleQuotes = []
+		for (const i in quoteTypes) {
+			for (const k in charFile) {
+				if (!charFile[k].hidden && charFile[k][`quotes`] && charFile[k][`quotes`][`${quoteTypes[i]}quote`] && charFile[k][`quotes`][`${quoteTypes[i]}quote`].length > 1) {
+					possibleQuotes.push([k, quoteTypes[i], charFile[k][`quotes`][`${quoteTypes[i]}quote`][utilityFuncs.randNum(charFile[k][`quotes`][`${quoteTypes[i]}quote`].length-1)]])
+				}
+			}
+		}
+		if (possibleQuotes.length == 0) return message.channel.send(`No quotes found!`);
+
+		if (!dailyQuote) dailyQuote = {};
+
+		let notice = 'Here is the daily character quote, again.'
+		if (!dailyQuote[message.guild.id]) {
+			//pick a random quote
+			dailyQuote[message.guild.id] = possibleQuotes[utilityFuncs.randNum(possibleQuotes.length-1)];
+
+			let authorTxt = charFile[dailyQuote[message.guild.id][0]].owner ? `<@!${charFile[dailyQuote[message.guild.id][0]].owner}>` : '<@776480348757557308>'
+			notice = `${authorTxt}, your character's quote is the daily character quote for today!`;
+		}
+
+		setTimeout(function() {
+			if (charFile[dailyQuote[message.guild.id][0]]) {
+				let today = getCurrentDate();
+
+				fs.writeFileSync(dataPath+'/dailyquote.txt', JSON.stringify(dailyQuote));
+
+				let charTxt = `**[${today}]**\n${notice}`
+				let randQuote = `"*${dailyQuote[message.guild.id][2]}*"\n**${dailyQuote[message.guild.id][0]}**, ${dailyQuote[message.guild.id][1].toUpperCase()} Quote`;
+				let DiscordEmbed = new Discord.MessageEmbed()
+					.setColor('#4b02c9')
+					.setTitle("Daily Character Quote.")
+					.setDescription(randQuote)
+				message.channel.send({content: charTxt, embeds: [DiscordEmbed]});
+			}
+		}, 500);
 	}
 })
 

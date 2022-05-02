@@ -848,3 +848,111 @@ commands.dailyenemy = new Command({
 		}, 500);
 	}
 })
+
+commands.setimage = new Command({
+	desc: 'Set an image for an enemy.',
+	section: 'fun',
+	args: [
+		{
+			name: "Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Attachment",
+			type: "Image or URL",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`You are banned from using this command.`);
+		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You do not have permission to use this command.`);
+		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy name.`);
+
+		if (!checkImage(message, args[1], message.attachments.first())) return message.channel.send(`${args[1]} is not a valid image.`);
+
+		enemyFile[args[0]].image = checkImage(message, args[1], message.attachments.first());
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, 4));
+
+		message.channel.send(`Image set for ${enemyFile[args[0]].name}!`);
+	}
+})
+
+commands.randenemyquote = new Command({
+	desc: "Get a random quote from any enemy.",
+	aliases: ['randenemyquote', 'randomenemyquote'],
+	section: "fun",
+	args: [],
+	func: (message, args) => {
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		if (Object.keys(enemyFile).length == 0) return message.channel.send(`No enemies have been added yet!`);
+		
+		let possibleQuotes = []
+		for (const i in quoteTypes) {
+			for (const k in enemyFile) {
+				if (enemyFuncs.encounteredEnemy(k, message.guild.id) && enemyFile[k]['quotes'] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`].length > 1) {
+					possibleQuotes.push([k, quoteTypes[i], enemyFile[k]['quotes'][`${quoteTypes[i]}quote`][utilityFuncs.randNum(enemyFile[k]['quotes'][`${quoteTypes[i]}quote`].length-1)]])
+				}
+			}
+		}
+		if (possibleQuotes.length == 0) return message.channel.send(`No quotes found!`);
+
+		let quoteData = possibleQuotes[utilityFuncs.randNum(possibleQuotes.length-1)]   
+		let randQuote = `"*${quoteData[2]}*"\n**${quoteData[0]}**, ${quoteData[1].toUpperCase()} Quote`;
+
+		const DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#4b02c9')
+			.setTitle("Random Quote.")
+			.setDescription(randQuote)
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
+commands.dailyenemyquote = new Command({
+	desc: "Any random enemy quote can be set as a daily one! Test your luck to see if theme enemy's that you desire is here!",
+	section: "fun",
+	args: [],
+	func: (message, args) => {
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		if (Object.keys(enemyFile).length == 0) return message.channel.send(`No enemies have been added yet!`);
+
+		let possibleQuotes = []
+		for (const i in quoteTypes) {
+			for (const k in enemyFile) {
+				if (enemyFuncs.encounteredEnemy(k, message.guild.id) && enemyFile[k]['quotes'] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`].length > 1) {
+					possibleQuotes.push([k, quoteTypes[i], enemyFile[k]['quotes'][`${quoteTypes[i]}quote`][utilityFuncs.randNum(enemyFile[k]['quotes'][`${quoteTypes[i]}quote`].length-1)]])
+				}
+			}
+		}
+		if (possibleQuotes.length == 0) return message.channel.send(`No quotes found!`);
+
+		if (!dailyEnemyQuote) dailyEnemyQuote = {};
+
+		let notice = 'Here is the daily enemy quote, again.'
+		if (!dailyEnemyQuote[message.guild.id]) {
+			//pick a random quote
+			dailyEnemyQuote[message.guild.id] = possibleQuotes[utilityFuncs.randNum(possibleQuotes.length-1)];
+
+			notice = `The enemy quote of the day goes to ${dailyEnemyQuote[message.guild.id][0]}'s!`;
+		}
+
+		setTimeout(function() {
+			if (enemyFile[dailyEnemyQuote[message.guild.id][0]]) {
+				let today = getCurrentDate();
+
+				fs.writeFileSync(dataPath+'/dailyenemyquote.txt', JSON.stringify(dailyEnemyQuote));
+
+				let charTxt = `**[${today}]**\n${notice}`
+				let randQuote = `"*${dailyEnemyQuote[message.guild.id][2
+				]}*"\n**${dailyEnemyQuote[message.guild.id][0]}**, ${dailyEnemyQuote[message.guild.id][1].toUpperCase()} Quote`;
+				let DiscordEmbed = new Discord.MessageEmbed()
+					.setColor('#4b02c9')
+					.setTitle("Daily Enemy Quote.")
+					.setDescription(randQuote)
+				message.channel.send({content: charTxt, embeds: [DiscordEmbed]});
+			}
+		}, 500);
+	}
+})
