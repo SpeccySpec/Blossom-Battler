@@ -198,7 +198,7 @@ longDescription = (charDefs, level, server, message) => {
 	let statDesc = ''
 	if (!char.type) statDesc += `Level ${char.level}\n${char.hp}/${char.maxhp}HP\n${char.mp}/${char.maxmp}${char.mpMeter ? char.mpMeter[1] : 'MP'}\n${char.xp}/${char.maxxp}XP\n`;
 	else statDesc += `Level ${char.level}\n${char.hp}HP\n${char.mp}MP\n${char.xp}XP\n`;
-	for (const i in char.stats) statDesc += `\n${char.stats[i]}${i.toUpperCase()}`;
+	for (const i in char.stats) statDesc += `\n${char.stats[i]}${i.toUpperCase()}${!char.type ? ` (${char.basestats['base'+i]} Base)` : ''}`;
 	DiscordEmbed.fields.push({ name: 'Stats', value: statDesc, inline: true });
 	
 	// Skills
