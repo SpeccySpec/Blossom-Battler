@@ -81,7 +81,7 @@ async function sendHelp(message, commandsInCategories) {
 	}
 
 	const collector = embedMessage.createMessageComponentCollector({
-		filter: ({user}) => true
+		filter: ({user}) => user.id === message.author.id
 	})
 
 	collector.on('collect', async interaction => {
