@@ -2,7 +2,6 @@
     "Barista": {
         "name": "Barista",
         "level": 99,
-        "diety": true,
         "hp": 9999,
         "mp": 2000,
         "melee": {
@@ -2017,7 +2016,7 @@
     "Monum": {
         "level": 20,
         "image": "monum",
-        "diety": true,
+        
         "hp": 1400,
         "mp": 1000,
         "melee": {
@@ -2087,7 +2086,7 @@
         "name": "AwakenedMonum",
         "level": 66,
         "image": "monum",
-        "diety": true,
+        
         "hp": 10000,
         "mp": 3485,
         "melee": {
@@ -2874,7 +2873,7 @@
     },
     "Nyamem": {
         "level": 30,
-        "diety": true,
+        
         "hp": 3000,
         "mp": 1754,
         "melee": {
@@ -2955,7 +2954,7 @@
     },
     "InfectedNyamem": {
         "level": 32,
-        "diety": true,
+        
         "hp": 4000,
         "mp": 2000,
         "melee": {
@@ -3022,7 +3021,7 @@
     },
     "Evergreen": {
         "level": 35,
-        "diety": true,
+        
         "hp": 3025,
         "mp": 3210,
         "melee": {
@@ -3141,7 +3140,7 @@
     },
     "GravenIdol": {
         "level": 47,
-        "diety": true,
+        
         "hp": 6523,
         "mp": 3423,
         "melee": {
@@ -3333,7 +3332,7 @@
     },
     "TheLuminosity": {
         "level": 40,
-        "diety": true,
+        
         "hp": 6421,
         "mp": 4324,
         "melee": {
@@ -3383,7 +3382,7 @@
     },
     "ElderLuminosity": {
         "level": 75,
-        "diety": true,
+        
         "hp": 7000,
         "mp": 6000,
         "melee": {
@@ -6191,7 +6190,7 @@
         "negotiateDefs": {
             "required": 5
         },
-        "diety": true,
+        
         "image": "Nyamem",
         "mainElement": "strike",
         "owner": "532291526634635285",

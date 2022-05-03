@@ -700,12 +700,18 @@ listArray = async(channel, theArray, author) => {
 	}
 
 	const canFitOnOnePage = theArray.length <= 10
-	const embedMessage = await channel.send({
+	let embedMessage
+	if (canFitOnOnePage) {
+		embedMessage = await channel.send({
+			embeds: [await generateEmbed(0)]
+		})
+		return
+	}
+
+	embedMessage = await channel.send({
 		embeds: [await generateEmbed(0)],
 		components: [new Discord.MessageActionRow({components: [backButton, forwardButton, pageButton, cancelButton]})]
 	})
-
-	if (canFitOnOnePage) return
 
 	const collector = embedMessage.createMessageComponentCollector({
 		filter: ({user}) => user.id == author

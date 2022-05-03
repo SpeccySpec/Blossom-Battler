@@ -241,127 +241,302 @@ commands.getchar = new Command({
 	}
 })
 
+function checkArg(type, variable, validTypes, message, settings) {
+	switch (type) {
+		case 'element':
+			variable = variable.toLowerCase();
+			if (!utilityFuncs.inArray(variable, Elements)) {
+				message.channel.send(`${variable} is not a valid element!`);
+				return false
+			}
+			break;
+		case 'superweak':
+		case 'weak':
+		case 'resist':
+		case 'block':
+		case 'repel':
+		case 'drain':
+			variable = variable.toLowerCase();
+			if (!utilityFuncs.inArray(variable, Elements) && !utilityFuncs.inArray(variable, statusEffects)) {
+				message.channel.send(`${variable} is not a valid status or element!`);
+				return false
+			}
+			if (utilityFuncs.inArray(variable, statusEffects) && !settings.mechanics.stataffinities) {
+				message.channel.send(`Status affinities are not enabled on this server! I shall exclude it from searching.`);
+				return 'disabled'
+			}
+			break;
+		case 'user':
+			variable = variable.toLowerCase();
+			if (variable.startsWith('<@') && variable.endsWith('>')) {
+				let user = message.guild.members.cache.find(m => m.id == variable.slice(2, -1));
+				if (!user) {
+					message.channel.send('Invalid user! Please enter a valid user.');
+					return false
+				}
+			} else if (variable.startsWith('<@!') && variable.endsWith('>')) {
+				let user = message.guild.members.cache.find(m => m.id == variable.slice(3, -1));
+				if (!user) {
+					message.channel.send('Invalid user! Please enter a valid user.');
+					return false
+				}
+			}
+			if (!variable.includes('@') && message.mentions.members.size == 0) {
+				let user = message.guild.members.cache.find(m => m.id == variable);
+				if (!user) {
+					message.channel.send('Invalid user! Please enter a valid user.');
+					return false
+				}
+			}
+			break;
+		case 'level':
+			if (isNaN(variable)) {
+				message.channel.send('Invalid level! Please enter a valid level.');
+				return false
+			}
+			break;
+		case 'leaderskills':
+		case 'limitbreaks':
+		case 'charms':
+		case 'transformations':
+		case 'teamcombos':
+			const fullNames = {
+				leaderskills: 'Leader Skills',
+				limitbreaks: 'Limit Breaks',
+				charms: 'Charms',
+				transformations: 'Transformations',
+				teamcombos: 'Team Combos'
+			}
+			if (!settings.mechanics[type]) {
+				message.channel.send(`${fullNames[type]} are not enabled on this server! I shall exclude it from searching.`);
+				return 'disabled'
+			}
+
+			if (type == 'leaderskills') {
+				variable = variable.toLowerCase();
+				let validThings = ['boost', 'discount', 'crit', 'status', 'buff']
+				if (!utilityFuncs.inArray(variable, validThings) && variable != 'true' && variable != 'false') {
+					message.channel.send(`${variable} is not a valid leader skill!`);
+					return false
+				}
+			}
+
+			if (type == 'limitbreaks') {
+				variable.toLowerCase()
+				if (!isNaN(variable)) {
+					if (parseInt(variable) < 1 || parseInt(variable) > 4) {
+						message.channel.send(`${variable} is not in the range of 1-4!`);
+						return false
+					}
+				} else {
+					if (variable != 'true' && variable != 'false') {
+						if (variable != 'atk' && variable != 'heal') {
+							message.channel.send(`${variable} is not a valid limit break class! (atk/heal)`);
+							return false
+						}
+					}
+				}
+			}
+
+			if (type == 'transformations') {
+				variable = variable.toLowerCase();
+				let reqTable = ['allydown', 'onlystanding', 'belowhalfhp', 'outofmp', 'leaderdown', 'trusteddown']
+
+				if (!utilityFuncs.inArray(variable, reqTable) && variable != 'true' && variable != 'false') {
+					message.channel.send(`${variable} is not a valid transformation! (allydown/onlystanding/belowhalfhp/outofmp/leaderdown/trusteddown)`);
+					return false
+				}
+			}
+
+			if (type == 'teamcombos') {
+				if (variable.toLowerCase() != 'true' && variable.toLowerCase() != 'false') {
+					charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+					if (!charFile[variable]) {
+						message.channel.send(`${variable} is not a valid character!`);
+						return false
+					}
+				}
+			}
+			break;
+		case 'skill':
+			if (!skillFile[variable]) {
+				message.channel.send(`${variable} is not a valid skill!`);
+				return false
+			}
+		default:
+			message.channel.send(`Invalid type! Valid types are: \`${validTypes.join('\`\n -\`')}`);
+			return false
+	}
+
+	return true
+}
+
 commands.listchars = new Command({
-	desc: 'Lists *all* existing characters.',
+	desc: 'Lists *all* existing characters. Types and Variables must be written as shown.',
 	section: "characters",
 	args: [
 		{
-			name: "Type",
+			name: "Type #1, Variable #1",
 			type: "Word",
-			forced: false
-		},
-		{
-			name: "Variable",
-			type: "Any",
-			forced: false
+			forced: false,
+			multiple: true
 		}
 	],
 	func: (message, args) => {
 		let array = [];
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
-		const validTypes = ['element', 'superweak', 'weak', 'resist', 'block', 'repel', 'drain', 'user', 'level', 'leaderskills', 'limitbreaks', 'charms', 'transformations'];
+		const validTypes = ['element', 'superweak', 'weak', 'resist', 'block', 'repel', 'drain', 'user', 'level', 'leaderskills', 'limitbreaks', 'charms', 'transformations', 'teamcombos', 'skill'];
 
 		let settings = setUpSettings(message.guild.id);
 
 		if (args[0]) {
-			args[0] = args[0].toLowerCase();
+			if (args.length % 2 != 0) return message.channel.send('The number of arguments must be even.');
 
-			switch (args[0].toLowerCase()) {
-				case 'element':
-				case 'superweak':
-				case 'weak':
-				case 'resist':
-				case 'block':
-				case 'repel':
-				case 'drain':
-					if (!args[1]) return message.channel.send(`You need to specify what you look for...`);
-					args[1] = args[1].toLowerCase();
-					if (!utilityFuncs.inArray(args[1], Elements) && !utilityFuncs.inArray(args[1], statusEffects)) return message.channel.send(`${args[1]} is not a valid status or element!`);
-					if (utilityFuncs.inArray(args[1], statusEffects) && !settings.mechanics.stataffinities) return message.channel.send(`Status affinities are not enabled on this server!`);
-					break;
-				case 'user':
-					if (!args[1]) return message.channel.send(`You need to specify what you look for...`);
-					args[1] = args[1].toLowerCase();
-					if (args[1].startsWith('<@') && args[1].endsWith('>')) {
-						let user = message.guild.members.cache.find(m => m.id == args[1].slice(2, -1));
-						if (!user) return message.channel.send('Invalid user! Please enter a valid user.');
-						args[1] = user.id;
-					} else if (args[1].startsWith('<@!') && args[1].endsWith('>')) {
-						let user = message.guild.members.cache.find(m => m.id == args[1].slice(3, -1));
-						if (!user) return message.channel.send('Invalid user! Please enter a valid user.');
-						args[1] = user.id;
+			for (i in args) {
+				if (i % 2 == 1) {
+					let thingy = checkArg(args[i-1].toLowerCase(), args[i], validTypes, message, settings)
+					if (!thingy) return
+					if (thingy == 'disabled') {
+						args[i-1] = '';
+						args[i] = '';
 					}
-
-					if (!args[1].includes('@') && message.mentions.members.size == 0) {
-						let user = message.guild.members.cache.find(m => m.id == args[1]);
-						if (!user) return message.channel.send('Invalid user! Please enter a valid user.');
+				}
+			}
+			args = args.filter(arg => arg != '');
+			
+			for (i in args) {
+				if (i % 2 == 0) {
+					if (args.filter(arg => arg == args[i]).length > 1) {
+						return message.channel.send('You cannot have multiple of the same type.');
 					}
-
-					if (message.mentions.members.size > 0) {
-						args[1] = message.mentions.members.first().id;
-					}
-					break;
-				case 'level':
-					if (!args[1]) return message.channel.send(`You need to specify what you look for...`);
-					args[1] = args[1].toLowerCase();
-					if (isNaN(args[1])) return message.channel.send('Invalid level! Please enter a valid level.');
-					args[1] = parseInt(args[1]);
-					break;
-				case 'leaderskills':
-				case 'limitbreaks':
-				case 'charms':
-				case 'transformations':
-					if (!settings.mechanics[args[0]]) return message.channel.send(`${args[0]} are not enabled on this server!`);
-					break;
-				default:
-					return message.channel.send('Invalid type! Valid types are: `element`, `superweak`, `weak`, `resist`, `block`, `repel`, `drain`, `user`, `level`, `leaderskills`, `limitbreaks`, `charms`, `transformations`');
+				}
 			}
 		}
 
 		for (const i in charFile) {
 			if (charFile[i].hidden) continue;
-			let descTxt = `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}MP`;
 
-			switch (args[0]) {
-				case 'element':
-					if (charFile[i].mainElement != args[1]) continue;
-					break;
-				case 'superweak':
-				case 'weak':
-				case 'resist':
-				case 'block':
-				case 'repel':
-				case 'drain':
-					if (utilityFuncs.inArray(args[1], Elements)) {
-						if (!charFile[i].affinities[args[0]] || (charFile[i].affinities[args[0]] && !charFile[i].affinities[args[0]].includes(args[1]))) continue;
-					} else if (utilityFuncs.inArray(args[1], statusEffects)) {
-						if (!charFile[i].statusaffinities[args[0]] || (charFile[i].statusaffinities[args[0]] && !charFile[i].statusaffinities[args[0]].includes(args[1]))) continue;
+			let isConditionMet = true;
+			for (a in args) {
+				if (a % 2 == 1) {
+					switch (args[a-1].toLowerCase()) {
+						case 'element':
+							args[a] = args[a].toLowerCase();
+							isConditionMet = (charFile[i].mainElement == args[a])
+							break;
+						case 'superweak':
+						case 'weak':
+						case 'resist':
+						case 'block':
+						case 'repel':
+						case 'drain':
+							args[a] = args[a].toLowerCase();
+							if (utilityFuncs.inArray(args[a], Elements)) {
+								isConditionMet = (charFile[i].affinities[args[a-1]] && charFile[i].affinities[args[a-1]].includes(args[a]))
+							} else if (utilityFuncs.inArray(args[a], statusEffects)) {
+								isConditionMet = (charFile[i].statusaffinities[args[a-1]] && charFile[i].statusaffinities[args[a-1]].includes(args[a]))
+							}
+							break;
+						case 'user':
+							args[a] = args[a].toLowerCase();
+							if (variable.startsWith('<@') && variable.endsWith('>')) {
+								let user = message.guild.members.cache.find(m => m.id == variable.slice(2, -1));
+								args[a] = user.id;
+							} else if (variable.startsWith('<@!') && variable.endsWith('>')) {
+								let user = message.guild.members.cache.find(m => m.id == variable.slice(3, -1));
+								args[a] = user.id;
+							}
+							if (!variable.includes('@') && message.mentions.members.size == 0) {
+								let user = message.guild.members.cache.find(m => m.id == variable);
+								args[a] = user.id;
+							}
+							if (message.mentions.members.size > 0) {
+								args[a] = message.mentions.members.first().id;
+							}
+
+							isConditionMet = (charFile[i].owner == args[a])
+							break;
+						case 'level':
+							args[a] = args[a].toLowerCase();
+							args[a] = parseInt(args[a]);
+							isConditionMet = (charFile[i].level == args[a])
+							break;
+						case 'leaderskills':
+							args[a] = args[a].toLowerCase();
+							if (args[a] == 'true') {
+								isConditionMet = (charFile[i].leaderskill && Object.keys(charFile[i].leaderskill).length > 0)
+							} else if (args[a] == 'false'){
+								isConditionMet = ((charFile[i].leaderskill && Object.keys(charFile[i].leaderskill).length == 0) || !charFile[i].leaderskill)
+							} else {
+								isConditionMet = (charFile[i].leaderskill && charFile[i].leaderskill.type == args[a])
+							}
+							break;
+						case 'limitbreaks':
+							if (isNaN(args[a])) {
+								args[a] = args[a].toLowerCase();
+								if (args[a] == 'true') {
+									isConditionMet = (charFile[i].lb && Object.keys(charFile[i].lb).length > 0)
+								} else if (args[a] == 'false') {
+									isConditionMet = ((charFile[i].lb && Object.keys(charFile[i].lb).length == 0) || !charFile[i].lb)
+								} else {
+									isConditionMet = (charFile[i].lb && charFile[i].lb[1] && charFile[i].lb[1].class == args[a])
+								}
+							} else {
+								args[a] = parseInt(args[a]);
+								isConditionMet = (charFile[i].lb && charFile[i].lb[args[a]])
+							}
+							break;
+						case 'charms':
+							args[a] = args[a].toLowerCase();
+							args[a] = args[a] == 'true' || args[a] == 'yes' || args[a] == 'y' || args[a] == '1';
+							if (args[a]) {
+								isConditionMet = (charFile[i].charms && charFile[i].charms.length > 0)
+							} else {
+								isConditionMet = (charFile[i].charms.length == 0 || !charFile[i].charms)
+							}
+							break;
+						case 'transformations':
+							args[a] = args[a].toLowerCase();
+							if (args[a] == 'true') {
+								isConditionMet = (charFile[i].transformations && Object.keys(charFile[i].transformations).length > 0)
+							} else if (args[a] == 'false') {
+								isConditionMet = ((charFile[i].transformations && Object.keys(charFile[i].transformations).length == 0) || !charFile[i].transformations)
+							} else {
+								isConditionMet = false;
+								if (charFile[i].transformations) {
+									for (j in charFile[i].transformations) {
+										if (charFile[i].transformations[j].requirement == args[a]) {
+											isConditionMet = true;
+											break;
+										}
+									}
+								}
+							}
+							break;
+						case 'teamcombos':
+							if (args[a] == 'true') {
+								isConditionMet = (charFile[i].teamCombo && Object.keys(charFile[i].teamCombo).length > 0)
+							} else if (args[a] == 'false'){
+								isConditionMet = ((charFile[i].teamCombo && Object.keys(charFile[i].teamCombo).length == 0) || !charFile[i].teamCombo)
+							} else {
+								isConditionMet = (charFile[i].teamCombo && charFile[i].teamCombo[args[a]])
+							}
+							break;
+						case 'skill':
+							isConditionMet = charFile[i].skills && charFile[i].skills.includes(args[a])
+							break;
 					}
-					break;
-				case 'user':
-					if (charFile[i].owner != args[1]) continue;
-					break;
-				case 'level':
-					if (charFile[i].level != args[1]) continue;
-					break;
-				case 'leaderskill':
-					if (!charFile[i].leaderskill || Object.keys(charFile[i].leaderskill).length == 0) continue;
-					break;
-				case 'limitbreaks':
-					if (!charFile[i].lb || Object.keys(charFile[i].lb).length == 0) continue;
-					break;
-				case 'charms':
-					if (!charFile[i].charms || charFile[i].charms.length == 0) continue;
-					break;
-				case 'transformations':
-					if (!charFile[i].transformations || Object.keys(charFile[i].transformations).length == 0) continue;
-					break;
+
+					if (isConditionMet == false || isConditionMet == undefined) break;
+				}
 			}
+			if (isConditionMet == false || isConditionMet == undefined) continue;
+
+			let descTxt = `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}MP`;
 
 			array.push({title: `${elementEmoji[charFile[i].mainElement]}${charFile[i].name} (${i})`, desc: descTxt});
 		}
-
 		if (array.length == 0) return message.channel.send('No characters found!');
 
 		listArray(message.channel, array, message.author.id);
@@ -1245,6 +1420,11 @@ commands.setlb = new Command({
 			forced: false
 		},
 		{
+			name: "Limit Break Type",
+			type: "Word",
+			forced: false
+		},
+		{
 			name: "LB% Required",
 			type: "Num",
 			forced: false
@@ -1309,7 +1489,7 @@ commands.setlb = new Command({
 		if (args[2] > 4 || args[2] < 1) return message.channel.send('Invalid Limit Break Level! Please enter one from 1-4.');
 	
 		let powerBounds = [450, 600, 750, 900];
-		let percentBounds = [100, 200, 300, 4-0];
+		let percentBounds = [100, 200, 300, 400];
 		let levelLocks = [20, 48, 69, 85];
 		if (thingDefs[args[0]].lb) {
 			if (!thingDefs[args[0]][args[2]-1].lb) return message.channel.send(`Please enter Limit Breaks chronologically! You do not have a level ${args[2]-1} Limit Break.`);
@@ -1318,43 +1498,47 @@ commands.setlb = new Command({
 		}
 	
 		if (thingDefs[args[0]].level < levelLocks[args[2]-1]) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but they must be at level ${levelLocks[args[2]-1]} to obtain a level ${args[2]} limit break.`);
+
+		if (args[3].toLowerCase() != 'atk' || args[3].toLowerCase() != 'heal') return message.channel.send('Invalid Limit Break Type! Please enter either "Atk" or "Heal".');
+		if (thingDefs[args[0]].lb) {
+			if (thingDefs[args[0]][args[2]-1].type != args[3].toLowerCase()) return message.channel.send(`Please enter limit breaks within the same type! You already have a ${thingDefs[args[0]][args[2]-1].type} Limit Break.`);
+		}
 	
-		if (args[3] < percentBounds[args[2]-1]) return message.channel.send(`Level ${args[2]} Limit Breaks costs cannot be lower than ${percentBounds[args[2]-1]} LB%.`);
+		if (args[4] < percentBounds[args[2]-1]) return message.channel.send(`Level ${args[2]} Limit Breaks costs cannot be lower than ${percentBounds[args[2]-1]} LB%.`);
 	
-		if (args[4] < 1) return message.channel.send('Limit Break Skills with 0 power or less will not function!');
-		if (args[4] > powerBounds[args[2]-1]) return message.channel.send(`Level ${args[2]} Limit Breaks cannot exceed ${powerBounds[args[2]-1]} power.`);
-		if (!isFinite(args[3])) return message.channel.send('Please enter a whole number for **Power**!');
+		if (args[5] < 1) return message.channel.send('Limit Break Skills with 0 power or less will not function!');
+		if (args[5] > powerBounds[args[2]-1]) return message.channel.send(`Level ${args[2]} Limit Breaks cannot exceed ${powerBounds[args[2]-1]} power.`);
 	
-		if (args[6] < 1) return message.channel.send('Skills with 0 hits or less will not function!');
-		if (!isFinite(args[6])) return message.channel.send('Please enter a whole number for **Hits**!')
+		if (args[7] < 1) return message.channel.send('Skills with 0 hits or less will not function!');
 	
-		if (!args[7] || !utilityFuncs.inArray(args[7].toLowerCase(), Targets)) return message.channel.send('Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n-SpreadOpposing\n- SpreadAllies```')
+		if (!args[8] || !utilityFuncs.inArray(args[8].toLowerCase(), Targets)) return message.channel.send('Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n-SpreadOpposing\n- SpreadAllies```')
 	
 		let skillDefs = {
 			name: args[1],
 			level: args[2],
-			pow: args[4],
-			cost: args[3],
-			hits: args[6],
-			target: args[7].toLowerCase(),
+			class: args[3].toLowerCase(),
+			pow: args[5],
+			cost: args[4],
+			hits: args[7],
+			target: args[8].toLowerCase(),
 			originalAuthor: message.author.id
 		}
 	
-		if (args[5] > 0) skillDefs.crit = args[5];
+		if (args[6] > 0) skillDefs.crit = args[6];
 	
-		if (args[8] && args[8].toLowerCase() != 'none') {
-			if (!utilityFuncs.inArray(args[8].toLowerCase(), statusEffects)) {
-				let str = `${args[8]} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
+		if (args[9] && args[9].toLowerCase() != 'none') {
+			if (!utilityFuncs.inArray(args[9].toLowerCase(), statusEffects)) {
+				let str = `${args[9]} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
 				for (let i in statusEffects) str += `\n-${statusEffects[i]}`;
 				str += '```'
 
 				return message.channel.send(str);
 			}
-					skillDefs.status = args[8].toLowerCase();
-			if (isFinite(args[9]) && args[9] < 100) skillDefs.statuschance = args[11];
+					skillDefs.status = args[9].toLowerCase();
+			if (isFinite(args[10]) && args[10] < 100) skillDefs.statuschance = args[11];
 		}
 	
-		if (args[10]) skillDefs.desc = args[10];
+		if (args[11]) skillDefs.desc = args[11];
 		
 		if (!thingDefs[args[0]].lb) thingDefs[args[0]].lb = {};
 		thingDefs[args[0]].lb[args[2]] = skillDefs;
@@ -1771,6 +1955,11 @@ commands.setquote = new Command({
 			name: "The Quote",
 			type: "Word",
 			forced: true
+		},
+		{
+			name: "Quote ID",
+			type: "Num",
+			forced: false
 		}
 	],
 	func: (message, args) => {
@@ -1800,7 +1989,8 @@ commands.setquote = new Command({
 		}
 
 		if (!thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`]) thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`] = [];
-		thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`].push(args[2]);
+		if (args[3] && thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`][args[3]]) thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`][args[3]] = args[2];
+		else thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`].push(args[2]);
 
 		message.react('👍');
 		if (thingDefs[args[0]].type) {
@@ -1903,7 +2093,7 @@ commands.clearquote = new Command({
 
 commands.getquotes = new Command({
 	desc: "View a character's quotes.",
-	aliases: ['seequotes'],
+	aliases: ['seequotes', 'showquotes'],
 	section: "characters",
 	args: [
 		{

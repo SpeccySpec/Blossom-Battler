@@ -634,7 +634,7 @@ commands.listenemies = new Command({
 		let array = [];
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 
-		const validTypes = ['element', 'superweak', 'weak', 'resist', 'block', 'repel', 'drain', 'level', 'limitbreaks'];
+		const validTypes = ['element', 'superweak', 'weak', 'resist', 'block', 'repel', 'drain', 'level', 'limitbreaks', 'encountered', 'negotiable', 'pet', 'type'];
 
 		let settings = setUpSettings(message.guild.id);
 
@@ -663,15 +663,22 @@ commands.listenemies = new Command({
 				case 'limitbreaks':
 					if (!settings.mechanics[args[0]]) return message.channel.send(`${args[0]} are not enabled on this server!`);
 					break;
+				case 'encountered':
+				case 'negotiable':
+				case 'pet':
+					args[1] = args[1] && (args[1].toLowerCase() == 'true' || args[1].toLowerCase() == 'yes' || args[1].toLowerCase() == 'y' || args[1].toLowerCase() == '1');
+					break;
+				case 'type':
+					if (!args[1]) return message.channel.send(`You need to specify what you look for...`);
+					args[1] = args[1].toLowerCase();
+					if (!utilityFuncs.inArray(args[1], enemyTypes) && args[1] != 'none') return message.channel.send(`${args[1]} is not a valid enemy type! Valid types are: ${enemyTypes.join(', ')}`);
+					break;
 				default:
-					return message.channel.send('Invalid type! Valid types are: `element`, `superweak`, `weak`, `resist`, `block`, `repel`, `drain`, `level`, `limitbreaks`');
+					return message.channel.send(`Invalid type! Valid types are: \`${validTypes.join('\`\n -')}`);
 			}
 		}
 
 		for (const i in enemyFile) {
-			let descTxt = `${enemyFile[i].hp}HP, ${enemyFile[i].mp}MP`;
-			let title = `${elementEmoji[enemyFile[i].mainElement]}${enemyFile[i].name} (${i})`;
-
 			switch (args[0]) {
 				case 'element':
 					if (enemyFile[i].mainElement != args[1]) continue;
@@ -694,7 +701,30 @@ commands.listenemies = new Command({
 				case 'limitbreaks':
 					if (!enemyFile[i].lb || Object.keys(enemyFile[i].lb).length == 0) continue;
 					break;
+				case 'encountered':
+					if (enemyFuncs.encounteredEnemy(i, message.guild.id) != args[1]) continue;
+					break;
+				case 'negotiable':
+					if (args[1] == true) {
+						if (!enemyFile[i].negotiate || enemyFile[i].negotiate.length == 0) continue;
+					} else {
+						if (enemyFile[i].negotiate && enemyFile[i].negotiate.length > 0) continue;
+					}
+					break;
+				case 'pet':
+					if (args[1] == true) {
+						if (!enemyFile[i].negotiateDefs || Object.keys(enemyFile[i].negotiateDefs).length == 0) continue;
+					} else {
+						if (enemyFile[i].negotiateDefs && Object.keys(enemyFile[i].negotiateDefs).length > 0) continue;
+					}
+					break;
+				case 'type':
+					if (enemyFile[i].type != args[1]) continue;
+					break;
 			}
+
+			let descTxt = `${enemyFile[i].hp}HP, ${enemyFile[i].mp}MP`;
+			let title = `${elementEmoji[enemyFile[i].mainElement]}${enemyFile[i].name} (${i})`;
 
 			if (!enemyFuncs.encounteredEnemy(i, message.guild.id)) {
 				title = `||${title}||`;
@@ -1167,5 +1197,124 @@ commands.clearpetvalues = new Command({
 
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
 		message.channel.send(`${args[0]}'s pet values have been cleared.`);
+	}
+})
+
+commands.getenemydreams = new Command({
+	desc: "Gets an enemy's dreams.",
+	section: "enemies",
+	aliases: ['seeenemydreams', 'showenemydreams'],
+	args: [
+		{
+			name: "Enemy Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`You are banned from using this command.`);
+		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You do not have permission to use this command.`);
+
+		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
+
+		if (!enemyFile[args[0]].dreams || enemyFile[args[0]].dreams.length == 0) return message.channel.send(`${args[0]} doesn't have any dreams.`);
+
+		let array = [];
+		for (let i in enemyFile[args[0]].dreams) array.push({title: `**[${i}]**`, desc: `_"${enemyFile[args[0]].dreams[i]}"_`});
+
+		listArray(message.channel, array, message.author.id);
+	}
+})
+
+commands.setenemydream = new Command({
+	desc: "Sets an enemy's dream.",
+	section: "enemies",
+	aliases: ['setenemydream', 'setenemydreams', 'setenemydreams'],
+	args: [
+		{
+			name: "Enemy Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Dream",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Dream ID",
+			type: "Num",
+			forced: false
+		}
+	],
+	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`You are banned from using this command.`);
+		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You do not have permission to use this command.`);
+
+		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
+
+		if (!enemyFile[args[0]].dreams) enemyFile[args[0]].dreams = [];
+
+		if (args[2] && enemyFile[args[0]].dreams[args[2]]) enemyFile[args[0]].dreams[args[2]] = args[1];
+		else enemyFile[args[0]].dreams.push(args[1]);
+
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+	}
+})
+
+commands.clearenemydream = new Command({
+	desc: 'Removes a dream from an enemy.',
+	aliases: ['clearenemydreams', 'cen'],
+	section: "enemies",
+	args: [
+		{
+			name: "Enemy Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Dream ID",
+			type: "Num",
+			forced: false
+		}
+	],
+	func: (message, args) => {
+		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
+		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to remove a dream from ${args[0]}.`);
+
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
+
+		if (!args[1]) {
+			message.channel.send('**[WARNING]**\nAre you sure? **YOU CANNOT GET THESE BACK!**')
+			
+			let givenResponce = false
+			let collector = message.channel.createMessageCollector({ time: 15000 });
+			collector.on('collect', m => {
+				if (m.author.id == message.author.id) {
+					if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
+						m.react('👍');
+						message.react('👍');
+
+						enemyFile[args[0]].dreams = [];
+						fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+					} else {
+						m.react('👍');
+						message.react('👍');
+						message.channel.send(`${args[0]} will not be cleansed of their dreams.`);
+					}
+				}
+			});
+			collector.on('end', c => {
+				if (givenResponce == false) message.channel.send("I'll... take that as a no.");
+			});
+		} else {
+			enemyFile[args[0]].dreams.splice(args[1], 1);
+			message.react('👍');
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		}
 	}
 })

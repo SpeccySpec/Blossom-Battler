@@ -208,7 +208,7 @@ commands.help = new Command({
 				}
 			}
 
-			if (commandsList.length > 15) {
+			if (commandsList.length > 12) {
 				let commandsByCategory = {}
 				for (let command of commandsList) {
 					if (!commandsByCategory[command[1]]) commandsByCategory[command[1]] = []
