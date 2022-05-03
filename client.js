@@ -886,12 +886,19 @@ Command = class extends ArgList {
 		super(object.args, object.desc)
 		this.section = object.section
 		this.func = object.func
+		this.checkban = object.checkban
+		this.admin = object.admin
 	}
 
 	call(message, rawargs) {
 		const args = this.parse(message, rawargs)
-		if (args)
-			this.func(message, args)
+		if (!args)
+			return
+		if (this.checkban && utilityFuncs.isBanned(message.author.id, message.guild.id))
+			return message.channel.send(`${message.author.username}, you are banned from using this bot.`)
+		if (this.admin && !utilityFuncs.isAdmin(message))
+			return message.channel.send(this.admin);
+		this.func(message, args)
 	}
 }
 

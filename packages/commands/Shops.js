@@ -23,10 +23,10 @@ commands.openshop = new Command({
 		}
 	],
 	section: "shops",
+	checkban: true,
+	admin: "You lack sufficient permissions, I'm so sorry!",
 	func: (message, args) => {
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
 		let shopData = setUpFile(`${dataPath}/json/${message.guild.id}/shops.json`);
-        if (!utilityFuncs.isAdmin(message)) return message.channel.send("You lack sufficient permissions, I'm so sorry!");
 
         if (!args[1]) {
             const DiscordEmbed = new Discord.MessageEmbed()
