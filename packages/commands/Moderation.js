@@ -308,23 +308,20 @@ commands.description = new Command({
 			forced: true
 		}
 	],
+	admin: "You do not have permission to change the description!",
 	func: (message, args) => {
 		let settings = setUpSettings(message.guild.id)
 
-		if (utilityFuncs.isAdmin(message)) {
-			if (args[0].length > 1024) {
-				return message.channel.send('Description is too long!')
-			}
-			if (args[0] == '' || args[0] == ' ' || args[0] == 'none') {
-				settings['desc'] = ''
-			} else {
-				settings['desc'] = args[0]
-			}
-			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
-			message.channel.send('Description set to ' + args[0])
-		} else {
-			return message.channel.send('You do not have permission to change the description!')
+		if (args[0].length > 1024) {
+			return message.channel.send('Description is too long!')
 		}
+		if (args[0] == '' || args[0] == ' ' || args[0] == 'none') {
+			settings['desc'] = ''
+		} else {
+			settings['desc'] = args[0]
+		}
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+		message.channel.send('Description set to ' + args[0])
 	}
 })
 

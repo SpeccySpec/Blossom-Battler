@@ -222,8 +222,8 @@ commands.registeritem = new Command({
             type: "Word",
         }
 	],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (itemFile[args[0]] && itemFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("This item exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
@@ -338,8 +338,8 @@ commands.purgeitem = new Command({
             forced: true
         }
     ],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
@@ -503,8 +503,8 @@ commands.edititem = new Command({
             multiple: true
         }
     ],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
@@ -724,8 +724,8 @@ commands.itemimage = new Command({
             forced: true
         }
     ],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item.`);
@@ -738,104 +738,6 @@ commands.itemimage = new Command({
         message.react('👍');
     }
 })
-
-commands.purgeweapon = new Command({
-    desc: `Purges a weapon of your choice. **YOU CANNOT GET IT BACK AFTER DELETION!**`,
-    section: 'items',
-    aliases: ['weaponpurge', 'unregisterweapon', 'weaponunregister', 'deleteweapon', 'weapondelete'],
-    args: [
-        {
-            name: "Name",
-            type: "Word",
-            forced: true
-        }
-    ],
-    func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
-        weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
-
-        if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon name.`);
-
-        if (weaponFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this weapon, therefore, you have insufficient permissions to delete it.")
-
-        message.channel.send(`Are you **sure** you want to delete ${weaponFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this weapon.\n**Y/N**`);
-
-        var givenResponce = false
-        var collector = message.channel.createMessageCollector({ time: 15000 });
-        collector.on('collect', m => {
-            if (m.author.id == message.author.id) {
-                if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
-                    message.channel.send(`${weaponFile[args[0]].name} has been erased from existance. The loot and chests that have this weapon should be checked in order to ensure that they do not have an invalid weapon.`)
-                    delete weaponFile[args[0]]
-
-                    let warning = '**WARNING**'
-                    let warningText = {}
-
-                    warningText['loot'] = ''
-                    warningText['chests'] = ''
-                    lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
-                    chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
-                    for (let item in lootFile) {
-                        for (const i in lootFile[item].items) {
-                            if (i % 4 == 3) {
-                                if (lootFile[item].items[i-2] == args[0] && lootFile[item].items[i-3] == 'weapon') {
-                                    lootFile[item].items[i-3] = ''
-                                    lootFile[item].items[i-2] = ''
-                                    lootFile[item].items[i-1] = ''
-                                    lootFile[item].items[i] = ''
-                                }
-                            }
-                        }
-                        if (lootFile[item].items.includes('')) warningText['loot'] += `- ${lootFile[item].name}\n`
-
-                        lootFile[item].items.filter(a => (a != ''))
-                    }
-                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/loot.json`, JSON.stringify(lootFile))
-
-                    for (let channel in chestFile) {
-                        for (let chest in chestFile[channel]) {
-                            if (chestFile[channel][chest].items && chestFile[channel][chest].items['weapon']) {
-                                for (let item in chestFile[channel][chest].items['weapon']) {
-                                    if (item = args[0]) {
-                                        warningText['chests'] += `- ${chestFile[channel][chest].name}\n`
-                                        delete chestFile[channel][chest].items['weapon'][item]
-                                    }
-                                }
-                                if (Object.keys(chestFile[channel][chest].items['weapon']).length == 0) {
-                                    delete chestFile[channel][chest].items['weapon']
-                                }
-                            }
-                        }
-                    }
-                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
-
-                    for (let type in warningText) {
-                        if (warningText[type] != '') {
-                            warning += `\nThe following ${type} have the weapon in use:\n${warningText[type]}\nso it was removed from them.`
-                        }
-                    }
-                    if (warning != '**WARNING:**') message.channel.send(warning)
-
-                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile, null, 4));
-                } else
-                    message.channel.send(`${weaponFile[args[0]].name} will not be deleted.`);
-
-                    givenResponce = true
-                    collector.stop()
-                }
-            });
-            collector.on('end', c => {
-                if (givenResponce == false)
-                    message.channel.send(`No response given.\n${weaponFile[args[0]].name} will not be deleted.`);
-            });
-    }
-})
-
-
-
-
-
-// Now for Weapons, treat them similarly to item commands
 
 commands.registerweapon = new Command({
     desc: 'Creates a weapon to be equipped. They can be used in battle to grant certain effects or restore health.',
@@ -881,9 +783,8 @@ commands.registerweapon = new Command({
             type: "Word",
         }
     ],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
-        //treat it similarly as the registeritem command
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
         if (weaponFile[args[0]] && weaponFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("This weapon exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
@@ -1061,8 +962,8 @@ commands.weaponimage = new Command({
             forced: true
         }
     ],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
         if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon.`);
@@ -1097,8 +998,8 @@ commands.editweapon = new Command({
             forced: true
         }
     ],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
         if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon.`);
@@ -1175,6 +1076,97 @@ commands.editweapon = new Command({
     }
 })
 
+commands.purgeweapon = new Command({
+    desc: `Purges a weapon of your choice. **YOU CANNOT GET IT BACK AFTER DELETION!**`,
+    section: 'items',
+    aliases: ['weaponpurge', 'unregisterweapon', 'weaponunregister', 'deleteweapon', 'weapondelete'],
+    args: [
+        {
+            name: "Name",
+            type: "Word",
+            forced: true
+        }
+    ],
+    checkban: true,
+    func: (message, args) => {
+        weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
+
+        if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon name.`);
+
+        if (weaponFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this weapon, therefore, you have insufficient permissions to delete it.")
+
+        message.channel.send(`Are you **sure** you want to delete ${weaponFile[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this weapon.\n**Y/N**`);
+
+        var givenResponce = false
+        var collector = message.channel.createMessageCollector({ time: 15000 });
+        collector.on('collect', m => {
+            if (m.author.id == message.author.id) {
+                if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
+                    message.channel.send(`${weaponFile[args[0]].name} has been erased from existance. The loot and chests that have this weapon should be checked in order to ensure that they do not have an invalid weapon.`)
+                    delete weaponFile[args[0]]
+
+                    let warning = '**WARNING**'
+                    let warningText = {}
+
+                    warningText['loot'] = ''
+                    warningText['chests'] = ''
+                    lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
+                    chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+                    for (let item in lootFile) {
+                        for (const i in lootFile[item].items) {
+                            if (i % 4 == 3) {
+                                if (lootFile[item].items[i-2] == args[0] && lootFile[item].items[i-3] == 'weapon') {
+                                    lootFile[item].items[i-3] = ''
+                                    lootFile[item].items[i-2] = ''
+                                    lootFile[item].items[i-1] = ''
+                                    lootFile[item].items[i] = ''
+                                }
+                            }
+                        }
+                        if (lootFile[item].items.includes('')) warningText['loot'] += `- ${lootFile[item].name}\n`
+
+                        lootFile[item].items.filter(a => (a != ''))
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/loot.json`, JSON.stringify(lootFile))
+
+                    for (let channel in chestFile) {
+                        for (let chest in chestFile[channel]) {
+                            if (chestFile[channel][chest].items && chestFile[channel][chest].items['weapon']) {
+                                for (let item in chestFile[channel][chest].items['weapon']) {
+                                    if (item = args[0]) {
+                                        warningText['chests'] += `- ${chestFile[channel][chest].name}\n`
+                                        delete chestFile[channel][chest].items['weapon'][item]
+                                    }
+                                }
+                                if (Object.keys(chestFile[channel][chest].items['weapon']).length == 0) {
+                                    delete chestFile[channel][chest].items['weapon']
+                                }
+                            }
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+
+                    for (let type in warningText) {
+                        if (warningText[type] != '') {
+                            warning += `\nThe following ${type} have the weapon in use:\n${warningText[type]}\nso it was removed from them.`
+                        }
+                    }
+                    if (warning != '**WARNING:**') message.channel.send(warning)
+
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile, null, 4));
+                } else
+                    message.channel.send(`${weaponFile[args[0]].name} will not be deleted.`);
+
+                    givenResponce = true
+                    collector.stop()
+                }
+            });
+            collector.on('end', c => {
+                if (givenResponce == false)
+                    message.channel.send(`No response given.\n${weaponFile[args[0]].name} will not be deleted.`);
+            });
+    }
+})
 
 
 commands.registerarmor = new Command({
@@ -1211,8 +1203,8 @@ commands.registerarmor = new Command({
             type: "Word",
         }
     ],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (armorFile[args[0]] && armorFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("This armor exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
@@ -1386,8 +1378,8 @@ commands.armorimage = new Command({
             forced: true
         }
     ],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (!armorFile[args[0]]) return message.channel.send(`${args[0]} is not a valid armor.`);
@@ -1422,8 +1414,8 @@ commands.editarmor = new Command({
             forced: true
         }
     ],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (!armorFile[args[0]]) return message.channel.send(`${args[0]} is not a valid armor.`);
@@ -1507,8 +1499,8 @@ commands.purgearmor = new Command({
             forced: true
         }
     ],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (!armorFile[args[0]]) return message.channel.send(`${args[0]} is not a valid armor name.`);
@@ -1614,8 +1606,8 @@ commands.makecraftingrecipe = new Command({
             type: "Word"
         }
     ],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
@@ -1749,8 +1741,8 @@ commands.clearitemrecipe = new Command({
             forced: true
         }
     ],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)

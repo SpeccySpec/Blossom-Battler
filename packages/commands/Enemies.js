@@ -185,9 +185,9 @@ commands.registerenemy = new Command({
 			type: "Word",
 		}
 	],
+	checkban: true,
+	admin: "You do not have sufficient permissions to register an enemy.",
 	func: (message, args) => {
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
-		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`${message.author.username}, you do not have permission to use this command.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid enemy name! Please enter an actual name.');
 
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
@@ -279,9 +279,9 @@ commands.encounter = new Command({
 			forced: true
 		}
 	],
+	checkban: true,
+	admin: 'You do not have permission to manually set an enemy as encountered.',
 	func: (message, args) => {
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
-		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`${message.author.username}, you do not have permission to use this command.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid enemy name! Please enter an actual name.');
 
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
@@ -406,9 +406,9 @@ commands.assignloot = new Command({
             forced: true
         }
     ],
+	checkban: true,
+	admin: 'You do not have permission to assign loot to an enemy.',
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
-        if (!utilityFuncs.isAdmin(message)) return message.channel.send("You do not have sufficient permissions to assign loot to enemies.")
         lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
         enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
 
@@ -434,9 +434,9 @@ commands.deassignloot = new Command({
 			forced: true
 		}
 	],
+	checkban: true,
+	admin: 'You do not have permission to deassign loot from an enemy.',
 	func: (message, args) => {
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
-		if (!utilityFuncs.isAdmin(message)) return message.channel.send("You do not have sufficient permissions to deassign loot from enemies.")
 		lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
 
@@ -522,9 +522,9 @@ commands.changeenemystats = new Command({
 			forced: true
 		}
 	],
+	checkban: true,
+	admin: 'You do not have permission to change the stats of an enemy.',
 	func: (message, args) => {
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
-		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to use this command.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid enemy name! Please enter an actual name.');
 
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
@@ -567,9 +567,9 @@ commands.enemytype = new Command({
 			forced: true
 		}
 	],
+	checkban: true,
+	admin: 'You do not have permission to change the type of an enemy.',
 	func: (message, args) => {
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
-		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to use this command.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid enemy name! Please enter an actual name.');
 
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
@@ -600,9 +600,9 @@ commands.enemyjournal = new Command({
 			forced: true
 		}
 	],
+	checkban: true,
+	admin: 'You do not have permission to change the journal entry of an enemy.',
 	func: (message, args) => {
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
-		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to use this command.`);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid enemy name! Please enter an actual name.');
 
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
@@ -789,8 +789,9 @@ commands.purgeenemy = new Command({
 			forced: true
 		}
 	],
+	checkban: true,
+	admin: 'You do not have permission to delete an enemy.',
 	func: (message, args) => {
-		if (!utilityFuncs.isAdmin(message)) return message.channel.send("You do not have sufficient permissions to delete enemies.");
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
 
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy name.`);
@@ -894,10 +895,10 @@ commands.setimage = new Command({
 			forced: true
 		}
 	],
+	checkban: true,
+	admin: 'You do not have permission to set an image for an enemy.',
 	func: (message, args) => {
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`You are banned from using this command.`);
-		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You do not have permission to use this command.`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy name.`);
 
 		if (args[1].toLowerCase() != 'none')
@@ -1029,10 +1030,9 @@ commands.setnegotiation = new Command({
 			forced: true
 		}
 	],
+	checkban: true,
+	admin: 'You do not have permission to set negotiations.',
 	func: (message, args) => {
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`You are banned from using this command.`);
-		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You do not have permission to use this command.`);
-
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
@@ -1085,10 +1085,9 @@ commands.clearnegotiation = new Command({
 			forced: true
 		}
 	],
+	checkban: true,
+	admin: 'You do not have permission to clear negotiations.',
 	func: (message, args) => {
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`You are banned from using this command.`);
-		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You do not have permission to use this command.`);
-
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
@@ -1146,10 +1145,9 @@ commands.setpetvalues = new Command({
 			forced: true
 		}
 	],
+	checkban: true,
+	admin: 'You do not have permission to set pet values.',
 	func: (message, args) => {
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`You are banned from using this command.`);
-		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You do not have permission to use this command.`);
-
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
@@ -1185,10 +1183,9 @@ commands.clearpetvalues = new Command({
 			forced: true
 		}
 	],
+	checkban: true,
+	admin: 'You do not have permission to clear pet values.',
 	func: (message, args) => {
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`You are banned from using this command.`);
-		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You do not have permission to use this command.`);
-
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
@@ -1212,9 +1209,6 @@ commands.getenemydreams = new Command({
 		}
 	],
 	func: (message, args) => {
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`You are banned from using this command.`);
-		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You do not have permission to use this command.`);
-
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
@@ -1248,10 +1242,9 @@ commands.setenemydream = new Command({
 			forced: false
 		}
 	],
+	checkban: true,
+	admin: 'You do not have permission to set enemy dreams.',
 	func: (message, args) => {
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`You are banned from using this command.`);
-		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You do not have permission to use this command.`);
-
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
@@ -1281,10 +1274,9 @@ commands.clearenemydream = new Command({
 			forced: false
 		}
 	],
+	checkban: true,
+	admin: 'You do not have permission to remove enemy dreams.',
 	func: (message, args) => {
-		if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
-		if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to remove a dream from ${args[0]}.`);
-
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
 

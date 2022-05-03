@@ -54,8 +54,8 @@ commands.registerloot = new Command({
             multiple: true,
         }
     ],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
 
         if (lootFile[args[0]] && message.author.id != lootFile[args[0]].originalAuthor && !utilityFuncs.isAdmin(message)) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
@@ -126,8 +126,8 @@ commands.renameloot = new Command({
             forced: true,
         }
     ],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
 
         if (!lootFile[args[0]]) return message.channel.send(`${args[0]} does not exist.`)
@@ -246,8 +246,8 @@ commands.purgeloot = new Command({
             forced: true
         }
     ],
+    checkban: true,
     func: (message, args) => {
-        if (utilityFuncs.isBanned(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are banned from using this bot.`);
         lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
 
         if (!lootFile[args[0]]) return message.channel.send(`${args[0]} is not a valid loot table name.`);
