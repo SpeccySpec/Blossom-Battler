@@ -361,27 +361,26 @@ statusEmojis = {
 }
 
 elementTechs = {
-	burn: ['water', 'earth', 'nuclear'],
-	bleed: ['slash', 'poison', 'nuclear'],
-	freeze: ['strike', 'fire', 'earth'],
-	paralyze: ['strike', 'slash', 'pierce'],
-	dizzy: ['psychic', 'earth', 'wind'],
+	burn: ['explode', 'wind', 'grass', 'nuclear'],
+	bleed: ['slash', 'pierce', 'nuclear'],
+	freeze: ['strike', 'explode', 'fire', 'earth', 'gravity', 'nuclear', 'metal'],
+	paralyze: ['strike', 'slash', 'pierce', 'gravity'],
+	dizzy: ['psychic', 'spirit', 'sound'],
 	sleep: ['all'],
-	despair: ['psychic', 'curse', 'grass'],
-	poison: ['slash', 'pierce', 'wind'],
-	brainwash: ['psychic', 'bless', 'curse'],
-	fear: ['psychic', 'curse', 'ice'],
-	rage: ['bless', 'ice', 'psychic'],
-	ego: ['ice', 'sound', 'spirit'],
-	silence: ['sound', 'poison', 'nuclear'],
-	dazed: ['strike', 'wind', 'water'],
-	hunger: ['strike', 'pierce', 'earth'],
-	illness: ['slash', 'poison', 'nuclear'],
-	mirror: ['strike', 'slash', 'pierce', 'explode'],
-	blind: ['curse', 'bless', 'gravity'],
+	despair: ['psychic', 'curse', 'spirit'],
+	poison: ['slash', 'pierce', 'nuclear'],
+	brainwash: ['psychic', 'bless', 'spirit'],
+	fear: ['psychic', 'curse', 'spirit'],
+	rage: ['bless', 'sound', 'psychic'],
+	ego: ['psychic', 'sound', 'curse'],
+	silence: ['sound', 'psychic'],
+	dazed: ['psychic', 'wind', 'gravity', 'sound'],
+	hunger: ['poison', 'nuclear'],
+	mirror: ['strike', 'slash', 'pierce', 'explode', 'sound'],
+	blind: ['all'],
 	irradiation: ['fire', 'nuclear', 'water'],
-	sensitive: ['spirit', 'psychic', 'wind'],
-	happy: ['curse', 'poison', 'spirit']
+	sensitive: ['strike', 'slash', 'pierce', 'explode', 'spirit', 'wind'],
+	happy: ['psychic', 'bless', 'curse', 'spirit', 'sound']
 }
 
 // Enemy Habitats
