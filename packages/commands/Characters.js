@@ -322,13 +322,13 @@ function checkArg(type, variable, validTypes, message, settings) {
 			}
 
 			if (type == 'limitbreaks') {
-				variable.toLowerCase()
 				if (!isNaN(variable)) {
 					if (parseInt(variable) < 1 || parseInt(variable) > 4) {
 						message.channel.send(`${variable} is not in the range of 1-4!`);
 						return false
 					}
 				} else {
+					variable = variable.toLowerCase()
 					if (variable != 'true' && variable != 'false') {
 						if (variable != 'atk' && variable != 'heal') {
 							message.channel.send(`${variable} is not a valid limit break class! (atk/heal)`);
@@ -364,7 +364,7 @@ function checkArg(type, variable, validTypes, message, settings) {
 				return false
 			}
 		default:
-			message.channel.send(`Invalid type! Valid types are: \`${validTypes.join('\`\n -\`')}`);
+			message.channel.send(`Invalid type! Valid types are: \`${validTypes.join('\`\n -\`')}\``);
 			return false
 	}
 

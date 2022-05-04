@@ -1,7 +1,8 @@
-function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFile) {
+function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFile, charFile) {
     if (!itemFile) itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
     if (!weaponFile) weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
     if (!armorFile) armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
+    if (!charFile) charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
 
     let userTxt = getServerUser(chestDefs.originalAuthor, message)
 
@@ -9,9 +10,10 @@ function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFil
     let lockTypeName = chestDefs.lock[0].charAt(0).toUpperCase() + chestDefs.lock[0].slice(1)
     switch (chestDefs.lock[0]) {
         case 'party':
-        case 'character':
         case 'pet':
             break;
+        case 'character':
+            lockTxt = `${lockTypeName} (${elementEmoji[charFile[chestDefs.lock[1]].mainElement]} ${charFile[chestDefs.lock[1]].name})`
         case 'money':
             lockTxt = `${lockTypeName} (${chestDefs.lock[1]})`
             break;
@@ -141,9 +143,11 @@ commands.registerchest = new Command({
 
         switch (lockType) {
             case 'party':
-            case 'character':
             case 'pet':
                 return message.channel.send("This type of lock hasn't been implemented yet.")
+            case 'character':
+                let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
+                if (!charFile[lockKey]) return message.channel.send(`${lockKey} is not a valid character.`)
             case 'money':
                 if (isNaN(lockKey)) return message.channel.send("The lock key must be a number.")
                 lockKey = Math.max(0, parseInt(lockKey))
@@ -315,46 +319,239 @@ commands.getchest = new Command({
     }
 })
 
+function checkArg(type, variable, validTypes, message, settings) {
+	switch (type) {
+		case 'user':
+			variable = variable.toLowerCase();
+			if (variable.startsWith('<@') && variable.endsWith('>')) {
+				let user = message.guild.members.cache.find(m => m.id == variable.slice(2, -1));
+				if (!user) {
+					message.channel.send('Invalid user! Please enter a valid user.');
+					return false
+				}
+			} else if (variable.startsWith('<@!') && variable.endsWith('>')) {
+				let user = message.guild.members.cache.find(m => m.id == variable.slice(3, -1));
+				if (!user) {
+					message.channel.send('Invalid user! Please enter a valid user.');
+					return false
+				}
+			}
+			if (!variable.includes('@') && message.mentions.members.size == 0) {
+				let user = message.guild.members.cache.find(m => m.id == variable);
+				if (!user) {
+					message.channel.send('Invalid user! Please enter a valid user.');
+					return false
+				}
+			}
+			break;
+        case 'channel':
+            if (variable.startsWith('<#') && variable.endsWith('>')) {
+                let channel = message.guild.channels.cache.find(c => c.id == variable.slice(2, -1));
+                if (!channel) {
+                    message.channel.send('Invalid channel! Please enter a valid channel.');
+                    return false
+                }
+            } else if (variable.startsWith('<#!') && variable.endsWith('>')) {
+                let channel = message.guild.channels.cache.find(c => c.id == variable.slice(3, -1));
+                if (!channel) {
+                    message.channel.send('Invalid channel! Please enter a valid channel.');
+                    return false
+                }
+            } 
+            if (!variable.includes('#') && message.mentions.channels.size == 0) {
+                //check if it's only numbers or not
+                if (variable.match(/^[0-9]+$/)) {
+                    let channel = message.guild.channels.cache.find(c => c.id == variable);
+                    if (!channel) {
+                        message.channel.send('Invalid channel! Please enter a valid channel.');
+                        return false
+                    }
+                } else {
+                    let channel = message.guild.channels.cache.find(c => c.name == variable);
+                    if (!channel) {
+                        message.channel.send('Invalid channel! Please enter a valid channel.');
+                        return false
+                    }
+                }
+            }
+            break;
+        case 'lock':
+            variable = variable.toLowerCase();
+            const validLockTypes = ['party', 'character', 'money', 'pet', 'item', 'weapon', 'armor', 'password', 'none']
+            if (!validLockTypes.includes(variable)) {
+                message.channel.send('Invalid lock type! Please enter a valid lock type. Valid lock types are: `party`, `character`, `money`, `pet`, `item`, `weapon`, `armor`, `password`, and `none`.');
+                return false
+            }
+            break;
+        case 'item':
+        case 'weapon':
+        case 'armor':
+            if (variable.toString().toLowerCase() != 'true' && variable.toString().toLowerCase() != 'false') {
+                let thingDef = setUpFile(`${dataPath}/json/${message.guild.id}/${type}s.json`)
+                if (!thingDef[variable]) {
+                    message.channel.send(`Invalid ${type}! Please enter a valid ${type}.`);
+                    return false
+                }
+            }
+            break;
+        case 'money':
+            if (variable.toString().toLowerCase() != 'true' && variable.toString().toLowerCase() != 'false') {
+                if (isNaN(variable)) {
+                    message.channel.send(`Invalid amount! Please enter a valid amount of ${getCurrency(message.guild.id)}s.`);
+                    return false
+                }
+            }
+            break;
+		default:
+			message.channel.send(`Invalid type! Valid types are: \`${validTypes.join('\`\n -\`')}\``);
+			return false
+	}
+
+	return true
+}
+
 commands.listchests = new Command({
     desc: `Lists all chests.`,
     section: 'chests',
     args: [
         {
-            name: "Channel",
-            type: "Channel",
-        },
-        {
-            name: "Quick Page",
-            type: "Num"
-        }
+			name: "Type #1, Variable #1",
+			type: "Word",
+			forced: false,
+			multiple: true
+		}
     ],
     func: (message, args) => {
+        let array = [];
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
 
-        let array = []
-        for (let channel in chestFile) {
-            for (let chest in chestFile[channel]) {
+        const validTypes = ['channel', 'user', 'lock', 'item', 'weapon', 'armor', 'money'];
+
+        if (args[0]) {
+			if (args.length % 2 != 0) return message.channel.send('The number of arguments must be even.');
+
+			for (i in args) {
+				if (i % 2 == 1) {
+					let thingy = checkArg(args[i-1].toLowerCase(), args[i], validTypes, message)
+					if (!thingy) return
+					if (thingy == 'disabled') {
+						args[i-1] = '';
+						args[i] = '';
+					}
+				}
+			}
+			args = args.filter(arg => arg != '');
+			
+			for (i in args) {
+				if (i % 2 == 0) {
+					if (args.filter(arg => arg == args[i]).length > 1) {
+						return message.channel.send('You cannot have multiple of the same type.');
+					}
+				}
+			}
+		}
+
+        for (const channel in chestFile) {
+            for (const i in chestFile[channel]) {
+                let isConditionMet = true;
+                for (a in args) {
+                    if (a % 2 == 1) {
+                        switch (args[a-1].toLowerCase()) {
+                            case 'user':
+                                args[a] = args[a].toLowerCase();
+                                if (args[a].startsWith('<@') && args[a].endsWith('>')) {
+                                    let user = message.guild.members.cache.find(m => m.id == args[a].slice(2, -1));
+                                    args[a] = user.id;
+                                } else if (args[a].startsWith('<@!') && args[a].endsWith('>')) {
+                                    let user = message.guild.members.cache.find(m => m.id == args[a].slice(3, -1));
+                                    args[a] = user.id;
+                                }
+                                if (!args[a].includes('@') && message.mentions.members.size == 0) {
+                                    let user = message.guild.members.cache.find(m => m.id == args[a]);
+                                    args[a] = user.id;
+                                }
+                                if (message.mentions.members.size > 0) {
+                                    args[a] = message.mentions.members.first().id;
+                                }
+
+                                isConditionMet = (chestFile[channel][i].originalAuthor == args[a])
+                                break;
+                            case 'channel':
+                                if (args[a].startsWith('<#') && args[a].endsWith('>')) {
+                                    let channel = message.guild.channels.cache.find(c => c.id == args[a].slice(2, -1));
+                                    args[a] = channel.id;
+                                } else if (args[a].startsWith('<#!') && args[a].endsWith('>')) {
+                                    let channel = message.guild.channels.cache.find(c => c.id == args[a].slice(3, -1));
+                                    args[a] = channel.id;
+                                }
+                                if (!args[a].includes('#') && message.mentions.channels.size == 0) {
+                                    if (args[a].match(/^[0-9]+$/)) {
+                                        let channel = message.guild.channels.cache.find(c => c.id == args[a]);
+                                        args[a] = channel.id;
+                                    } else {
+                                        let channel = message.guild.channels.cache.find(c => c.name == args[a]);
+                                        args[a] = channel.id;
+                                    }
+                                }
+                                if (message.mentions.channels.size > 0) {
+                                    args[a] = message.mentions.channels.first().id;
+                                }
+
+                                isConditionMet = (chestFile[channel][i].channel == args[a])
+                                break;
+                            case 'lock':
+                                isConditionMet = (chestFile[channel][i].lock && chestFile[channel][i].lock[0] == args[a])
+                                break;
+                            case 'item':
+                            case 'weapon':
+                            case 'armor':
+                                if (args[a].toString().toLowerCase() != 'true' && args[a].toString().toLowerCase() != 'false') {
+                                    isConditionMet = (chestFile[channel][i]['items'] && chestFile[channel][i]['items'][args[a-1]] && Object.keys(chestFile[channel][i]['items'][args[a-1]]).includes(args[a]))
+                                } else {
+                                    if (args[a].toString().toLowerCase() == 'true') {
+                                        isConditionMet = (chestFile[channel][i]['items'] && chestFile[channel][i]['items'][args[a-1]] && Object.keys(chestFile[channel][i]['items'][args[a-1]]).length > 0)
+                                    } else {
+                                        isConditionMet = ((chestFile[channel][i]['items'] && chestFile[channel][i]['items'][args[a-1]] && Object.keys(chestFile[channel][i]['items'][args[a-1]]).length == 0) || !chestFile[channel][i]['items'] || (chestFile[channel][i]['items'] && !chestFile[channel][i]['items'][args[a-1]]))
+                                    }
+                                }
+                                break;
+                            case 'money':
+                                if (args[a].toString().toLowerCase() != 'true' && args[a].toString().toLowerCase() != 'false') {
+                                    isConditionMet = (chestFile[channel][i]['items'] && chestFile[channel][i]['items']['money'] == parseInt(args[a]))
+                                } else {
+                                    if (args[a].toString().toLowerCase() == 'true') {
+                                        isConditionMet = (chestFile[channel][i]['items'] && chestFile[channel][i]['items']['money'] > 0)
+                                    } else {
+                                        isConditionMet = ((chestFile[channel][i]['items'] && chestFile[channel][i]['items']['money'] == 0) || (chestFile[channel][i]['items'] && !chestFile[channel][i]['items']['money']) || !chestFile[channel][i]['items'])
+                                    }
+                                }
+                                break;
+                        }
+
+                        if (isConditionMet == false || isConditionMet == undefined) break;
+                    }
+                }
+                if (isConditionMet == false || isConditionMet == undefined) continue;
+
                 let channelTxt = ''
                 try {
-                    channelTxt = `${message.guild.channels.cache.get(chestFile[channel][chest].channel).name} (${chestFile[channel][chest].channel})`
+                    channelTxt = `${message.guild.channels.cache.get(chestFile[channel][i].channel).name}`
                 } catch (e) {
-                    channelTxt = `${chestFile[channel][chest].channel}`
+                    channelTxt = `${chestFile[channel][i].channel}`
                 }
 
-                let name = `${chestFile[channel][chest].name} (${chest})`
+                let name = `${chestFile[channel][i].name} (${i})`
 
                 //check if hidden, if so, surround channelTxt and name in ||
-                if (chestFile[channel][chest].hidden) {
+                if (chestFile[channel][i].hidden) {
                     channelTxt = `||${channelTxt}||`
                     name = `||${name}||`
                 }
 
-    
+        
                 array.push({title: name, desc: `located in ${channelTxt}`});
             }
         }
-
-        array.filter(e => !args[0] || (args[0] && e.desc.includes(args[0])))
 
         if (array.length == 0) return message.channel.send(`No chests found.`);
 
@@ -532,9 +729,12 @@ commands.editchest = new Command({
 
                 switch (lockType) {
                     case 'party':
-                    case 'character':
                     case 'pet':
                         return message.channel.send("This type of lock hasn't been implemented yet.")
+                    case 'character':
+                        let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
+                        if (!charFile[lockKey]) return message.channel.send(`${lockKey} is not a valid character.`)
+                        break;
                     case 'money':
                         if (isNaN(lockKey)) return message.channel.send("The lock key must be a number.")
                         lockKey = Math.max(0, parseInt(lockKey))

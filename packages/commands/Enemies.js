@@ -615,113 +615,206 @@ commands.enemyjournal = new Command({
 	}
 })
 
+function checkArg(type, variable, validTypes, message, settings) {
+	switch (type) {
+		case 'element':
+			variable = variable.toLowerCase();
+			if (!utilityFuncs.inArray(variable, Elements)) {
+				message.channel.send(`${variable} is not a valid element!`);
+				return false
+			}
+			break;
+		case 'superweak':
+		case 'weak':
+		case 'resist':
+		case 'block':
+		case 'repel':
+		case 'drain':
+			variable = variable.toLowerCase();
+			if (!utilityFuncs.inArray(variable, Elements) && !utilityFuncs.inArray(variable, statusEffects)) {
+				message.channel.send(`${variable} is not a valid status or element!`);
+				return false
+			}
+			if (utilityFuncs.inArray(variable, statusEffects) && !settings.mechanics.stataffinities) {
+				message.channel.send(`Status affinities are not enabled on this server! I shall exclude it from searching.`);
+				return 'disabled'
+			}
+			break;
+		case 'level':
+			if (isNaN(variable)) {
+				message.channel.send('Invalid level! Please enter a valid level.');
+				return false
+			}
+			break;
+		case 'limitbreaks':
+			if (!settings.mechanics[type]) {
+				message.channel.send(`Limit Breaks are not enabled on this server! I shall exclude it from searching.`);
+				return 'disabled'
+			}
+
+			if (!isNaN(variable)) {
+				if (parseInt(variable) < 1 || parseInt(variable) > 4) {
+					message.channel.send(`${variable} is not in the range of 1-4!`);
+					return false
+				}
+			} else {
+				variable = variable.toLowerCase()
+				if (variable != 'true' && variable != 'false') {
+					if (variable != 'atk' && variable != 'heal') {
+						message.channel.send(`${variable} is not a valid limit break class! (atk/heal)`);
+						return false
+					}
+				}
+			}
+			break;
+		case 'skill':
+			if (!skillFile[variable]) {
+				message.channel.send(`${variable} is not a valid skill!`);
+				return false
+			}
+			break;
+		case 'encountered':
+		case 'negotiable':
+		case 'pet':
+			break;
+		case 'type':
+			variable = variable.toLowerCase();
+			if (!utilityFuncs.inArray(variable, enemyTypes) && variable != 'none') {
+				message.channel.send(`${variable} is not a valid enemy type! Valid types are: ${enemyTypes.join(', ')}`);
+				return false
+			}
+			break;
+		default:
+			message.channel.send(`Invalid type! Valid types are: \`${validTypes.join('\`\n -\`')}\``);
+			return false
+	}
+
+	return true
+}
+
 commands.listenemies = new Command({
 	desc: 'Lists *all* enemies in the server.',
 	section: 'enemies',
 	args: [
 		{
-			name: "Type",
+			name: "Type #1, Variable #1",
 			type: "Word",
-			forced: false
-		},
-		{
-			name: "Variable",
-			type: "Any",
-			forced: false
+			forced: false,
+			multiple: true
 		}
 	],
 	func: (message, args) => {
 		let array = [];
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 
-		const validTypes = ['element', 'superweak', 'weak', 'resist', 'block', 'repel', 'drain', 'level', 'limitbreaks', 'encountered', 'negotiable', 'pet', 'type'];
+		const validTypes = ['element', 'superweak', 'weak', 'resist', 'block', 'repel', 'drain', 'level', 'limitbreaks', 'skill', 'encountered', 'negotiable', 'pet', 'type', 'dreams', 'loot'];
 
 		let settings = setUpSettings(message.guild.id);
 
 		if (args[0]) {
-			args[0] = args[0].toLowerCase();
+			if (args.length % 2 != 0) return message.channel.send('The number of arguments must be even.');
 
-			switch (args[0].toLowerCase()) {
-				case 'element':
-				case 'superweak':
-				case 'weak':
-				case 'resist':
-				case 'block':
-				case 'repel':
-				case 'drain':
-					if (!args[1]) return message.channel.send(`You need to specify what you look for...`);
-					args[1] = args[1].toLowerCase();
-					if (!utilityFuncs.inArray(args[1], Elements) && !utilityFuncs.inArray(args[1], statusEffects)) return message.channel.send(`${args[1]} is not a valid status or element!`);
-					if (utilityFuncs.inArray(args[1], statusEffects) && !settings.mechanics.stataffinities) return message.channel.send(`Status affinities are not enabled on this server!`);
-					break;
-				case 'level':
-					if (!args[1]) return message.channel.send(`You need to specify what you look for...`);
-					args[1] = args[1].toLowerCase();
-					if (isNaN(args[1])) return message.channel.send('Invalid level! Please enter a valid level.');
-					args[1] = parseInt(args[1]);
-					break;
-				case 'limitbreaks':
-					if (!settings.mechanics[args[0]]) return message.channel.send(`${args[0]} are not enabled on this server!`);
-					break;
-				case 'encountered':
-				case 'negotiable':
-				case 'pet':
-					args[1] = args[1] && (args[1].toLowerCase() == 'true' || args[1].toLowerCase() == 'yes' || args[1].toLowerCase() == 'y' || args[1].toLowerCase() == '1');
-					break;
-				case 'type':
-					if (!args[1]) return message.channel.send(`You need to specify what you look for...`);
-					args[1] = args[1].toLowerCase();
-					if (!utilityFuncs.inArray(args[1], enemyTypes) && args[1] != 'none') return message.channel.send(`${args[1]} is not a valid enemy type! Valid types are: ${enemyTypes.join(', ')}`);
-					break;
-				default:
-					return message.channel.send(`Invalid type! Valid types are: \`${validTypes.join('\`\n -')}`);
+			for (i in args) {
+				if (i % 2 == 1) {
+					let thingy = checkArg(args[i-1].toLowerCase(), args[i], validTypes, message, settings)
+					if (!thingy) return
+					if (thingy == 'disabled') {
+						args[i-1] = '';
+						args[i] = '';
+					}
+				}
+			}
+			args = args.filter(arg => arg != '');
+			
+			for (i in args) {
+				if (i % 2 == 0) {
+					if (args.filter(arg => arg == args[i]).length > 1) {
+						return message.channel.send('You cannot have multiple of the same type.');
+					}
+				}
 			}
 		}
 
 		for (const i in enemyFile) {
-			switch (args[0]) {
-				case 'element':
-					if (enemyFile[i].mainElement != args[1]) continue;
-					break;
-				case 'superweak':
-				case 'weak':
-				case 'resist':
-				case 'block':
-				case 'repel':
-				case 'drain':
-					if (utilityFuncs.inArray(args[1], Elements)) {
-						if (!enemyFile[i].affinities[args[0]] || (enemyFile[i].affinities[args[0]] && !enemyFile[i].affinities[args[0]].includes(args[1]))) continue;
-					} else if (utilityFuncs.inArray(args[1], statusEffects)) {
-						if (!enemyFile[i].statusaffinities[args[0]] || (enemyFile[i].statusaffinities[args[0]] && !enemyFile[i].statusaffinities[args[0]].includes(args[1]))) continue;
+			let isConditionMet = true;
+			for (a in args) {
+				if (a % 2 == 1) {
+					switch (args[a-1].toLowerCase()) {
+						case 'element':
+							args[a] = args[a].toLowerCase();
+							isConditionMet = (enemyFile[i].mainElement == args[a])
+							break;
+						case 'superweak':
+						case 'weak':
+						case 'resist':
+						case 'block':
+						case 'repel':
+						case 'drain':
+							args[a] = args[a].toLowerCase();
+							if (utilityFuncs.inArray(args[a], Elements)) {
+								isConditionMet = (enemyFile[i].affinities[args[a-1]] && enemyFile[i].affinities[args[a-1]].includes(args[a]))
+							} else if (utilityFuncs.inArray(args[a], statusEffects)) {
+								isConditionMet = (enemyFile[i].statusaffinities[args[a-1]] && enemyFile[i].statusaffinities[args[a-1]].includes(args[a]))
+							}
+							break;
+						case 'level':
+							args[a] = parseInt(args[a]);
+							isConditionMet = (enemyFile[i].level == args[a])
+							break;
+						case 'limitbreaks':
+							if (isNaN(args[a])) {
+								args[a] = args[a].toLowerCase();
+								if (args[a] == 'true') {
+									isConditionMet = (enemyFile[i].lb && Object.keys(enemyFile[i].lb).length > 0)
+								} else if (args[a] == 'false') {
+									isConditionMet = ((enemyFile[i].lb && Object.keys(enemyFile[i].lb).length == 0) || !enemyFile[i].lb)
+								} else {
+									isConditionMet = (enemyFile[i].lb && enemyFile[i].lb[1] && enemyFile[i].lb[1].class == args[a])
+								}
+							} else {
+								args[a] = parseInt(args[a]);
+								isConditionMet = (enemyFile[i].lb && enemyFile[i].lb[args[a]])
+							}
+							break;
+						case 'skill':
+							isConditionMet = enemyFile[i].skills && enemyFile[i].skills.includes(args[a])
+							break;
+						case 'type':
+							args[a] = args[a].toLowerCase();
+							isConditionMet = (enemyFile[i].type == args[a])
+							break;
+						case 'encountered':
+						case 'negotiable':
+						case 'pet':
+							args[a] = args[a].toString().toLowerCase();
+							args[a] = args[a] == 'true' || args[a] == 'yes' || args[a] == 'y' || args[a] == '1';
+
+							if (args[a-1] == 'encountered') {
+								isConditionMet = (enemyFuncs.encounteredEnemy(i, message.guild.id) == args[a])
+							}
+
+							if (args[a-1] == 'negotiable') {
+								if (args[a]) {
+									isConditionMet = enemyFile[i].negotiate && enemyFile[i].negotiate.length > 0
+								} else {
+									isConditionMet = !enemyFile[i].negotiate || (enemyFile[i].negotiate && enemyFile[i].negotiate.length == 0)
+								}
+							}
+
+							if (args[a-1] == 'pet') {
+								if (args[a]) {
+									isConditionMet = enemyFile[i].negotiateDefs && Object.keys(enemyFile[i].negotiateDefs).length > 0
+								} else {
+									isConditionMet = !enemyFile[i].negotiateDefs || (enemyFile[i].negotiateDefs && Object.keys(enemyFile[i].negotiateDefs).length == 0)
+								}
+							}
+							break;
 					}
-					break;
-				case 'level':
-					if (enemyFile[i].level != args[1]) continue;
-					break;
-				case 'limitbreaks':
-					if (!enemyFile[i].lb || Object.keys(enemyFile[i].lb).length == 0) continue;
-					break;
-				case 'encountered':
-					if (enemyFuncs.encounteredEnemy(i, message.guild.id) != args[1]) continue;
-					break;
-				case 'negotiable':
-					if (args[1] == true) {
-						if (!enemyFile[i].negotiate || enemyFile[i].negotiate.length == 0) continue;
-					} else {
-						if (enemyFile[i].negotiate && enemyFile[i].negotiate.length > 0) continue;
-					}
-					break;
-				case 'pet':
-					if (args[1] == true) {
-						if (!enemyFile[i].negotiateDefs || Object.keys(enemyFile[i].negotiateDefs).length == 0) continue;
-					} else {
-						if (enemyFile[i].negotiateDefs && Object.keys(enemyFile[i].negotiateDefs).length > 0) continue;
-					}
-					break;
-				case 'type':
-					if (enemyFile[i].type != args[1]) continue;
-					break;
+
+					if (isConditionMet == false || isConditionMet == undefined) break;
+				}
 			}
+			if (isConditionMet == false || isConditionMet == undefined) continue;
 
 			let descTxt = `${enemyFile[i].hp}HP, ${enemyFile[i].mp}MP`;
 			let title = `${elementEmoji[enemyFile[i].mainElement]}${enemyFile[i].name} (${i})`;
