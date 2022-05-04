@@ -615,83 +615,6 @@ commands.enemyjournal = new Command({
 	}
 })
 
-function checkArg(type, variable, validTypes, message, settings) {
-	switch (type) {
-		case 'element':
-			variable = variable.toLowerCase();
-			if (!utilityFuncs.inArray(variable, Elements)) {
-				message.channel.send(`${variable} is not a valid element!`);
-				return false
-			}
-			break;
-		case 'superweak':
-		case 'weak':
-		case 'resist':
-		case 'block':
-		case 'repel':
-		case 'drain':
-			variable = variable.toLowerCase();
-			if (!utilityFuncs.inArray(variable, Elements) && !utilityFuncs.inArray(variable, statusEffects)) {
-				message.channel.send(`${variable} is not a valid status or element!`);
-				return false
-			}
-			if (utilityFuncs.inArray(variable, statusEffects) && !settings.mechanics.stataffinities) {
-				message.channel.send(`Status affinities are not enabled on this server! I shall exclude it from searching.`);
-				return 'disabled'
-			}
-			break;
-		case 'level':
-			if (isNaN(variable)) {
-				message.channel.send('Invalid level! Please enter a valid level.');
-				return false
-			}
-			break;
-		case 'limitbreaks':
-			if (!settings.mechanics[type]) {
-				message.channel.send(`Limit Breaks are not enabled on this server! I shall exclude it from searching.`);
-				return 'disabled'
-			}
-
-			if (!isNaN(variable)) {
-				if (parseInt(variable) < 1 || parseInt(variable) > 4) {
-					message.channel.send(`${variable} is not in the range of 1-4!`);
-					return false
-				}
-			} else {
-				variable = variable.toLowerCase()
-				if (variable != 'true' && variable != 'false') {
-					if (variable != 'atk' && variable != 'heal') {
-						message.channel.send(`${variable} is not a valid limit break class! (atk/heal)`);
-						return false
-					}
-				}
-			}
-			break;
-		case 'skill':
-			if (!skillFile[variable]) {
-				message.channel.send(`${variable} is not a valid skill!`);
-				return false
-			}
-			break;
-		case 'encountered':
-		case 'negotiable':
-		case 'pet':
-			break;
-		case 'type':
-			variable = variable.toLowerCase();
-			if (!utilityFuncs.inArray(variable, enemyTypes) && variable != 'none') {
-				message.channel.send(`${variable} is not a valid enemy type! Valid types are: ${enemyTypes.join(', ')}`);
-				return false
-			}
-			break;
-		default:
-			message.channel.send(`Invalid type! Valid types are: \`${validTypes.join('\`\n -\`')}\``);
-			return false
-	}
-
-	return true
-}
-
 commands.listenemies = new Command({
 	desc: 'Lists *all* enemies in the server.',
 	section: 'enemies',
@@ -716,7 +639,7 @@ commands.listenemies = new Command({
 
 			for (i in args) {
 				if (i % 2 == 1) {
-					let thingy = checkArg(args[i-1].toLowerCase(), args[i], validTypes, message, settings)
+					let thingy = checkListArgument(args[i-1].toLowerCase(), args[i], validTypes, message, settings)
 					if (!thingy) return
 					if (thingy == 'disabled') {
 						args[i-1] = '';

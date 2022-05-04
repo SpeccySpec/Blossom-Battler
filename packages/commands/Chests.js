@@ -319,97 +319,6 @@ commands.getchest = new Command({
     }
 })
 
-function checkArg(type, variable, validTypes, message, settings) {
-	switch (type) {
-		case 'user':
-			variable = variable.toLowerCase();
-			if (variable.startsWith('<@') && variable.endsWith('>')) {
-				let user = message.guild.members.cache.find(m => m.id == variable.slice(2, -1));
-				if (!user) {
-					message.channel.send('Invalid user! Please enter a valid user.');
-					return false
-				}
-			} else if (variable.startsWith('<@!') && variable.endsWith('>')) {
-				let user = message.guild.members.cache.find(m => m.id == variable.slice(3, -1));
-				if (!user) {
-					message.channel.send('Invalid user! Please enter a valid user.');
-					return false
-				}
-			}
-			if (!variable.includes('@') && message.mentions.members.size == 0) {
-				let user = message.guild.members.cache.find(m => m.id == variable);
-				if (!user) {
-					message.channel.send('Invalid user! Please enter a valid user.');
-					return false
-				}
-			}
-			break;
-        case 'channel':
-            if (variable.startsWith('<#') && variable.endsWith('>')) {
-                let channel = message.guild.channels.cache.find(c => c.id == variable.slice(2, -1));
-                if (!channel) {
-                    message.channel.send('Invalid channel! Please enter a valid channel.');
-                    return false
-                }
-            } else if (variable.startsWith('<#!') && variable.endsWith('>')) {
-                let channel = message.guild.channels.cache.find(c => c.id == variable.slice(3, -1));
-                if (!channel) {
-                    message.channel.send('Invalid channel! Please enter a valid channel.');
-                    return false
-                }
-            } 
-            if (!variable.includes('#') && message.mentions.channels.size == 0) {
-                //check if it's only numbers or not
-                if (variable.match(/^[0-9]+$/)) {
-                    let channel = message.guild.channels.cache.find(c => c.id == variable);
-                    if (!channel) {
-                        message.channel.send('Invalid channel! Please enter a valid channel.');
-                        return false
-                    }
-                } else {
-                    let channel = message.guild.channels.cache.find(c => c.name == variable);
-                    if (!channel) {
-                        message.channel.send('Invalid channel! Please enter a valid channel.');
-                        return false
-                    }
-                }
-            }
-            break;
-        case 'lock':
-            variable = variable.toLowerCase();
-            const validLockTypes = ['party', 'character', 'money', 'pet', 'item', 'weapon', 'armor', 'password', 'none']
-            if (!validLockTypes.includes(variable)) {
-                message.channel.send('Invalid lock type! Please enter a valid lock type. Valid lock types are: `party`, `character`, `money`, `pet`, `item`, `weapon`, `armor`, `password`, and `none`.');
-                return false
-            }
-            break;
-        case 'item':
-        case 'weapon':
-        case 'armor':
-            if (variable.toString().toLowerCase() != 'true' && variable.toString().toLowerCase() != 'false') {
-                let thingDef = setUpFile(`${dataPath}/json/${message.guild.id}/${type}s.json`)
-                if (!thingDef[variable]) {
-                    message.channel.send(`Invalid ${type}! Please enter a valid ${type}.`);
-                    return false
-                }
-            }
-            break;
-        case 'money':
-            if (variable.toString().toLowerCase() != 'true' && variable.toString().toLowerCase() != 'false') {
-                if (isNaN(variable)) {
-                    message.channel.send(`Invalid amount! Please enter a valid amount of ${getCurrency(message.guild.id)}s.`);
-                    return false
-                }
-            }
-            break;
-		default:
-			message.channel.send(`Invalid type! Valid types are: \`${validTypes.join('\`\n -\`')}\``);
-			return false
-	}
-
-	return true
-}
-
 commands.listchests = new Command({
     desc: `Lists all chests.`,
     section: 'chests',
@@ -432,7 +341,7 @@ commands.listchests = new Command({
 
 			for (i in args) {
 				if (i % 2 == 1) {
-					let thingy = checkArg(args[i-1].toLowerCase(), args[i], validTypes, message)
+					let thingy = checkListArgument(args[i-1].toLowerCase(), args[i], validTypes, message)
 					if (!thingy) return
 					if (thingy == 'disabled') {
 						args[i-1] = '';

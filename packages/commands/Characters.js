@@ -253,136 +253,6 @@ commands.getchar = new Command({
 	}
 })
 
-function checkArg(type, variable, validTypes, message, settings) {
-	switch (type) {
-		case 'element':
-			variable = variable.toLowerCase();
-			if (!utilityFuncs.inArray(variable, Elements)) {
-				message.channel.send(`${variable} is not a valid element!`);
-				return false
-			}
-			break;
-		case 'superweak':
-		case 'weak':
-		case 'resist':
-		case 'block':
-		case 'repel':
-		case 'drain':
-			variable = variable.toLowerCase();
-			if (!utilityFuncs.inArray(variable, Elements) && !utilityFuncs.inArray(variable, statusEffects)) {
-				message.channel.send(`${variable} is not a valid status or element!`);
-				return false
-			}
-			if (utilityFuncs.inArray(variable, statusEffects) && !settings.mechanics.stataffinities) {
-				message.channel.send(`Status affinities are not enabled on this server! I shall exclude it from searching.`);
-				return 'disabled'
-			}
-			break;
-		case 'user':
-			variable = variable.toLowerCase();
-			if (variable.startsWith('<@') && variable.endsWith('>')) {
-				let user = message.guild.members.cache.find(m => m.id == variable.slice(2, -1));
-				if (!user) {
-					message.channel.send('Invalid user! Please enter a valid user.');
-					return false
-				}
-			} else if (variable.startsWith('<@!') && variable.endsWith('>')) {
-				let user = message.guild.members.cache.find(m => m.id == variable.slice(3, -1));
-				if (!user) {
-					message.channel.send('Invalid user! Please enter a valid user.');
-					return false
-				}
-			}
-			if (!variable.includes('@') && message.mentions.members.size == 0) {
-				let user = message.guild.members.cache.find(m => m.id == variable);
-				if (!user) {
-					message.channel.send('Invalid user! Please enter a valid user.');
-					return false
-				}
-			}
-			break;
-		case 'level':
-			if (isNaN(variable)) {
-				message.channel.send('Invalid level! Please enter a valid level.');
-				return false
-			}
-			break;
-		case 'leaderskills':
-		case 'limitbreaks':
-		case 'charms':
-		case 'transformations':
-		case 'teamcombos':
-			const fullNames = {
-				leaderskills: 'Leader Skills',
-				limitbreaks: 'Limit Breaks',
-				charms: 'Charms',
-				transformations: 'Transformations',
-				teamcombos: 'Team Combos'
-			}
-			if (!settings.mechanics[type]) {
-				message.channel.send(`${fullNames[type]} are not enabled on this server! I shall exclude it from searching.`);
-				return 'disabled'
-			}
-
-			if (type == 'leaderskills') {
-				variable = variable.toLowerCase();
-				let validThings = ['boost', 'discount', 'crit', 'status', 'buff']
-				if (!utilityFuncs.inArray(variable, validThings) && variable != 'true' && variable != 'false') {
-					message.channel.send(`${variable} is not a valid leader skill!`);
-					return false
-				}
-			}
-
-			if (type == 'limitbreaks') {
-				if (!isNaN(variable)) {
-					if (parseInt(variable) < 1 || parseInt(variable) > 4) {
-						message.channel.send(`${variable} is not in the range of 1-4!`);
-						return false
-					}
-				} else {
-					variable = variable.toLowerCase()
-					if (variable != 'true' && variable != 'false') {
-						if (variable != 'atk' && variable != 'heal') {
-							message.channel.send(`${variable} is not a valid limit break class! (atk/heal)`);
-							return false
-						}
-					}
-				}
-			}
-
-			if (type == 'transformations') {
-				variable = variable.toLowerCase();
-				let reqTable = ['allydown', 'onlystanding', 'belowhalfhp', 'outofmp', 'leaderdown', 'trusteddown']
-
-				if (!utilityFuncs.inArray(variable, reqTable) && variable != 'true' && variable != 'false') {
-					message.channel.send(`${variable} is not a valid transformation! (allydown/onlystanding/belowhalfhp/outofmp/leaderdown/trusteddown)`);
-					return false
-				}
-			}
-
-			if (type == 'teamcombos') {
-				if (variable.toLowerCase() != 'true' && variable.toLowerCase() != 'false') {
-					charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-					if (!charFile[variable]) {
-						message.channel.send(`${variable} is not a valid character!`);
-						return false
-					}
-				}
-			}
-			break;
-		case 'skill':
-			if (!skillFile[variable]) {
-				message.channel.send(`${variable} is not a valid skill!`);
-				return false
-			}
-		default:
-			message.channel.send(`Invalid type! Valid types are: \`${validTypes.join('\`\n -\`')}\``);
-			return false
-	}
-
-	return true
-}
-
 commands.listchars = new Command({
 	desc: 'Lists *all* existing characters. Types and Variables must be written as shown.',
 	section: "characters",
@@ -407,7 +277,7 @@ commands.listchars = new Command({
 
 			for (i in args) {
 				if (i % 2 == 1) {
-					let thingy = checkArg(args[i-1].toLowerCase(), args[i], validTypes, message, settings)
+					let thingy = checkListArgument(args[i-1].toLowerCase(), args[i], validTypes, message, settings)
 					if (!thingy) return
 					if (thingy == 'disabled') {
 						args[i-1] = '';

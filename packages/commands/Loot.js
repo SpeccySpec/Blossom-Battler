@@ -182,16 +182,96 @@ commands.listloots = new Command({
     desc: `Lists all loot tables.`,
     section: 'loot',
     args: [
-        {
-            name: "Quick Page",
-            type: "Num"
-        }
-    ],
+		{
+			name: "Type #1, Variable #1",
+			type: "Word",
+			forced: false,
+			multiple: true
+		}
+	],
     func: (message, args) => {
+        let array = []
         lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
 
-        let array = []
+        const validTypes = ['user', 'weapon', 'item', 'armor'];
+
+        if (args[0]) {
+			if (args.length % 2 != 0) return message.channel.send('The number of arguments must be even.');
+
+			for (i in args) {
+				if (i % 2 == 1) {
+					let thingy = checkListArgument(args[i-1].toLowerCase(), args[i], validTypes, message)
+					if (!thingy) return
+					if (thingy == 'disabled') {
+						args[i-1] = '';
+						args[i] = '';
+					}
+				}
+			}
+			args = args.filter(arg => arg != '');
+			
+			for (i in args) {
+				if (i % 2 == 0) {
+					if (args.filter(arg => arg == args[i]).length > 1) {
+						return message.channel.send('You cannot have multiple of the same type.');
+					}
+				}
+			}
+		}
+
         for (let loot in lootFile) {
+            let isConditionMet = true;
+            for (a in args) {
+                if (a % 2 == 1) {
+                    switch (args[a-1].toLowerCase()) {
+                        case 'user':
+                            args[a] = args[a].toLowerCase();
+                            if (args[a].startsWith('<@') && args[a].endsWith('>')) {
+                                let user = message.guild.members.cache.find(m => m.id == args[a].slice(2, -1));
+                                args[a] = user.id;
+                            } else if (args[a].startsWith('<@!') && args[a].endsWith('>')) {
+                                let user = message.guild.members.cache.find(m => m.id == args[a].slice(3, -1));
+                                args[a] = user.id;
+                            }
+                            if (!args[a].includes('@') && message.mentions.members.size == 0) {
+                                let user = message.guild.members.cache.find(m => m.id == args[a]);
+                                args[a] = user.id;
+                            }
+                            if (message.mentions.members.size > 0) {
+                                args[a] = message.mentions.members.first().id;
+                            }
+
+                            isConditionMet = (lootFile[loot].originalAuthor == args[a])
+                            break;
+                        case 'item':
+                        case 'weapon':
+                        case 'armor':
+                            if (args[a].toString().toLowerCase() != 'true' && args[a].toString().toLowerCase() != 'false') {
+                                isConditionMet = false
+                                if (lootFile[loot].items) {
+                                    for (let i in lootFile[loot].items) {
+                                        if (i % 4 == 1) {
+                                            if (lootFile[loot].items[i] == args[a] && lootFile[loot].items[i-1] == args[a-1]) {
+                                                isConditionMet = true
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                if (args[a].toString().toLowerCase() == 'true') {
+                                    isConditionMet = (lootFile[loot].items && lootFile[loot].items.includes(args[a-1]))
+                                } else {
+                                    isConditionMet = (!lootFile[loot].items || (lootFile[loot].items && !lootFile[loot].items.includes(args[a-1])))
+                                }
+                            }
+                            break;
+                    }
+                    if (isConditionMet == false || isConditionMet == undefined) break;
+                }
+            }
+            if (isConditionMet == false || isConditionMet == undefined) continue;
+
             let amount = 0
             for (i in lootFile[loot].items) {
                 if (i % 4 == 2) amount += lootFile[loot].items[i]

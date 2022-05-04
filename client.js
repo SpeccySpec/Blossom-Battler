@@ -831,6 +831,227 @@ typeParsers = {
 	Image: ({message}) => {return checkImage(message, undefined, message.attachments.first())}
 }
 
+checkListArgument = (type, variable, validTypes, message, settings) => {
+	if (!validTypes.includes(type)) {
+		message.channel.send(`Invalid type! Valid types are: \n -\`${validTypes.join('\`\n -\`')}\``);
+		return false
+	}
+
+	switch (type) {
+		case 'user':
+			variable = variable.toLowerCase();
+			if (variable.startsWith('<@') && variable.endsWith('>')) {
+				let user = message.guild.members.cache.find(m => m.id == variable.slice(2, -1));
+				if (!user) {
+					message.channel.send('Invalid user! Please enter a valid user.');
+					return false
+				}
+			} else if (variable.startsWith('<@!') && variable.endsWith('>')) {
+				let user = message.guild.members.cache.find(m => m.id == variable.slice(3, -1));
+				if (!user) {
+					message.channel.send('Invalid user! Please enter a valid user.');
+					return false
+				}
+			}
+			if (!variable.includes('@') && message.mentions.members.size == 0) {
+				let user = message.guild.members.cache.find(m => m.id == variable);
+				if (!user) {
+					message.channel.send('Invalid user! Please enter a valid user.');
+					return false
+				}
+			}
+			break;
+        case 'cost':
+		case 'level':
+            if (isNaN(variable)) {
+                message.channel.send('Invalid cost! Please enter a valid cost.');
+                return false;
+            }
+            break;
+        case 'element':
+            if (!Elements.includes(variable.toLowerCase())) {
+                message.channel.send('Invalid element! Please enter a valid element.');
+                return false;
+            }
+            break;
+        case 'recipe':
+		case 'material':
+		case 'encountered':
+		case 'negotiable':
+		case 'pet':
+            break;
+        case 'melee':
+        case 'atk':
+        case 'mag':
+		case 'heal':
+        case 'healmp':
+        case 'healhpmp':
+        case 'revive':
+        case 'pacify':
+		case 'end':
+		case 'money':
+            if (variable.toString().toLowerCase() != 'true' && variable.toString().toLowerCase() != 'false') {
+                if (isNaN(variable)) {
+                    message.channel.send('Invalid amount! Please enter a valid amount.');
+                    return false;
+                }
+            }
+            break;
+        case 'skill':
+            if (variable.toString().toLowerCase() != 'true' && variable.toString().toLowerCase() != 'false') {
+                if (!skillFile[variable]) {
+                    message.channel.send(`${variable} is not a valid skill name.`);
+                    return false;
+                }
+            }
+            break;
+		case 'rarity':
+            variable = variable.toLowerCase();
+            if (!itemRarities.includes(variable) && variable != 'none') {
+                message.channel.send(`${variable} is not a valid rarity. Valid rarities are:\n${Builders.codeBlock('', '- '+itemRarities.join(',\n- '))}`);
+                return false;
+            }
+            break;
+		case 'item':
+        case 'weapon':
+        case 'armor':
+            if (variable.toString().toLowerCase() != 'true' && variable.toString().toLowerCase() != 'false') {
+                let thingDef = setUpFile(`${dataPath}/json/${message.guild.id}/${type}s.json`)
+                if (!thingDef[variable]) {
+                    message.channel.send(`Invalid ${type}! Please enter a valid ${type}.`);
+                    return false
+                }
+            }
+            break;
+		case 'channel':
+			if (variable.startsWith('<#') && variable.endsWith('>')) {
+				let channel = message.guild.channels.cache.find(c => c.id == variable.slice(2, -1));
+				if (!channel) {
+					message.channel.send('Invalid channel! Please enter a valid channel.');
+					return false
+				}
+			} else if (variable.startsWith('<#!') && variable.endsWith('>')) {
+				let channel = message.guild.channels.cache.find(c => c.id == variable.slice(3, -1));
+				if (!channel) {
+					message.channel.send('Invalid channel! Please enter a valid channel.');
+					return false
+				}
+			} 
+			if (!variable.includes('#') && message.mentions.channels.size == 0) {
+				if (variable.match(/^[0-9]+$/)) {
+					let channel = message.guild.channels.cache.find(c => c.id == variable);
+					if (!channel) {
+						message.channel.send('Invalid channel! Please enter a valid channel.');
+						return false
+					}
+				} else {
+					let channel = message.guild.channels.cache.find(c => c.name == variable);
+					if (!channel) {
+						message.channel.send('Invalid channel! Please enter a valid channel.');
+						return false
+					}
+				}
+			}
+			break;
+		case 'lock':
+			variable = variable.toLowerCase();
+			const validLockTypes = ['party', 'character', 'money', 'pet', 'item', 'weapon', 'armor', 'password', 'none']
+			if (!validLockTypes.includes(variable)) {
+				message.channel.send('Invalid lock type! Please enter a valid lock type. Valid lock types are: `party`, `character`, `money`, `pet`, `item`, `weapon`, `armor`, `password`, and `none`.');
+				return false
+			}
+			break;
+		case 'leaderskills':
+		case 'limitbreaks':
+		case 'charms':
+		case 'transformations':
+		case 'teamcombos':
+			const fullNames = {
+				leaderskills: 'Leader Skills',
+				limitbreaks: 'Limit Breaks',
+				charms: 'Charms',
+				transformations: 'Transformations',
+				teamcombos: 'Team Combos'
+			}
+			if (!settings.mechanics[type]) {
+				message.channel.send(`${fullNames[type]} are not enabled on this server! I shall exclude it from searching.`);
+				return 'disabled'
+			}
+
+			if (type == 'leaderskills') {
+				variable = variable.toLowerCase();
+				let validThings = ['boost', 'discount', 'crit', 'status', 'buff']
+				if (!utilityFuncs.inArray(variable, validThings) && variable != 'true' && variable != 'false') {
+					message.channel.send(`${variable} is not a valid leader skill!`);
+					return false
+				}
+			}
+
+			if (type == 'limitbreaks') {
+				if (!isNaN(variable)) {
+					if (parseInt(variable) < 1 || parseInt(variable) > 4) {
+						message.channel.send(`${variable} is not in the range of 1-4!`);
+						return false
+					}
+				} else {
+					variable = variable.toLowerCase()
+					if (variable != 'true' && variable != 'false') {
+						if (variable != 'atk' && variable != 'heal') {
+							message.channel.send(`${variable} is not a valid limit break class! (atk/heal)`);
+							return false
+						}
+					}
+				}
+			}
+
+			if (type == 'transformations') {
+				variable = variable.toLowerCase();
+				let reqTable = ['allydown', 'onlystanding', 'belowhalfhp', 'outofmp', 'leaderdown', 'trusteddown']
+
+				if (!utilityFuncs.inArray(variable, reqTable) && variable != 'true' && variable != 'false') {
+					message.channel.send(`${variable} is not a valid transformation! (allydown/onlystanding/belowhalfhp/outofmp/leaderdown/trusteddown)`);
+					return false
+				}
+			}
+
+			if (type == 'teamcombos') {
+				if (variable.toLowerCase() != 'true' && variable.toLowerCase() != 'false') {
+					charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+					if (!charFile[variable]) {
+						message.channel.send(`${variable} is not a valid character!`);
+						return false
+					}
+				}
+			}
+			break;
+		case 'superweak':
+		case 'weak':
+		case 'resist':
+		case 'block':
+		case 'repel':
+		case 'drain':
+			variable = variable.toLowerCase();
+			if (!utilityFuncs.inArray(variable, Elements) && !utilityFuncs.inArray(variable, statusEffects)) {
+				message.channel.send(`${variable} is not a valid status or element!`);
+				return false
+			}
+			if (utilityFuncs.inArray(variable, statusEffects) && !settings.mechanics.stataffinities) {
+				message.channel.send(`Status affinities are not enabled on this server! I shall exclude it from searching.`);
+				return 'disabled'
+			}
+			break;
+		case 'type':
+			variable = variable.toLowerCase();
+			if (!utilityFuncs.inArray(variable, enemyTypes) && variable != 'none') {
+				message.channel.send(`${variable} is not a valid enemy type! Valid types are: ${enemyTypes.join(', ')}`);
+				return false
+			}
+			break;
+	}
+
+	return true
+}
+
 ArgList = class {
 	constructor(args, desc) {
 		this.args = args ?? []

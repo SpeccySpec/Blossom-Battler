@@ -298,27 +298,115 @@ commands.listitems = new Command({
     section: 'items',
     args: [
         {
-            name: "Type",
-            type: "Word",
-        },
-        {
-            name: "Quick Page",
-            type: "Num"
-        }
+			name: "Type #1, Variable #1",
+			type: "Word",
+			forced: false,
+			multiple: true
+		}
     ],
     func: (message, args) => {
+        let array = []
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
-        let array = []
-        for (let item in itemFile) {
-            
-            if (!args[0]) {
-				array.push({title: `${itemTypeEmoji[itemFile[item].type]}${itemFile[item].name} (${item})`, desc: `${itemFile[item].cost} cost`});
-				continue;
-			}
+        const validTypes = ['user', 'rarity', 'cost', 'skill', 'heal', 'healmp', 'healhpmp', 'revive', 'pacify', 'material', 'recipe']
+        
+        if (args[0]) {
+			if (args.length % 2 != 0) return message.channel.send('The number of arguments must be even.');
 
-            if (itemFile[item].type != args[0].toLowerCase()) continue;
-            array.push({title: `${itemTypeEmoji[itemFile[item].type]}${itemFile[item].name} (${item})`, desc: `${itemFile[item].cost} cost`});
+			for (i in args) {
+				if (i % 2 == 1) {
+					let thingy = checkListArgument(args[i-1].toLowerCase(), args[i], validTypes, message)
+					if (!thingy) return
+					if (thingy == 'disabled') {
+						args[i-1] = '';
+						args[i] = '';
+					}
+				}
+			}
+			args = args.filter(arg => arg != '');
+			
+			for (i in args) {
+				if (i % 2 == 0) {
+					if (args.filter(arg => arg == args[i]).length > 1) {
+						return message.channel.send('You cannot have multiple of the same type.');
+					}
+				}
+			}
+		}
+
+        for (let item in itemFile) {
+            let isConditionMet = true;
+            for (a in args) {
+                if (a % 2 == 1) {
+                    switch (args[a-1].toLowerCase()) {
+                        case 'user':
+                            args[a] = args[a].toLowerCase();
+                            if (args[a].startsWith('<@') && args[a].endsWith('>')) {
+                                let user = message.guild.members.cache.find(m => m.id == args[a].slice(2, -1));
+                                args[a] = user.id;
+                            } else if (args[a].startsWith('<@!') && args[a].endsWith('>')) {
+                                let user = message.guild.members.cache.find(m => m.id == args[a].slice(3, -1));
+                                args[a] = user.id;
+                            }
+                            if (!args[a].includes('@') && message.mentions.members.size == 0) {
+                                let user = message.guild.members.cache.find(m => m.id == args[a]);
+                                args[a] = user.id;
+                            }
+                            if (message.mentions.members.size > 0) {
+                                args[a] = message.mentions.members.first().id;
+                            }
+
+                            isConditionMet = (itemFile[item].originalAuthor == args[a])
+                            break;
+                        case 'rarity':
+                            args[a] = args[a].toLowerCase();
+                            isConditionMet = (itemFile[item].rarity == args[a])
+                            break;
+                        case 'cost':
+                            args[a] = parseInt(args[a]);
+                            isConditionMet = (itemFile[item].cost == args[a])
+                            break;
+                        case 'skill':
+                        case 'heal':
+                        case 'healmp':
+                        case 'healhpmp':
+                        case 'revive':
+                        case 'pacify':
+                        case 'material':
+                            if (args[a].toString().toLowerCase() == 'true') {
+                                isConditionMet = (itemFile[item].type == args[a-1])
+                            } else if (args[a].toString().toLowerCase() == 'false') {
+                                isConditionMet = (!itemFile[item].type == args[a-1])
+                            } else {
+                                if (args[a-1] == 'material') {
+                                    args[a] = args[a].toString().toLowerCase() == 'true' || args[a].toString().toLowerCase() == 'yes' || args[a].toString().toLowerCase() == 'y' || args[a].toString().toLowerCase() == '1'
+                                    //isConditionMet = ((itemFile[item].type == 'material') == args[a])
+                                    if (args[a] == true) {
+                                        isConditionMet = (itemFile[item].type == 'material')
+                                    } else {
+                                        isConditionMet = (!itemFile[item].type == 'material')
+                                    }
+                                } else {
+                                    if (args[a-1] != 'skill') args[a] = parseInt(args[a]);
+                                    isConditionMet = (itemFile[item].type == [args[a-1]] && itemFile[item][args[a-1]] == args[a])
+                                }
+                            }
+                            break;
+                        case 'recipe':
+                            args[a] = args[a].toString().toLowerCase() == 'true' || args[a].toString().toLowerCase() == 'yes' || args[a].toString().toLowerCase() == 'y' || args[a].toString().toLowerCase() == '1'
+                            if (args[a] == true) {
+                                isConditionMet = (itemFile[item].recipe)
+                            } else {
+                                isConditionMet = (!itemFile[item].recipe)
+                            }
+                            break;
+                    }
+                    if (isConditionMet == false || isConditionMet == undefined) continue;
+                }
+            }
+            if (isConditionMet == false || isConditionMet == undefined) continue;
+
+            array.push({title: `${itemFile[item].rarity != 'none' ? itemRarityEmoji[itemFile[item].rarity] : ''}${itemTypeEmoji[itemFile[item].type]}${itemFile[item].name} (${item})`, desc: `${itemFile[item].cost} cost`});
         }
 
         if (array.length == 0) return message.channel.send(`No items found.`);
@@ -855,27 +943,101 @@ commands.listweapons = new Command({
     section: 'items',
     args: [
         {
-            name: "Element",
-            type: "Word"
-        },
-        {
-            name: "Quick Page",
-            type: "Num"
-        }
+			name: "Type #1, Variable #1",
+			type: "Word",
+			forced: false,
+			multiple: true
+		}
     ],
     func: (message, args) => {
+        let array = []
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
-        let array = []
+        const validTypes = ['user', 'element', 'cost', 'skill', 'melee', 'atk', 'mag', 'recipe']
+        
+        if (args[0]) {
+			if (args.length % 2 != 0) return message.channel.send('The number of arguments must be even.');
+
+			for (i in args) {
+				if (i % 2 == 1) {
+					let thingy = checkListArgument(args[i-1].toLowerCase(), args[i], validTypes, message)
+					if (!thingy) return
+					if (thingy == 'disabled') {
+						args[i-1] = '';
+						args[i] = '';
+					}
+				}
+			}
+			args = args.filter(arg => arg != '');
+			
+			for (i in args) {
+				if (i % 2 == 0) {
+					if (args.filter(arg => arg == args[i]).length > 1) {
+						return message.channel.send('You cannot have multiple of the same type.');
+					}
+				}
+			}
+		}
+
         for (let weapon in weaponFile) {
+            let isConditionMet = true;
+            for (a in args) {
+                if (a % 2 == 1) {
+                    switch (args[a-1].toLowerCase()) {
+                        case 'user':
+                            args[a] = args[a].toLowerCase();
+                            if (args[a].startsWith('<@') && args[a].endsWith('>')) {
+                                let user = message.guild.members.cache.find(m => m.id == args[a].slice(2, -1));
+                                args[a] = user.id;
+                            } else if (args[a].startsWith('<@!') && args[a].endsWith('>')) {
+                                let user = message.guild.members.cache.find(m => m.id == args[a].slice(3, -1));
+                                args[a] = user.id;
+                            }
+                            if (!args[a].includes('@') && message.mentions.members.size == 0) {
+                                let user = message.guild.members.cache.find(m => m.id == args[a]);
+                                args[a] = user.id;
+                            }
+                            if (message.mentions.members.size > 0) {
+                                args[a] = message.mentions.members.first().id;
+                            }
 
-            if (!args[0]) {
-                array.push({title: `${elementEmoji[weaponFile[weapon].element]} ${weaponFile[weapon].name} (${weapon})`, desc: `${weaponFile[weapon].melee && weaponFile[weapon].melee != 0 ? weaponFile[weapon].melee : `???`} Power Melee Attack`});
-                continue;
+                            isConditionMet = (weaponFile[weapon].originalAuthor == args[a])
+                            break;
+                        case 'cost':
+                            args[a] = parseInt(args[a]);
+                            isConditionMet = (weaponFile[weapon].cost == args[a])
+                            break;
+                        case 'element':
+                            args[a] = args[a].toLowerCase();
+                            isConditionMet = (weaponFile[weapon].element == args[a])
+                            break;
+                        case 'skill':
+                        case 'melee':
+                        case 'atk':
+                        case 'mag':
+                            if (args[a].toString().toLowerCase() == 'true') {
+                                isConditionMet = (weaponFile[weapon][args[a-1]])
+                            } else if (args[a].toString().toLowerCase() == 'false') {
+                                isConditionMet = (!weaponFile[weapon][args[a-1]])
+                            } else {
+                                if (args[a-1] != 'skill') args[a] = parseInt(args[a]);
+                                isConditionMet = (weaponFile[weapon][args[a-1]] == args[a])
+                            }
+                            break;
+                        case 'recipe':
+                            args[a] = args[a].toString().toLowerCase() == 'true' || args[a].toString().toLowerCase() == 'yes' || args[a].toString().toLowerCase() == 'y' || args[a].toString().toLowerCase() == '1'
+                            if (args[a] == true) {
+                                isConditionMet = (weaponFile[weapon].recipe)
+                            } else {
+                                isConditionMet = (!weaponFile[weapon].recipe)
+                            }
+                            break;
+                    }
+                    if (isConditionMet == false || isConditionMet == undefined) continue;
+                }
             }
+            if (isConditionMet == false || isConditionMet == undefined) continue;
 
-            if (weaponFile[weapon].element != args[0].toLowerCase()) continue;
-            
             array.push({title: `${elementEmoji[weaponFile[weapon].element]} ${weaponFile[weapon].name} (${weapon})`, desc: `${weaponFile[weapon].melee && weaponFile[weapon].melee != 0 ? weaponFile[weapon].melee : `???`} Power Melee Attack`});
         }
 
@@ -1282,26 +1444,98 @@ commands.listarmors = new Command({
     section: 'items',
     args: [
         {
-            name: "Element",
-            type: "Word"
-        },
-        {
-            name: "Quick Page",
-            type: "Num"
-        }
+			name: "Type #1, Variable #1",
+			type: "Word",
+			forced: false,
+			multiple: true
+		}
     ],
     func: (message, args) => {
+        let array = []
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
-        let array = []
+        const validTypes = ['user', 'element', 'cost', 'end', 'recipe']
+
+        if (args[0]) {
+			if (args.length % 2 != 0) return message.channel.send('The number of arguments must be even.');
+
+			for (i in args) {
+				if (i % 2 == 1) {
+					let thingy = checkListArgument(args[i-1].toLowerCase(), args[i], validTypes, message)
+					if (!thingy) return
+					if (thingy == 'disabled') {
+						args[i-1] = '';
+						args[i] = '';
+					}
+				}
+			}
+			args = args.filter(arg => arg != '');
+			
+			for (i in args) {
+				if (i % 2 == 0) {
+					if (args.filter(arg => arg == args[i]).length > 1) {
+						return message.channel.send('You cannot have multiple of the same type.');
+					}
+				}
+			}
+		}
+
         for (let armor in armorFile) {
+            let isConditionMet = true;
+            for (a in args) {
+                if (a % 2 == 1) {
+                    switch (args[a-1].toLowerCase()) {
+                        case 'user':
+                            args[a] = args[a].toLowerCase();
+                            if (args[a].startsWith('<@') && args[a].endsWith('>')) {
+                                let user = message.guild.members.cache.find(m => m.id == args[a].slice(2, -1));
+                                args[a] = user.id;
+                            } else if (args[a].startsWith('<@!') && args[a].endsWith('>')) {
+                                let user = message.guild.members.cache.find(m => m.id == args[a].slice(3, -1));
+                                args[a] = user.id;
+                            }
+                            if (!args[a].includes('@') && message.mentions.members.size == 0) {
+                                let user = message.guild.members.cache.find(m => m.id == args[a]);
+                                args[a] = user.id;
+                            }
+                            if (message.mentions.members.size > 0) {
+                                args[a] = message.mentions.members.first().id;
+                            }
 
-            if (!args[0]) {
-                array.push({title: `${elementEmoji[armorFile[armor].element]} ${armorFile[armor].name} (${armor})`, desc: `Defensive Skill: ${armorFile[armor].skill && armorFile[armor].skill != '' ? armorFile[armor].skill : `None`}`});
-                continue;
+                            isConditionMet = (armorFile[armor].originalAuthor == args[a])
+                            break;
+                        case 'cost':
+                            args[a] = parseInt(args[a]);
+                            isConditionMet = (armorFile[armor].cost == args[a])
+                            break;
+                        case 'element':
+                            args[a] = args[a].toLowerCase();
+                            isConditionMet = (armorFile[armor].element == args[a])
+                            break;
+                        case 'skill':
+                        case 'end':
+                            if (args[a].toString().toLowerCase() == 'true') {
+                                isConditionMet = (armorFile[armor][args[a-1]])
+                            } else if (args[a].toString().toLowerCase() == 'false') {
+                                isConditionMet = (!armorFile[armor][args[a-1]])
+                            } else {
+                                if (args[a-1] != 'skill') args[a] = parseInt(args[a]);
+                                isConditionMet = (armorFile[armor][args[a-1]] == args[a])
+                            }
+                            break;
+                        case 'recipe':
+                            args[a] = args[a].toString().toLowerCase() == 'true' || args[a].toString().toLowerCase() == 'yes' || args[a].toString().toLowerCase() == 'y' || args[a].toString().toLowerCase() == '1'
+                            if (args[a] == true) {
+                                isConditionMet = (armorFile[armor].recipe)
+                            } else {
+                                isConditionMet = (!armorFile[armor].recipe)
+                            }
+                            break;
+                    }
+                    if (isConditionMet == false || isConditionMet == undefined) continue;
+                }
             }
-
-            if (armorFile[armor].element != args[0].toLowerCase()) continue;
+            if (isConditionMet == false || isConditionMet == undefined) continue;
 
             array.push({title: `${elementEmoji[armorFile[armor].element]} ${armorFile[armor].name} (${armor})`, desc: `Defensive Skill: ${armorFile[armor].skill && armorFile[armor].skill != '' ? armorFile[armor].skill : `None`}`});
         }
