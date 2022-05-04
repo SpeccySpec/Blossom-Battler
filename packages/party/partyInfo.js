@@ -1,4 +1,4 @@
-partyDesc = (party, message) = {
+partyDesc = (party, message) => {
 	let m = '';
 	for (const i in party.members) m += `\n${party.members[i]}`;
 	if (m === '') m = 'Empty...';
