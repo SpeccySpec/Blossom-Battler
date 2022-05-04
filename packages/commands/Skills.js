@@ -1217,7 +1217,7 @@ commands.liststatus = new Command({
 			dazed: '💥Unable to use any physical skills for 2 turns.',
 			hunger: '💥ATK & MAG halved.',
 			blind: '💥PRC and AGL halved.',
-			irradiation: '💥Switch 2 random stats for 3 turns.',
+			irradiation: '💥Switch 3 random stats for 3 turns.',
 
 			// Mental
 			dizzy: '🌀Accuracy of all skills halved for 3 turns.',
@@ -1230,7 +1230,7 @@ commands.liststatus = new Command({
 			silence: '🌀Unable to use any magical skills for 2 turns.',
 			infatuation: '🌀50% chance to hault attack. Stacks with other status effects.',
 			confusion: '🌀50% chance to damage self when attacking. Stacks with other status effects.',
-			sensitive: '🌀Debuff a random stat evey hit taken for 3 turns.',
+			sensitive: '🌀Debuff a random stat once hit a single time per opponent for 3 turns.',
 
 			// Positive Physical
 			mirror: '💥Positive Status Effect. Immobilized for 3 turns. Repel magic skills.',
