@@ -78,9 +78,9 @@ commands.makeparty = new Command({
 		}
 		
 		for (let i in args) {
-			if (!charFile[args[i]]) return message.channel.send(`${args[i]} is not a valid character!`);
-
 			if (i > 0) {
+				if (!charFile[args[i]]) return message.channel.send(`${args[i]} is not a valid character!`);
+
 				if (i <= 4)
 					parties[args[0]].members.push(args[i])
 				else

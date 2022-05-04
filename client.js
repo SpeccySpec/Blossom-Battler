@@ -905,7 +905,7 @@ for (const file of commandFiles) {
 }
 
 // Run this shit
-let folders = ['skills', 'characters'] // i TOLD YOU there WILL be moreee
+let folders = ['skills', 'characters', 'party'] // i TOLD YOU there WILL EEEVEN be moreee
 
 for (const i in folders) {
 	let files = fs.readdirSync(`${packPath}/${folders[i]}`).filter(file => file.endsWith('.js'));
