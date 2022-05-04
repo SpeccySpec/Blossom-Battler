@@ -863,17 +863,36 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 			break;
         case 'cost':
 		case 'level':
+		case 'pow':
+		case 'acc':
+		case 'crit':
+		case 'hits':
+		case 'statuschance':
             if (isNaN(variable)) {
                 message.channel.send('Invalid cost! Please enter a valid cost.');
                 return false;
             }
             break;
+		case 'levellock':
+			if (isNaN(variable)) {
+				if (variable.toLowerCase() != 'unobtainable') {
+					message.channel.send('Invalid level lock! Please enter a valid level lock.');
+					return false;
+				}
+			}
+			break;
         case 'element':
             if (!Elements.includes(variable.toLowerCase())) {
                 message.channel.send('Invalid element! Please enter a valid element.');
                 return false;
             }
             break;
+		case 'status':
+			if (!statusEffects.includes(variable.toLowerCase())) {
+				message.channel.send('Invalid status! Please enter a valid status.');
+				return false;
+			}
+			break;
         case 'recipe':
 		case 'material':
 		case 'encountered':
@@ -1044,6 +1063,44 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 			variable = variable.toLowerCase();
 			if (!utilityFuncs.inArray(variable, enemyTypes) && variable != 'none') {
 				message.channel.send(`${variable} is not a valid enemy type! Valid types are: ${enemyTypes.join(', ')}`);
+				return false
+			}
+			break;
+		case 'costtype':
+			variable = variable.toLowerCase();
+			if (!utilityFuncs.inArray(variable, costTypes)) {
+				message.channel.send(`${variable} is not a valid cost type! Valid types are: ${costTypes.join(', ')}`);
+				return false
+			}
+			break;
+		case 'atktype':
+			variable = variable.toLowerCase();
+			if (variable != 'physical' && variable != 'magic' && variable != 'ranged') {
+				message.channel.send(`${variable} is not a valid attack type! Valid types are: physical, magic, and ranged.`);
+				return false
+			}
+			break;
+		case 'target':
+			variable = variable.toLowerCase();
+			if (!utilityFuncs.inArray(variable, Targets)) {
+				message.channel.send(`${variable} is not a valid target! Valid targets are: ${Targets.join(', ')}`);
+				return false
+			}
+			break;
+		case 'preskill':
+		case 'evoskill':
+			if (variable.toLowerCase() != 'true' && variable.toLowerCase() != 'false') {
+				if (!isNaN(variable)) {
+					if (!skillFile[variable]) {
+						message.channel.send(`${variable} is not a valid skill!`);
+						return false
+					}
+				}
+			}
+			break;
+		case 'extra':
+			if (!statusList[variable.toLowerCase()] && !passiveList[variable.toLowerCase()] && !healList[variable.toLowerCase()]) {
+				message.channel.send(`${variable} is not a valid status, passive, or heal extra!`);
 				return false
 			}
 			break;

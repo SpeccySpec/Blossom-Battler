@@ -715,14 +715,15 @@ commands.editskill = new Command({
 				case 'levellock':
 				case 'level':
 				case 'lock':
-					let level = parseInt(args[2])
-					
-					if (level > 100) return message.channel.send(`${level} is too high a level lock!\n\n**[NOTICE]**\nConsider using the "levellock" command! It is faster for you, and for me.`)
-					
-					if (level <= 1)
-						delete skillFile[args[0]].levellock;
-					else
-						skillFile[args[0]].levellock = level;
+					if (args[2].toLowerCase() == 'unobtainable') skillFile[args[0]].levellock == 'unobtainable';
+					else {
+						let level = parseInt(args[2])
+						
+						if (level <= 1)
+							delete skillFile[args[0]].levellock;
+						else
+							skillFile[args[0]].levellock = level;
+					}
 
 					message.channel.send(`**[NOTICE]**\nConsider using the "levellock" command! It is faster for you, and for me.`)
 				case 'target':
@@ -753,7 +754,7 @@ commands.levellock = new Command({
 		},
 		{
 			name: "Level Lock",
-			type: "Num",
+			type: "Num or 'Unobtainable'",
 			forced: true
 		}
 	],
@@ -763,13 +764,15 @@ commands.levellock = new Command({
 				return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
 			}
 
-			let level = parseInt(args[2])
-			if (level > 100) return message.channel.send(`${level} is too high a level lock!`)
-
-			if (level <= 1)
-				delete skillFile[args[0]].levellock;
-			else
-				skillFile[args[0]].levellock = level;
+			if (args[1].toLowerCase() == 'unobtainable') skillFile[args[0]].levellock == 'unobtainable';
+			else {
+				let level = parseInt(args[1])
+				
+				if (level <= 1)
+					delete skillFile[args[0]].levellock;
+				else
+					skillFile[args[0]].levellock = level;
+			}
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
@@ -935,20 +938,164 @@ commands.listskills = new Command({
 	desc: 'Lists *all* existing skills.',
 	section: "skills",
 	args: [
-		{
-			name: "Element",
+        {
+			name: "Type #1, Variable #1",
 			type: "Word",
-			forced: false
-		},
-		{
-			name: "User",
-			type: "Ping",
-			forced: false
+			forced: false,
+			multiple: true
 		}
-	],
+    ],
 	func: (message, args) => {
 		let array = []
+
+		const validTypes = ['user', 'element', 'cost', 'costtype', 'pow', 'acc', 'crit', 'hits', 'atktype', 'target', 'status', 'statuschance', 'preskill', 'evoskill', 'levellock', 'extra']
+
+        if (args[0]) {
+			if (args.length % 2 != 0) return message.channel.send('The number of arguments must be even.');
+
+			for (i in args) {
+				if (i % 2 == 1) {
+					let thingy = checkListArgument(args[i-1].toLowerCase(), args[i], validTypes, message)
+					if (!thingy) return
+					if (thingy == 'disabled') {
+						args[i-1] = '';
+						args[i] = '';
+					}
+				}
+			}
+			args = args.filter(arg => arg != '');
+			
+			for (i in args) {
+				if (i % 2 == 0) {
+					if (args.filter(arg => arg == args[i]).length > 1) {
+						return message.channel.send('You cannot have multiple of the same type.');
+					}
+				}
+			}
+		}
+
 		for (const i in skillFile) {
+			let isConditionMet = true;
+            for (a in args) {
+                if (a % 2 == 1) {
+                    switch (args[a-1].toLowerCase()) {
+						case 'user':
+                            args[a] = args[a].toLowerCase();
+                            if (args[a].startsWith('<@') && args[a].endsWith('>')) {
+                                let user = message.guild.members.cache.find(m => m.id == args[a].slice(2, -1));
+                                args[a] = user.id;
+                            } else if (args[a].startsWith('<@!') && args[a].endsWith('>')) {
+                                let user = message.guild.members.cache.find(m => m.id == args[a].slice(3, -1));
+                                args[a] = user.id;
+                            }
+                            if (!args[a].includes('@') && message.mentions.members.size == 0) {
+                                let user = message.guild.members.cache.find(m => m.id == args[a]);
+                                args[a] = user.id;
+                            }
+                            if (message.mentions.members.size > 0) {
+                                args[a] = message.mentions.members.first().id;
+                            }
+
+							isConditionMet = (skillFile[i].originalAuthor == args[a])
+							break;
+						case 'element':
+							args[a] = args[a].toLowerCase();
+							isConditionMet = (skillFile[i].type == args[a])
+							break;
+						case 'status':
+							args[a] = args[a].toLowerCase();
+							isConditionMet = (skillFile[i].status && skillFile[i].status == args[a])
+							break;
+						case 'cost':
+						case 'pow':
+						case 'hits':
+							args[a] = parseInt(args[a]);
+							isConditionMet = (skillFile[i][args[a-1]] == args[a])
+							break;
+						case 'acc':
+						case 'crit':
+						case 'statuschance':
+							args[a] = parseFloat(args[a]);
+							isConditionMet = (skillFile[i][args[a-1]] && skillFile[i][args[a-1]] == args[a])
+							break;
+						case 'atktype':
+						case 'costtype':
+						case 'target':
+							args[a] = args[a].toLowerCase();
+							isConditionMet = (skillFile[i][args[a-1]] && skillFile[i][args[a-1]].includes(args[a]))
+							break;
+						case 'preskill':
+						case 'evoskill':
+							isConditionMet = false
+
+							args[a-1] = args[a-1] + 's';
+							if (args[a].toString().toLowerCase() != 'true' && args[a].toString().toLowerCase() != 'false') {
+								if (skillFile[i][args[a-1]]) {
+									if (!isNaN(args[a])) args[a] = parseInt(args[a]);
+
+									for (const j in skillFile[i][args[a-1]]) {
+										if (skillFile[i][args[a-1]][j].includes(args[a])) {
+											isConditionMet = true;
+											break;
+										}
+									}
+								}
+							} else if (args[a].toString().toLowerCase() == 'true') {
+								isConditionMet = (skillFile[i][args[a-1]] && Object.keys(skillFile[i][args[a-1]]).length > 0)
+							} else if (args[a].toString().toLowerCase() == 'false') {
+								isConditionMet = (skillFile[i][args[a-1]] && Object.keys(skillFile[i][args[a-1]]).length == 0) || !skillFile[i][args[a-1]]
+							}
+							break;
+						case 'levellock':
+							if (args[a].toString().toLowerCase() != 'true' && args[a].toString().toLowerCase() != 'false') {
+								if (!isNaN(variable)) {
+									args[a] = parseInt(args[a]);
+								}
+
+								isConditionMet = skillFile[i].levellock && skillFile[i].levellock.includes(args[a])
+							} else if (args[a].toString().toLowerCase() == 'true') {
+								isConditionMet = skillFile[i].levellock
+							} else if (args[a].toString().toLowerCase() == 'false') {
+								isConditionMet = !skillFile[i].levellock
+							}
+							break;
+						case 'extra':
+							isConditionMet = false
+							if (skillFile[i].type == 'status') {
+								if (skillFile[i].statusses) {
+									for (const j in skillFile[i].statusses) {
+										if (skillFile[i].statusses[j].includes(args[a])) {
+											isConditionMet = true;
+											break;
+										}
+									}
+								}
+							} else if (skillFile[i].type == 'heal') {
+								if (skillFile[i].heal) {
+									for (const j in skillFile[i].heal) {
+										if (skillFile[i].heal[j].includes(args[a])) {
+											isConditionMet = true;
+											break;
+										}
+									}
+								}
+							} else if (skillFile[i].type == 'passive') {
+								if (skillFile[i].passive) {
+									for (const j in skillFile[i].passive) {
+										if (skillFile[i].passive[j].includes(args[a])) {
+											isConditionMet = true;
+											break;
+										}
+									}
+								}
+							}
+							break;
+					}
+					if (isConditionMet == false || isConditionMet == undefined) continue;
+				}
+			}
+			if (isConditionMet == false || isConditionMet == undefined) continue;
+
 			let descTxt = '';
 			if (skillFile[i].passive) {
 				let pt = skillFile[i].passive;
@@ -965,13 +1112,6 @@ commands.listskills = new Command({
 				}
 			}
 
-			if ((!args[0] || args[0].toLowerCase() === 'none') && (!args[1] || args[1].toLowerCase() === 'none')) {
-				array.push({title: `${elementEmoji[skillFile[i].type]}${skillFile[i].name} (${i})`, desc: descTxt});
-				continue;
-			}
-
-			if ((!args[0] || args[0].toLowerCase() === 'none') && skillFile[i].type != args[0].toLowerCase()) continue;
-			if (!args[1] && message.mentions.users.first() && skillFile[i].type != message.mentions.users.first().id) continue;
 			array.push({title: `${elementEmoji[skillFile[i].type]}${skillFile[i].name} (${i})`, desc: descTxt});
 		}
 

@@ -211,7 +211,7 @@ skillDesc = (skillDefs, skillName, server) => {
 		finalText += '```\n'
 	}
 
-	if (skillDefs.levellock) finalText += `🔒 *Skill Locked until level **${skillDefs.levellock}***`;
+	if (skillDefs.levellock) finalText += skillDefs.levellock != 'unobtainable' ? `🔒 *Skill Locked until level **${skillDefs.levellock}***` : '🔒 *Skill Unobtainable*\n';
 
 	if (skillDefs.desc) finalText += `\n*${skillDefs.desc}*`;
 	
