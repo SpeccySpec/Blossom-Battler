@@ -1,10 +1,30 @@
+let leaderSkillTxt = {
+	boost: 'Boosts the specified type.',
+	discount: 'Takes away the amount of cost specified to the specified type.',
+	buff: 'Start the battle with the specified stat buff',
+	status: 'Increased chance to land the specified status effect',
+	crit: 'Increased crit chance to the specified element'
+}
+
+let usesPercent = {
+	buff: false,
+	
+	boost: true,
+	crit: true,
+	status: true,
+	discount: true
+}
+
 partyDesc = (party, message) => {
+	let settings = setUpSettings(message.guild.id);
+	let chars = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
 	let m = '';
-	for (const i in party.members) m += `\n${party.members[i]}`;
+	for (const i in party.members) m += `\n${chars[party.members[i]].name}`;
 	if (m === '') m = 'Empty...';
 
 	let b = '';
-	for (const i in party.backup) b += `\n${party.backup[i]}`;
+	for (const i in party.backup) b += `\n${chars[party.backup[i]].name}`;
 	if (b === '') b = 'No backup.';
 
 	let p = '';
@@ -41,9 +61,18 @@ partyDesc = (party, message) => {
 	if (weapons === '') weapons = 'No weapons.';
 	if (armor === '') armor = 'No armor.';
 
+	let embedColor = '#e36b2b';
+	let leaderSkill = 'No Leader Skill...?';
+	if (chars[party.members[0]]) {
+		let char = chars[party.members[0]];
+		embedColor = elementColors[char.mainElement] ?? '#e36b2b';
+		leaderSkill = `**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} toward ${char.leaderskill.var1.toUpperCase()}`
+	}
+
 	return new Discord.MessageEmbed()
-		.setColor('#e36b2b')
-		.setTitle(`Team ${arg[1]}`)
+		.setColor(embedColor)
+		.setTitle(`Team ${party.name}`)
+		.setDescription(leaderSkill)
 		.addFields(
 			{ name: 'Members', value: `${m}\n\n**${party.currency} ${settings.currency}s**`, inline: true },
 			{ name: 'Items', value: items, inline: true },

@@ -236,7 +236,6 @@ commands.getparty = new Command({
 		}
 	],
 	func: (message, args) => {
-		let settings = setUpSettings(message.guild.id);
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 
 		if (!parties[args[0]]) return message.channel.send(`${args[0]} is an invalid party!`);
@@ -260,7 +259,6 @@ commands.listparty = new Command({
 		}
 	],
 	func: (message, args) => {
-		let settings = setUpSettings(message.guild.id);
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 
 		let array = [];
