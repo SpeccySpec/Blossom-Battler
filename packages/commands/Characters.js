@@ -1078,7 +1078,8 @@ commands.learnskill = new Command({
 		},
 		{
 			name: "Skill Names",
-			type: "Continuous",
+			type: "Word",
+			multiple: true,
 			forced: true
 		}
 	],

@@ -10,6 +10,7 @@ const categories = {
 	skills: "Can't fight without the various attacks now, can ya?",
 	characters: "Characters! The ones who will feel evil and succeed in their quests! I hope.",
 	enemies: "Enemies! The ones that you will fight to the death! I hope you don't get killed!",
+	parties: "Can't battle without parties now, can ya?",
 	battle: "The main part of Bloom Battler is well... the battles of course!",
 	all: "All of the existing commands"
 }
