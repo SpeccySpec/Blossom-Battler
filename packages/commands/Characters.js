@@ -162,6 +162,18 @@ commands.changetruename = new Command({
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 		}
 
+		chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+        for (let channel in chestFile) {
+            for (let chest in chestFile[channel]) {
+                if (chestFile[channel][chest].lock[0] == 'character') {
+                    if (chestFile[channel][chest].lock[1] == args[0]) {
+                        chestFile[channel][chest].lock[1] = args[1]
+                    }
+                }
+            }
+        }
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, '    '));
+
 		message.channel.send(`${args[0]} has been renamed to ${args[1]}!`);
 	}
 })
@@ -1860,6 +1872,18 @@ commands.purgechar = new Command({
 				if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
 					message.channel.send(`${charFile[args[0]].name} has been erased from existance.`)
 					delete charFile[args[0]]
+
+					chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+					for (let channel in chestFile) {
+						for (let chest in chestFile[channel]) {
+							if (chestFile[channel][chest].lock[0] == 'character') {
+								if (chestFile[channel][chest].lock[1] == args[0]) {
+									chestFile[channel][chest].lock = ['none', '']
+								}
+							}
+						}
+					}
+					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, '    '));
 
 					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, 4));
 				} else
