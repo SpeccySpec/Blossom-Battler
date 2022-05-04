@@ -2323,9 +2323,11 @@ commands.setbioinfo = new Command({
 				if (isNaN(args[2])) {
 					let split = args[2].split('\'');
 					if (split.length == 1) {
-						charFile[args[0]].bio.height = parseFloat(split[0]);
+						let feet = Math.floor(parseFloat(split[0]) / 0.3048);
+						let inches = Math.round((parseFloat(split[0]) / 0.3048 - feet) * 12);
+						charFile[args[0]].bio.height = [feet, inches]; 
 					} else {
-						charFile[args[0]].bio.height = [parseFloat(split[0]), parseFloat(split[1].replace('"', ''))];
+						charFile[args[0]].bio.height = [parseInt(split[0]), parseInt(split[1].replace('"', ''))];
 					}
 				} else {
 					return message.channel.send('Invalid Height! Please enter in the format `feet/inches` or `meters`.');

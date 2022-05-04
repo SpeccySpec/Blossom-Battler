@@ -454,6 +454,11 @@ commands.purgeitem = new Command({
                                     delete chestFile[channel][chest].items['item']
                                 }
                             }
+                            if (chestFile[channel][chest].lock[0] == 'item') {
+                                if (chestFile[channel][chest].lock[1] == args[0]) {
+                                    chestFile[channel][chest].lock = ['none', '0']
+                                }
+                            }
                         }
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
@@ -617,6 +622,11 @@ commands.edititem = new Command({
                                         chestFile[channel][chest].items['item'][args[2]] = chestFile[channel][chest].items['item'][item]
                                         delete chestFile[channel][chest].items['item'][item]
                                     }
+                                }
+                            }
+                            if (chestFile[channel][chest].lock[0] == 'item') {
+                                if (chestFile[channel][chest].lock[1] == args[0]) {
+                                    chestFile[channel][chest].lock[1] = args[2]
                                 }
                             }
                         }
@@ -1045,6 +1055,11 @@ commands.editweapon = new Command({
                                     }
                                 }
                             }
+                            if (chestFile[channel][chest].lock[0] == 'weapon') {
+                                if (chestFile[channel][chest].lock[1] == args[0]) {
+                                    chestFile[channel][chest].lock[1] = args[2]
+                                }
+                            }
                         }
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
@@ -1141,6 +1156,11 @@ commands.purgeweapon = new Command({
                                 if (Object.keys(chestFile[channel][chest].items['weapon']).length == 0) {
                                     delete chestFile[channel][chest].items['weapon']
                                 }
+                            }
+                        }
+                        if (chestFile[channel][chest].lock[0] == 'weapon') {
+                            if (chestFile[channel][chest].lock[1] == args[0]) {
+                                chestFile[channel][chest].lock = ['none', '']
                             }
                         }
                     }
@@ -1553,6 +1573,11 @@ commands.purgearmor = new Command({
                                 }
                                 if (Object.keys(chestFile[channel][chest].items['armor']).length == 0) {
                                     delete chestFile[channel][chest].items['armor']
+                                }
+                            }
+                            if (chestFile[channel][chest].lock[0] == 'armor') {
+                                if (chestFile[channel][chest].lock[1] == args[0]) {
+                                    chestFile[channel][chest].lock = ['none', '']
                                 }
                             }
                         }

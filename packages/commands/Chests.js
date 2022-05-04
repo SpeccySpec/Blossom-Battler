@@ -15,7 +15,7 @@ function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFil
         case 'character':
             lockTxt = `${lockTypeName} (${elementEmoji[charFile[chestDefs.lock[1]].mainElement]} ${charFile[chestDefs.lock[1]].name})`
         case 'money':
-            lockTxt = `${lockTypeName} (${chestDefs.lock[1]})`
+            lockTxt = `${lockTypeName} (${chestDefs.lock[1]} ${getCurrency(message.guild.id)}s)`
             break;
         case 'item':
             lockTxt = `${lockTypeName} (${itemTypeEmoji[itemFile[chestDefs.lock[1]].type]}${itemRarityEmoji[itemFile[chestDefs.lock[1]].rarity]} ${itemFile[chestDefs.lock[1]].name})`
