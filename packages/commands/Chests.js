@@ -1,8 +1,10 @@
-function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFile, charFile) {
+function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFile, charFile, enemyFile, partyFile) {
     if (!itemFile) itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
     if (!weaponFile) weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
     if (!armorFile) armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
     if (!charFile) charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
+    if (!enemyFile) enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
+    if (!partyFile) partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
 
     let userTxt = getServerUser(chestDefs.originalAuthor, message)
 
@@ -10,10 +12,14 @@ function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFil
     let lockTypeName = chestDefs.lock[0].charAt(0).toUpperCase() + chestDefs.lock[0].slice(1)
     switch (chestDefs.lock[0]) {
         case 'party':
+            lockTxt = `${lockTypeName} ${partyFile[chestDefs.lock[1]].name}`
+            break
         case 'pet':
-            break;
+            lockTxt = `${lockTypeName} (${elementEmoji[enemyFile[chestDefs.lock[1]].mainElement]} ${enemyFile[chestDefs.lock[1]].name})`
+            break
         case 'character':
             lockTxt = `${lockTypeName} (${elementEmoji[charFile[chestDefs.lock[1]].mainElement]} ${charFile[chestDefs.lock[1]].name})`
+            break
         case 'money':
             lockTxt = `${lockTypeName} (${chestDefs.lock[1]} ${getCurrency(message.guild.id)}s)`
             break;
@@ -31,6 +37,7 @@ function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFil
             break;
         case 'none':
             lockTxt = `${lockTypeName}`
+            break;
     }
 
     let channelText = ''
@@ -143,8 +150,14 @@ commands.registerchest = new Command({
 
         switch (lockType) {
             case 'party':
+                let partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
+                if (!partyFile[lockKey]) return message.channel.send("That party does not exist.")
+                break;
             case 'pet':
-                return message.channel.send("This type of lock hasn't been implemented yet.")
+                let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
+                if (!enemyFile[lockKey]) return message.channel.send(`${lockKey} is not a valid enemy.`)
+                if (!enemyFile[lockKey].negotiateDefs || (enemyFile[lockKey].negotiateDefs && Object.keys(enemyFile[lockKey].negotiateDefs).length == 0)) return message.channel.send(`${lockKey} can't become a pet lock.`)
+                break;
             case 'character':
                 let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
                 if (!charFile[lockKey]) return message.channel.send(`${lockKey} is not a valid character.`)
@@ -249,7 +262,6 @@ commands.registerchest = new Command({
         if (itemsDef) {
             for (i in itemsDef) {
                 if (i % 3 == 2) {
-                    console.log(itemsDef[i-2])
                     if (itemsDef[i-2] != 'money') {
                         if (!chestFile[channel][name].items[itemsDef[i-2]]) chestFile[channel][name].items[itemsDef[i-2]] = {}
                         
@@ -638,8 +650,14 @@ commands.editchest = new Command({
 
                 switch (lockType) {
                     case 'party':
+                        let partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
+                        if (!partyFile[lockKey]) return message.channel.send("That party does not exist.")
+                        break;
                     case 'pet':
-                        return message.channel.send("This type of lock hasn't been implemented yet.")
+                        let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
+                        if (!enemyFile[lockKey]) return message.channel.send(`${lockKey} is not a valid enemy.`)
+                        if (!enemyFile[lockKey].negotiateDefs || (enemyFile[lockKey].negotiateDefs && Object.keys(enemyFile[lockKey].negotiateDefs).length == 0)) return message.channel.send(`${lockKey} can't become a pet lock.`)
+                        break;
                     case 'character':
                         let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
                         if (!charFile[lockKey]) return message.channel.send(`${lockKey} is not a valid character.`)

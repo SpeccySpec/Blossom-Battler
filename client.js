@@ -590,16 +590,18 @@ setUpSettings = (guild) => {
 			},
 			caps: {
 				levelcap: 99,
-				hpmpcap: 70,
+				hpmpcap: 65,
 				statcap: 99,
 				basestatcap: 10,
 				bstcap: 45,
 				skillamount: 8,
+				teamsize: 4,
 				transformations: {
-					hpmpcap: 10,
+					hpcap: 10,
 					statcap: 99,
 					basestatcap: 10,
-					bstcap: 15
+					bstcap: 15,
+					level: 70
 				}
 			},
 			rates: {
@@ -839,6 +841,7 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 
 	switch (type) {
 		case 'user':
+		case 'leader':
 			variable = variable.toLowerCase();
 			if (variable.startsWith('<@') && variable.endsWith('>')) {
 				let user = message.guild.members.cache.find(m => m.id == variable.slice(2, -1));
@@ -868,6 +871,7 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 		case 'crit':
 		case 'hits':
 		case 'statuschance':
+		case 'money':
             if (isNaN(variable)) {
                 message.channel.send('Invalid cost! Please enter a valid cost.');
                 return false;
@@ -1104,6 +1108,26 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 			if (!statusList[variable.toLowerCase()] && !passiveList[variable.toLowerCase()] && !healList[variable.toLowerCase()]) {
 				message.channel.send(`${variable} is not a valid status, passive, or heal extra!`);
 				return false
+			}
+			break;
+		case 'character':
+			charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+			if (!charFile[variable]) {
+				message.channel.send(`${variable} is not a valid character!`);
+				return false
+			}
+			break;
+		case 'pets':
+			if (variable.toString().toLowerCase() != 'true' && variable.toString().toLowerCase() != 'false') {
+				enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+				if (!enemyFile[variable]) {
+					message.channel.send(`${variable} is not a valid enemy!`);
+					return false
+				}
+				if (!enemyFile[variable].negotiationDefs || (enemyFile[variable].negotiationDefs && Object.keys(enemyFile[variable].negotiationDefs).length == 0)) {
+					message.channel.send(`${variable} does not have any negotiation defs!`);
+					return false
+				}
 			}
 			break;
 	}

@@ -823,6 +823,32 @@ commands.purgeenemy = new Command({
 					delete enemyFile[args[0]]
 
 					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, 4));
+
+					chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+					for (let channel in chestFile) {
+						for (let chest in chestFile[channel]) {
+							if (chestFile[channel][chest].lock[0] == 'pet') {
+								if (chestFile[channel][chest].lock[1] == args[0]) {
+									chestFile[channel][chest].lock = ['none', '']
+								}
+							}
+						}
+					}
+					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, '    '));
+
+					partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+					for (let party in partyFile) {
+						if (partyFile[party].curPet == args[0]) {
+							delete partyFile[party].curPet
+						}
+						if (partyFile[party].negotiates && partyFile[party].negotiates[args[0]]) {
+							delete partyFile[party].negotiates[args[0]]
+						}
+						if (partyFile[party].negotiateAllies && partyFile[party].negotiateAllies[args[0]]) {
+							delete partyFile[party].negotiateAllies[args[0]]
+						}
+					}
+					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(partyFile, null, '    '));
 				} else
 					message.channel.send(`${enemyFile[args[0]].name} will not be deleted.`);
 				
@@ -1208,6 +1234,32 @@ commands.clearpetvalues = new Command({
 		if (enemyFile[args[0]].negotiateDefs) delete enemyFile[args[0]].negotiateDefs;
 		else return message.channel.send(`${args[0]} doesn't have a pet values.`);
 
+		chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+		for (let channel in chestFile) {
+			for (let chest in chestFile[channel]) {
+				if (chestFile[channel][chest].lock[0] == 'pet') {
+					if (chestFile[channel][chest].lock[1] == args[0]) {
+						chestFile[channel][chest].lock = ['none', '']
+					}
+				}
+			}
+		}
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, '    '));
+
+		partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		for (let party in partyFile) {
+			if (partyFile[party].curPet == args[0]) {
+				delete partyFile[party].curPet
+			}
+			if (partyFile[party].negotiates && partyFile[party].negotiates[args[0]]) {
+				delete partyFile[party].negotiates[args[0]]
+			}
+			if (partyFile[party].negotiateAllies && partyFile[party].negotiateAllies[args[0]]) {
+				delete partyFile[party].negotiateAllies[args[0]]
+			}
+		}
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(partyFile, null, '    '));
+
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
 		message.channel.send(`${args[0]}'s pet values have been cleared.`);
 	}
@@ -1326,3 +1378,128 @@ commands.clearenemydream = new Command({
 		}
 	}
 })
+
+commands.addpartypet = new Command({
+	desc: "Adds a pet to a party.",
+	section: "parties",
+	args: [
+		{
+			name: "Party Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Enemy Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	admin: 'You do not have permission to add party pets.',
+	func: (message, args) => {
+		let partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		if (!partyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
+
+		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		if (!enemyFile[args[1]]) return message.channel.send(`${args[1]} doesn't exist!`);
+		if (!enemyFile[args[1]].negotiateDefs) return message.channel.send(`${args[1]} doesn't have pet values!`);
+
+		if (!partyFile[args[0]].negotiateAllies) partyFile[args[0]].negotiateAllies = {};
+		partyFile[args[0]].negotiateAllies[args[1]] = enemyFile[args[1]].negotiateDefs;
+
+		partyFile[args[0]].negotiates[args[1]] = enemyFile[args[1]].negotiateDefs.required;
+		
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(partyFile, null, '    '));
+		message.channel.send(`${args[1]} has been added to ${args[0]}.`);
+	}
+})
+
+commands.removepartypet = new Command({
+	desc: "Removes a pet from a party.",
+	section: "parties",
+	args: [
+		{
+			name: "Party Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Enemy Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	admin: 'You do not have permission to remove party pets.',
+	func: (message, args) => {
+		let partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		if (!partyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
+
+		if (!partyFile[args[0]].negotiateAllies) return message.channel.send(`${args[0]} doesn't have any pets!`);
+		if (!partyFile[args[0]].negotiateAllies[args[1]]) return message.channel.send(`${args[0]} doesn't have ${args[1]} as a pet!`);
+
+		delete partyFile[args[0]].negotiateAllies[args[1]];
+
+		if (partyFile[args[0]].negotiates[args[1]]) delete partyFile[args[0]].negotiates[args[1]];
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(partyFile, null, '    '));
+		message.channel.send(`${args[1]} has been removed from ${args[0]}.`);
+	}
+})
+
+commands.setpet = new Command({
+	desc: "Sets a current pet for the party.",
+	section: "parties",
+	args: [
+		{
+			name: "Party Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Pet",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		if (!partyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
+		if (!partyFile[args[0]].negotiateAllies) return message.channel.send(`${args[0]} doesn't have any pets!`);
+
+		if (!isPartyLeader(message.author, parties[args[0]], message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send("You cannot set a pet for this party.");
+
+		partyFile[args[0]].curPet = args[1];
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(partyFile, null, '    '));
+		message.channel.send(`${args[1]} will now be carried on adventures with ${args[0]}!`);
+	}
+})
+
+commands.removepet = new Command({
+	desc: "Removes a current pet for the party.",
+	section: "parties",
+	args: [
+		{
+			name: "Party Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		if (!partyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
+		if (!partyFile[args[0]].curPet) return message.channel.send(`${args[0]} doesn't have a current pet!`);
+
+		if (!isPartyLeader(message.author, parties[args[0]], message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send("You cannot remove a pet for this party.");
+
+		let curPet = partyFile[args[0]].curPet;
+		delete partyFile[args[0]].curPet;
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(partyFile, null, '    '));
+		message.channel.send(`${curPet} steps back from the spot of group pet.`)
+	}
+})
+

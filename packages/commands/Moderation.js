@@ -55,6 +55,9 @@ commands.settings = new Command({
 				case 'skillamount':
 					capText += `**Character Skill Cap**: ${settings['caps'][i]}\n`
 					break
+				case 'teamsize':
+					capText += `**Team Size**: ${settings['caps'][i]}\n`
+					break
 			}
 		}
 
@@ -132,17 +135,20 @@ commands.settings = new Command({
 				let transformationText = ''
 				for (const i in settings['caps']['transformations']) {
 					switch (i) {
-						case 'hpmpcap':
-							transformationText += `**HP+MP Stat Cap**: ${settings['caps']['transformations'][i]}\n`
+						case 'hpcap':
+							transformationText += `**HP Stat Buff Cap**: ${settings['caps']['transformations'][i]}\n`
 							break
 						case 'statcap':
-							transformationText += `**Stat Cap**: ${settings['caps']['transformations'][i]}\n`
+							transformationText += `**Stat Buff Cap**: ${settings['caps']['transformations'][i]}\n`
 							break
 						case 'basestatcap':
 							transformationText += `**Base Stat Cap**: ${settings['caps']['transformations'][i]}\n`
 							break
 						case 'bstcap':
 							transformationText += `**Base Stat Total Cap**: ${settings['caps']['transformations'][i]}\n`
+							break
+						case 'level':
+							transformationText += `**Transformation Level**: ${settings['caps']['transformations'][i]}\n`
 							break
 					}
 				}
@@ -665,7 +671,8 @@ commands.caps = new Command({
 			'statcap': 'Stat Cap',
 			'basestatcap': 'Base Stat Cap',
 			'bstcap': 'Base Stat Total Cap',
-			'skillamount': 'Skill Amount'
+			'skillamount': 'Skill Amount',
+			'teamsize': 'Team Size',
 		}
 
 		switch (args[0].toLowerCase()) {
@@ -675,12 +682,13 @@ commands.caps = new Command({
 			case 'basestatcap':
 			case 'bstcap':
 			case 'skillamount':
+			case 'teamsize':
 				settings['caps'][args[0].toLowerCase()] = args[1]
 				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 				message.channel.send(fullNames[args[0].toLowerCase()] + ' set to ' + args[1])
 				break
 			default:
-				message.channel.send('Invalid cap! Valid caps are: levelcap, hpmpcap, statcap, basestatcap, bstcap, skillamount')
+				message.channel.send('Invalid cap! Valid caps are: levelcap, hpmpcap, statcap, basestatcap, bstcap, skillamount, teamsize')
 				break
 		}
 	}
@@ -708,23 +716,25 @@ commands.transformationcaps = new Command({
 		if (settings.mechanics.transformations == false) return message.channel.send('Transformations are not enabled!')
 
 		const fullNames = {
-			'hpmpcap': 'HP+MP Cap',
-			'statcap': 'Stat Cap',
+			'hpcap': 'HP Buff Cap',
+			'statcap': 'Stat Buff Cap',
 			'basestatcap': 'Base Stat Cap',
-			'bstcap': 'Base Stat Total Cap'
+			'bstcap': 'Base Stat Total Cap',
+			'level': 'Transformation Level'
 		}
 
 		switch (args[0].toLowerCase()) {
-			case 'hpmpcap':
+			case 'hpcap':
 			case 'statcap':
 			case 'basestatcap':
 			case 'bstcap':
+			case 'level':
 				settings['caps']['transformations'][args[0].toLowerCase()] = args[1]
 				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 				message.channel.send(fullNames[args[0].toLowerCase()] + ' set to ' + args[1])
 				break
 			default:
-				message.channel.send('Invalid cap! Valid caps are: hpmpcap, statcap, basestatcap, bstcap')
+				message.channel.send('Invalid cap! Valid caps are: hpcap, statcap, basestatcap, bstcap, level')
 				break
 		}
 	}

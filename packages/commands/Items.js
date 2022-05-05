@@ -551,6 +551,15 @@ commands.purgeitem = new Command({
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
                     
+                    warningText['party items'] = ''
+                    partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/party.json`)
+                    for (let party in partyFile) {
+                        if (partyFile[party].items[args[0]]) {
+                            delete partyFile[party].items[args[0]]
+                            warningText['party items'] += `- ${party}\n`
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/party.json`, JSON.stringify(partyFile, null, 4));
 
                     for (let type in warningText) {
                         if (warningText[type] != '') {
@@ -694,7 +703,7 @@ commands.edititem = new Command({
                     lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
                     for (let item in lootFile) {
                         if (lootFile[item].items) {
-                            if (i % 4 == 1 && lootFIle[item].items[i-1] == 'item' && lootFile[item].items[i] == args[0]) {
+                            if (i % 4 == 1 && lootFile[item].items[i-1] == 'item' && lootFile[item].items[i] == args[0]) {
                                 lootFile[item].items[i] = args[2]
                             }
                         }
@@ -720,6 +729,15 @@ commands.edititem = new Command({
                         }
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+
+                    partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/party.json`)
+                    for (let party in partyFile) {
+                        if (partyFile[party].items[args[0]]) {
+                            partyFile[party].items[args[2]] = partyFile[party].items[args[0]]
+                            delete partyFile[party].items[args[0]]
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/party.json`, JSON.stringify(partyFile, null, 4));
                 }
                 break;
             case 'image':
@@ -1199,7 +1217,7 @@ commands.editweapon = new Command({
                     lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
                     for (let item in lootFile) {
                         if (lootFile[item].items) {
-                            if (i % 4 == 1 && lootFIle[item].items[i-1] == 'weapon' && lootFile[item].items[i] == args[0]) {
+                            if (i % 4 == 1 && lootFile[item].items[i-1] == 'weapon' && lootFile[item].items[i] == args[0]) {
                                 lootFile[item].items[i] = args[2]
                             }
                         }
@@ -1225,6 +1243,15 @@ commands.editweapon = new Command({
                         }
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+
+                    partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/party.json`)
+                    for (let party in partyFile) {
+                        if (partyFile[party].weapons[args[0]]) {
+                            partyFile[party].weapons[args[2]] = partyFile[party].weapons[args[0]]
+                            delete partyFile[party].weapons[args[0]]
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/party.json`, JSON.stringify(partyFile, null, 4));
                 }
                 break;
             case 'image':
@@ -1327,6 +1354,16 @@ commands.purgeweapon = new Command({
                         }
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+
+                    warningText['party weapons'] = ''
+                    partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/party.json`)
+                    for (let party in partyFile) {
+                        if (partyFile[party].weapons[args[0]]) {
+                            delete partyFile[party].weapons[args[0]]
+                            warningText['party weapons'] += `- ${party}\n`
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/party.json`, JSON.stringify(partyFile, null, 4));
 
                     for (let type in warningText) {
                         if (warningText[type] != '') {
@@ -1691,7 +1728,7 @@ commands.editarmor = new Command({
                     lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
                     for (let item in lootFile) {
                         if (lootFile[item].items) {
-                            if (i % 4 == 1 && lootFIle[item].items[i-1] == 'armor' && lootFile[item].items[i] == args[0]) {
+                            if (i % 4 == 1 && lootFile[item].items[i-1] == 'armor' && lootFile[item].items[i] == args[0]) {
                                 lootFile[item].items[i] = args[2]
                             }
                         }
@@ -1712,6 +1749,15 @@ commands.editarmor = new Command({
                         }
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+
+                    partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/party.json`)
+                    for (let party in partyFile) {
+                        if (partyFile[party].armors[args[0]]) {
+                            partyFile[party].armors[args[2]] = partyFile[party].armors[args[0]]
+                            delete partyFile[party].armors[args[0]]
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/party.json`, JSON.stringify(partyFile, null, 4));
                 }
                 break;
             case 'cost':
@@ -1817,6 +1863,16 @@ commands.purgearmor = new Command({
                         }
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+
+                    warningText['party armors'] = ''
+                    partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/party.json`)
+                    for (let party in partyFile) {
+                        if (partyFile[party].armors[args[0]]) {
+                            delete partyFile[party].armors[args[0]]
+                            warningText['party armors'] += `- ${party}\n`
+                        }
+                    }
+                    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/party.json`, JSON.stringify(partyFile, null, 4));
 
                     for (let type in warningText) {
                         if (warningText[type] != '') {
@@ -2045,3 +2101,370 @@ commands.clearitemrecipe = new Command({
         message.channel.send(`${itemDefs.name} has had its crafting recipe removed.`)
     }
 })
+
+commands.obtainitems = new Command({
+    desc: 'Obtain items/weapons/armor/currency/loot items to a party.',
+    aliases: ['giveitem'],
+    section: 'parties',
+    checkban: true,
+    args: [
+        {
+            name: 'Party Name',
+            type: 'Word',
+            forced: true
+        },
+        {
+            name: "Items (Type, Item, Amount) #1",
+            type: "Word",
+            forced: true,
+            multiple: true
+        }
+    ],
+    admin: "You don't have permission to give items to a party.",
+    func: (message, args) => {
+        let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+        let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
+        let weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);
+        let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armor.json`);
+        let lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`);
+
+        if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party!`);
+
+        args.splice(0, 1)
+        const validTypes = ['item', 'weapon', 'armor', 'loot', 'money']
+        let itemsDef = []
+
+        let type
+
+        if (args.length % 3 != 0) return message.channel.send(`You didn't write the correct amount of fields.`)
+
+        for (i in args) {
+            if (i % 3 == 0) {
+                if (!validTypes.includes(args[i])) return message.channel.send(`${args[i]} is not a valid item type. Valid types are: \n- ${validTypes.join('\n- ')}`)
+                type = args[i].toLowerCase();
+            }
+            if (type != 'loot' && type != 'money') {
+                if (i % 3 == 1) {
+                    itemsDef[i-1] = args[i-1].toLowerCase()
+
+                    if (args[i-1].toLowerCase() == "item") {
+                        if (!itemFile[args[i]]) return message.channel.send(`${args[i]} is not a valid item.`)
+                    }
+                    else if (args[i-1].toLowerCase() == "weapon") {
+                        if (!weaponFile[args[i]]) return message.channel.send(`${args[i]} is not a valid weapon.`)
+                    }
+                    else if (args[i-1].toLowerCase() == "armor") {
+                        if (!armorFile[args[i]]) return message.channel.send(`${args[i]} is not a valid armor.`)
+                    }
+                    itemsDef[i] = args[i]
+                }
+                if (i % 3 == 2) {
+                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
+                    itemsDef[i] = Math.max(1, parseInt(args[i]))
+                }
+            } else if (type == 'loot') {
+                if (i % 3 == 1)
+                    if (!lootFile[args[i]]) return message.channel.send(`${args[i]} is not a valid loot table.`)
+                if (i % 3 == 2) {
+                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
+                    args[i] = Math.max(1, parseInt(args[i]))
+                    if (args[i] > 10) return message.channel.send(`${args[i]} is too high.`)
+
+                    for (let j = 0; j < args[i]; j++) {
+                        if (lootFile[args[i-1]].items) {
+                            for (let k in lootFile[args[i-1]].items) {
+                                if (k % 4 == 3) {
+                                    itemsDef.push(lootFile[args[i-1]].items[k-3])
+                                    itemsDef.push(lootFile[args[i-1]].items[k-2])
+                                    itemsDef.push(lootFile[args[i-1]].items[k-1])
+                                }
+                            }
+                        }
+                    }
+                }
+            } else if (type == 'money') {
+                if (i % 3 == 1) {
+                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
+                    itemsDef[i-1] = args[i-1].toLowerCase()
+                    itemsDef[i] = parseInt(args[i])
+                }
+                if (i % 3 == 2) {
+                    itemsDef[i] = '-'
+                }
+            }
+        }
+
+        for (i in itemsDef) {
+            if (i % 3 == 2) {
+                if (itemsDef[i-2] != 'money') {
+                    if (!parties[args[0]][itemsDef[i-2]+'s'][itemsDef[i-1]]) parties[args[0]][itemsDef[i-2]+'s'][itemsDef[i-1]] = 0
+                    parties[args[0]][itemsDef[i-2]+'s'][itemsDef[i-1]] += itemsDef[i]
+                } else {
+                    if (!parties[args[0]].currency) parties[args[0]].currency = 0
+                    parties[args[0]].currency += itemsDef[i-1]
+                }
+            }
+        }
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, 4));
+        message.channel.send(`${args[0]} has been given the items.`)
+    }
+})
+
+commands.removepartyitems = new Command({
+    desc: 'Remove items from a party.',
+    aliases: ['removepartyitem'],
+    section: 'parties',
+    checkban: true,
+    args: [
+        {
+            name: 'Party Name',
+            type: 'Word',
+            forced: true
+        },
+        {
+            name: "Items (Type, Item, Amount) #1",
+            type: "Word",
+            forced: true,
+            multiple: true
+        }
+    ],
+    admin: "You don't have permission to remove items from a party.",
+    func: (message, args) => {
+        let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+        let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
+        let weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);
+        let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armor.json`);
+
+        if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party!`);
+
+        args.splice(0, 1)
+        const validTypes = ['item', 'weapon', 'armor']
+        let itemsDef = []
+
+        let type
+
+        if (args.length % 3 != 0) return message.channel.send(`You didn't write the correct amount of fields.`)
+
+        if (args[0].toLowerCase() != 'all') {
+            for (i in args) {
+                if (i % 3 == 0) {
+                    if (!validTypes.includes(args[i])) return message.channel.send(`${args[i]} is not a valid item type. Valid types are: \n- ${validTypes.join('\n- ')}`)
+                    type = args[i].toLowerCase();
+                }
+                if (i % 3 == 1) {
+                    itemsDef[i-1] = args[i-1].toLowerCase()
+
+                    if (args[i].toLowerCase() != 'all') {
+                        if (args[i-1].toLowerCase() == "item") {
+                            if (!itemFile[args[i]]) return message.channel.send(`${args[i]} is not a valid item.`)
+                        }
+                        else if (args[i-1].toLowerCase() == "weapon") {
+                            if (!weaponFile[args[i]]) return message.channel.send(`${args[i]} is not a valid weapon.`)
+                        }
+                        else if (args[i-1].toLowerCase() == "armor") {
+                            if (!armorFile[args[i]]) return message.channel.send(`${args[i]} is not a valid armor.`)
+                        }
+                    }
+                    itemsDef[i] = args[i]
+                }
+                if (i % 3 == 2) {
+                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
+                    itemsDef[i] = Math.max(1, parseInt(args[i]))
+                }
+            }
+        }
+
+        for (i in itemsDef) {
+            if (itemsDef[0].toLowerCase() != 'all') {
+                if (i % 3 == 2) {
+                    if (itemsDef[i-1].toLowerCase() != 'all') {
+                        itemsDef[i] = Math.min(parties[args[0]][type+'s'][itemsDef[i-1]], itemsDef[i])
+                        if (parties[args[0]][type+'s'][itemsDef[i-1]]) {
+                            parties[args[0]][type+'s'][itemsDef[i-1]] -= itemsDef[i]
+
+                            if (parties[args[0]][type+'s'][itemsDef[i-1]] <= 0) {
+                                delete parties[args[0]][type+'s'][itemsDef[i-1]]
+                            }
+                        }
+                    } else {
+                        parties[args[0]][itemsDef[i-2]+'s'] = {}
+                    }
+                }
+            } else {
+                parties[args[0]].items = {}
+                parties[args[0]].weapons = {}
+                parties[args[0]].armors = {}
+            }
+        }
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, 4));
+        message.channel.send(`${args[0]} has the items specified removed.`)
+    }
+})
+
+commands.transferitems = new Command({
+    desc: 'Transfer items from one party to another.',
+    aliases: ['transferitem'],
+    section: 'parties',
+    checkban: true,
+    args: [
+        {
+            name: 'Party Name',
+            type: 'Word',
+            forced: true
+        },
+        {
+            name: 'Party Name',
+            type: 'Word',
+            forced: true
+        },
+        {
+            name: "Items (Type, Item, Amount) #1",
+            type: "Word",
+            forced: true,
+            multiple: true
+        }
+    ],
+    func: (message, args) => {
+        let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+        let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
+        let weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);
+        let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armor.json`);
+
+        if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party!`);
+        if (!parties[args[1]]) return message.channel.send(`${args[1]} is not a valid party!`);
+
+        if (!isPartyLeader(message.author, parties[args[0]], message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send("You cannot give items to another party.")
+
+        party1 = args[0]
+        party2 = args[1]
+
+        args.splice(0, 2)
+        const validTypes = ['item', 'weapon', 'armor']
+        let itemsDef = []
+
+        let type
+
+        if (args.length % 3 != 0) return message.channel.send(`You didn't write the correct amount of fields.`)
+
+        if (args[0].toLowerCase() != 'all') {
+            for (i in args) {
+                if (i % 3 == 0) {
+                    if (!validTypes.includes(args[i])) return message.channel.send(`${args[i]} is not a valid item type. Valid types are: \n- ${validTypes.join('\n- ')}`)
+                    if (!parties[party1][args[i].toLowerCase()+'s']) return message.channel.send(`${party1} does not have any ${args[i].toLowerCase()}s.`)
+                    type = args[i].toLowerCase();
+                }
+                if (i % 3 == 1) {
+                    itemsDef[i-1] = args[i-1].toLowerCase()
+
+                    if (args[i].toLowerCase() != 'all') {
+                        if (args[i-1].toLowerCase() == "item") {
+                            if (!itemFile[args[i]]) return message.channel.send(`${args[i]} is not a valid item.`)
+                            if (!parties[party1][type+'s'][args[i]]) return message.channel.send(`${party1} doesn't have ${args[i]}!`)
+                        }
+                        else if (args[i-1].toLowerCase() == "weapon") {
+                            if (!weaponFile[args[i]]) return message.channel.send(`${args[i]} is not a valid weapon.`)
+                            if (!parties[party1][type+'s'][args[i]]) return message.channel.send(`${party1} doesn't have ${args[i]}!`)
+                        }
+                        else if (args[i-1].toLowerCase() == "armor") {
+                            if (!armorFile[args[i]]) return message.channel.send(`${args[i]} is not a valid armor.`)
+                            if (!parties[party1][type+'s'][args[i]]) return message.channel.send(`${party1} doesn't have ${args[i]}!`)
+                        }
+                    }
+                    itemsDef[i] = args[i]
+                }
+                if (i % 3 == 2) {
+                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
+                    itemsDef[i] = Math.max(1, parseInt(args[i]))
+                }
+            }
+        }
+
+        if (isPartyLeader(message.author, parties[party2], message.guild.id) || utilityFuncs.isAdmin(message)) {
+            transfer(message, party1, party2, itemsDef)
+        } else {
+            let secondLeader = partyLeader(parties[party2], message.guild.id)
+            let givenResponce = false
+            //ask for confirmation
+            message.channel.send(`${message.author.username} wants to transfer items to ${party2}.\n<@${secondLeader}>, do you want to accept this transfer?\n**Y/N**`)
+            const collector = message.channel.createMessageCollector({ time: 15000 });
+            collector.on('collect', m => {
+                if (m.author.id == secondLeader) {
+                    if (m.content.toLowerCase() == 'true' || m.content.toLowerCase() == 'yes' || m.content.toLowerCase() == 'y' || m.content.toLowerCase() == '1') {
+                        givenResponce = true
+                        transfer(message, party1, party2, itemsDef)
+                        collector.stop()
+                    } else {
+                        message.channel.send(`The transfer has been rejected.`)
+                        givenResponce = true
+                        collector.stop()
+                    }
+                }
+            })
+            collector.on('end', collected => {
+                if (!givenResponce) {
+                    message.channel.send(`The transfer has been rejected.`)
+                }
+            })
+        }
+    }
+})
+
+function transfer(message, party1, party2, itemsDef) {
+    let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+
+    for (i in itemsDef) {
+        if (itemsDef[0].toLowerCase() != 'all') {
+            if (i % 3 == 2) {
+                if (itemsDef[i-1].toLowerCase() != 'all') {
+                    itemsDef[i] = Math.min(parties[party1][itemsDef[i-1]][itemsDef[i-1]], itemsDef[i])
+                    if (parties[party1][itemsDef[i-1]][itemsDef[i-1]]) {
+                        parties[party1][itemsDef[i-1]][itemsDef[i-1]] -= itemsDef[i]
+
+                        if (parties[party1][itemsDef[i-1]][itemsDef[i-1]] <= 0) {
+                            delete parties[party1][itemsDef[i-1]][itemsDef[i-1]]
+                        }
+
+                        if (!parties[party2][itemsDef[i-1]][itemsDef[i-1]]) {
+                            parties[party2][itemsDef[i-1]][itemsDef[i-1]] = 0
+                        }
+                        parties[party2][itemsDef[i-1]][itemsDef[i-1]] += itemsDef[i]
+                    }
+                } else {
+                    for (j in parties[party1][itemsDef[i-2]+'s']) {
+                        if (!parties[party2][itemsDef[i-2]+'s'][j]) {
+                            parties[party2][itemsDef[i-2]+'s'][j] = 0
+                        }
+                        parties[party2][itemsDef[i-2]+'s'][j] += parties[party1][itemsDef[i-2]+'s'][j]
+                        delete parties[party1][itemsDef[i-2]+'s'][j]
+                    }
+                }
+            }
+        } else {
+            for (j in parties[party1]['items']) {
+                if (!parties[party2]['items'][j]) {
+                    parties[party2]['items'][j] = 0
+                }
+                parties[party2]['items'][j] += parties[party1]['items'][j]
+                delete parties[party1]['items'][j]
+            }
+            for (j in parties[party1]['weapons']) {
+                if (!parties[party2]['weapons'][j]) {
+                    parties[party2]['weapons'][j] = 0
+                }
+                parties[party2]['weapons'][j] += parties[party1]['weapons'][j]
+                delete parties[party1]['weapons'][j]
+            }
+            for (j in parties[party1]['armors']) {
+                if (!parties[party2]['armors'][j]) {
+                    parties[party2]['armors'][j] = 0
+                }
+                parties[party2]['armors'][j] += parties[party1]['armors'][j]
+                delete parties[party1]['armors'][j]
+            }
+        }
+    }
+    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties))
+    message.channel.send(`The transfer has been completed.`)
+}

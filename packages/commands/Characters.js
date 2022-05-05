@@ -165,7 +165,7 @@ commands.changetruename = new Command({
 		chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
         for (let channel in chestFile) {
             for (let chest in chestFile[channel]) {
-                if (chestFile[channel][chest].lock[0] == 'character') {
+                if (chestFile[channel][chest].lock[0] == 'character' || chestFile[channel][chest].lock[0] == 'pet') {
                     if (chestFile[channel][chest].lock[1] == args[0]) {
                         chestFile[channel][chest].lock[1] = args[1]
                     }
@@ -173,6 +173,34 @@ commands.changetruename = new Command({
             }
         }
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, '    '));
+
+		partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
+		for (let party in partyFile) {
+			for (let member in partyFile[party].members) {
+				if (partyFile[party].members[member] == args[0]) {
+					partyFile[party].members[member] = args[1]
+				}
+			}
+			if (partyFile[party].backup) {
+				for (let member in partyFile[party].backup) {
+					if (partyFile[party].backup[member] == args[0]) {
+						partyFile[party].backup[member] = args[1]
+					}
+				}
+			}
+			if (partyFile[party].curPet == args[0]) {
+				partyFile[party].curPet = args[1]
+			}
+			if (partyFile[party].negotiates && partyFile[party].negotiates[args[0]]) {
+				partyFile[party].negotiates[args[1]] = partyFile[party].negotiates[args[0]];
+				delete partyFile[party].negotiates[args[0]];
+			}
+			if (partyFile[party].negotiateAllies && partyFile[party].negotiateAllies[args[0]]) {
+				partyFile[party].negotiateAllies[args[1]] = partyFile[party].negotiateAllies[args[0]];
+				delete partyFile[party].negotiateAllies[args[0]]
+			}
+		}
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(partyFile, null, '    '));
 
 		message.channel.send(`${args[0]} has been renamed to ${args[1]}!`);
 	}
@@ -1757,6 +1785,15 @@ commands.purgechar = new Command({
 						}
 					}
 					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, '    '));
+
+					partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
+					for (let party in partyFile) {
+						partyFile[party].members = partyFile[party].members.filter(m => m != args[0])
+						if (partyFile[party].backup) {
+							partyFile[party].backup = partyFile[party].backup.filter(m => m != args[0])
+						}
+					}
+					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(partyFile, null, '    '));
 
 					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, 4));
 				} else
