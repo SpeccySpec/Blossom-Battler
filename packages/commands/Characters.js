@@ -791,6 +791,40 @@ commands.gainxp = new Command({
 	}
 })
 
+commands.awardenemyxp = new Command({
+	desc: "Gives XP from an enemy to a character. Enough XP can cause the character to level up! __Affected by the XP Rate of the server__.",
+	aliases: ['awardxp', 'awardxpfromenemy'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Enemy Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	admin: 'You don\'t have permission to give XP from enemies to characters!',
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id)
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// Checks
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		if (!enemyFile[args[1]]) return message.channel.send('Nonexistant Enemy.');
+
+		// gainXp function handles everything.
+		gainXp(message, charFile[args[0]], enemyFile[args[1]].xp);
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
 commands.levelup = new Command({
 	desc: "Levels up a character.",
 	aliases: ['lvlup', 'gainlevel'],
