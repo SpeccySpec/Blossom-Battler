@@ -504,8 +504,8 @@ objClone = (source) => {
 
 // setUpFile
 fileStore = {};
-setUpFile = (file) => {
-	if (fileStore[file]) return fileStore[file];
+setUpFile = (file, force) => {
+	if (fileStore[file] && !force) return fileStore[file];
 	let fileRead = fs.readFileSync(file, {flag: 'as+'});
 
 	if (!fileRead || fileRead == "" || fileRead == " ") {

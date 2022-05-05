@@ -786,3 +786,27 @@ commands.affinityrates = new Command({
 		}
 	}
 })
+
+commands.reloadfile = new Command({
+	desc: '**RPG Bot Administrator Only!** Reloads a file for the server.',
+	section: 'moderation',
+	aliases: ['reload', 'reloadfile'],
+	args: [
+		{
+			name: 'File',
+			type: 'Word',
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (!utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send('You do not have permission to reload files!')
+
+		let validFiles = ['armors', 'characters', 'chests', 'enemies', 'items', 'loot', 'parties', 'settings', 'shops', 'weapons']
+		if (!validFiles.includes(args[0].toLowerCase())) return message.channel.send('Invalid file! Valid files are: armors, characters, chests, enemies, items, loot, parties, settings, shops, weapons')
+
+		setUpFile(`${dataPath}/json/${message.guild.id}/${args[0].toLowerCase()}.json`, true)
+		message.react('👍').then(() => {
+			message.delete(5000)
+		})
+	}
+})
