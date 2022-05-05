@@ -285,8 +285,6 @@ longDescription = (charDefs, level, server, message) => {
 		for (const i in charDefs.transformations) {
 			transTxt += `**${charDefs.transformations[i].name}** *(${charDefs.transformations[i].requirement})*\n`
 
-			if (charDefs.transformations[i].desc != '') transTxt += `*${charDefs.transformations[i].desc}*\n`
-
 			let addStats = [
 				"hp",
 				"atk",
@@ -298,48 +296,12 @@ longDescription = (charDefs, level, server, message) => {
 				"chr",
 				"luk"
 			]
-
-			transTxt += `**Stats:** `
 			for (const k in addStats) {
 				let addTxt = `+${charDefs.transformations[i][addStats[k]]}% ${addStats[k]}`
 				let subTxt = `${charDefs.transformations[i][addStats[k]]}% ${addStats[k]}`
 				transTxt += `${(charDefs.transformations[i][addStats[k]] >= 0) ? addTxt : subTxt}`;
 				if (k < addStats.length-1)
 					transTxt += ', '
-			}
-					
-			transTxt += `\n`
-
-			if (charDefs.transformations[i].skill && charDefs.transformations[i].skill != '') {
-				transTxt += `**Signature Skill:** ${elementEmoji[skillFile[charDefs.transformations[i].skill].type]}${skillFile[charDefs.transformations[i].skill].name}\n`
-			}
-
-			if (charDefs.transformations[i].affintiies || (settings.mechanics.stataffinities && charDefs.transformations[i].statusaffinities)) {
-				// Affinities
-				charAffs = '';
-				for (const affinity in charDefs.transformations[i].affinities) {
-					if (charDefs.transformations[i].affinities[affinity] && charDefs.transformations[i].affinities[affinity].length > 0) charAffs += `\n${affinityEmoji[affinity]}: `
-					for (const a in charDefs.transformations[i].affinities[affinity]) {
-						charAffs += `${elementEmoji[charDefs.transformations[i].affinities[affinity][a]]}`;
-					}
-				}
-				// Status Affinities
-				if (settings.mechanics.stataffinities) {
-					if (charDefs.transformations[i].statusaffinities) {
-						if (charAffs != '') charAffs += `\n`
-						statAffs = '';
-						for (const affinity in charDefs.transformations[i].statusaffinities) {
-							if (charDefs.transformations[i].statusaffinities[affinity] && charDefs.transformations[i].statusaffinities[affinity].length > 0) statAffs += `\n${affinityEmoji[affinity]}: `
-							for (const a in charDefs.transformations[i].statusaffinities[affinity]) {
-								statAffs += `${statusEmojis[charDefs.transformations[i].statusaffinities[affinity][a]]}`;
-							}
-						}
-						if (statAffs != '') {
-							charAffs += `${statAffs}\n\n`
-						};
-					}
-				}
-				if (charAffs != '') transTxt += `**Affinities:**${charAffs}\n`
 			}
 		}
 	}
@@ -422,6 +384,78 @@ longDescription = (charDefs, level, server, message) => {
 	}
 
 	// Ae
+	return DiscordEmbed;
+}
+
+transformationDesc = (char, name, server, message) => {
+	let settings = setUpFile(`${dataPath}/json/${server}/settings.json`);
+
+	let DiscordEmbed = new Discord.MessageEmbed()
+		.setColor('#FFBA00')
+		.setTitle(`${name}'s ${char.name} Transformation`)
+
+	if (char.desc != '') DiscordEmbed.setDescription(`*${char.desc}*`);
+
+	let statDesc = ''
+	let addStats = [
+		"hp",
+		"atk",
+		"mag",
+		"prc",
+		"end",
+		"agl",
+		"int",
+		"chr",
+		"luk"
+	]
+
+	for (const k in addStats) {
+		let addTxt = `+${char[addStats[k]]}% ${addStats[k].toUpperCase()}\n`
+		let subTxt = `${char[addStats[k]]}% ${addStats[k].toUpperCase()}\n`
+		statDesc += `${(char[addStats[k]] >= 0) ? addTxt : subTxt}`;
+	}
+
+	DiscordEmbed.fields.push({ name: 'Stats', value: statDesc, inline: true });
+
+	if (char.affintiies || (settings.mechanics.stataffinities && char.statusaffinities)) {
+		// Affinities
+		charAffs = '';
+		let affinityscore = 0
+		for (const affinity in char.affinities) {
+			if (char.affinities[affinity] && char.affinities[affinity].length > 0) charAffs += `\n${affinityEmoji[affinity]}: `
+			for (const a in char.affinities[affinity]) {
+				affinityscore += affinityScores[affinity]
+				charAffs += `${elementEmoji[char.affinities[affinity][a]]}`;
+			}
+		}
+		const scorecomment = affinityScores[(affinityscore > 0 ? Math.ceil : Math.floor)(affinityscore)]
+		charAffs += `\n\nScore: **${affinityscore}**\n*${scorecomment ?? "..."}*`
+
+		// Status Affinities
+		if (settings.mechanics.stataffinities) {
+			if (char.statusaffinities) {
+				statAffs = '';
+				let statusaffinityscore = 0
+				for (const affinity in char.statusaffinities) {
+					if (char.statusaffinities[affinity] && char.statusaffinities[affinity].length > 0) statAffs += `\n${affinityEmoji[affinity]}: `
+					for (const a in char.statusaffinities[affinity]) {
+						statusaffinityscore += affinityScores[affinity]
+						statAffs += `${statusEmojis[char.statusaffinities[affinity][a]]}`;
+					}
+				}
+				if (statAffs != '') {
+					const scorecomment = affinityScores[(statusaffinityscore > 0 ? Math.ceil : Math.floor)(statusaffinityscore)]
+					charAffs += `\n${statAffs}\n\nScore: **${statusaffinityscore}**\n*${scorecomment ?? "..."}*`
+				};
+			}
+		}
+		if (charAffs != '') DiscordEmbed.fields.push({ name: 'Affinities', value: charAffs, inline: true });
+	}
+
+	if (char.skill && char.skill != '') {
+		DiscordEmbed.fields.push({ name: 'Signature Skill', value: `${elementEmoji[skillFile[char.skill].type]}${skillFile[char.skill].name}`, inline: true });
+	}
+
 	return DiscordEmbed;
 }
 

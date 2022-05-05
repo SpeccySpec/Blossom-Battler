@@ -2620,6 +2620,34 @@ commands.edittransformation = new Command({
 	}
 })
 
+commands.gettransformation = new Command({
+	desc: "Get a character's transformation.",
+	section: "characters",
+	aliases: ['gettransformation', 'gettrans'],
+	args: [
+		{
+			name: "Character",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Transformation",
+			type: "Word",
+		}
+	],
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		if (!charFile[args[0]].transformations[args[1]]) return message.channel.send(`${args[0]} does not have a transformation named ${args[1]}!`);
+
+		let DiscordEmbed = transformationDesc(charFile[args[0]].transformations[args[1]], charFile[args[0]].name, message.guild.id, message);
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
 commands.renametransformation = new Command({
 	desc: "Renames a transformation.",
 	aliases: ['renametrans'],

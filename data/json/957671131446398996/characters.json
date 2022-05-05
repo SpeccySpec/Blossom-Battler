@@ -25156,6 +25156,23 @@
                         "strike"
                     ]
                 }
+            },
+            "Ancestral Fury": {
+                "name": "Ancestral Fury",
+                "requirement": "trusteddown",
+                "desc": "Sky feels a rage that burns inside his very soul, his ancestors channeling through it and strengthening him.",
+                "hp": 20,
+                "atk": 10,
+                "mag": -5,
+                "prc": 2,
+                "end": 2,
+                "chr": -5,
+                "int": 0,
+                "agl": 6,
+                "luk": 1,
+                "tp": 0,
+                "tpmax": 10,
+                "level": 1
             }
         },
         "charms": [
