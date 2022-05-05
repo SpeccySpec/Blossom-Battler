@@ -2337,6 +2337,547 @@ commands.setbioinfo = new Command({
 	}
 })
 
+commands.settransformation = new Command({
+	desc: "Sets a character's transformation",
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Transformation Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Requirement",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "HP Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Attack Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Magic Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Perception Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Endurance Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Charisma Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Intelligence Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Agility Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Luck Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Short Description",
+			type: "Word",
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		if (!charFile[args[0]].owner.includes(message.author.id) && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character!');
+
+		if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) {
+            message.channel.send(`You're really mean, you know that?`);
+            return false
+        }
+
+		if (charFile[args[0]].transformations && ! charFile[args[0]].transformations[args[1]] && Object.keys(charFile[args[0]].transformations).length >= settings.caps.transformations.transformationlimit) return message.channel.send(`You have reached the maximum number of transformations for this character!`);
+
+		let reqTable = ['allydown', 'onlystanding', 'belowhalfhp', 'outofmp', 'leaderdown', 'trusteddown']
+		if (!reqTable.includes(args[2])) return message.channel.send(`Invalid requirement! Please enter one of the following: ${reqTable.join(', ')}`);
+
+		if (args[3] > settings.caps.transformations.hpbuff) return message.channel.send(`HP Buff cannot be greater than ${settings.caps.transformations.hpbuff}!`);
+
+		let BST = 0;
+		let allowedMore = 0;
+		for (let i = 4; i < 12; i++) {
+			if (args[i] > settings.caps.transformations.basestatmaxcap) return message.channel.send(`${args[i]} cannot be greater than ${settings.caps.transformations.statbuff}!`);
+			if (args[i] < settings.caps.transformations.basestatmincap) return message.channel.send(`${args[i]} cannot be less than ${settings.caps.transformations.basestatmincap}!`);
+
+			if (args[i] < 0)
+				allowedMore = -args[i]/2
+
+			if (args[i] > 0)
+				BST += args[i];
+		}
+		if (BST > Math.round(Math.min(settings.caps.transformations.bstcap, settings.caps.transformations.bstcap+allowedMore))) return message.channel.send(`BST cannot be greater than ${Math.min(settings.caps.transformations.bstcap, settings.caps.transformations.bstcap+allowedMore)}! Maximum BST is ${settings.caps.transformations.bstcap}, but that modifies with negative stats.`);
+
+		charFuncs.makeTransformation(charFile[args[0]], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11]);
+		
+		if (args[12] != '') {
+			if (args[12].length > 128) return message.channel.send('Short description cannot be longer than 128 characters!');
+			charFile[args[0]].transformations[args[1]].desc = args[12];
+		}
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+
+		let transDefs = charFile[args[0]].transformations[args[1]]
+
+        const DiscordEmbed = new Discord.MessageEmbed()
+            .setColor('#f2c055')
+			.setTitle(`${charFile[args[0]].name}'s ${transDefs.name} Transformation's Stats:`)
+            .setDescription(`${transDefs.desc ? `*` + transDefs.desc + '*\n\n' : ''}**Stats:**\n${transDefs.hp}HP%++\n\n${transDefs.atk}ATK%++\n${transDefs.mag}MAG%++\n${transDefs.prc}PRC%++\n${transDefs.end}END%++\n${transDefs.chr}CHR%++\n${transDefs.int}INT%++\n${transDefs.agl}AGL%++\n${transDefs.luk}LUK%++`)
+        message.channel.send({content: `👍 ${charFile[args[0]].name}'s ${transDefs.name} transformation has been registered!`, embeds: [DiscordEmbed]});
+	}
+})
+
+commands.cleartransformation = new Command({
+	desc: "Clears a transformation from a character.",
+	section: "characters",
+	aliases: ["cleartransformation", "cleartransformations", "cleartransform", "cleartransforms", "cleartrans", "cleartranss"],
+	args: [
+		{
+			name: "Character",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Transformation",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		if (!charFile[args[0]].owner.includes(message.author.id) && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character!');
+
+		if (!charFile[args[0]].transformations[args[1]]) return message.channel.send(`${args[0]} does not have a transformation named ${args[1]}!`);
+
+		delete charFile[args[0]].transformations[args[1]];
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+
+		message.channel.send(`👍 ${args[0]}'s ${args[1]} transformation has been removed!`);
+	}
+})
+
+commands.edittransformation = new Command({
+	desc: "Change a character transformation's stats.",
+	section: "characters",
+	aliases: ["edittransformation", "edittransformations", "edittransform", "edittransforms", "edittrans", "edittranss"],
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Transformation Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Requirement",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "HP Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Attack Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Magic Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Perception Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Endurance Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Charisma Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Intelligence Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Agility Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Luck Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Short Description",
+			type: "Word",
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		if (!charFile[args[0]].owner.includes(message.author.id) && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character!');
+
+		if (!charFile[args[0]].transformations[args[1]]) return message.channel.send(`${args[0]} does not have a transformation named ${args[1]}!`);
+
+		let reqTable = ['allydown', 'onlystanding', 'belowhalfhp', 'outofmp', 'leaderdown', 'trusteddown']
+		if (!reqTable.includes(args[2])) return message.channel.send(`Invalid requirement! Please enter one of the following: ${reqTable.join(', ')}`);
+
+		if (args[3] > settings.caps.transformations.hpbuff) return message.channel.send(`HP Buff cannot be greater than ${settings.caps.transformations.hpbuff}!`);
+
+		let BST = 0;
+		let allowedMore = 0;
+		for (let i = 4; i < 12; i++) {
+			if (args[i] > settings.caps.transformations.basestatmaxcap) return message.channel.send(`${args[i]} cannot be greater than ${settings.caps.transformations.statbuff}!`);
+			if (args[i] < settings.caps.transformations.basestatmincap) return message.channel.send(`${args[i]} cannot be less than ${settings.caps.transformations.basestatmincap}!`);
+
+			if (args[i] < 0)
+				allowedMore = -args[i]/2
+
+			if (args[i] > 0)
+				BST += args[i];
+		}
+		if (BST > Math.round(Math.min(settings.caps.transformations.bstcap, settings.caps.transformations.bstcap+allowedMore))) return message.channel.send(`BST cannot be greater than ${Math.min(settings.caps.transformations.bstcap, settings.caps.transformations.bstcap+allowedMore)}! Maximum BST is ${settings.caps.transformations.bstcap}, but that modifies with negative stats.`);
+
+		charFile[args[0]].transformations[args[1]].requirement = args[2];
+		charFile[args[0]].transformations[args[1]].hp = args[3]
+		charFile[args[0]].transformations[args[1]].atk = args[4]
+		charFile[args[0]].transformations[args[1]].mag = args[5]
+		charFile[args[0]].transformations[args[1]].prc = args[6]
+		charFile[args[0]].transformations[args[1]].end = args[7]
+		charFile[args[0]].transformations[args[1]].chr = args[8]
+		charFile[args[0]].transformations[args[1]].int = args[9]
+		charFile[args[0]].transformations[args[1]].agl = args[10]
+		charFile[args[0]].transformations[args[1]].luk = args[11]
+
+		if (args[12] != '') {
+			if (args[12].length > 128) return message.channel.send('Short description cannot be longer than 128 characters!');
+			charFile[args[0]].transformations[args[1]].desc = args[12];
+		}
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+
+		let transDefs = charFile[args[0]].transformations[args[1]]
+
+        const DiscordEmbed = new Discord.MessageEmbed()
+            .setColor('#f2c055')
+			.setTitle(`${charFile[args[0]].name}'s ${transDefs.name} Transformation's Stats:`)
+            .setDescription(`${transDefs.desc ? `*` + transDefs.desc + '*\n\n' : ''}**Stats:**\n${transDefs.hp}HP%++\n\n${transDefs.atk}ATK%++\n${transDefs.mag}MAG%++\n${transDefs.prc}PRC%++\n${transDefs.end}END%++\n${transDefs.chr}CHR%++\n${transDefs.int}INT%++\n${transDefs.agl}AGL%++\n${transDefs.luk}LUK%++`)
+        message.channel.send({content: `👍 ${charFile[args[0]].name}'s ${transDefs.name} transformation has been changed!`, embeds: [DiscordEmbed]});
+	}
+})
+
+commands.renametransformation = new Command({
+	desc: "Renames a transformation.",
+	aliases: ['renametrans'],
+	section: 'characters',
+	checkban: true,
+	args: [
+		{
+			name: "Character",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Transformation",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "New Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		if (!charFile[args[0]].owner.includes(message.author.id) && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character!');
+
+		if (!charFile[args[0]].transformations[args[1]]) return message.channel.send(`${args[0]} does not have a transformation named ${args[1]}!`);
+
+		charFile[args[0]].transformations[args[1]].name = args[2];
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		message.channel.send(`👍 ${args[0]}'s ${args[1]} transformation has been renamed!`);
+	}
+})
+
+commands.transformationtruename = new Command({
+	desc: "Sets the true name of a transformation.",
+	aliases: ['transformationtruename'],
+	section: 'characters',
+	checkban: true,
+	args: [
+		{
+			name: "Character",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Transformation",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "New Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		if (!charFile[args[0]].owner.includes(message.author.id) && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character!');
+
+		if (!charFile[args[0]].transformations[args[1]]) return message.channel.send(`${args[0]} does not have a transformation named ${args[1]}!`);
+
+		if (charFile[args[0]].transformations[args[2]]) return message.channel.send(`${args[0]} already has a transformation named ${args[2]}!`);
+
+		if (args[1] == args[2]) return message.channel.send(`What's the point...?`);
+
+		charFile[args[0]].transformations[args[2]] = charFile[args[0]].transformations[args[1]];
+		delete charFile[args[0]].transformations[args[1]];
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		message.channel.send(`👍 ${args[0]}'s ${args[1]} transformation has been renamed!`);
+	}
+})
+
+commands.transformationaffinity = new Command({
+	desc: "Sets the affinities of a transformation that replace a character's affinities.",
+	aliases: ['transformationaffinity'],
+	section: 'characters',
+	checkban: true,
+	args: [
+		{
+			name: "Character",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Transformation",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Element",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Affinity",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		if (!charFile[args[0]].owner.includes(message.author.id) && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character!');
+
+		if (!charFile[args[0]].transformations[args[1]]) return message.channel.send(`${args[0]} does not have a transformation named ${args[1]}!`);
+
+		if (utilityFuncs.inArray(args[2].toLowerCase(), Elements)) {
+			if (!utilityFuncs.inArray(args[3].toLowerCase(), Affinities) && args[3].toLowerCase() != 'normal') return message.channel.send('Please enter a valid affinity!```diff\n+ SuperWeak\n+ Weak\n+ Normal\n+ Resist\n+ Block\n+ Repel\n+ Drain```');
+			if (args[2].toLowerCase() == 'almighty' || args[3].toLowerCase() == 'status' || args[2].toLowerCase() == 'passive' || args[2].toLowerCase() == 'heal') return message.channel.send(`You can't set ${args[2]} affinities!`);
+
+			if (hasAffinity(charFile[args[0]].transformations[args[1]], args[2].toLowerCase(), args[3].toLowerCase())) return message.channel.send(`${charFile[args[0]].transformations[args[1]].name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
+
+			if (!charFile[args[0]].transformations[args[1]].affinities) charFile[args[0]].transformations[args[1]].affinities = {};
+			// Clear Affinities
+			for (let a of Affinities) {
+				if (a && charFile[args[0]].transformations[args[1]].affinities[a]) {
+					for (const k in charFile[args[0]].transformations[args[1]].affinities[a]) {
+						if (charFile[args[0]].transformations[args[1]].affinities[a][k].toLowerCase() === args[2].toLowerCase()) {
+							charFile[args[0]].transformations[args[1]].affinities[a].splice(k, 1);
+							break;
+						}
+					}
+				}
+			}
+
+			// Apply Affinities (ignore if normal)
+			if (args[3].toLowerCase() != 'normal') {
+				if (!charFile[args[0]].transformations[args[1]].affinities[args[3].toLowerCase()]) charFile[args[0]].transformations[args[1]].affinities[args[3].toLowerCase()] = [];
+				charFile[args[0]].transformations[args[1]].affinities[args[3].toLowerCase()].push(args[2].toLowerCase());
+			}
+		// Status Affinities
+		} else if (utilityFuncs.inArray(args[2].toLowerCase(), statusEffects)) {
+			if (!utilityFuncs.inArray(args[3].toLowerCase(), Affinities) && args[3].toLowerCase() != 'normal') return message.channel.send('Please enter a valid affinity!```diff\n+ SuperWeak\n+ Weak\n+ Normal\n+ Resist\n+ Block\n+ Repel\n+ Drain```');
+			if (args[2].toLowerCase() == 'infatuation' || args[2].toLowerCase() == 'confusion' || args[2].toLowerCase() == 'mirror') return message.channel.send(`You can't set ${args[1]} affinities!`);
+
+			if (hasStatusAffinity(charFile[args[0]].transformations[args[1]], args[2].toLowerCase(), args[3].toLowerCase())) return message.channel.send(`${charFile[args[0]].transformations[args[1]].name} already has a ${args[3]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
+
+			if (!charFile[args[0]].transformations[args[1]].statusaffinities) charFile[args[0]].transformations[args[1]].statusaffinities = {};
+			// Clear Affinities
+			for (let a of Affinities) {
+				if (charFile[args[0]].transformations[args[1]].statusaffinities[a]) {
+					if (a && charFile[args[0]].transformations[args[1]].statusaffinities[a]) {
+						for (const k in charFile[args[0]].transformations[args[1]].statusaffinities[a]) {
+							if (charFile[args[0]].transformations[args[1]].statusaffinities[a][k].toLowerCase() === args[2].toLowerCase()) {
+								charFile[args[0]].transformations[args[1]].statusaffinities[a].splice(k, 1);
+								break;
+							}
+						}
+					}
+				}
+			}
+
+			// Apply Affinities (ignore if normal)
+			if (args[3].toLowerCase() != 'normal') {
+				if (!charFile[args[0]].transformations[args[1]].statusaffinities[args[3].toLowerCase()]) charFile[args[0]].transformations[args[1]].statusaffinities[args[3].toLowerCase()] = [];
+				charFile[args[0]].transformations[args[1]].statusaffinities[args[3].toLowerCase()].push(args[2].toLowerCase());
+			}
+		// Neither entered.
+		} else {
+			return message.channel.send('Please enter a valid element or status effect to resist!');
+		}
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		message.channel.send(`${args[0]}'s ${args[1]} now has a ${args[3]} affinity to ${args[2].charAt(0).toUpperCase()+args[2].slice(1).toLowerCase()}!`);
+	}
+})
+
+commands.transformationskill = new Command({
+	desc: 'Adds a signature skill to a transformation.',
+	aliases: ['tskill', 'transskill'],
+	checkban: true,
+	args: [
+		{
+			name: 'Character',
+			type: 'Word',
+			forced: true
+		},
+		{
+			name: 'Transformation',
+			type: 'Word',
+			forced: true
+		},
+		{
+			name: 'Skill',
+			type: 'Word',
+			forced: true
+		},
+	],
+	section: 'characters',
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		if (!charFile[args[0]].owner.includes(message.author.id) && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character!');
+
+		if (!charFile[args[0]].transformations[args[1]]) return message.channel.send(`${args[0]} does not have a transformation named ${args[1]}!`);
+
+		if (!skillFile[args[2]]) return message.channel.send(`${args[2]} is not a valid skill!`);
+
+		if (charFile[args[0]].transformations[args[1]].skill && charFile[args[0]].transformations[args[1]].skill == args[2]) return message.channel.send(`${charFile[args[0]].transformations[args[1]].name} already has ${args[2]} as a signature skill!`);
+
+		charFile[args[0]].transformations[args[1]].skill = args[2];
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+
+		message.channel.send(`${args[0]}'s ${args[1]} now has ${args[2]} as a signature skill!`);
+	}
+})
+
+commands.cleartransformationskill = new Command({
+	desc: 'Removes a signature skill from a transformation.',
+	aliases: ['ctskill', 'cleartransskill'],
+	checkban: true,
+	args: [
+		{
+			name: 'Character',
+			type: 'Word',
+			forced: true
+		},
+		{
+			name: 'Transformation',
+			type: 'Word',
+			forced: true
+		}
+	],
+	section: 'characters',
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		if (!charFile[args[0]].owner.includes(message.author.id) && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character!');
+
+		if (!charFile[args[0]].transformations[args[1]]) return message.channel.send(`${args[0]} does not have a transformation named ${args[1]}!`);
+
+		if (!charFile[args[0]].transformations[args[1]].skill) return message.channel.send(`${charFile[args[0]].transformations[args[1]].name} does not have a signature skill!`);
+
+		charFile[args[0]].transformations[args[1]].skill = '';
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+
+		message.channel.send(`${args[0]}'s ${args[1]} no longer has a signature skill!`);
+	}
+})
+
 // ae
 commands.exportchar = new Command({
 	desc: "Exports a character so you can use them in another server!",
@@ -2349,6 +2890,7 @@ commands.exportchar = new Command({
 			forced: true
 		}
 	],
+	checkban: true,
 	func: (message, args) => {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -2381,6 +2923,7 @@ commands.exportname = new Command({
 			forced: true
 		}
 	],
+	checkban: true,
 	func: (message, args) => {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 		let userdata = setUpUserData(message.author.id);
@@ -2392,6 +2935,8 @@ commands.exportname = new Command({
 
 			return message.channel.send(`${args[0]} has not been exported! Did you mean:${charList}`);
 		}
+
+		if (args[0] == args[1]) return message.channel.send(`What's the point...?`);
 
 		// Check for Duplicates
 		userdata.exports[args[1]] = objClone(userdata.exports[args[0]]);
@@ -2414,6 +2959,7 @@ commands.importchar = new Command({
 			forced: true
 		}
 	],
+	checkban: true,
 	func: (message, args) => {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 

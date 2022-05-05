@@ -105,6 +105,13 @@ let tempEnemyQuote = fs.readFileSync(dataPath+'/dailyenemyquote.txt', {flag: 'as
 if (tempEnemyQuote && tempEnemyQuote != '')
 dailyEnemyQuote = JSON.parse(tempEnemyQuote);
 
+// Dailt Ship - Resets at midnight
+dailyShip = {}
+
+let tempShip = fs.readFileSync(dataPath+'/dailyship.txt', {flag: 'as+'});
+if (tempShip && tempShip != '')
+dailyShip = JSON.parse(tempShip);
+
 // Midnight Moment
 function midnightInMS() {
     return new Date().setHours(24, 0, 0, 0) - new Date().getTime()
@@ -119,6 +126,7 @@ setTimeout(function() {
 	dailyChar = {};
 	dailyEnemy = {};
 	dailyEnemyQuote = {};
+	dailyShip = {};
 
 	fs.writeFileSync(dataPath+'/dailyquote.txt', '');
 	fs.writeFileSync(dataPath+'/dailyskill.txt', '');
@@ -128,6 +136,7 @@ setTimeout(function() {
 	fs.writeFileSync(dataPath+'/dailycharacter.txt', '');
 	fs.writeFileSync(dataPath+'/dailyenemy.txt', '');
 	fs.writeFileSync(dataPath+'/dailyenemyquote.txt', '');
+	fs.writeFileSync(dataPath+'/dailyship.txt', '');
 }, midnightInMS());
 
 // Elements
@@ -579,14 +588,14 @@ setUpSettings = (guild) => {
 		settings = {
 			prefix: 'rpg!',
 			mechanics: {
-				limitbreaks: false,
-				teamcombos: false,
-				onemores: false,
-				stataffinities: false,
-				charms: false,
-				leaderskills: false,
-				transformations: false,
-				technicaldamage: false,
+				limitbreaks: true,
+				teamcombos: true,
+				onemores: true,
+				stataffinities: true,
+				charms: true,
+				leaderskills: true,
+				transformations: true,
+				technicaldamage: true,
 			},
 			caps: {
 				levelcap: 99,
@@ -597,11 +606,13 @@ setUpSettings = (guild) => {
 				skillamount: 8,
 				teamsize: 4,
 				transformations: {
-					hpcap: 10,
+					hpcap: 20,
 					statcap: 99,
-					basestatcap: 10,
-					bstcap: 15,
-					level: 70
+					basestatmincap: -20,
+					basestatmaxcap: 10,
+					bstcap: 25,
+					level: 70,
+					transformationlimit: 3
 				}
 			},
 			rates: {

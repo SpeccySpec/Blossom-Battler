@@ -2855,7 +2855,7 @@
             "SyncedUp": {
                 "name": "SyncedUp",
                 "requirement": "trusteddown",
-                "desc": "",
+                "desc": "Three beings, thinking alike, acting alike... Syncing up to do one and one thing only.",
                 "hp": 20,
                 "atk": 0,
                 "mag": 6,
@@ -2867,7 +2867,18 @@
                 "luk": 1,
                 "tp": 0,
                 "tpmax": 10,
-                "level": 1
+                "level": 1,
+                "statusaffinities": {
+                    "block": [
+                        "brainwash"
+                    ]
+                },
+                "skill": "Test",
+                "affinities": {
+                    "block": [
+                        "psychic"
+                    ]
+                }
             }
         },
         "nickname": "TriTan",
@@ -3642,7 +3653,8 @@
                 "luk": -5,
                 "tp": 0,
                 "tpmax": 10,
-                "level": 1
+                "level": 1,
+                "skill": ""
             }
         },
         "teamCombo": {
@@ -25138,7 +25150,12 @@
                 "luk": 1,
                 "tp": 0,
                 "tpmax": 10,
-                "level": 1
+                "level": 1,
+                "affinities": {
+                    "resist": [
+                        "strike"
+                    ]
+                }
             }
         },
         "charms": [
@@ -25522,6 +25539,11 @@
                 "status": "dizzy",
                 "statuschance": 60
             }
+        },
+        "statusaffinities": {
+            "block": [
+                "ego"
+            ]
         }
     },
     "Sakuya": {
@@ -26749,6 +26771,7 @@
                 "status": "none",
                 "statuschance": 0
             }
-        }
+        },
+        "transformations": {}
     }
 }

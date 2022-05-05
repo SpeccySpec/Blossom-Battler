@@ -627,6 +627,7 @@ commands.editchest = new Command({
                 if (chestFile[args[0]] && chestFile[args[0]][args[3]]) {
                     return message.channel.send(`A chest called ${chestFile[args[0]][args[3]].name} (${args[3]}) already exists in that channel!`)
                 } else {
+                    if (args[1] == args[3]) return message.channel.send(`What's the point...?`);
                     chestFile[args[0]][args[3]] = utilityFuncs.cloneObj(chestFile[args[0]][args[1]])
                     delete chestFile[args[0]][args[1]]
                 }

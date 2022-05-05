@@ -1,4 +1,4 @@
-function writeTransformation(userDefs, trnsName, req, hpBuff, atkBuff, magBuff, prcBuff, endBuff, chrBuff, intBuff, aglBuff, lukBuff) {
+function writeTransformation(userDefs, trnsName, req, hpBuff, atkBuff, magBuff, prcBuff, endBuff, chrBuff, intBuff, aglBuff, lukBuff, skill, desc) {
 	if (!userDefs.transformations)
 		userDefs.transformations = {};
 	
@@ -21,7 +21,6 @@ function writeTransformation(userDefs, trnsName, req, hpBuff, atkBuff, magBuff, 
 		tpmax: 10,
 		level: 1
 	}
-	
 	console.log(`Written ${userDefs.name}'s ${trnsName} Transformation.`)
 }
 
