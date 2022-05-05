@@ -19,32 +19,58 @@ partyDesc = (party, message) => {
 	let settings = setUpSettings(message.guild.id);
 	let chars = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
-	let m = '';
-	for (const i in party.members) m += `\n${chars[party.members[i]].name}`;
-	if (m === '') m = 'Empty...';
-
-	let b = '';
-	for (const i in party.backup) b += `\n${chars[party.backup[i]].name}`;
-	if (b === '') b = 'No backup.';
-
-	enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
-
-	let p = '';
-	for (const i in party.negotiateAllies) {
-		let petDefs = party.negotiateAllies[i]
-		p += `\n${petDefs.name} - ${petDefs.skill}`;
+	// Show Leader Skill
+	let embedColor = '#e36b2b';
+	let leaderSkill = 'No Leader Skill...?';
+	if (chars[party.members[0]]) {
+		let char = chars[party.members[0]];
+		embedColor = elementColors[char.mainElement] ?? '#e36b2b';
+		leaderSkill = `**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} toward ${char.leaderskill.var1.toUpperCase()}`
 	}
 
-	if (p === '') p = 'No backup.';
+	// okay here's the embed :)
+	let DiscordEmbed = new Discord.MessageEmbed()
+		.setColor(embedColor)
+		.setTitle(`Team ${party.name}`)
+		.setDescription(leaderSkill)
+		.addFields();
 
-	itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
-	weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);
-	armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`);
+	// Members
+	if (party.members && party.members.length > 0) {
+		let members = '';
+		for (const i in party.members) members += `\n[**${i}**] ${chars[party.members[i]].name}`;
+	
+		DiscordEmbed.fields.push({ name: 'Team Members', value: members, inline: true });
+	}
+
+	// Backup
+	if (party.backup && party.backup.length > 0) {
+		let members = '';
+		for (const i in party.backup) members += `\n[**${i}**] ${chars[party.members[i]].name}`;
+
+		DiscordEmbed.fields.push({ name: 'Backup Members', value: members, inline: true });
+	}
+
+	// Pets
+	if (party.negotiateAllies) {
+		let p = '';
+		for (const i in party.negotiateAllies) {
+			let petDefs = party.negotiateAllies[i]
+			p += `\n${petDefs.name} - ${petDefs.skill}`;
+		}
+
+		if (p != '') DiscordEmbed.fields.push({ name: 'Pets', value: members, inline: true });
+	}
+
+	let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
+	let weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);
+	let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`);
 
 	// Items
 	let items = '';
 	for (const i in party.items) items += `${itemTypeEmoji[itemFile[i].type]} ${itemRarityEmoji[itemFile[i].rarity]}${i}: ${party.items[i]}\n`;
-	if (items === '') items = 'No items.';
+
+	if (items != '') DiscordEmbed.fields.push({ name: 'Items', value: items, inline: true });
 
 	// Weapons and Armor
 	let weapons = '';
@@ -64,27 +90,8 @@ partyDesc = (party, message) => {
 		}
 	}
 
-	if (weapons === '') weapons = 'No weapons.';
-	if (armor === '') armor = 'No armor.';
+	if (weapons != '') DiscordEmbed.fields.push({ name: 'Weapons', value: weapons, inline: true });
+	if (armor != '') DiscordEmbed.fields.push({ name: 'Armors', value: armor, inline: true });
 
-	let embedColor = '#e36b2b';
-	let leaderSkill = 'No Leader Skill...?';
-	if (chars[party.members[0]]) {
-		let char = chars[party.members[0]];
-		embedColor = elementColors[char.mainElement] ?? '#e36b2b';
-		leaderSkill = `**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} toward ${char.leaderskill.var1.toUpperCase()}`
-	}
-
-	return new Discord.MessageEmbed()
-		.setColor(embedColor)
-		.setTitle(`Team ${party.name}`)
-		.setDescription(leaderSkill)
-		.addFields(
-			{ name: 'Members', value: `${m}\n\n**${party.currency} ${settings.currency}s**`, inline: true },
-			{ name: 'Items', value: items, inline: true },
-			{ name: 'Backup', value: b, inline: true },
-			{ name: 'Pets', value: p, inline: true },
-			{ name: 'Weapons', value: weapons, inline: true },
-			{ name: 'Armors', value: armor, inline: true }
-		)
+	return DiscordEmbed;
 }

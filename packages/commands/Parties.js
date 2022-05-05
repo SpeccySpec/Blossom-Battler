@@ -189,9 +189,9 @@ commands.changepos = new Command({
 		if (!isPartyLeader(message.author, parties[args[0]], message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send("You cannot edit this party.")
 
 		if (removeFromParty(parties[args[0]], args[1])) {
+			message.react('👍');
 			parties[args[0]].members.splice(args[2], 0, args[1]);
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
-			message.channel.send(`${charFile[args[1]]} is now the leader of ${args[0]}!`);
 		} else {
 			return message.channel.send(`${args[1]} is not in the party!`);
 		}
