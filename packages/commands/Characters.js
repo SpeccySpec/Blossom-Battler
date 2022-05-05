@@ -2279,9 +2279,9 @@ commands.exportchar = new Command({
 
 		// Alright, let's get the character!
 		userdata.exports[args[0]] = charFile[args[0]];
-		message.channel.send(`Exported ${charFile[args[0]]}! Now you can import them to other servers using "exportchar"!`);
+		message.channel.send(`Exported ${charFile[args[0]].name}! Now you can import them to other servers using "importchar"!`);
 
-		fs.writeFileSync(`${dataPath}/userdata/${message.author.id}.json`, JSON.stringify(settings, null, 4));
+		fs.writeFileSync(`${dataPath}/userdata/${message.author.id}.json`, JSON.stringify(userdata, null, 4));
 	}
 })
 
@@ -2338,6 +2338,7 @@ commands.importchar = new Command({
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let userdata = setUpUserData(message.author.id);
+		if (Object.keys(userdata.exports).length < 1) return message.channel.send('You have no characters to import from.');
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		
 		if (!userdata.exports[args[0]]) {
@@ -2345,17 +2346,47 @@ commands.importchar = new Command({
 			for (const i in userdata.exports) charList += `- ${i}\n`;
 			charList += '```'
 
-			return message.channel.send(`${args[0]} has not been exported! Did you mean:${charList}`);
+			return message.channel.send(`${args[0]} has not been imported! Did you mean:${charList}`);
 		}
 
 		// Check for Duplicates
 		let charname = args[0];
-		while (charFile[charname]) charname = `${args[0]}-Import`;
+		let givenResponce = false;
+		if (charFile[charname]) {
+			if (charFile[charname].owner != message.author.id) {
+				charname = `${charname}(${message.author.id})`;
+			} else {
+				message.channel.send(`${charname} already exists! Do you want to overwrite it?\n**Y/N**`);
+				let collector = message.channel.createMessageCollector({ time: 15000 });
+				collector.on('collect', m => {
+					if (m.author.id == message.author.id) {
+						givenResponce = true;
+						if (m.content.toLowerCase() == 'true' || m.content.toLowerCase() == 'yes' || m.content.toLowerCase() == 'y' || m.content.toLowerCase() == '1') {
+							collector.stop();
+						} else {
+							charname = `${charname}-Import`;
+							collector.stop();
+						}
+					}
+				})
+				collector.on('end', collected => {
+					if (!givenResponce) {
+						return message.channel.send('You did not respond in time! Cancelling.');
+					} else {
+						// Alright, let's get the character!
+						charFile[charname] = userdata.exports[args[0]];
+						message.channel.send(`Imported ${userdata.exports[args[0]].name} as ${charname}! Now you can use them in this server!`);
 
-		// Alright, let's get the character!
-		charFile[charname] = userdata.exports[args[0]];
-		message.channel.send(`Imported ${userdata.exports[args[0]].name} as ${charname}! Now you can use them in this server!`);
+						fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+					}
+				})
+			}
+		} else {
+			// Alright, let's get the character!
+			charFile[charname] = userdata.exports[args[0]];
+			message.channel.send(`Imported ${userdata.exports[args[0]].name} as ${charname}! Now you can use them in this server!`);
 
-		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		}
 	}
 })

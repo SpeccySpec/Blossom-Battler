@@ -1265,5 +1265,8 @@ client.on("messageCreate", (message) => {
 	command.call(message, args)
 })
 
+//last ditch things
+makeDirectory(`${dataPath}/userdata`)
+
 client.login(process.env.TOKEN);
 console.log(`The bot is now in session! Enjoy!`)
