@@ -874,10 +874,12 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
             }
             break;
 		case 'levellock':
-			if (isNaN(variable)) {
-				if (variable.toLowerCase() != 'unobtainable') {
-					message.channel.send('Invalid level lock! Please enter a valid level lock.');
-					return false;
+			if (variable.toString().toLowerCase() != 'true' && variable.toString().toLowerCase() != 'false') {
+				if (isNaN(variable)) {
+					if (variable.toLowerCase() != 'unobtainable') {
+						message.channel.send('Invalid level lock! Please enter a valid level lock.');
+						return false;
+					}
 				}
 			}
 			break;

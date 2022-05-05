@@ -1010,7 +1010,7 @@ commands.listskills = new Command({
 						case 'pow':
 						case 'hits':
 							args[a] = parseInt(args[a]);
-							isConditionMet = (skillFile[i][args[a-1]] == args[a])
+							isConditionMet = (skillFile[i][args[a-1]] && skillFile[i][args[a-1]] == args[a])
 							break;
 						case 'acc':
 						case 'crit':
