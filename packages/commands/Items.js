@@ -2455,7 +2455,7 @@ function transfer(message, party1, party2, itemsDef) {
                     }
                 }
             } else {
-                if (i % 3 == 2) {
+                if (i % 3 == 1) {
                     if (parties[party1].currency) {
                         parties[party2].currency += itemsDef[i]
                         parties[party1].currency -= itemsDef[i]
