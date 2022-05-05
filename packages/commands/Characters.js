@@ -250,6 +250,15 @@ commands.renamechar = new Command({
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 		}
 		message.channel.send(`${args[0]}'s name has been changed to ${args[1]}!`);
+
+		partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
+		for (let party in partyFile) {
+			if (partyFile[party].negotiateAllies && partyFile[party].negotiateAllies[args[0]]) {
+				if (partyFile[party].negotiateAllies[args[0]].name == args[0])
+					partyFile[party].negotiateAllies[args[0]].name = args[1]
+			}
+		}
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(partyFile, null, '    '));
 	}
 })
 

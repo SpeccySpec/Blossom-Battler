@@ -1405,7 +1405,7 @@ commands.addpartypet = new Command({
 		if (!enemyFile[args[1]].negotiateDefs) return message.channel.send(`${args[1]} doesn't have pet values!`);
 
 		if (!partyFile[args[0]].negotiateAllies) partyFile[args[0]].negotiateAllies = {};
-		partyFile[args[0]].negotiateAllies[args[1]] = enemyFile[args[1]].negotiateDefs;
+		partyFile[args[0]].negotiateAllies[args[1]] = enemyFuncs.makePet(args[1])
 
 		partyFile[args[0]].negotiates[args[1]] = enemyFile[args[1]].negotiateDefs.required;
 		

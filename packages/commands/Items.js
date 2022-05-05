@@ -2125,7 +2125,7 @@ commands.obtainitems = new Command({
         let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
         let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
         let weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);
-        let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armor.json`);
+        let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`);
         let lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`);
 
         if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party!`);
@@ -2234,7 +2234,7 @@ commands.removepartyitems = new Command({
         let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
         let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
         let weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);
-        let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armor.json`);
+        let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`);
 
         if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party!`);
 
@@ -2330,7 +2330,7 @@ commands.transferitems = new Command({
         let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
         let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
         let weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);
-        let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armor.json`);
+        let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`);
 
         if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party!`);
         if (!parties[args[1]]) return message.channel.send(`${args[1]} is not a valid party!`);
@@ -2418,18 +2418,18 @@ function transfer(message, party1, party2, itemsDef) {
         if (itemsDef[0].toLowerCase() != 'all') {
             if (i % 3 == 2) {
                 if (itemsDef[i-1].toLowerCase() != 'all') {
-                    itemsDef[i] = Math.min(parties[party1][itemsDef[i-1]][itemsDef[i-1]], itemsDef[i])
-                    if (parties[party1][itemsDef[i-1]][itemsDef[i-1]]) {
-                        parties[party1][itemsDef[i-1]][itemsDef[i-1]] -= itemsDef[i]
+                    itemsDef[i] = Math.min(parties[party1][itemsDef[i-2]+"s"][itemsDef[i-1]], itemsDef[i])
+                    if (parties[party1][itemsDef[i-2]+"s"][itemsDef[i-1]]) {
+                        parties[party1][itemsDef[i-2]+"s"][itemsDef[i-1]] -= itemsDef[i]
 
-                        if (parties[party1][itemsDef[i-1]][itemsDef[i-1]] <= 0) {
-                            delete parties[party1][itemsDef[i-1]][itemsDef[i-1]]
+                        if (parties[party1][itemsDef[i-2]+"s"][itemsDef[i-1]] <= 0) {
+                            delete parties[party1][itemsDef[i-2]+"s"][itemsDef[i-1]]
                         }
 
-                        if (!parties[party2][itemsDef[i-1]][itemsDef[i-1]]) {
-                            parties[party2][itemsDef[i-1]][itemsDef[i-1]] = 0
+                        if (!parties[party2][itemsDef[i-2]+"s"][itemsDef[i-1]]) {
+                            parties[party2][itemsDef[i-2]+"s"][itemsDef[i-1]] = 0
                         }
-                        parties[party2][itemsDef[i-1]][itemsDef[i-1]] += itemsDef[i]
+                        parties[party2][itemsDef[i-2]+"s"][itemsDef[i-1]] += itemsDef[i]
                     }
                 } else {
                     for (j in parties[party1][itemsDef[i-2]+'s']) {
@@ -2465,6 +2465,6 @@ function transfer(message, party1, party2, itemsDef) {
             }
         }
     }
-    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties))
+    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, 4));
     message.channel.send(`The transfer has been completed.`)
 }

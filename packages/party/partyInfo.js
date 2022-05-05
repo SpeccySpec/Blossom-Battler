@@ -27,6 +27,8 @@ partyDesc = (party, message) => {
 	for (const i in party.backup) b += `\n${chars[party.backup[i]].name}`;
 	if (b === '') b = 'No backup.';
 
+	enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+
 	let p = '';
 	for (const i in party.negotiateAllies) {
 		let petDefs = party.negotiateAllies[i]
@@ -35,9 +37,13 @@ partyDesc = (party, message) => {
 
 	if (p === '') p = 'No backup.';
 
+	itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
+	weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);
+	armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`);
+
 	// Items
 	let items = '';
-	for (const i in party.items) items += `i: ${party.items[i]}\n`;
+	for (const i in party.items) items += `${itemTypeEmoji[itemFile[i].type]} ${itemRarityEmoji[itemFile[i].rarity]}${i}: ${party.items[i]}\n`;
 	if (items === '') items = 'No items.';
 
 	// Weapons and Armor
@@ -47,14 +53,14 @@ partyDesc = (party, message) => {
 	if (party.weapons) {
 		for (const i in party.weapons) {
 			let weaponDefs = party.weapons[i]
-			weapons += `${i} - **${weaponDefs.atk ? weaponDefs.atk : '0'}ATK**, **${weaponDefs.mag ? weaponDefs.mag : '0'}MAG**\n`;
+			weapons += `${elementEmoji[weaponFile[i].element]} ${i} - **${weaponDefs.atk ? weaponDefs.atk : '0'}ATK**, **${weaponDefs.mag ? weaponDefs.mag : '0'}MAG**\n`;
 		}
 	}
 
 	if (party.armors) {
 		for (const i in party.armors) {
 			let armorDefs = party.armors[i]
-			armor += `${i} - **${armorDefs.def ? armorDefs.def : '0'}DEF**\n`;
+			armor += `${elementEmoji[weaponFile[i].element]} ${i} - **${armorDefs.def ? armorDefs.def : '0'}DEF**\n`;
 		}
 	}
 
