@@ -2341,7 +2341,7 @@ commands.transferitems = new Command({
         party2 = args[1]
 
         args.splice(0, 2)
-        const validTypes = ['item', 'weapon', 'armor']
+        const validTypes = ['item', 'weapon', 'armor', 'money']
         let itemsDef = []
 
         let type
@@ -2355,28 +2355,40 @@ commands.transferitems = new Command({
                     if (!parties[party1][args[i].toLowerCase()+'s']) return message.channel.send(`${party1} does not have any ${args[i].toLowerCase()}s.`)
                     type = args[i].toLowerCase();
                 }
-                if (i % 3 == 1) {
-                    itemsDef[i-1] = args[i-1].toLowerCase()
+                if (type != 'loot' && type != 'money') {
+                    if (i % 3 == 1) {
+                        itemsDef[i-1] = args[i-1].toLowerCase()
 
-                    if (args[i].toLowerCase() != 'all') {
-                        if (args[i-1].toLowerCase() == "item") {
-                            if (!itemFile[args[i]]) return message.channel.send(`${args[i]} is not a valid item.`)
-                            if (!parties[party1][type+'s'][args[i]]) return message.channel.send(`${party1} doesn't have ${args[i]}!`)
+                        if (args[i].toLowerCase() != 'all') {
+                            if (args[i-1].toLowerCase() == "item") {
+                                if (!itemFile[args[i]]) return message.channel.send(`${args[i]} is not a valid item.`)
+                                if (!parties[party1][type+'s'][args[i]]) return message.channel.send(`${party1} doesn't have ${args[i]}!`)
+                            }
+                            else if (args[i-1].toLowerCase() == "weapon") {
+                                if (!weaponFile[args[i]]) return message.channel.send(`${args[i]} is not a valid weapon.`)
+                                if (!parties[party1][type+'s'][args[i]]) return message.channel.send(`${party1} doesn't have ${args[i]}!`)
+                            }
+                            else if (args[i-1].toLowerCase() == "armor") {
+                                if (!armorFile[args[i]]) return message.channel.send(`${args[i]} is not a valid armor.`)
+                                if (!parties[party1][type+'s'][args[i]]) return message.channel.send(`${party1} doesn't have ${args[i]}!`)
+                            }
                         }
-                        else if (args[i-1].toLowerCase() == "weapon") {
-                            if (!weaponFile[args[i]]) return message.channel.send(`${args[i]} is not a valid weapon.`)
-                            if (!parties[party1][type+'s'][args[i]]) return message.channel.send(`${party1} doesn't have ${args[i]}!`)
-                        }
-                        else if (args[i-1].toLowerCase() == "armor") {
-                            if (!armorFile[args[i]]) return message.channel.send(`${args[i]} is not a valid armor.`)
-                            if (!parties[party1][type+'s'][args[i]]) return message.channel.send(`${party1} doesn't have ${args[i]}!`)
-                        }
+                        itemsDef[i] = args[i]
                     }
-                    itemsDef[i] = args[i]
-                }
-                if (i % 3 == 2) {
-                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
-                    itemsDef[i] = Math.max(1, parseInt(args[i]))
+                    if (i % 3 == 2) {
+                        if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
+                        itemsDef[i] = Math.max(1, parseInt(args[i]))
+                    }
+                } else {
+                    if (i % 3 == 1) {
+                        if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
+                        itemsDef[i-1] = args[i-1].toLowerCase()
+                        itemsDef[i] = Math.max(0, parseInt(args[i]))
+                        if (!parties[party1].currency || parties[party1].currency < itemsDef[i]) return message.channel.send(`${party1} doesn't have enough currency!`)
+                    }
+                    if (i % 3 == 2) {
+                        itemsDef[i] = '-'
+                    }
                 }
             }
         }
@@ -2416,28 +2428,37 @@ function transfer(message, party1, party2, itemsDef) {
 
     for (i in itemsDef) {
         if (itemsDef[0].toLowerCase() != 'all') {
-            if (i % 3 == 2) {
-                if (itemsDef[i-1].toLowerCase() != 'all') {
-                    itemsDef[i] = Math.min(parties[party1][itemsDef[i-2]+"s"][itemsDef[i-1]], itemsDef[i])
-                    if (parties[party1][itemsDef[i-2]+"s"][itemsDef[i-1]]) {
-                        parties[party1][itemsDef[i-2]+"s"][itemsDef[i-1]] -= itemsDef[i]
+            if (itemsDef[i-1].toLowerCase() != 'money') {
+                if (i % 3 == 2) {
+                    if (itemsDef[i-1].toLowerCase() != 'all') {
+                        itemsDef[i] = Math.min(parties[party1][itemsDef[i-2]+"s"][itemsDef[i-1]], itemsDef[i])
+                        if (parties[party1][itemsDef[i-2]+"s"][itemsDef[i-1]]) {
+                            parties[party1][itemsDef[i-2]+"s"][itemsDef[i-1]] -= itemsDef[i]
 
-                        if (parties[party1][itemsDef[i-2]+"s"][itemsDef[i-1]] <= 0) {
-                            delete parties[party1][itemsDef[i-2]+"s"][itemsDef[i-1]]
-                        }
+                            if (parties[party1][itemsDef[i-2]+"s"][itemsDef[i-1]] <= 0) {
+                                delete parties[party1][itemsDef[i-2]+"s"][itemsDef[i-1]]
+                            }
 
-                        if (!parties[party2][itemsDef[i-2]+"s"][itemsDef[i-1]]) {
-                            parties[party2][itemsDef[i-2]+"s"][itemsDef[i-1]] = 0
+                            if (!parties[party2][itemsDef[i-2]+"s"][itemsDef[i-1]]) {
+                                parties[party2][itemsDef[i-2]+"s"][itemsDef[i-1]] = 0
+                            }
+                            parties[party2][itemsDef[i-2]+"s"][itemsDef[i-1]] += itemsDef[i]
                         }
-                        parties[party2][itemsDef[i-2]+"s"][itemsDef[i-1]] += itemsDef[i]
+                    } else {
+                        for (j in parties[party1][itemsDef[i-2]+'s']) {
+                            if (!parties[party2][itemsDef[i-2]+'s'][j]) {
+                                parties[party2][itemsDef[i-2]+'s'][j] = 0
+                            }
+                            parties[party2][itemsDef[i-2]+'s'][j] += parties[party1][itemsDef[i-2]+'s'][j]
+                            delete parties[party1][itemsDef[i-2]+'s'][j]
+                        }
                     }
-                } else {
-                    for (j in parties[party1][itemsDef[i-2]+'s']) {
-                        if (!parties[party2][itemsDef[i-2]+'s'][j]) {
-                            parties[party2][itemsDef[i-2]+'s'][j] = 0
-                        }
-                        parties[party2][itemsDef[i-2]+'s'][j] += parties[party1][itemsDef[i-2]+'s'][j]
-                        delete parties[party1][itemsDef[i-2]+'s'][j]
+                }
+            } else {
+                if (i % 3 == 2) {
+                    if (parties[party1].currency) {
+                        parties[party2].currency += itemsDef[i]
+                        parties[party1].currency -= itemsDef[i]
                     }
                 }
             }
@@ -2462,6 +2483,11 @@ function transfer(message, party1, party2, itemsDef) {
                 }
                 parties[party2]['armors'][j] += parties[party1]['armors'][j]
                 delete parties[party1]['armors'][j]
+            }
+
+            if (parties[party1].currency) {
+                parties[party2].currency += parties[party1].currency
+                parties[party1].currency = 0
             }
         }
     }
