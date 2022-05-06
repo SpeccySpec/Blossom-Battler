@@ -168,22 +168,24 @@ commands.startbattle = new Command({
 //			terrain: 'none',
 			effects: {},
 
-			teams: {
-				1: {
+			teams: [
+				{
 					name: "",
 					members: [],
 					backup: [],
 					items: {},
 					pets: {},
 				},
-				2: {
+				{
 					name: "",
+					enemyteam: true,
+					forcehorde: true, // more than 4 enemies mean some will be put into backup and automatically switched in, either by the team leader, or once an enemy dies.
 					members: [],
 					backup: [],
 					items: {},
 					pets: {},
 				}
-			}
+			]
 		}
 
 		// Validity Check for Parties
@@ -202,9 +204,56 @@ commands.startbattle = new Command({
 		}
 
 		// Battle File!
-		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`);
+		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
+		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		
 		// Can't battle while another party is!
 		if (btl.battling) return message.channel.send("You can't battle in this channel while another battle is happening!");
+
+		// Set up Ally Side.
+		let party = parties[args[0]];
+
+		for (const i in party.members) {
+			if (!charFile[party.members[i]]) continue;
+
+			let char = objClone(charFile[party.members[i]]);
+			if (!char.name) char.name = party.members[i];
+
+			if (i <= 0) {
+				char.leader = true
+				battle.teams[0].leaderskill = char.leaderskill;
+			}
+
+			battle.teams[0].members.push(char);
+		}
+
+		for (const i in party.backup) {
+			if (!charFile[party.backup[i]]) continue;
+
+			let char = objClone(charFile[party.backup[i]]);
+			if (!char.name) char.name = party.backup[i];
+			battle.teams[0].members.push(char);
+		}
+
+		// Set up Enemy Side.
+		// == this time, no encounters set until the enemy is killed or pacified == //
+		for (let i = 4; i <= args.length; i++) {
+			if (!args[i]) continue;
+			if (!enmFile[args[i]]) return message.channel.send(`${args[i]} is an invalid enemy!`);
+
+			let enemy = objClone(enmFile[args[i]]);
+			if (!enemy.name) enemy.name = args[i];
+			battle.teams[1].members.push(enemy);
+		}
+
+		// Save all this data to a file.
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, JSON.stringify(battle, null, '    '));
+
+		message.channel.send(`Team ${args[0]} encountered some enemies!`);
+		setTimeout(function() {
+//			advanceTurn(btl, message.guild.id)
+        }, 500)
 	}
 })

@@ -1,4 +1,4 @@
-function writeEnemy(creator, guild, name, mainelement, level, health, magicpoints, experience, attack, magic, perception, endurance, charisma, intelligence, agility, luck, type, description) {
+writeEnemy = (creator, guild, name, mainelement, level, health, magicpoints, experience, attack, magic, perception, endurance, charisma, intelligence, agility, luck, type, description) => {
     let enemyFile = setUpFile(`${dataPath}/json/${guild.id}/enemies.json`);
 
     enemyFile[name] = {

@@ -49,97 +49,6 @@ request = require('request');
 //hatebin, for converting long walls of text into links
 hastebin = require('hastebin-gen');
 
-// Daily Quote - Resets at midnight
-dailyQuote = {}
-
-let tempQuote = fs.readFileSync(dataPath+'/dailyquote.txt', {flag: 'as+'});
-if (tempQuote && tempQuote != '')
-	dailyQuote = tempQuote.toString();
-
-// Daily Skill - Resets at midnight
-dailySkill = 'none'
-
-let tempSkill = fs.readFileSync(dataPath+'/dailyskill.txt', {flag: 'as+'});
-if (tempSkill && tempSkill != '')
-	dailySkill = tempSkill.toString();
-
-// Daily Item - Resets at midnight
-dailyItem = {}
-
-let tempItem = fs.readFileSync(dataPath+'/dailyitem.txt', {flag: 'as+'});
-if (tempItem && tempItem != '')
-	dailyItem = JSON.parse(tempItem);
-
-// Daily Weapon - Resets at midnight
-dailyWeapon = {}
-
-let tempWeapon = fs.readFileSync(dataPath+'/dailyweapon.txt', {flag: 'as+'});
-if (tempWeapon && tempWeapon != '')
-	dailyWeapon = JSON.parse(tempWeapon);
-
-// Daily Armor - Resets at midnight
-dailyArmor = {}
-
-let tempArmor = fs.readFileSync(dataPath+'/dailyarmor.txt', {flag: 'as+'});
-if (tempArmor && tempArmor != '')
-	dailyArmor = JSON.parse(tempArmor);
-
-// Daily Character - Resets at midnight
-dailyChar = {}
-
-let tempCharacter = fs.readFileSync(dataPath+'/dailycharacter.txt', {flag: 'as+'});
-if (tempCharacter && tempCharacter != '')
-dailyChar = JSON.parse(tempCharacter);
-
-// Daily Enemy - Resets at midnight
-dailyEnemy = {}
-
-let tempEnemy = fs.readFileSync(dataPath+'/dailyenemy.txt', {flag: 'as+'});
-if (tempEnemy && tempEnemy != '')
-dailyEnemy = JSON.parse(tempEnemy);
-
-// Daily Enemy Quote - Resets at midnight
-dailyEnemyQuote = {}
-
-let tempEnemyQuote = fs.readFileSync(dataPath+'/dailyenemyquote.txt', {flag: 'as+'});
-if (tempEnemyQuote && tempEnemyQuote != '')
-dailyEnemyQuote = JSON.parse(tempEnemyQuote);
-
-function resetDailies() {
-	dailyQuote = {};
-	dailySkill = 'none';
-	dailyItem = {};
-	dailyWeapon = {};
-	dailyArmor = {};
-	dailyChar = {};
-	dailyEnemy = {};
-	dailyEnemyQuote = {};
-
-	fs.writeFileSync(dataPath+'/dailyquote.txt', '');
-	fs.writeFileSync(dataPath+'/dailyskill.txt', '');
-	fs.writeFileSync(dataPath+'/dailyitem.txt', '');
-	fs.writeFileSync(dataPath+'/dailyweapon.txt', '');
-	fs.writeFileSync(dataPath+'/dailyarmor.txt', '');
-	fs.writeFileSync(dataPath+'/dailycharacter.txt', '');
-	fs.writeFileSync(dataPath+'/dailyenemy.txt', '');
-	fs.writeFileSync(dataPath+'/dailyenemyquote.txt', '');
-}
-
-// reset if the last day isnt... well, the last day.
-let lastDay = fs.readFileSync(dataPath+'/lastday.txt', {flag: 'as+'});
-if (!lastDay || lastDay != getCurrentDate()) resetDailies();
-
-fs.writeFileSync(dataPath+'/lastday.txt', getCurrentDate());
-
-// reset by time.
-function midnightInMS() {
-    return new Date().setHours(24, 0, 0, 0) - new Date().getTime()
-}
-
-setTimeout(function() {
-	resetDailies();
-}, midnightInMS());
-
 // Elements
 Elements = [
     "strike",
@@ -481,6 +390,17 @@ enemyTypeColors = {
 	deity: '#FFFFFF'
 }
 
+specialDates = {
+	"24 12": "Christmas Eve",
+	"25 12": "Christmas",
+	"26 12": "Boxing Day",
+	"31 12": "New Years' Eve",
+	"1 1": "New Years",
+	"1 4": "April Fools' day",
+	"2 6": "<@516359709779820544>'s birthday",
+	"31 10": "Halloween"
+}
+
 getPrefix = (server) => {
 	let settings = setUpSettings(server)
 	return settings['prefix']
@@ -490,6 +410,111 @@ getCurrency = (server) => {
 	let settings = setUpSettings(server)
 	return settings['currency']
 }
+
+getCurrentDate = () => {
+	let today = new Date();
+	let dd = String(today.getDate()).padStart(2, '0');
+	let mm = String(today.getMonth() + 1).padStart(2, '0');
+	let yyyy = today.getFullYear();
+
+	today = specialDates[`${dd} ${mm}`] ?? dd + '/' + mm + '/' + yyyy;
+
+	if (dd === '17' && mm === '4' && yyyy == '2022')
+		today = `Easter (${yyyy})`;
+	
+	return today
+}
+
+// Daily Quote - Resets at midnight
+dailyQuote = {}
+
+let tempQuote = fs.readFileSync(dataPath+'/dailyquote.txt', {flag: 'as+'});
+if (tempQuote && tempQuote != '')
+	dailyQuote = tempQuote.toString();
+
+// Daily Skill - Resets at midnight
+dailySkill = 'none'
+
+let tempSkill = fs.readFileSync(dataPath+'/dailyskill.txt', {flag: 'as+'});
+if (tempSkill && tempSkill != '')
+	dailySkill = tempSkill.toString();
+
+// Daily Item - Resets at midnight
+dailyItem = {}
+
+let tempItem = fs.readFileSync(dataPath+'/dailyitem.txt', {flag: 'as+'});
+if (tempItem && tempItem != '')
+	dailyItem = JSON.parse(tempItem);
+
+// Daily Weapon - Resets at midnight
+dailyWeapon = {}
+
+let tempWeapon = fs.readFileSync(dataPath+'/dailyweapon.txt', {flag: 'as+'});
+if (tempWeapon && tempWeapon != '')
+	dailyWeapon = JSON.parse(tempWeapon);
+
+// Daily Armor - Resets at midnight
+dailyArmor = {}
+
+let tempArmor = fs.readFileSync(dataPath+'/dailyarmor.txt', {flag: 'as+'});
+if (tempArmor && tempArmor != '')
+	dailyArmor = JSON.parse(tempArmor);
+
+// Daily Character - Resets at midnight
+dailyChar = {}
+
+let tempCharacter = fs.readFileSync(dataPath+'/dailycharacter.txt', {flag: 'as+'});
+if (tempCharacter && tempCharacter != '')
+dailyChar = JSON.parse(tempCharacter);
+
+// Daily Enemy - Resets at midnight
+dailyEnemy = {}
+
+let tempEnemy = fs.readFileSync(dataPath+'/dailyenemy.txt', {flag: 'as+'});
+if (tempEnemy && tempEnemy != '')
+dailyEnemy = JSON.parse(tempEnemy);
+
+// Daily Enemy Quote - Resets at midnight
+dailyEnemyQuote = {}
+
+let tempEnemyQuote = fs.readFileSync(dataPath+'/dailyenemyquote.txt', {flag: 'as+'});
+if (tempEnemyQuote && tempEnemyQuote != '')
+dailyEnemyQuote = JSON.parse(tempEnemyQuote);
+
+function resetDailies() {
+	dailyQuote = {};
+	dailySkill = 'none';
+	dailyItem = {};
+	dailyWeapon = {};
+	dailyArmor = {};
+	dailyChar = {};
+	dailyEnemy = {};
+	dailyEnemyQuote = {};
+
+	fs.writeFileSync(dataPath+'/dailyquote.txt', '');
+	fs.writeFileSync(dataPath+'/dailyskill.txt', '');
+	fs.writeFileSync(dataPath+'/dailyitem.txt', '');
+	fs.writeFileSync(dataPath+'/dailyweapon.txt', '');
+	fs.writeFileSync(dataPath+'/dailyarmor.txt', '');
+	fs.writeFileSync(dataPath+'/dailycharacter.txt', '');
+	fs.writeFileSync(dataPath+'/dailyenemy.txt', '');
+	fs.writeFileSync(dataPath+'/dailyenemyquote.txt', '');
+}
+
+// reset if the last day isnt... well, the last day.
+let lastDay = fs.readFileSync(dataPath+'/lastday.txt', {flag: 'as+'});
+if (!lastDay || lastDay != getCurrentDate()) resetDailies();
+
+fs.writeFileSync(dataPath+'/lastday.txt', getCurrentDate());
+
+// reset by time.
+function midnightInMS() {
+    return new Date().setHours(24, 0, 0, 0) - new Date().getTime()
+}
+
+setTimeout(function() {
+	resetDailies();
+}, midnightInMS());
 
 // Clone Object
 objClone = (source) => {
@@ -792,31 +817,6 @@ listArray = async(channel, theArray, author) => {
 			})
 		}
 	})
-}
-
-specialDates = {
-	"24 12": "Christmas Eve",
-	"25 12": "Christmas",
-	"26 12": "Boxing Day",
-	"31 12": "New Years' Eve",
-	"1 1": "New Years",
-	"1 4": "April Fools' day",
-	"2 6": "<@516359709779820544>'s birthday",
-	"31 10": "Halloween"
-}
-
-getCurrentDate = () => {
-	let today = new Date();
-	let dd = String(today.getDate()).padStart(2, '0');
-	let mm = String(today.getMonth() + 1).padStart(2, '0');
-	let yyyy = today.getFullYear();
-
-	today = specialDates[`${dd} ${mm}`] ?? dd + '/' + mm + '/' + yyyy;
-
-	if (dd === '17' && mm === '4' && yyyy == '2022')
-		today = `Easter (${yyyy})`;
-	
-	return today
 }
 
 // Global JSONs
