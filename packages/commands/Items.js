@@ -662,6 +662,7 @@ commands.edititem = new Command({
                 if (itemFile[args[2]]) {
                     return message.channel.send(`An item called ${itemFile[args[2]].name} (${args[2]}) already exists!`)
                 } else {
+                    if (args[0] == args[2]) return message.channel.send(`What's the point...?`);
                     itemFile[args[2]] = utilityFuncs.cloneObj(itemFile[args[0]])
                     delete itemFile[args[0]]
 
@@ -1211,6 +1212,7 @@ commands.editweapon = new Command({
                 if (weaponFile[args[2]]) {
                     return message.channel.send(`A weapon called ${weaponFile[args[2]].name} (${args[2]}) already exists!`)
                 } else {
+                    if (args[0] == args[2]) return message.channel.send(`What's the point...?`);
                     weaponFile[args[2]] = utilityFuncs.cloneObj(weaponFile[args[0]])
                     delete weaponFile[args[0]]
 
@@ -1722,6 +1724,7 @@ commands.editarmor = new Command({
                 if (armorFile[args[2]]) {
                     return message.channel.send(`An armor piece called ${armorFile[args[2]].name} (${args[2]}) already exists!`)
                 } else {
+                    if (args[0] == args[2]) return message.channel.send(`What's the point...?`);
                     armorFile[args[2]] = utilityFuncs.cloneObj(armorFile[args[0]])
                     delete armorFile[args[0]]
 

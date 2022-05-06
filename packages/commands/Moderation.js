@@ -141,14 +141,20 @@ commands.settings = new Command({
 						case 'statcap':
 							transformationText += `**Stat Buff Cap**: ${settings['caps']['transformations'][i]}\n`
 							break
-						case 'basestatcap':
-							transformationText += `**Base Stat Cap**: ${settings['caps']['transformations'][i]}\n`
+						case 'basestatmincap':
+							transformationText += `**Minimum Base Stat Buff Cap**: ${settings['caps']['transformations'][i]}\n`
+							break
+						case 'basestatmaxcap':
+							transformationText += `**Maximum Base Stat Buff Cap**: ${settings['caps']['transformations'][i]}\n`
 							break
 						case 'bstcap':
 							transformationText += `**Base Stat Total Cap**: ${settings['caps']['transformations'][i]}\n`
 							break
 						case 'level':
 							transformationText += `**Transformation Level**: ${settings['caps']['transformations'][i]}\n`
+							break
+						case 'transformationlimit':
+							transformationText += `**Transformation Limit**: ${settings['caps']['transformations'][i]}\n`
 							break
 					}
 				}
@@ -718,23 +724,27 @@ commands.transformationcaps = new Command({
 		const fullNames = {
 			'hpcap': 'HP Buff Cap',
 			'statcap': 'Stat Buff Cap',
-			'basestatcap': 'Base Stat Cap',
+			'basestatmincap': 'Minimum Base Stat Buff Cap',
+			'basestatmaxcap': 'Maximum Base Stat Buff Cap',
 			'bstcap': 'Base Stat Total Cap',
-			'level': 'Transformation Level'
+			'level': 'Transformation Level',
+			'transformationlimit': 'Transformation Limit',
 		}
 
 		switch (args[0].toLowerCase()) {
 			case 'hpcap':
 			case 'statcap':
-			case 'basestatcap':
+			case 'basestatmincap':
+			case 'basestatmaxcap':
 			case 'bstcap':
 			case 'level':
+			case 'transformationlimit':
 				settings['caps']['transformations'][args[0].toLowerCase()] = args[1]
 				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 				message.channel.send(fullNames[args[0].toLowerCase()] + ' set to ' + args[1])
 				break
 			default:
-				message.channel.send('Invalid cap! Valid caps are: hpcap, statcap, basestatcap, bstcap, level')
+				message.channel.send('Invalid cap! Valid caps are: hpcap, statcap, basestatmincap, basestatmaxcap, bstcap, level, transformationlimit')
 				break
 		}
 	}

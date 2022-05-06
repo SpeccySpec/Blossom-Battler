@@ -631,6 +631,7 @@ commands.editskill = new Command({
 					if (skillFile[args[2]]) {
 						return message.channel.send(`A skill called ${args[2]} (${skillFile[args[2]].name}) already exists!`)
 					} else {
+						if (args[0] == args[2]) return message.channel.send(`What's the point...?`);
 						skillFile[args[2]] = utilityFuncs.cloneObj(skillFile[args[0]])
 						delete skillFile[args[0]]
 
@@ -686,6 +687,13 @@ commands.editskill = new Command({
 									for (skill in charFile[character].skills) {
 										if (charFile[character].skills[skill] == args[0]) {
 											charFile[character].skills[skill] = args[2];
+										}
+									}
+								}
+								if (charFile[character].transformations) {
+									for (transformation in charFile[character].transformations) {
+										if (charFile[character].transformations[transformation].skill == args[0]) {
+											charFile[character].transformations[transformation].skill = args[2];
 										}
 									}
 								}
@@ -1226,6 +1234,13 @@ commands.purgeskill = new Command({
 										}
 									}
 									charFile[char].skills = charFile[char].skills.filter(skill => skill != '');
+								}
+								if (charFile[character].transformations) {
+									for (transformation in charFile[character].transformations) {
+										if (charFile[character].transformations[transformation].skill == args[0]) {
+											charFile[character].transformations[transformation].skill = '';
+										}
+									}
 								}
 							}
 							fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/characters.json`, JSON.stringify(charFile, null, '    '));

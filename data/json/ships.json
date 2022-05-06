@@ -178,5 +178,14 @@
     },
     "Bow-(Non-Canon)": {
         "loveParameter": 17
+    },
+    "Lophari": {
+        "loveParameter": 18
+    },
+    "Bomo": {
+        "loveParameter": 68
+    },
+    "goth": {
+        "loveParameter": 87
     }
 }
