@@ -116,3 +116,95 @@ commands.pvpleaderboards = new Command({
 		},	500)
 	}
 })
+
+// IT'S TIME
+// EVERYTHING'S BEEN BUILDING UP TO THIS MOMENT
+// TIME FOR BATTLES!!
+commands.startbattle = new Command({
+	desc: "Start a battle in this channel. Without any enemies, use the set encounters for this channel. I hope you enjoy!\n\nThis definitely won't work without the following:```diff\n+ Characters\n+ Skills\n+ Enemies\n+ Parties```",
+	section: "battle",
+	aliases: ["startenemybattle", "battlebegin", "fightenemies"],
+	args: [
+		{
+			name: "Party",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Escapable",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Weather",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Terrain",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Enemies",
+			type: "Word",
+			forced: false,
+			multiple: true
+		}
+	],
+	func: (message, args) => {
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		let settings = setUpSettings(message.guild.id);
+
+		// Set up Battle Field
+		let battle = {
+			battling: true,
+
+			turn: 0,
+			curturn: 0,
+			turnorder: [],
+
+//			weather: 'none',
+//			terrain: 'none',
+			effects: {},
+
+			teams: {
+				1: {
+					name: "",
+					members: [],
+					backup: [],
+					items: {},
+					pets: {},
+				},
+				2: {
+					name: "",
+					members: [],
+					backup: [],
+					items: {},
+					pets: {},
+				}
+			}
+		}
+
+		// Validity Check for Parties
+		if (!parties[args[0]]) return message.channel.send(`${args[0]} is an invalid party!`);
+
+		// Weather and stuff
+		if (args[2].toLowerCase() != 'none') {
+			if (!utilityFuncs.inArray(args[2].toLowerCase(), weathers)) return message.channel.send(`${args[2].toLowerCase()} is an invalid weather type!`);
+			battle.weather = args[2].toLowerCase();
+		}
+
+		// Terrains and stuff
+		if (args[3].toLowerCase() != 'none') {
+			if (!utilityFuncs.inArray(args[3].toLowerCase(), terrains)) return message.channel.send(`${args[3].toLowerCase()} is an invalid terrain type!`);
+			battle.terrain = args[3].toLowerCase();
+		}
+
+		// Battle File!
+		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`);
+		
+		// Can't battle while another party is!
+		if (btl.battling) return message.channel.send("You can't battle in this channel while another battle is happening!");
+	}
+})

@@ -105,12 +105,7 @@ let tempEnemyQuote = fs.readFileSync(dataPath+'/dailyenemyquote.txt', {flag: 'as
 if (tempEnemyQuote && tempEnemyQuote != '')
 dailyEnemyQuote = JSON.parse(tempEnemyQuote);
 
-// Midnight Moment
-function midnightInMS() {
-    return new Date().setHours(24, 0, 0, 0) - new Date().getTime()
-}
-
-setTimeout(function() {
+function resetDailies() {
 	dailyQuote = {};
 	dailySkill = 'none';
 	dailyItem = {};
@@ -128,6 +123,21 @@ setTimeout(function() {
 	fs.writeFileSync(dataPath+'/dailycharacter.txt', '');
 	fs.writeFileSync(dataPath+'/dailyenemy.txt', '');
 	fs.writeFileSync(dataPath+'/dailyenemyquote.txt', '');
+}
+
+// reset if the last day isnt... well, the last day.
+let lastDay = fs.readFileSync(dataPath+'/lastday.txt', {flag: 'as+'});
+if (!lastDay || lastDay != getCurrentDate()) resetDailies();
+
+fs.writeFileSync(dataPath+'/lastday.txt', getCurrentDate());
+
+// reset by time.
+function midnightInMS() {
+    return new Date().setHours(24, 0, 0, 0) - new Date().getTime()
+}
+
+setTimeout(function() {
+	resetDailies();
 }, midnightInMS());
 
 // Elements
@@ -395,13 +405,14 @@ enmHabitats = [
 	"unknown"
 ]
 
+// weather and terrain
 weathers = [
-	"rain",
-	"thunder",
-	"sunlight",
-	"windy",
-	"sandstorm",
-	"hail"
+	"rain", // 1.3x to water
+	"thunder", // 1.3x to elec
+	"sunlight", // 1.3x to fire
+	"windy", // 1.3x to wind
+	"sandstorm", // -33% perception to non earth main elements
+	"hail" // 10 damage per turn to non ice main elements
 ]
 
 terrains = [
@@ -803,7 +814,7 @@ getCurrentDate = () => {
 	today = specialDates[`${dd} ${mm}`] ?? dd + '/' + mm + '/' + yyyy;
 
 	if (dd === '17' && mm === '4' && yyyy == '2022')
-		today = 'Easter (2022)';
+		today = `Easter (${yyyy})`;
 	
 	return today
 }

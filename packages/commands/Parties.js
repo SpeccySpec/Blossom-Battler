@@ -447,7 +447,7 @@ commands.chanegepartyname = new Command({
 		}
 	],
 	checkban: true,
-	aliases: ['renameparty'],
+	aliases: ['renameparty', 'partyname'],
 	func: (message, args) => {
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 
