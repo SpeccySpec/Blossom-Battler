@@ -1199,6 +1199,7 @@ Command = class extends ArgList {
 		this.func = object.func
 		this.checkban = object.checkban
 		this.admin = object.admin
+		this.aliases = object.aliases
 	}
 
 	call(message, rawargs) {
