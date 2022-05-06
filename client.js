@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////
-// MAIN SCRIPT FOR BLOOM BATTLER //
+// MAIN SCRIPT FOR BLOSSOM BATTLER //
 // grassimp :) ////////////////////
 ///////////////////////////////////
 
@@ -1254,7 +1254,7 @@ client.on("guildCreate", (guild) => {
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor('#0099ff')
 		.setTitle('Welcome, everyone!')
-		.setDescription(`I'm Bloom Battler, and welcome to my extravagant Real-Time RPG experience.`)
+		.setDescription(`I'm Blossom Battler, and welcome to my extravagant Real-Time RPG experience.`)
 		.addField('What can I do?', `I can do whatever you imagine. This includes:
 			**- Characters
 			- Items

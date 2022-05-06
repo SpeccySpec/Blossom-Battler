@@ -284,7 +284,7 @@ commands.currency = new Command({
 		else if (args[0].toLowerCase() == 'dick')
 			return message.channel.send("Not funny enough to let you do this, you clown.");
 		else if (args[0].toLowerCase() == 'balls')
-			return message.channel.send("You're either ballin', playing with balls, or being stopped by Bloom Battler... you sick human being.");
+			return message.channel.send("You're either ballin', playing with balls, or being stopped by Blossom Battler... you sick human being.");
 		else if (args[0].toLowerCase() == 'vagina')
 			return message.channel.send("Yeah okay... No.");
 		else if (args[0].toLowerCase() == 'women' || args[0].toLowerCase() == 'woman')

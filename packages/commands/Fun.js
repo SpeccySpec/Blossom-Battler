@@ -83,7 +83,7 @@ let tradePkmn = [
 let soloScenarios = [
 	`is lonely. They need some friends, so they go out for a search. They're unlucky.`,
 	`is getting beat up by some strong anime character.`,
-	`"Omae wa mou, shinderu."\nBloom Battler "Nani!?"`,
+	`"Omae wa mou, shinderu."\nBlossom Battler "Nani!?"`,
 	`explores the dark web. They found a fedora.`,
 	`: Stand Master「Edge」\n*The ability to summon a Fedora.*`,
 	`dies.`,
