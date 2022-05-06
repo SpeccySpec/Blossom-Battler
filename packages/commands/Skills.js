@@ -348,7 +348,7 @@ commands.registerpassive = new Command({
 
 /*
 commands.updateskills = new Command({
-	desc: 'Update all skills for this new version of Bloom Battler.',
+	desc: 'Update all skills for this new version of Blssoom Battler.',
 	section: "skills",
 	func: (message, args) => {
 	}
