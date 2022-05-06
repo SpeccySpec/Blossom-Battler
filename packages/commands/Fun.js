@@ -403,6 +403,44 @@ commands.randship = new Command({
 	}
 })
 
+commands.dailyship = new Command({
+	desc: "Any ship can be set as a daily one! Test your luck to see if one you desire is here!",
+	section: "fun",
+	args: [],
+	func: (message, args) => {
+		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
+		if (Object.keys(charFile).length == 0) return message.channel.send(`No characters have been added yet!`);
+		if (!dailyShip) dailyShip = {};
+
+		let notice = 'Here is the daily ship, again.'
+		if (!dailyShip[message.guild.id]) {
+			let char1 = Object.keys(charFile)[Math.floor(Math.random() * Object.keys(charFile).length)]
+			let char2 = Object.keys(charFile)[Math.floor(Math.random() * Object.keys(charFile).length)]
+			while (char1 == char2) char2 = Object.keys(charFile)[Math.floor(Math.random() * Object.keys(charFile).length)]
+
+			dailyShip[message.guild.id] = [char1, char2]
+
+			let authorTxt1 = charFile[dailyShip[message.guild.id][0]].owner ? `<@!${charFile[dailyShip[message.guild.id][0]].owner}>` : '<@776480348757557308>'
+			let authorTxt2 = charFile[dailyShip[message.guild.id][1]].owner ? `<@!${charFile[dailyShip[message.guild.id][1]].owner}>` : '<@776480348757557308>'
+
+			notice = `${authorTxt1} and ${authorTxt2}'s characters ship for today is here!`;
+		}
+
+		setTimeout(function() {
+			if (dailyShip[message.guild.id]) {
+				let today = getCurrentDate();
+
+				fs.writeFileSync(dataPath+'/dailyship.txt', JSON.stringify(dailyShip));
+
+				let shipTxt = `**[${today}]**\n${notice}`
+				message.channel.send(shipTxt)
+
+				evaluateShip(dailyShip[message.guild.id], message)
+			}
+		}, 500);
+	}
+})
+
 let inQuestion = {}
 commands.pmdquiz = new Command({
 	desc: "Play a PMD quiz!",
