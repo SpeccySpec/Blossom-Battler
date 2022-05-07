@@ -733,6 +733,29 @@ commands.editskill = new Command({
 							skillFile[args[0]].levellock = level;
 					}
 
+					let directoryList = fs.readdirSync(`${dataPath}/json`).filter(file => !isNaN(file));
+						
+					for (directory in directoryList) {
+						let charFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/characters.json`);
+						for (character in charFile) {
+							if (charFile[character].skills[args[0]]) {
+								if (skillFile[args[0]].levellock == 'unobtainable' || skillFile[args[0]].levellock > charFile[character].level) {
+									delete charFile[character].skills[args[0]];
+								}
+							}
+							if (charFile[character].transformations) {
+								for (transformation in charFile[character].transformations) {
+									if (charFile[character].transformations[transformation].skill == args[0]) {
+										if (skillFile[args[0]].levellock == 'unobtainable' || skillFile[args[0]].levellock > charFile[character].level) {
+											delete charFile[character].transformations[transformation].skill;
+										}
+									}
+								}
+							}
+						}
+						fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/characters.json`, JSON.stringify(charFile, null, '    '));
+					}
+
 					message.channel.send(`**[NOTICE]**\nConsider using the "levellock" command! It is faster for you, and for me.`)
 				case 'target':
 					if (!utilityFuncs.inArray(args[2].toLowerCase(), Targets)) return message.channel.send(`${args[2].toLowerCase()} is an invalid target!`);
@@ -780,6 +803,29 @@ commands.levellock = new Command({
 					delete skillFile[args[0]].levellock;
 				else
 					skillFile[args[0]].levellock = level;
+			}
+
+			let directoryList = fs.readdirSync(`${dataPath}/json`).filter(file => !isNaN(file));
+
+			for (directory in directoryList) {
+				let charFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/characters.json`);
+				for (character in charFile) {
+					if (charFile[character].skills[args[0]]) {
+						if (skillFile[args[0]].levellock == 'unobtainable' || skillFile[args[0]].levellock > charFile[character].level) {
+							delete charFile[character].skills[args[0]];
+						}
+					}
+					if (charFile[character].transformations) {
+						for (transformation in charFile[character].transformations) {
+							if (charFile[character].transformations[transformation].skill == args[0]) {
+								if (skillFile[args[0]].levellock == 'unobtainable' || skillFile[args[0]].levellock > charFile[character].level) {
+									delete charFile[character].transformations[transformation].skill;
+								}
+							}
+						}
+					}
+				}
+				fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/characters.json`, JSON.stringify(charFile, null, '    '));
 			}
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
@@ -911,6 +957,29 @@ commands.evoskill = new Command({
 
 			if (args[4] && (args[4].toLowerCase() == 'y' || args[4].toLowerCase() == 'yes')) {
 				skillFile[args[0]].levellock = args[2];
+
+				let directoryList = fs.readdirSync(`${dataPath}/json`).filter(file => !isNaN(file));
+
+				for (directory in directoryList) {
+					let charFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/characters.json`);
+					for (character in charFile) {
+						if (charFile[character].skills[args[0]]) {
+							if (skillFile[args[0]].levellock == 'unobtainable' || skillFile[args[0]].levellock > charFile[character].level) {
+								delete charFile[character].skills[args[0]];
+							}
+						}
+						if (charFile[character].transformations) {
+							for (transformation in charFile[character].transformations) {
+								if (charFile[character].transformations[transformation].skill == args[0]) {
+									if (skillFile[args[0]].levellock == 'unobtainable' || skillFile[args[0]].levellock > charFile[character].level) {
+										delete charFile[character].transformations[transformation].skill;
+									}
+								}
+							}
+						}
+					}
+					fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/characters.json`, JSON.stringify(charFile, null, '    '));
+				}
 			}
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
