@@ -2,8 +2,8 @@
 // Here you go Verwex :)
 foodFiles = {}
 
-userPreferences = setUpFile(`${dataPath}/json/food/S_preferences.json`)
-userPrivacy = setUpFile(`${dataPath}/json/food/S_privacy.json`)
+userPreferences = setUpFile(`${dataPath}/json/food/s_preferences.json`)
+userPrivacy = setUpFile(`${dataPath}/json/food/s_privacy.json`)
 
 //available categories
 var categories = ['icecream', 'pizza', 'hamburger']
@@ -117,7 +117,7 @@ function setupFileProfile(user, option, file) {
                 "bCategories": [],
                 "bChannels": []
             }
-            fs.writeFileSync(`${dataPath}/json/food/S_privacy.json`, JSON.stringify(file, null, '    '));
+            fs.writeFileSync(`${dataPath}/json/food/s_privacy.json`, JSON.stringify(file, null, '    '));
             break;
 		case 'preferences':
 			file[user] = {
@@ -126,7 +126,7 @@ function setupFileProfile(user, option, file) {
 				BlockedUsers: [],
 				BlockedPhrases: []
 			}
-			fs.writeFileSync(`${dataPath}/json/food/S_preferences.json`, JSON.stringify(file, null, '    '));
+			fs.writeFileSync(`${dataPath}/json/food/s_preferences.json`, JSON.stringify(file, null, '    '));
 			break;
 		default:
 			if (!file[user]) {
@@ -333,7 +333,7 @@ commands.foodprivacy = new Command({
 					}
 			}
 
-			fs.writeFileSync(`${dataPath}/json/food/S_privacy.json`, JSON.stringify(userPrivacy, null, '    '));
+			fs.writeFileSync(`${dataPath}/json/food/s_privacy.json`, JSON.stringify(userPrivacy, null, '    '));
 		}
     }
 })
@@ -593,7 +593,7 @@ commands.foodpreferences = new Command({
 			}
 		}
 
-		fs.writeFileSync(`${dataPath}/json/food/S_preferences.json`, JSON.stringify(userPreferences, null, '    '));
+		fs.writeFileSync(`${dataPath}/json/food/s_preferences.json`, JSON.stringify(userPreferences, null, '    '));
 }})
 
 commands.foodcategories = new Command({

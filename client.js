@@ -818,7 +818,7 @@ listArray = async(channel, theArray, author) => {
 // Global JSONs
 skillFile = setUpFile(`${dataPath}/json/skills.json`)
 shipFile = setUpFile(`${dataPath}/json/ships.json`);
-pmdFile = setUpFile(`${dataPath}/json/PMDQuestions.json`);
+pmdFile = setUpFile(`${dataPath}/json/pmdquestions.json`);
 
 function getDateAfterTwoWeeks() {
 	const date = new Date();

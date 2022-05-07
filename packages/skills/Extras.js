@@ -19,31 +19,13 @@ extrasList = {
 
 	buff: {
 		name: "Stat Buff",
-		desc: "_<Foe/Caster> <Stat> <Stages> <Chance>_\nWill buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return mesasge.channel.send("You didn't supply anything for <Foe/Caster>!");
-			if (!extra2) return mesasge.channel.send("You didn't supply anything for <Stat>!");
-			if (!extra3) extra3 = '-1';
-			if (!extra4) extra3 = '100';
+		desc: "_<Stat> <Stages> <Chance>_\nWill buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
+		applyfunc: function(message, skill, extra1, extra2, extra3) {
+			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
+			if (!extra2) extra2 = '-1';
+			if (!extra3) extra3 = '100';
 
-			if (extra1.toLowerCase() != 'foe' && extra1.toLowerCase() != 'caster') return message.channel.send('Please enter either "foe" or "caster" for <Foe/Caster>!');
-
-			makeExtra(skill, "buff", [extra1.toLowerCase(), extra2.toLowerCase(), parseInt(extra3), parseFloat(extra4)]);
-		}
-	},
-
-	buff: {
-		name: "Stat Buff",
-		desc: "_<Foe/Caster> <Stat> <Stages> <Chance>_\nWill buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Foe/Caster>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Stat>!");
-			if (!extra3) extra3 = '-1';
-			if (!extra4) extra3 = '100';
-
-			if (extra1.toLowerCase() != 'foe' && extra1.toLowerCase() != 'caster') return message.channel.send('Please enter either "foe" or "caster" for <Foe/Caster>!');
-
-			makeExtra(skill, "buff", [extra1.toLowerCase(), extra2.toLowerCase(), parseInt(extra3), parseFloat(extra4)]);
+			makeExtra(skill, "buff", [extra1.toLowerCase(), extra2.toLowerCase(), parseInt(extra3)]);
 		}
 	},
 
@@ -59,9 +41,8 @@ extrasList = {
 		name: "Steal MP",
 		desc: "Turns the skill into a skill that takes <Power> MP from the foe.",
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-//			if hasExtra(skill, "stealmp") return message.channel.send('This skill already steals MP from the foe.');
 			if (skill.extras['stealmp']) return message.channel.send('This skill already steals MP from the foe.');
-			makeExtra(skill, "stealmp", []);
+			makeExtra(skill, "stealmp", [true]);
 		}
 	},
 

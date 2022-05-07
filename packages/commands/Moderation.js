@@ -798,7 +798,7 @@ commands.affinityrates = new Command({
 })
 
 commands.reloadfile = new Command({
-	desc: '**RPG Bot Administrator Only!** Reloads a file for the server.',
+	desc: '**Blossom Battler Administrator Only!**\nReloads a file for the server.',
 	section: 'moderation',
 	aliases: ['reload', 'reloadfile'],
 	args: [
@@ -806,15 +806,46 @@ commands.reloadfile = new Command({
 			name: 'File',
 			type: 'Word',
 			forced: true
+		},
+		{
+			name: 'User',
+			type: 'Word',
 		}
 	],
 	func: (message, args) => {
 		if (!utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send('You do not have permission to reload files!')
 
 		let validFiles = ['armors', 'characters', 'chests', 'enemies', 'items', 'loot', 'parties', 'settings', 'shops', 'weapons']
-		if (!validFiles.includes(args[0].toLowerCase())) return message.channel.send('Invalid file! Valid files are: armors, characters, chests, enemies, items, loot, parties, settings, shops, weapons')
+		let validGlobalFiles = ['pmdquestions', 'ships', 'skills']
+		let validFoodFiles = ['hamburger', 'icecream', 'pizza', 's_preferences', 's_privacy']
+		let validUserDataFiles = ['userdata']
 
-		setUpFile(`${dataPath}/json/${message.guild.id}/${args[0].toLowerCase()}.json`, true)
+		if (!validFiles.includes(args[0].toLowerCase()) && !validGlobalFiles.includes(args[0].toLowerCase()) && !validFoodFiles.includes(args[0].toLowerCase()) && !validUserDataFiles.includes(args[0].toLowerCase())) return message.channel.send(`Invalid file!`)
+
+		if (validFiles.includes(args[0].toLowerCase())) {
+			setUpFile(`${dataPath}/json/${message.guild.id}/${args[0].toLowerCase()}.json`, true)
+		} else if (validGlobalFiles.includes(args[0].toLowerCase())) {
+			setUpFile(`${dataPath}/json/${args[0].toLowerCase()}.json`, true)
+		} else if (validFoodFiles.includes(args[0].toLowerCase())) {
+			setUpFile(`${dataPath}/json/food/${args[0].toLowerCase()}.json`, true)
+		} else if (validUserDataFiles.includes(args[0].toLowerCase())) {
+			if (!args[1]) return message.channel.send(`You must specify a user!`)
+
+			if (args[1].startsWith('<@') && args[1].endsWith('>')) {
+				args[1] = args[1].slice(2, -1)
+			} else if (args[1].startsWith('<@!') && args[1].endsWith('>')) {
+				args[1] = args[1].slice(3, -1)
+			}
+			
+			let user = message.guild.members.cache.find(member => {
+				if (member.user.id === args[1]) return true
+				if (member.user.tag === args[1]) return true
+				if (member.user.username === args[1]) return true
+			})
+			if (!user) return message.channel.send(`Could not find user!`)
+
+			setUpFile(`${dataPath}/json/userdata/${user.id}.json`, true)
+		}
 		message.react('👍').then(() => {
 			message.delete(5000)
 		})
