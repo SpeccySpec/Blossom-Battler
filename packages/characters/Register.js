@@ -229,7 +229,7 @@ longDescription = (charDefs, level, server, message) => {
 			if (!skillFile[skill]) {
 				skillDesc += `🛑 Invalid Skill (${skill})\n`;
 			} else {
-				let type = typeof skillFile[skill].type == 'object' ? elementEmojis[skillFile[skill].type[0]] : elementEmoji[skillFile[skill].type];
+				let type = typeof skillFile[skill].type == 'object' ? elementEmoji[skillFile[skill].type[0]] : elementEmoji[skillFile[skill].type];
 				skillDesc += `${type}${skillFile[skill].name}`;
 				if (charDefs.autolearn && charDefs.autolearn[i]) skillDesc += '<:tick:918501752398020628>';
 				skillDesc += `\n`;
