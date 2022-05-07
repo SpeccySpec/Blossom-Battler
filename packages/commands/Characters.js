@@ -1264,13 +1264,13 @@ commands.leaderskill = new Command({
 		},
 		{
 			name: "Variable #1",
-			type: "Word",
-			forced: true
+			type: "Any",
+			forced: false
 		},
 		{
 			name: "Variable #2",
-			type: "Num",
-			forced: true
+			type: "Any",
+			forced: false
 		}
 	],
 	checkban: true,
@@ -1288,11 +1288,15 @@ commands.leaderskill = new Command({
 			name: args[1],
 			type: args[2].toLowerCase()
 		}
+		
+		let var1 = null;
+		let var2 = null;
 
 		switch(args[2].toLowerCase()) {
 			case 'boost':
 			case 'discount':
 			case 'crit':
+			case 'endure':
 				if (args[3].toLowerCase() === "magic" || args[3].toLowerCase() === "physical")
 					if (args[4] > 10) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for a ${args[3]} affecting leader skill is 10%.`);
 				else {
@@ -1301,23 +1305,44 @@ commands.leaderskill = new Command({
 				}
 
 				if (args[4] < 1) return message.channel.send(`${args[4]}% is too low a boost :/`);
+				var1 = args[3].toLowerCase();
+				var2 = args[4];
 				break;
 
 			case 'status':
 				if (!utilityFuncs.inArray(args[3].toLowerCase(), statusEffects)) return message.channel.send({content: `${args[3]} is an invalid status effect!`});
 				if (args[4] > 25) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for this leader skill is 25%.`);
 				if (args[4] < 1) return message.channel.send(`${args[4]}% is too low a boost :/`);
+				var1 = args[3].toLowerCase();
+				var2 = args[4];
+				break;
+
+			case 'money':
+			case 'items':
+			case 'pacify':
+				if (args[3] > 50) return message.channel.send(`${args[3]}% is too powerful for a leader skill like this! The maximum for this leader skill is 50%.`);
+				if (args[3] < 1) return message.channel.send(`${args[3]}% is too low a boost :/`);
+				var2 = args[3];
 				break;
 
 			case 'buff':
 				if (!utilityFuncs.inArray(args[3].toLowerCase(), stats)) return message.channel.send({content: `${args[3]} is an invalid stat!`});
-				if (args[4] > 3) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for this leader skill is 3.`);
-				if (args[4] < 1) return message.channel.send(`${args[4]}% is too low a boost :/`);
+				if (args[4] > 3) return message.channel.send(`${args[4]} is too powerful for a leader skill like this! The maximum for this leader skill is 3.`);
+				if (args[4] < 1) return message.channel.send(`${args[4]} is too low a boost :/`);
+				var1 = args[3].toLowerCase();
+				var2 = args[4];
 				break;
 		}
 
-		charFile[args[0]].leaderskill.var1 = args[3];
-		charFile[args[0]].leaderskill.var2 = args[4];
+		if (var1)
+			charFile[args[0]].leaderskill.var1 = var1;
+		else
+			delete charFile[args[0]].leaderskill.var1;
+
+		if (var2)
+			charFile[args[0]].leaderskill.var2 = parseInt(var2);
+		else
+			delete charFile[args[0]].leaderskill.var2;
 
 		message.react('👍');
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
