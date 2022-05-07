@@ -1,3 +1,8 @@
+getCharFromTurn = (btl) => {
+	let id = btl.turnorder[btl.curturn];
+	return getCharFromId(id, btl);
+}
+
 getTurnOrder = (btl) => {
 	let turnorder = [];
 
@@ -36,4 +41,41 @@ leaderSkillsAtBattleStart = (party) => {
 		for (const ally of party.members) buffStat(ally, party.leaderskill.var1.toLowerCase(), parseInt(party.leaderskill.var2));
 		return true;
 	}
+}
+
+doTurn = (btl) => {
+}
+
+advanceTurn = (btl) => {
+	if (btl.testing) {
+		btl.testing--;
+		if (btl.testing <= 0) {
+			btl.channel.send("The test battle is now over!");
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, '{}');
+			return;
+		}
+	}
+
+	// We should check for death first
+	let teamsleft = [];
+
+	// Now, go to the next turn.
+	let newTurn = false;
+
+	if (!btl.curturn) {
+		btl.curturn = 0;
+	} else {
+		let toTurn = btl.curturn+1;
+
+		if (!btl.turnorder[toTurn]) {
+			btl.curturn = 0;
+
+			newTurn = true;
+			btl.turn++;
+		} else
+			btl.curturn = 1;
+	}
+
+	let charDefs = getCharFromTurn(btl);
+	doTurn(charDefs);
 }

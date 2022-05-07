@@ -178,9 +178,11 @@ commands.startbattle = new Command({
 		// Set up Battle Field
 		let battle = {
 			battling: true,
+			channel: message.channel, // so i dont have to do it later
+			guild: message.guild, // so i dont have to do it later
 
 			turn: 0,
-			curturn: 0,
+//			curturn: -1,
 			turnorder: [],
 
 //			weather: 'none',
