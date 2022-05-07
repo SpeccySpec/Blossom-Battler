@@ -117,6 +117,25 @@ commands.pvpleaderboards = new Command({
 	}
 })
 
+commands.endbattle = new Command({
+	desc: "Manually ends a battle happening in this channel. No stat changes, xp or money is saved.",
+	admin: "You do not have permission to manually end the battle!",
+	section: "battle",
+	aliases: ["endfight"],
+	func: (message, args) => {
+		// Set up files
+		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
+		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
+
+		// Can't end a battle if it's not actually happening :/
+		if (!btl.battling) return message.channel.send("No battle is happening in this channel!");
+
+		// Clear the file
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, '{}');
+	}
+})
+
 // IT'S TIME
 // EVERYTHING'S BEEN BUILDING UP TO THIS MOMENT
 // TIME FOR BATTLES!!
@@ -206,13 +225,14 @@ commands.startbattle = new Command({
 		// Battle File!
 		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
 		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
-		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		let enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
-		
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
+		let enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`, true);
+
 		// Can't battle while another party is!
 		if (btl.battling) return message.channel.send("You can't battle in this channel while another battle is happening!");
 
 		// Set up Ally Side.
+		let battleid = 0;
 		let party = parties[args[0]];
 
 		for (const i in party.members) {
@@ -220,6 +240,11 @@ commands.startbattle = new Command({
 
 			let char = objClone(charFile[party.members[i]]);
 			if (!char.name) char.name = party.members[i];
+
+			char.id = battleid;
+			battleid++;
+
+			setupBattleStats(char);
 
 			if (i <= 0) {
 				char.leader = true
@@ -234,19 +259,47 @@ commands.startbattle = new Command({
 
 			let char = objClone(charFile[party.backup[i]]);
 			if (!char.name) char.name = party.backup[i];
+
+			char.id = battleid;
+			battleid++;
+
+			setupBattleStats(char);
+
 			battle.teams[0].members.push(char);
 		}
 
 		// Set up Enemy Side.
 		// == this time, no encounters set until the enemy is killed or pacified == //
+		let enmDesc = '';
 		for (let i = 4; i <= args.length; i++) {
 			if (!args[i]) continue;
 			if (!enmFile[args[i]]) return message.channel.send(`${args[i]} is an invalid enemy!`);
 
 			let enemy = objClone(enmFile[args[i]]);
 			if (!enemy.name) enemy.name = args[i];
-			battle.teams[1].members.push(enemy);
+
+			enemy.id = battleid;
+			battleid++;
+
+			setupBattleStats(enemy);
+
+			enmDesc += `${enemy.name} (LV${enemy.level})\n`;
+
+			if (battle.teams[1].members.length < 4) {
+				if (i <= 0 && enemy.leaderskill) {
+					enemy.leader = true;
+					battle.teams[0].leaderskill = enemy.leaderskill;
+				}
+
+				battle.teams[1].members.push(enemy);
+			} else
+				battle.teams[1].backup.push(enemy);
 		}
+
+		for (party of battle.teams) leaderSkillsAtBattleStart(party);
+
+		// turn order :)
+		battle.turnorder = getTurnOrder(battle);
 
 		// Save all this data to a file.
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, JSON.stringify(battle, null, '    '));

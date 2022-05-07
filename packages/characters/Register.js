@@ -132,7 +132,11 @@ let leaderSkillTxt = {
 	discount: 'Takes away the amount of cost specified to the specified type.',
 	buff: 'Start the battle with the specified stat buff',
 	status: 'Increased chance to land the specified status effect',
-	crit: 'Increased crit chance to the specified element'
+	crit: 'Increased crit chance to the specified element',
+	money: 'Increased money gain after battle.',
+	items: 'Increased items gain after battle.',
+	pacify: 'Pacify Enemies by the specified percentage at the start of battle.',
+	endure: 'Endure one fatal attack.',
 }
 
 let usesPercent = {
@@ -141,7 +145,11 @@ let usesPercent = {
 	boost: true,
 	crit: true,
 	status: true,
-	discount: true
+	discount: true,
+	money: true,
+	items: true,
+	pacify: true,
+	endure: true,
 }
 
 const affinityScores = {
@@ -195,7 +203,7 @@ longDescription = (charDefs, level, server, message) => {
 		.setTitle(`${elementEmoji[char.mainElement]}${char.name} ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
 
 	let desc = ''
-	if (char.leaderskill && settings.mechanics.leaderskills) desc += `**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} toward ${char.leaderskill.var1.toUpperCase()}`
+	if (char.leaderskill && settings.mechanics.leaderskills) desc += `**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} ${char.leaderskill.var1 ? ("toward " + char.leaderskill.var1.toUpperCase()) : ''};`
 	if (char.journal) desc += `\n${char.journal ? `\n\n${char.journal}` : ''}`
 
 	DiscordEmbed.setDescription(desc);
