@@ -22,3 +22,13 @@ buffStat = (f, stat, amount) => {
 	if (f.buffs[statBuff] > 3) f.buffs[statBuff] = 3;
 	if (f.buffs[statBuff] < -3) f.buffs[statBuff] = -3;
 }
+
+getCharFromId = (id, btl) => {
+	for (const i in btl.teams) {
+		for (const k in btl.teams[i].members) {
+			if (btl.teams[i].members[k].id && btl.teams[i].members[k].id == id) return btl.teams[i].members[k];
+		}
+	}
+
+	return btl.teams[0].members[0];
+}
