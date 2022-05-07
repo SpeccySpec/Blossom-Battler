@@ -512,10 +512,6 @@ function midnightInMS() {
     return new Date().setHours(24, 0, 0, 0) - new Date().getTime()
 }
 
-setTimeout(function() {
-	resetDailies();
-}, midnightInMS());
-
 // Clone Object
 objClone = (source) => {
 	if (Object.prototype.toString.call(source) === '[object Array]') {
@@ -824,16 +820,39 @@ skillFile = setUpFile(`${dataPath}/json/skills.json`)
 shipFile = setUpFile(`${dataPath}/json/ships.json`);
 pmdFile = setUpFile(`${dataPath}/json/PMDQuestions.json`);
 
-// 2 Week Moment
-function twoWeekInMS() {
-	return new Date().setDate(new Date().getDate() + 14) - new Date().getTime()
+function getDateAfterTwoWeeks() {
+	const date = new Date();
+	date.setDate(date.getDate() + 14);
+	const dateString = date.toISOString();
+	return dateString;
+}
+
+checkShips();
+
+function checkShips() {
+	function resetShips() {
+		shipFile = {};
+		fs.writeFileSync(`${dataPath}/json/ships.json`, '{}');
+	}
+	
+	let lastWeek = fs.readFileSync(dataPath + '/datein2weeks.txt', { flag: 'as+' });
+	const today = new Date();
+	if (lastWeek && lastWeek <= today.toISOString()) {
+		resetShips();
+		writeShipDayFile()
+	}
+	
+	if (!lastWeek) writeShipDayFile()
+	
+	function writeShipDayFile() {
+	fs.writeFileSync(dataPath + '/datein2weeks.txt', getDateAfterTwoWeeks());
+	}
 }
 
 setTimeout(function() {
-	shipFile = {}
-
-	fs.writeFileSync(`${dataPath}/json/ships.json`, '{}');
-}, twoWeekInMS());
+	resetDailies();
+	checkShips()
+}, midnightInMS());
 
 typeParsers = {
 	Num: ({arg}) => {return isNaN(arg) ? undefined : parseInt(arg)},
