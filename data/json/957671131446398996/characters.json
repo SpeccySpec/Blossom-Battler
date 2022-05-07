@@ -2878,7 +2878,8 @@
                     "block": [
                         "psychic"
                     ]
-                }
+                },
+                "autolearn": false
             }
         },
         "nickname": "TriTan",

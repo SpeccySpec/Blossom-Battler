@@ -892,7 +892,7 @@ commands.forcelevel = new Command({
 
 		//check every skill. if skill exists, check its level lock. If level lock is lower, set it to '', and then filter later
 		for (let skill in charFile[args[0]].skills) {
-			if (charFile[args[0]].skills[skill].levelLock < args[1]) charFile[args[0]].skills[skill] = '';
+			if (charFile[args[0]].skills[skill].levelLock > args[1]) charFile[args[0]].skills[skill] = '';
 		}
 		charFile[args[0]].skills = charFile[args[0]].skills.filter(skill => skill != '');
 
@@ -1080,7 +1080,7 @@ commands.learnskill = new Command({
 				return message.channel.send(`${args[i]} isn't a valid skill.`);
 		}
 
-		if (!thingDefs[args[0]].type && thingDefs[args[0]].skills.length > settings.caps.skillamount) return message.channel.send("You cannot have more than 8 skills!");
+		if (!thingDefs[args[0]].type && thingDefs[args[0]].skills.length > settings.caps.skillamount) return message.channel.send(`You cannot have more than ${settings.caps.skillamount} skills!`);
 		message.channel.send(learnString);
 
 		if (thingDefs[args[0]].type) {
@@ -2861,12 +2861,51 @@ commands.transformationskill = new Command({
 
 		if (!skillFile[args[2]]) return message.channel.send(`${args[2]} is not a valid skill!`);
 
+		if (skillFile[args[2]].levellock) {
+			if (skillFile[args[2]].levellock == 'unobtainable') return message.channel.send(`${args[2]} is unobtainable!`);
+			if (charFile[args[0]].level < skillFile[args[2]].levellock) return message.channel.send(`${charFile[args[0]].name} is level ${charFile[args[0]].level}, but must be level ${skillFile[args[2]].levellock} to learn ${skillFile[args[2]].name}!`);
+		}
+
 		if (charFile[args[0]].transformations[args[1]].skill && charFile[args[0]].transformations[args[1]].skill == args[2]) return message.channel.send(`${charFile[args[0]].transformations[args[1]].name} already has ${args[2]} as a signature skill!`);
 
 		charFile[args[0]].transformations[args[1]].skill = args[2];
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 
 		message.channel.send(`${args[0]}'s ${args[1]} now has ${args[2]} as a signature skill!`);
+	}
+})
+
+commands.autolearntransformation = new Command({
+	desc: "Allows the transformation skill to be automatically evolved when levelling up based on the skill's Evo-Skill.",
+	aliases: ['autoskill', 'autoevo'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Transformation",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		if (!charFile[args[0]].owner.includes(message.author.id) && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character!');
+
+		if (!charFile[args[0]].transformations[args[1]]) return message.channel.send(`${args[0]} does not have a transformation named ${args[1]}!`);
+
+		// Let's allow it to auto evolve
+		charFile[args[0]].transformations[args[1]].autolearn = !charFile[args[0]].transformations[args[1]].autolearn
+		message.channel.send(`${charFile[args[0]].name}'s ${skillFile[charFile[args[0]].transformations[args[1]].skill].name} automatic evolution has been toggled to ${charFile[args[0]].transformations[args[1]].autolearn ? 'On' : 'Off'}!`);
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
 

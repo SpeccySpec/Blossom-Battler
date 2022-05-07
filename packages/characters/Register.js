@@ -453,7 +453,9 @@ transformationDesc = (char, name, server, message) => {
 	}
 
 	if (char.skill && char.skill != '') {
-		DiscordEmbed.fields.push({ name: 'Signature Skill', value: `${elementEmoji[skillFile[char.skill].type]}${skillFile[char.skill].name}`, inline: true });
+		let skillTxt = `${elementEmoji[skillFile[char.skill].type]}${skillFile[char.skill].name}`
+		if (char.autolearn) skillTxt += '<:tick:918501752398020628>';
+		DiscordEmbed.fields.push({ name: 'Signature Skill', value: skillTxt, inline: true });
 	}
 
 	return DiscordEmbed;
