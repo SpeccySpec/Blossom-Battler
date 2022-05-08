@@ -1952,6 +1952,9 @@ commands.updateskills = new Command({
 
 				if (Object.keys(skillFile[skill].extras).length === 0) delete skillFile[skill].extras;
 			}
+
+			if (skillFile[skill].evoSkill) skillFile[skill].evoSkill = [skillFile[skill].evoSkill];
+			if (skillFile[skill].preSkill) skillFile[skill].preSkill = [skillFile[skill].preSkill];
 		}
 		fs.writeFileSync(dataPath+'/json/skills.json', JSON.stringify(skillFile, null, '    '));
 		message.react('👍');
