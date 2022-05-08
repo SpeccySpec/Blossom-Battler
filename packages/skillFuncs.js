@@ -127,6 +127,8 @@ function atkDesc(skillDefs) {
 
 	if (hasExtra(skillDefs, 'metronome')) {
 		finalText += 'Uses a **randomly defined skill**.\n';
+	} else if (hasExtra(skillDefs, 'copyskill')) {
+		finalText += `Copies a **random skill of caster's team**.\n`;
 	} else {
 		if (hasExtra(skillDefs, 'affinitypow'))
 			finalText += `Affected by **<:passive:906874477210648576>SpiritCharge** or **<:passive:906874477210648576>Teamwork**, by **${skillDefs.extras.affinitypow[0]} power**.\n`;

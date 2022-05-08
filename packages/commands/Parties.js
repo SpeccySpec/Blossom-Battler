@@ -155,6 +155,45 @@ commands.setleader = new Command({
 	}
 })
 
+commands.addtoparty = new Command({
+	desc: "Adds a character to a party.",
+	aliases: ['partyadd', 'add', 'addto', 'addtoparty'],
+	section: "parties",
+	checkban: true,
+	args: [
+		{
+			name: "Party Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Character",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		if (!parties[args[0]]) return message.channel.send(`${args[0]} is an invalid party!`);
+		if (!charFile[args[1]]) return message.channel.send(`${args[1]} is an invalid character!`);
+
+		if (!isPartyLeader(message.author, parties[args[0]], message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send("You cannot edit this party.")
+
+		if (parties[args[0]].members.includes(args[1]) || parties[args[0]].backup.includes(args[1])) return message.channel.send(`${args[1]} is already in the party!`);
+
+		if (parties[args[0]].members.length < settings.caps.teamsize) {
+			parties[args[0]].members.push(args[1]);
+		} else {
+			parties[args[0]].backup.push(args[1]);
+		}
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
+		message.channel.send(`${args[1]} has been added to ${args[0]}!`);
+	}
+})
+
 commands.changepos = new Command({
 	desc: "Changes a characters' position in the party.",
 	aliases: ['partyposition', 'position', 'partyorder'],
@@ -191,6 +230,46 @@ commands.changepos = new Command({
 		if (removeFromParty(parties[args[0]], args[1])) {
 			message.react('👍');
 			parties[args[0]].members.splice(args[2], 0, args[1]);
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
+		} else {
+			return message.channel.send(`${args[1]} is not in the party!`);
+		}
+	}
+})
+
+commands.kickfromparty = new Command({
+	desc: "Kicks a character from a party.",
+	aliases: ['partykick', 'kick'],
+	section: "parties",
+	checkban: true,
+	args: [
+		{
+			name: "Party Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Character",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		if (!parties[args[0]]) return message.channel.send(`${args[0]} is an invalid party!`);
+		if (!charFile[args[1]]) return message.channel.send(`${args[1]} is an invalid character!`);
+
+		if (!isPartyLeader(message.author, parties[args[0]], message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send("You cannot edit this party.")
+
+		if (parties.members.includes(args[1])) {
+			message.channel.send(`${args[1]} has been kicked from ${args[0]}!`);
+			parties[args[0]].members.splice(parties[args[0]].members.indexOf(args[1]), 1);
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
+		} else if (parties.backup && parties.backup.includes(args[1])) {
+			message.channel.send(`${args[1]} has been kicked from ${args[0]}!`);
+			parties[args[0]].backup.splice(parties[args[0]].backup.indexOf(args[1]), 1);
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
 		} else {
 			return message.channel.send(`${args[1]} is not in the party!`);
