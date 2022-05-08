@@ -567,7 +567,7 @@ commands.editskill = new Command({
 					if (args[2] < 0) return message.channel.send('Skills cannot go below 0 power.');
 
 					skillFile[args[0]].pow = args[2];
-
+					break;
 				case 'acc':
 				case 'crit':
 					skillFile[args[0]][editField] = args[2];
@@ -723,7 +723,7 @@ commands.editskill = new Command({
 				case 'levellock':
 				case 'level':
 				case 'lock':
-					if (args[2].toLowerCase() == 'unobtainable') skillFile[args[0]].levellock == 'unobtainable';
+					if (args[2].toLowerCase() == 'unobtainable') skillFile[args[0]].levellock = 'unobtainable';
 					else {
 						let level = parseInt(args[2])
 						
@@ -757,12 +757,15 @@ commands.editskill = new Command({
 					}
 
 					message.channel.send(`**[NOTICE]**\nConsider using the "levellock" command! It is faster for you, and for me.`)
+					break;
 				case 'target':
 					if (!utilityFuncs.inArray(args[2].toLowerCase(), Targets)) return message.channel.send(`${args[2].toLowerCase()} is an invalid target!`);
 					if (skillFile[args[0]].type == 'passive') return message.channel.send('Passive skills cannot have a target!');
 					skillFile[args[0]].target = args[2].toLowerCase();
+					break;
 				default:
 					skillFile[args[0]][editField] = args[2];
+					break;
 			}
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
@@ -1700,7 +1703,7 @@ commands.updateskills = new Command({
 				if (skillFile[skill].debuff) {
 					if (!skillFile[skill].statusses.buff) skillFile[skill].statusses.buff = []
 
-					skillFile[skill].statusses.buff.push([skillFile[skill].debuff, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].debuffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
+					skillFile[skill].statusses.buff.push([skillFile[skill].debuff, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
 					delete skillFile[skill].debuff;
 					delete skillFile[skill].buffchance;
 					delete skillFile[skill].debuffCount;
@@ -1708,7 +1711,7 @@ commands.updateskills = new Command({
 				if (skillFile[skill].debuffuser) {
 					if (!skillFile[skill].statusses.buff) skillFile[skill].statusses.buff = []
 
-					skillFile[skill].statusses.buff.push([skillFile[skill].debuffuser, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].debuffchance) ? 100 : skillFile[skill].debuffchance]) //stat, stages, chance
+					skillFile[skill].statusses.buff.push([skillFile[skill].debuffuser, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
 					delete skillFile[skill].debuffuser;
 					delete skillFile[skill].buffchance;
 					delete skillFile[skill].debuffCount;
@@ -1763,6 +1766,9 @@ commands.updateskills = new Command({
 				} else if (skillFile[skill].sacrifice) {
 					skillFile[skill].heal.sacrifice = [[0]] //hp left
 					delete skillFile[skill].sacrifice;
+				} else if (skillFile[skill].revive) {
+					skillFile[skill].heal.revive = [[skillFile[skill].revive]]; //1/amount of HP
+					delete skillFile[skill].revive;
 				} else {
 					if (!skillFile[skill].heal.default)	skillFile[skill].heal.default = [[skillFile[skill].pow]]; //power
 				}
@@ -1788,7 +1794,7 @@ commands.updateskills = new Command({
 				if (skillFile[skill].debuff) {
 					if (!skillFile[skill].extras.buff) skillFile[skill].extras.buff = []
 
-					skillFile[skill].extras.buff.push([skillFile[skill].debuff, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].debuffchance) ? 100 : skillFile[skill].debuffchance]) //stat, stages, chance
+					skillFile[skill].extras.buff.push([skillFile[skill].debuff, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
 					delete skillFile[skill].debuff;
 					delete skillFile[skill].buffchance;
 					delete skillFile[skill].debuffCount;
@@ -1796,7 +1802,7 @@ commands.updateskills = new Command({
 				if (skillFile[skill].debuffuser) {
 					if (!skillFile[skill].extras.buff) skillFile[skill].extras.buff = []
 
-					skillFile[skill].extras.buff.push([skillFile[skill].debuffuser, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].debuffchance) ? 100 : skillFile[skill].debuffchance]) //stat, stages, chance
+					skillFile[skill].extras.buff.push([skillFile[skill].debuffuser, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
 					delete skillFile[skill].debuffuser;
 					delete skillFile[skill].buffchance;
 					delete skillFile[skill].debuffCount;
@@ -1953,8 +1959,13 @@ commands.updateskills = new Command({
 				if (Object.keys(skillFile[skill].extras).length === 0) delete skillFile[skill].extras;
 			}
 
-			if (skillFile[skill].evoSkill) skillFile[skill].evoSkill = [skillFile[skill].evoSkill];
-			if (skillFile[skill].preSkill) skillFile[skill].preSkill = [skillFile[skill].preSkill];
+			if (skillFile[skill].evoSkill) skillFile[skill].evoskills = [skillFile[skill].evoSkill];
+			if (skillFile[skill].preSkill) skillFile[skill].preskills = [skillFile[skill].preSkill];
+			delete skillFile[skill].evoSkill;
+			delete skillFile[skill].preSkill;
+
+			if (skillFile[skill].levelLock) skillFile[skill].levellock = skillFile[skill].levelLock;
+			delete skillFile[skill].levelLock;
 		}
 		fs.writeFileSync(dataPath+'/json/skills.json', JSON.stringify(skillFile, null, '    '));
 		message.react('👍');

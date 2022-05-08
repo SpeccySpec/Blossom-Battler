@@ -1,94 +1,301 @@
 function statusDesc(skillDefs) {
 	var finalText = '';
+	
+	if (hasStatus(skillDefs, 'buff')) {
+		let buffs = {
+			buffs: {},
+			debuffs: {},
+		}
+
+		for (let i = 0; i < skillDefs.statusses.buff.length; i++) {
+			if (skillDefs.statusses.buff[i][1] > 0) {
+				if (!buffs.buffs[skillDefs.statusses.buff[i][2]]) buffs.buffs[skillDefs.statusses.buff[i][2]] = {};
+				if (!buffs.buffs[skillDefs.statusses.buff[i][2]][skillDefs.statusses.buff[i][0]]) buffs.buffs[skillDefs.statusses.buff[i][2]][skillDefs.statusses.buff[i][0]] = 0;
+				buffs.buffs[skillDefs.statusses.buff[i][2]][skillDefs.statusses.buff[i][0]] += Math.abs(skillDefs.statusses.buff[i][1]);
+			} else {
+				if (!buffs.debuffs[skillDefs.statusses.buff[i][2]]) buffs.debuffs[skillDefs.statusses.buff[i][2]] = {};
+				if (!buffs.debuffs[skillDefs.statusses.buff[i][2]][skillDefs.statusses.buff[i][0]]) buffs.debuffs[skillDefs.statusses.buff[i][2]][skillDefs.statusses.buff[i][0]] = 0;
+				buffs.debuffs[skillDefs.statusses.buff[i][2]][skillDefs.statusses.buff[i][0]] += Math.abs(skillDefs.statusses.buff[i][1]);
+			}
+		}
+
+		let buffArray = []
+		let fullBuffArray = []
+		if (Object.keys(buffs.buffs).length > 0) {
+			for (let i in buffs.buffs) {
+				for (let j in buffs.buffs[i]) {
+					buffArray = []
+					for (let k in buffs.buffs[i]) {
+						buffArray.push([k, buffs.buffs[i][k]])
+					}
+				}
+				buffArray.sort(function(a, b) {
+					return b[1] - a[1];
+				})
+
+				fullBuffArray.push([i, buffArray])
+				fullBuffArray.sort(function(a, b) {
+					return b[0] - a[0];
+				})
+			}
+		}
+
+		for (i in fullBuffArray) {
+			if (fullBuffArray[i][0] == 100) finalText += `Buffs `
+			else finalText += `Has a **${fullBuffArray[i][0]}%** chance to buff `
+
+			for (let j in fullBuffArray[i][1]) {
+				finalText += ` **${fullBuffArray[i][1][j][0].charAt(0).toUpperCase() + fullBuffArray[i][1][j][0].slice(1)}**`;
+
+				let sameValue = 0;
+				for (let k in fullBuffArray[i][1]) {
+					if (k <= j) continue
+					if (fullBuffArray[i][1][j][1] == fullBuffArray[i][1][k][1]) sameValue++;
+				}
+				if (sameValue == 0) finalText += ` by ${fullBuffArray[i][1][j][1]} stage${fullBuffArray[i][1][j][1] > 1 ? 's' : ''}`;
+
+				if (sameValue != 0) {
+					if (sameValue == 1) finalText += ` and `;
+					else finalText += `, `;
+				} else {
+					if (j < fullBuffArray[i][1].length - 2) finalText += `, `;
+					else if (j == fullBuffArray[i][1].length - 2) finalText += ` and `;
+					else finalText += `.`;
+				}
+			}
+			finalText += `\n`;
+		}
+
+		buffArray = []
+		fullBuffArray = []
+		if (Object.keys(buffs.debuffs).length > 0) {
+			for (let i in buffs.debuffs) {
+				for (let j in buffs.debuffs[i]) {
+					buffArray = []
+					for (let k in buffs.debuffs[i]) {
+						buffArray.push([k, buffs.debuffs[i][k]])
+					}
+				}
+				buffArray.sort(function(a, b) {
+					return b[1] - a[1];
+				})
+
+				fullBuffArray.push([i, buffArray])
+				fullBuffArray.sort(function(a, b) {
+					return b[0] - a[0];
+				})
+			}
+		}
+
+		for (i in fullBuffArray) {
+			if (fullBuffArray[i][0] == 100) finalText += `Debuffs `
+			else finalText += `Has a **${fullBuffArray[i][0]}%** chance to debuff `
+
+			for (let j in fullBuffArray[i][1]) {
+				finalText += ` **${fullBuffArray[i][1][j][0].charAt(0).toUpperCase() + fullBuffArray[i][1][j][0].slice(1)}**`;
+
+				let sameValue = 0;
+				for (let k in fullBuffArray[i][1]) {
+					if (k <= j) continue
+					if (fullBuffArray[i][1][j][1] == fullBuffArray[i][1][k][1]) sameValue++;
+				}
+				if (sameValue == 0) finalText += ` by ${fullBuffArray[i][1][j][1]} stage${fullBuffArray[i][1][j][1] > 1 ? 's' : ''}`;
+
+				if (sameValue != 0) {
+					if (sameValue == 1) finalText += ` and `;
+					else finalText += `, `;
+				} else {
+					if (j < fullBuffArray[i][1].length - 2) finalText += `, `;
+					else if (j == fullBuffArray[i][1].length - 2) finalText += ` and `;
+					else finalText += `.`;
+				}
+			}
+			finalText += `\n`;
+		}
+	}
+
 	return finalText;
 }
 
 function passiveDesc(skillDefs) {
-	var finalText = `Passive Type: **${skillDefs.passive}**\n`
+	var finalText = `Passive Type: **${Object.keys(skillDefs.passive).join(', ')}**\n`;
 	return finalText;
 }
 
 function atkDesc(skillDefs) {
 	var finalText = '';
 
-	if (skillDefs.metronome) {
+	if (hasExtra(skillDefs, 'metronome')) {
 		finalText += 'Uses a **randomly defined skill**.\n';
 	} else {
-		if (skillDefs.affinitypow)
-			finalText += `Affected by **<:passive:906874477210648576>SpiritCharge** or **<:passive:906874477210648576>Teamwork**, by **${skillDefs.affinitypow} power**.\n`;
+		if (hasExtra(skillDefs, 'affinitypow'))
+			finalText += `Affected by **<:passive:906874477210648576>SpiritCharge** or **<:passive:906874477210648576>Teamwork**, by **${skillDefs.extras.affinitypow[0]} power**.\n`;
 
-		if (skillDefs.buff) {
-			if (skillDefs.buffchance) {
-				finalText += `**${skillDefs.buffchance}%** chance to buff **${skillDefs.buff.toUpperCase()}**.\n`
-			} else {
-				finalText += `Buffs **${skillDefs.buff.toUpperCase()}**.\n`
+		if (hasExtra(skillDefs, 'buff')) {
+			let buffs = {
+				buffs: {},
+				debuffs: {},
+			}
+
+			for (let i = 0; i < skillDefs.extras.buff.length; i++) {
+				if (skillDefs.extras.buff[i][1] > 0) {
+					if (!buffs.buffs[skillDefs.extras.buff[i][2]]) buffs.buffs[skillDefs.extras.buff[i][2]] = {};
+					if (!buffs.buffs[skillDefs.extras.buff[i][2]][skillDefs.extras.buff[i][0]]) buffs.buffs[skillDefs.extras.buff[i][2]][skillDefs.extras.buff[i][0]] = 0;
+					buffs.buffs[skillDefs.extras.buff[i][2]][skillDefs.extras.buff[i][0]] += Math.abs(skillDefs.extras.buff[i][1]);
+				} else {
+					if (!buffs.debuffs[skillDefs.extras.buff[i][2]]) buffs.debuffs[skillDefs.extras.buff[i][2]] = {};
+					if (!buffs.debuffs[skillDefs.extras.buff[i][2]][skillDefs.extras.buff[i][0]]) buffs.debuffs[skillDefs.extras.buff[i][2]][skillDefs.extras.buff[i][0]] = 0;
+					buffs.debuffs[skillDefs.extras.buff[i][2]][skillDefs.extras.buff[i][0]] += Math.abs(skillDefs.extras.buff[i][1]);
+				}
+			}
+
+			let buffArray = []
+			let fullBuffArray = []
+			if (Object.keys(buffs.buffs).length > 0) {
+				for (let i in buffs.buffs) {
+					for (let j in buffs.buffs[i]) {
+						buffArray = []
+						for (let k in buffs.buffs[i]) {
+							buffArray.push([k, buffs.buffs[i][k]])
+						}
+					}
+					buffArray.sort(function(a, b) {
+						return b[1] - a[1];
+					})
+
+					fullBuffArray.push([i, buffArray])
+					fullBuffArray.sort(function(a, b) {
+						return b[0] - a[0];
+					})
+				}
+			}
+
+			for (i in fullBuffArray) {
+				if (fullBuffArray[i][0] == 100) finalText += `Buffs `
+				else finalText += `Has a **${fullBuffArray[i][0]}%** chance to buff `
+
+				for (let j in fullBuffArray[i][1]) {
+					finalText += ` **${fullBuffArray[i][1][j][0].charAt(0).toUpperCase() + fullBuffArray[i][1][j][0].slice(1)}**`;
+
+					let sameValue = 0;
+					for (let k in fullBuffArray[i][1]) {
+						if (k <= j) continue
+						if (fullBuffArray[i][1][j][1] == fullBuffArray[i][1][k][1]) sameValue++;
+					}
+					if (sameValue == 0) finalText += ` by ${fullBuffArray[i][1][j][1]} stage${fullBuffArray[i][1][j][1] > 1 ? 's' : ''}`;
+
+					if (sameValue != 0) {
+						if (sameValue == 1) finalText += ` and `;
+						else finalText += `, `;
+					} else {
+						if (j < fullBuffArray[i][1].length - 2) finalText += `, `;
+						else if (j == fullBuffArray[i][1].length - 2) finalText += ` and `;
+						else finalText += `.`;
+					}
+				}
+				finalText += `\n`;
+			}
+
+			buffArray = []
+			fullBuffArray = []
+			if (Object.keys(buffs.debuffs).length > 0) {
+				for (let i in buffs.debuffs) {
+					for (let j in buffs.debuffs[i]) {
+						buffArray = []
+						for (let k in buffs.debuffs[i]) {
+							buffArray.push([k, buffs.debuffs[i][k]])
+						}
+					}
+					buffArray.sort(function(a, b) {
+						return b[1] - a[1];
+					})
+
+					fullBuffArray.push([i, buffArray])
+					fullBuffArray.sort(function(a, b) {
+						return b[0] - a[0];
+					})
+				}
+			}
+
+			for (i in fullBuffArray) {
+				if (fullBuffArray[i][0] == 100) finalText += `Debuffs `
+				else finalText += `Has a **${fullBuffArray[i][0]}%** chance to debuff `
+
+				for (let j in fullBuffArray[i][1]) {
+					finalText += ` **${fullBuffArray[i][1][j][0].charAt(0).toUpperCase() + fullBuffArray[i][1][j][0].slice(1)}**`;
+
+					let sameValue = 0;
+					for (let k in fullBuffArray[i][1]) {
+						if (k <= j) continue
+						if (fullBuffArray[i][1][j][1] == fullBuffArray[i][1][k][1]) sameValue++;
+					}
+					if (sameValue == 0) finalText += ` by ${fullBuffArray[i][1][j][1]} stage${fullBuffArray[i][1][j][1] > 1 ? 's' : ''}`;
+
+					if (sameValue != 0) {
+						if (sameValue == 1) finalText += ` and `;
+						else finalText += `, `;
+					} else {
+						if (j < fullBuffArray[i][1].length - 2) finalText += `, `;
+						else if (j == fullBuffArray[i][1].length - 2) finalText += ` and `;
+						else finalText += `.`;
+					}
+				}
+				finalText += `\n`;
 			}
 		}
 
-		if (skillDefs.debuff) {
-			if (skillDefs.buffchance) {
-				finalText += `**${skillDefs.buffchance}%** chance to debuff target's **${skillDefs.debuff.toUpperCase()}**.\n`
-			} else {
-				finalText += `Debuffs target's **${skillDefs.debuff.toUpperCase()}**.\n`
-			}
-		}
-
-		if (skillDefs.debuffuser)
-			finalText += `Debuffs the caster's **${skillDefs.debuffuser.toUpperCase()}**.\n`;
-
-		if (skillDefs.dualbuff) {
-			var stats = '';
-			for (const i in skillDefs.dualbuff) {
-				stats += `**${skillDefs.dualbuff[i].toUpperCase()}**`;
-				if (i < skillDefs.dualbuff.length-1) stats += ', ';
-			}
-
-			if (skillDefs.buffchance) {
-				finalText += `**${skillDefs.buffchance}%** chance to buff caster's ${stats}.\n`
-			} else {
-				finalText += `Will buff the caster's ${stats}.\n`
-			}
-		}
-
-		if (skillDefs.dualdebuff) {
-			var stats = '';
-			for (const i in skillDefs.dualdebuff) {
-				stats += `**${skillDefs.dualdebuff[i].toUpperCase()}**`;
-				if (i < skillDefs.dualdebuff.length-1) stats += ', ';
-			}
-
-			if (skillDefs.buffchance) {
-				finalText += `**${skillDefs.buffchance}%** chance to debuff foe's ${stats}.\n`
-			} else {
-				finalText += `WIll debuff the foe's ${stats}.\n`
-			}
-		}
-
-		if (skillDefs.lonewolf)
-			finalText += `Power is multiplied by 1.5x if **the user is alone or the last one standing**\n`;
+		if (hasExtra(skillDefs, 'lonewolf'))
+			finalText += `Power is multiplied by ${skillDefs.extras.lonewolf[0]}x if **the user is alone or the last one standing**\n`;
 	}
 	
 	return finalText;
 }
 
 skillDesc = (skillDefs, skillName, server) => {
+	let settings = setUpSettings(server);
 	var finalText = ``;
-	if (skillDefs.pow && skillDefs.type != "status" && skillDefs.type != "passive") {
-		if (skillDefs.ohko && skillDefs.type != "heal")
+	if (skillDefs.type != "status" && skillDefs.type != "passive") {
+		if (hasExtra(skillDefs, 'ohko') && skillDefs.type != "heal")
 			finalText += 'Defeats the foe in **one shot**!';
 		else {
 			if (skillDefs.type === 'heal') {
-				if (skillDefs.fullheal)
-					finalText += '**Fully heals**';
-				else if (skillDefs.statusheal)
-					finalText += '**Cures status ailments**';
-				else
-					finalText += `Heals **around ${skillDefs.pow}HP**`;
+				for (const i in skillDefs.heal) {
+					switch (i) {
+						case 'fullheal':
+							finalText += '**Fully heals**';
+							break;
+						case 'statusheal':
+							finalText += `Cures **${skillDefs.heal[i][0]} ailments**`;
+							break;
+						case 'healmp':
+							finalText += `Heals **around ${skillDefs.heal[i][0]} MP**`;
+							break;
+						case 'default':
+							finalText += `Heals **around ${skillDefs.heal[i][0]} HP**`;
+							break;
+						case 'regenerate':
+							finalText += `Regenerates **around ${skillDefs.heal[i][0][0]} HP** for **${skillDefs.heal[i][0][1]} turns**`;
+							break;
+						case 'invigorate':
+							finalText += `Regenerates **around ${skillDefs.heal[i][0][0]} MP** for **${skillDefs.heal[i][0][1]} turns**`;
+							break;
+						case 'sacrifice':
+							finalText += `${skillDefs.heal[i][0] > 0 ? `**Leaves the caster's health at ${skillDefs.heal[i][0]}**` : '**Sacrifices the caster**'}`;
+							break;
+						case 'revive':
+							finalText += `**Revives** the target to 1/${skillDefs.heal[i][0]} of their max HP`;
+							break;
+						case 'wish':
+							finalText += `Heals after **${skillDefs.heal[i][0]} turns**`;
+							break;
+					}
+					if (i < Object.keys(skillDefs.heal).length-1) finalText += '\n';
+				}
 			} else
 				finalText += `Has **${skillDefs.pow}** Power`;
 		}
 
-		if (skillDefs.hits && skillDefs.hits > 1 && skillDefs.type != "heal" && !skillDefs.ohko) 
+		if (skillDefs.hits && skillDefs.hits > 1 && skillDefs.type != "heal" && !hasExtra(skillDefs, 'ohko')) 
 			finalText += ` and hits **${skillDefs.hits}** times.`;
 
 		finalText += "\n";
@@ -116,6 +323,12 @@ skillDesc = (skillDefs, skillName, server) => {
 		case "randomopposing":
 			finalText += "Targets a **random opponent** in-battle.\n";
 			break;
+		case "spreadopposing":
+			finalText += "Targets **one opponent and spreads to two surrounding**.\n";
+			break;
+		case "spreadallies":
+			finalText += "Targets **an ally and spreads to two surrounding**.\n";
+			break;
 		default:
 			finalText += "Targets **one foe**.\n";
 	}
@@ -134,6 +347,17 @@ skillDesc = (skillDefs, skillName, server) => {
 			case "money":
 				finalText += `Costs **${skillDefs.cost} of the team's money**.\n`;
 				break;
+			case "moneypercent":
+				finalText += `Costs **${skillDefs.cost}% of the team's money**.\n`;
+				break;
+			case "lb":
+				if (settings.mechanics.limitbreaks) finalText += `Costs **${skillDefs.cost}LB**.\n`;
+				else finalText += `Costs **${skillDefs.cost}MP**.\n`;
+				break;
+			case "lbpercent":
+				if (settings.mechanics.limitbreaks) finalText += `Costs **${skillDefs.cost}% of LB**.\n`;
+				else finalText += `Costs **${skillDefs.cost}% of the user's Max MP**.\n`;
+				break;
 			default:
 				finalText += `Costs **${skillDefs.cost}MP**.\n`;
 		}
@@ -142,7 +366,7 @@ skillDesc = (skillDefs, skillName, server) => {
 	if (skillDefs.acc && skillDefs.type != "heal" && skillDefs.type != "passive")
 		finalText += `Has **${skillDefs.acc}%** Accuracy.\n`;
 
-	if (skillDefs.drain && skillDefs.type != "heal") {
+	if (hasExtra(skillDefs, 'drain') && skillDefs.type != "heal") {
 		if (skillDefs.drain > 1) {
 			finalText += `Drains 1/${skillDefs.drain} of damage dealt.\n`;
 		} else {
@@ -204,6 +428,7 @@ skillDesc = (skillDefs, skillName, server) => {
 	}
 
 	if (skillDefs.evoskills) {
+		if (skillDefs.preskills) finalText = finalText.slice(0, -1)
 		finalText += '\nEvo Skills:```diff\n'
 		for (const i in skillDefs.evoskills) {
 			finalText += `- ${skillDefs.evoskills[i][0]}, Lv${skillDefs.evoskills[i][1]}\n`
@@ -211,7 +436,7 @@ skillDesc = (skillDefs, skillName, server) => {
 		finalText += '```\n'
 	}
 
-	if (skillDefs.levellock) finalText += skillDefs.levellock != 'unobtainable' ? `🔒 *Skill Locked until level **${skillDefs.levellock}***` : '🔒 *Skill Unobtainable*\n';
+	if (skillDefs.levellock) finalText += skillDefs.levellock != 'unobtainable' ? `🔒 *Skill Locked until level **${skillDefs.levellock}***\n` : '🔒 *Skill Unobtainable*\n';
 
 	if (skillDefs.desc) finalText += `\n*${skillDefs.desc}*`;
 	

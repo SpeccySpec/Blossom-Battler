@@ -825,9 +825,29 @@ commands.reloadfile = new Command({
 		if (validFiles.includes(args[0].toLowerCase())) {
 			setUpFile(`${dataPath}/json/${message.guild.id}/${args[0].toLowerCase()}.json`, true)
 		} else if (validGlobalFiles.includes(args[0].toLowerCase())) {
-			setUpFile(`${dataPath}/json/${args[0].toLowerCase()}.json`, true)
+			switch (args[0].toLowerCase()) {
+				case 'pmdquestions':
+					pmdFile = setUpFile(`${dataPath}/json/pmdquestions.json`, true)
+					break
+				case 'ships':
+					shipFile = setUpFile(`${dataPath}/json/ships.json`, true)
+					break
+				case 'skills':
+					skillFile = setUpFile(`${dataPath}/json/skills.json`, true)
+					break
+			}
 		} else if (validFoodFiles.includes(args[0].toLowerCase())) {
-			setUpFile(`${dataPath}/json/food/${args[0].toLowerCase()}.json`, true)
+			switch (args[0].toLowerCase()) {
+				case 's_preferences':
+					userPreferences = setUpFile(`${dataPath}/json/food/s_preferences.json`, true)
+					break
+				case 's_privacy':
+					userPrivacy = setUpFile(`${dataPath}/json/food/s_privacy.json`, true)
+					break
+				default:
+					foodFiles[args[0].toLowerCase()] = setUpFile(`${dataPath}/json/food/${args[0].toLowerCase()}.json`, true)
+					break
+			}
 		} else if (validUserDataFiles.includes(args[0].toLowerCase())) {
 			if (!args[1]) return message.channel.send(`You must specify a user!`)
 
