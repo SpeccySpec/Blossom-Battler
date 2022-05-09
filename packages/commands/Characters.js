@@ -1706,12 +1706,23 @@ commands.updatecharacters = new Command({
 	args: [],
 	func: (message, args) => {
 		if (!utilityFuncs.RPGBotAdmin(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are not a hardcoded admin of this bot.`);
+
+		let newFile = {}
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		for (let i in charFile) {
-			charFile[i].name = i;
+			newFile[i] = objClone(charFile[i]);				
+			delete newFile[i].autoLearn;
+			delete newFile[i].leaderSkill;
+			for (let k of stats) delete newFile[i][k];
+			for (let k of Affinities) delete newFile[i][k];
+			for (let k of stats) delete newFile[i][`base${k}`];
+			for (let k = 1; k < 4; k++) delete newFile[i][`lb${k}`];
+			for (let k of quoteTypes) delete newFile[i][`${k}quote`];
+
+			newFile[i].name = i;
 
 			// Melee Attack
-			charFile[i].melee = {
+			newFile[i].melee = {
 				name: charFile[i].melee[0],
 				type: charFile[i].melee[1],
 				pow: 30,
@@ -1720,11 +1731,11 @@ commands.updatecharacters = new Command({
 			}
 
 			// Weapons and Armor
-			charFile[i].weapon = {}
-			charFile[i].armor = {}
+			newFile[i].weapon = {}
+			newFile[i].armor = {}
 
 			// Main stats
-			charFile[i].stats = {
+			newFile[i].stats = {
 				atk: charFile[i].atk,
 				mag: charFile[i].mag,
 				prc: charFile[i].prc,
@@ -1735,7 +1746,7 @@ commands.updatecharacters = new Command({
 				luk: charFile[i].luk
 			}
 
-			charFile[i].basestats = {
+			newFile[i].basestats = {
 				baseatk: charFile[i].baseatk,
 				basemag: charFile[i].basemag,
 				baseprc: charFile[i].baseprc,
@@ -1747,7 +1758,7 @@ commands.updatecharacters = new Command({
 			}
 
 			// Affinities & Skills
-			charFile[i].affinities = {
+			newFile[i].affinities = {
 				superweak: charFile[i].superweak,
 				weak: charFile[i].weak,
 				resist: charFile[i].resist,
@@ -1756,17 +1767,17 @@ commands.updatecharacters = new Command({
 				drain: charFile[i].drain
 			}
 
-			charFile[i].autolearn = charFile[i].autoLearn
+			newFile[i].autolearn = charFile[i].autoLearn
 
 			// Quotes
-			if (!charFile[i].quotes) charFile[i].quotes = {};
+			if (!newFile[i].quotes) newFile[i].quotes = {};
 			for (const k in quoteTypes) {
-				charFile[i].quotes[`${quoteTypes[k]}quote`] = charFile[i][`${quoteTypes[k]}quote`];
+				newFile[i].quotes[`${quoteTypes[k]}quote`] = charFile[i][`${quoteTypes[k]}quote`];
 			}
 			
 			// Leader Skills
 			if (charFile[i].leaderSkill) {
-				charFile[i].leaderskill = {
+				newFile[i].leaderskill = {
 					name: charFile[i].leaderSkill.name,
 					type: charFile[i].leaderSkill.type,
 					var1: charFile[i].leaderSkill.target,
@@ -1775,41 +1786,27 @@ commands.updatecharacters = new Command({
 			}
 
 			// LBs
-			if (!charFile[i].lb) charFile[i].lb = {};
+			if (!newFile[i].lb) newFile[i].lb = {};
 
 			for (let k = 1; k < 4; k++) {
-				if (charFile[i][`lb${k}`]) charFile[i].lb[k] = charFile[i][`lb${k}`];
+				if (charFile[i][`lb${k}`]) newFile[i].lb[k] = charFile[i][`lb${k}`];
 			}
 
 			// Bio Info
-			charFile[i].bio.height = [4, 0]
-			charFile[i].bio.weight = 0
-			charFile[i].bio.age = 10
-			charFile[i].bio.custom = {}
+			newFile[i].bio.height = [4, 0]
+			newFile[i].bio.weight = 0
+			newFile[i].bio.age = 10
+			newFile[i].bio.custom = {}
 
 			// Update Stats, for certain changes in new BB.
-			updateStats(charFile[i], message.guild.id, true);
+			updateStats(newFile[i], message.guild.id, true);
 		}
 		
 		// delete old shit
 		setTimeout(function() {
-			for (let i in charFile) {
-				delete charFile[i].autoLearn;
-				delete charFile[i].leaderSkill;
-				for (let k of stats) delete charFile[i][k];
-				for (let k of Affinities) delete charFile[i][k];
-				for (let k of stats) delete charFile[i][`base${k}`];
-				for (let k = 1; k < 4; k++) delete charFile[i][`lb${k}`];
-				for (let k of quoteTypes) delete charFile[i][`${k}quote`];
-			}
-
-			setTimeout(function() {
-				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
-
-				// Send an Embed to notify us!
-				message.channel.send('Characters have been updated from an older version to a newer one!');
-			}, 300);
-		}, 300);
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(newFile, null, '    '));
+			message.channel.send('Characters have been updated from an older version to a newer one!');
+		}, 300)
 	}
 })
 

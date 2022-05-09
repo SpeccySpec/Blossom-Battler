@@ -186,6 +186,8 @@ const affinityScores = {
 
 longDescription = (charDefs, level, server, message) => {
 	let char = objClone(charDefs);
+	console.log(char);
+
 	let dispLevel = '';
 	let settings = setUpFile(`${dataPath}/json/${server}/settings.json`);
 
@@ -212,9 +214,13 @@ longDescription = (charDefs, level, server, message) => {
 
 	// Stats
 	let statDesc = ''
-	if (!char.type) statDesc += `Level ${char.level}\n${char.hp}/${char.maxhp}HP\n${char.mp}/${char.maxmp}${char.mpMeter ? char.mpMeter[1] : 'MP'}\n${char.xp}/${char.maxxp}XP\n`;
-	else statDesc += `Level ${char.level}\n${char.hp}HP\n${char.mp}MP\n${char.xp}XP\n`;
+	if (!char.type) 
+		statDesc += `Level ${char.level}\n${char.hp}/${char.maxhp}HP\n${char.mp}/${char.maxmp}${char.mpMeter ? char.mpMeter[1] : 'MP'}\n${char.xp}/${char.maxxp}XP\n`;
+	else 
+		statDesc += `Level ${char.level}\n${char.hp}HP\n${char.mp}MP\n${char.xp}XP\n`;
+
 	for (const i in char.stats) statDesc += `\n${char.stats[i]}${i.toUpperCase()}${!char.type ? ` (${char.basestats['base'+i]} Base)` : ''}`;
+
 	DiscordEmbed.fields.push({ name: 'Stats', value: statDesc, inline: true });
 	
 	// Skills
@@ -231,7 +237,7 @@ longDescription = (charDefs, level, server, message) => {
 			} else {
 				let type = typeof skillFile[skill].type == 'object' ? elementEmoji[skillFile[skill].type[0]] : elementEmoji[skillFile[skill].type];
 				skillDesc += `${type}${skillFile[skill].name}`;
-				if (charDefs.autolearn && charDefs.autolearn[i]) skillDesc += '<:tick:918501752398020628>';
+				if (charDefs.autolearn && charDefs.autolearn[i]) skillDesc += '<:tick:973077052372701294>';
 				skillDesc += `\n`;
 			}
 		}
@@ -462,7 +468,7 @@ transformationDesc = (char, name, server, message) => {
 
 	if (char.skill && char.skill != '') {
 		let skillTxt = `${elementEmoji[skillFile[char.skill].type]}${skillFile[char.skill].name}`
-		if (char.autolearn) skillTxt += '<:tick:918501752398020628>';
+		if (char.autolearn) skillTxt += '<:tick:973077052372701294>';
 		DiscordEmbed.fields.push({ name: 'Signature Skill', value: skillTxt, inline: true });
 	}
 

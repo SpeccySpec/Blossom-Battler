@@ -165,15 +165,15 @@ itemTypes = [
 ]
 
 itemTypeEmoji = {
-	skill: '<:skill:963788061068656661>',
+	skill: '<:physical:973077052129423411>',
 	
-	heal: "<:healhp:963788060665970709>",
-	healmp: "<:healmp:963788061253201980>",
-	healhpmp: "<:healhpmp:963788060976357446>",
+	heal: "<:healhp:973078508123328522>",
+	healmp: "<:healmp:973078513827606589>",
+	healhpmp: "<:healhpmp:973078513747902504>",
 
-	revive: "<:revive:963788061056049213>",
-	material: '<:material:963788061731348510>',
-	pacify: '<:pacify:963788061068648479>',
+	revive: '<:revive:973078509868183572>',
+	material: '<:material:973078509595537459>',
+	pacify: '<:pacify:973077052142026752>',
 }
 
 itemRarities = [
@@ -188,14 +188,14 @@ itemRarities = [
 ]
 
 itemRarityEmoji = {
-	common: '<:common:963787701230915614>',
-	uncommon: '<:uncommon:963787700903743509>',
-	rare: '<:rare:963787701444804608>',
-	veryrare: '<:veryrare:963787701256077332>',
-	epic: '<:epic:963787701268643890>',
-	legendary: '<:legendary:963787701524516875>',
-	sentient: '<:sentient:963787701205745754>',
-	artifact: '<:artifact:963787701084106872>'
+	common: '<:common:973078463848280124>',
+	uncommon: '<:uncommon:973078464083152906>',
+	rare: '<:rare:973078463844057100>',
+	veryrare: '<:veryrare:973078464963952670>',
+	epic: '<:epic:973078463554658325>',
+	legendary: '<:legendary:973078464011862066>',
+	sentient: '<:sentient:973078464057991220>',
+	artifact: '<:artifact:973078463227510825>'
 }
 
 // Status Effects
@@ -264,19 +264,20 @@ statusEmojis = {
     poison: "<:poison:963389074146738216>",
     brainwash: "<:brainwash:963387466230956044>",
 	fear: "<:fear:963387466918813747>",
-	rage: "🗯️",
+	rage: "<:rage:973076333838098452>",
 	ego: "<:ego:963387466788794380>",
 	silence: '<:silence:963389866983440456>',
 	dazed: '<:dazed:963387466235134013>',
 	hunger: '<:hunger:963387467002675261>',
-	illness: '🤢',
-	infatuation: '❣️',
-	mirror: '<:mirror:963389073974755358>',
+	infatuation: '<:infatuation:973076333884227594>',
 	blind: '<:blind:963387466570690560>',
 	confusion: '<:confusion:963387466541330472>',
-	irradiation: '☣️',
-	sensitive: '😖',
-	happy: '🙂'
+	irradiation: '<:irradiated:973076333599031379>',
+	sensitive: '<:sensitive:973076333825499156>',
+
+	// Positive Statusses
+	mirror: '<:mirror:963389073974755358>',
+	happy: '<:happy:973076333871644733>'
 }
 
 elementTechs = {
@@ -389,6 +390,8 @@ enemyTypeColors = {
 	bigboss: '#FF0000',
 	deity: '#FFFFFF'
 }
+
+critEmoji = '<:crit:973077052083286056>';
 
 specialDates = {
 	"24 12": "Christmas Eve",

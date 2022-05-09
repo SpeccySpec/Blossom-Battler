@@ -44,9 +44,20 @@ leaderSkillsAtBattleStart = (party) => {
 }
 
 doTurn = (btl) => {
+	let char = getCharFromTurn(btl);
+	let settings = setUpSettings(btl.guild.id)
+
+	let statusTxt = '';
+
+	for (let skill of char.skills) {
+		// Start Of Turn passives
+		if (skill.type === 'passive') {
+		}
+	}
 }
 
 advanceTurn = (btl) => {
+	// End the battle in a test battle.
 	if (btl.testing) {
 		btl.testing--;
 		if (btl.testing <= 0) {
@@ -56,8 +67,53 @@ advanceTurn = (btl) => {
 		}
 	}
 
-	// We should check for death first
+	// We should check for death first. While we're here, let's reset some things.
 	let teamsleft = [];
+
+	for (let i in btl.teams) {
+		let pLeft = btl.teams[i].members.length;
+
+		for (let k in btl.teams[i].members) {
+			let char = btl.teams[i].members[k];
+
+			// This character is dead.
+			if (char.hp <= 0) {
+				pLeft--;
+				resetEffects(char);
+				continue;
+			}
+		}
+
+		teamsleft[i] = pLeft;
+	}
+
+	// Let's see how many of us are alive.
+	let lastAlive = 0;
+	let teamsAlive = 0;
+	for (let i in teamsleft) {
+		if (teamsAlive > 1) break;
+		if (teamsleft[i] > 0) {
+			lastAlive = i; 
+			teamsAlive++;
+		}
+	}
+
+	// If there's only one team alive...
+	if (teamsAlive <= 1) {
+		let party = btl.teams[lastAlive];
+
+		if (btl.pvp) {
+			pvpWin(btl, lastAlive);
+		} else {
+			// If it's not a pvp battle... then we're probably team 0.
+			// If we're not team 0, fuck me i guess LOL
+			if (party.enemyteam) {
+				loseBattle(btl, 0)
+			} else {
+				winBattle(btl, 0)
+			}
+		}
+	}
 
 	// Now, go to the next turn.
 	let newTurn = false;
@@ -76,6 +132,6 @@ advanceTurn = (btl) => {
 			btl.curturn = 1;
 	}
 
-	let charDefs = getCharFromTurn(btl);
-	doTurn(charDefs);
+	// Let's do this character's turn.
+	doTurn(btl);
 }
