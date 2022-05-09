@@ -45,7 +45,7 @@ function statusDesc(skillDefs) {
 			else finalText += `Has a **${fullBuffArray[i][0]}%** chance to buff `
 
 			for (let j in fullBuffArray[i][1]) {
-				finalText += ` **${fullBuffArray[i][1][j][0].charAt(0).toUpperCase() + fullBuffArray[i][1][j][0].slice(1)}**`;
+				finalText += ` **${fullBuffArray[i][1][j][0].toUpperCase()}**`;
 
 				let sameValue = 0;
 				for (let k in fullBuffArray[i][1]) {
@@ -92,7 +92,7 @@ function statusDesc(skillDefs) {
 			else finalText += `Has a **${fullBuffArray[i][0]}%** chance to debuff `
 
 			for (let j in fullBuffArray[i][1]) {
-				finalText += ` **${fullBuffArray[i][1][j][0].charAt(0).toUpperCase() + fullBuffArray[i][1][j][0].slice(1)}**`;
+				finalText += ` **${fullBuffArray[i][1][j][0].toUpperCase()}**`;
 
 				let sameValue = 0;
 				for (let k in fullBuffArray[i][1]) {
@@ -113,7 +113,101 @@ function statusDesc(skillDefs) {
 			finalText += `\n`;
 		}
 	}
+	
+	if (hasStatus(skillDefs, 'weather') || hasStatus(skillDefs, 'terrain')) {
+		finalText += `Changes`;
 
+		if (hasStatus(skillDefs, 'weather')) {
+			finalText += ` **Weather** to ${skillDefs.statusses.weather[0]}`;
+		}
+
+		if (hasStatus(skillDefs, 'terrain')) {
+			if (hasStatus(skillDefs, 'weather')) finalText += ` and`;
+			
+			finalText += ` **Terrain** to ${skillDefs.statusses.terrain[0]}`;
+		}
+		finalText += `.\n`;
+	}
+
+	if (hasStatus(skillDefs, 'reincarnate')) {
+		finalText += `Summons **an undead ally**.\n` 
+	}
+
+	if (hasStatus(skillDefs, 'mimic')) {
+		finalText += `Mimics **an ally or foe**.\n`
+	}
+
+	if (hasStatus(skillDefs, 'clone')) {
+		finalText += `Clones **the caster**.\n`
+	}
+
+	if (hasStatus(skillDefs, 'makarakarn') || hasStatus(skillDefs, 'tetrakarn') || hasStatus(skillDefs, 'shield')) {
+		finalText += `Surrounds the target with`;
+
+		if (hasStatus(skillDefs, 'makarakarn')) {
+			finalText += ` **Makarakarn**`;
+		}
+		if (hasStatus(skillDefs, 'tetrakarn')) {
+			if (hasStatus(skillDefs, 'makarakarn') && !hasStatus(skillDefs, 'shield')) finalText += ` and `;
+			else if (hasStatus(skillDefs, 'makarakarn') && hasStatus(skillDefs, 'shield')) finalText += `, `;
+
+			finalText += ` **Tetrakarn**`;
+		}
+		if (hasStatus(skillDefs, 'shield')) {
+			if (hasStatus(skillDefs, 'makarakarn') || hasStatus(skillDefs, 'tetrakarn')) finalText += ` and `;
+			finalText += ` a **shield named ${skillDefs.statusses.shield[0]}**`;
+		}
+		finalText += `.\n`;
+	}
+
+	if (hasStatus(skillDefs, 'trap')) {
+		finalText += `Sets up a **trap**.\n`
+	}
+
+	if (hasStatus(skillDefs, 'futuresight')) {
+		finalText += `Strieks with a **${skillDefs.statusses.futuresight[0][0].type}** attack in **${skillDefs.statusses.futuresight[0][0].turns}** turns.\n`
+	}
+
+	if (hasStatus(skillDefs, 'analyze') || hasStatus(skillDefs, 'fullanalyse')) {
+		if (hasStatus(skillDefs, 'fullanalyze')) finalText += `Fully Analyzes`
+		else finalText += `Analyzes`
+		finalText += ` the target.\n`
+	}
+
+	if (hasStatus(skillDefs, 'shieldbreak')) {
+		finalText += `Breaks the target's **${skillDefs.statusses.shieldbreak[0][0].charAt(0).toUpperCase() + skillDefs.statusses.shieldbreak[0][0].slice(1)}${skillDefs.statusses.shieldbreak[0][0].includes('ra') ? 'karn' : ''}**.\n`
+	}
+
+	if (hasStatus(skillDefs, 'dekunda')) {
+		finalText += `Removes buffs of the target.\n`
+	}
+
+	if (hasStatus(skillDefs, 'heartswap')) {
+		finalText += `Swaps caster's **stat chances** with the target's.\n`
+	}
+
+	if (hasStatus(skillDefs, 'pacifystatus')) {
+		finalText += `Pacifies the target with **${skillDefs.statusses.pacifystatus[0][0]}**${skillDefs.statusses.pacifystatus[0][1] >= 100 ? '' : ` by ${skillDefs.statusses.pacifystatus[0][1]}%`}.\n`
+	}
+
+	if (hasStatus(skillDefs, 'batonpass')) {
+		finalText += `Switch out caster **with someone in backup**.\n`
+	}
+
+	if (hasStatus(skillDefs, 'powercharge') || hasStatus(skillDefs, 'mindcharge')) {
+		finalText += `Boosts`
+		if (hasStatus(skillDefs, 'powercharge')) finalText += ` **Physical** damage by ${skillDefs.statusses.powercharge[0]}x for one turn`;
+
+		if (hasStatus(skillDefs, 'mindcharge')) {
+			if (hasStatus(skillDefs, 'powercharge')) finalText += ` and`;
+			finalText += ` **Magic** damage by ${skillDefs.statusses.mindcharge[0]}x for one turn`;
+		}
+		finalText += `.\n`
+	}
+
+	if (hasStatus(skillDefs, 'chaosstir')) {
+		finalText += `Attack back when hit, with a **${skillDefs.statusses.chaosstir[0][1]}%** accuracy attack with **${skillDefs.statusses.chaosstir[0][0]}x** power.\n`
+	}
 	return finalText;
 }
 
@@ -122,7 +216,7 @@ function passiveDesc(skillDefs) {
 	return finalText;
 }
 
-function atkDesc(skillDefs) {
+function atkDesc(skillDefs, settings) {
 	var finalText = '';
 
 	if (hasExtra(skillDefs, 'metronome')) {
@@ -132,6 +226,54 @@ function atkDesc(skillDefs) {
 	} else {
 		if (hasExtra(skillDefs, 'affinitypow'))
 			finalText += `Affected by **<:passive:906874477210648576>SpiritCharge** or **<:passive:906874477210648576>Teamwork**, by **${skillDefs.extras.affinitypow[0]} power**.\n`;
+
+		if (hasExtra(skillDefs, 'needlessthan')) {
+			let extraSom = ''
+			switch (skillDefs.extras.needlessthan[0][1]) {
+				case 'hp':
+					extraSom = ' HP';
+					break;
+				case 'mp':
+					extraSom = ' MP';
+					break;
+				case 'lb':
+					if (settings.mechanics.limitbreaks) extraSom = ' LB';
+					else extraSom = ' MP';
+					break;
+				case 'money':
+					extraSom = ` of Team's Money`;
+					break;
+				case 'hppercent':
+					extraSom = '% of the user\'s Max HP';
+					break;
+				case 'mppercent':
+					extraSom = '% of the user\'s Max MP';
+					break;
+				case 'lbpercent':
+					if (settings.mechanics.limitbreaks) extraSom = '% of the user\'s Max LB';
+					else extraSom = '% of the user\'s Max MP';
+					break;
+				case 'moneypercent':
+					extraSom = '% of the user Team\'s Money';
+					break;
+			}
+			finalText += `Needs less than **${skillDefs.extras.needlessthan[0][0]}${extraSom}** to use.\n`;
+		}
+
+		if (hasExtra(skillDefs, 'sacrifice'))
+			finalText += `${skillDefs.extras.sacrifice[0] <= 0 ? `**Sacrifices the caster**` : `Leaves the caster's health at **${skillDefs.extras.sacrifice[0]}**`}.\n`;
+
+		if (hasExtra(skillDefs, 'stealmp'))
+			finalText += `Steals MP from the target instead of dealing damage.\n`;
+
+		if (hasExtra(skillDefs, 'takemp'))
+			finalText += `Takes **${skillDefs.extras.takemp[0]} MP** from the target.\n`;
+
+		if (hasExtra(skillDefs, 'drain'))
+			finalText += `Drains **1/${skillDefs.extras.drain[0]} of the damage**.\n`;
+
+		if (hasExtra(skillDefs, 'steal'))
+			finalText += `Has a **${skillDefs.extras.steal[0][0]}%** chance of stealing **${skillDefs.extras.steal[0][1]}** of the target team's items.\n`;
 
 		if (hasExtra(skillDefs, 'buff')) {
 			let buffs = {
@@ -177,7 +319,7 @@ function atkDesc(skillDefs) {
 				else finalText += `Has a **${fullBuffArray[i][0]}%** chance to buff `
 
 				for (let j in fullBuffArray[i][1]) {
-					finalText += ` **${fullBuffArray[i][1][j][0].charAt(0).toUpperCase() + fullBuffArray[i][1][j][0].slice(1)}**`;
+					finalText += ` **${fullBuffArray[i][1][j][0].toUpperCase()}**`;
 
 					let sameValue = 0;
 					for (let k in fullBuffArray[i][1]) {
@@ -224,7 +366,7 @@ function atkDesc(skillDefs) {
 				else finalText += `Has a **${fullBuffArray[i][0]}%** chance to debuff `
 
 				for (let j in fullBuffArray[i][1]) {
-					finalText += ` **${fullBuffArray[i][1][j][0].charAt(0).toUpperCase() + fullBuffArray[i][1][j][0].slice(1)}**`;
+					finalText += ` **${fullBuffArray[i][1][j][0].toUpperCase()}**`;
 
 					let sameValue = 0;
 					for (let k in fullBuffArray[i][1]) {
@@ -246,8 +388,145 @@ function atkDesc(skillDefs) {
 			}
 		}
 
+		if (hasExtra(skillDefs, 'powerbuff')) {
+			let powerbuffs = {}
+			for (let i in skillDefs.extras.powerbuff) {
+				for (let j in skillDefs.extras.powerbuff[i]) {
+					if (j % 2 == 0) {
+						if (!powerbuffs[skillDefs.extras.powerbuff[i][j]]) powerbuffs[skillDefs.extras.powerbuff[i][j]] = 0;
+					} else {
+						powerbuffs[skillDefs.extras.powerbuff[i][j-1]] += skillDefs.extras.powerbuff[i][j];
+					}
+				}
+			}
+			finalText += `Increases in power with`
+			for (let i in powerbuffs) {
+				finalText += ` **${i.toUpperCase()}** buffs`;
+
+				let sameValue = 0;
+				for (let j in powerbuffs) {
+					if (i == j) continue
+					if (powerbuffs[i] == powerbuffs[j]) sameValue++;
+				}
+				if (sameValue == 0) finalText += ` up to **${powerbuffs[i]}%**`;
+
+				if (sameValue != 0) {
+					if (sameValue == 1) finalText += ` and`;
+					else finalText += `,`;
+				} else {
+					if (i < Object.keys(powerbuffs).length - 2) finalText += `,`;
+					else if (i == Object.keys(powerbuffs).length - 2) finalText += ` and`;
+					else finalText += `.`;
+				}
+			}
+			finalText += `\n`;
+		}
+
+		if (hasExtra(skillDefs, 'healverse') || hasExtra(skillDefs, 'powerverse') || hasExtra(skillDefs, 'spreadverse')) {
+			finalText += `Surrounds the target with a `;
+			if (hasExtra(skillDefs, 'healverse')) {
+				finalText += `**healing aura** for **${skillDefs.extras.healverse[0][1]}** turns`;
+			}
+			if (hasExtra(skillDefs, 'powerverse')) {
+				if (hasExtra(skillDefs, 'healverse') && !hasExtra(skillDefs, 'powerverse')) finalText += ` and a`;
+				else if (hasExtra(skillDefs, 'healverse') && hasExtra(skillDefs, 'powerverse')) finalText += `, a`;
+
+				finalText += ` **power aura** for **${skillDefs.extras.powerverse[0][1]}** turns`;
+			}
+			if (hasExtra(skillDefs, 'spreadverse')) {
+				if (hasExtra(skillDefs, 'healverse') || hasExtra(skillDefs, 'powerverse')) finalText += ` and a`;
+
+				finalText += ` **spread aura** for **${skillDefs.extras.spreadverse[0][1]}** turns`;
+			}
+			finalText += `.\n`;
+		}
+
 		if (hasExtra(skillDefs, 'lonewolf'))
-			finalText += `Power is multiplied by ${skillDefs.extras.lonewolf[0]}x if **the user is alone or the last one standing**\n`;
+			finalText += `Power is multiplied by ${skillDefs.extras.lonewolf[0]}x if **the user is alone or the last one standing**.\n`;
+
+		if (hasExtra(skillDefs, 'heavenwrath'))
+			finalText += `Power is multiplied by ${skillDefs.extras.heavenwrath[0]}x if **not alone, and all allies are not down**.\n`;
+
+		if (hasExtra(skillDefs, 'rest'))
+			finalText += `Caster **must recharge for a turn**.\n`;
+
+		if (hasExtra(skillDefs, 'feint'))
+			finalText += `**Bypasses shielding skills**.\n`;
+
+		if (hasExtra(skillDefs, 'statcalc'))
+			finalText += `Uses caster's **${skillDefs.extras.statcalc[0].toString().toUpperCase()}** for measuring damage.\n`;
+
+		if (hasExtra(skillDefs, 'hpcalc') || hasExtra(skillDefs, 'mpcalc')) {
+			finalText += `Damage boosted or nerfed with`
+
+			if (hasExtra(skillDefs, 'hpcalc')) {
+				finalText += ` caster's **current HP** up to **${skillDefs.extras.hpcalc[0]}%**`
+			}
+
+			if (hasExtra(skillDefs, 'mpcalc')) {
+				if (hasExtra(skillDefs, 'hpcalc')) finalText += ` and from`
+
+				finalText += ` caster's **current MP** up to **${skillDefs.extras.mpcalc[0]}%**`
+			}
+			finalText += `.\n`;
+		}
+
+		if (hasExtra(skillDefs, 'forcetech')) {
+			let techs = []
+			for (let i in skillDefs.extras.forcetech) {
+				for (let j in skillDefs.extras.forcetech[i]) {
+					techs.push(skillDefs.extras.forcetech[i][j])
+				}
+			}
+
+			techs.sort(function(a, b) {
+				return b - a;
+			})
+			techset = new Set(techs)
+			techs = Array.from(techset)
+			console.log(techs)
+			techs.filter((value) => value != null)
+
+			finalText += `Forces techs from **${techs.join(', ')}**.\n`;
+		}
+
+		if (hasExtra(skillDefs, 'rollout')) {
+			finalText += `Forced to repeat, boosting power by **${skillDefs.extras.rollout[0][0]}%** until **${skillDefs.extras.rollout[0][1]}x** pow is reached or for **${skillDefs.extras.rollout[0][2]}** turns.\n`;
+		}
+
+		if (hasExtra(skillDefs, 'resistremove')) {
+			finalText += `Removes resisting, blocking, draining and repelling affinities to **${skillDefs.extras.resistremove[0][0].charAt(0).toUpperCase() + skillDefs.extras.resistremove[0][0].slice(1)}**.\n`;
+		}
+
+		if (hasExtra(skillDefs, 'sustain') || hasExtra(skillDefs, 'reverse') || hasExtra(skillDefs, 'powhit') ) {
+			finalText += `\n**Multi-hit Properties:**\n`;
+
+			if (hasExtra(skillDefs, 'sustain')) {
+				finalText += `- Does not decreate in power with hits.\n`;
+			}
+			if (hasExtra(skillDefs, 'reverse')) {
+				finalText += `- Gains in power with hits.\n`;
+			}
+			if (hasExtra(skillDefs, 'powhit')) {
+				let powhits = []
+				for (let i in skillDefs.extras.powhit) {
+					for (let j in skillDefs.extras.powhit[i]) {
+						powhits.push(skillDefs.extras.powhit[i][j])
+					}
+				}
+				powSet = new Set(powhits)
+				powhits = Array.from(powSet)
+				powhits.sort(function(a, b) {
+					return b[0] - a[0];
+				})
+				for (let i in powhits) {
+					if (typeof powhits[i] == 'object' || powhits[i] == null) powhits[i] = ''
+				}
+				powhits = powhits.filter((x) => x != '')
+
+				finalText += `- ${powhits.length > 1 ? 'Hits' : 'Hit'} **${powhits.join(', ')}** increase${powhits.length > 1 ? '' : 's'} in power.\n`;
+			}
+		}
 	}
 	
 	return finalText;
@@ -410,7 +689,7 @@ skillDesc = (skillDefs, skillName, server) => {
 	} else if (skillDefs.type === 'passive') {
 		finalText += passiveDesc(skillDefs)
 	} else if (skillDefs.type != 'passive') {
-		finalText += atkDesc(skillDefs)
+		finalText += atkDesc(skillDefs, settings)
 	}
 
 	if (skillDefs.atktype) {

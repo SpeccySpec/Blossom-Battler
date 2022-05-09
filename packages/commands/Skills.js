@@ -1648,13 +1648,13 @@ commands.updateskills = new Command({
 					skillFile[skill].statusses.fullanalyze = [[true]] //true
 					delete skillFile[skill].fullanalyse;
 				} else if (skillFile[skill].shieldbreak) {
-					skillFile[skill].statusses.shieldbreak = [['shield', 100]] //shield
+					skillFile[skill].statusses.shieldbreak = [['shield', 100]] //shield, accuracy
 					delete skillFile[skill].shieldbreak;
 				} else if (skillFile[skill].tetrabreak) {
-					skillFile[skill].statusses.shieldbreak = [['tetra', 100]] //tetrabreak
+					skillFile[skill].statusses.shieldbreak = [['tetra', 100]] //tetrabreak, accuracy
 					delete skillFile[skill].tetrabreak;
 				} else if (skillFile[skill].makarabreak) {
-					skillFile[skill].statusses.shieldbreak = [['makara', 100]] //makarabreak
+					skillFile[skill].statusses.shieldbreak = [['makara', 100]] //makarabreak, accuracy
 					delete skillFile[skill].makarabreak;
 				} else if (skillFile[skill].dekunda) {
 					skillFile[skill].statusses.dekunda = [[true]] //true
@@ -1694,8 +1694,10 @@ commands.updateskills = new Command({
 
 				if (skillFile[skill].buff) {
 					if (!skillFile[skill].statusses.buff) skillFile[skill].statusses.buff = []
+					if (skillFile[skill].buffchance == 0) skillFile[skill].buffchance = 100
 
 					skillFile[skill].statusses.buff.push([skillFile[skill].buff, skillFile[skill].buffCount ? skillFile[skill].buffCount : 1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
+					if (skillFile[skill].buffchance == 0) skillFile[skill].buffchance = 100
 					delete skillFile[skill].buff;
 					delete skillFile[skill].buffchance;
 					delete skillFile[skill].buffCount;
@@ -1704,6 +1706,7 @@ commands.updateskills = new Command({
 					if (!skillFile[skill].statusses.buff) skillFile[skill].statusses.buff = []
 
 					skillFile[skill].statusses.buff.push([skillFile[skill].debuff, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
+					if (skillFile[skill].buffchance == 0) skillFile[skill].buffchance = 100
 					delete skillFile[skill].debuff;
 					delete skillFile[skill].buffchance;
 					delete skillFile[skill].debuffCount;
@@ -1712,6 +1715,7 @@ commands.updateskills = new Command({
 					if (!skillFile[skill].statusses.buff) skillFile[skill].statusses.buff = []
 
 					skillFile[skill].statusses.buff.push([skillFile[skill].debuffuser, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
+					if (skillFile[skill].buffchance == 0) skillFile[skill].buffchance = 100
 					delete skillFile[skill].debuffuser;
 					delete skillFile[skill].buffchance;
 					delete skillFile[skill].debuffCount;
@@ -1784,6 +1788,7 @@ commands.updateskills = new Command({
 				if (!skillFile[skill].extras) skillFile[skill].extras = {};
 
 				if (skillFile[skill].buff) {
+					if (skillFile[skill].buffchance == 0) skillFile[skill].buffchance = 100
 					if (!skillFile[skill].extras.buff) skillFile[skill].extras.buff = []
 
 					skillFile[skill].extras.buff.push([skillFile[skill].buff, skillFile[skill].buffCount ? skillFile[skill].buffCount : 1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
@@ -1792,6 +1797,7 @@ commands.updateskills = new Command({
 					delete skillFile[skill].buffCount;
 				} 
 				if (skillFile[skill].debuff) {
+					if (skillFile[skill].buffchance == 0) skillFile[skill].buffchance = 100
 					if (!skillFile[skill].extras.buff) skillFile[skill].extras.buff = []
 
 					skillFile[skill].extras.buff.push([skillFile[skill].debuff, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
@@ -1800,6 +1806,7 @@ commands.updateskills = new Command({
 					delete skillFile[skill].debuffCount;
 				}
 				if (skillFile[skill].debuffuser) {
+					if (skillFile[skill].buffchance == 0) skillFile[skill].buffchance = 100
 					if (!skillFile[skill].extras.buff) skillFile[skill].extras.buff = []
 
 					skillFile[skill].extras.buff.push([skillFile[skill].debuffuser, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
@@ -1887,11 +1894,14 @@ commands.updateskills = new Command({
 				if (skillFile[skill].verse) {
 					switch (skillFile[skill].verse[0]) {
 						case 'heal':
-							skillFile[skill].extras.healverse = [[skillFile[skill].verse[1], 3, '%ENEMY% is now shrowded in a healing aura']];
+							skillFile[skill].extras.healverse = [[skillFile[skill].verse[1], 3, '%ENEMY% is now shrowded in a healing aura']]; //amount, turns, message
+							break;
 						case 'power':
-							skillFile[skill].extras.powerverse = [[skillFile[skill].verse[1], 3, '%ENEMY% is now shrowded in a power aura']];
+							skillFile[skill].extras.powerverse = [[skillFile[skill].verse[1], 3, '%ENEMY% is now shrowded in a power aura']]; //amount, turns, message
+							break;
 						case 'spread':
-							skillFile[skill].extras.spreadverse = [[skillFile[skill].verse[1], 3, '%ENEMY% is now shrowded in a spread aura']];
+							skillFile[skill].extras.spreadverse = [[skillFile[skill].verse[1], 3, '%ENEMY% is now shrowded in a spread aura']]; //amount, turns, message
+							break;
 					}
 					delete skillFile[skill].verse;
 				}
@@ -1947,7 +1957,7 @@ commands.updateskills = new Command({
 				}
 
 				if (skillFile[skill].needlessthan) {
-					skillFile[skill].extras.needlessthan = [[skillFile[skill].needlessthan, 'percent']]; // amount, type
+					skillFile[skill].extras.needlessthan = [[skillFile[skill].needlessthan, 'hppercent']]; // amount, type
 					delete skillFile[skill].needlessthan;
 				}
 
@@ -1966,6 +1976,11 @@ commands.updateskills = new Command({
 
 			if (skillFile[skill].levelLock) skillFile[skill].levellock = skillFile[skill].levelLock;
 			delete skillFile[skill].levelLock;
+
+			if (skillFile[skill].status) {
+				if (skillFile[skill].status == 'illness') skillFile[skill].status = 'irradiation';
+				else if (skillFile[skill].status.includes('illness')) skillFile[skill].status[skillFile[skill].status.indexOf('illness')] = 'irradiation';
+			}
 		}
 		fs.writeFileSync(dataPath+'/json/skills.json', JSON.stringify(skillFile, null, '    '));
 		message.react('👍');
