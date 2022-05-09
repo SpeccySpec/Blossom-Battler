@@ -66,7 +66,7 @@ commands.pvpleaderboards = new Command({
 		type: "Word",
 	}],
 	func: (message, args) => {
-		settings = setUpSettings(message.guild.id)
+		let settings = setUpSettings(message.guild.id)
 
 		if (!settings['pvpstuff'] || settings['pvpstuff'].length <= 2) {
 			settings['pvpstuff'] = {
@@ -198,7 +198,7 @@ commands.startbattle = new Command({
 					pets: {},
 				},
 				{
-					name: "",
+					name: "Enemies",
 					enemyteam: true,
 					forcehorde: true, // more than 4 enemies mean some will be put into backup and automatically switched in, either by the team leader, or once an enemy dies.
 					members: [],
@@ -308,7 +308,7 @@ commands.startbattle = new Command({
 
 		message.channel.send(`Team ${args[0]} encountered some enemies!`);
 		setTimeout(function() {
-//			advanceTurn(btl, message.guild.id)
+			advanceTurn(battle)
         }, 500)
 	}
 })

@@ -244,3 +244,12 @@ commands.help = new Command({
 		message.channel.send({embeds: [DiscordEmbed]});
 	}
 })
+
+let inviteLink = 'https://discord.com/oauth2/authorize?client_id=957671901197647912&scope=bot&permissions=319441726528'
+
+commands.invite = new Command({
+	desc: "Invite Blossom Battler to another server!",
+	section: "misc",
+	func: (message, args) => {
+	}
+})

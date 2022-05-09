@@ -32,3 +32,6 @@ getCharFromId = (id, btl) => {
 
 	return btl.teams[0].members[0];
 }
+
+resetEffects = (char) => {
+}

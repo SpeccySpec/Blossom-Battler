@@ -2011,34 +2011,34 @@ commands.liststatus = new Command({
 
 		let statusDesc = {
 			// Physical
-			burn: '💥Take 1/10th of max HP damage each turn until cured, or you reach one hp. Halves ATK stat.',
-			bleed: '💥Take 1/10th of max HP damage each until cured, or the inflicted is defeated.',
-			freeze: '💥Immobilized for one turn.',
-			paralyze: '💥Immobilized for one turn.',
-			poison: '💥Take 1/10th of max HP damage each turn until cured, or you reach one hp. Halves MAG stat.',
-			dazed: '💥Unable to use any physical skills for 2 turns.',
-			hunger: '💥ATK & MAG halved.',
-			blind: '💥PRC and AGL halved.',
-			irradiation: '💥Switch 3 random stats for 3 turns.',
+			burn: '<:physical:973077052129423411>Take 1/10th of max HP damage each turn until cured, or you reach one hp. Halves ATK stat.',
+			bleed: '<:physical:973077052129423411>Take 1/10th of max HP damage each until cured, or the inflicted is defeated.',
+			freeze: '<:physical:973077052129423411>Immobilized for one turn.',
+			paralyze: '<:physical:973077052129423411>Immobilized for one turn.',
+			poison: '<:physical:973077052129423411>Take 1/10th of max HP damage each turn until cured, or you reach one hp. Halves MAG stat.',
+			dazed: '<:physical:973077052129423411>Unable to use any physical skills for 2 turns.',
+			hunger: '<:physical:973077052129423411>ATK & MAG halved.',
+			blind: '<:physical:973077052129423411>PRC and AGL halved.',
+			irradiation: '<:physical:973077052129423411>Switch 3 random stats for 3 turns.',
 
 			// Mental
-			dizzy: '🌀Accuracy of all skills halved for 3 turns.',
-			sleep: '🌀Immobilized for 2 turns, restore 1/20th of HP & MP while affected.',
-			despair: '🌀Lose 1/10th of max MP every turn until cured. Downs the inflicted once they reach 0MP.',
-			brainwash: '🌀Use a random move on the incorrect target for 2 turns.',
-			fear: '🌀50% chance to be immobilized but cured from the status.',
-			rage: '🌀Forced to use stronger melee attack on a random target for 2 turns.',
-			ego: '🌀Unnable to use heal skills for 3 turns.',
-			silence: '🌀Unable to use any magical skills for 2 turns.',
-			infatuation: '🌀50% chance to hault attack. Stacks with other status effects.',
-			confusion: '🌀50% chance to damage self when attacking. Stacks with other status effects.',
-			sensitive: '🌀Debuff a random stat once hit a single time per opponent for 3 turns.',
+			dizzy: '<:mental:973077052053921792>Accuracy of all skills halved for 3 turns.',
+			sleep: '<:mental:973077052053921792>Immobilized for 2 turns, restore 1/20th of HP & MP while affected.',
+			despair: '<:mental:973077052053921792>Lose 1/10th of max MP every turn until cured. Downs the inflicted once they reach 0MP.',
+			brainwash: '<:mental:973077052053921792>Use a random move on the incorrect target for 2 turns.',
+			fear: '<:mental:973077052053921792>50% chance to be immobilized but cured from the status.',
+			rage: '<:mental:973077052053921792>Forced to use stronger melee attack on a random target for 2 turns.',
+			ego: '<:mental:973077052053921792>Unnable to use heal skills for 3 turns.',
+			silence: '<:mental:973077052053921792>Unable to use any magical skills for 2 turns.',
+			infatuation: '<:mental:973077052053921792>50% chance to hault attack. Stacks with other status effects.',
+			confusion: '<:mental:973077052053921792>50% chance to damage self when attacking. Stacks with other status effects.',
+			sensitive: '<:mental:973077052053921792>Debuff a random stat once hit a single time per opponent for 3 turns.',
 
 			// Positive Physical
-			mirror: '💥Positive Status Effect. Immobilized for 3 turns. Repel magic skills.',
+			mirror: '<:physical:973077052129423411>Positive Status Effect. Immobilized for 3 turns. Repel magic skills.',
 
 			// Positive Mental
-			happy: '🌀Positive Status Effect. LUK and AGL increased, PRC decreased. Can still be teched on your opponents.'
+			happy: '<:mental:973077052053921792>Positive Status Effect. LUK and AGL increased, PRC decreased. Can still be teched on your opponents.'
 		}
 
 		for (const i in statusEffects) {
