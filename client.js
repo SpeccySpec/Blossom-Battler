@@ -481,6 +481,13 @@ let tempEnemyQuote = fs.readFileSync(dataPath+'/dailyenemyquote.txt', {flag: 'as
 if (tempEnemyQuote && tempEnemyQuote != '')
 dailyEnemyQuote = JSON.parse(tempEnemyQuote);
 
+// Daily Ship - Resets at midnight
+dailyShip = {}
+
+let tempShip = fs.readFileSync(dataPath+'/dailyship.txt', {flag: 'as+'});
+if (tempShip && tempShip != '')
+dailyShip = JSON.parse(tempShip);
+
 function resetDailies() {
 	dailyQuote = {};
 	dailySkill = 'none';
@@ -829,12 +836,12 @@ function getDateAfterTwoWeeks() {
 
 checkShips();
 
+function resetShips() {
+	shipFile = {};
+	fs.writeFileSync(`${dataPath}/json/ships.json`, '{}');
+}
+
 function checkShips() {
-	function resetShips() {
-		shipFile = {};
-		fs.writeFileSync(`${dataPath}/json/ships.json`, '{}');
-	}
-	
 	let lastWeek = fs.readFileSync(dataPath + '/datein2weeks.txt', { flag: 'as+' });
 	const today = new Date();
 	if (lastWeek && lastWeek <= today.toISOString()) {

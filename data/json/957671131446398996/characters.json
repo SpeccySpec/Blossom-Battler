@@ -13060,7 +13060,9 @@
                 "bless",
                 "psychic"
             ],
-            "block": [],
+            "block": [
+                "spirit"
+            ],
             "repel": [],
             "drain": [
                 "sound"
