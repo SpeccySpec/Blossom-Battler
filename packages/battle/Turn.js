@@ -52,6 +52,11 @@ doTurn = (btl) => {
 	for (let skill of char.skills) {
 		// Start Of Turn passives
 		if (skill.type === 'passive') {
+			for (let i in skill.passive) {
+				if (passiveList[i] && passiveList[i].onTurn) {
+					passiveList[i].onTurn(btl, char, skill.passive[i])
+				}
+			}
 		}
 	}
 }
@@ -100,7 +105,7 @@ advanceTurn = (btl) => {
 
 	// If there's only one team alive...
 	if (teamsAlive <= 1) {
-		let party = btl.teams[lastAlive];
+		let party = btl.teams[lastAlive] ?? btl.teams[0];
 
 		if (btl.pvp) {
 			pvpWin(btl, lastAlive);

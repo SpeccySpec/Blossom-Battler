@@ -308,7 +308,7 @@ commands.startbattle = new Command({
 
 		message.channel.send(`Team ${args[0]} encountered some enemies!`);
 		setTimeout(function() {
-//			advanceTurn(btl, message.guild.id)
+			advanceTurn(battle)
         }, 500)
 	}
 })

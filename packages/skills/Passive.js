@@ -1,4 +1,5 @@
 passiveList = {
+	// On Attack.
 	boost: {
 		name: "Boost",
 		desc: "_<Element> <Percentage>_\nBoosts the powers of skills of a specific element. Values for <Percentage> that are less than 100% will actually have negative effects! Negative values may even heal the foe... somehow.",
@@ -6,6 +7,103 @@ passiveList = {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Element>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <Percentage>!");
 			makePassive(skill, "boost", [extra1.toLowerCase(), parseInt(extra2)]);
+			return true;
+		}
+	},
+
+	moodswing: {
+		name: "Mood Swing",
+		desc: "_<Percentage Boost/Decrease> <Turns>_\nEvery <Turns> turns, your mood will switch from Calm to Angry and back, buffing/nerfing skills respectively.",
+		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+			if (!extra1 || parseFloat(extra1) < 1) return message.channel.send("You didn't supply anything for <Element>!");
+			if (!extra2 || parseInt(extra2) < 1) return message.channel.send("You didn't supply anything for <Percentage>!");
+			makePassive(skill, "boost", [parseFloat(extra1), parseInt(extra2)]);
+			return true;
+		}
+	},
+
+	berserk: {
+		name: "Berserk",
+		desc: "_<Percentage Multiplier> <Highest HP Percent>_\n.With more HP, the user is more willing to fight. <Percentage Multiplier> should be over 100%... or you might get the opposite!",
+		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+			if (!extra1 || parseFloat(extra1) < 1) return message.channel.send("You didn't supply anything for <Element>!");
+			if (!extra2 || parseFloat(extra2) < 1) return message.channel.send("You didn't supply anything for <Percentage>!");
+			makePassive(skill, "boost", [parseFloat(extra1), parseFloat(extra2)]);
+			return true;
+		}
+	},
+
+	enraged: {
+		name: "Enraged",
+		desc: "_<Percentage Multiplier> <Highest HP Percent>_\n.With less HP, the user is more angered. <Percentage Multiplier> should be over 100%... or you might get the opposite!",
+		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+			if (!extra1 || parseFloat(extra1) < 1) return message.channel.send("You didn't supply anything for <Element>!");
+			if (!extra2 || parseFloat(extra2) < 1) return message.channel.send("You didn't supply anything for <Percentage>!");
+			makePassive(skill, "boost", [parseFloat(extra1), parseFloat(extra2)]);
+			return true;
+		}
+	},
+
+	// Start Of Turn
+	heal: {
+		name: "Heal",
+		desc: "_<Amount> <Stat>_\nRestores <Amount> of max <Stat> on the start of your turn, <Stat> being either HP, HPPercent, MP, MPPercent, or LB.",
+		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+			if (!extra1 || parseInt(extra1) < 1) return message.channel.send("You didn't supply anything for <Amount>!");
+			if (!extra2) return message.channel.send("You didn't supply anything for <Stat>!");
+			
+			let stat = extra2.toLowerCase();
+			if (stat != 'hp' && stat != 'mp' && stat != 'hppercent' && stat != 'mppercent' && stat != 'lb')
+				return message.channel.send("You entered an invalid value for <Stat>! It can be either HP, HPPercent, MP, MPPercent, or LB.");
+
+			makePassive(skill, "heal", [parseInt(extra1), stat]);
+			return true;
+		},
+		onturn: function(btl, char, vars) {
+			let settings = setUpSettings(btl.guild.id);
+
+			switch(vars[1].toLowerCase()) {
+				case 'mp':
+					char.mp += parseInt(vars[0]);
+					btl.channel.send(`${char.name}'s MP was restored by ${vars[0]}!`);
+					break;
+
+				case 'lb':
+					if (settings.mechanics.limitbreaks) {
+						char.lbpercent += parseInt(vars[0]);
+						btl.channel.send(`${char.name}'s LB% was restored by ${vars[0]}!`);
+					}
+
+					break;
+
+				case 'hppercent':
+					char.hp += (char.maxhp/100)*parseInt(vars[0]);
+					btl.channel.send(`${char.name}'s HP was restored by ${(char.maxhp/100)*parseInt(vars[0])}!`);
+					break;
+
+				case 'mppercent':
+					char.mp += (char.maxmp/100)*parseInt(vars[0]);
+					btl.channel.send(`${char.name}'s MP was restored by ${(char.maxmp/100)*parseInt(vars[0])}!`);
+					break;
+				
+				default:
+					char.hp += parseInt(vars[0]);
+					btl.channel.send(`${char.name}'s HP was restored by ${vars[0]}!`);
+					break;
+			}
+
+			char.hp = Math.min(char.maxhp, char.hp);
+			char.hp = Math.min(char.maxmp, char.mp);
+			return true;
+		}
+	},
+
+	curestatus: {
+		name: "Cure Status",
+		desc: "_<Chance>_\n<Chance>% chance to cure a negative status effect on the start of your turn.",
+		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+			if (!extra1 || parseFloat(extra1) < 1) return message.channel.send("You didn't supply anything for <Amount>!");
+			makePassive(skill, "curestatus", [parseFloat(extra1)]);
 			return true;
 		}
 	}
