@@ -237,7 +237,7 @@ longDescription = (charDefs, level, server, message) => {
 			} else {
 				let type = typeof skillFile[skill].type == 'object' ? elementEmoji[skillFile[skill].type[0]] : elementEmoji[skillFile[skill].type];
 				skillDesc += `${type}${skillFile[skill].name}`;
-				if (charDefs.autolearn && charDefs.autolearn[i]) skillDesc += '<:tick:973077052372701294>';
+				if (charDefs.autolearn && charDefs.autolearn[i]) skillDesc += ' <:tick:973077052372701294>';
 				skillDesc += `\n`;
 			}
 		}

@@ -1,1 +1,50 @@
-{}
+{
+    "Rulue": {
+        "loveParameter": 67
+    },
+    "Sky(B)": {
+        "loveParameter": 60
+    },
+    "Mario": {
+        "loveParameter": 68
+    },
+    "Ramia": {
+        "loveParameter": 21
+    },
+    "Golena": {
+        "loveParameter": 61
+    },
+    "CSST": {
+        "loveParameter": 4
+    },
+    "OldDarko": {
+        "loveParameter": 14
+    },
+    "Dawn": {
+        "loveParameter": 68
+    },
+    "Bow-(Non-Canon)": {
+        "loveParameter": 77
+    },
+    "Carlo": {
+        "loveParameter": 92
+    },
+    "Viridian": {
+        "loveParameter": 29
+    },
+    "PhTest": {
+        "loveParameter": 88
+    },
+    "Paradise": {
+        "loveParameter": 77
+    },
+    "Ayumi": {
+        "loveParameter": 8
+    },
+    "Ira": {
+        "loveParameter": 17
+    },
+    "Lanagu(C)": {
+        "loveParameter": 29
+    }
+}
