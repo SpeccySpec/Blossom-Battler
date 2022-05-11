@@ -186,7 +186,6 @@ const affinityScores = {
 
 longDescription = (charDefs, level, server, message) => {
 	let char = objClone(charDefs);
-	console.log(char);
 
 	let dispLevel = '';
 	let settings = setUpFile(`${dataPath}/json/${server}/settings.json`);
@@ -468,8 +467,8 @@ transformationDesc = (char, name, server, message) => {
 
 	if (char.skill && char.skill != '') {
 		let skillTxt = `${elementEmoji[skillFile[char.skill].type]}${skillFile[char.skill].name}`
-		if (char.autolearn) skillTxt += '<:tick:973077052372701294>';
-		DiscordEmbed.fields.push({ name: 'Signature Skill', value: skillTxt, inline: true });
+		if (char.autolearn) skillTxt += ' <:tick:973077052372701294>';
+		DiscordEmbed.fields.push({ name: 'Signature Skill', value: skillTxt, inline: false });
 	}
 
 	return DiscordEmbed;

@@ -134,7 +134,7 @@ function statusDesc(skillDefs) {
 	}
 
 	if (hasStatus(skillDefs, 'mimic')) {
-		finalText += `Mimics **an ally or foe**.\n`
+		finalText += `Mimics **an ally or foe** for **${skillDefs.statusses.mimic[0][0]}** turns.\n`
 	}
 
 	if (hasStatus(skillDefs, 'clone')) {
@@ -203,6 +203,10 @@ function statusDesc(skillDefs) {
 			finalText += ` **Magic** damage by ${skillDefs.statusses.mindcharge[0]}x for one turn`;
 		}
 		finalText += `.\n`
+	}
+
+	if (hasStatus(skillDefs, 'orgiamode')) {
+		finalText += `Modifies caster's ATK and MAG by **${skillDefs.statusses.orgiamode[0][0]}**x and END by **${skillDefs.statusses.orgiamode[0][1]}**x for **${skillDefs.statusses.orgiamode[0][2]}** turns. Falls asleep afterwards.\n`
 	}
 
 	if (hasStatus(skillDefs, 'chaosstir')) {
@@ -533,6 +537,31 @@ function atkDesc(skillDefs, settings) {
 }
 
 skillDesc = (skillDefs, skillName, server) => {
+	let userTxt = ''
+	if (skillDefs.originalAuthor) {
+		if (skillDefs.originalAuthor === 'Default')
+			userTxt = 'Default/Official';
+		else {
+			let user = client.users.fetch(skillDefs.originalAuthor)
+			userTxt = user.username
+		}
+	} else
+		userTxt = 'Default/Official';
+
+	let type = ''
+	if (typeof skillDefs.type === 'string')
+		type = `${elementEmoji[skillDefs.type]}`;
+	else if (typeof skillDefs.type === 'object') {
+		for (const i in skillDefs.type) type += `${elementEmoji[skillDefs.type[i]]}`;
+	}
+
+	let color = elementColors[(typeof skillDefs.type === 'string') ? skillDefs.type : skillDefs.type[0]];
+
+	let DiscordEmbed = new Discord.MessageEmbed()
+		.setColor(color)
+		.setTitle(`${type}${skillDefs.name ? skillDefs.name : skillName} *(${userTxt})*`)
+	
+	
 	let settings = setUpSettings(server);
 	var finalText = ``;
 	if (skillDefs.type != "status" && skillDefs.type != "passive") {
@@ -540,38 +569,23 @@ skillDesc = (skillDefs, skillName, server) => {
 			finalText += 'Defeats the foe in **one shot**!';
 		else {
 			if (skillDefs.type === 'heal') {
-				for (const i in skillDefs.heal) {
-					switch (i) {
-						case 'fullheal':
-							finalText += '**Fully heals**';
-							break;
-						case 'statusheal':
-							finalText += `Cures **${skillDefs.heal[i][0]} ailments**`;
-							break;
-						case 'healmp':
-							finalText += `Heals **around ${skillDefs.heal[i][0]} MP**`;
-							break;
-						case 'default':
-							finalText += `Heals **around ${skillDefs.heal[i][0]} HP**`;
-							break;
-						case 'regenerate':
-							finalText += `Regenerates **around ${skillDefs.heal[i][0][0]} HP** for **${skillDefs.heal[i][0][1]} turns**`;
-							break;
-						case 'invigorate':
-							finalText += `Regenerates **around ${skillDefs.heal[i][0][0]} MP** for **${skillDefs.heal[i][0][1]} turns**`;
-							break;
-						case 'sacrifice':
-							finalText += `${skillDefs.heal[i][0] > 0 ? `**Leaves the caster's health at ${skillDefs.heal[i][0]}**` : '**Sacrifices the caster**'}`;
-							break;
-						case 'revive':
-							finalText += `**Revives** the target to 1/${skillDefs.heal[i][0]} of their max HP`;
-							break;
-						case 'wish':
-							finalText += `Heals after **${skillDefs.heal[i][0]} turns**`;
-							break;
-					}
-					if (i < Object.keys(skillDefs.heal).length-1) finalText += '\n';
-				}
+				if (hasHealType(skillDefs, 'fullheal')) finalText += '**Fully heals**\n';
+
+				if (hasHealType(skillDefs, 'default')) finalText += `Heals **around ${skillDefs.heal.default[0]} HP**\n`;
+				if (hasHealType(skillDefs, 'healmp')) finalText += `Heals **around ${skillDefs.heal.healmp[0]} MP**\n`;
+
+				if (hasHealType(skillDefs, 'regenerate')) finalText += `Regenerates **around ${skillDefs.heal.regenerate[0][0]} HP** for **${skillDefs.heal.regenerate[0][1]} turns**\n`;
+				if (hasHealType(skillDefs, 'invigorate')) finalText += `Regenerates **around ${skillDefs.heal.invigorate[0][0]} MP** for **${skillDefs.heal.invigorate[0][1]} turns**\n`;
+
+				if (hasHealType(skillDefs, 'revive')) finalText += `**Revives** the target to 1/${skillDefs.heal.revive[0]} of their max HP\n`;
+
+				if (hasHealType(skillDefs, 'statusheal')) finalText += `Cures **${skillDefs.heal.statusheal[0]} ailments**\n`;
+				
+				if (hasHealType(skillDefs, 'sacrifice')) finalText += `${skillDefs.heal.sacrifice[0] > 0 ? `**Leaves the caster's health at ${skillDefs.heal.sacrifice[0]}**` : '**Sacrifices the caster**'}\n`;
+				
+				if (hasHealType(skillDefs, 'wish')) finalText += `Heals after **${skillDefs.heal.wish[0]} turns**\n`;
+
+				finalText = finalText.slice(0, -1);
 			} else
 				finalText += `Has **${skillDefs.pow}** Power`;
 		}
@@ -667,7 +681,7 @@ skillDesc = (skillDefs, skillName, server) => {
 			}
 
 			for (const i in skillDefs.status) {
-				finalText += `**${skillDefs.status[i]}**`
+				finalText += `**${statusEmojis[skillDefs.status[i]]}${skillDefs.status[i]}**`
 				if (i == skillDefs.status.length-2)
 					finalText += ' or '
 				else if (i >= skillDefs.status.length-1)
@@ -677,9 +691,9 @@ skillDesc = (skillDefs, skillName, server) => {
 			}
 		} else if (skillDefs.status !== "none" && skillDefs.type != "heal") {
 			if (skillDefs.statuschance) {
-				finalText += `Has a **${skillDefs.statuschance}%** chance of inflicting **${skillDefs.status}**.\n`;
+				finalText += `Has a **${skillDefs.statuschance}%** chance of inflicting **${statusEmojis[skillDefs.status]}${skillDefs.status}**.\n`;
 			} else if (!skillDefs.statuschance || skillDefs.statuschance >= 100) {
-				finalText += `Guaranteed to inflict **${skillDefs.status}**.\n`;
+				finalText += `Guaranteed to inflict **${statusEmojis[skillDefs.status]}${skillDefs.status}**.\n`;
 			}
 		}
 	}
@@ -701,27 +715,28 @@ skillDesc = (skillDefs, skillName, server) => {
 	}
 
 	if (skillDefs.preskills) {
-		finalText += '\nPre Skills:```diff\n'
+		let preskillText = '```diff\n'
 		for (const i in skillDefs.preskills) {
-			finalText += `- ${skillDefs.preskills[i][0]}, Lv${skillDefs.preskills[i][1]}\n`
+			preskillText += `- ${skillFile[skillDefs.preskills[i][0]].name} (${skillDefs.preskills[i][0]}), Lv${skillDefs.preskills[i][1]}\n`
 		}
-		finalText += '```\n'
+		preskillText += '```\n'
+
+		DiscordEmbed.fields.push({name: 'Pre Skills:', value: preskillText, inline: false})
 	}
 
 	if (skillDefs.evoskills) {
-		if (skillDefs.preskills) finalText = finalText.slice(0, -1)
-		finalText += '\nEvo Skills:```diff\n'
+		let evoskilltext = '```diff\n'
 		for (const i in skillDefs.evoskills) {
-			finalText += `- ${skillDefs.evoskills[i][0]}, Lv${skillDefs.evoskills[i][1]}\n`
+			evoskilltext += `+ ${skillFile[skillDefs.evoskills[i][0]].name} (${skillDefs.evoskills[i][0]}), Lv${skillDefs.evoskills[i][1]}\n`
 		}
-		finalText += '```\n'
+		evoskilltext += '```\n'
+
+		DiscordEmbed.fields.push({name: 'Evo Skills:', value: evoskilltext, inline: false})
 	}
 
 	if (skillDefs.levellock) finalText += skillDefs.levellock != 'unobtainable' ? `🔒 *Skill Locked until level **${skillDefs.levellock}***\n` : '🔒 *Skill Unobtainable*\n';
 
-	if (skillDefs.desc) finalText += `\n*${skillDefs.desc}*`;
-	
-	finalText += '\n\n**Known By**:'
+	if (skillDefs.desc) DiscordEmbed.fields.push({name: 'Description:', value: skillDefs.desc, inline: false})
 
 	var charFile = setUpFile(`${dataPath}/json/${server}/characters.json`)
 	var enmFile = setUpFile(`${dataPath}/json/${server}/enemies.json`)
@@ -748,32 +763,9 @@ skillDesc = (skillDefs, skillName, server) => {
 		}
 	}
 
-	finalText += `\n${knownBy}`
-	
-	let userTxt = ''
-	if (skillDefs.originalAuthor) {
-		if (skillDefs.originalAuthor === 'Default')
-			userTxt = 'Default/Official';
-		else {
-			let user = client.users.fetch(skillDefs.originalAuthor)
-			userTxt = user.username
-		}
-	} else
-		userTxt = 'Default/Official';
+	if (knownBy != "") DiscordEmbed.fields.push({name: 'Known By:', value: knownBy, inline: false})
 
-	let type = ''
-	if (typeof skillDefs.type === 'string')
-		type = `${elementEmoji[skillDefs.type]}`;
-	else if (typeof skillDefs.type === 'object') {
-		for (const i in skillDefs.type) type += `${elementEmoji[skillDefs.type[i]]}`;
-	}
-
-	let color = elementColors[(typeof skillDefs.type === 'string') ? skillDefs.type : skillDefs.type[0]];
-
-	let DiscordEmbed = new Discord.MessageEmbed()
-		.setColor(color)
-		.setTitle(`${type}${skillDefs.name ? skillDefs.name : skillName} *(${userTxt})*`)
-		.setDescription(finalText ?? 'Invalid Description :(')
+	DiscordEmbed.setDescription(finalText ?? 'Invalid Description :(')
 	return DiscordEmbed;
 }
 

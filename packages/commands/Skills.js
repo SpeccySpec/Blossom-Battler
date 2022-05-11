@@ -435,6 +435,82 @@ commands.liststatusextras = new Command({
 	}
 })
 
+commands.listhealextras = new Command({
+	desc: 'List the possible extras you can give a __heal__ skill.',
+	aliases: ['healextras', 'extrasheal', 'listextrasheal'],
+	section: "skills",
+	args: [
+		{
+			name: "Page Number",
+			type: "Num",
+			forced: false
+		},
+	],
+	func: (message, args) => {
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle('List of Heal Extras')
+			.setDescription('When using a heal skill, skills can have extra effects! These are called extras, and can be added with the "applyextra" command.')
+
+		let extras = []
+		for (let i in healList) {
+			extras.push({name: `${healList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: healList[i].desc, inline: true});
+		}
+
+		let firstOne = 0;
+		let lastOne = 5;
+
+		if (args[0]) {
+			firstOne += 6*(args[0]-1);
+			lastOne += 6*(args[0]-1);
+		}
+
+		for (let i = firstOne; i <= lastOne; i++) {
+			if (extras[i]) DiscordEmbed.fields.push(extras[i]);
+		}
+
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
+commands.listpassiveextras = new Command({
+	desc: 'List the possible extras you can give a __passive__ skill.',
+	aliases: ['passiveextras', 'extraspassive', 'listextraspassive'],
+	section: "skills",
+	args: [
+		{
+			name: "Page Number",
+			type: "Num",
+			forced: false
+		},
+	],
+	func: (message, args) => {
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle('List of Passive Extras')
+			.setDescription('When using a passive skill, skills can have extra effects! These are called extras, and can be added with the "applyextra" command.')
+
+		let extras = []
+		for (let i in passiveList) {
+			extras.push({name: `${passiveList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: passiveList[i].desc, inline: true});
+		}
+
+		let firstOne = 0;
+		let lastOne = 5;
+
+		if (args[0]) {
+			firstOne += 6*(args[0]-1);
+			lastOne += 6*(args[0]-1);
+		}
+
+		for (let i = firstOne; i <= lastOne; i++) {
+			if (extras[i]) DiscordEmbed.fields.push(extras[i]);
+		}
+
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
 commands.applyextra = new Command({
 	desc: 'A registered skill may have extra effects. These are called "extras". Apply an extra with this command, list all the ones possible with "listatkextras".',
 	aliases: ['extraapply'],
@@ -484,8 +560,25 @@ commands.applyextra = new Command({
 			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skillFile[args[0]].originalAuthor != message.author.id) {
 				return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
 			}
-			applyExtra(message, skillFile[args[0]], args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
+			
+			let type = typeof skillFile[args[0]].type == 'object' ? skillFile[args[0]].type[0] : skillFile[args[0]].type
+			switch (type) {
+				case 'passive':
+					applyPassive(message, skillFile[args[0]], args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
+					break;
+				case 'status':
+					applyStatus(message, skillFile[args[0]], args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
+					break;
+				case 'heal':
+					applyHeal(message, skillFile[args[0]], args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
+					break;
+				default:
+					applyExtra(message, skillFile[args[0]], args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
+					break;
+			}
+
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+			message.react('👍');
 		} else {
 			return message.channel.send(`${args[0]} is an invalid Skill Name!`)
 		}
@@ -514,10 +607,34 @@ commands.clearextras = new Command({
 				return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
 			}
 
-			if (!skillFile[args[0]].extras) return message.channel.send(`${skillFile[args[0]].name} has no extras!`);
-			if (!skillFile[args[0]].extras[args[1].toLowerCase()]) return message.channel.send(`${skillFile[args[0]].name} has no ${args[1]} extras!`);
+			let type = typeof skillFile[args[0]].type == 'object' ? skillFile[args[0]].type[0] : skillFile[args[0]].type
+			switch (type) {
+				case 'passive':
+					if (!skillFile[args[0]].passive) return message.channel.send(`${skillFile[args[0]].name} has no extras!`);
+					if (!skillFile[args[0]].passive[args[1].toLowerCase()]) return message.channel.send(`${skillFile[args[0]].name} has no ${args[1]} extras!`);
 
-			delete skillFile[args[0]].extras[args[1].toLowerCase()];
+					delete skillFile[args[0]].passive[args[1].toLowerCase()];
+					break;
+				case 'status':
+					if (!skillFile[args[0]].statusses) return message.channel.send(`${skillFile[args[0]].name} has no extras!`);
+					if (!skillFile[args[0]].statusses[args[1].toLowerCase()]) return message.channel.send(`${skillFile[args[0]].name} has no ${args[1]} extras!`);
+
+					delete skillFile[args[0]].statusses[args[1].toLowerCase()];
+					break;
+				case 'heal':
+					if (!skillFile[args[0]].heal) return message.channel.send(`${skillFile[args[0]].name} has no extras!`);
+					if (!skillFile[args[0]].heal[args[1].toLowerCase()]) return message.channel.send(`${skillFile[args[0]].name} has no ${args[1]} extras!`);
+
+					delete skillFile[args[0]].heal[args[1].toLowerCase()];
+					break;
+				default:
+					if (!skillFile[args[0]].extras) return message.channel.send(`${skillFile[args[0]].name} has no extras!`);
+					if (!skillFile[args[0]].extras[args[1].toLowerCase()]) return message.channel.send(`${skillFile[args[0]].name} has no ${args[1]} extras!`);
+
+					delete skillFile[args[0]].extras[args[1].toLowerCase()];
+					break;
+			}
+
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
 		} else {
@@ -648,6 +765,11 @@ commands.editskill = new Command({
 									if (skillFile[i].preskills[j][0] == args[0]) {
 										skillFile[i].preskills[j][0] = args[2];
 									}
+								}
+							}
+							if (skillFile[i].statusses && skillFile[i].statusses.tanukimation && skillFile[i].statusses.tanukimation[0][1] != null) {
+								if (skillFile[i].statusses.tanukimation[0][1] == args[0]) {
+									skillFile[i].statusses.tanukimation[0][1] = args[2];
 								}
 							}
 						}
@@ -1284,6 +1406,11 @@ commands.purgeskill = new Command({
 									}
 								}
 							}
+							if (skillFile[i].statusses && skillFile[i].statusses.tanukimation && skillFile[i].statusses.tanukimation[0][1] != null) {
+								if (skillFile[i].statusses.tanukimation[0][1] == args[0]) {
+									skillFile[i].statusses.tanukimation[0][1] = null;
+								}
+							}
 						}
 
 						let directoryList = fs.readdirSync(`${dataPath}/json`).filter(file => !isNaN(file));
@@ -1325,10 +1452,10 @@ commands.purgeskill = new Command({
 									}
 									charFile[char].skills = charFile[char].skills.filter(skill => skill != '');
 								}
-								if (charFile[character].transformations) {
-									for (transformation in charFile[character].transformations) {
-										if (charFile[character].transformations[transformation].skill == args[0]) {
-											charFile[character].transformations[transformation].skill = '';
+								if (charFile[char].transformations) {
+									for (transformation in charFile[char].transformations) {
+										if (charFile[char].transformations[transformation].skill == args[0]) {
+											charFile[char].transformations[transformation].skill = '';
 										}
 									}
 								}
@@ -1511,7 +1638,7 @@ commands.updateskills = new Command({
 								acc: skillFile[skill].counter.skill.acc,
 								crit: skillFile[skill].counter.skill.crit,
 								type: skillFile[skill].counter.skill.type,
-								atktype: 'mag',
+								atktype: 'magic',
 								affinitypow: 5
 							}]] //chance, power, accuracy, crit, type
 							delete skillFile[skill].counter;
@@ -1591,7 +1718,7 @@ commands.updateskills = new Command({
 					skillFile[skill].statusses.terrain = [[skillFile[skill].terrain]] //terrain
 					delete skillFile[skill].terrain;
 				} else if (skillFile[skill].reincarnate) {
-					skillFile[skill].statusses.reincarnate = [[1, 20, 25, 20, "%PLAYER% has summoned an undead", ["Agilao", "Bufula", "Zionga", "Garula", "Hanama", "Aques", "Psio", "Jino", "Diarama", "Makakaja", "Tarukaja"]]] //minimum of a stat, maximum of a stat, percentage of max HP and MP, level (used for calculating skill level locks) message, skills (in a separate message)
+					skillFile[skill].statusses.reincarnate = [[1, 20, 25, "%PLAYER% has summoned an undead %UNDEAD%"]] //minimum of a stat, maximum of a stat, percentage of max HP and MP, message
 					delete skillFile[skill].reincarnate;
 				} else if (skillFile[skill].makarakarn) {
 					skillFile[skill].statusses.makarakarn = [[true]] //true
@@ -1600,7 +1727,7 @@ commands.updateskills = new Command({
 					skillFile[skill].statusses.tetrakarn = [[true]] //true
 					delete skillFile[skill].tetrakarn;
 				} else if (skillFile[skill].mimic) {
-					skillFile[skill].statusses.mimic = [[true]] //true
+					skillFile[skill].statusses.mimic = [Object.values(skillFile[skill].mimic)] //true
 					delete skillFile[skill].mimic;
 				} else if (skillFile[skill].clone) {
 					skillFile[skill].statusses.clone = [[50, 50, 50]] //% of max HP, % of max MP, % of max stats
