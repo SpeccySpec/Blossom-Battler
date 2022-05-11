@@ -283,6 +283,26 @@ extrasList = {
 		}
 	},
 
+	forceformula: {
+		name: "Force Formula",
+		desc: "_<Formula> {Custom Formula}_\nForces a skill to use a different damage formula. If the formula is custom, you must supply a custom formula.",
+		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+			if (!extra1) return message.channel.send("You didn't supply anything for <Formula>!");
+
+			let damageFormulas = ['persona','pokemon','custom',]
+	
+			if (damageFormulas.includes(extra1.toLowerCase())) {
+				return message.channel.send('Invalid damage formula! Valid formulas are: persona, pokemon, custom')
+			}
+	
+			if (extra1.toLowerCase() == 'custom') {
+				return message.channel.send('Custom damage formulas are not yet supported!')
+			}
+
+			makeExtra(skill, "forceformula", [extra1.toLowerCase(), extra2]);
+		}
+	},
+
 	rollout: {
 		name: "Rollout",
 		desc: "_<Boost> <Max Boost> <Times>_\nBoost the skill's power by <Boost> every consecutive use, but the caster is locked to using it until power reaches <Max Boost>x or skill is used <Times> times in a row.",
