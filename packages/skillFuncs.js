@@ -494,6 +494,10 @@ function atkDesc(skillDefs, settings) {
 			finalText += `Forces techs from **${techs.join(', ')}**.\n`;
 		}
 
+		if (hasExtra(skillDefs, 'forceformula')) {
+			finalText += `Forces to use the **${skillDefs.extras.forceformula[0][0].charAt(0).toUpperCase() + skillDefs.extras.forceformula[0][0].slice(1)}**${skillDefs.extras.forceformula[0][0] == 'custom' ? `\`${skillDefs.extras.forceformula[0][1]}\`` : ''} formula.\n`;
+		}
+
 		if (hasExtra(skillDefs, 'rollout')) {
 			finalText += `Forced to repeat, boosting power by **${skillDefs.extras.rollout[0][0]}%** until **${skillDefs.extras.rollout[0][1]}x** pow is reached or for **${skillDefs.extras.rollout[0][2]}** turns.\n`;
 		}
