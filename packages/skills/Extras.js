@@ -118,7 +118,7 @@ extrasList = {
 
 	drain: {
 		name: "Drain",
-		desc: "_<Amount>_\nHeals the caster for 1/{Amount} of the damage dealt.",
+		desc: "_<Amount>_\nHeals the caster for 1/<Amount> of the damage dealt.",
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			makeExtra(skill, "drain", [parseInt(extra1) == 0 ? 1 : parseInt(extra1)]);
 			return true
