@@ -194,7 +194,7 @@ statusList = {
 
 	reincarnate: {
 		name: "Reincarnate",
-		desc: "_<Mininum Stat> <Maximum Stat> <Percent> <level> {Deploy Message}_\nSummons a level <Level> reincarnate to the caster's team. The reincarnate will have stats randomized between <Minimum Stat> and <Maximum Stat> and HP and MP at <Percent>% of caster's Max HP and Max MP. You can add flair to this skill with a {Deploy Message}. These can use %PLAYER% to replace with the caster, and %UNDEAD% to replace with the undead.",
+		desc: "_<Mininum Stat> <Maximum Stat> <Percent> {Deploy Message}_\nSummons a reincarnate to the caster's team. The reincarnate will have stats randomized between <Minimum Stat> and <Maximum Stat> and HP and MP at <Percent>% of caster's Max HP and Max MP. You can add flair to this skill with a {Deploy Message}. These can use %PLAYER% to replace with the caster, and %UNDEAD% to replace with the undead.",
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Minimum Stat>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <Maximum Stat>!");
