@@ -1228,6 +1228,13 @@ Command = class extends ArgList {
 		this.func = object.func
 		this.checkban = object.checkban
 		this.admin = object.admin
+		if (object.aliases) {
+			const aliases = object.aliases
+			object.section = "aliases"
+			object.aliases = null
+			for (const alias of aliases)
+				commands[alias] = new Command(object)
+		}
 	}
 
 	call(message, rawargs) {
@@ -1305,27 +1312,21 @@ client.on("guildCreate", (guild) => {
 })
 
 client.on("messageCreate", (message) => {
-	if (message.channel.type !== 'DM') makeDirectory(`${dataPath}/json/${message.guild.id}`);
-	if (message.author.bot) return;
-
+	if (message.channel.type !== 'DM')
+		makeDirectory(`${dataPath}/json/${message.guild.id}`);
+	if (message.author.bot)
+		return;
 	// Register commands
 	prefix = getPrefix(message.guild.id)
-	if (!message.content.startsWith(prefix)) return;
+	if (!message.content.startsWith(prefix))
+		return;
 	let args = [...message.content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
-	if (args.length == 0) return;
+	if (args.length == 0)
+		return;
 	let command = commands[args[0]];
-	if (!command) {
-		for (const i in commands) {
-			if (commands[i].aliases && commands[i].aliases.includes(args[0])) {
-				command = commands[i];
-				break;
-			}
-		}
-	}
-
 	args.shift()
-
-	if (!command) return;
+	if (!command)
+		return;
 	command.call(message, args)
 })
 
