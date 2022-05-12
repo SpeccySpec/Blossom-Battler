@@ -154,8 +154,8 @@ passiveList = {
 			if (parseFloat(extra3) < 1) return message.channel.send("You entered an invalid value for <Accuracy>!");
 
 			if (!Elements.includes(extra5.toLowerCase())) return message.channel.send("You entered an invalid value for <Element>!");
-			if (skill.type != 'strike' || skill.type != 'slash' || skill.type != 'pierce' || skill.type != 'explode')
-				return message.channel.send("That is not a physical element!");
+			if (extra5.toLowerCase() == 'status' || extra5.toLowerCase() == 'heal' || extra5.toLowerCase() == 'passive')
+				return message.channel.send("You can't use this element!");
 
 			makePassive(skill, "counterphys", [parseInt(extra1), {
 				name: skill.name,
@@ -184,10 +184,8 @@ passiveList = {
 			if (parseFloat(extra3) < 1) return message.channel.send("You entered an invalid value for <Accuracy>!");
 
 			if (!Elements.includes(extra5.toLowerCase())) return message.channel.send("You entered an invalid value for <Element>!");
-			if (skill.type != 'status' || skill.type != 'heal' || skill.type != 'passive')
-				return message.channel.send("That is not a magical element!");
-			if (skill.type == 'strike' || skill.type == 'slash' || skill.type == 'pierce')
-				return message.channel.send("That is not a magical element!");
+			if (extra5.toLowerCase() == 'status' || extra5.toLowerCase() == 'heal' || extra5.toLowerCase() == 'passive')
+				return message.channel.send("You can't use this element!");
 
 			makePassive(skill, "countermag", [parseInt(extra1), {
 				name: skill.name,
