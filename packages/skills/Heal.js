@@ -78,6 +78,7 @@ healList = {
 	statusheal: {
 		name: "Status Heal",
 		desc: "_<Status>_\nCures the target of the specified status. Accepts 'physical', 'mental' and 'all' as statuses.",
+		multiplelimiter: 0,
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Status>!");
 			extra1 = extra1.toLowerCase();
@@ -131,7 +132,17 @@ function makeHeal(skill, extra, func) {
 	if (!skill.heal) skill.heal = {};
 	if (!skill.heal[extra]) skill.heal[extra] = [];
 
-	skill.heal[extra][0] = func;
+	if (healList[extra].multiplelimiter && skill.heal[extra].length < 1) {
+		for (i in skill.heal[extra]) {
+			if (skill.heal[extra][i][healList[extra].multiplelimiter] === func[healList[extra].multiplelimiter]) {
+				skill.heal[extra][i] = func;
+				return true;
+			}
+		}
+		skill.heal[extra].push(func);
+	} else {
+		skill.heal[extra][0] = func;
+	}
 }
 
 // Checks if the skill has an extra

@@ -22,6 +22,7 @@ extrasList = {
 	needlessthan: {
 		name: "Need less than",
 		desc: '_<Percent> <Stat>_\nWill make the skill require less than <Percent>% of <Stat> for it to work.',
+		multiplelimiter: 1,
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1 || !extra2) return message.channel.send("You didn't supply enough arguments!");
 
@@ -59,6 +60,7 @@ extrasList = {
 	buff: {
 		name: "Stat Buff",
 		desc: "_<Stat> <Stages> <Chance>_\nWill buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
+		multiplelimiter: [0, 2],
 		applyfunc: function(message, skill, extra1, extra2, extra3) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
 			if (!utilityFuncs.validStat(extra1)) return message.channel.send("That's not a valid stat!");
@@ -73,6 +75,7 @@ extrasList = {
 	powerbuff: {
 		name: "Power Buff",
 		desc: "_<Stat> <Percent>_\nBoosts skill power with <Stat> buffs up to <Percent>%.",
+		multiplelimiter: 0,
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <Percent>!");
@@ -355,27 +358,14 @@ function makeExtra(skill, extra, func) {
 	if (!skill.extras) skill.extras = {};
 	if (!skill.extras[extra]) skill.extras[extra] = [];
 
-	let extrasthatcanbeinmultiples = ['needlessthan', 'buff', 'powerbuff']
-
-	if (extrasthatcanbeinmultiples.includes(extra)) {
-		let index = 0;
-		let stop = false;
-		for (let i in skill.extras[extra].length) {
-			switch (extra) {
-				case 'needlessthan':
-					stop = (skill.extras[extra][i][1] == func[1]);
-					break;
-				case 'buff':
-					stop = (skill.extras[extra][i][0] == func[0] && skill.extras[extra][i][2] == func[2]);
-					break;
-				case 'powerbuff':
-					stop = (skill.extras[extra][i][0] == func[0]);
-					break;
+	if (extrasList[extra].multiplelimiter && skill.extras[extra].length < 1) {
+		for (i in skill.extras[extra]) {
+			if (skill.extras[extra][i][extrasList[extra].multiplelimiter] === func[extrasList[extra].multiplelimiter]) {
+				skill.extras[extra][i] = func;
+				return true;
 			}
-			if (stop) break;
-			index++
 		}
-		skill.extras[extra][index] = func;
+		skill.extras[extra].push(func);
 	} else {
 		skill.extras[extra][0] = func;
 	}
@@ -396,67 +386,6 @@ applyExtra = (message, skill, skillExtra, extra1, extra2, extra3, extra4, extra5
 
 	extrasList[skillExtra.toLowerCase()].applyfunc(message, skill, extra1, extra2, extra3, extra4, extra5);
 	message.react('👍');
-	
-	/* === OLD EXTRAS HERE FOR REFERENCE ===
-
-	else if (extra1 === 'steal') {
-		skill.steal = parseInt(extra2);
-		skill.levelLock += (extra1 === 'steal') ? 20 : 8;
-	} else if (extra1 === 'powerbuff') {
-		if (utilityFuncs.validStat(extra2))
-			skill.powerbuff = [extra2.toLowerCase(), parseInt(extra3)];
-	} else if (extra1 === 'multistatus') {
-		if (skill.status && typeof skill.status === 'string')
-			skill.status = [skill.status]
-		else if (typeof skill.status === 'object')
-			skill.status = [skill.status[0]]
-		else
-			skill.status = []
-
-		if (utilityFuncs.validStatus(extra2)) skill.status.push(extra2);
-		if (utilityFuncs.validStatus(extra3)) skill.status.push(extra3);
-	} else if (extra1 === 'statcalc') {
-		if (utilityFuncs.validStat(extra2.toLowerCase()))
-			skill.statCalc = extra2.toLowerCase();
-	} else if (extra1 === 'hpcalc' || extra1 === 'mpcalc' || extra1 === 'feint' || extra1 === 'rest' || extra1 === 'stealmp' || extra1 === 'lonewolf' || extra1 === 'heavenwrath') {
-		skill[extra1] = true;
-		
-		if (extra1 === 'feint' || extra1 === 'stealmp')
-			skill.levelLock = Math.min(99, skill.levelLock+15);
-	} else if (extra1 === 'rollout') {
-		skill.rollout = parseFloat(extra2);
-
-		if (skill.rollout >= 75)
-			skill.levelLock = Math.min(99, skill.levelLock+60);
-		else if (skill.rollout >= 50)
-			skill.levelLock = Math.min(99, skill.levelLock+45);
-		else if (skill.rollout >= 25)
-			skill.levelLock = Math.min(99, skill.levelLock+30);
-		else
-			skill.levelLock = Math.min(99, skill.levelLock+15);
-	} else if (extra1 === 'forcetech') {
-		if (utilityFuncs.validStatus(extra2)) {
-			if (utilityFuncs.validStatus(extra3))
-				skill.forceTech = [extra2, extra3];
-			else
-				skill.forceTech = [extra2];
-		} else
-			return false;
-	// Verwex's Dual-Element Extra
-	} else if (extra1 === 'dualelement' || extra1 === 'dualtype') {
-		if (utilityFuncs.validType(extra2.toLowerCase()) && extra2.toLowerCase() != skill.type && extra2.toLowerCase() != 'passive' && extra2.toLowerCase() != 'status' && extra2.toLowerCase() != 'heal') {
-			skill.type = [(typeof skill.type === 'object') ? skill.type[0] : skill.type, extra2.toLowerCase()];
-		} else
-			return false;
-	} else if (extra1 === 'sustain' || extra1 === 'sustaindmg' || extra1 === 'susdmg') {
-		skill.susDmg = true; // AMONGUS
-	} else if (extra1 === 'reverse' || extra1 === 'reversedmg' || extra1 === 'revdmg') {
-		skill.revDmg = true; // AMONGUS
-	} else if (extra1 === 'powhit') {
-		skill.powHits = [parseInt(extra2), extra3 ? parseInt(extra3) : null]
-	} else
-		return false;
-	*/
 
 	return true;
 }
