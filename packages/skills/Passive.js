@@ -3,6 +3,7 @@ passiveList = {
 	boost: {
 		name: "Boost",
 		desc: "_<Element> <Percentage>_\nBoosts the powers of skills of a specific element. Values for <Percentage> that are less than 100% will actually have negative effects! Negative values may even heal the foe... somehow.",
+		multiplelimiter: 0,
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Element>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <Percentage>!");
@@ -48,6 +49,7 @@ passiveList = {
 	heal: {
 		name: "Heal",
 		desc: "_<Amount> <Stat>_\nRestores <Amount> of max <Stat> on the start of your turn, <Stat> being either HP, HPPercent, MP, MPPercent, or LB.",
+		multiplelimiter: 1,
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1 || parseInt(extra1) < 1) return message.channel.send("You didn't supply anything for <Amount>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <Stat>!");
@@ -104,6 +106,7 @@ passiveList = {
 	damage: {
 		name: "Damage",
 		desc: "_<Phys/Mag> <Damage> <Element>_\nInflicts <Damage> of <Element> damage to the target when attacked with a <Phys/Mag> skill.",
+		multiplelimiter: 0,
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Phys/Mag>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <Damage>!");
@@ -125,6 +128,7 @@ passiveList = {
 	dodge: {
 		name: "Dodge",
 		desc: "_<Phys/Mag> <Chance>_\nHas a <Chance>% chance to dodge attacks from a <Phys/Mag> skill.",
+		multiplelimiter: 0,
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Phys/Mag>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <Chance>!");
@@ -203,6 +207,7 @@ passiveList = {
 	status: {
 		name: "Status",
 		desc: "_<Status Effect> <Chance>_\nHas a <Chance>% chance of inflicting <Status Effect> on a fighter if they use a physical attack.",
+		multiplelimiter: 0,
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Status Effect>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <Chance>!");
@@ -227,6 +232,7 @@ passiveList = {
 	statusdodge: {
 		name: "Status Dodge",
 		desc: "_<Status Effect> <Chance>_\nHas a <Chance>% chance to avoid <Status Effect> from being inflicted. Accepts 'physical', 'mental' and 'all' as status effects.",
+		multiplelimiter: 0,
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Status Effect>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <Chance>!");
@@ -443,6 +449,7 @@ passiveList = {
 	elementstore: {
 		name: "Element Store",
 		desc: "_<Element> <Percent of Damage> <Chance>_\n<Chance>% chance to store <Damage Percent>% of damage taken from <Element> attacks to add up for the next attack. Stackable. Once hit, the stored damage is reset.",
+		multiplelimiter: 0,
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Element>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <Damage Percent>!");
@@ -465,30 +472,14 @@ function makePassive(skill, extra, func) {
 	if (!skill.passive) skill.passive = {};
 	if (!skill.passive[extra]) skill.passive[extra] = [];
 
-	let extrasthatcanbeinmultiples = ['boost', 'heal', 'damage', 'dodge', 'status', 'statusdodge', 'elementstore']
-
-	if (extrasthatcanbeinmultiples.includes(extra)) {
-		let index = 0;
-		let stop = false;
-		for (let i in skill.passive[extra].length) {
-			switch (extra) {
-				case 'boost':
-				case 'dodge':
-				case 'damage':
-				case 'dodge':
-				case 'status':
-				case 'statusdodge':
-				case 'elementstore':
-					stop = (skill.passive[extra][i][0] === func[0])
-					break;
-				case 'heal':
-					stop = (skill.passive[extra][i][1] === func[1])
-					break;
+	if (passiveList[extra].multiplelimiter && skill.passive[extra].length < 1) {
+		for (i in skill.passive[extra]) {
+			if (skill.passive[extra][i][passiveList[extra].multiplelimiter] === func[passiveList[extra].multiplelimiter]) {
+				skill.passive[extra][i] = func;
+				return true;
 			}
-			if (stop) break;
-			index++
 		}
-		skill.passive[extra][index] = func;
+		skill.passive[extra].push(func);
 	} else {
 		skill.passive[extra][0] = func;
 	}

@@ -17,6 +17,7 @@ statusList = {
 	buff: {
 		name: "Stat Buff",
 		desc: "_<Stat> <Stages> <Chance>_\nWill buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
+		multiplelimiter: [0, 2],
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
 			if (!utilityFuncs.validStat(extra1)) return message.channel.send("That's not a valid stat!");
@@ -346,7 +347,7 @@ function makeStatus(skill, extra, func) {
 	if (!skill.statusses) skill.statusses = {};
 	if (!skill.statusses[extra]) skill.statusses[extra] = [];
 
-	let extrasthatcanbeinmultiples = ['buff']
+	/*let extrasthatcanbeinmultiples = ['buff']
 
 	if (extrasthatcanbeinmultiples.includes(extra)) {
 		let index = 0;
@@ -357,6 +358,31 @@ function makeStatus(skill, extra, func) {
 			index++
 		}
 		skill.statusses[extra][index] = func;
+	} else {
+		skill.statusses[extra][0] = func;
+	}*/
+	if (statusList[extra].multiplelimiter && skill.statusses[extra].length < 1) {
+		for (i in skill.statusses[extra]) {
+			if (typeof skill.statusses[extra][i] == "number") {
+				if (skill.statusses[extra][i][statusList[extra].multiplelimiter] === func[statusList[extra].multiplelimiter]) {
+					skill.statusses[extra][i] = func;
+					return true;
+				}
+			} else {
+				let alltrue = true;
+				for (j in statusList[extra].multiplelimiter) {
+					if (skill.statusses[extra][i][statusList[extra].multiplelimiter[j]] !== func[statusList[extra].multiplelimiter[j]]) {
+						alltrue = false;
+						break;
+					}
+				}
+				if (alltrue) {
+					skill.statusses[extra][i] = func;
+					return true;
+				}
+			}
+		}
+		skill.statusses[extra].push(func);
 	} else {
 		skill.statusses[extra][0] = func;
 	}
