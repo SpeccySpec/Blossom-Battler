@@ -1799,30 +1799,19 @@ commands.listskills = new Command({
 							isConditionMet = false
 							if (skillFile[i].type == 'status') {
 								if (skillFile[i].statusses) {
-									for (const j in skillFile[i].statusses) {
-										if (skillFile[i].statusses[j].includes(args[a])) {
-											isConditionMet = true;
-											break;
-										}
-									}
+									isConditionMet = (skillFile[i].statusses[args[a]])
 								}
 							} else if (skillFile[i].type == 'heal') {
 								if (skillFile[i].heal) {
-									for (const j in skillFile[i].heal) {
-										if (skillFile[i].heal[j].includes(args[a])) {
-											isConditionMet = true;
-											break;
-										}
-									}
+									isConditionMet = (skillFile[i].heal[args[a]])
 								}
 							} else if (skillFile[i].type == 'passive') {
 								if (skillFile[i].passive) {
-									for (const j in skillFile[i].passive) {
-										if (skillFile[i].passive[j].includes(args[a])) {
-											isConditionMet = true;
-											break;
-										}
-									}
+									isConditionMet = (skillFile[i].passive[args[a]])
+								}
+							} else {
+								if (skillFile[i].extras) {
+									isConditionMet = (skillFile[i].extras[args[a]])
 								}
 							}
 							break;
