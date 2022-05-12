@@ -408,3 +408,97 @@ buildStatus = (message, args) => {
 		return false
 	}
 }
+
+// Ah you know what
+// This file shares names with Status Effects anyway lol
+// We might as well shove some extra stuff in here
+// statusEffectFuncs will be an object that doe ufnnye status
+statusEffectFuncs = {
+	burn: {
+		onturn: function(btl, char) {
+			let statusTxt = '';
+			let affinityTxt = '';
+
+			let dmg = Math.round(fighterDef.maxhp/10)
+			if (char.boss || char.miniboss) dmg = 5;
+
+			if (hasStatusAffinity(char, 'burn', 'weak')) {
+				dmg *= 2;
+				affinityTxt = affinityEmoji.weak;
+			} else if (hasStatusAffinity(char, 'burn', 'resist')) {
+				dmg /= 2;
+				affinityTxt = affinityEmoji.resist;
+			}
+
+			char.hp = Math.max(1, char.hp-dmg);
+			
+			return `${char.name} took ${dmg}${affinityTxt} damage from their burns!`
+		},
+		statmod: function(char, stats) {
+			if (hasStatusAffinity(char, 'burn', 'weak')) {
+				stats.mag /= 4;
+			} else if (hasStatusAffinity(char, 'burn', 'resist')) {
+				stats.mag /= 1.25;
+			} else {
+				stats.mag /= 2;
+			}
+
+			return stats;
+		}
+	},
+
+	poison: {
+		onturn: function(btl, char) {
+			let statusTxt = '';
+			let affinityTxt = '';
+
+			let dmg = Math.round(fighterDef.maxhp/10)
+			if (char.boss || char.miniboss) dmg = 5;
+
+			if (hasStatusAffinity(char, 'poison', 'weak')) {
+				dmg *= 2;
+				affinityTxt = affinityEmoji.weak;
+			} else if (hasStatusAffinity(char, 'poison', 'resist')) {
+				dmg /= 2;
+				affinityTxt = affinityEmoji.resist;
+			}
+
+			char.hp = Math.max(1, char.hp-dmg);
+			return `${char.name} took ${dmg}${affinityTxt} damage from their poison!`;
+		},
+		statmod: function(char, stats) {
+			if (hasStatusAffinity(char, 'poison', 'weak')) {
+				stats.mag /= 4;
+			} else if (hasStatusAffinity(char, 'poison', 'resist')) {
+				stats.mag /= 1.25;
+			} else {
+				stats.mag /= 2;
+			}
+
+			return stats;
+		}
+	},
+
+	bleed: {
+		onturn: function(btl, char) {
+			let statusTxt = '';
+			let affinityTxt = '';
+
+			let dmg = Math.round(fighterDef.maxhp/8)
+			if (char.boss || char.miniboss) dmg = 10;
+
+			if (hasStatusAffinity(char, 'burn', 'weak')) {
+				dmg *= 2;
+				affinityTxt = affinityEmoji.weak;
+			} else if (hasStatusAffinity(char, 'burn', 'resist')) {
+				dmg /= 2;
+				affinityTxt = affinityEmoji.resist;
+			}
+
+			char.hp = Math.max(0, char.hp-dmg);
+			if (char.hp <= 0) return `${char.name} took ${dmg}${affinityTxt} damage from their bleeding, being defeated!`;
+
+			return `${char.name} took ${dmg}${affinityTxt} damage from their bleeding!`;
+		}
+	}
+}

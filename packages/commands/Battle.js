@@ -215,13 +215,21 @@ commands.startbattle = new Command({
 		// Weather and stuff
 		if (args[2].toLowerCase() != 'none') {
 			if (!utilityFuncs.inArray(args[2].toLowerCase(), weathers)) return message.channel.send(`${args[2].toLowerCase()} is an invalid weather type!`);
-			battle.weather = args[2].toLowerCase();
+
+			battle.weather = {
+				type: args[2].toLowerCase(),
+				turns: -1
+			}
 		}
 
 		// Terrains and stuff
 		if (args[3].toLowerCase() != 'none') {
 			if (!utilityFuncs.inArray(args[3].toLowerCase(), terrains)) return message.channel.send(`${args[3].toLowerCase()} is an invalid terrain type!`);
-			battle.terrain = args[3].toLowerCase();
+
+			battle.terrain = {
+				type: args[3].toLowerCase(),
+				turns: -1
+			}
 		}
 
 		// Battle File!
@@ -253,6 +261,7 @@ commands.startbattle = new Command({
 				battle.teams[0].leaderskill = char.leaderskill;
 			}
 
+			char.team = 0;
 			battle.teams[0].members.push(char);
 		}
 
@@ -267,7 +276,8 @@ commands.startbattle = new Command({
 
 			setupBattleStats(char);
 
-			battle.teams[0].members.push(char);
+			char.team = 0;
+			battle.teams[0].backup.push(char);
 		}
 
 		// Set up Enemy Side.
@@ -287,10 +297,11 @@ commands.startbattle = new Command({
 
 			enmDesc += `${enemy.name} (LV${enemy.level})\n`;
 
+			enemy.team = 1;
 			if (battle.teams[1].members.length < 4) {
 				if (i <= 0 && enemy.leaderskill) {
 					enemy.leader = true;
-					battle.teams[0].leaderskill = enemy.leaderskill;
+					battle.teams[1].leaderskill = enemy.leaderskill;
 				}
 
 				battle.teams[1].members.push(enemy);

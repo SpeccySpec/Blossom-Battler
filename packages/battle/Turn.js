@@ -49,14 +49,30 @@ doTurn = (btl) => {
 
 	let statusTxt = '';
 
+	// Start Of Turn passives.
 	for (let skill of char.skills) {
-		// Start Of Turn passives
 		if (skill.type === 'passive') {
 			for (let i in skill.passive) {
-				if (passiveList[i] && passiveList[i].onTurn) {
-					passiveList[i].onTurn(btl, char, skill.passive[i])
+				if (passiveList[i] && passiveList[i].onturn) {
+					if (passiveList[i].multiple) {
+						for (let k in skill.passive[i]) statusTxt += passiveList[i].onturn(btl, char, skill.passive[i][k]);
+					} else
+						statusTxt += passiveList[i].onturn(btl, char, skill.passive[i]);
+
+					statusTxt += '\n';
 				}
 			}
+		}
+	}
+
+	// Status Effects.
+	if (char.status && char.statusturns && statusEffectFuncs[char.status.toLowerCase()]) {
+		statusTxt += statusEffectFuncs[char.status.toLowerCase()].onturn(btl, char);
+
+		char.statusturns--;
+		if (char.statusturns == 0) {
+			delete char.status;
+			delete char.statusturns;
 		}
 	}
 }
