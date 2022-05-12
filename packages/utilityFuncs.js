@@ -222,7 +222,7 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 			pets: 'negotiation defs',
 		}
 
-		let file = setUpFile(`${dataPath}/json/${message.guild.id}/${key}s.json`);
+		let file = setUpFile(`${dataPath}/json/${message.guild.id}/${jsons[type]}.json`);
 		if (!file[variable][jsonsvariables[type][0]] || (file[variable][jsonsvariables[type][0]] && Object.keys(file[variable][jsonsvariables[type][0]]).length == 0)) {
 			message.channel.send(`${variable} does not have any ${propernames[type]}!`);
 			return false
