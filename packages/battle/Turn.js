@@ -43,7 +43,31 @@ leaderSkillsAtBattleStart = (party) => {
 	}
 }
 
-doTurn = (btl) => {
+// Send an Interactable Turn Embed, buttons and all
+makeButton = (name, emoji, color) => {
+	let btnType = {
+		blue: 'PRIMARY',
+		grey: 'SECONDARY',
+		green: 'SUCCESS',
+		red: 'DANGER'
+	}
+
+	return new Discord.MessageButton({
+		label: name,
+		customId: name.toLowerCase(),
+		style: btnType[color.toLowerCase()] ?? 'SECONDARY',
+		emoji: emoji
+	})
+}
+
+sendCurTurnEmbed = (char, btl) => {
+	let a;
+	let message = {
+		content: `<@${char.owner}>`,
+	}
+}
+
+doTurn = (btl, noTurnEmbed) => {
 	let char = getCharFromTurn(btl);
 	let settings = setUpSettings(btl.guild.id)
 
@@ -66,15 +90,64 @@ doTurn = (btl) => {
 	}
 
 	// Status Effects.
+	let canMove = true;
+
 	if (char.status && char.statusturns && statusEffectFuncs[char.status.toLowerCase()]) {
-		statusTxt += statusEffectFuncs[char.status.toLowerCase()].onturn(btl, char);
+		let statusEff = statusEffectFuncs[char.status.toLowerCase()].onturn(btl, char);
+		
+		if (typeof statusEff === 'string')
+			statusTxt += statusEff
+		else if (typeof statusEff === 'object') {
+			if (!statusEff[1]) canMove = false;
+			statusTxt += statusEff[0]
+		}
 
 		char.statusturns--;
 		if (char.statusturns == 0) {
 			delete char.status;
 			delete char.statusturns;
 		}
+
+		statusTxt += '\n';
 	}
+
+	let stackable = ['confusion', 'infatuation'];
+
+	for (let i in stackable) {
+		if (char[i] && statusEffectFuncs[i]) {
+			let statusEff = statusEffectFuncs[i].onturn(btl, char);
+			
+			if (typeof statusEff === 'string')
+				statusTxt += statusEff
+			else if (typeof statusEff === 'object') {
+				if (!statusEff[1]) canMove = false;
+				statusTxt += statusEff[0]
+			}
+
+			char[i]--;
+			if (char[i] == 0) delete char[i];
+
+			statusTxt += '\n';
+		}
+	}
+
+	// Now send the embed
+	if (statusTxt != '') {
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#ff1fa9')
+			.setTitle(`${char.name}'s turn!`)
+			.setDescription(statusTxt)
+
+		btl.channel.send({embeds: [DiscordEmbed]});
+	}
+
+	setTimeout(function() {
+		if (!canMove) return advanceTurn(btl)
+		if (noTurnEmbed) return;
+
+		// Now... send the turn embed!
+		sendCurTurnEmbed(char, btl);
+	})
 }
 
 advanceTurn = (btl) => {

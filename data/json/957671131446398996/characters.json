@@ -1471,7 +1471,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 0,
+        "xp": 2370626,
         "maxxp": 4741253,
         "skills": [
             "Bufudyne",
@@ -20861,11 +20861,11 @@
     "Snow": {
         "name": "Snow",
         "owner": "621307633718132746",
-        "level": 57,
-        "hp": 376,
-        "mp": 305,
-        "maxhp": 376,
-        "maxmp": 305,
+        "level": 58,
+        "hp": 382,
+        "mp": 310,
+        "maxhp": 382,
+        "maxmp": 310,
         "basehp": 40,
         "basemp": 25,
         "mpMeter": [
@@ -20881,8 +20881,8 @@
         },
         "weapon": {},
         "armor": {},
-        "xp": 14002,
-        "maxxp": 1509072,
+        "xp": 4930,
+        "maxxp": 1741237,
         "skills": [
             "LightningFist",
             "SnowGun",
@@ -20937,14 +20937,14 @@
         "curCharms": [],
         "nickname": "Snow Leader",
         "stats": {
-            "atk": 62,
-            "mag": 33,
-            "prc": 33,
+            "atk": 63,
+            "mag": 34,
+            "prc": 34,
             "end": 23,
             "chr": 23,
-            "int": 61,
-            "agl": 66,
-            "luk": 32
+            "int": 62,
+            "agl": 67,
+            "luk": 33
         },
         "basestats": {
             "baseatk": 6,

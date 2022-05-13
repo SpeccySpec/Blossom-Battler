@@ -391,6 +391,32 @@ enemyTypeColors = {
 	deity: '#FFFFFF'
 }
 
+barEmojis = {
+	hp: {
+		left: '<:hpbarleft:974742791643090984>',
+		middle: '<:hpbarmidl:974742791768920065>',
+		right: '<:hpbarrigh:974742791722782780>'
+	},
+
+	mp: {
+		left: '<:mpbarleft:974742791857012736>',
+		middle: '<:mpbarmidl:974742791760531506>',
+		right: '<:mpbarrigh:974742791865380885>'
+	},
+
+	xp: {
+		left: '<:xpbarleft:974742791861207041>',
+		middle: '<:xpbarmidl:974742791777316924>',
+		right: '<:xpbarrigh:974742791609544725>'
+	},
+
+	none: {
+		left: '<:nobarleft:974743873249243248>',
+		middle: '<:nobarmidl:974743873760923678>',
+		right: '<:nobarrigh:974743874390089778>'
+	}
+}
+
 critEmoji = '<:crit:973077052083286056>';
 
 specialDates = {
@@ -699,6 +725,26 @@ setUpUserData = (user) => {
 	}
 
 	return userdata
+}
+
+getBar = (type, value, maxvalue) => {
+	let barType = barEmojis[type.toLowerCase()] ?? barEmojis.none;
+
+	let p = Math.floor((parseInt(value)/parseInt(maxvalue))*10);
+	console.log(p);
+
+	let firstOne = barType.left;
+	if (p < 1) firstOne = barEmojis.none.left;
+
+	let lastOne = barType.right;
+	if (p < 10) lastOne = barEmojis.none.right;
+
+	let middleOnes = '';
+	for (let i = 2; i < 9; i++) {
+		middleOnes += (p >= i) ? barType.middle : barEmojis.none.middle;
+	}
+
+	return `${firstOne}${middleOnes}${lastOne}`;
 }
 
 backButton = new Discord.MessageButton({

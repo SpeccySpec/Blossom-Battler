@@ -214,7 +214,7 @@ longDescription = (charDefs, level, server, message) => {
 	// Stats
 	let statDesc = ''
 	if (!char.type) 
-		statDesc += `Level ${char.level}\n${char.hp}/${char.maxhp}HP\n${char.mp}/${char.maxmp}${char.mpMeter ? char.mpMeter[1] : 'MP'}\n${char.xp}/${char.maxxp}XP\n`;
+		statDesc += `Level ${char.level}\n${char.hp}/${char.maxhp}HP\n${char.mp}/${char.maxmp}${char.mpMeter ? char.mpMeter[1] : 'MP'}\n${char.xp}/${char.maxxp}XP\n${getBar('xp', char.xp, char.maxxp)}\n`;
 	else 
 		statDesc += `Level ${char.level}\n${char.hp}HP\n${char.mp}MP\n${char.xp}XP\n`;
 

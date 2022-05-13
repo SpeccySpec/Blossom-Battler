@@ -476,8 +476,6 @@ function makePassive(skill, extra, func) {
 	if (!skill.passive) skill.passive = {};
 	if (!skill.passive[extra]) skill.passive[extra] = [];
 
-	let extrasthatcanbeinmultiples = ['boost', 'heal', 'damage', 'dodge', 'status', 'statusdodge', 'elementstore']
-
 	if (passiveList[extra].multiple) {
 		let index = 0;
 		let stop = false;

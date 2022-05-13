@@ -4,10 +4,7 @@
 	- HANDLE LEVELLING UP
 */
 xpBar = (charDefs) => {
-	let xpPercent = Math.round((charDefs.xp/charDefs.maxxp)*100)
-	let xpSquares = Math.min(10, Math.floor(xpPercent/10))
-
-	return `**[**${'🟦'.repeat(xpSquares)}${'⬛'.repeat(10 - xpSquares)}**]**`;
+	return getBar('xp', charDefs.xp, charDefs.maxxp);
 }
 
 gainXp = (message, charDefs, xp) => {
@@ -83,7 +80,7 @@ updateStats = (charDefs, server, updateXp) => {
 }
 
 levelUp = (charDefs, forceEvo, server) => {
-	let settings = setUpFile(server)
+	let settings = setUpSettings(server)
 
 	if (charDefs.level >= settings.caps.levelcap) {
 		charDefs.xp = charDefs.maxxp - 1
