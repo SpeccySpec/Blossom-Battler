@@ -290,6 +290,9 @@ commands.startbattle = new Command({
 			let enemy = objClone(enmFile[args[i]]);
 			if (!enemy.name) enemy.name = args[i];
 
+			enemy.maxhp = enemy.hp;
+			enemy.maxmp = enemy.mp;
+
 			enemy.id = battleid;
 			battleid++;
 

@@ -60,11 +60,69 @@ makeButton = (name, emoji, color) => {
 	})
 }
 
+MENU_ACT = 0;
+MENU_SKILL = 1;
+MENU_ITEM = 2;
+MENU_TACTICS = 3;
+MENU_TEAMSEL = 4;
+MENU_TARGET = 5;
+MENU_SELFTARGET = 6;
+
+setUpComponents = (char, btl, menustate) => {
+	let comps = [];
+
+	switch(parseInt(menustate)) {
+		case MENU_ACT:
+			comps[0] = [makeButton('Melee', elementEmoji.strike, 'red'), makeButton('Skills', elementEmoji.bless, 'blue'), makeButton('Items', itemTypeEmoji.healhpmp, 'green'), makeButton('Tactics', critEmoji, 'grey')];
+			break;
+	}
+
+	for (let i in comps)
+		comps[i] = new Discord.MessageActionRow({components: comps[i]});
+
+	return comps;
+}
+
 sendCurTurnEmbed = (char, btl) => {
-	let a;
+	let menustate = MENU_ACT;
+	let statDesc = `${getBar('hp', char.hp, char.maxhp)}\n${char.hp}/${char.maxhp}HP\n\n${getBar('mp', char.mp, char.maxmp)}\n${char.mp}/${char.maxmp}MP`;
+	
+	let teamDesc = '';
+	let multipleTeams = false;
+	if (btl.teams.length > 2) {
+		multipleTeams = true;
+
+		for (let i in btl.teams) {
+			if (i != char.team) teamDesc += `Team ${btl.teams[i].name}`;
+		}
+	} else {
+		let op = (char.team <= 0) ? 1 : 0;
+
+		for (let i in btl.teams[op].members) {
+			let c = btl.teams[op].members[i];
+			teamDesc += `${i}: ${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+		}
+	}
+
+	let myTeamDesc = '';
+	for (let i in btl.teams[char.team].members) {
+		let c = btl.teams[char.team].members[i];
+		myTeamDesc += `${i}: ${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+	}
+
+	let DiscordEmbed = new Discord.MessageEmbed()
+		.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+		.setTitle(`Turn #${btl.turn} - ${char.name}'s turn`)
+		.setDescription(statDesc)
+		.addFields({name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true})
+
 	let message = {
 		content: `<@${char.owner}>`,
-	}
+		embeds: [DiscordEmbed],
+		components: setUpComponents(char, btl, menustate)
+	};
+
+	btl.channel.send(message);
 }
 
 doTurn = (btl, noTurnEmbed) => {
@@ -172,6 +230,8 @@ advanceTurn = (btl) => {
 
 			// This character is dead.
 			if (char.hp <= 0) {
+				btl.channel.send(`**[DEBUG]**\n${char.name} is dead!`);
+
 				pLeft--;
 				resetEffects(char);
 				continue;
