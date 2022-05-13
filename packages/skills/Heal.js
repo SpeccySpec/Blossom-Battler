@@ -78,7 +78,8 @@ healList = {
 	statusheal: {
 		name: "Status Heal",
 		desc: "_<Status>_\nCures the target of the specified status. Accepts 'physical', 'mental' and 'all' as statuses.",
-		multiplelimiter: 0,
+		multiple: true,
+		diffflag: 0,
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Status>!");
 			extra1 = extra1.toLowerCase();
@@ -132,11 +133,13 @@ function makeHeal(skill, extra, func) {
 	if (!skill.heal) skill.heal = {};
 	if (!skill.heal[extra]) skill.heal[extra] = [];
 
-	if (healList[extra].multiplelimiter && skill.heal[extra].length < 1) {
-		for (i in skill.heal[extra]) {
-			if (skill.heal[extra][i][healList[extra].multiplelimiter] === func[healList[extra].multiplelimiter]) {
-				skill.heal[extra][i] = func;
-				return true;
+	if (healList[extra].multiple) {
+		if (healList[extra].diffflag) {
+			for (i in skill.heal[extra]) {
+				if (skill.heal[extra][i][healList[extra].diffflag] === func[healList[extra].diffflag]) {
+					skill.heal[extra][i] = func;
+					return true;
+				}
 			}
 		}
 		skill.heal[extra].push(func);

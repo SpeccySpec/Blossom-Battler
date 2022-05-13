@@ -22,7 +22,8 @@ extrasList = {
 	needlessthan: {
 		name: "Need less than",
 		desc: '_<Percent> <Stat>_\nWill make the skill require less than <Percent>% of <Stat> for it to work.',
-		multiplelimiter: 1,
+		multiple: true,
+		diffflag: 1,
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1 || !extra2) return message.channel.send("You didn't supply enough arguments!");
 
@@ -60,7 +61,8 @@ extrasList = {
 	buff: {
 		name: "Stat Buff",
 		desc: "_<Stat> <Stages> <Chance>_\nWill buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
-		multiplelimiter: [0, 2],
+		multiple: true,
+		diffflag: [0, 2],
 		applyfunc: function(message, skill, extra1, extra2, extra3) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
 			if (!utilityFuncs.validStat(extra1)) return message.channel.send("That's not a valid stat!");
@@ -75,7 +77,8 @@ extrasList = {
 	powerbuff: {
 		name: "Power Buff",
 		desc: "_<Stat> <Percent>_\nBoosts skill power with <Stat> buffs up to <Percent>%.",
-		multiplelimiter: 0,
+		multiple: true,
+		diffflag: 0,
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <Percent>!");
@@ -358,11 +361,27 @@ function makeExtra(skill, extra, func) {
 	if (!skill.extras) skill.extras = {};
 	if (!skill.extras[extra]) skill.extras[extra] = [];
 
-	if (extrasList[extra].multiplelimiter && skill.extras[extra].length < 1) {
-		for (i in skill.extras[extra]) {
-			if (skill.extras[extra][i][extrasList[extra].multiplelimiter] === func[extrasList[extra].multiplelimiter]) {
-				skill.extras[extra][i] = func;
-				return true;
+	if (extrasList[extra].multiple) {
+		if (extrasList[extra].diffflag) {
+			for (i in skill.extras[extra]) {
+				if (typeof skill.extras[extra][i] == "number") {
+					if (skill.extras[extra][i][extrasList[extra].diffflag] === func[extrasList[extra].diffflag]) {
+						skill.extras[extra][i] = func;
+						return true;
+					}
+				} else {
+					let alltrue = true;
+					for (j in extrasList[extra].diffflag) {
+						if (skill.extras[extra][i][extrasList[extra].diffflag[j]] !== func[extrasList[extra].diffflag[j]]) {
+							alltrue = false;
+							break;
+						}
+					}
+					if (alltrue) {
+						skill.extras[extra][i] = func;
+						return true;
+					}
+				}
 			}
 		}
 		skill.extras[extra].push(func);

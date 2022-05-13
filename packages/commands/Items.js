@@ -2013,6 +2013,37 @@ commands.makecraftingrecipe = new Command({
                     collector.stop()
                 }
 
+                for (i in itemFile) {
+                    if (itemFile[i].recipe) {
+                        if (itemFile[i].recipe.recipe == margs) {
+                            message.channel.send(`This crafting recipe is already in use by ${itemFile[i].name}.`);
+                            givenResponce = true
+                            collector.stop()
+                            break;
+                        }
+                    }
+                }
+                for (i in weaponFile) {
+                    if (weaponFile[i].recipe) {
+                        if (weaponFile[i].recipe.recipe == margs) {
+                            message.channel.send(`This crafting recipe is already in use by ${weaponFile[i].name}.`);
+                            givenResponce = true
+                            collector.stop()
+                            break;
+                        }
+                    }
+                }
+                for (i in armorFile) {
+                    if (armorFile[i].recipe) {
+                        if (armorFile[i].recipe.recipe == margs) {
+                            message.channel.send(`This crafting recipe is already in use by ${armorFile[i].name}.`);
+                            givenResponce = true
+                            collector.stop()
+                            break;
+                        }
+                    }
+                }
+
                 itemDefs.recipe = {
                     amount: args[2],
                     shapeless: args[3],
