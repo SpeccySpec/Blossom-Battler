@@ -43,15 +43,15 @@ leaderSkillsAtBattleStart = (party) => {
 	}
 }
 
+const btnType = {
+	blue: 'PRIMARY',
+	grey: 'SECONDARY',
+	green: 'SUCCESS',
+	red: 'DANGER'
+}
+
 // Send an Interactable Turn Embed, buttons and all
 makeButton = (name, emoji, color, lowercase, forceid) => {
-	let btnType = {
-		blue: 'PRIMARY',
-		grey: 'SECONDARY',
-		green: 'SUCCESS',
-		red: 'DANGER'
-	}
-
 	return new Discord.MessageButton({
 		label: name,
 		customId: forceid ?? (lowercase ? name : name.toLowerCase()),
@@ -68,85 +68,64 @@ MENU_TEAMSEL = 4;
 MENU_TARGET = 5;
 MENU_SELFTARGET = 6;
 
-setUpComponents = (char, btl, menustate) => {
-	let comps = [];
+function CalcCompins(comps, i) {
+	const compins = Math.min(Math.floor((i - 0.1) / 4), 3)
+	if (!comps[compins])
+		comps[compins] = [];
+	return compins
+}
 
-	switch(parseInt(menustate)) {
-		case MENU_ACT:
-			comps[0] = [makeButton('Melee', elementEmoji.strike, 'red'), makeButton('Skills', elementEmoji.bless, 'blue'), makeButton('Items', itemTypeEmoji.healhpmp, 'green'), makeButton('Tactics', critEmoji, 'grey'), makeButton('Guard', affinityEmoji.block, 'grey')];
-			break;
-
-		case MENU_SKILL:
-			for (let i in char.skills) {
-				if (skillFile[char.skills[i]].type === 'passive') continue;
-				let compins = 0;
-				if (i <= 4) {
-					if (!comps[0]) comps[0] = [];
-					compins = 0;
-				} else if (i <= 8) {
-					if (!comps[1]) comps[1] = [];
-					compins = 1;
-				} else if (i <= 12) {
-					if (!comps[2]) comps[2] = [];
-					compins = 2;
-				} else {
-					if (!comps[3]) comps[3] = [];
-					compins = 3;
-				}
-
-				let btncolor = 'blue'
-				if (skillFile[char.skills[i]].type === 'heal') 
-					btncolor = 'green';
-				else if (skillFile[char.skills[i]].type === 'status') 
-					btncolor = 'grey';
-				else if (skillFile[char.skills[i]].atktype === 'physical') 
-					btncolor = 'red';
-
-				comps[compins].push(makeButton(skillFile[char.skills[i]] ? skillFile[char.skills[i]].name : char.skills[i], skillFile[char.skills[i]] ? elementEmoji[skillFile[char.skills[i]].type] : elementEmoji.strike, btncolor, true, char.skills[i]));
-			}
-
-			break;
-		
-		case MENU_TEAMSEL:
-			for (let i in btl.teams) {
-				let compins = 0;
-				if (i <= 4) {
-					if (!comps[0]) comps[0] = [];
-					compins = 0;
-				} else if (i <= 8) {
-					if (!comps[1]) comps[1] = [];
-					compins = 1;
-				} else if (i <= 12) {
-					if (!comps[2]) comps[2] = [];
-					compins = 2;
-				} else {
-					if (!comps[3]) comps[3] = [];
-					compins = 3;
-				}
-
-				comps[compins].push(makeButton(`Team ${btl.teams[i].name}`, '#️⃣', 'green', true, i.toString()));
-			}
-
-		case MENU_TARGET:
-			for (let i in btl.teams[btl.action.target[0]].members) {
-				let compins = 0;
-				if (i <= 4) {
-					if (!comps[0]) comps[0] = [];
-					compins = 0;
-				} else if (i <= 8) {
-					if (!comps[1]) comps[1] = [];
-					compins = 1;
-				} else if (i <= 12) {
-					if (!comps[2]) comps[2] = [];
-					compins = 2;
-				} else {
-					if (!comps[3]) comps[3] = [];
-					compins = 3;
-				}
-
-				comps[compins].push(makeButton(`${btl.teams[btl.action.target[0]].members[i].name}`, '#️⃣', 'red', true, i.toString()));
-			}
+const menuStates = {
+	[MENU_ACT]: ({comps}) => {
+		comps[0] = [
+			makeButton('Melee', elementEmoji.strike, 'red'),
+			makeButton('Skills', elementEmoji.bless, 'blue'),
+			makeButton('Items', itemTypeEmoji.healhpmp, 'green'),
+			makeButton('Tactics', critEmoji, 'grey'),
+			makeButton('Guard', affinityEmoji.block, 'grey')
+		]
+	},
+	[MENU_SKILL]: ({char, comps}) => {
+		for (const i in char.skills) {
+			const skillname = char.skills[i]
+			const skillinfo = skillFile[skillname]
+			if (skillinfo?.type === 'passive')
+				continue;
+			const compins = CalcCompins(comps, i)
+			let btncolor = 'blue'
+			if (skillinfo?.type === 'heal') 
+				btncolor = 'green'
+			else if (skillinfo?.type === 'status') 
+				btncolor = 'grey'
+			else if (skillinfo?.atktype === 'physical') 
+				btncolor = 'red'
+			comps[compins].push(makeButton(
+				skillinfo?.name ?? skillname,
+				skillinfo
+					? elementEmoji[skillinfo.type]
+					: elementEmoji.strike,
+				btncolor, true, skillname)
+			)
+		}
+	},
+	[MENU_TEAMSEL]: ({btl, comps}) => {
+		for (const i in btl.teams)
+			comps[CalcCompins(comps, i)].push(
+				makeButton(`Team ${btl.teams[i].name}`, '#️⃣', 'green', true, i.toString())
+			)
+	},
+	[MENU_TARGET]: ({btl, comps}) => {
+		const members = btl.teams[btl.action.target[0]].members
+		for (const i in members)
+			comps[CalcCompins(comps, i)].push(
+				makeButton(`${members[i].name}`, '#️⃣', 'red', true, i.toString())
+			)
 	}
+}
+
+setUpComponents = (char, btl, menustate) => {
+	let comps = []
+	menuStates[parseInt(menustate)]({char, btl, comps})
 
 	if (menustate != MENU_ACT) {
 		for (let i in comps) {
