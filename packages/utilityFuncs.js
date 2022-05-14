@@ -27,7 +27,7 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 		return false
 	}
 
-	//then chack if their mechanic is disabled
+	//then check if their mechanic is disabled
 	const fullNames = {
 		leaderskills: 'Leader Skills',
 		limitbreaks: 'Limit Breaks',
