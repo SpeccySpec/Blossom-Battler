@@ -118,7 +118,7 @@ const menuStates = {
 		const members = btl.teams[btl.action.target[0]].members
 		for (const i in members)
 			comps[CalcCompins(comps, i)].push(
-				makeButton(`${members[i].name}`, '#️⃣', 'red', true, i.toString())
+				makeButton(`${members[i].name}`, '#️⃣', (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
 			)
 	}
 }
@@ -222,9 +222,14 @@ sendCurTurnEmbed = (char, btl) => {
 					} else if (skill.target === "ally" || skill.target === "spreadallies") {
 						btl.action.target[0] = char.team;
 						menustate = MENU_TARGET;
+					} else if (skill.target === "caster") {
+						btl.action.target = [char.team, char.id];
+						doAction(char, btl, btl.action);
+						collector.stop();
 					} else {
 						btl.action.target = [undefined, undefined];
 						doAction(char, btl, btl.action);
+						collector.stop();
 					}
 				} else if (menustate == MENU_TEAMSEL && btl.teams[i.customId]) {
 					let skill = skillFile[i.customId];
