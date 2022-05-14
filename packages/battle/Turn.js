@@ -118,7 +118,7 @@ const menuStates = {
 		const members = btl.teams[btl.action.target[0]].members
 		for (const i in members)
 			comps[CalcCompins(comps, i)].push(
-				makeButton(`${members[i].name}`, '#️⃣', 'red', true, i.toString())
+				makeButton(`${members[i].name}`, '#️⃣', (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
 			)
 	}
 }
@@ -130,7 +130,7 @@ setUpComponents = (char, btl, menustate) => {
 	if (menustate != MENU_ACT) {
 		for (let i in comps) {
 			if (comps[i].length < 5) {
-				comps[i].push(makeButton('Back', '⏸', 'grey'));
+				comps[i].push(makeButton('Back', '◀️', 'grey'));
 				break;
 			}
 		}
@@ -144,7 +144,7 @@ setUpComponents = (char, btl, menustate) => {
 
 sendCurTurnEmbed = (char, btl) => {
 	let menustate = MENU_ACT;
-	let statDesc = `${getBar('hp', char.hp, char.maxhp)}${getBar('mp', char.mp, char.maxmp)}\n${char.hp}/${char.maxhp}HP					${char.mp}/${char.maxmp}MP`;
+	let statDesc = `${getBar('hp', char.hp, char.maxhp)}		${getBar('mp', char.mp, char.maxmp)}\n${char.hp}/${char.maxhp}HP						${char.mp}/${char.maxmp}MP`;
 
 	let teamDesc = '';
 	let op = (char.team <= 0) ? 1 : 0;
@@ -215,9 +215,30 @@ sendCurTurnEmbed = (char, btl) => {
 			default:
 				if (menustate == MENU_SKILL && skillFile[i.customId] && char.skills.includes(i.customId)) {
 					btl.action.index = i.customId;
-					menustate = MENU_TEAMSEL;
+					let skill = skillFile[i.customId];
+
+					if (skill.target === "one" || skill.target === "spreadopposing") {
+						menustate = MENU_TEAMSEL;
+					} else if (skill.target === "ally" || skill.target === "spreadallies") {
+						btl.action.target[0] = char.team;
+						menustate = MENU_TARGET;
+					} else if (skill.target === "caster") {
+						btl.action.target = [char.team, char.id];
+						doAction(char, btl, btl.action);
+						collector.stop();
+					} else {
+						btl.action.target = [undefined, undefined];
+						doAction(char, btl, btl.action);
+						collector.stop();
+					}
 				} else if (menustate == MENU_TEAMSEL && btl.teams[i.customId]) {
-					btl.action.target[0] = parseInt(i.customId);
+					let skill = skillFile[i.customId];
+
+					if (skill.target === "one" || skill.target === "spreadopposing") {
+						btl.action.target[0] = parseInt(i.customId);
+					} else if (skill.target === "ally" || skill.target === "spreadallies") {
+						btl.action.target[0] = char.team;
+					}
 					menustate = MENU_TARGET;
 
 					teamDesc = '';

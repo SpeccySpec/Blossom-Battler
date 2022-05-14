@@ -27,7 +27,7 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 		return false
 	}
 
-	//then chack if their mechanic is disabled
+	//then check if their mechanic is disabled
 	const fullNames = {
 		leaderskills: 'Leader Skills',
 		limitbreaks: 'Limit Breaks',
@@ -176,8 +176,7 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 	if (arraybased.includes(type)) {
 		let acceptsNone = ['rarity', 'type']
 
-		if (acceptsNone.includes(type)) 
-			return true
+		if (acceptsNone.includes(type) && variable.toLowerCase() == 'none') return true
 
 		let arraysToCheck = {
 			transformations: ['allydown', 'onlystanding', 'belowhalfhp', 'outofmp', 'leaderdown', 'trusteddown'],
