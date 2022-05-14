@@ -707,7 +707,7 @@ setUpSettings = (guild) => {
 			desc: ""
 		}
 
-		fs.writeFileSync(`${dataPath}/json/${guild}/settings.json`, JSON.stringify(settings, null, 4))
+		fs.writeFileSync(`${dataPath}/json/${guild}/settings.json`, JSON.stringify(settings, '	', 4))
 	}
 
 	return settings
@@ -721,7 +721,7 @@ setUpUserData = (user) => {
 			exports: {}
 		}
 
-		fs.writeFileSync(`${dataPath}/userdata/${user}.json`, JSON.stringify(userdata, null, 4))
+		fs.writeFileSync(`${dataPath}/userdata/${user}.json`, JSON.stringify(userdata, '	', 4))
 	}
 
 	return userdata
@@ -762,7 +762,7 @@ forwardButton = new Discord.MessageButton({
 cancelButton = new Discord.MessageButton({
 	style: 'SECONDARY',
 	label: 'Cancel',
-	emoji: '⏸️',
+	emoji: '⏸',
 	customId: 'cancel'
 })
 pageButton = new Discord.MessageButton({

@@ -44,7 +44,7 @@ leaderSkillsAtBattleStart = (party) => {
 }
 
 // Send an Interactable Turn Embed, buttons and all
-makeButton = (name, emoji, color) => {
+makeButton = (name, emoji, color, lowercase, forceid) => {
 	let btnType = {
 		blue: 'PRIMARY',
 		grey: 'SECONDARY',
@@ -54,7 +54,7 @@ makeButton = (name, emoji, color) => {
 
 	return new Discord.MessageButton({
 		label: name,
-		customId: name.toLowerCase(),
+		customId: forceid ?? (lowercase ? name : name.toLowerCase()),
 		style: btnType[color.toLowerCase()] ?? 'SECONDARY',
 		emoji: emoji
 	})
@@ -73,8 +73,88 @@ setUpComponents = (char, btl, menustate) => {
 
 	switch(parseInt(menustate)) {
 		case MENU_ACT:
-			comps[0] = [makeButton('Melee', elementEmoji.strike, 'red'), makeButton('Skills', elementEmoji.bless, 'blue'), makeButton('Items', itemTypeEmoji.healhpmp, 'green'), makeButton('Tactics', critEmoji, 'grey')];
+			comps[0] = [makeButton('Melee', elementEmoji.strike, 'red'), makeButton('Skills', elementEmoji.bless, 'blue'), makeButton('Items', itemTypeEmoji.healhpmp, 'green'), makeButton('Tactics', critEmoji, 'grey'), makeButton('Guard', affinityEmoji.block, 'grey')];
 			break;
+
+		case MENU_SKILL:
+			for (let i in char.skills) {
+				if (skillFile[char.skills[i]].type === 'passive') continue;
+				let compins = 0;
+				if (i <= 4) {
+					if (!comps[0]) comps[0] = [];
+					compins = 0;
+				} else if (i <= 8) {
+					if (!comps[1]) comps[1] = [];
+					compins = 1;
+				} else if (i <= 12) {
+					if (!comps[2]) comps[2] = [];
+					compins = 2;
+				} else {
+					if (!comps[3]) comps[3] = [];
+					compins = 3;
+				}
+
+				let btncolor = 'blue'
+				if (skillFile[char.skills[i]].type === 'heal') 
+					btncolor = 'green';
+				else if (skillFile[char.skills[i]].type === 'status') 
+					btncolor = 'grey';
+				else if (skillFile[char.skills[i]].atktype === 'physical') 
+					btncolor = 'red';
+
+				comps[compins].push(makeButton(skillFile[char.skills[i]] ? skillFile[char.skills[i]].name : char.skills[i], skillFile[char.skills[i]] ? elementEmoji[skillFile[char.skills[i]].type] : elementEmoji.strike, btncolor, true, char.skills[i]));
+			}
+
+			break;
+		
+		case MENU_TEAMSEL:
+			for (let i in btl.teams) {
+				let compins = 0;
+				if (i <= 4) {
+					if (!comps[0]) comps[0] = [];
+					compins = 0;
+				} else if (i <= 8) {
+					if (!comps[1]) comps[1] = [];
+					compins = 1;
+				} else if (i <= 12) {
+					if (!comps[2]) comps[2] = [];
+					compins = 2;
+				} else {
+					if (!comps[3]) comps[3] = [];
+					compins = 3;
+				}
+
+				comps[compins].push(makeButton(`Team ${btl.teams[i].name}`, '#️⃣', 'green', true, i.toString()));
+			}
+
+		case MENU_TARGET:
+			for (let i in btl.teams[btl.action.target[0]].members) {
+				let compins = 0;
+				if (i <= 4) {
+					if (!comps[0]) comps[0] = [];
+					compins = 0;
+				} else if (i <= 8) {
+					if (!comps[1]) comps[1] = [];
+					compins = 1;
+				} else if (i <= 12) {
+					if (!comps[2]) comps[2] = [];
+					compins = 2;
+				} else {
+					if (!comps[3]) comps[3] = [];
+					compins = 3;
+				}
+
+				comps[compins].push(makeButton(`${btl.teams[btl.action.target[0]].members[i].name}`, '#️⃣', 'red', true, i.toString()));
+			}
+	}
+
+	if (menustate != MENU_ACT) {
+		for (let i in comps) {
+			if (comps[i].length < 5) {
+				comps[i].push(makeButton('Back', '⏸', 'grey'));
+				break;
+			}
+		}
 	}
 
 	for (let i in comps)
@@ -85,9 +165,10 @@ setUpComponents = (char, btl, menustate) => {
 
 sendCurTurnEmbed = (char, btl) => {
 	let menustate = MENU_ACT;
-	let statDesc = `${getBar('hp', char.hp, char.maxhp)}\n${char.hp}/${char.maxhp}HP\n\n${getBar('mp', char.mp, char.maxmp)}\n${char.mp}/${char.maxmp}MP`;
-	
+	let statDesc = `${getBar('hp', char.hp, char.maxhp)}${getBar('mp', char.mp, char.maxmp)}\n${char.hp}/${char.maxhp}HP					${char.mp}/${char.maxmp}MP`;
+
 	let teamDesc = '';
+	let op = (char.team <= 0) ? 1 : 0;
 	let multipleTeams = false;
 	if (btl.teams.length > 2) {
 		multipleTeams = true;
@@ -96,8 +177,6 @@ sendCurTurnEmbed = (char, btl) => {
 			if (i != char.team) teamDesc += `Team ${btl.teams[i].name}`;
 		}
 	} else {
-		let op = (char.team <= 0) ? 1 : 0;
-
 		for (let i in btl.teams[op].members) {
 			let c = btl.teams[op].members[i];
 			teamDesc += `${i}: ${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
@@ -123,6 +202,92 @@ sendCurTurnEmbed = (char, btl) => {
 	};
 
 	btl.channel.send(message);
+
+	// Now...
+	btl.action = {
+		move: 'melee',
+		index: 0,
+		target: [0, 0],
+	}
+
+	let collector = btl.channel.createMessageComponentCollector({
+		filter: ({user}) => user.id == char.owner
+	})
+
+	let currentIndex = 0;
+	collector.on('collect', async i => {
+		btl.action.laststate = menustate;
+
+		switch(i.customId) {
+			case 'melee':
+				btl.action.move = 'melee';
+				menustate = MENU_TEAMSEL;
+				break;
+
+			case 'skills':
+				btl.action.move = 'skills';
+				menustate = MENU_SKILL;
+				break;
+
+			case 'back':
+				if (btl.action.laststate) menustate = MENU_ACT;
+				break;
+
+			default:
+				if (menustate == MENU_SKILL && skillFile[i.customId] && char.skills.includes(i.customId)) {
+					btl.action.index = i.customId;
+					menustate = MENU_TEAMSEL;
+				} else if (menustate == MENU_TEAMSEL && btl.teams[i.customId]) {
+					btl.action.target[0] = parseInt(i.customId);
+					menustate = MENU_TARGET;
+
+					teamDesc = '';
+					for (let i in btl.teams[btl.action.target[0]].members) {
+						let c = btl.teams[btl.action.target[0]].members[i];
+						teamDesc += `${i}: ${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+					}
+
+					DiscordEmbed.fields = [{name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true}];
+				} else if (menustate == MENU_TARGET && btl.teams[btl.action.target[0]] && btl.teams[btl.action.target[0]].members[i.customId]) {
+					btl.action.target[1] = parseInt(i.customId);
+					doAction(char, btl, btl.action);
+					collector.stop();
+				}
+		}
+
+
+		switch(menustate) {
+			case MENU_TEAMSEL:
+				if (!multipleTeams) {
+					menustate = MENU_TARGET;
+					btl.action.target[0] = op;
+					DiscordEmbed.title = '**Choose a target!**';
+				} else {
+					DiscordEmbed.title = '**Choose a team to target.**';
+				}
+
+				break;
+
+			case MENU_TARGET:
+				DiscordEmbed.title = '**Choose a target!**';
+				break;
+		}
+
+		i.update({
+			content: `<@${char.owner}>`,
+			embeds: [DiscordEmbed],
+			components: setUpComponents(char, btl, menustate)
+		})
+	})
+}
+
+doAction = (char, btl, action) => {
+	btl.channel.send(`**[DEBUG]**\n\n**[INDEX]** _${action.index}_\n**[TARGET]**: _[${action.target[0]}, ${action.target[1]}]_`);
+
+	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, '	', 4));
+	setTimeout(function() {
+		advanceTurn(btl);
+	}, 2500)
 }
 
 doTurn = (btl, noTurnEmbed) => {
@@ -205,7 +370,7 @@ doTurn = (btl, noTurnEmbed) => {
 
 		// Now... send the turn embed!
 		sendCurTurnEmbed(char, btl);
-	})
+	}, 150)
 }
 
 advanceTurn = (btl) => {
@@ -272,18 +437,19 @@ advanceTurn = (btl) => {
 	// Now, go to the next turn.
 	let newTurn = false;
 
-	if (!btl.curturn) {
+	if (btl.curturn == null) {
 		btl.curturn = 0;
+		btl.turn = 1;
 	} else {
 		let toTurn = btl.curturn+1;
 
-		if (!btl.turnorder[toTurn]) {
+		if (btl.turnorder[toTurn] == null) {
 			btl.curturn = 0;
 
 			newTurn = true;
 			btl.turn++;
 		} else
-			btl.curturn = 1;
+			btl.curturn++;
 	}
 
 	// Let's do this character's turn.
