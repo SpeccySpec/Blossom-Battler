@@ -326,3 +326,58 @@ commands.startbattle = new Command({
         }, 500)
 	}
 })
+
+commands.forcebattle = new Command({
+	desc: "Start a battle in this channel, _**replacing any existing ones**_.\n\nThis definitely won't work without the following:```diff\n+ Characters\n+ Skills\n+ Enemies\n+ Parties```",
+	section: "battle",
+	aliases: ["forceenemybattle"],
+	args: [
+		{
+			name: "Party",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Escapable",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Weather",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Terrain",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Enemies",
+			type: "Word",
+			forced: false,
+			multiple: true
+		}
+	],
+	func: (message, args) => {
+		commands.endbattle.call(message)
+		commands.startbattle.call(message, args)
+	}
+})
+
+commands.resendembed = new Command({
+	desc: "Resends the Battle Embed. Maybe it broke or something, I suck.",
+	section: "battle",
+	aliases: ["makeembed", "replacembed"],
+	func: (message, args) => {
+		// Battle File!
+		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
+		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
+
+		// Sadly, no battle.
+		if (!btl.battling) return message.channel.send("No battle is happening!");
+
+		// Resend the Embed
+		sendCurTurnEmbed(getCharFromTurn(btl), btl)
+	}
+})

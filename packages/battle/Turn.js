@@ -108,13 +108,20 @@ const menuStates = {
 			)
 		}
 	},
+	[MENU_TACTICS]: ({comps}) => {
+		comps[0] = [
+			makeButton('Run!', elementEmoji.wind, 'grey'),
+			makeButton('Backup', '<:mental:973077052053921792>', 'blue'),
+			makeButton('Pacify', itemTypeEmoji.pacify, 'green')
+		]
+	},
 	[MENU_TEAMSEL]: ({btl, comps}) => {
 		for (const i in btl.teams)
 			comps[CalcCompins(comps, i)].push(
 				makeButton(`Team ${btl.teams[i].name}`, '#️⃣', 'green', true, i.toString())
 			)
 	},
-	[MENU_TARGET]: ({btl, comps}) => {
+	[MENU_TARGET]: ({char, btl, comps}) => {
 		const members = btl.teams[btl.action.target[0]].members
 		for (const i in members)
 			comps[CalcCompins(comps, i)].push(
@@ -200,7 +207,14 @@ sendCurTurnEmbed = (char, btl) => {
 		switch(i.customId) {
 			case 'melee':
 				btl.action.move = 'melee';
-				menustate = MENU_TEAMSEL;
+				
+				if (multipleTeams) {
+					menustate = MENU_TEAMSEL;
+				} else {
+					btl.action.target[0] = op;
+					menustate = MENU_TARGET;
+				}
+
 				break;
 
 			case 'skills':
@@ -208,8 +222,13 @@ sendCurTurnEmbed = (char, btl) => {
 				menustate = MENU_SKILL;
 				break;
 
+			case 'tactics':
+				btl.action.move = 'skills';
+				menustate = MENU_TACTICS;
+				break;
+
 			case 'back':
-				if (btl.action.laststate) menustate = MENU_ACT;
+				menustate = MENU_ACT;
 				break;
 
 			default:
@@ -226,19 +245,22 @@ sendCurTurnEmbed = (char, btl) => {
 						btl.action.target = [char.team, char.id];
 						doAction(char, btl, btl.action);
 						collector.stop();
+
+						return i.update({
+							content: `<@${char.owner}>`,
+							embeds: [DiscordEmbed],
+						});
 					} else {
 						btl.action.target = [undefined, undefined];
 						doAction(char, btl, btl.action);
 						collector.stop();
+
+						return i.update({
+							content: `<@${char.owner}>`,
+							embeds: [DiscordEmbed],
+						});
 					}
 				} else if (menustate == MENU_TEAMSEL && btl.teams[i.customId]) {
-					let skill = skillFile[i.customId];
-
-					if (skill.target === "one" || skill.target === "spreadopposing") {
-						btl.action.target[0] = parseInt(i.customId);
-					} else if (skill.target === "ally" || skill.target === "spreadallies") {
-						btl.action.target[0] = char.team;
-					}
 					menustate = MENU_TARGET;
 
 					teamDesc = '';
@@ -252,6 +274,11 @@ sendCurTurnEmbed = (char, btl) => {
 					btl.action.target[1] = parseInt(i.customId);
 					doAction(char, btl, btl.action);
 					collector.stop();
+
+					return i.update({
+						content: `<@${char.owner}>`,
+						embeds: [DiscordEmbed],
+					});
 				}
 		}
 
@@ -282,7 +309,16 @@ sendCurTurnEmbed = (char, btl) => {
 }
 
 doAction = (char, btl, action) => {
-	btl.channel.send(`**[DEBUG]**\n\n**[INDEX]** _${action.index}_\n**[TARGET]**: _[${action.target[0]}, ${action.target[1]}]_`);
+	switch(btl.action.move) {
+		case 'melee':
+			btl.channel.send(`**[DEBUG]**\n\n**[MOVE]** _Melee Attack_\n**[TARGET]**: _[${action.target[0]}, ${action.target[1]}]_`);
+			break;
+
+		case 'skills':
+			btl.channel.send(`**[DEBUG]**\n\n**[MOVE]** _Skill_\n**[SKILLNAME]** _${getFullName(skillFile[btl.index])}_\n**[TARGET]**: _[${action.target[0]}, ${action.target[1]}]_`);
+			useSkill(char, btl, action);
+			break;
+	}
 
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, '	', 4));
 	setTimeout(function() {
