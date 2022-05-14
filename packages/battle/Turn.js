@@ -69,7 +69,7 @@ MENU_TARGET = 5;
 MENU_SELFTARGET = 6;
 
 function CalcCompins(comps, i) {
-	const compins = Math.min(Math.floor((i - 0.1) / 4), 3)
+	const compins = Math.min(Math.floor(Math.max(i - 0.1, 0) / 4), 3)
 	if (!comps[compins])
 		comps[compins] = [];
 	return compins
