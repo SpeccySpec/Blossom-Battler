@@ -306,6 +306,7 @@ extrasList = {
 			}
 
 			makeExtra(skill, "forceformula", [extra1.toLowerCase(), extra2]);
+			return true;
 		}
 	},
 
@@ -351,7 +352,32 @@ extrasList = {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Hit #1>!");
 
 			makeExtra(skill, "powhit", [parseInt(extra1), extra2 ? parseInt(extra2) : null, extra3 ? parseInt(extra3) : null, extra4 ? parseInt(extra4) : null, extra5 ? parseInt(extra5) : null]);
-			return true
+			return true;
+		}
+	},
+
+	multihit: {
+		name: "Multi",
+		desc: "_<Chance> {Number of Hits}_\nA <Chance>% chance to add {Number of Hits} extra hit(s) to the skill, multi-hit already or not.",
+		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+			if (!extra1) return message.channel.send("You didn't supply anything for <Chance>!");
+			if (extra1 <= 0 || extra1 > 50) return message.channel.send("Invalid value for <Chance>! It should be above 0 or below 50.");
+			
+			if (extra2) {
+				if (extra2 <= 0 || extra2 > 99-(skill.hits ?? 1))
+					return message.channel.send(`Invalid value for {Number of Hits}. It should be above 0. Be aware that skills cannot exceed 99 hits, and so, the highest this number can be is ${99-(skill.hits ?? 1)}.`);
+			}
+
+			makeExtra(skill, "powhit", [parseInt(extra1), extra2 ? parseInt(extra2) : 1]);
+			return true;
+		},
+		statmod: function(char, skill, vars, btl) {
+			let num = randNum(100);
+
+			if (num <= vars[0]) {
+				skill.hits += vars[1];
+				addAtkMsg(`${char.name}'s ${skill.name} landed ${vars[1]} extra time(s)!`);
+			}
 		}
 	}
 }

@@ -502,10 +502,10 @@ statusEffectFuncs = {
 			let dmg = Math.round(fighterDef.maxhp/8)
 			if (char.boss || char.miniboss) dmg = 10;
 
-			if (hasStatusAffinity(char, 'burn', 'weak')) {
+			if (hasStatusAffinity(char, 'bleed', 'weak')) {
 				dmg *= 2;
 				affinityTxt = affinityEmoji.weak;
-			} else if (hasStatusAffinity(char, 'burn', 'resist')) {
+			} else if (hasStatusAffinity(char, 'bleed', 'resist')) {
 				dmg /= 2;
 				affinityTxt = affinityEmoji.resist;
 			}

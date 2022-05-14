@@ -570,6 +570,15 @@ objClone = (source) => {
 	}
 }
 
+// Random Num
+randNum = (minNum, maxNum) => {
+	if (!maxNum) {
+		return Math.round(Math.random()*minNum);
+	} else {
+		return minNum + Math.round(Math.random()*maxNum);
+	}
+}
+
 // setUpFile
 fileStore = {};
 setUpFile = (file, force) => {

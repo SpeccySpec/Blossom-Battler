@@ -8,8 +8,15 @@ passiveList = {
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Element>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <Percentage>!");
-			makePassive(skill, "boost", [extra1.toLowerCase(), parseInt(extra2)]);
+
+			let element = extra1.toLowerCase();
+			if ((!utilityFuncs.inArray(element, Elements) && element != 'all' && element != 'magic' && element != 'physical') || element === 'almighty') return message.channel.send("You entered an invalid element!");
+
+			makePassive(skill, "boost", [element, parseInt(extra2)]);
 			return true;
+		},
+		statmod: function(btl, char, skill, vars) {
+			
 		}
 	},
 
