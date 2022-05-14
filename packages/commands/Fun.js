@@ -2,14 +2,16 @@
 commands.ping = new Command({
 	desc: "Check for my Latency and API Latency.",
 	section: "fun",
-	func: (message, args) => {
-		let pingVal = Date.now() - message.createdTimestamp
-		let latencyVal = Math.round(client.ws.ping)
-
-		let hit = "There! I hit it!";
-		if (pingVal > 50 || pingVal < -50 || latencyVal < 20) hit = "Darn, guess I missed.";
-
-        message.channel.send(`🏓 Allow me to swing! \nLatency is ${pingVal}ms. API Latency is ${latencyVal}ms\n${hit}`);
+	func: (message) => {
+		message.channel.send("Loading...").then((message2) => {
+			const latency = Math.round(client.ws.ping)
+			const ping = message2.createdTimestamp - message.createdTimestamp
+			message2.edit(`🏓 Allow me to swing! \nLatency is ${ping}ms. API Latency is ${latency}ms\n${
+				ping > 500 || latency > 500
+					? "Darn, guess I missed."
+					: "There! I hit it!"
+			}`)
+		})
 	}
 })
 
