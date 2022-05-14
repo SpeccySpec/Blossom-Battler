@@ -215,6 +215,7 @@ sendCurTurnEmbed = (char, btl) => {
 			default:
 				if (menustate == MENU_SKILL && skillFile[i.customId] && char.skills.includes(i.customId)) {
 					btl.action.index = i.customId;
+					let skill = skillFile[i.customId];
 
 					if (skill.target === "one" || skill.target === "spreadopposing") {
 						menustate = MENU_TEAMSEL;
