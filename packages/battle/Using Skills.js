@@ -6,6 +6,60 @@ canUseLb = (char, btl) => {
 	return false;
 }
 
+// Is this a tech
+function isTech(charDefs, element) {
+	if (!charDefs.status) return false;
+	if (charDefs.status === 'sleep' || charDefs.status === 'blind') return true;
+
+	for (let i in elementTechs[charDefs.status]) {
+		let techElement = elementTechs[charDefs.status][i];
+		if (typeof element == 'string')
+			if (element == techElement) return true;
+		else {
+			for (let k in element)
+				if (element[k] == techElement) return true;
+		}
+	}
+
+	return false;
+}
+
+
+// Is the status effect physical?
+function isPhysicalStatus(status) {
+	if (!status) return false;
+	let statusName = status.toLowerCase();
+	return (statusName === 'burn' || statusName === 'bleed' || statusName === 'freeze' || statusName === 'paralyze' || statusName === 'poison' || statusName === 'hunger' || statusName === 'dazed' || statusName === 'irradiated' || statusName === 'mirror' || statusName === 'blind')
+}
+
+useCost = (char, cost, costtype) => {
+	if (cost && costtype) {
+		if (costtype === "hp" && !char.boss)
+			char.hp = Math.max(1, char.hp - cost);
+		else if (costtype === "hppercent" && !char.boss)
+			char.hp = Math.round(Math.max(1, char.hp - ((char.maxhp / 100) * cost)));
+		else if (costtype === "mp")
+			char.mp = Math.max(0, char.mp - cost);
+		else if (costtype === "mppercent" && !char.boss)
+			char.mp = Math.round(Math.max(0, char.mp - ((char.maxmp / 100) * cost)));
+	}
+	
+	return true
+}
+
+// Placeholder
+genDmg = (char, targ, skill) {
+	return randNum(char.level+20);
+}
+
+attackWithSkill = (char, targ, skill, btl) => {
+	const result = {
+		txt: ``,
+		oneMore: false,
+		teamCombo: false
+	}
+}
+
 useSkill = (charDefs, btl, act) => {
 	let char = objClone(charDefs);
 	let skill = objClone(skillFile[act.index]);
@@ -49,11 +103,19 @@ useSkill = (charDefs, btl, act) => {
 			}
 		}
 	}
+	
+	// more shit
+	let skillCost = skill.cost;
+	if (party.leaderskill.type === 'discount') {
 
 	// Who will this skill target? Each index of "targets" is [ID, Power Multiplier].
 	let targets = [];
 	let possible = [];
+	
+	// (easy access)
+	let party = btl.teams[char.team];
 
+	// Insert IDs into the target.
 	switch(skill.target.toLowerCase()) {
 		case 'one':
 		case 'ally':
@@ -75,8 +137,8 @@ useSkill = (charDefs, btl, act) => {
 			break;
 
 		case 'allallies':
-			for (let i in btl.teams[char.team].members)
-				if (btl.teams[char.team].members[i].hp > 0) targets.push([btl.teams[char.team].members[i].id, 1]);
+			for (let i in party.members)
+				if (party.members[i].hp > 0) targets.push([party.members[i].id, 1]);
 			break;
 
 		case 'randomopposing':
@@ -95,7 +157,7 @@ useSkill = (charDefs, btl, act) => {
 
 		case 'randomallies':
 			while (targets.length < skill.hits) {
-				let charDefs = btl.teams[char.team].members[randNum(btl.teams[char.team].members.length-1)];
+				let charDefs = party.members[randNum(party.members.length-1)];
 				if (charDefs && charDefs.hp > 0) targets.push([charDefs.id, 1]);
 			}
 
@@ -152,12 +214,19 @@ useSkill = (charDefs, btl, act) => {
 		skillDefs.pow *= targets[i][1];
 
 		finalText += `\nUsed ${skillDefs.name} on ${targ.name}.`;
-//		finalText += 
+//		finalText += attackWithSkill(char, targ, skillDefs, btl);
 	}
 
+	// Take away the cost
+	useCost(char, skillCost, skill.costtype);
+
+	// Now, send the embed!
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 		.setTitle(targTxt)
 		.setDescription(finalText)
 	btl.channel.send({embeds: [DiscordEmbed]});
+
+	// return true or something
+	return true;
 }

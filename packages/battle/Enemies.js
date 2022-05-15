@@ -4,7 +4,7 @@ enemyThinker = (char, btl) => {
 	let action = {
 		move: 'skills',
 		index: char.skills[randNum(char.skills.length-1)],
-		target: [0, randNum(btl.teams[0].length-1)],
+		target: [0, randNum(btl.teams[0].members.length-1)],
 	}
 
 	return action;
