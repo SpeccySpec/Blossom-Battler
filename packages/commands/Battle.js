@@ -288,11 +288,11 @@ commands.startbattle = new Command({
 			if (!enmFile[args[i]]) return message.channel.send(`${args[i]} is an invalid enemy!`);
 
 			let enemy = objClone(enmFile[args[i]]);
-			if (!enemy.name) enemy.name = args[i];
+			enemy.enemy = true;
 
+			if (!enemy.name) enemy.name = args[i];
 			enemy.maxhp = enemy.hp;
 			enemy.maxmp = enemy.mp;
-
 			enemy.id = battleid;
 			battleid++;
 

@@ -41,4 +41,113 @@ useSkill = (charDefs, btl, act) => {
 			}
 		}
 	}
+
+	// Who will this skill target? Each index of "targets" is [ID, Power Multiplier].
+	let targets = [];
+	let possible = [];
+
+	switch(skill.target.toLowerCase()) {
+		case 'one':
+		case 'ally':
+			targets.push([btl.teams[act.target[0]].members[act.target[1]].id, 1]);
+			break;
+
+		case 'caster':
+			targets.push([char.id, 1]);
+			break;
+
+		case 'allopposing':
+			for (let i in btl.teams) {
+				if (char.team == i) continue;
+				
+				for (let k in btl.teams[i].members)
+					if (btl.teams[i].members[k].hp > 0) targets.push([btl.teams[i].members[k].id, 1]);
+			}
+			break;
+
+		case 'allallies':
+			for (let i in btl.teams[char.team].members)
+				if (btl.teams[char.team].members[k].hp > 0) targets.push([btl.teams[char.team].members[i].id, 1]);
+			break;
+
+		case 'randomopposing':
+			for (let i in btl.teams) {
+				if (char.team == i) continue;
+				
+				for (let k in btl.teams[i].members)
+					if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k].id);
+			}
+
+			for (let i = 0; i < skill.hits; i++)
+				targets.push([possible[randNum(possible.length-1)] ?? possible[0], 1]);
+
+			skill.hits = 1; // make the skill one hit now.
+			break;
+
+		case 'randomallies':
+			while (targets.length < skill.hits) {
+				let charDefs = btl.teams[char.team].members[randNum(btl.teams[char.team].members.length-1)];
+				if (charDefs && charDefs.hp > 0) targets.push([charDefs.id, 1]);
+			}
+
+			skill.hits = 1; // make the skill one hit now.
+			break;
+
+		case 'random':
+			for (let i in btl.teams) {
+				for (let k in btl.teams[i].members)
+					if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) possible.push(btl.teams[i].members[k].id);
+			}
+
+			for (let i = 0; i < skill.hits; i++)
+				targets.push([possible[randNum(possible.length-1)] ?? possible[0], 1]);
+
+			skill.hits = 1; // make the skill one hit now.
+			break;
+
+		case 'everyone':
+			for (let i in btl.teams) {
+				for (let k in btl.teams[i].members)
+					if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) targets.push([btl.teams[i].members[k].id, 1]);
+			}
+			break;
+
+		case 'spreadallies':
+		case 'spreadopposing':
+			targets.push([btl.teams[act.target[0]].members[act.target[1]].id, 1]);
+			if (btl.teams[act.target[0]].members[act.target[1]-1] && btl.teams[act.target[0]].members[act.target[1]-1].hp > 0) targets.push([btl.teams[act.target[0]].members[act.target[1]-1].id, 0.6666666666666666]);
+			if (btl.teams[act.target[0]].members[act.target[1]+1] && btl.teams[act.target[0]].members[act.target[1]+1].hp > 0) targets.push([btl.teams[act.target[0]].members[act.target[1]+1].id, 0.6666666666666666]);
+			break;
+	}
+
+	let targTxt = `${char.name} => `;
+	let finalText = '**[DEBUG]**';
+
+	if (targets.length <= 1) 
+		targTxt += getCharFromId(targets[0][0], btl).name;
+	else {
+		if (skill.target === 'allallies' || skill.target === 'spreadallies') {
+			targTxt += 'Allies'
+		} else if (skill.target === 'everyone') {
+			targTxt += 'Everyone'
+		} else if (skill.target === 'random' || skill.target === 'randomopposing') {
+			targTxt += '???'
+		} else {
+			targTxt += 'Foes'
+		}
+	}
+
+	for (let i in targets) {
+		let targ = getCharFromId(targets[i][0], btl);
+		let skillDefs = objClone(skill);
+		skillDefs.pow *= targets[i][1];
+
+		finalText += `\nUsed ${skillDefs.name} on ${targ.name}.`;
+	}
+
+	let DiscordEmbed = new Discord.MessageEmbed()
+		.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+		.setTitle(targTxt)
+		.setDescription(finalText)
+	btl.channel.send({embeds: [DiscordEmbed]});
 }

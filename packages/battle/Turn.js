@@ -123,10 +123,13 @@ const menuStates = {
 	},
 	[MENU_TARGET]: ({char, btl, comps}) => {
 		const members = btl.teams[btl.action.target[0]].members
-		for (const i in members)
+		for (const i in members) {
+			if (members[i].hp <= 0) continue;
+
 			comps[CalcCompins(comps, i)].push(
 				makeButton(`${members[i].name}`, '#️⃣', (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
 			)
+		}
 	}
 }
 
@@ -309,13 +312,16 @@ sendCurTurnEmbed = (char, btl) => {
 }
 
 doAction = (char, btl, action) => {
-	switch(btl.action.move) {
+	btl.channel.send(`**[DEBUG]**\n\n_${char.name}'s turn!_`);
+
+	switch(action.move) {
 		case 'melee':
 			btl.channel.send(`**[DEBUG]**\n\n**[MOVE]** _Melee Attack_\n**[TARGET]**: _[${action.target[0]}, ${action.target[1]}]_`);
 			break;
 
+		case 'skill':
 		case 'skills':
-			btl.channel.send(`**[DEBUG]**\n\n**[MOVE]** _Skill_\n**[SKILLNAME]** _${getFullName(skillFile[btl.index])}_\n**[TARGET]**: _[${action.target[0]}, ${action.target[1]}]_`);
+			btl.channel.send(`**[DEBUG]**\n\n**[MOVE]** _Skill_\n**[SKILLNAME]** _${getFullName(skillFile[action.index])}_\n**[TARGET]**: _[${action.target[0]}, ${action.target[1]}]_`);
 			useSkill(char, btl, action);
 			break;
 	}
@@ -405,7 +411,10 @@ doTurn = (btl, noTurnEmbed) => {
 		if (noTurnEmbed) return;
 
 		// Now... send the turn embed!
-		sendCurTurnEmbed(char, btl);
+		if (char.enemy || char.automove)
+			doEnemyTurn(char, btl);
+		else
+			sendCurTurnEmbed(char, btl);
 	}, 150)
 }
 
