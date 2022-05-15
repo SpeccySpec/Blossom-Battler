@@ -1,3 +1,11 @@
+canUseLb = (char, btl) => {
+	let settings = setUpSettings(btl.guild.id);
+	if (!settings.mechanics.limitbreaks) return false;
+
+	// We'll sort this out later.
+	return false;
+}
+
 useSkill = (charDefs, btl, act) => {
 	let char = objClone(charDefs);
 	let skill = objClone(skillFile[act.index]);
@@ -49,7 +57,8 @@ useSkill = (charDefs, btl, act) => {
 	switch(skill.target.toLowerCase()) {
 		case 'one':
 		case 'ally':
-			targets.push([btl.teams[act.target[0]].members[act.target[1]].id, 1]);
+			let targ = btl.teams[act.target[0]].members[act.target[1]] ?? btl.teams[0].members[0];
+			targets.push([targ.id, 1]);
 			break;
 
 		case 'caster':
@@ -67,7 +76,7 @@ useSkill = (charDefs, btl, act) => {
 
 		case 'allallies':
 			for (let i in btl.teams[char.team].members)
-				if (btl.teams[char.team].members[k].hp > 0) targets.push([btl.teams[char.team].members[i].id, 1]);
+				if (btl.teams[char.team].members[i].hp > 0) targets.push([btl.teams[char.team].members[i].id, 1]);
 			break;
 
 		case 'randomopposing':
@@ -120,20 +129,20 @@ useSkill = (charDefs, btl, act) => {
 			break;
 	}
 
-	let targTxt = `${char.name} => `;
-	let finalText = '**[DEBUG]**';
+	let targTxt = `__${char.name}__ => `;
+	let finalText = `_${char.name}_ used _${skill.name}_!`;
 
 	if (targets.length <= 1) 
-		targTxt += getCharFromId(targets[0][0], btl).name;
+		targTxt += `__${getCharFromId(targets[0][0], btl).name}__`;
 	else {
 		if (skill.target === 'allallies' || skill.target === 'spreadallies') {
-			targTxt += 'Allies'
+			targTxt += '__Allies__'
 		} else if (skill.target === 'everyone') {
-			targTxt += 'Everyone'
+			targTxt += '__Everyone__'
 		} else if (skill.target === 'random' || skill.target === 'randomopposing') {
-			targTxt += '???'
+			targTxt += '__???__'
 		} else {
-			targTxt += 'Foes'
+			targTxt += '__Foes__'
 		}
 	}
 
@@ -143,6 +152,7 @@ useSkill = (charDefs, btl, act) => {
 		skillDefs.pow *= targets[i][1];
 
 		finalText += `\nUsed ${skillDefs.name} on ${targ.name}.`;
+//		finalText += 
 	}
 
 	let DiscordEmbed = new Discord.MessageEmbed()

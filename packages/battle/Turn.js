@@ -76,7 +76,7 @@ function CalcCompins(comps, i) {
 }
 
 const menuStates = {
-	[MENU_ACT]: ({comps}) => {
+	[MENU_ACT]: ({char, btl, comps}) => {
 		comps[0] = [
 			makeButton('Melee', elementEmoji.strike, 'red'),
 			makeButton('Skills', elementEmoji.bless, 'blue'),
@@ -84,13 +84,17 @@ const menuStates = {
 			makeButton('Tactics', critEmoji, 'grey'),
 			makeButton('Guard', affinityEmoji.block, 'grey')
 		]
+
+		if (btl.canteamcombo) comps[CalcCompins(comps, comps[0].length)].push(makeButton('Team Combo', elementEmoji.slash, 'blue'));
+		if (canUseLb(char, btl)) comps[CalcCompins(comps, comps[0].length)].push(makeButton('Limit Break', elementEmoji.almighty, 'blue'));
 	},
 	[MENU_SKILL]: ({char, comps}) => {
 		for (const i in char.skills) {
 			const skillname = char.skills[i]
 			const skillinfo = skillFile[skillname]
-			if (skillinfo?.type === 'passive')
-				continue;
+			if (!skillinfo) continue;
+			if (skillinfo?.type === 'passive') continue;
+
 			const compins = CalcCompins(comps, i)
 			let btncolor = 'blue'
 			if (skillinfo?.type === 'heal') 
@@ -112,7 +116,8 @@ const menuStates = {
 		comps[0] = [
 			makeButton('Run!', elementEmoji.wind, 'grey'),
 			makeButton('Backup', '<:mental:973077052053921792>', 'blue'),
-			makeButton('Pacify', itemTypeEmoji.pacify, 'green')
+			makeButton('Pacify', itemTypeEmoji.pacify, 'green'),
+			makeButton('Enemy Info', statusEmojis.silence, 'red')
 		]
 	},
 	[MENU_TEAMSEL]: ({btl, comps}) => {
@@ -122,9 +127,17 @@ const menuStates = {
 			)
 	},
 	[MENU_TARGET]: ({char, btl, comps}) => {
-		const members = btl.teams[btl.action.target[0]].members
+		let skill = skillFile[btl.action.index];
+		const members = btl.teams[btl.action.target[0]].members;
+
 		for (const i in members) {
-			if (members[i].hp <= 0) continue;
+			if (!skill) continue;
+
+			if (skill.type === 'heal' && skill.heal.revive) {
+				if (members[i].hp > 0) continue;
+			} else {
+				if (members[i].hp <= 0) continue;
+			}
 
 			comps[CalcCompins(comps, i)].push(
 				makeButton(`${members[i].name}`, '#️⃣', (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
