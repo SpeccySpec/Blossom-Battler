@@ -22,11 +22,26 @@ statusList = {
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
 			if (!utilityFuncs.validStat(extra1)) return message.channel.send("That's not a valid stat!");
-			if (!extra2) extra3 = '-1';
+			if (!extra2) extra2 = '1';
 			if (!extra3) extra3 = '100';
 
 			makeStatus(skill, "buff", [extra1.toLowerCase(), parseInt(extra2), parseFloat(extra3)]);
 			return true;
+		},
+		onuse: function(char, targ, skill, btl, vars) {
+			if (vars[2]) {
+				let chance = randNum(100);
+
+				if (chance <= vars[2]) {
+					buffStat(targ, vars[0].toLowerCase(), vars[1]);
+					return `__${targ.name}__'s _${vars[0].toUpperCase()}_ was buffed ${vars[1]} time(s)!`;
+				} else {
+					return `But it missed __${targ.name}__!`;
+				}
+			} else {
+				buffStat(targ, vars[0].toLowerCase(), vars[1]);
+				return `__${targ.name}__'s _${vars[0].toUpperCase()}_ was buffed ${vars[1]} time(s)!`;
+			}
 		}
 	},
 
@@ -36,6 +51,13 @@ statusList = {
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			makeStatus(skill, "dekunda", [true]);
 			return true;
+		},
+		onuse: function(char, targ, skill, btl, vars) {
+			for (let i in targ.buffs) {
+				if (targ.buffs[i] > 0) targ.buffs[i] = 0;
+			}
+
+			return `__${targ.name}__'s positive buffs were nullified!`;
 		}
 	},
 

@@ -120,6 +120,8 @@ attackWithSkill = (char, targ, skill, btl) => {
 		// Placeholder damage formula
 		let dmg = genDmg(char, targ, skill)
 		result.txt += `__${targ.name}__ took _${dmg} damage_!`;
+
+		targ.hp -= dmg;
 	}
 
 	return result;
@@ -259,7 +261,7 @@ useSkill = (charDefs, btl, act) => {
 	}
 
 	let targTxt = `__${char.name}__ => `;
-	let finalText = `_${char.name}_ used _${skill.name}_!`;
+	let finalText = `_${char.name}_ used _${skill.name}_!\n\n`;
 
 	if (targets.length <= 1) 
 		targTxt += `__${getCharFromId(targets[0][0], btl).name}__`;
@@ -323,4 +325,5 @@ useSkill = (charDefs, btl, act) => {
 
 	// return true or something
 	return true;
+	fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, btl);
 }
