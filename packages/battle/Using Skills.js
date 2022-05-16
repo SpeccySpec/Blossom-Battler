@@ -119,7 +119,7 @@ attackWithSkill = (char, targ, skill, btl) => {
 
 		// Placeholder damage formula
 		let dmg = genDmg(char, targ, skill)
-		result.txt += `${targ.name} took ${dmg} damage!`;
+		result.txt += `__${targ.name}__ took _${dmg} damage_!`;
 	}
 
 	return result;
@@ -171,15 +171,16 @@ useSkill = (charDefs, btl, act) => {
 	
 	// more shit
 	let skillCost = skill.cost;
-	if (party.leaderskill.type === 'discount') {
+	
+	// (easy access)
+	let party = btl.teams[char.team];
+
+	if (party.leaderskill && party.leaderskill.type === 'discount') {
 	}
 
 	// Who will this skill target? Each index of "targets" is [ID, Power Multiplier].
 	let targets = [];
 	let possible = [];
-	
-	// (easy access)
-	let party = btl.teams[char.team];
 
 	// Insert IDs into the target.
 	switch(skill.target.toLowerCase()) {
@@ -304,7 +305,7 @@ useSkill = (charDefs, btl, act) => {
 		skillDefs.pow *= targets[i][1];
 
 		let result = attackWithSkill(char, targ, skillDefs, btl);
-		finalText += result.txt;
+		finalText += `${result.txt}\n`;
 
 		if (result.oneMore) btl.doonemore = true;
 		if (result.teamCombo) btl.canteamcombo = true;

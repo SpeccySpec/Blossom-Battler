@@ -127,21 +127,32 @@ const menuStates = {
 			)
 	},
 	[MENU_TARGET]: ({char, btl, comps}) => {
-		let skill = skillFile[btl.action.index];
-		const members = btl.teams[btl.action.target[0]].members;
+		if (btl.action.move === 'melee') {
+			const members = btl.teams[btl.action.target[0]].members;
 
-		for (const i in members) {
-			if (!skill) continue;
-
-			if (skill.type === 'heal' && skill.heal.revive) {
-				if (members[i].hp > 0) continue;
-			} else {
+			for (const i in members) {
 				if (members[i].hp <= 0) continue;
+				comps[CalcCompins(comps, i)].push(
+					makeButton(`${members[i].name}`, '#️⃣', (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
+				)
 			}
+		} else {
+			let skill = skillFile[btl.action.index];
+			const members = btl.teams[btl.action.target[0]].members;
 
-			comps[CalcCompins(comps, i)].push(
-				makeButton(`${members[i].name}`, '#️⃣', (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
-			)
+			for (const i in members) {
+				if (!skill) continue;
+
+				if (skill.type === 'heal' && skill.heal.revive) {
+					if (members[i].hp > 0) continue;
+				} else {
+					if (members[i].hp <= 0) continue;
+				}
+
+				comps[CalcCompins(comps, i)].push(
+					makeButton(`${members[i].name}`, '#️⃣', (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
+				)
+			}
 		}
 	}
 }
@@ -223,14 +234,7 @@ sendCurTurnEmbed = (char, btl) => {
 		switch(i.customId) {
 			case 'melee':
 				btl.action.move = 'melee';
-				
-				if (multipleTeams) {
-					menustate = MENU_TEAMSEL;
-				} else {
-					btl.action.target[0] = op;
-					menustate = MENU_TARGET;
-				}
-
+				menustate = MENU_TEAMSEL;
 				break;
 
 			case 'skills':
@@ -325,8 +329,6 @@ sendCurTurnEmbed = (char, btl) => {
 }
 
 doAction = (char, btl, action) => {
-	btl.channel.send(`**[DEBUG]**\n\n_${char.name}'s turn!_`);
-
 	switch(action.move) {
 		case 'melee':
 			btl.channel.send(`**[DEBUG]**\n\n**[MOVE]** _Melee Attack_\n**[TARGET]**: _[${action.target[0]}, ${action.target[1]}]_`);
@@ -334,7 +336,6 @@ doAction = (char, btl, action) => {
 
 		case 'skill':
 		case 'skills':
-			btl.channel.send(`**[DEBUG]**\n\n**[MOVE]** _Skill_\n**[SKILLNAME]** _${getFullName(skillFile[action.index])}_\n**[TARGET]**: _[${action.target[0]}, ${action.target[1]}]_`);
 			useSkill(char, btl, action);
 			break;
 	}
