@@ -54,7 +54,69 @@ genDmg = (char, targ, skill) => {
 	return randNum(char.level+20)+randNum(skill.pow/4);
 }
 
-attackWithSkill = (char, targ, skill, btl) => {
+// Also Placeholder
+getAffinity = (charDefs, skillType) => {
+	let affinity = 'normal'
+
+	if (typeof skillType === 'object') {
+		skillType = skillType.filter((_, index) => _ != "almighty");
+		console.log(skillType)
+		
+		if (skillType.length < 2) skillType = skillType[0]
+	}
+
+	if (skillType && skillType != "almighty") {
+		const affinities = ["superweak", "weak", "resist", "block", "repel", "drain"]
+
+		if (typeof skillType === 'string') {
+			for (const i in affinities) {
+				for (const k in charDefs.affinities[affinities[i]]) {
+					if (charDefs.affinities[affinities[i]][k] == skillType)
+						affinity = affinities[i];
+				}
+			}
+		} else {
+			let results = [-2, -1, 1, 2, 2, 2] //results that would appear
+			let points = 0
+
+			let affinityToConsider = ''
+
+			for (let j = 0; j < skillType.length; j++) {
+				for (const i in affinities) {
+					for (const k in charDefs.affinities[affinities[i]]) {
+						if (charDefs.affinities[affinities[i]][k] == skillType[j]) {
+							points = results[affinities.indexOf(affinities[i])]
+
+							if (affinities[i] === "repel") affinityToConsider = "repel"
+							if (affinities[i] === "block") affinityToConsider = "block"
+							if (affinities[i] === "drain") affinityToConsider = "drain"
+						}
+					}
+				}
+			}
+
+			points = Math.min(points, 2)
+			points = Math.max(points, -4)
+
+			if (points == 0)
+				affinity = "normal"
+			else if (points < 2 && points != 0 && points > -3)
+				affinity = affinities[results.indexOf(points)]
+			else if (points == 2)
+				affinity = affinityToConsider != '' ? affinityToConsider : 'block'
+			else if (points == -4)
+				affinity = "deathly"
+			else if (points == -3)
+				affinity = "superweak"
+		}
+	}
+	
+	return affinity
+}
+
+attackWithSkill = (char, targ, skill, btl, noRepel) => {
+	let settings = setUpSettings(btl.guild.id);
+
 	const result = {
 		txt: ``,
 		oneMore: false,
@@ -105,23 +167,87 @@ attackWithSkill = (char, targ, skill, btl) => {
 
 				if (extrasList[i].multiple) {
 					for (let k in skill.extras[i]) {
-						result.txt += `${extrasList[i].onuseoverride(char, targ, btl, skill.extras[i][k])}\n`;
+						result.txt += `${extrasList[i].onuseoverride(char, targ, skill, btl, skill.extras[i][k])}\n`;
 						return true;
 					}
 				} else {
-					result.txt += `${extrasList[i].onuseoverride(char, targ, btl, skill.extras[i])}\n`;
+					result.txt += `${extrasList[i].onuseoverride(char, targ, skill, btl, skill.extras[i])}\n`;
 					return true;
 				}
 			}
 
 			if (returnThis) return result;
 		}
+		
+		let affinity = getAffinity(targ, skill.type);
+		if (affinity == 'block' || (affinity == 'repel' && noRepel)) {
+			result.txt += `${targ.name} blocked it!`;
+			return result;
+		} else if (affinity == 'repel' && !noRepel) {
+			let newResults = attackWithSkill(char, char, skill, btl, true);
+			result.oneMore = newResults.oneMore;
+			result.teamCombo = newResults.teamCombo;
+
+			result.txt += `${targ.name} repelled it!\n${newResults.txt}`;
+			skill.acc = 999; // Never miss a repel - just to be flashy :D
+			return result;
+		}
 
 		// Placeholder damage formula
-		let dmg = genDmg(char, targ, skill)
-		result.txt += `__${targ.name}__ took _${dmg} damage_!`;
+		let damages = [];
+		let total = 0;
+		
+		// How many total hits
+		let totalHits = 0;
+		for (let i = 0; i < skill.hits; i++) {
+			let chance = randNum(100);
+			if (chance <= skill.acc) {
+				totalHits++;
+				continue;
+			}
 
-		targ.hp -= dmg;
+			break;
+		}
+
+		if (totalHits <= 0)
+			result.txt += `${targ.name} dodged it!`;
+		else {
+			for (let i = 0; i < skill.hits; i++) {
+				let dmg = genDmg(char, targ, skill);
+				if (affinity == 'resist') dmg *= settings.rates.affinities.resist;
+				if (affinity == 'weak') dmg *= settings.rates.affinities.weak;
+				if (affinity == 'superweak') dmg *= settings.rates.affinities.superweak;
+				if (affinity == 'deadly') dmg *= settings.rates.affinities.deadly;
+				damages.push(dmg);
+			}
+
+			if (affinity == 'drain') {
+				result.txt += `__${targ.name}__'s HP was restored by _`
+				for (let i in damages) {
+					result.txt += `**${damages[i]}**${affinityEmoji.drain}`;
+
+					total += damages[i];
+					if (i < damages.length-1) result.txt += '+';
+				}
+				result.txt += '!_';
+
+				if (damages.length > 1) result.txt += ` **(${totalHits} hits, ${total} Total)**`;
+				targ.hp = Math.min(targ.maxhp, targ.hp+total);
+			} else {
+				result.txt += `__${targ.name}__ took _`
+				for (let i in damages) {
+					result.txt += `**${damages[i]}**`;
+					if (affinityEmoji[affinity]) result.txt += affinityEmoji[affinity];
+
+					total += damages[i];
+					if (i < damages.length-1) result.txt += ' + ';
+				}
+				result.txt += ' damage!_';
+
+				if (damages.length > 1) result.txt += ` **(${(totalHits >= skill.hits) ? '__Full Combo!__ ' : (totalHits + ' hits, ')}${total} Total)**`;
+				targ.hp = Math.max(0, targ.hp-total);
+			}
+		}
 	}
 
 	return result;
@@ -261,7 +387,7 @@ useSkill = (charDefs, btl, act) => {
 	}
 
 	let targTxt = `__${char.name}__ => `;
-	let finalText = `_${char.name}_ used _${skill.name}_!\n\n`;
+	let finalText = `__${char.name}__ used __${skill.name}__!\n\n`;
 
 	if (targets.length <= 1) 
 		targTxt += `__${getCharFromId(targets[0][0], btl).name}__`;

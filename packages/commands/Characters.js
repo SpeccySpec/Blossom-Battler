@@ -625,6 +625,26 @@ commands.mainelement = new Command({
 })
 
 // Affinities
+
+// Get element affinity.
+/*
+getAffinity = (charDefs, element) => {
+	if (element.toLowerCase() == 'almighty') return 'neutral';
+	if (!charDefs.affinities) return 'neutral';
+
+	for (let i in Affinities) {
+		if (charDefs.affinities[Affinities[i]] && charDefs.affinities[Affinities[i]].length > 0) {
+			for (let k in charDefs.affinities[Affinities[i]]) {
+				if (charDefs.affinities[Affinities[i]][k].toLowerCase() === element.toLowerCase()) return Affinities[i];
+			}
+		}
+	}
+
+	return 'neutral';
+}
+*/
+
+// Has the specified affinities
 hasAffinity = (charDefs, element, affinity) => {
 	if (element.toLowerCase() == 'almighty') return false;
 

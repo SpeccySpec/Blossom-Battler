@@ -106,7 +106,7 @@ extrasList = {
 			makeExtra(skill, "stealmp", [true]);
 			return true
 		},
-		onuseoverride: function(char, targ, btl, vars) {
+		onuseoverride: function(char, targ, skill, btl, vars) {
 			let mpStolen = Math.max(1, skill.pow+randNum(-10, 10));
 			
 			targ.mp = Math.max(0, targ.mp-mpStolen)

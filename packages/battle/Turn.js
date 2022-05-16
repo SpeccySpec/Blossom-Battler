@@ -348,8 +348,12 @@ doAction = (char, btl, action) => {
 
 doTurn = (btl, noTurnEmbed) => {
 	let char = getCharFromTurn(btl);
-	let settings = setUpSettings(btl.guild.id)
+	let settings = setUpSettings(btl.guild.id);
+	
+	// Skip this turn if we're dead.
+	if (char.hp <= 0) return advanceTurn(btl);
 
+	// a
 	let statusTxt = '';
 
 	// Start Of Turn passives.
@@ -421,7 +425,7 @@ doTurn = (btl, noTurnEmbed) => {
 	}
 
 	setTimeout(function() {
-		if (!canMove) return advanceTurn(btl)
+		if (!canMove) return advanceTurn(btl);
 		if (noTurnEmbed) return;
 
 		// Now... send the turn embed!
@@ -454,8 +458,6 @@ advanceTurn = (btl) => {
 
 			// This character is dead.
 			if (char.hp <= 0) {
-				btl.channel.send(`**[DEBUG]**\n${char.name} is dead!`);
-
 				pLeft--;
 				resetEffects(char);
 				continue;
@@ -491,6 +493,8 @@ advanceTurn = (btl) => {
 				winBattle(btl, 0)
 			}
 		}
+
+		return;
 	}
 
 	// Now, go to the next turn.
