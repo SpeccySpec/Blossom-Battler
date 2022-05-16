@@ -167,7 +167,7 @@ setUpComponents = (char, btl, menustate) => {
 
 sendCurTurnEmbed = (char, btl) => {
 	let menustate = MENU_ACT;
-	let statDesc = `${getBar('hp', char.hp, char.maxhp)}		${getBar('mp', char.mp, char.maxmp)}\n${char.hp}/${char.maxhp}HP						${char.mp}/${char.maxmp}MP`;
+	let statDesc = `${getBar('hp', char.hp, char.maxhp)}\t${getBar('mp', char.mp, char.maxmp)}\n${char.hp}/${char.maxhp}HP						${char.mp}/${char.maxmp}MP`;
 
 	let teamDesc = '';
 	let op = (char.team <= 0) ? 1 : 0;
