@@ -255,21 +255,22 @@ commands.kickfromparty = new Command({
 		}
 	],
 	func: (message, args) => {
-		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
-		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		const parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		const party = parties[args[0]]
+		const charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
-		if (!parties[args[0]]) return message.channel.send(`${args[0]} is an invalid party!`);
+		if (!party) return message.channel.send(`${args[0]} is an invalid party!`);
 		if (!charFile[args[1]]) return message.channel.send(`${args[1]} is an invalid character!`);
 
-		if (!isPartyLeader(message.author, parties[args[0]], message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send("You cannot edit this party.")
-
-		if (parties.members.includes(args[1])) {
+		if (!isPartyLeader(message.author, party, message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send("You cannot edit this party.")
+		
+		if (party.members?.includes(args[1])) {
 			message.channel.send(`${args[1]} has been kicked from ${args[0]}!`);
-			parties[args[0]].members.splice(parties[args[0]].members.indexOf(args[1]), 1);
+			party.members.splice(party.members.indexOf(args[1]), 1);
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
-		} else if (parties.backup && parties.backup.includes(args[1])) {
+		} else if (party.backup?.includes(args[1])) {
 			message.channel.send(`${args[1]} has been kicked from ${args[0]}!`);
-			parties[args[0]].backup.splice(parties[args[0]].backup.indexOf(args[1]), 1);
+			party.backup.splice(party.backup.indexOf(args[1]), 1);
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
 		} else {
 			return message.channel.send(`${args[1]} is not in the party!`);
