@@ -5,8 +5,14 @@ healList = {
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <HP>!");
 			if (parseInt(extra1) == 0) extra1 = 60;
+			
+			skill.pow = parseInt(extra1);
 			makeHeal(skill, "default", [parseInt(extra1)]);
 			return true;
+		},
+		onuse: function(char, targ, skill, btl, vars) {
+			targ.hp = Math.min(targ.maxhp, targ.hp+vars[0]);
+			return `${targ.name}'s HP was restored by ${vars[0]}!`;
 		}
 	},
 
@@ -17,6 +23,10 @@ healList = {
 			if (!extra1) return message.channel.send("You didn't supply anything for <MP>!");
 			makeHeal(skill, "healmp", [parseInt(extra1)]);
 			return true;
+		},
+		onuse: function(char, targ, skill, btl, vars) {
+			targ.mp = Math.min(targ.maxmp, targ.mp+vars[0]);
+			return `${targ.name}'s MP was restored by ${vars[0]}!`;
 		}
 	},
 
@@ -30,6 +40,15 @@ healList = {
 			if (parseInt(extra1) == 0) extra2 = 3;
 			makeHeal(skill, "regenerate", [parseInt(extra1), parseInt(extra2)]);
 			return true;
+		},
+		onuse: function(char, targ, skill, btl, vars) {
+			targ.regenheal = {
+				heal: vars[0],
+				turns: vars[1],
+				type: "hp"
+			}
+
+			return `${targ.name} is surrounded in a lime coloured aura!`;
 		}
 	},
 
@@ -42,6 +61,15 @@ healList = {
 			if (parseInt(extra1) == 0) extra1 = 20;
 			if (parseInt(extra1) == 0) extra2 = 3;
 			return true;
+		},
+		onuse: function(char, targ, skill, btl, vars) {
+			targ.regenheal = {
+				heal: vars[0],
+				turns: vars[1],
+				type: "mp"
+			}
+
+			return `${targ.name} is surrounded in a violet coloured aura!`;
 		}
 	},
 
@@ -53,6 +81,12 @@ healList = {
 			if (parseInt(extra1) <= 0) return message.channel.send("You can't revive to 0 or less!");
 			makeHeal(skill, "revive", [parseInt(extra1)]);
 			return true;
+		},
+		onuse: function(char, targ, skill, btl, vars) {
+			if (targ.hp > 0) return 'But it failed!';
+
+			targ.hp = targ.maxhp/vars[0];
+			return `${targ.name} was revived!`;
 		}
 	},
 
@@ -62,6 +96,15 @@ healList = {
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			makeHeal(skill, "recarmdra", [true]);
 			return true;
+		},
+		override: function(char, skill, btl, vars) {
+			char.hp = 0;
+			for (let i in btl.teams[char.team]) {
+				targ.hp = targ.maxhp;
+				targ.mp = targ.maxmp;
+			}
+
+			return `The party's HP & MP was fully restored, but at the cost of ${char.name}'s sacrifice!`;
 		}
 	},
 

@@ -13,11 +13,12 @@ function isTech(charDefs, element) {
 
 	for (let i in elementTechs[charDefs.status]) {
 		let techElement = elementTechs[charDefs.status][i];
-		if (typeof element == 'string')
+		if (typeof element == 'string') {
 			if (element == techElement) return true;
-		else {
-			for (let k in element)
+		} else {
+			for (let k in element) {
 				if (element[k] == techElement) return true;
+			}
 		}
 	}
 
@@ -29,7 +30,8 @@ function isTech(charDefs, element) {
 function isPhysicalStatus(status) {
 	if (!status) return false;
 	let statusName = status.toLowerCase();
-	return (statusName === 'burn' || statusName === 'bleed' || statusName === 'freeze' || statusName === 'paralyze' || statusName === 'poison' || statusName === 'hunger' || statusName === 'dazed' || statusName === 'irradiated' || statusName === 'mirror' || statusName === 'blind')
+
+	return (statusName === 'burn' || statusName === 'bleed' || statusName === 'freeze' || statusName === 'paralyze' || statusName === 'poison' || statusName === 'hunger' || statusName === 'dazed' || statusName === 'irradiated' || statusName === 'mirror' || statusName === 'blind');
 }
 
 useCost = (char, cost, costtype) => {
@@ -48,8 +50,8 @@ useCost = (char, cost, costtype) => {
 }
 
 // Placeholder
-genDmg = (char, targ, skill) {
-	return randNum(char.level+20);
+genDmg = (char, targ, skill) => {
+	return randNum(char.level+20)+randNum(skill.pow/4);
 }
 
 attackWithSkill = (char, targ, skill, btl) => {
@@ -58,6 +60,69 @@ attackWithSkill = (char, targ, skill, btl) => {
 		oneMore: false,
 		teamCombo: false
 	}
+
+	// Healing Skills
+	if (skill.type === 'heal') {
+		if (skill.heal) {
+			for (let i in skill.heal) {
+				if (!healList[i]) continue;
+				if (!healList[i].onuse) continue;
+
+				if (healList[i].multiple) {
+					for (let k in skill.heal[i]) {
+						result.txt += `${healList[i].onuse(char, targ, skill, btl, skill.heal[i][k])}\n`;
+					}
+				} else {
+					result.txt += `${healList[i].onuse(char, targ, skill, btl, skill.heal[i])}\n`;
+				}
+			}
+		}
+	// Status Skills
+	} else if (skill.type === 'status') {
+		if (skill.statusses) {
+			for (let i in skill.statusses) {
+				if (!statusList[i]) continue;
+				if (!statusList[i].onuse) continue;
+
+				if (statusList[i].multiple) {
+					for (let k in skill.statusses[i]) {
+						result.txt += `${statusList[i].onuse(char, targ, skill, btl, skill.statusses[i][k])}\n`;
+					}
+				} else {
+					result.txt += `${statusList[i].onuse(char, targ, skill, btl, skill.statusses[i])}\n`;
+				}
+			}
+		}
+	// Attacking Skills
+	} else {
+		// Override
+		if (skill.extras) {
+			let returnThis = false;
+
+			for (let i in skill.extras) {
+				if (!extrasList[i]) continue;
+				if (!extrasList[i].onuseoverride) continue;
+
+				if (extrasList[i].multiple) {
+					for (let k in skill.extras[i]) {
+						result.txt += `${extrasList[i].onuseoverride(char, targ, btl, skill.extras[i][k])}\n`;
+						return true;
+					}
+				} else {
+					result.txt += `${extrasList[i].onuseoverride(char, targ, btl, skill.extras[i])}\n`;
+					return true;
+				}
+			}
+
+			if (returnThis) return result;
+		}
+
+		// Placeholder damage formula
+		let dmg = genDmg(char, targ, skill)
+		result.txt += `${targ.name} took ${dmg} damage!`;
+	}
+
+	return result;
 }
 
 useSkill = (charDefs, btl, act) => {
@@ -107,6 +172,7 @@ useSkill = (charDefs, btl, act) => {
 	// more shit
 	let skillCost = skill.cost;
 	if (party.leaderskill.type === 'discount') {
+	}
 
 	// Who will this skill target? Each index of "targets" is [ID, Power Multiplier].
 	let targets = [];
@@ -208,13 +274,40 @@ useSkill = (charDefs, btl, act) => {
 		}
 	}
 
+	if (skill.heal) {
+		for (let i in skill.heal) {
+			if (healList[i].override) {
+				if (healList[i].multiple) {
+					for (let k in skill.heal[i]) {
+						finalText += healList[i].override(char, skill, btl, skill.heal[i][k]);
+					}
+				} else {
+					finalText += healList[i].override(char, skill, btl, skill.heal[i]);
+				}
+
+				// Take away the cost
+				useCost(char, skillCost, skill.costtype);
+
+				// Now, send the embed!
+				let DiscordEmbed = new Discord.MessageEmbed()
+					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setTitle(targTxt)
+					.setDescription(finalText)
+				return btl.channel.send({embeds: [DiscordEmbed]});
+			}
+		}
+	}
+
 	for (let i in targets) {
 		let targ = getCharFromId(targets[i][0], btl);
 		let skillDefs = objClone(skill);
 		skillDefs.pow *= targets[i][1];
 
-		finalText += `\nUsed ${skillDefs.name} on ${targ.name}.`;
-//		finalText += attackWithSkill(char, targ, skillDefs, btl);
+		let result = attackWithSkill(char, targ, skillDefs, btl);
+		finalText += result.txt;
+
+		if (result.oneMore) btl.doonemore = true;
+		if (result.teamCombo) btl.canteamcombo = true;
 	}
 
 	// Take away the cost
