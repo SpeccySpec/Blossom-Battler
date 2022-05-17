@@ -10,9 +10,30 @@ trialDesc = (trial, name, message) => {
     return embed
 }
 
-longtrialdesc = async(trial, name, message) => {
+async function longtrialdesc(trial, name, message){
+    enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
+    const newtrial = trial.waves
+
     const generateEmbed = async start => {
-        const current = trial.waves.slice(start, start + 15)
+        const current = newtrial.slice(start, start + 15)
+
+        for (let i = 0; i < current.length; i++) {
+            for (let j = 0; j < current[i].length; j++) {
+                if (current[i][j].startsWith('<:warning:878094052208296007>')) {
+                    current[i][j] = current[i][j].replace('<:warning:878094052208296007>', '')
+                }
+                if (current[i][j].startsWith('||') && current[i][j].endsWith('||')) {
+                    current[i][j] = current[i][j].slice(2, current[i][j].length - 2)
+                }
+                if (!enemyFuncs.encounteredEnemy(current[i][j], message.guild.id)) {
+                    current[i][j] = `||${current[i][j]}||`
+                }
+                if (enemyFile[current[i][j]].type == 'miniboss' || enemyFile[current[i][j]].type == 'boss' || enemyFile[current[i][j]].type == 'bigboss' || enemyFile[current[i][j]].type == 'deity') {
+                    current[i][j] = `<:warning:878094052208296007>${current[i][j]}`
+                }
+            }
+        }
+
         if (current.length > 0) {
             return new Discord.MessageEmbed({
                 color: '#0099ff',
@@ -20,7 +41,7 @@ longtrialdesc = async(trial, name, message) => {
                 description: `${trial.desc ?  `${trial.desc}` : 'No Description'}`,
                 fields: await Promise.all(
                     current.map(async arrayDefs => ({
-                        name: `Wave ${trial.waves.indexOf(arrayDefs) + 1}`,
+                        name: `Wave ${newtrial.indexOf(arrayDefs) + 1}`,
                         value: arrayDefs.join(', '),
                         inline: true
                     }))
@@ -39,7 +60,7 @@ longtrialdesc = async(trial, name, message) => {
         }
     }
     
-    const canFitOnOnePage = trial.waves.length <= 15
+    const canFitOnOnePage = newtrial.length <= 15
     let embedMessage
     if (canFitOnOnePage) {
         embedMessage = await message.channel.send({
@@ -63,12 +84,12 @@ longtrialdesc = async(trial, name, message) => {
         if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
             if (interaction.customId === 'back') {
                 if (currentIndex - 15 < 0) {
-                    currentIndex = trial.waves.length - (trial.waves.length % 15)
+                    currentIndex = newtrial.length - (newtrial.length % 15)
                 } else {
                     currentIndex -= 15
                 }
             } else if (interaction.customId === 'forward') {
-                if (currentIndex + 15 >= trial.waves.length) {
+                if (currentIndex + 15 >= newtrial.length) {
                     currentIndex = 0
                 } else {
                     currentIndex += 15
@@ -92,7 +113,7 @@ longtrialdesc = async(trial, name, message) => {
                     if (pageInteraction.author.id == message.author.id) {
                         try {
                             const page = parseInt(pageInteraction.content) - 1
-                            if (page > -1 && page <= Math.floor(trial.waves.length / 15)) {
+                            if (page > -1 && page <= Math.floor(newtrial.length / 15)) {
                                 currentIndex = page * 15
                                 await interaction.update({
                                     embeds: [await generateEmbed(currentIndex)],
@@ -162,7 +183,7 @@ commands.registertrial = new Command({
         if (args[2]) trialFile[args[0]].desc = args[2];
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trialFile, null, 4));
-        const embed = trialDesc(trialFile[args[0]], args[0], message)
+        const embed = trialDesc(trialFile[args[0]], trialFile[args[0]].name, message)
         message.channel.send({content: `${trialFile[args[0]].name} has been registered:`, embeds: [embed]})
     }
 })
@@ -182,7 +203,7 @@ commands.gettrial = new Command({
         trialFile = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`)
 
         if (!trialFile[args[0]]) return message.channel.send(`No trial with the name ${args[0]} was found.`)
-        longtrialdesc(trialFile[args[0]], args[0], message)
+        longtrialdesc(trialFile[args[0]], trialFile[args[0]].name, message)
     }
 })
 
@@ -302,5 +323,153 @@ commands.searchtrials = new Command({
         if (array.length == 0) return message.channel.send('No trials found!')
         
         listArray(message.channel, array, message.author.id);
+    }
+})
+
+commands.trialwave = new Command({
+    desc: `Adds a wave to a trial.`,
+    section: 'trials',
+    aliases: ['trialwave', 'addwave', 'addwaves'],
+    args: [
+        {
+            name: "Name",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Wave",
+            type: "Num",
+            forced: true
+        },
+        {
+            name: "Enemies",
+            type: "Word",
+            forced: true,
+            multiple: true
+        }
+    ],
+    admin: 'You don\'t have permission to add waves to a trial.',
+    checkban: true,
+    func: async(message, args) => {
+        trialFile = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`)
+        enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
+
+        if (!trialFile[args[0]]) return message.channel.send(`No trial with the name ${args[0]} was found.`)
+
+        if (args[1] <= 0) return message.channel.send('Wave must be greater than 0.')
+        if (args[1] > trialFile[args[0]].waves.length + 1) return message.channel.send(`The trial ${args[0]} only has ${trialFile[args[0]].waves.length} waves.`)
+
+        for (i in args) {
+            if (i > 1) {
+                if (!enemyFile[args[i]]) return message.channel.send(`No enemy with the name ${args[i]} was found.`)
+            }
+        }
+
+        trialFile[args[0]].waves.push(args.slice(1));
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trialFile, null, 4))
+        message.channel.send(`Added wave ${args[1]} to ${args[0]}. Here's the trial so far:`)
+        longtrialdesc(trialFile[args[0]], trialFile[args[0]].name, message)
+    }
+})
+
+commands.cleartrialwave = new Command({
+    desc: `Removes a wave from a trial.`,
+    section: 'trials',
+    aliases: ['cleartrialwave', 'cleartrialwaves', 'removewave', 'removewaves'],
+    args: [
+        {
+            name: "Name",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Wave",
+            type: "Num",
+            forced: true
+        }
+    ],
+    admin: 'You don\'t have permission to remove waves from a trial.',
+    checkban: true,
+    func: async(message, args) => {
+        trialFile = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`)
+        enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
+
+        if (!trialFile[args[0]]) return message.channel.send(`No trial with the name ${args[0]} was found.`)
+        if (trialFile[args[0]].waves.length == 0) return message.channel.send(`The trial ${args[0]} has no waves.`)
+
+        if (args[1] <= 0) return message.channel.send('Wave must be greater than 0.')
+        if (args[1] > trialFile[args[0]].waves.length) return message.channel.send(`The trial ${args[0]} only has ${trialFile[args[0]].waves.length} waves.`)
+
+        trialFile[args[0]].waves.splice(args[1] - 1, 1);
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trialFile, null, 4))
+        message.channel.send(`Removed wave ${args[1]} from ${args[0]}. Here's the trial so far:`)
+        longtrialdesc(trialFile[args[0]], trialFile[args[0]].name, message)
+    }
+})
+
+commands.trialtruename = new Command({
+    desc: `Changes the true name of a trial.`,
+    section: 'trials',
+    args: [
+        {
+            name: "Name",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "New Name",
+            type: "Word",
+            forced: true
+        }
+    ],
+    admin: 'You don\'t have permission to change the true name of a trial.',
+    checkban: true,
+    func: async(message, args) => {
+        trialFile = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`)
+
+        if (!trialFile[args[0]]) return message.channel.send(`No trial with the name ${args[0]} was found.`)
+        if (trialFile[args[1]]) return message.channel.send(`A trial with the name ${args[1]} already exists.`)
+        if (args[0] == args[1]) return message.channel.send(`What are you trying to do?`)
+
+        trialFile[args[1]] = trialFile[args[0]];
+        delete trialFile[args[0]];
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trialFile, null, 4))
+        message.channel.send(`Changed the true name of ${args[0]} to ${args[1]}.`)
+    }
+})
+
+commands.renametrial = new Command({
+    desc: `Changes the name of a trial.`,
+    section: 'trials',
+    args: [
+        {
+            name: "Name",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "New Name",
+            type: "Word",
+            forced: true
+        }
+    ],
+    admin: 'You don\'t have permission to change the true name of a trial.',
+    checkban: true,
+    func: async(message, args) => {
+        trialFile = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`)
+
+        if (!trialFile[args[0]]) return message.channel.send(`No trial with the name ${args[0]} was found.`)
+        if (args[0] == args[1]) return message.channel.send(`What are you trying to do?`)
+
+        if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
+        if (args[1].length > 50) return message.channel.send(`${args[1]} is too long of a trial name.`);
+
+        trialFile[args[0]].name = args[1];
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trialFile, null, 4))
+        message.channel.send(`Changed the name of ${args[0]} to ${args[1]}.`)
     }
 })

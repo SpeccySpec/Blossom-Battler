@@ -202,6 +202,18 @@ commands.changetruename = new Command({
 		}
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(partyFile, null, '    '));
 
+		trialFile = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`)
+		for (let trial in trialFile) {
+			for (let wave in trialFile[trial].waves) {
+				for (let enemy in trialFile[trial].waves[wave]) {
+					if (trialFile[trial].waves[wave][enemy] == args[0]) {
+						trialFile[trial].waves[wave][enemy] = args[1]
+					}
+				}
+			}
+		}
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trialFile, null, '    '));
+
 		message.channel.send(`${args[0]} has been renamed to ${args[1]}!`);
 	}
 })

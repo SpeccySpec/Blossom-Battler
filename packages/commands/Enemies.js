@@ -849,6 +849,20 @@ commands.purgeenemy = new Command({
 						}
 					}
 					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(partyFile, null, '    '));
+
+					trialFile = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`)
+					for (let trial in trialFile) {
+						for (let wave in trialFile[trial].waves) {
+							for (let enemy in trialFile[trial].waves[wave]) {
+								if (trialFile[trial].waves[wave][enemy] == args[0]) {
+									trialFile[trial].waves[wave][enemy] = ''
+								}
+							}
+							trialFile[trial].waves[wave] = trialFile[trial].waves[wave].filter(e => e != '')
+						}
+						trialFile[trial].waves = trialFile[trial].waves.filter(e => e != [])
+					}
+					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trialFile, null, '    '));
 				} else
 					message.channel.send(`${enemyFile[args[0]].name} will not be deleted.`);
 				
