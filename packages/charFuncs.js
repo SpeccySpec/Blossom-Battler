@@ -350,9 +350,10 @@ function hasteamCombo(charName, allyName, server) {
 }
 
 function equippedCharm(charDefs, charm) {
-	for (const i in charDefs.charms) {
-		if (charDefs.charms[i] == charm)
-			return true
+	if (charDefs.charms) {
+		for (const i in charDefs.charms) {
+			if (charDefs.charms[i] == charm) return true;
+		}
 	}
 	
 	return false

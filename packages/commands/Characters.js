@@ -3215,3 +3215,173 @@ commands.listcharms = new Command({
 		listArray(message.channel, array, message.author.id, 6);
 	}
 })
+
+commands.findcharm = new Command({
+	desc: "Lets a character find a charm.",
+	section: "characters",
+	args: [
+		{
+			name: 'Character',
+			type: 'Word',
+			forced: true,
+		},
+		{
+			name: "Charm Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	admin: "you don't have permission to give a charm to a character.",
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+
+		if (!settings.mechanics.charms) return message.channel.send('Charms are not enabled on this server.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let charmFile = setUpFile(`${dataPath}/charms.json`);
+
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+		if (!charmFile[args[1]]) return message.channel.send(`${args[1]} is not a valid charm!`);
+
+		for (i in charFile[args[0]].curCharms) {
+			if (charFile[args[0]].curCharms[i] == args[1]) return message.channel.send(`${args[0]} already has ${args[1]}!`);
+		}
+
+		charFile[args[0]].curCharms.push(args[1]);
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+
+		message.channel.send(`${args[0]} has found the ${args[1]} charm!`);
+
+		message.delete()
+	}
+})
+
+commands.abandomcharm = new Command({
+	desc: "Lets a character abandon a charm.",
+	section: "characters",
+	args: [
+		{
+			name: 'Character',
+			type: 'Word',
+			forced: true,
+		},
+		{
+			name: "Charm Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+
+		if (!settings.mechanics.charms) return message.channel.send('Charms are not enabled on this server.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let charmFile = setUpFile(`${dataPath}/charms.json`);
+
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+		if (charFile[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
+		if (!charmFile[args[1]]) return message.channel.send(`${args[1]} is not a valid charm!`);
+
+		let index = charFile[args[0]].curCharms.indexOf(args[1]);
+		if (index == -1) return message.channel.send(`${args[0]} does not have ${args[1]}!`);
+
+		charFile[args[0]].curCharms.splice(index, 1);
+		if (charFile[args[0]].charms && charFile[args[0]].charms.includes(args[1])) charFile[args[0]].charms.splice(charFile[args[0]].charms.indexOf(args[1]), 1);
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+
+		message.channel.send(`${args[0]} has abandoned the ${args[1]} charm!`);
+	}
+})
+
+commands.equipcharm = new Command({
+	desc: "Lets a character equip a charm.",
+	section: "characters",
+	args: [
+		{
+			name: 'Character',
+			type: 'Word',
+			forced: true,
+		},
+		{
+			name: "Charm Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+
+		if (!settings.mechanics.charms) return message.channel.send('Charms are not enabled on this server.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let charmFile = setUpFile(`${dataPath}/charms.json`);
+
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+		if (charFile[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
+		if (!charmFile[args[1]]) return message.channel.send(`${args[1]} is not a valid charm!`);
+
+		if (!charFile[args[0]].curCharms.includes(args[1])) return message.channel.send(`${args[0]} does not have ${args[1]}!`);
+
+		if (charFile[args[0]].charms.includes(args[1])) return message.channel.send(`${args[0]} already has ${args[1]} equipped!`);
+
+		let notches = 0
+		for (i in charFile[args[0]].charms) {
+			notches += charmFile[charFile[args[0]].charms[i]].notches;
+		}
+		notches += charmFile[args[1]].notches;
+
+		if (notches > charFuncs.needNotches(charFile[args[0]].level)) return message.channel.send(`${args[0]} does not have enough notches to equip ${args[1]}!`);
+
+		charFile[args[0]].charms.push(args[1]);
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+
+		message.channel.send(`${args[0]} has equipped the ${args[1]} charm!`);
+	}
+})
+
+commands.unequipcharm = new Command({
+	desc: "Lets a character unequip a charm.",
+	section: "characters",
+	args: [
+		{
+			name: 'Character',
+			type: 'Word',
+			forced: true,
+		},
+		{
+			name: "Charm Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+
+		if (!settings.mechanics.charms) return message.channel.send('Charms are not enabled on this server.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let charmFile = setUpFile(`${dataPath}/charms.json`);
+
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+		if (charFile[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
+		if (!charmFile[args[1]]) return message.channel.send(`${args[1]} is not a valid charm!`);
+
+		if (!charFile[args[0]].charms) return message.channel.send(`${args[0]} does not have any charms equipped!`);
+		if (!charFile[args[0]].charms.includes(args[1])) return message.channel.send(`${args[0]} does not have ${args[1]} equipped!`);
+
+		let index = charFile[args[0]].charms.indexOf(args[1]);
+		charFile[args[0]].charms.splice(index, 1);
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+
+		message.channel.send(`${args[0]} has unequipped the ${args[1]} charm!`);
+	}
+})

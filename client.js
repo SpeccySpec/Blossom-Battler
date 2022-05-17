@@ -740,7 +740,6 @@ getBar = (type, value, maxvalue) => {
 	let barType = barEmojis[type.toLowerCase()] ?? barEmojis.none;
 
 	let p = Math.floor((parseInt(value)/parseInt(maxvalue))*10);
-	console.log(p);
 
 	let firstOne = barType.left;
 	if (p < 1) firstOne = barEmojis.none.left;
