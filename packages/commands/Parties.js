@@ -352,9 +352,10 @@ commands.listparty = new Command({
 	checkban: true,
 	args: [
 		{
-			name: "Leader",
-			type: "Ping",
-			forced: false
+			name: "Type #1, Variable #1",
+			type: "Word",
+			forced: false,
+			multiple: true
 		}
 	],
 	func: (message, args) => {
@@ -368,7 +369,7 @@ commands.listparty = new Command({
 
 			for (i in args) {
 				if (i % 2 == 1) {
-					let thingy = checkListArgument(args[i-1].toLowerCase(), args[i], validTypes, message, settings)
+					let thingy = checkListArgument(args[i-1].toLowerCase(), args[i], validTypes, message)
 					if (!thingy) return
 					if (thingy == 'disabled') {
 						args[i-1] = '';

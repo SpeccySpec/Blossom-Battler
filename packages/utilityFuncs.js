@@ -16,7 +16,7 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 	//check if the thing accepts truths and falses
 	let doesaccepttruths = ['pets', 'preskill', 'evoskill', 'item', 'weapon', 'armor', 'skill', 'melee', 'atk', 'mag', 'heal', 'healmp', 'healhpmp', 'revive', 'pacify', 'end', 'money',
 							'limitbreaks', 'teamcombos', 'leaderskills', 'transformations', 'levellock']
-	let canonlyaccepttruths = ['charms']
+	let canonlyaccepttruths = ['charms', 'endless']
 
 	if (doesaccepttruths.includes(type) && (variable.toString().toLowerCase() == 'true' || variable.toString().toLowerCase() == 'false')) {
 		return true
@@ -50,7 +50,7 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 		item: ['item'],
 		weapon: ['weapon'],
 		armor: ['armor'],
-		enemie: ['pets'],
+		enemie: ['pets', 'enemy'],
 	}
 
 	for (let key in jsonChecks) {
@@ -73,7 +73,7 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 	//and then check their real thing
 	let userbased = ['user', 'leader']
 	let channelbased = ['channel']
-	let numberbased = ['cost', 'level', 'pow', 'acc', 'crit', 'hits', 'statuschance', 'money', 'melee', 'atk', 'mag', 'heal', 'healmp', 'healhpmp', 'revive', 'pacify', 'end', 'money', 'levellock']
+	let numberbased = ['cost', 'level', 'pow', 'acc', 'crit', 'hits', 'statuschance', 'money', 'melee', 'atk', 'mag', 'heal', 'healmp', 'healhpmp', 'revive', 'pacify', 'end', 'money', 'levellock', 'waves', 'notches']
 	let limitbreak = ['limitbreaks']
 	let arraybased = ['transformations', 'leaderskills', 'element', 'status', 'costtype', 'atktype', 'target', 'lock', 'extra', 'rarity', 'type']
 	let affinitydependent = ['superweak', 'weak', 'resist', 'repel', 'block', 'drain']

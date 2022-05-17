@@ -815,7 +815,7 @@ commands.reloadfile = new Command({
 	func: (message, args) => {
 		if (!utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send('You do not have permission to reload files!')
 
-		let validFiles = ['armors', 'characters', 'chests', 'enemies', 'items', 'loot', 'parties', 'settings', 'shops', 'weapons']
+		let validFiles = ['armors', 'characters', 'chests', 'enemies', 'items', 'loot', 'parties', 'settings', 'shops', 'weapons', 'trials']
 		let validGlobalFiles = ['pmdquestions', 'ships', 'skills']
 		let validFoodFiles = ['hamburger', 'icecream', 'pizza', 's_preferences', 's_privacy']
 		let validUserDataFiles = ['userdata']

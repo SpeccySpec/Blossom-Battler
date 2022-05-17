@@ -293,6 +293,32 @@ longDescription = (charDefs, level, server, message) => {
 	}
 	if (charAffs != '') DiscordEmbed.fields.push({ name: 'Affinities', value: charAffs, inline: true });
 
+	if (settings.mechanics.charms && char.curCharms && char.curCharms.length > 0) {
+		let charmFile = setUpFile(`${dataPath}/charms.json`);
+			
+		let notches = 0
+		if (charDefs.charms) {
+			for (const i in charDefs.charms)
+				notches += charmFile[charDefs.charms[i]].notches
+		}
+			
+		let charms = ''
+		for (const i in charDefs.curCharms) {
+			if (charFuncs.equippedCharm(charDefs, charDefs.curCharms[i]))
+				charms += `**${charmFile[charDefs.curCharms[i]].name}** (${charmFile[charDefs.curCharms[i]].notches} notches)\n`
+			else
+				charms += `${charmFile[charDefs.curCharms[i]].name} (${charmFile[charDefs.curCharms[i]].notches} notches)\n`
+		}
+			
+		if (charms === '')
+			charms = 'None'
+		else
+			charms += `*${notches}/${charFuncs.needNotches(charDefs.level)} Notches taken.*`
+
+		if (charms != '')
+			DiscordEmbed.fields.push({ name: 'Charms', value: charms, inline: true });
+	}
+
 	let transTxt = '';
 	if (charDefs.transformations && settings.mechanics.transformations) {
 		for (const i in charDefs.transformations) {
