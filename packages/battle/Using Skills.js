@@ -27,11 +27,20 @@ function isTech(charDefs, element) {
 
 
 // Is the status effect physical?
-function isPhysicalStatus(status) {
+isPhysicalStatus = (status) => {
 	if (!status) return false;
 	let statusName = status.toLowerCase();
 
 	return (statusName === 'burn' || statusName === 'bleed' || statusName === 'freeze' || statusName === 'paralyze' || statusName === 'poison' || statusName === 'hunger' || statusName === 'dazed' || statusName === 'irradiated' || statusName === 'mirror' || statusName === 'blind');
+}
+
+// im lazy
+dodgeTxt = (char, targ) => {
+	if (targ) {
+		return `${targ.name} dodged it!\n${selectQuote(targ, 'dodge')}\n${selectQuote(char, 'miss')}`;
+	} else {
+		return `${char.name} dodged it!\n${selectQuote(char, 'dodge')}`;
+	}
 }
 
 useCost = (char, cost, costtype) => {
@@ -127,15 +136,15 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 	if (skill.type === 'heal') {
 		if (skill.heal) {
 			for (let i in skill.heal) {
-				if (!healList[i]) continue;
+ 				if (!healList[i]) continue;
 				if (!healList[i].onuse) continue;
 
 				if (healList[i].multiple) {
 					for (let k in skill.heal[i]) {
-						result.txt += `${healList[i].onuse(char, targ, skill, btl, skill.heal[i][k])}\n`;
+						result.txt += `\n${healList[i].onuse(char, targ, skill, btl, skill.heal[i][k])}`;
 					}
 				} else {
-					result.txt += `${healList[i].onuse(char, targ, skill, btl, skill.heal[i])}\n`;
+					result.txt += `\n${healList[i].onuse(char, targ, skill, btl, skill.heal[i])}`;
 				}
 			}
 		}
@@ -148,10 +157,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 				if (statusList[i].multiple) {
 					for (let k in skill.statusses[i]) {
-						result.txt += `${statusList[i].onuse(char, targ, skill, btl, skill.statusses[i][k])}\n`;
+						result.txt += `\n${statusList[i].onuse(char, targ, skill, btl, skill.statusses[i][k])}`;
 					}
 				} else {
-					result.txt += `${statusList[i].onuse(char, targ, skill, btl, skill.statusses[i])}\n`;
+					result.txt += `\n${statusList[i].onuse(char, targ, skill, btl, skill.statusses[i])}`;
 				}
 			}
 		}
@@ -167,12 +176,12 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 				if (extrasList[i].multiple) {
 					for (let k in skill.extras[i]) {
-						result.txt += `${extrasList[i].onuseoverride(char, targ, skill, btl, skill.extras[i][k])}\n`;
-						return true;
+						result.txt += `\n${extrasList[i].onuseoverride(char, targ, skill, btl, skill.extras[i][k])}`;
+						returnThis = true;
 					}
 				} else {
-					result.txt += `${extrasList[i].onuseoverride(char, targ, skill, btl, skill.extras[i])}\n`;
-					return true;
+					result.txt += `\n${extrasList[i].onuseoverride(char, targ, skill, btl, skill.extras[i])}`;
+					returnThis = true;
 				}
 			}
 
@@ -181,15 +190,16 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 		
 		let affinity = getAffinity(targ, skill.type);
 		if (affinity == 'block' || (affinity == 'repel' && noRepel)) {
-			result.txt += `${targ.name} blocked it!`;
+			result.txt += `${targ.name} blocked it!\n${selectQuote(char, 'badatk')}\n${selectQuote(targ, 'block')}`;
 			return result;
 		} else if (affinity == 'repel' && !noRepel) {
+			skill.acc = 999; // Never miss a repel - just to be flashy :D
+
 			let newResults = attackWithSkill(char, char, skill, btl, true);
 			result.oneMore = newResults.oneMore;
 			result.teamCombo = newResults.teamCombo;
 
-			result.txt += `${targ.name} repelled it!\n${newResults.txt}`;
-			skill.acc = 999; // Never miss a repel - just to be flashy :D
+			result.txt += `selectQuote(targ, 'repel')\n${targ.name} repelled it!\n${newResults.txt}`;
 			return result;
 		}
 
@@ -200,8 +210,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 		// How many total hits
 		let totalHits = 0;
 		for (let i = 0; i < skill.hits; i++) {
-			let chance = randNum(100);
-			if (chance <= skill.acc) {
+			let c = randNum(100);
+			if (c <= skill.acc+((char.stats.prc-targ.stats.agl)/2)) {
 				totalHits++;
 				continue;
 			}
@@ -210,21 +220,32 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 		}
 
 		if (totalHits <= 0)
-			result.txt += `${targ.name} dodged it!`;
+			result.txt += dodgeTxt(targ);
 		else {
+			let crits = [];
 			for (let i = 0; i < skill.hits; i++) {
 				let dmg = genDmg(char, targ, skill);
 				if (affinity == 'resist') dmg *= settings.rates.affinities.resist;
 				if (affinity == 'weak') dmg *= settings.rates.affinities.weak;
 				if (affinity == 'superweak') dmg *= settings.rates.affinities.superweak;
 				if (affinity == 'deadly') dmg *= settings.rates.affinities.deadly;
-				damages.push(dmg);
+
+				if (skill.crit) {
+					let c = randNum(100);
+					if (c <= skill.crit+((char.stats.luk-targ.stats.luk)/2)) {
+						crits[i] = true;
+						dmg *= settings.rates.crit;
+					}
+				}
+
+				damages.push(Math.round(dmg));
 			}
 
 			if (affinity == 'drain') {
 				result.txt += `__${targ.name}__'s HP was restored by _`
 				for (let i in damages) {
 					result.txt += `**${damages[i]}**${affinityEmoji.drain}`;
+					if (crits[i]) result.txt += critEmoji;
 
 					total += damages[i];
 					if (i < damages.length-1) result.txt += '+';
@@ -233,11 +254,14 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 				if (damages.length > 1) result.txt += ` **(${totalHits} hits, ${total} Total)**`;
 				targ.hp = Math.min(targ.maxhp, targ.hp+total);
+
+				result.txt += `\n${selectQuote(char, 'badatk')}\n${selectQuote(targ, 'drain')}`;
 			} else {
 				result.txt += `__${targ.name}__ took _`
 				for (let i in damages) {
 					result.txt += `**${damages[i]}**`;
 					if (affinityEmoji[affinity]) result.txt += affinityEmoji[affinity];
+					if (crits[i]) result.txt += critEmoji;
 
 					total += damages[i];
 					if (i < damages.length-1) result.txt += ' + ';
@@ -246,6 +270,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 				if (damages.length > 1) result.txt += ` **(${(totalHits >= skill.hits) ? '__Full Combo!__ ' : (totalHits + ' hits, ')}${total} Total)**`;
 				targ.hp = Math.max(0, targ.hp-total);
+
+				let quotetype = affinity;
+				if (affinity === 'normal') quotetype = 'hurt';
+				result.txt += `\n${selectQuote(targ, quotetype)}`;
 			}
 		}
 	}
@@ -253,9 +281,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 	return result;
 }
 
-useSkill = (charDefs, btl, act) => {
+useSkill = (charDefs, btl, act, forceskill) => {
 	let char = objClone(charDefs);
-	let skill = objClone(skillFile[act.index]);
+	let skill = objClone(forceskill) ?? objClone(skillFile[act.index]);
 
 	// First, we modify stats via passives n shit. This isn't the actual character anyway so we don't care.
 
@@ -263,7 +291,9 @@ useSkill = (charDefs, btl, act) => {
 	if (!skill.hits) skill.hits = 1;
 
 	// Passives
-	for (let psv of char.skills) {
+	for (let skillName of char.skills) {
+		let psv = skillFile[skillName];
+
 		if (psv.type != 'passive' || !psv.passive) continue;
 
 		for (let i in psv.passive) {
@@ -298,12 +328,12 @@ useSkill = (charDefs, btl, act) => {
 	}
 	
 	// more shit
-	let skillCost = skill.cost;
+	let skillCost = skill.cost ?? null;
 	
 	// (easy access)
 	let party = btl.teams[char.team];
 
-	if (party.leaderskill && party.leaderskill.type === 'discount') {
+	if (skill.cost && party.leaderskill && party.leaderskill.type === 'discount') {
 	}
 
 	// Who will this skill target? Each index of "targets" is [ID, Power Multiplier].
@@ -387,7 +417,12 @@ useSkill = (charDefs, btl, act) => {
 	}
 
 	let targTxt = `__${char.name}__ => `;
-	let finalText = `__${char.name}__ used __${skill.name}__!\n\n`;
+	
+	let quotetype = 'phys';
+	if (skill.atktype === 'magic') quotetype = 'mag';
+	if (skill.type === 'heal') quotetype = 'heal';
+
+	let finalText = `${selectQuote(char, quotetype)}\n__${char.name}__ used __${skill.name}__!\n\n`;
 
 	if (targets.length <= 1) 
 		targTxt += `__${getCharFromId(targets[0][0], btl).name}__`;
@@ -440,7 +475,7 @@ useSkill = (charDefs, btl, act) => {
 	}
 
 	// Take away the cost
-	useCost(char, skillCost, skill.costtype);
+	if (skillCost && skill.costtype) useCost(char, skillCost, skill.costtype);
 
 	// Now, send the embed!
 	let DiscordEmbed = new Discord.MessageEmbed()

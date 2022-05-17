@@ -115,6 +115,10 @@ healList = {
 			makeHeal(skill, "fullheal", [true]);
 			if (hasHealType(skill, "default")) delete skill.heal["default"];
 			return true;
+		},
+		onuse: function(char, targ, skill, btl, vars) {
+			targ.hp = targ.maxhp
+			return `${targ.name}'s HP was fully restored!`;
 		}
 	},
 
@@ -131,6 +135,56 @@ healList = {
 			}
 			makeHeal(skill, "statusheal", [extra1]);
 			return true;
+		},
+		onuse: function(char, targ, skill, btl, vars) {
+			switch(vars[0]) {
+				case 'physical':
+					if (targ.confusion) delete targ.confusion;
+
+					if (isPhysicalStatus(targ.status)) {
+						delete targ.status;
+						delete targ.statusturns;
+					}
+
+					return `${targ.name} had physical status ailments cured!`;
+					break;
+			
+				case 'mental':
+					if (targ.infatuation) delete targ.infatuation;
+
+					if (!isPhysicalStatus(targ.status)) {
+						delete targ.status;
+						delete targ.statusturns;
+					}
+
+					return `${targ.name} had mental status ailments cured!`;
+					break;
+
+				case 'all':
+					if (targ.confusion) delete targ.confusion;
+					if (targ.infatuation) delete targ.infatuation;
+					delete targ.status;
+					delete targ.statusturns;
+
+					return `${targ.name} had their status ailments cured!`;
+					break;
+				
+				default:
+					if (vars[0] === 'confusion') {
+						if (targ.confusion) delete targ.confusion;
+					} else if (vars[0] === 'infatuation') {
+						if (targ.infatuation) delete targ.infatuation;
+					} else {
+						if (targ.status === vars[0]) {
+							delete targ.status;
+							delete targ.statusturns;
+						}
+					}
+
+					return `${targ.name} had their ${vars[0]} status effect cured!`;
+			}
+
+			return '...';
 		}
 	},
 
@@ -138,7 +192,7 @@ healList = {
 		name: "Sacrifice",
 		desc: "_{HP}_\nWill reduce the caster's HP to a {HP}.",
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeHeal(skill, "sacrifice", [parseInt(extra1)]);
+			makeHeal(skill, "sacrifice", [extra1 ? parseInt(extra1) : 0]);
 			let hasHeal = false;
 			for (var i in skill.heal) {
 				if (i != "wish" && i != "sacrifice") {
@@ -148,6 +202,14 @@ healList = {
 			}
 			if (!hasHeal) makeHeal(skill, "default", [60]);
 			return true;
+		},
+		onuse: function(char, targ, skill, btl, vars) {
+			if (!vars[0])
+				char.hp = 0;
+			else
+				char.hp = vars[0];
+
+			return `${char.name} sacrificed themselves, lowering their HP to ${vars[0]}!`;
 		}
 	},
 
@@ -167,6 +229,10 @@ healList = {
 			}
 			if (!hasHeal) makeHeal(skill, "default", [60]);
 			return true;
+		},
+		onuse: function(char, targ, skill, btl, vars) {
+			targ.wishheal = vars[0];
+			return `${char.name} will experience a healing wish in ${vars[0]} turns.`;
 		}
 	}
 }
