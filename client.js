@@ -781,9 +781,11 @@ pageButton = new Discord.MessageButton({
 	customId: 'page'
 })
 
-listArray = async(channel, theArray, author) => {
+listArray = async(channel, theArray, author, forceIndex) => {
+	let index = forceIndex ?? 10;
+
 	const generateEmbed = async start => {
-		const current = theArray.slice(start, start + 10)
+		const current = theArray.slice(start, start + index)
 		return new Discord.MessageEmbed({
 			title: `Showing results ${start + 1}-${start + current.length} out of ${theArray.length}`,
 			fields: await Promise.all(
@@ -795,7 +797,7 @@ listArray = async(channel, theArray, author) => {
 		})
 	}
 
-	const canFitOnOnePage = theArray.length <= 10
+	const canFitOnOnePage = theArray.length <= index
 	let embedMessage
 	if (canFitOnOnePage) {
 		embedMessage = await channel.send({
@@ -817,16 +819,16 @@ listArray = async(channel, theArray, author) => {
 	collector.on('collect', async interaction => {
 		if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
 			if (interaction.customId === 'back') {
-				if (currentIndex - 10 < 0) {
-					currentIndex = theArray.length - (theArray.length % 10)
+				if (currentIndex - index < 0) {
+					currentIndex = theArray.length - (theArray.length % index)
 				} else {
-					currentIndex -= 10
+					currentIndex -= index
 				}
 			} else if (interaction.customId === 'forward') {
-				if (currentIndex + 10 >= theArray.length) {
+				if (currentIndex + index >= theArray.length) {
 					currentIndex = 0
 				} else {
-					currentIndex += 10
+					currentIndex += index
 				}
 			}
 
@@ -847,8 +849,8 @@ listArray = async(channel, theArray, author) => {
 					if (pageInteraction.author.id == author) {
 						try {
 							const page = parseInt(pageInteraction.content) - 1
-							if (page > -1 && page <= Math.floor(theArray.length / 10)) {
-								currentIndex = page * 10
+							if (page > -1 && page <= Math.floor(theArray.length / index)) {
+								currentIndex = page * index
 								await interaction.update({
 									embeds: [await generateEmbed(currentIndex)],
 									components: [

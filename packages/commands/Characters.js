@@ -3137,3 +3137,81 @@ commands.importchar = new Command({
 		}
 	}
 })
+
+/*-----------------------------
+             Charms
+------------------------------*/
+
+commands.listcharms = new Command({
+	desc: "Lists all charms available.",
+	aliases: ['listcharms', 'listcharm'],
+	section: "characters",
+	args: [
+		{
+			name: "Type #1, Variable #1",
+			type: "Word",
+			multiple: true,
+		}
+	],
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+
+		if (!settings.mechanics.charms) return message.channel.send('Charms are not enabled on this server.');
+
+		let charmFile = setUpFile(`${dataPath}/charms.json`);
+		let array = [];
+
+		const validTypes = ['name', 'notches'];
+
+		if (args[0]) {
+			if (args.length % 2 != 0) return message.channel.send('The number of arguments must be even.');
+
+			for (i in args) {
+				if (i % 2 == 1) {
+					let thingy = checkListArgument(args[i-1].toLowerCase(), args[i], validTypes, message, settings)
+					if (!thingy) return
+					if (thingy == 'disabled') {
+						args[i-1] = '';
+						args[i] = '';
+					}
+				}
+			}
+			args = args.filter(arg => arg != '');
+			
+			for (i in args) {
+				if (i % 2 == 0) {
+					if (args.filter(arg => arg == args[i]).length > 1) {
+						return message.channel.send('You cannot have multiple of the same type.');
+					}
+				}
+			}
+		}
+
+		for (i in charmFile) {
+			let isConditionMet = true;
+			for (a in args) {
+				if (a % 2 == 1) {
+					switch (args[a-1].toLowerCase()) {
+						case 'name':
+							if (i.toLowerCase().includes(args[a].toString().toLowerCase()) || charmFile[i].name.toLowerCase().includes(args[a].toString().toLowerCase())) {
+								isConditionMet = true;
+							}
+							break;
+						case 'notches':
+							if (charmFile[i].notches == args[a]) {
+								isConditionMet = true;
+							}
+							break;
+					}
+					if (isConditionMet == false || isConditionMet == undefined) break;
+				}
+			}
+			if (isConditionMet == false || isConditionMet == undefined) continue;
+
+			array.push({title: charmFile[i].name, desc: `**${charmFile[i].notches} Notches**\n*${charmFile[i].desc}*`});
+		}
+		if (array.length == 0) return message.channel.send('No charms found.');
+		
+		listArray(message.channel, array, message.author.id, 6);
+	}
+})

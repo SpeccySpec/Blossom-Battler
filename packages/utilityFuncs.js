@@ -73,7 +73,7 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 	//and then check their real thing
 	let userbased = ['user', 'leader']
 	let channelbased = ['channel']
-	let numberbased = ['cost', 'level', 'pow', 'acc', 'crit', 'hits', 'statuschance', 'money', 'melee', 'atk', 'mag', 'heal', 'healmp', 'healhpmp', 'revive', 'pacify', 'end', 'money', 'levellock', 'waves']
+	let numberbased = ['cost', 'level', 'pow', 'acc', 'crit', 'hits', 'statuschance', 'money', 'melee', 'atk', 'mag', 'heal', 'healmp', 'healhpmp', 'revive', 'pacify', 'end', 'money', 'levellock', 'waves', 'notches']
 	let limitbreak = ['limitbreaks']
 	let arraybased = ['transformations', 'leaderskills', 'element', 'status', 'costtype', 'atktype', 'target', 'lock', 'extra', 'rarity', 'type']
 	let affinitydependent = ['superweak', 'weak', 'resist', 'repel', 'block', 'drain']
