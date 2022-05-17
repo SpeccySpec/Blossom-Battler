@@ -9,6 +9,7 @@ getTurnOrder = (btl) => {
 	for (const i in btl.teams) {
 		for (const k in btl.teams[i].members) {
 			turnorder.push(objClone(btl.teams[i].members[k]));
+			if (btl.teams[i].members[k].boss) turnorder.push(objClone(btl.teams[i].members[k]));
 		}
 	}
 
@@ -112,6 +113,25 @@ const menuStates = {
 			)
 		}
 	},
+	[MENU_ITEM]: ({char, btl, comps}) => {
+		let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`);
+
+		for (let i in btl.teams[char.team].items) {
+			const item = itemFile[i]
+			if (!item) continue;
+			if (btl.teams[char.team].items <= 0) continue;
+
+			const compins = CalcCompins(comps, i)
+			let btncolor = 'green';
+			if (item?.type === 'skill') 
+				btncolor = 'red';
+			else if (item?.type === 'pacify') 
+				btncolor = 'blue';
+
+			comps[compins].push(makeButton(`${item?.name ?? i}: ${btl.teams[char.team].items[i]}`, itemTypeEmoji[item.type],
+			btncolor, false, i))
+		}
+	},
 	[MENU_TACTICS]: ({comps}) => {
 		comps[0] = [
 			makeButton('Run!', elementEmoji.wind, 'grey'),
@@ -162,10 +182,14 @@ setUpComponents = (char, btl, menustate) => {
 	menuStates[parseInt(menustate)]({char, btl, comps})
 
 	if (menustate != MENU_ACT) {
-		for (let i in comps) {
-			if (comps[i].length < 5) {
-				comps[i].push(makeButton('Back', '◀️', 'grey'));
-				break;
+		if (!comps[0]) {
+			comps[0] = [makeButton('Nothing Here :/', '◀️', 'grey', true, 'back')];
+		} else {
+			for (let i in comps) {
+				if (comps[i].length < 5) {
+					comps[i].push(makeButton('Back', '◀️', 'grey'));
+					break;
+				}
 			}
 		}
 	}
@@ -227,7 +251,8 @@ sendCurTurnEmbed = (char, btl) => {
 		filter: ({user}) => user.id == char.owner
 	})
 
-	let currentIndex = 0;
+	let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`);
+
 	collector.on('collect', async i => {
 		btl.action.laststate = menustate;
 
@@ -242,8 +267,13 @@ sendCurTurnEmbed = (char, btl) => {
 				menustate = MENU_SKILL;
 				break;
 
+			case 'items':
+				btl.action.move = 'item';
+				menustate = MENU_ITEM;
+				break;
+
 			case 'tactics':
-				btl.action.move = 'skills';
+				btl.action.move = 'tactic';
 				menustate = MENU_TACTICS;
 				break;
 
@@ -262,6 +292,35 @@ sendCurTurnEmbed = (char, btl) => {
 						btl.action.target[0] = char.team;
 						menustate = MENU_TARGET;
 					} else if (skill.target === "caster") {
+						btl.action.target = [char.team, char.id];
+						doAction(char, btl, btl.action);
+						collector.stop();
+
+						return i.update({
+							content: `<@${char.owner}>`,
+							embeds: [DiscordEmbed],
+						});
+					} else {
+						btl.action.target = [undefined, undefined];
+						doAction(char, btl, btl.action);
+						collector.stop();
+
+						return i.update({
+							content: `<@${char.owner}>`,
+							embeds: [DiscordEmbed],
+						});
+					}
+				} else if (menustate == MENU_ITEM && itemFile[i.customId]) {
+					btl.action.index = i.customId;
+					let item = itemFile[i.customId];
+					let itemdta = itemData[item.type];
+
+					if (!itemdta.target || itemdta.target === "one" || itemdta.target === "spreadopposing") {
+						menustate = MENU_TEAMSEL;
+					} else if (itemdta.target === "ally" || itemdta.target === "spreadallies") {
+						btl.action.target[0] = char.team;
+						menustate = MENU_TARGET;
+					} else if (itemdta.target === "caster") {
 						btl.action.target = [char.team, char.id];
 						doAction(char, btl, btl.action);
 						collector.stop();
@@ -336,7 +395,7 @@ doAction = (char, btl, action) => {
 			for (let skillName of char.skills) {
 				let psv = skillFile[skillName];
 				if (psv.type != 'passive' || !psv.passive) continue;
-				
+
 				if (psv.passive.magicmelee) atkType = 'magic';
 				if (psv.passive.attackall) targType = 'allopposing';
 			}
@@ -357,6 +416,28 @@ doAction = (char, btl, action) => {
 		case 'skill':
 		case 'skills':
 			useSkill(char, btl, action);
+			break;
+
+		case 'item':
+			let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`);
+			let party = btl.teams[char.team];
+			let itemTxt = '';
+
+			if (party.items[action.index] && itemFile[action.index] && party.items[action.index] > 0) {
+				party.items[action.index]--;
+				itemTxt = itemData[action.index].func(char, btl.teams[action.target[0]].members[action.target[1]], objClone(itemFile[action.index]), btl);
+
+				if (party.items[action.index] <= 0) delete party.items[action.index];
+			} else {
+				itemTxt = "...But the party doesn't have any of that item left...?";
+			}
+
+			// Now, send the embed!
+			let DiscordEmbed = new Discord.MessageEmbed()
+				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+				.setTitle('Using Item...')
+				.setDescription(itemTxt)
+			btl.channel.send({embeds: [DiscordEmbed]});
 			break;
 	}
 

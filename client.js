@@ -157,8 +157,11 @@ stats = ['atk', 'mag', 'prc', 'end', 'chr', 'int', 'agl', 'luk']
 itemTypes = [
 	"skill",
 	"heal",
+	"healall",
 	"healmp",
+	"healallmp",
 	"healhpmp",
+	"healallhpmp",
 	"revive",
 	"material",
 	"pacify"

@@ -255,8 +255,13 @@ commands.registeritem = new Command({
             case 'healmp':
                 amount = args[4] && parseInt(args[4]) ? parseInt(args[4]) : 60;
                 break;
+			case 'healall':
+			case 'healallmp':
             case 'healhpmp':
                 amount = args[4] && parseInt(args[4]) ? parseInt(args[4]) : 40;
+                break;
+            case 'healallhpmp':
+                amount = args[4] && parseInt(args[4]) ? parseInt(args[4]) : 25;
                 break;
             case 'revive':
                 amount = args[4] && parseInt(args[4]) ? parseInt(args[4]) : 2;
@@ -264,6 +269,9 @@ commands.registeritem = new Command({
             case 'pacify':
                 amount = args[4] && parseInt(args[4]) ? Math.max(0, Math.min(parseInt(args[4]), 100)) : 30;
                 break;
+
+			default:
+				return message.channel.send("Invalid item type!");
         }
 
         if (amount) itemFile[args[0]][args[3]] = amount;

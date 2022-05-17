@@ -45,17 +45,18 @@ dodgeTxt = (char, targ) => {
 
 useCost = (char, cost, costtype) => {
 	if (cost && costtype) {
-		if (costtype === "hp" && !char.boss)
-			char.hp = Math.max(1, char.hp - cost);
-		else if (costtype === "hppercent" && !char.boss)
+		if (costtype === "hppercent" && !char.boss)
 			char.hp = Math.round(Math.max(1, char.hp - ((char.maxhp / 100) * cost)));
 		else if (costtype === "mp")
 			char.mp = Math.max(0, char.mp - cost);
 		else if (costtype === "mppercent" && !char.boss)
 			char.mp = Math.round(Math.max(0, char.mp - ((char.maxmp / 100) * cost)));
+		else {
+			if (!char.boss) char.hp = Math.max(1, char.hp - cost);
+		}
 	}
 	
-	return true
+	return true;
 }
 
 // Placeholder
@@ -225,16 +226,16 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			let crits = [];
 			for (let i = 0; i < skill.hits; i++) {
 				let dmg = genDmg(char, targ, skill);
-				if (affinity == 'resist') dmg *= settings.rates.affinities.resist;
-				if (affinity == 'weak') dmg *= settings.rates.affinities.weak;
-				if (affinity == 'superweak') dmg *= settings.rates.affinities.superweak;
-				if (affinity == 'deadly') dmg *= settings.rates.affinities.deadly;
+				if (affinity == 'resist') dmg *= settings.rates.affinities.resist ?? 0.5;
+				if (affinity == 'weak') dmg *= settings.rates.affinities.weak ?? 1.5;
+				if (affinity == 'superweak') dmg *= settings.rates.affinities.superweak ?? 2.1;
+				if (affinity == 'deadly') dmg *= settings.rates.affinities.deadly ?? 4.2;
 
 				if (skill.crit) {
 					let c = randNum(100);
 					if (c <= skill.crit+((char.stats.luk-targ.stats.luk)/2)) {
 						crits[i] = true;
-						dmg *= settings.rates.crit;
+						dmg *= settings.rates.crit ?? 1.5;
 					}
 				}
 
@@ -339,6 +340,13 @@ useSkill = (charDefs, btl, act, forceskill) => {
 	// Who will this skill target? Each index of "targets" is [ID, Power Multiplier].
 	let targets = [];
 	let possible = [];
+
+	if (!skill.target) {
+		if (skill.type === 'heal')
+			skill.target = 'ally';
+		else
+			skill.target = 'one';
+	}
 
 	// Insert IDs into the target.
 	switch(skill.target.toLowerCase()) {
