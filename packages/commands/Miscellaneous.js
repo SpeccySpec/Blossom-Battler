@@ -12,6 +12,7 @@ const categories = {
 	enemies: "Enemies! The ones that you will fight to the death! I hope you don't get killed!",
 	parties: "Can't battle without parties now, can ya?",
 	battle: "The main part of Blossom Battler is well... the battles of course!",
+	trials: "Trials! Where you test yourself against waves of enemies!",
 	all: "All of the existing commands"
 }
 
