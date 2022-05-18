@@ -3,7 +3,7 @@ itemData = {
 	heal: {
 		target: 'ally',
 		func: function(char, targ, item, btl) {
-			targ.hp = Math.max(targ.maxhp, targ.hp + item.heal);
+			targ.hp = Math.min(targ.maxhp, targ.hp + item.heal);
 			return `__${char.name}__ used the __${item.name}__ to heal **${item.heal}HP** to __${targ.name}__!`;
 		}
 	},
@@ -13,7 +13,7 @@ itemData = {
 		func: function(char, targ, item, btl) {
 			for (let i in btl.teams[char.team].members) {
 				let t = btl.teams[char.team].members[i];
-				t.hp = Math.max(t.maxhp, t.hp + item.healall);
+				t.hp = Math.min(t.maxhp, t.hp + item.healall);
 			}
 
 			return `__${char.name}__ used the __${item.name}__ to heal **${item.healall}HP** to their party!`;
@@ -23,7 +23,7 @@ itemData = {
 	healmp: {
 		target: 'ally',
 		func: function(char, targ, item, btl) {
-			targ.mp = Math.max(targ.maxmp, targ.mp + item.healmp);
+			targ.mp = Math.min(targ.maxmp, targ.mp + item.healmp);
 			return `__${char.name}__ used the __${item.name}__ to heal **${item.healmp}MP** to __${targ.name}__!`;
 		}
 	},
@@ -33,7 +33,7 @@ itemData = {
 		func: function(char, targ, item, btl) {
 			for (let i in btl.teams[char.team].members) {
 				let t = btl.teams[char.team].members[i];
-				t.mp = Math.max(t.maxmp, t.hp + item.healallmp);
+				t.mp = Math.min(t.maxmp, t.hp + item.healallmp);
 			}
 
 			return `__${char.name}__ used the __${item.name}__ to heal **${item.healall}MP** to their party!`;
@@ -43,8 +43,8 @@ itemData = {
 	healhpmp: {
 		target: 'ally',
 		func: function(char, targ, item, btl) {
-			targ.hp = Math.max(targ.maxhp, targ.hp + item.healhpmp);
-			targ.mp = Math.max(targ.maxmp, targ.mp + item.healhpmp);
+			targ.hp = Math.min(targ.maxhp, targ.hp + item.healhpmp);
+			targ.mp = Math.min(targ.maxmp, targ.mp + item.healhpmp);
 			return `__${char.name}__ used the __${item.name}__ to heal **${item.healhpmp}HP** and **${item.healhpmp}MP** to __${targ.name}__!`;
 		}
 	},
@@ -54,8 +54,8 @@ itemData = {
 		func: function(char, targ, item, btl) {
 			for (let i in btl.teams[char.team].members) {
 				let t = btl.teams[char.team].members[i];
-				t.hp = Math.max(t.maxhp, t.hp + item.healallhpmp);
-				t.mp = Math.max(t.maxmp, t.hp + item.healallhpmp);
+				t.hp = Math.min(t.maxhp, t.hp + item.healallhpmp);
+				t.mp = Math.min(t.maxmp, t.hp + item.healallhpmp);
 			}
 
 			return `__${char.name}__ used the __${item.name}__ to heal **${item.healallhpmp}HP** and **${item.healallhpmp}MP** to their party!`;

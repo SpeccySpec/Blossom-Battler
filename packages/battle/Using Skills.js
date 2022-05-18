@@ -44,24 +44,27 @@ dodgeTxt = (char, targ) => {
 }
 
 useCost = (char, cost, costtype) => {
-	if (cost && costtype) {
-		if (costtype === "hppercent" && !char.boss)
-			char.hp = Math.round(Math.max(1, char.hp - ((char.maxhp / 100) * cost)));
-		else if (costtype === "mp")
+	switch(costtype) {
+		case 'hppercent':
+			if (!isBoss(char)) char.hp = Math.round(Math.max(1, char.hp - ((char.maxhp / 100) * cost)));
+			break;
+
+		case 'mppercent':
+			if (!isBoss(char)) char.mp = Math.round(Math.max(0, char.mp - ((char.maxmp / 100) * cost)));
+			break;
+
+		case 'mp':
 			char.mp = Math.max(0, char.mp - cost);
-		else if (costtype === "mppercent" && !char.boss)
-			char.mp = Math.round(Math.max(0, char.mp - ((char.maxmp / 100) * cost)));
-		else {
-			if (!char.boss) char.hp = Math.max(1, char.hp - cost);
-		}
+			break;
+		
+		default:
+			if (!isBoss(char)) char.hp = Math.max(1, char.hp - cost);
 	}
-	
-	return true;
 }
 
 // Placeholder
 genDmg = (char, targ, skill) => {
-	return randNum(char.level+20)+randNum(skill.pow/4);
+	return randNum(char.level+35)+randNum(skill.pow/1.75);
 }
 
 // Also Placeholder

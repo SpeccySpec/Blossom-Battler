@@ -8,8 +8,10 @@ getTurnOrder = (btl) => {
 
 	for (const i in btl.teams) {
 		for (const k in btl.teams[i].members) {
-			turnorder.push(objClone(btl.teams[i].members[k]));
-			if (btl.teams[i].members[k].boss) turnorder.push(objClone(btl.teams[i].members[k]));
+			let f = btl.teams[i].members[k];
+
+			turnorder.push(objClone(f));
+			if (f.type && (f.type.includes('boss') || f.type.includes('deity'))) turnorder.push(objClone(f));
 		}
 	}
 
@@ -121,20 +123,22 @@ const menuStates = {
 	[MENU_ITEM]: ({char, btl, comps}) => {
 		let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`);
 
+		let k = 0;
 		for (let i in btl.teams[char.team].items) {
-			const item = itemFile[i]
-			if (!item) continue;
-			if (btl.teams[char.team].items <= 0) continue;
+			if (!itemFile[i]) continue;
 
-			const compins = CalcCompins(comps, i)
+			let item = itemFile[i];
+			if (btl.teams[char.team].items[i] <= 0) continue;
+
+			const compins = CalcCompins(comps, k)
 			let btncolor = 'green';
 			if (item?.type === 'skill') 
 				btncolor = 'red';
 			else if (item?.type === 'pacify') 
 				btncolor = 'blue';
 
-			comps[compins].push(makeButton(`${item?.name ?? i}: ${btl.teams[char.team].items[i]}`, itemTypeEmoji[item.type],
-			btncolor, false, i))
+			comps[compins].push(makeButton(`${item?.name ?? i}: ${btl.teams[char.team].items[i]}`, itemTypeEmoji[item.type], btncolor, false, i))
+			k++;
 		}
 	},
 	[MENU_TACTICS]: ({comps}) => {
@@ -157,6 +161,23 @@ const menuStates = {
 
 			for (const i in members) {
 				if (members[i].hp <= 0) continue;
+				comps[CalcCompins(comps, i)].push(
+					makeButton(`${members[i].name}`, '#️⃣', (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
+				)
+			}
+		} else if (btl.action.move === 'item') {
+			const members = btl.teams[btl.action.target[0]].members;
+
+			let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`, true);
+			let item = itemFile[btl.action.index];
+
+			for (const i in members) {
+				if (item.type === 'revive') {
+					if (members[i].hp > 0) continue;
+				} else {
+					if (members[i].hp <= 0) continue;
+				}
+
 				comps[CalcCompins(comps, i)].push(
 					makeButton(`${members[i].name}`, '#️⃣', (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
 				)
@@ -260,10 +281,11 @@ sendCurTurnEmbed = (char, btl) => {
 		filter: ({user}) => user.id == char.owner
 	})
 
-	let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`);
+	let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`, true);
 
 	collector.on('collect', async i => {
 		btl.action.laststate = menustate;
+		DiscordEmbed.title = `Turn #${btl.turn} - ${char.name}'s turn`;
 
 		switch(i.customId) {
 			case 'melee':
@@ -286,7 +308,20 @@ sendCurTurnEmbed = (char, btl) => {
 				menustate = MENU_TACTICS;
 				break;
 
+			case 'guard':
+				btl.action.move = 'guard';
+				btl.action.index = 'guard';
+				btl.action.target = [char.team, char.id];
+				doAction(char, btl, btl.action);
+				collector.stop();
+
+				return i.update({
+					content: `<@${char.owner}>`,
+					embeds: [DiscordEmbed]
+				});
+
 			case 'run':
+				btl.action.move = 'run';
 				btl.action.index = 'run';
 				btl.action.target = [char.team, char.id];
 
@@ -309,6 +344,11 @@ sendCurTurnEmbed = (char, btl) => {
 					embeds: [DiscordEmbed],
 					components: setUpComponents(char, btl, menustate)
 				});
+
+			case 'pacify':
+				btl.action.move = 'pacify';
+				menustate = MENU_TEAMSEL;
+				break;
 
 			case 'back':
 				menustate = MENU_ACT;
@@ -384,13 +424,17 @@ sendCurTurnEmbed = (char, btl) => {
 					DiscordEmbed.fields = [{name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true}];
 				} else if (menustate == MENU_TARGET && btl.teams[btl.action.target[0]] && btl.teams[btl.action.target[0]].members[i.customId]) {
 					btl.action.target[1] = parseInt(i.customId);
-					doAction(char, btl, btl.action);
-					collector.stop();
+					
+					if (btl.action.move === 'pacify') {
+					} else {
+						doAction(char, btl, btl.action);
+						collector.stop();
 
-					return i.update({
-						content: `<@${char.owner}>`,
-						embeds: [DiscordEmbed],
-					});
+						return i.update({
+							content: `<@${char.owner}>`,
+							embeds: [DiscordEmbed],
+						});
+					}
 				} else if (menustate == MENU_FORFEIT) {
 					if (i.customId === 'forfeit') {
 						btl.action.move = 'forfeit';
@@ -470,12 +514,12 @@ doAction = (char, btl, action) => {
 			break;
 
 		case 'item':
-			let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`);
+			let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`, true);
 			let itemTxt = '';
 
 			if (party.items[action.index] && itemFile[action.index] && party.items[action.index] > 0) {
 				party.items[action.index]--;
-				itemTxt = itemData[action.index].func(char, btl.teams[action.target[0]].members[action.target[1]], objClone(itemFile[action.index]), btl);
+				itemTxt = itemData[itemFile[action.index].type].func(char, btl.teams[action.target[0]].members[action.target[1]], objClone(itemFile[action.index]), btl);
 
 				if (party.items[action.index] <= 0) delete party.items[action.index];
 			} else {
@@ -487,6 +531,19 @@ doAction = (char, btl, action) => {
 				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 				.setTitle('Using Item...')
 				.setDescription(itemTxt)
+			btl.channel.send({embeds: [DiscordEmbed]});
+			break;
+
+		case 'guard':
+			char.guard = 0.45;
+
+			let mpget = randNum(Math.round(char.level/10));
+			char.mp = Math.min(char.maxmp, char.mp+mpget)
+
+			DiscordEmbed = new Discord.MessageEmbed()
+				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+				.setTitle(`${char.name} => Self`)
+				.setDescription(`${char.name} guards! This reduces damage, and restores ${mpget}MP!`)
 			btl.channel.send({embeds: [DiscordEmbed]});
 			break;
 		
@@ -509,8 +566,14 @@ doAction = (char, btl, action) => {
 
 			let runCheck = (90 + ((statWithBuff(char.stats.agl, char.buffs.agl) - avgSpd)/2));
 			if (randNum(100) <= runCheck) {
-				runTxt = 'You got away!';
+				DiscordEmbed = new Discord.MessageEmbed()
+					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setTitle('Running Away!')
+					.setDescription("You escaped from the enemies!")
+				btl.channel.send({embeds: [DiscordEmbed]});
+
 				runFromBattle(char, btl)
+				return;
 			} else {
 				DiscordEmbed = new Discord.MessageEmbed()
 					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
@@ -631,7 +694,7 @@ advanceTurn = (btl) => {
 		btl.testing--;
 		if (btl.testing <= 0) {
 			btl.channel.send("The test battle is now over!");
-			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, '{}');
+			fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, '{}');
 			return;
 		}
 	}
@@ -703,6 +766,9 @@ advanceTurn = (btl) => {
 		} else
 			btl.curturn++;
 	}
+
+	// Write Data.
+	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, null, '    '));
 
 	// Let's do this character's turn.
 	doTurn(btl);

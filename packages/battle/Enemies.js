@@ -1,3 +1,10 @@
+// Are you a boss
+isBoss = (f) => {
+	if (!f.type) return false;
+	return (f.type.includes('boss') || f.type.includes('deity'));
+}
+
+// Enemy thinker!
 enemyThinker = (char, btl) => {
 	// Ah shit. Enemy AI. AH FUCk.
 	// Placeholder AI uses random skill on random target.

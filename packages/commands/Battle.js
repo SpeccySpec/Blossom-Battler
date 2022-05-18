@@ -174,7 +174,7 @@ commands.startbattle = new Command({
 		}
 	],
 	func: (message, args) => {
-		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true);
 		let settings = setUpSettings(message.guild.id);
 
 		// Set up Battle Field
@@ -300,8 +300,12 @@ commands.startbattle = new Command({
 			enemy.maxmp = enemy.mp;
 			enemy.id = battleid;
 			battleid++;
+
+			// For enemy ai
+			enemy.memory = {};
 			
-			if (enemy.boss || enemy.miniboss || enemy.bigboss || enemy.finalboss || enemy.deity) battle.bossbattle = true;
+			// Does this battle pass as a boss
+			if (enemy.type.includes('boss') || enemy.type.includes('deity')) battle.bossbattle = true;
 
 			setupBattleStats(enemy);
 
