@@ -282,6 +282,9 @@ commands.startbattle = new Command({
 			battle.teams[0].backup.push(char);
 		}
 
+		battle.teams[0].items = objClone(party.items);
+		battle.teams[0].pets = objClone(party.pets);
+
 		// Set up Enemy Side.
 		// == this time, no encounters set until the enemy is killed or pacified == //
 		let enmDesc = '';
@@ -382,7 +385,7 @@ commands.resendembed = new Command({
 		if (!btl.battling) return message.channel.send("No battle is happening!");
 
 		// Set channel again
-		btl.channel = client.channels.fetch(btl.channel.id);
+		btl.channel = message.channel;
 		message.react('👍');
 
 		// Resend the Embed

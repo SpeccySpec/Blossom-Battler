@@ -138,7 +138,7 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 		let otherWords = {
 			levellock: ['unobtainable']
 		}
-		if (otherWords[type].includes(variable.toLowerCase())) return true
+		if (otherWords[type] && otherWords[type].includes(variable.toLowerCase())) return true
 
 		if (isNaN(variable)) {
 			message.channel.send('Invalid number! Please enter a valid number.');
