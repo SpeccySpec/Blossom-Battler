@@ -132,6 +132,8 @@ commands.endbattle = new Command({
 
 		// Clear the file
 		message.react('👍');
+		
+		btl = {};
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, '{}');
 	}
 })
@@ -295,6 +297,8 @@ commands.startbattle = new Command({
 			enemy.maxmp = enemy.mp;
 			enemy.id = battleid;
 			battleid++;
+			
+			if (enemy.boss || enemy.miniboss || enemy.bigboss || enemy.finalboss || enemy.deity) battle.bossbattle = true;
 
 			setupBattleStats(enemy);
 
@@ -376,6 +380,10 @@ commands.resendembed = new Command({
 
 		// Sadly, no battle.
 		if (!btl.battling) return message.channel.send("No battle is happening!");
+
+		// Set channel again
+		btl.channel = client.channels.fetch(btl.channel.id);
+		message.react('👍');
 
 		// Resend the Embed
 		sendCurTurnEmbed(getCharFromTurn(btl), btl)

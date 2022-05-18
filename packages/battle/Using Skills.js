@@ -200,7 +200,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			result.oneMore = newResults.oneMore;
 			result.teamCombo = newResults.teamCombo;
 
-			result.txt += `selectQuote(targ, 'repel')\n${targ.name} repelled it!\n${newResults.txt}`;
+			result.txt += `${selectQuote(targ, 'repel')}\n${targ.name} repelled it!\n${newResults.txt}`;
 			return result;
 		}
 

@@ -61,13 +61,18 @@ makeButton = (name, emoji, color, lowercase, forceid) => {
 	})
 }
 
+// Menu States
 MENU_ACT = 0;
 MENU_SKILL = 1;
 MENU_ITEM = 2;
 MENU_TACTICS = 3;
 MENU_TEAMSEL = 4;
 MENU_TARGET = 5;
-MENU_SELFTARGET = 6;
+MENU_PACIFY = 6;
+
+// Extra States (Misc. Shit like PVP)
+MENU_ENEMYINFO = 7;
+MENU_FORFEIT = 8;
 
 function CalcCompins(comps, i) {
 	const compins = Math.min(Math.floor(Math.max(i - 0.1, 0) / 4), 3)
@@ -134,7 +139,7 @@ const menuStates = {
 	},
 	[MENU_TACTICS]: ({comps}) => {
 		comps[0] = [
-			makeButton('Run!', elementEmoji.wind, 'grey'),
+			makeButton('Run!', elementEmoji.wind, 'grey', true, 'run'),
 			makeButton('Backup', '<:mental:973077052053921792>', 'blue'),
 			makeButton('Pacify', itemTypeEmoji.pacify, 'green'),
 			makeButton('Enemy Info', statusEmojis.silence, 'red')
@@ -174,6 +179,10 @@ const menuStates = {
 				)
 			}
 		}
+	},
+	
+	[MENU_FORFEIT]: ({comps}) => {
+		comps[0] = [makeButton('Yes!', elementEmoji.wind, 'red', true, 'forfeit')]
 	}
 }
 
@@ -277,6 +286,30 @@ sendCurTurnEmbed = (char, btl) => {
 				menustate = MENU_TACTICS;
 				break;
 
+			case 'run':
+				btl.action.index = 'run';
+				btl.action.target = [char.team, char.id];
+
+				if (btl.bossbattle)
+					DiscordEmbed.title = "You cannot run away from boss battles!";
+				else if (btl.pvp) {
+					if (char.leader) {
+						menustate = MENU_FORFEIT;
+						DiscordEmbed.title = "Would you like to forfeit? This will make your team the loser.";
+					} else {
+						DiscordEmbed.title = "Only the leader can forfeit!";
+					}
+				} else {
+					doAction(char, btl, btl.action);
+					collector.stop();
+				}
+
+				return i.update({
+					content: `<@${char.owner}>`,
+					embeds: [DiscordEmbed],
+					components: setUpComponents(char, btl, menustate)
+				});
+
 			case 'back':
 				menustate = MENU_ACT;
 				break;
@@ -358,6 +391,21 @@ sendCurTurnEmbed = (char, btl) => {
 						content: `<@${char.owner}>`,
 						embeds: [DiscordEmbed],
 					});
+				} else if (menustate == MENU_FORFEIT) {
+					if (i.customId === 'forfeit') {
+						btl.action.move = 'forfeit';
+
+						for (let i in btl.teams[char.team].members)
+							btl.teams[char.team].members[i].hp = 0;
+
+						doAction(char, btl, btl.action);
+						collector.stop();
+
+						return i.update({
+							content: `<@${char.owner}>`,
+							embeds: [DiscordEmbed],
+						});
+					}
 				}
 		}
 
@@ -388,6 +436,9 @@ sendCurTurnEmbed = (char, btl) => {
 }
 
 doAction = (char, btl, action) => {
+	let party = btl.teams[char.team];
+	var DiscordEmbed;
+
 	switch(action.move) {
 		case 'melee':
 			let atkType = 'physical'
@@ -420,7 +471,6 @@ doAction = (char, btl, action) => {
 
 		case 'item':
 			let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`);
-			let party = btl.teams[char.team];
 			let itemTxt = '';
 
 			if (party.items[action.index] && itemFile[action.index] && party.items[action.index] > 0) {
@@ -433,10 +483,48 @@ doAction = (char, btl, action) => {
 			}
 
 			// Now, send the embed!
-			let DiscordEmbed = new Discord.MessageEmbed()
+			DiscordEmbed = new Discord.MessageEmbed()
 				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 				.setTitle('Using Item...')
 				.setDescription(itemTxt)
+			btl.channel.send({embeds: [DiscordEmbed]});
+			break;
+		
+		case 'run':
+			let runTxt = '';
+
+			let avgSpd = 0;
+			let totalFoes = 0;
+			for (let i in btl.teams) {
+				if (i == char.team) continue;
+
+				for (let k in btl.teams[i].members) {
+					if (btl.teams[i].members[k].hp > 0) {
+						avgSpd += statWithBuff(btl.teams[i].members[k].stats.agl, btl.teams[i].members[k].buffs.agl);
+						totalFoes++;
+					}
+				}
+			}
+			avgSpd /= totalFoes;
+
+			let runCheck = (90 + ((statWithBuff(char.stats.agl, char.buffs.agl) - avgSpd)/2));
+			if (randNum(100) <= runCheck) {
+				runTxt = 'You got away!';
+				runFromBattle(char, btl)
+			} else {
+				DiscordEmbed = new Discord.MessageEmbed()
+					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setTitle('Running Away!')
+					.setDescription("You couldn't get away!")
+				btl.channel.send({embeds: [DiscordEmbed]});
+				break;
+			}
+
+		case 'forfeit':
+			DiscordEmbed = new Discord.MessageEmbed()
+				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+				.setTitle('Forfeiting!')
+				.setDescription(`Team ${btl.teams[char.team].name} is forfeiting the match!`)
 			btl.channel.send({embeds: [DiscordEmbed]});
 			break;
 	}
