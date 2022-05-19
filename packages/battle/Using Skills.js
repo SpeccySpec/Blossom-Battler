@@ -68,11 +68,11 @@ useCost = (char, cost, costtype) => {
 genDmg = (char, targ, btl, skill) => {
 	let settings = setUpSettings(btl.guild.id);
 
-	let charStats = statusEffectFuncs[char.status].statmod(char, char.stats)
-	let targStats = statusEffectFuncs[char.status].statmod(char, targ.stats)
+	let charStats = (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].statmod) ? statusEffectFuncs[char.status].statmod(char, char.stats) : objClone(char.stats);
+	let targStats = (targ.status && statusEffectFuncs[targ.status] && statusEffectFuncs[targ.status].statmod) ? statusEffectFuncs[targ.status].statmod(targ, targ.stats) : objClone(targ.stats);
 
-	let atkStat = (skill.atktype === 'phys') ? statWithBuff(charStats.atk, char.buffs.atk) : statWithBuff(charStats.mag, char.buff.mag);
-	let endStat = targStats.end;
+	let atkStat = (skill.atktype === 'phys') ? statWithBuff(charStats.atk, char.buffs.atk) : statWithBuff(charStats.mag, char.buffs.mag);
+	let endStat = statWithBuff(targStats.end, targ.buffs.end);
 	let def = atkStat/endStat;
 	
 	let formulas = ['persona', 'pokemon', 'lamonka'];
@@ -155,8 +155,6 @@ getAffinity = (charDefs, skillType) => {
 
 attackWithSkill = (char, targ, skill, btl, noRepel) => {
 	let settings = setUpSettings(btl.guild.id);
-	
-	btl.channel.send('**[DEBUG]**\ntest');
 
 	const result = {
 		txt: ``,
@@ -335,7 +333,11 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					dmgTxt = `**${Math.round(avg)} average**`;
 				}
 
-				result.txt += `${dmgTxt} damage!_`;
+				if (targ.hp <= 0) {
+					result.txt += `${dmgTxt} damage and was defeated!_`;
+				} else {
+					result.txt += `${dmgTxt} damage!_`;
+				}
 
 				if (damages.length > 1) result.txt += ` **(${(totalHits >= skill.hits) ? '__Full Combo!__ ' : (totalHits + ' hits, ')}${total} Total)**`;
 				targ.hp = Math.max(0, targ.hp-total);
@@ -359,6 +361,13 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 				let quotetype = affinity;
 				if (affinity === 'normal') quotetype = 'hurt';
+				if (affinity === 'resist') result.txt += `\n${selectQuote(char, 'badatk')}`;
+
+				if (targ.hp <= 0) {
+					quotetype = 'dead';
+					result.txt += `\n${selectQuote(char, 'kill')}`;
+				}
+
 				result.txt += `\n${selectQuote(targ, quotetype)}`;
 			}
 		}
@@ -367,8 +376,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 	return result;
 }
 
-useSkill = (charDefs, btl, act, forceskill) => {
-	let char = objClone(charDefs);
+useSkill = (char, btl, act, forceskill) => {
 	let skill = objClone(forceskill) ?? objClone(skillFile[act.index]);
 
 	// First, we modify stats via passives n shit. This isn't the actual character anyway so we don't care.
@@ -428,7 +436,7 @@ useSkill = (charDefs, btl, act, forceskill) => {
 	switch(skill.target.toLowerCase()) {
 		case 'one':
 		case 'ally':
-			let targ = btl.teams[act.target[0]].members[act.target[1]] ?? btl.teams[0].members[0];
+			let targ = (btl.teams[act.target[0]] && btl.teams[act.target[0]].members[act.target[1]]) ? btl.teams[act.target[0]].members[act.target[1]] : btl.teams[0].members[0];
 			targets.push([targ.id, 1]);
 			break;
 
@@ -567,12 +575,7 @@ useSkill = (charDefs, btl, act, forceskill) => {
 		.setTitle(targTxt)
 		.setDescription(finalText)
 	btl.channel.send({embeds: [DiscordEmbed]});
-	
-	// Let's update ME first.
-	charDefs.hp = char.hp;
-	charDefs.mp = char.mp;
-	charDefs.lbpercent = char.lbpercent;
 
 	// return true or something
-	fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, btl);
+	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, null, '    '));
 }

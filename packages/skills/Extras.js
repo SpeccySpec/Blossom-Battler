@@ -10,7 +10,7 @@ extrasList = {
 		},
 		onuseoverride: function(char, targ, skill, btl, vars) {
 			let chance = randNum(100);
-			let target = vars[0]+((char.luk-targ.luk)/2)
+			let target = vars[0]+((char.stats.luk-targ.stats.luk)/2)
 
 			if (chance <= target) {
 				targ.hp = 0;

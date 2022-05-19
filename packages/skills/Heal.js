@@ -11,6 +11,8 @@ healList = {
 			return true;
 		},
 		onuse: function(char, targ, skill, btl, vars) {
+			if (!vars[0] || vars[0] === null) return '';
+
 			targ.hp = Math.min(targ.maxhp, targ.hp+vars[0]);
 			return `${targ.name}'s HP was restored by ${vars[0]}!`;
 		}

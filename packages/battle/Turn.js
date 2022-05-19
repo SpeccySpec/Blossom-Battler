@@ -162,7 +162,7 @@ const menuStates = {
 			for (const i in members) {
 				if (members[i].hp <= 0) continue;
 				comps[CalcCompins(comps, i)].push(
-					makeButton(`${members[i].name}`, '#️⃣', (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
+					makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
 				)
 			}
 		} else if (btl.action.move === 'item') {
@@ -179,7 +179,7 @@ const menuStates = {
 				}
 
 				comps[CalcCompins(comps, i)].push(
-					makeButton(`${members[i].name}`, '#️⃣', (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
+					makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
 				)
 			}
 		} else {
@@ -196,7 +196,7 @@ const menuStates = {
 				}
 
 				comps[CalcCompins(comps, i)].push(
-					makeButton(`${members[i].name}`, '#️⃣', (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
+					makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
 				)
 			}
 		}
