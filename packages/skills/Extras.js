@@ -11,7 +11,7 @@ extrasList = {
 		onuseoverride: function(char, targ, skill, btl, vars) {
 			let chance = randNum(100);
 			let target = vars[0]+((char.luk-targ.luk)/2)
-			
+
 			if (chance <= target) {
 				targ.hp = 0;
 				return `${char.name} instantly KO'd ${targ.name}!`;
@@ -27,6 +27,11 @@ extrasList = {
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			makeExtra(skill, "sacrifice", [parseInt(extra1)]);
 			return true
+		},
+		onuse: function(char, targ, skill, btl, vars) {
+			char.hp = vars[0];
+
+			return `${char.name} sacrificed themselves! Their HP dropped to ${vars[0]}!`;
 		}
 	},
 
@@ -44,12 +49,35 @@ extrasList = {
 			
 			makeExtra(skill, "needlessthan", [parseFloat(extra1), extra2]);
 			return true
+		},
+		canuse: function(char, skill, btl, vars) {
+			switch(vars[1].toLowerCase()) {
+				case 'mp':
+					if (char.mp > vars[0]) return `You need less than ${vars[0]}MP to use this move!`;
+					return true;
+
+				case 'lb':
+					if (char.lbpercent > vars[0]) return `You need less than ${vars[0]}LB% to use this move!`;
+					return true;
+
+				case 'mppercent':
+					if (char.mp > (char.mp/char.maxmp)*vars[0]) return `You need less than ${(char.mp/char.maxmp)*vars[0]}MP to use this move!`;
+					return true;
+
+				case 'hppercent':
+					if (char.mp > (char.hp/char.maxhp)*vars[0]) return `You need less than ${(char.hp/char.maxhp)*vars[0]}HP to use this move!`;
+					return true;
+				
+				default:
+					if (char.hp > vars[0]) return `You need less than ${vars[0]}HP to use this move!`;
+					return true;
+			}
 		}
 	},
 
 	resistremove: {
 		name: "Resist Remove",
-		desc: "_<Element>_\nWill remove foe's resisting, blocking, repelling or draining affinities to <Element>.",
+		desc: "_<Element>_\nWill remove user's resisting, blocking, repelling or draining affinities to <Element>.",
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply enough arguments!");
 
@@ -310,18 +338,13 @@ extrasList = {
 
 	forceformula: {
 		name: "Force Formula",
-		desc: "_<Formula> {Custom Formula}_\nForces a skill to use a different damage formula. If the formula is custom, you must supply a custom formula.",
+		desc: "_<Formula>_\nForces a skill to use a different damage formula.",
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Formula>!");
 
-			let damageFormulas = ['persona','pokemon','custom',]
-	
+			let damageFormulas = ['persona', 'pokemon', 'lamonka']
 			if (damageFormulas.includes(extra1.toLowerCase())) {
-				return message.channel.send('Invalid damage formula! Valid formulas are: persona, pokemon, custom')
-			}
-	
-			if (extra1.toLowerCase() == 'custom') {
-				return message.channel.send('Custom damage formulas are not yet supported!')
+				return message.channel.send('Invalid damage formula!\nValid formulas are: Persona, Pokemon, Lamonka')
 			}
 
 			makeExtra(skill, "forceformula", [extra1.toLowerCase(), extra2]);

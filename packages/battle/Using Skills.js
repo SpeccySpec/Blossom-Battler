@@ -44,27 +44,53 @@ dodgeTxt = (char, targ) => {
 }
 
 useCost = (char, cost, costtype) => {
-	switch(costtype) {
+	if (!costtype) costtype === 'mp';
+
+	switch(costtype.toLowerCase()) {
 		case 'hppercent':
-			if (!isBoss(char)) char.hp = Math.round(Math.max(1, char.hp - ((char.maxhp / 100) * cost)));
+			if (!isBoss(char)) char.hp = Math.max(1, char.hp - Math.round((char.maxhp/100) * cost));
 			break;
 
 		case 'mppercent':
-			if (!isBoss(char)) char.mp = Math.round(Math.max(0, char.mp - ((char.maxmp / 100) * cost)));
+			if (!isBoss(char)) char.mp = Math.max(0, char.mp - Math.round((char.maxmp/100) * cost));
 			break;
 
 		case 'mp':
 			char.mp = Math.max(0, char.mp - cost);
 			break;
-		
+
 		default:
-			if (!isBoss(char)) char.hp = Math.max(1, char.hp - cost);
+			char.hp = Math.max(1, char.hp - cost);
 	}
 }
 
 // Placeholder
-genDmg = (char, targ, skill) => {
-	return randNum(char.level+35)+randNum(skill.pow/1.75);
+genDmg = (char, targ, btl, skill) => {
+	let settings = setUpSettings(btl.guild.id);
+
+	let charStats = statusEffectFuncs[char.status].statmod(char, char.stats)
+	let targStats = statusEffectFuncs[char.status].statmod(char, targ.stats)
+
+	let atkStat = (skill.atktype === 'phys') ? statWithBuff(charStats.atk, char.buffs.atk) : statWithBuff(charStats.mag, char.buff.mag);
+	let endStat = targStats.end;
+	let def = atkStat/endStat;
+	
+	let formulas = ['persona', 'pokemon', 'lamonka'];
+	let damageformula = settings.formulas.damageFormula ?? 'persona';
+	if (skill.extras && skill.extras.forceformula && formulas.includes(skill.extras.forceformula.toLowerCase())) {
+		damageformula = skill.extras.forceformula.toLowerCase();
+	}
+
+	switch(damageformula) {
+		case 'persona':
+			return Math.round(5 * Math.sqrt(def * skill.pow))+randNum(-7, 7);
+		case 'pokemon':
+			return Math.round((((2*char.level)/5+2)*skill.pow*def)/50+2)+randNum(-7, 7);
+		case 'lamonka':
+			return Math.ceil(((skill.pow+char.level)*(def/4)))*(0.95+(Math.random()/20));
+		default:
+			return randNum(char.level+35)+randNum(skill.pow/1.75)+randNum(-7, 7);
+	}
 }
 
 // Also Placeholder
@@ -129,6 +155,8 @@ getAffinity = (charDefs, skillType) => {
 
 attackWithSkill = (char, targ, skill, btl, noRepel) => {
 	let settings = setUpSettings(btl.guild.id);
+	
+	btl.channel.send('**[DEBUG]**\ntest');
 
 	const result = {
 		txt: ``,
@@ -227,8 +255,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			result.txt += dodgeTxt(targ);
 		else {
 			let crits = [];
-			for (let i = 0; i < skill.hits; i++) {
-				let dmg = genDmg(char, targ, skill);
+			for (let i = 0; i < totalHits; i++) {
+				let dmg = genDmg(char, targ, btl, skill);
 				if (affinity == 'resist') dmg *= settings.rates.affinities.resist ?? 0.5;
 				if (affinity == 'weak') dmg *= settings.rates.affinities.weak ?? 1.5;
 				if (affinity == 'superweak') dmg *= settings.rates.affinities.superweak ?? 2.1;
@@ -242,19 +270,47 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					}
 				}
 
+				// DmgMod
+				if (skill.extras) {
+					for (let i in skill.extras) {
+						if (!extrasList[i]) continue;
+						if (!extrasList[i].dmgmod) continue;
+
+						if (extrasList[i].multiple) {
+							for (let k in skill.extras[i]) {
+								extrasList[i].dmgmod(char, targ, dmg, skill, btl, skill.extras[i][k]);
+							}
+						} else {
+							extrasList[i].dmgmod(char, targ, dmg, skill, btl, skill.extras[i]);
+						}
+					}
+				}
+
+				// This damage is done!
 				damages.push(Math.round(dmg));
 			}
 
+			let dmgTxt = '';
 			if (affinity == 'drain') {
 				result.txt += `__${targ.name}__'s HP was restored by _`
+				
 				for (let i in damages) {
-					result.txt += `**${damages[i]}**${affinityEmoji.drain}`;
-					if (crits[i]) result.txt += critEmoji;
+					dmgTxt += `**${damages[i]}**${affinityEmoji.drain}`;
+					if (crits[i]) dmgTxt += critEmoji;
 
 					total += damages[i];
-					if (i < damages.length-1) result.txt += '+';
+					if (i < damages.length-1) dmgTxt += ' + ';
 				}
-				result.txt += '!_';
+
+				if (dmgTxt.length > 1000) {
+					let avg = 0;
+					for (let i in damages) avg += damages[i];
+					avg /= damages.length;
+
+					dmgTxt = `**${Math.round(avg)}${affinityEmoji.drain} average**`;
+				}
+
+				result.txt += `${dmgTxt}!_`;
 
 				if (damages.length > 1) result.txt += ` **(${totalHits} hits, ${total} Total)**`;
 				targ.hp = Math.min(targ.maxhp, targ.hp+total);
@@ -263,17 +319,43 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			} else {
 				result.txt += `__${targ.name}__ took _`
 				for (let i in damages) {
-					result.txt += `**${damages[i]}**`;
-					if (affinityEmoji[affinity]) result.txt += affinityEmoji[affinity];
-					if (crits[i]) result.txt += critEmoji;
+					dmgTxt += `**${damages[i]}**`;
+					if (affinityEmoji[affinity]) dmgTxt += affinityEmoji[affinity];
+					if (crits[i]) dmgTxt += critEmoji;
 
 					total += damages[i];
-					if (i < damages.length-1) result.txt += ' + ';
+					if (i < damages.length-1) dmgTxt += ' + ';
 				}
-				result.txt += ' damage!_';
+
+				if (dmgTxt.length > 1000) {
+					let avg = 0;
+					for (let i in damages) avg += damages[i];
+					avg /= damages.length;
+
+					dmgTxt = `**${Math.round(avg)} average**`;
+				}
+
+				result.txt += `${dmgTxt} damage!_`;
 
 				if (damages.length > 1) result.txt += ` **(${(totalHits >= skill.hits) ? '__Full Combo!__ ' : (totalHits + ' hits, ')}${total} Total)**`;
 				targ.hp = Math.max(0, targ.hp-total);
+
+				// OnUse
+				if (skill.extras) {
+					for (let i in skill.extras) {
+						if (!extrasList[i]) continue;
+						if (!extrasList[i].onuse) continue;
+
+						if (extrasList[i].multiple) {
+							for (let k in skill.extras[i]) {
+								result.txt += `\n${extrasList[i].onuse(char, targ, skill, btl, skill.extras[i][k])}`;
+								returnThis = true;
+							}
+						} else {
+							result.txt += `\n${extrasList[i].onuse(char, targ, skill, btl, skill.extras[i])}`;
+						}
+					}
+				}
 
 				let quotetype = affinity;
 				if (affinity === 'normal') quotetype = 'hurt';
@@ -310,15 +392,6 @@ useSkill = (charDefs, btl, act, forceskill) => {
 		}
 	}
 
-	// Status Effects
-	if (char.status && statusEffectFuncs[char.status].statmod)
-		char.stats = statusEffectFuncs[char.status].statmod(char, char.stats);
-
-	// Buffs
-	let statUse = ['atk', 'mag', 'prc', 'end', 'agl', 'luk'];
-	let buffStats = ['atk', 'mag', 'prc', 'end', 'agl', 'crit'];
-	for (let i in statUse) char.stats[i] = statWithBuff(char.stats[i], char.buffs[buffStats[i]]);
-
 	// Attack Extras
 	if (skill.extras) {
 		for (let i in skill.extras) {
@@ -330,10 +403,10 @@ useSkill = (charDefs, btl, act, forceskill) => {
 			}
 		}
 	}
-	
+
 	// more shit
 	let skillCost = skill.cost ?? null;
-	
+
 	// (easy access)
 	let party = btl.teams[char.team];
 
@@ -486,7 +559,7 @@ useSkill = (charDefs, btl, act, forceskill) => {
 	}
 
 	// Take away the cost
-	if (skillCost && skill.costtype) useCost(char, skillCost, skill.costtype);
+	if (skillCost) useCost(char, skillCost, skill.costtype);
 
 	// Now, send the embed!
 	let DiscordEmbed = new Discord.MessageEmbed()
@@ -494,8 +567,12 @@ useSkill = (charDefs, btl, act, forceskill) => {
 		.setTitle(targTxt)
 		.setDescription(finalText)
 	btl.channel.send({embeds: [DiscordEmbed]});
+	
+	// Let's update ME first.
+	charDefs.hp = char.hp;
+	charDefs.mp = char.mp;
+	charDefs.lbpercent = char.lbpercent;
 
 	// return true or something
-	return true;
 	fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, btl);
 }

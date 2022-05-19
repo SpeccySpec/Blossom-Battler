@@ -359,6 +359,39 @@ sendCurTurnEmbed = (char, btl) => {
 					btl.action.index = i.customId;
 					let skill = skillFile[i.customId];
 
+					if (skill.extras) {
+						for (let i in skill.extras) {
+							if (!extrasList[i]) continue;
+							if (!extrasList[i].canuse) continue;
+
+							if (extrasList[i].multiple) {
+								for (let k in skill.extras[i]) {
+									let txt = extrasList[i].canuse(char, skill, btl, skill.extras[i][k]);
+									if (txt != true) {
+										DiscordEmbed.title = txt;
+										collector.stop();
+
+										return i.update({
+											content: `<@${char.owner}>`,
+											embeds: [DiscordEmbed],
+										});
+									}
+								}
+							} else {
+								let txt = extrasList[i].canuse(char, skill, btl, skill.extras[i]);
+								if (txt != true) {
+									DiscordEmbed.title = txt;
+									collector.stop();
+
+									return i.update({
+										content: `<@${char.owner}>`,
+										embeds: [DiscordEmbed],
+									});
+								}
+							}
+						}
+					}
+
 					if (skill.target === "one" || skill.target === "spreadopposing") {
 						menustate = MENU_TEAMSEL;
 					} else if (skill.target === "ally" || skill.target === "spreadallies") {

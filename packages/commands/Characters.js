@@ -1094,8 +1094,8 @@ commands.learnskill = new Command({
 
 			if (skillFile[args[i]]) {
 				if (skillFile[args[i]].levellock) {
-					if (!thingDefs[0].type && skillFile[args[i]].levellock == 'unobtainable') return message.channel.send(`${args[i]} is unobtainable!`);
-					if (!thingDefs[0].type && thingDefs[args[0]].level < skillFile[args[i]].levellock) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but must be level ${skillFile[args[i]].levellock} to learn ${skillFile[args[i]].name}!`);
+					if (!thingDefs[args[0]].type && skillFile[args[i]].levellock == 'unobtainable') return message.channel.send(`${args[i]} is unobtainable!`);
+					if (!thingDefs[args[0]].type && thingDefs[args[0]].level < skillFile[args[i]].levellock) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but must be level ${skillFile[args[i]].levellock} to learn ${skillFile[args[i]].name}!`);
 				}
 
 				learnString += (skillFile[args[i]].name ? skillFile[args[i]].name : args[i])
