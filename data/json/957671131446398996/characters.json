@@ -16790,11 +16790,11 @@
     "Negagen": {
         "name": "Negagen",
         "owner": "621307633718132746",
-        "level": 65,
-        "hp": 345,
-        "mp": 616,
-        "maxhp": 345,
-        "maxmp": 616,
+        "level": 99,
+        "hp": 515,
+        "mp": 922,
+        "maxhp": 515,
+        "maxmp": 922,
         "basehp": 25,
         "basemp": 40,
         "mpMeter": [
@@ -16810,8 +16810,8 @@
         },
         "weapon": {},
         "armor": {},
-        "xp": 618,
-        "maxxp": 4741253,
+        "xp": -43797463476587,
+        "maxxp": 615066353,
         "skills": [
             "Lifeup-Sigma",
             "Counter-Omega",
@@ -16894,14 +16894,14 @@
         },
         "mainElement": "spirit",
         "stats": {
-            "atk": 23,
-            "mag": 26,
-            "prc": 70,
-            "end": 37,
-            "chr": 71,
-            "int": 74,
-            "agl": 37,
-            "luk": 37
+            "atk": 35,
+            "mag": 38,
+            "prc": 104,
+            "end": 54,
+            "chr": 105,
+            "int": 108,
+            "agl": 54,
+            "luk": 54
         },
         "basestats": {
             "baseatk": 2,

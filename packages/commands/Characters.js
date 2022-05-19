@@ -1167,8 +1167,8 @@ commands.replaceskill = new Command({
 
 		// Level Lock
 		if (skillFile[args[2]].levellock) {
-			if (!thingDefs[0].type && skillFile[args[2]].levellock == 'unobtainable') return message.channel.send(`${args[2]} is unobtainable!`);
-			if (!thingDefs[0].type && thingDefs[args[0]].level < skillFile[args[2]].levellock) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but must be level ${skillFile[args[2]].levellock} to learn ${skillFile[args[2]].name}!`);
+			if (!thingDefs[args[0]].type && skillFile[args[2]].levellock == 'unobtainable') return message.channel.send(`${args[2]} is unobtainable!`);
+			if (!thingDefs[args[0]].type && thingDefs[args[0]].level < skillFile[args[2]].levellock) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but must be level ${skillFile[args[2]].levellock} to learn ${skillFile[args[2]].name}!`);
 		}
 
 		// Let's replace it
