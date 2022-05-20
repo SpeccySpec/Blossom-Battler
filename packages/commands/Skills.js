@@ -808,13 +808,13 @@ commands.updateskills = new Command({
 				if (skillFile[skill].verse) {
 					switch (skillFile[skill].verse[0]) {
 						case 'heal':
-							skillFile[skill].extras.healverse = [[skillFile[skill].verse[1], 3, '%ENEMY% is now shrowded in a healing aura']]; //amount, turns, message
+							skillFile[skill].extras.healverse = [skillFile[skill].verse[1], 3, '%ENEMY% is now shrowded in a healing aura']; //amount, turns, message
 							break;
 						case 'power':
-							skillFile[skill].extras.powerverse = [[skillFile[skill].verse[1], 3, '%ENEMY% is now shrowded in a power aura']]; //amount, turns, message
+							skillFile[skill].extras.powerverse = [skillFile[skill].verse[1], 3, '%ENEMY% is now shrowded in a power aura']; //amount, turns, message
 							break;
 						case 'spread':
-							skillFile[skill].extras.spreadverse = [[skillFile[skill].verse[1], 3, '%ENEMY% is now shrowded in a spread aura']]; //amount, turns, message
+							skillFile[skill].extras.spreadverse = [skillFile[skill].verse[1], 3, '%ENEMY% is now shrowded in a spread aura']; //amount, turns, message
 							break;
 					}
 					delete skillFile[skill].verse;

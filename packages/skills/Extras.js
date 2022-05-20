@@ -85,6 +85,18 @@ extrasList = {
 
 			makeExtra(skill, "resistremove", [extra1.toLowerCase()]);
 			return true
+		},
+		onselect: function(char, skill, btl, vars) {
+			let remAff = ['resist', 'block', 'repel', 'drain'];
+			for (let i in remAff) {
+				if (char.affinities[remAff[i]]) {
+					for (let k in char.affinities[remAff[i]]) {
+						if (char.affinities[remAff[i]][k].toLowerCase() === vars[0].toLowerCase()) char.affinities[remAff[i]].splice(k, 1);
+					}
+				}
+			}
+
+			return `${char.name}'s resisting affinities to ${vars[0]} have been removed!`;
 		}
 	},
 
@@ -94,6 +106,10 @@ extrasList = {
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			makeExtra(skill, "rest", [true]);
 			return true
+		},
+		onselect: function(char, skill, btl, vars) {
+			char.rest = true;
+			return `_${char.name} must rest to regain their energy!_`;
 		}
 	},
 
@@ -197,6 +213,27 @@ extrasList = {
 			if (parseInt(extra2) < 1) return message.channel.send("You can't have less than 1 turn for this skill.");
 			makeExtra(skill, "healverse", [parseFloat(extra1), parseInt(extra2), extra3]);
 			return true
+		},
+		onuse: function(char, targ, skill, btl, vars) {
+			if (targ.hp > 0) {
+				addCusVal(targ, "healverse", {
+					name: skill.name,
+					infname: char.name,
+					heal: vars[0],
+					turns: vars[1],
+					type: 'hp'
+				});
+
+				if (vars[2]) {
+					let txt = vars[2];
+					while (txt.includes('%SKILL%')) txt = txt.replace('%SKILL%', skill.name);
+					while (txt.includes('%USER%')) txt = txt.replace('%USER%', char.name);
+					while (txt.includes('%ENEMY%')) txt = txt.replace('%ENEMY%', targ.name);
+					return txt;
+				} else {
+					return `A green aura is deployed around ${targ.name}!`;
+				}
+			}
 		}
 	},
 
@@ -475,4 +512,38 @@ applyExtra = (message, skill, skillExtra, extra1, extra2, extra3, extra4, extra5
 	message.react('👍');
 
 	return true;
+}
+
+// Custom Variables!
+addCusVal = (char, name, vars) => {
+	if (!char.custom) char.custom = {};
+
+	char.custom[name] = vars;
+	return char.custom[name];
+}
+
+customVariables = {
+	healverse: {
+		onturn: function(btl, char, vars) {
+			vars.turns--;
+			if (vars.turns <= 0) {
+				killVar(char, "healverse");
+				return `${vars.infname}'s ${vars.name} has worn off for ${char.name}!`;
+			}
+
+			return null;
+		},
+		onhit: function(btl, char, inf, dmg, vars) {
+			let heal = Math.round((dmg/100)*vars.heal);
+			switch(vars.type) {
+				case 'mp':
+					inf.mp = Math.min(inf.maxmp, inf.mp+heal);
+
+				default:
+					inf.hp = Math.min(inf.maxhp, inf.hp+heal);
+			}
+
+			return `${vars.infname}'s ${vars.name} allowed ${inf.name} to restore ${heal}${vars.type.toUpperCase()}`;
+		}
+	},
 }

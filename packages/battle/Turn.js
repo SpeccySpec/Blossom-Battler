@@ -570,7 +570,7 @@ doAction = (char, btl, action) => {
 		case 'guard':
 			char.guard = 0.45;
 
-			let mpget = randNum(Math.round(char.level/10));
+			let mpget = randNum(1, Math.round(char.level/10));
 			char.mp = Math.min(char.maxmp, char.mp+mpget)
 
 			DiscordEmbed = new Discord.MessageEmbed()
@@ -647,11 +647,11 @@ doTurn = (btl, noTurnEmbed) => {
 			for (let i in skill.passive) {
 				if (passiveList[i] && passiveList[i].onturn) {
 					if (passiveList[i].multiple) {
-						for (let k in skill.passive[i]) statusTxt += passiveList[i].onturn(btl, char, skill.passive[i][k]);
+						for (let k in skill.passive[i]) statusTxt += (passiveList[i].onturn(btl, char, skill.passive[i][k]) ?? '');;
 					} else
-						statusTxt += passiveList[i].onturn(btl, char, skill.passive[i]);
+						statusTxt += (passiveList[i].onturn(btl, char, skill.passive[i]) ?? '');
 
-					statusTxt += '\n';
+					if (statusTxt != '') statusTxt += '\n';
 				}
 			}
 		}
@@ -661,8 +661,8 @@ doTurn = (btl, noTurnEmbed) => {
 	let canMove = true;
 
 	if (char.status && char.statusturns && statusEffectFuncs[char.status.toLowerCase()]) {
-		let statusEff = statusEffectFuncs[char.status.toLowerCase()].onturn(btl, char);
-		
+		let statusEff = (statusEffectFuncs[char.status.toLowerCase()].onturn(btl, char) ?? '');
+
 		if (typeof statusEff === 'string')
 			statusTxt += statusEff
 		else if (typeof statusEff === 'object') {
@@ -682,9 +682,9 @@ doTurn = (btl, noTurnEmbed) => {
 	let stackable = ['confusion', 'infatuation'];
 
 	for (let i in stackable) {
-		if (char[i] && statusEffectFuncs[i]) {
-			let statusEff = statusEffectFuncs[i].onturn(btl, char);
-			
+		if (char[stackable[i]] && statusEffectFuncs[stackable[i]]) {
+			let statusEff = (statusEffectFuncs[stackable[i]].onturn(btl, char) ?? '');
+
 			if (typeof statusEff === 'string')
 				statusTxt += statusEff
 			else if (typeof statusEff === 'object') {
@@ -692,10 +692,20 @@ doTurn = (btl, noTurnEmbed) => {
 				statusTxt += statusEff[0]
 			}
 
-			char[i]--;
-			if (char[i] == 0) delete char[i];
+			char[stackable[i]]--;
+			if (char[stackable[i]] == 0) delete char[stackable[i]];
 
 			statusTxt += '\n';
+		}
+	}
+
+	// Custom Variables.
+	if (char.hp > 0 && char.custom) {
+		for (let i in char.custom) {
+			if (customVariables[i] && customVariables[i].onturn) {
+				statusTxt += (customVariables[i].onturn(btl, char, char.custom[i]) ?? '');
+				if (statusTxt != '') statusTxt += '\n';
+			}
 		}
 	}
 

@@ -1069,22 +1069,24 @@ client.on("guildCreate", (guild) => {
 })
 
 client.on("messageCreate", (message) => {
-	if (message.channel.type !== 'DM')
-		makeDirectory(`${dataPath}/json/${message.guild.id}`);
-	if (message.author.bot)
-		return;
+	if (message.author.bot) return;
+	if (message.channel.type === 'DM') return message.channel.send("Don't use me in DMs! That's kinda sussy!");
+
+	// Set up directory :)
+	makeDirectory(`${dataPath}/json/${message.guild.id}`);
+
 	// Register commands
 	prefix = getPrefix(message.guild.id)
-	if (!message.content.startsWith(prefix))
-		return;
+	if (!message.content.startsWith(prefix)) return;
+
 	let args = [...message.content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
-	if (args.length == 0)
-		return;
+	if (args.length == 0) return;
+
 	let command = commands[args[0]];
-	args.shift()
-	if (!command)
-		return;
-	command.call(message, args)
+	if (!command) return;
+
+	args.shift();
+	command.call(message, args);
 })
 
 //last ditch things

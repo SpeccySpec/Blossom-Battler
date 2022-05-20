@@ -249,9 +249,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			break;
 		}
 
-		if (totalHits <= 0)
+		if (totalHits <= 0) {
 			result.txt += dodgeTxt(targ);
-		else {
+			return result;
+		} else {
 			let crits = [];
 			for (let i = 0; i < totalHits; i++) {
 				let dmg = genDmg(char, targ, btl, skill);
@@ -282,6 +283,12 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 							extrasList[i].dmgmod(char, targ, dmg, skill, btl, skill.extras[i]);
 						}
 					}
+				}
+
+				// Guarding
+				if (char.guard) {
+					dmg *= char.guard;
+					delete char.guard;
 				}
 
 				// This damage is done!
@@ -350,15 +357,25 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) {
-								result.txt += `\n${extrasList[i].onuse(char, targ, skill, btl, skill.extras[i][k])}`;
+								result.txt += `\n${(extrasList[i].onuse(char, targ, skill, btl, skill.extras[i][k] ) ?? '')}`;
 								returnThis = true;
 							}
 						} else {
-							result.txt += `\n${extrasList[i].onuse(char, targ, skill, btl, skill.extras[i])}`;
+							result.txt += `\n${(extrasList[i].onuse(char, targ, skill, btl, skill.extras[i]) ?? '')}`;
 						}
 					}
 				}
 
+				// On hit
+				if (targ.hp > 0 && targ.custom) {
+					for (let i in targ.custom) {
+						if (customVariables[i] && customVariables[i].onhit) {
+							result.txt += '\n' + (customVariables[i].onhit(btl, targ, char, total, targ.custom[i]) ?? '');
+						}
+					}
+				}
+
+				// Quotes
 				let quotetype = affinity;
 				if (affinity === 'normal') quotetype = 'hurt';
 				if (affinity === 'resist') result.txt += `\n${selectQuote(char, 'badatk')}`;
@@ -564,6 +581,20 @@ useSkill = (char, btl, act, forceskill) => {
 
 		if (result.oneMore) btl.doonemore = true;
 		if (result.teamCombo) btl.canteamcombo = true;
+	}
+
+	// OnSelect
+	if (skill.extras) {
+		for (let i in skill.extras) {
+			if (!extrasList[i]) continue;
+			if (!extrasList[i].onselect) continue;
+
+			if (extrasList[i].multiple) {
+				for (let k in skill.extras[i]) finalText += `\n${(extrasList[i].onselect(char, skill, btl, skill.extras[i][k]) ?? '')}`;
+			} else {
+				finalText += `\n${(extrasList[i].onselect(char, skill, btl, skill.extras[i]) ?? '')}`;
+			}
+		}
 	}
 
 	// Take away the cost
