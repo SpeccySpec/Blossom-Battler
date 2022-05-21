@@ -557,7 +557,7 @@ statusEffectFuncs = {
 				char.statusturns = 2;
 			else
 				char.statusturns = 1;
-		}
+		},
 		onturn: function(btl, char) {
 			let chance = 100;
 			if (hasStatusAffinity(char, 'freeze', 'resist')) chance = 50;

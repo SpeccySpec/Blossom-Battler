@@ -405,7 +405,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				if (targ.hp <= 0) {
 					quotetype = 'dead';
 					result.txt += `\n${selectQuote(char, 'kill')}`;
-				} else {
+				} else
 					result.txt += `\n${selectQuote(char, 'landed')}`;
 
 				result.txt += `\n${selectQuote(targ, quotetype)}`;
