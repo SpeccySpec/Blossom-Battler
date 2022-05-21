@@ -1,1 +1,35 @@
-{}
+{
+    "Sutela": {
+        "loveParameter": 13
+    },
+    "Perduvuk": {
+        "loveParameter": 9
+    },
+    "Turi": {
+        "loveParameter": 7
+    },
+    "Permic": {
+        "loveParameter": 56
+    },
+    "Foresa": {
+        "loveParameter": 87
+    },
+    "Mumei": {
+        "loveParameter": 17
+    },
+    "Tint": {
+        "loveParameter": 39
+    },
+    "Pank": {
+        "loveParameter": 81
+    },
+    "Rosy": {
+        "loveParameter": 35
+    },
+    "Pointy": {
+        "loveParameter": 98
+    },
+    "Ayumi": {
+        "loveParameter": 8
+    }
+}

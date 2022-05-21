@@ -397,6 +397,13 @@ passiveList = {
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			makePassive(skill, "wonderguard", [true]);
 			return true;
+		},
+		affinitymodoninf: function(char, inf, skill, passive, affinity, btl, vars) {
+			if (affinity === 'deadly' || affinity === 'superweak' || affinity === 'weak') {
+				return null;
+			}
+
+			return ['block', `${char.name}'s ${passive.name} made the skill have no affect!`];
 		}
 	},
 
