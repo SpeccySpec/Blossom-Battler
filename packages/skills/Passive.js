@@ -12,11 +12,11 @@ passiveList = {
 			let element = extra1.toLowerCase();
 			if ((!utilityFuncs.inArray(element, Elements) && element != 'all' && element != 'magic' && element != 'physical') || element === 'almighty') return message.channel.send("You entered an invalid element!");
 
-			makePassive(skill, "boost", [element, parseInt(extra2)]);
+			makePassive(skill, "boost", [element, parseFloat(extra2)]);
 			return true;
 		},
 		statmod: function(btl, char, skill, vars) {
-			
+			skill.pow *= extra2/100;
 		}
 	},
 
@@ -319,6 +319,15 @@ passiveList = {
 			if (parseFloat(extra1) < 1) return message.channel.send("You entered an invalid value for <Chance>!");
 			makePassive(skill, "affinitycutter", [parseFloat(extra1)]);
 			return true;
+		},
+		affinitymod: function(inf, char, skill, affinity, btl, vars) {
+			if (affinity === 'resist' || affinity === 'block') {
+				if (randNum(1, 100) <= vars[0]) {
+					return ['normal', `${inf.name} cuts through ${char.name}'s ${affinity} affinity!`];
+				}
+			}
+
+			return null;
 		}
 	},
 
@@ -331,6 +340,15 @@ passiveList = {
 			if (parseFloat(extra1) < 1) return message.channel.send("You entered an invalid value for <Chance>!");
 			makePassive(skill, "affinityslicer", [parseFloat(extra1)]);
 			return true;
+		},
+		affinitymod: function(inf, char, skill, affinity, btl, vars) {
+			if (affinity === 'resist' || affinity === 'block' || affinity === 'repel' || affinity === 'drain') {
+				if (randNum(1, 100) <= vars[0]) {
+					return ['normal', `${inf.name} cuts through ${char.name}'s ${affinity} affinity!`];
+				}
+			}
+
+			return null;
 		}
 	},
 

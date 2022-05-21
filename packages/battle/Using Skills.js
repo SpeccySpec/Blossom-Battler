@@ -264,22 +264,44 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 			for (let i = 0; i < totalHits; i++) {
 				let dmg = genDmg(char, targ, btl, skill);
+
+				// Handle Final Affinities
+				let curAffinity = affinity
+				if (char.guard)
+					curAffinity = 'resist';
+				else {
+					if (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].affinitymod) {
+						curAffinity = statusEffectFuncs[char.status].affinitymod(char, targ, skill, btl, affinity);
+					}
+
+					for (let i in char.skills) {
+						if (!skillFile[char.skills[i]]) continue;
+						if (skillFile[char.skills[i]].type != 'passive') continue;
+
+						for (let k in skillFile[char.skills[i]].passive) {
+							if (passiveList[k] && passiveList[k].affinitymod) {
+								let a = passiveList[k].affinitymod(char, targ, skill, btl, skillFile[char.skills[i]].passive[k])
+								
+								if (a && a != null && a != false) {
+									if (typeof(a) === 'string') {
+										curAffinity = a;
+									} else {
+										curAffinity = a[0];
+										results.txt += a[1];
+									}
+								}
+							}
+						}
+					}
+				}
+
+				affinities.push(curAffinity);
+
 				if (affinity == 'resist') dmg *= settings.rates.affinities.resist ?? 0.5;
 				if (affinity == 'drain') dmg *= settings.rates.affinities.drain ?? 1;
 				if (affinity == 'weak' && !char.guard) dmg *= settings.rates.affinities.weak ?? 1.5;
 				if (affinity == 'superweak' && !char.guard) dmg *= settings.rates.affinities.superweak ?? 2.1;
 				if (affinity == 'deadly' && !char.guard) dmg *= settings.rates.affinities.deadly ?? 4.2;
-
-				// Handle Final Affinities
-				if (char.guard)
-					affinities.push('resist');
-				else {
-					if (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].affinitymod) {
-						affinities.push(statusEffectFuncs[char.status].affinitymod(char, targ, skill, btl, affinity));
-					} else {
-						affinities.push(affinity);
-					}
-				}
 
 				// Critical Hits
 				if (skill.crit) {
