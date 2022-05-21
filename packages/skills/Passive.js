@@ -336,7 +336,7 @@ passiveList = {
 		desc: "_<Chance>_\n<Chance>% chance to bypass all affinities, turning them into a resist or better.\n```diff\n+ Drain, Repel, Block ---> Resist\n+ Resist ---> Normal\n```",
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Chance>!");
-			
+
 			if (parseFloat(extra1) < 1) return message.channel.send("You entered an invalid value for <Chance>!");
 			makePassive(skill, "affinityslicer", [parseFloat(extra1)]);
 			return true;
@@ -361,6 +361,15 @@ passiveList = {
 			if (parseFloat(extra1) < 1) return message.channel.send("You entered an invalid value for <Chance>!");
 			makePassive(skill, "swordbreaker", [parseFloat(extra1)]);
 			return true;
+		},
+		affinitymodoninf: function(char, inf, skill, passive, affinity, btl, vars) {
+			if (affinity === 'deadly' || affinity === 'superweak' || affinity === 'weak' || affinity === 'normal') {
+				if (randNum(1, 100) <= vars[0]) {
+					return ['resist', `${char.name}'s ${passive.name} changed ${skill.name}'s attack to a resist!`];
+				}
+			}
+
+			return null;
 		}
 	},
 

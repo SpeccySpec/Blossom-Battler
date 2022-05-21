@@ -280,7 +280,27 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 						for (let k in skillFile[char.skills[i]].passive) {
 							if (passiveList[k] && passiveList[k].affinitymod) {
-								let a = passiveList[k].affinitymod(char, targ, skill, btl, skillFile[char.skills[i]].passive[k])
+								let a = passiveList[k].affinitymod(targ, char, skill, btl, skillFile[char.skills[i]].passive[k])
+
+								if (a && a != null && a != false) {
+									if (typeof(a) === 'string') {
+										curAffinity = a;
+									} else {
+										curAffinity = a[0];
+										results.txt += a[1];
+									}
+								}
+							}
+						}
+					}
+
+					for (let i in targ.skills) {
+						if (!skillFile[targ.skills[i]]) continue;
+						if (skillFile[targ.skills[i]].type != 'passive') continue;
+
+						for (let k in skillFile[targ.skills[i]].passive) {
+							if (passiveList[k] && passiveList[k].affinitymodoninf) {
+								let a = passiveList[k].affinitymodoninf(targ, char, skill, skillFile[char.skills[i]], btl, skillFile[char.skills[i]].passive[k])
 								
 								if (a && a != null && a != false) {
 									if (typeof(a) === 'string') {
@@ -299,9 +319,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 				if (affinity == 'resist') dmg *= settings.rates.affinities.resist ?? 0.5;
 				if (affinity == 'drain') dmg *= settings.rates.affinities.drain ?? 1;
-				if (affinity == 'weak' && !char.guard) dmg *= settings.rates.affinities.weak ?? 1.5;
-				if (affinity == 'superweak' && !char.guard) dmg *= settings.rates.affinities.superweak ?? 2.1;
-				if (affinity == 'deadly' && !char.guard) dmg *= settings.rates.affinities.deadly ?? 4.2;
+				if (affinity == 'weak' && !targ.guard) dmg *= settings.rates.affinities.weak ?? 1.5;
+				if (affinity == 'superweak' && !targ.guard) dmg *= settings.rates.affinities.superweak ?? 2.1;
+				if (affinity == 'deadly' && !targ.guard) dmg *= settings.rates.affinities.deadly ?? 4.2;
 
 				// Critical Hits
 				if (skill.crit) {
@@ -313,7 +333,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				}
 
 				// Techs
-				if (char.status && isTech(char, skill.type)) {
+				if (targ.status && isTech(targ, skill.type)) {
 					dmg *= settings.rates.tech;
 					techs[i] = true;
 				}
