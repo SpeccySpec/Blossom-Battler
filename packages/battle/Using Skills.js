@@ -7,18 +7,15 @@ canUseLb = (char, btl) => {
 }
 
 // Is this a tech
-function isTech(charDefs, element) {
-	if (!charDefs.status) return false;
-	if (charDefs.status === 'sleep' || charDefs.status === 'blind') return true;
+function isTech(char, element) {
+	if (!char.status) return false;
+	if (char.status === 'sleep' || char.status === 'blind') return true;
 
-	for (let i in elementTechs[charDefs.status]) {
-		let techElement = elementTechs[charDefs.status][i];
-		if (typeof element == 'string') {
-			if (element == techElement) return true;
-		} else {
-			for (let k in element) {
-				if (element[k] == techElement) return true;
-			}
+	if (typeof element == 'string') {
+		return elementTechs[char.status].includes(element.toLowerCase());
+	} else {
+		for (let k in element) {
+			if (elementTechs[char.status].includes(element[k].toLowerCase())) return true;
 		}
 	}
 
@@ -94,7 +91,7 @@ genDmg = (char, targ, btl, skill) => {
 }
 
 // Also Placeholder
-getAffinity = (charDefs, skillType) => {
+getAffinity = (char, skillType) => {
 	let affinity = 'normal'
 
 	if (typeof skillType === 'object') {
@@ -109,8 +106,8 @@ getAffinity = (charDefs, skillType) => {
 
 		if (typeof skillType === 'string') {
 			for (const i in affinities) {
-				for (const k in charDefs.affinities[affinities[i]]) {
-					if (charDefs.affinities[affinities[i]][k] == skillType)
+				for (const k in char.affinities[affinities[i]]) {
+					if (char.affinities[affinities[i]][k] == skillType)
 						affinity = affinities[i];
 				}
 			}
@@ -122,8 +119,8 @@ getAffinity = (charDefs, skillType) => {
 
 			for (let j = 0; j < skillType.length; j++) {
 				for (const i in affinities) {
-					for (const k in charDefs.affinities[affinities[i]]) {
-						if (charDefs.affinities[affinities[i]][k] == skillType[j]) {
+					for (const k in char.affinities[affinities[i]]) {
+						if (char.affinities[affinities[i]][k] == skillType[j]) {
 							points = results[affinities.indexOf(affinities[i])]
 
 							if (affinities[i] === "repel") affinityToConsider = "repel"
@@ -263,6 +260,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 		} else {
 			let crits = [];
 			let affinities = [];
+			let techs = [];
+
 			for (let i = 0; i < totalHits; i++) {
 				let dmg = genDmg(char, targ, btl, skill);
 				if (affinity == 'resist') dmg *= settings.rates.affinities.resist ?? 0.5;
@@ -289,6 +288,12 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 						crits[i] = true;
 						dmg *= settings.rates.crit ?? 1.5;
 					}
+				}
+
+				// Techs
+				if (char.status && isTech(char, skill.type)) {
+					dmg *= settings.rates.tech;
+					techs[i] = true;
 				}
 
 				// DmgMod
@@ -348,6 +353,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				for (let i in damages) {
 					dmgTxt += `**${damages[i]}**`;
 					if (affinityEmoji[affinities[i]]) dmgTxt += affinityEmoji[affinities[i]];
+					if (techs[i]) dmgTxt += statusEmojis[char.status.toLowerCase()];
 					if (crits[i]) dmgTxt += critEmoji;
 
 					total += damages[i];
@@ -380,7 +386,6 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) {
 								result.txt += `\n${(extrasList[i].onuse(char, targ, skill, btl, skill.extras[i][k] ) ?? '')}`;
-								returnThis = true;
 							}
 						} else {
 							result.txt += `\n${(extrasList[i].onuse(char, targ, skill, btl, skill.extras[i]) ?? '')}`;
@@ -409,6 +414,23 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					result.txt += `\n${selectQuote(char, 'landed')}`;
 
 				result.txt += `\n${selectQuote(targ, quotetype)}`;
+
+				// Lastly, Status Effects
+				if (skill.status && !targ.status) {
+					var status;
+					if (typeof(skill.status) === 'object') {
+						status = skill.status[randNum(skill.status.length-1)];
+					} else {
+						status = skill.status;
+					}
+
+					let chance = (skill.statuschance ?? 5) + ((char.stats.chr-targ.stats.chr)/2);
+					if (isPhysicalStatus(status.toLowerCase())) chance = (skill.statuschance ?? 5) + ((char.stats.luk-targ.stats.luk)/2);
+
+					if (randNum(1, 100) <= chance) {
+						result.txt += `${inflictStatus(targ, status.toLowerCase())}\n${selectQuote(char, 'landed')}\n${selectQuote(targ, 'hurt')}`;
+					}
+				}
 			}
 		}
 	}

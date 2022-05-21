@@ -328,7 +328,7 @@ extrasList = {
 				return message.channel.send('All 3 status effects were invalid.');
 			}
 			
-			if (!skill.statusChance) skill.statusChance = 100;
+			if (!skill.statuschance) skill.statuschance = 100;
 			return true;
 		}
 	},

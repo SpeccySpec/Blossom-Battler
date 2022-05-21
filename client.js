@@ -265,7 +265,7 @@ statusEmojis = {
 	sleep: "<:sleep:963389074213847070>",
 	dizzy: "<:dizzy:963387466935570444>",
 	despair: "<:despair:963387466574856242>",
-    brainwash: "<:brainwash:963387466230956044>",
+    brainwash: "<:brainwash:963413989537222666>",
 	fear: "<:fear:963387466918813747>",
 	rage: "<:rage:973076333838098452>",
 	ego: "<:ego:963387466788794380>",

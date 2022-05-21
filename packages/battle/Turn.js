@@ -246,14 +246,16 @@ sendCurTurnEmbed = (char, btl) => {
 	} else {
 		for (let i in btl.teams[op].members) {
 			let c = btl.teams[op].members[i];
-			teamDesc += `${i}: ${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+			let s = c.status ? `${statusEmojis[c.status]}` : '';
+			teamDesc += `${i}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
 		}
 	}
 
 	let myTeamDesc = '';
 	for (let i in btl.teams[char.team].members) {
 		let c = btl.teams[char.team].members[i];
-		myTeamDesc += `${i}: ${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+		let s = c.status ? `${statusEmojis[c.status]}` : '';
+		myTeamDesc += `${i}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
 	}
 
 	let DiscordEmbed = new Discord.MessageEmbed()
@@ -462,7 +464,8 @@ sendCurTurnEmbed = (char, btl) => {
 					teamDesc = '';
 					for (let i in btl.teams[btl.action.target[0]].members) {
 						let c = btl.teams[btl.action.target[0]].members[i];
-						teamDesc += `${i}: ${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+						let s = c.status ? `${statusEmojis[c.status]}` : '';
+						teamDesc += `${i}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
 					}
 
 					DiscordEmbed.fields = [{name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true}];
