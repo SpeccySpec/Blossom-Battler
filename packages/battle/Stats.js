@@ -23,6 +23,17 @@ buffStat = (f, stat, amount) => {
 	if (f.buffs[statBuff] < -3) f.buffs[statBuff] = -3;
 }
 
+inflictStatus = (char, status) => {
+	if (hasStatusAffinity(char, status.toLowerCase(), 'block')) return `${char.name} blocked the ${statusNames[char.status]}!`;
+
+	char.status = status.toLowerCase();
+	char.statusturns = statusEffectFuncs[char.status] ? statusEffectFuncs[char.status].forceturns : 3;
+	if (statusEffectFuncs[char.status] && statusEffectFuncs[char.status].oninflict)
+		statusEffectFuncs[char.status].oninflict(char);
+
+	return `${char.name} was inflicted with ${statusNames[char.status]}!`;
+}
+
 getCharFromId = (id, btl) => {
 	for (const i in btl.teams) {
 		for (const k in btl.teams[i].members) {

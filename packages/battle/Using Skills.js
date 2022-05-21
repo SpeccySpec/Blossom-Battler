@@ -241,9 +241,17 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 		let totalHits = 0;
 		for (let i = 0; i < skill.hits; i++) {
 			let c = randNum(100);
-			if (c <= skill.acc+((char.stats.prc-targ.stats.agl)/2)) {
-				totalHits++;
-				continue;
+
+			if (skill.nomod && skill.nomod.acc) {
+				if (c <= skill.acc) {
+					totalHits++;
+					continue;
+				}
+			} else {
+				if (c <= skill.acc+((char.stats.prc-targ.stats.agl)/2)) {
+					totalHits++;
+					continue;
+				}
 			}
 
 			break;
@@ -254,13 +262,27 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			return result;
 		} else {
 			let crits = [];
+			let affinities = [];
 			for (let i = 0; i < totalHits; i++) {
 				let dmg = genDmg(char, targ, btl, skill);
 				if (affinity == 'resist') dmg *= settings.rates.affinities.resist ?? 0.5;
-				if (affinity == 'weak') dmg *= settings.rates.affinities.weak ?? 1.5;
-				if (affinity == 'superweak') dmg *= settings.rates.affinities.superweak ?? 2.1;
-				if (affinity == 'deadly') dmg *= settings.rates.affinities.deadly ?? 4.2;
+				if (affinity == 'drain') dmg *= settings.rates.affinities.drain ?? 1;
+				if (affinity == 'weak' && !char.guard) dmg *= settings.rates.affinities.weak ?? 1.5;
+				if (affinity == 'superweak' && !char.guard) dmg *= settings.rates.affinities.superweak ?? 2.1;
+				if (affinity == 'deadly' && !char.guard) dmg *= settings.rates.affinities.deadly ?? 4.2;
 
+				// Handle Final Affinities
+				if (char.guard)
+					affinities.push('resist');
+				else {
+					if (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].affinitymod) {
+						affinities.push(statusEffectFuncs[char.status].affinitymod(char, targ, skill, btl, affinity));
+					} else {
+						affinities.push(affinity);
+					}
+				}
+
+				// Critical Hits
 				if (skill.crit) {
 					let c = randNum(100);
 					if (c <= skill.crit+((char.stats.luk-targ.stats.luk)/2)) {
@@ -286,7 +308,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				}
 
 				// Guarding
-				if (char.guard) {
+				if (char.guard && affinity != 'drain') {
 					dmg *= char.guard;
 					delete char.guard;
 				}
@@ -298,7 +320,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			let dmgTxt = '';
 			if (affinity == 'drain') {
 				result.txt += `__${targ.name}__'s HP was restored by _`
-				
+
 				for (let i in damages) {
 					dmgTxt += `**${damages[i]}**${affinityEmoji.drain}`;
 					if (crits[i]) dmgTxt += critEmoji;
@@ -325,7 +347,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				result.txt += `__${targ.name}__ took _`
 				for (let i in damages) {
 					dmgTxt += `**${damages[i]}**`;
-					if (affinityEmoji[affinity]) dmgTxt += affinityEmoji[affinity];
+					if (affinityEmoji[affinities[i]]) dmgTxt += affinityEmoji[affinities[i]];
 					if (crits[i]) dmgTxt += critEmoji;
 
 					total += damages[i];
@@ -383,7 +405,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				if (targ.hp <= 0) {
 					quotetype = 'dead';
 					result.txt += `\n${selectQuote(char, 'kill')}`;
-				}
+				} else {
+					result.txt += `\n${selectQuote(char, 'landed')}`;
 
 				result.txt += `\n${selectQuote(targ, quotetype)}`;
 			}
@@ -427,6 +450,11 @@ useSkill = (char, btl, act, forceskill) => {
 					extrasList[i].statmod(char, skill, skill.extras[i], btl)
 			}
 		}
+	}
+
+	// Status Effects
+	if (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].skillmod) {
+		statusEffectFuncs[char.status].skillmod(char, skill, btl);
 	}
 
 	// more shit

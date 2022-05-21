@@ -259,12 +259,12 @@ statusNames = {
 statusEmojis = {
     burn: "<:burn:963387466423873607>",
 	bleed: "<:bleed:963387466323206174>",
+    poison: "<:poison:963389074146738216>",
     freeze: "<:freeze:963387466885259324>",
     paralyze: "<:electric:962465467400851518>",
 	sleep: "<:sleep:963389074213847070>",
 	dizzy: "<:dizzy:963387466935570444>",
 	despair: "<:despair:963387466574856242>",
-    poison: "<:poison:963389074146738216>",
     brainwash: "<:brainwash:963387466230956044>",
 	fear: "<:fear:963387466918813747>",
 	rage: "<:rage:973076333838098452>",

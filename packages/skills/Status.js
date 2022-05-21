@@ -9,8 +9,20 @@ statusList = {
 			if (!extra2) extra2 = 100;
 
 			skill.status = extra1;
-			skill.statusChance = extra2;
+			skill.statuschance = extra2;
 			return true;
+		},
+		onuse: function(char, targ, skill, btl, vars) {
+			if (hasStatusAffinity(char, skill.status.toLowerCase(), 'block')) return `${targ.name} blocked it!\n${selectQuote(char, 'badatk')}\n${selectQuote(targ, 'block')}`;
+
+			let chance = (skill.statusChance ?? skill.statuschance) + ((char.stats.chr-targ.stats.chr)/2);
+			if (isPhysicalStatus(skill.status.toLowerCase())) chance = (skill.statusChance ?? skill.statuschance) + ((char.stats.luk-targ.stats.luk)/2);
+
+			if (randNum(1, 100) <= chance) {
+				return `${inflictStatus(targ, skill.status.toLowerCase())}\n${selectQuote(char, 'landed')}\n${selectQuote(targ, 'hurt')}`;
+			} else {
+				return dodgeTxt(char, targ);
+			}
 		}
 	},
 
@@ -30,7 +42,7 @@ statusList = {
 		},
 		onuse: function(char, targ, skill, btl, vars) {
 			if (vars[2]) {
-				let chance = randNum(100);
+				let chance = randNum(1, 100);
 
 				if (chance <= vars[2]) {
 					buffStat(targ, vars[0].toLowerCase(), vars[1]);
@@ -537,5 +549,106 @@ statusEffectFuncs = {
 
 			return `${char.name} took ${dmg}${affinityTxt} damage from their bleeding!`;
 		}
-	}
+	},
+
+	freeze: {
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'freeze', 'weak'))
+				char.statusturns = 2;
+			else
+				char.statusturns = 1;
+		}
+		onturn: function(btl, char) {
+			let chance = 100;
+			if (hasStatusAffinity(char, 'freeze', 'resist')) chance = 50;
+
+			if (randNum(1, 100) <= chance)
+				return [`${char.name} is frozen, losing their turn!`, false];
+			else 
+				return `${char.name} thaws out!`;
+		}
+	},
+
+	paralysis: {
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'paralysis', 'weak')) {
+				char.parachance = 160;
+				char.statusturns = 5;
+			} else if (hasStatusAffinity(char, 'paralysis', 'resist')) {
+				char.parachance = 40;
+				char.statusturns = 4;
+			} else {
+				char.parachance = 80;
+				char.statusturns = 3;
+			}
+		},
+		onremove: function(char) {
+			delete char.parachance
+		},
+		onturn: function(btl, char) {
+			if (randNum(1, 100) <= char.parachance) {
+				char.parachance /= 2;
+				return [`${char.name} is stopped in their tracks by paralysis, losing their turn!`, false];
+			} else {
+				char.parachance /= 2;
+			}
+		}
+	},
+
+	sleep: {
+		onturn: function(btl, char) {
+			let hp = Math.round(fighterDef.maxhp/20);
+			let mp = Math.round(fighterDef.maxmp/20);
+			if (hasStatusAffinity(char, 'sleep', 'resist')) {
+				hp *= 2
+				mp *= 2
+			}
+
+			if (!hasStatusAffinity(char, 'sleep', 'weak')) {
+				char.hp = Math.min(char.maxhp, char.hp+hp);
+				char.mp = Math.min(char.maxmp, char.mp+mp);
+				return [`${char.name} is asleep. They are able to restore ${hp}HP and ${mp}MP!`, false];
+			} else {
+				return [`${char.name} is in a deep sleep...`, false];
+			}
+		}
+	},
+
+	dizzy: {
+		onturn: function(btl, char) {
+			return `${char.name} is dizzy!`;
+		},
+		skillmod: function(char, skill, btl) {
+			skill.acc /= 2;
+			skill.nomod = {
+				acc: true
+			};
+		}
+	},
+
+	despair: {
+		onturn: function(btl, char) {
+			let statusTxt = '';
+			let affinityTxt = '';
+
+			let dmg = Math.round(fighterDef.maxmp/10)
+			if (char.boss || char.miniboss) dmg = 10;
+
+			if (hasStatusAffinity(char, 'despair', 'weak')) {
+				dmg *= 2;
+				affinityTxt = affinityEmoji.weak;
+			} else if (hasStatusAffinity(char, 'despair', 'resist')) {
+				dmg /= 2;
+				affinityTxt = affinityEmoji.resist;
+			}
+
+			char.mp = Math.max(0, char.mp-dmg);
+			if (char.mp <= 0) {
+				char.hp = 0;
+				return `${char.name} lost ${dmg}${affinityTxt}MP from their despair, running out of MP and therefore being defeated!`;
+			}
+
+			return `${char.name} lost ${dmg}${affinityTxt}MP from their despair!`;
+		}
+	},
 }

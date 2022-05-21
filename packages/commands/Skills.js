@@ -2124,7 +2124,7 @@ commands.liststatus = new Command({
 			burn: '<:physical:973077052129423411>Take 1/10th of max HP damage each turn until cured, or you reach one hp. Halves ATK stat.',
 			bleed: '<:physical:973077052129423411>Take 1/10th of max HP damage each until cured, or the inflicted is defeated.',
 			freeze: '<:physical:973077052129423411>Immobilized for one turn.',
-			paralyze: '<:physical:973077052129423411>Immobilized for one turn.',
+			paralyze: '<:physical:973077052129423411>Chance to be immobilized until the status passes.',
 			poison: '<:physical:973077052129423411>Take 1/10th of max HP damage each turn until cured, or you reach one hp. Halves MAG stat.',
 			dazed: '<:physical:973077052129423411>Unable to use any physical skills for 2 turns.',
 			hunger: '<:physical:973077052129423411>ATK & MAG halved.',

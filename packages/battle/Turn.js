@@ -369,7 +369,6 @@ sendCurTurnEmbed = (char, btl) => {
 									let txt = extrasList[i].canuse(char, skill, btl, skill.extras[i][k]);
 									if (txt != true) {
 										DiscordEmbed.title = txt;
-										collector.stop();
 
 										return i.update({
 											content: `<@${char.owner}>`,
@@ -381,13 +380,25 @@ sendCurTurnEmbed = (char, btl) => {
 								let txt = extrasList[i].canuse(char, skill, btl, skill.extras[i]);
 								if (txt != true) {
 									DiscordEmbed.title = txt;
-									collector.stop();
 
 									return i.update({
 										content: `<@${char.owner}>`,
 										embeds: [DiscordEmbed],
 									});
 								}
+							}
+						}
+
+						if (char.status && statusEffectFuncs[char.status.toLowerCase()] && statusEffectFuncs[char.status.toLowerCase()].canuse) {
+							let canUse = statusEffectFuncs[char.status.toLowerCase()].canuse(char, skill, btl)
+
+							if (canUse && canUse[1] != true) {
+								DiscordEmbed.title = canUse[0];
+
+								return i.update({
+									content: `<@${char.owner}>`,
+									embeds: [DiscordEmbed],
+								});
 							}
 						}
 					}
@@ -669,14 +680,22 @@ doTurn = (btl, noTurnEmbed) => {
 			if (!statusEff[1]) canMove = false;
 			statusTxt += statusEff[0]
 		}
-
-		char.statusturns--;
-		if (char.statusturns == 0) {
+		
+		if (char.hp <= 0) {
+			canMove = false;
 			delete char.status;
 			delete char.statusturns;
+			if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(char);
+		} else {
+			char.statusturns--;
+			if (char.statusturns == 0) {
+				delete char.status;
+				delete char.statusturns;
+				if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(char);
+			}
 		}
 
-		statusTxt += '\n';
+		if (statusTxt != '') statusTxt += '\n';
 	}
 
 	let stackable = ['confusion', 'infatuation'];
@@ -692,10 +711,15 @@ doTurn = (btl, noTurnEmbed) => {
 				statusTxt += statusEff[0]
 			}
 
-			char[stackable[i]]--;
-			if (char[stackable[i]] == 0) delete char[stackable[i]];
+			if (char.hp <= 0) {
+				canMove = false;
+				delete char[stackable[i]];
+			} else {
+				char[stackable[i]]--;
+				if (char[stackable[i]] == 0) delete char[stackable[i]];
+			}
 
-			statusTxt += '\n';
+			if (statusTxt != '') statusTxt += '\n';
 		}
 	}
 
@@ -720,7 +744,7 @@ doTurn = (btl, noTurnEmbed) => {
 	}
 
 	setTimeout(function() {
-		if (!canMove) return advanceTurn(btl);
+		if (!canMove || char.hp <= 0) return advanceTurn(btl);
 		if (noTurnEmbed) return;
 
 		// Now... send the turn embed!

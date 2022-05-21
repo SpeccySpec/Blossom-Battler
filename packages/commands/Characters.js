@@ -1958,6 +1958,8 @@ commands.dailychar = new Command({
 
 // Quotes... oh boy.
 selectQuote = (char, quote, neverEmpty) => {
+	if (char.status && (char.status === 'sleep' || char.status === 'freeze')) return '';
+
 	let emptyTxt = neverEmpty ? 'No quotes in this section!' : '';
 
 	if (!char.quotes[`${quote}quote`]) return emptyTxt;
