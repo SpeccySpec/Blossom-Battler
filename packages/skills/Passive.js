@@ -16,7 +16,9 @@ passiveList = {
 			return true;
 		},
 		statmod: function(btl, char, skill, vars) {
-			skill.pow *= extra2/100;
+			if ((typeof(skill.type) === 'object' && skill.type.includes(vars[0])) || (typeof(skill.type) === 'string' && skill.type == vars[0])) {
+				skill.pow *= vars[1]/100;
+			}
 		}
 	},
 

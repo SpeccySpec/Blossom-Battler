@@ -670,16 +670,17 @@ doTurn = (btl, noTurnEmbed) => {
 			}
 		}
 	}
+	console.log(`Checkpoint 1: ${statusTxt}`);
 
 	// Status Effects.
 	let canMove = true;
 
-	if (char.status && char.statusturns && statusEffectFuncs[char.status.toLowerCase()]) {
+	if (char.status && statusEffectFuncs[char.status.toLowerCase()]) {
 		let statusEff = (statusEffectFuncs[char.status.toLowerCase()].onturn(btl, char) ?? '');
 
-		if (typeof statusEff === 'string')
+		if (typeof(statusEff) === 'string')
 			statusTxt += statusEff
-		else if (typeof statusEff === 'object') {
+		else if (typeof(statusEff) === 'object') {
 			if (!statusEff[1]) canMove = false;
 			statusTxt += statusEff[0]
 		}
@@ -700,6 +701,7 @@ doTurn = (btl, noTurnEmbed) => {
 
 		if (statusTxt != '') statusTxt += '\n';
 	}
+	console.log(`Checkpoint 2: ${statusTxt}`);
 
 	let stackable = ['confusion', 'infatuation'];
 
@@ -725,6 +727,7 @@ doTurn = (btl, noTurnEmbed) => {
 			if (statusTxt != '') statusTxt += '\n';
 		}
 	}
+	console.log(`Checkpoint 3: ${statusTxt}`);
 
 	// Custom Variables.
 	if (char.hp > 0 && char.custom) {
@@ -737,6 +740,7 @@ doTurn = (btl, noTurnEmbed) => {
 	}
 
 	// Now send the embed
+	console.log(`Checkpoint 4: ${statusTxt}`);
 	if (statusTxt != '') {
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#ff1fa9')

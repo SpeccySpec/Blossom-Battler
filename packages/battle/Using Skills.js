@@ -267,9 +267,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 				// Handle Final Affinities
 				let curAffinity = affinity
-				if (char.guard)
-					curAffinity = 'resist';
-				else {
+				if (!char.guard){
 					if (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].affinitymod) {
 						curAffinity = statusEffectFuncs[char.status].affinitymod(char, targ, skill, btl, affinity);
 					}
@@ -334,7 +332,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 				// Techs
 				if (targ.status && isTech(targ, skill.type)) {
-					dmg *= settings.rates.tech;
+					dmg *= settings.rates.tech ?? 1.2;
 					techs[i] = true;
 				}
 
@@ -361,7 +359,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				}
 
 				// This damage is done!
-				damages.push(Math.round(dmg));
+				damages.push(Math.max(1, Math.round(dmg)));
 			}
 
 			let dmgTxt = '';
@@ -395,7 +393,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				for (let i in damages) {
 					dmgTxt += `**${damages[i]}**`;
 					if (affinityEmoji[affinities[i]]) dmgTxt += affinityEmoji[affinities[i]];
-					if (techs[i]) dmgTxt += statusEmojis[char.status.toLowerCase()];
+					if (techs[i]) dmgTxt += statusEmojis[targ.status.toLowerCase()] ?? statusEmojis.burn;
 					if (crits[i]) dmgTxt += critEmoji;
 
 					total += damages[i];

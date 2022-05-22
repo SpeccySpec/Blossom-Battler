@@ -468,7 +468,7 @@ statusEffectFuncs = {
 			let statusTxt = '';
 			let affinityTxt = '';
 
-			let dmg = Math.round(fighterDef.maxhp/10)
+			let dmg = Math.round(char.maxhp/10)
 			if (char.boss || char.miniboss) dmg = 5;
 
 			if (hasStatusAffinity(char, 'burn', 'weak')) {
@@ -501,7 +501,7 @@ statusEffectFuncs = {
 			let statusTxt = '';
 			let affinityTxt = '';
 
-			let dmg = Math.round(fighterDef.maxhp/10)
+			let dmg = Math.round(char.maxhp/10)
 			if (char.boss || char.miniboss) dmg = 5;
 
 			if (hasStatusAffinity(char, 'poison', 'weak')) {
@@ -533,7 +533,7 @@ statusEffectFuncs = {
 			let statusTxt = '';
 			let affinityTxt = '';
 
-			let dmg = Math.round(fighterDef.maxhp/8)
+			let dmg = Math.round(char.maxhp/8)
 			if (char.boss || char.miniboss) dmg = 10;
 
 			if (hasStatusAffinity(char, 'bleed', 'weak')) {
@@ -569,7 +569,7 @@ statusEffectFuncs = {
 		}
 	},
 
-	paralysis: {
+	paralyze: {
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'paralysis', 'weak')) {
 				char.parachance = 160;
@@ -597,8 +597,8 @@ statusEffectFuncs = {
 
 	sleep: {
 		onturn: function(btl, char) {
-			let hp = Math.round(fighterDef.maxhp/20);
-			let mp = Math.round(fighterDef.maxmp/20);
+			let hp = Math.round(char.maxhp/20);
+			let mp = Math.round(char.maxmp/20);
 			if (hasStatusAffinity(char, 'sleep', 'resist')) {
 				hp *= 2
 				mp *= 2
@@ -631,7 +631,7 @@ statusEffectFuncs = {
 			let statusTxt = '';
 			let affinityTxt = '';
 
-			let dmg = Math.round(fighterDef.maxmp/10)
+			let dmg = Math.round(char.maxmp/10)
 			if (char.boss || char.miniboss) dmg = 10;
 
 			if (hasStatusAffinity(char, 'despair', 'weak')) {
