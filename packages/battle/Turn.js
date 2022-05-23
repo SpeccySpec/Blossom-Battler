@@ -600,7 +600,7 @@ sendCurTurnEmbed = (char, btl) => {
 						if (!targ.enemy) {
 							DiscordEmbed.title = `${targ.name} isn't an enemy!`;
 
-							i.update({
+							return i.update({
 								content: `<@${char.owner}>`,
 								embeds: [DiscordEmbed],
 								components: setUpComponents(char, btl, menustate)
@@ -608,7 +608,7 @@ sendCurTurnEmbed = (char, btl) => {
 						} else if (!enemyFuncs.encounteredEnemy(targ.truename, btl.guild.id)) {
 							DiscordEmbed.title = `We've yet to learn about ${targ.name}.`;
 
-							i.update({
+							return i.update({
 								content: `<@${char.owner}>`,
 								embeds: [DiscordEmbed],
 								components: setUpComponents(char, btl, menustate)
@@ -617,7 +617,7 @@ sendCurTurnEmbed = (char, btl) => {
 							let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 							menustate = MENU_ENEMYINFO;
 
-							i.update({
+							return i.update({
 								content: `<@${char.owner}>`,
 								embeds: [longDescription(enemyFile[targ.truename], enemyFile[targ.truename].level, btl.guild.id, i)],
 								components: setUpComponents(char, btl, menustate)
