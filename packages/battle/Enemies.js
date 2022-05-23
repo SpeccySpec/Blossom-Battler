@@ -65,9 +65,16 @@ doPacify = (char, btl, action) => {
 
 							party.negotiateAllies[targ.name] = {
 								nickname: targ.name,
-								hp: targ.maxhp,
-								mp: targ.maxmp,
+								hp: Math.round(targ.hp/2),
+								mp: Math.round(targ.mp/2),
+								maxhp: Math.round(targ.maxhp/2),
+								maxmp: Math.round(targ.maxmp/2),
 								stats: targ.stats,
+
+								skill: targ.negotiateDefs.qualities.skill,
+								atkbuff: targ.negotiateDefs.qualities.atk,
+								magbuff: targ.negotiateDefs.qualities.mag,
+								endbuff: targ.negotiateDefs.qualities.end,
 
 								happines: 255, // OKAY BUT WHAT IF WE COULD DO THIS TAMAGOCHI THING WITH PETS THATD BE SO SICK
 								mood: 'happy', // YOU'D GET TO SEE THEIR MOOD AND SHIT

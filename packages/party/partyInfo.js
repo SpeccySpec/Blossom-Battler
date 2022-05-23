@@ -55,7 +55,7 @@ partyDesc = (party, message) => {
 	// Backup
 	if (party.backup && party.backup.length > 0) {
 		let members = '';
-		for (const i in party.backup) members += `\n[**${i}**] ${chars[party.members[i]].name}`;
+		for (const i in party.backup) members += `\n[**${i}**] ${chars[party.backup[i]].name}`;
 
 		DiscordEmbed.fields.push({ name: 'Backup Members', value: members, inline: true });
 	}
@@ -64,11 +64,11 @@ partyDesc = (party, message) => {
 	if (party.negotiateAllies) {
 		let p = '';
 		for (const i in party.negotiateAllies) {
-			let petDefs = party.negotiateAllies[i]
-			p += `\n${petDefs.name} - ${petDefs.skill}`;
+			let petDefs = party.negotiateAllies[i];
+			p += `\n${petDefs.nickname}${(petDefs.nickname != i) ? (" (" + i + ")") : ""} - ${petDefs.skill}`;
 		}
 
-		if (p != '') DiscordEmbed.fields.push({ name: 'Pets', value: members, inline: true });
+		if (p != '') DiscordEmbed.fields.push({ name: 'Pets', value: p, inline: true });
 	}
 
 	let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);

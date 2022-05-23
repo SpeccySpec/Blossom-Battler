@@ -261,7 +261,7 @@ commands.startbattle = new Command({
 			setupBattleStats(char);
 
 			if (i <= 0) {
-				char.leader = true
+				char.leader = true;
 				battle.teams[0].leaderskill = char.leaderskill;
 			}
 

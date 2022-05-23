@@ -420,7 +420,9 @@ barEmojis = {
 	}
 }
 
+// Misc. Emojis
 critEmoji = '<:crit:973077052083286056>';
+leaderEmoji = '👑';
 
 specialDates = {
 	"24 12": "Christmas Eve",
