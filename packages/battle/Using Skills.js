@@ -408,6 +408,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					dmgTxt = `**${Math.round(avg)} average**`;
 				}
 
+				targ.hp = Math.max(0, targ.hp-total);
 				if (targ.hp <= 0) {
 					result.txt += `${dmgTxt} damage and was defeated!_`;
 				} else {
@@ -415,7 +416,6 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				}
 
 				if (damages.length > 1) result.txt += ` **(${(totalHits >= skill.hits) ? '__Full Combo!__ ' : (totalHits + ' hits, ')}${total} Total)**`;
-				targ.hp = Math.max(0, targ.hp-total);
 
 				// OnUse
 				if (skill.extras) {
