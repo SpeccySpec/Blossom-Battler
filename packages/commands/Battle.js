@@ -248,6 +248,8 @@ commands.startbattle = new Command({
 		// Set up Ally Side.
 		let battleid = 0;
 		let party = parties[args[0]];
+		
+		if (!party.discoveries) party.discoveries = {};
 
 		for (const i in party.members) {
 			if (!charFile[party.members[i]]) continue;

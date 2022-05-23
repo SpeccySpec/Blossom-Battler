@@ -147,7 +147,7 @@ const menuStates = {
 			makeButton('Run!', elementEmoji.wind, 'grey', true, 'run'),
 			makeButton('Backup', '<:mental:973077052053921792>', 'blue'),
 			makeButton('Pacify', itemTypeEmoji.pacify, 'green'),
-			makeButton('Enemy Info', statusEmojis.silence, 'red')
+			makeButton('Enemy Info', statusEmojis.silence, 'red', true, 'enemyinfo')
 		]
 	},
 	[MENU_PACIFY]: ({char, btl, comps}) => {
@@ -180,6 +180,7 @@ const menuStates = {
 		switch(btl.action.move) {
 			case 'melee':
 			case 'pacify':
+			case 'enemyinfo':
 				for (const i in members) {
 					if (members[i].hp <= 0 || members[i].pacified) continue;
 					comps[CalcCompins(comps, i)].push(
@@ -239,14 +240,17 @@ const menuStates = {
 	
 	[MENU_FORFEIT]: ({comps}) => {
 		comps[0] = [makeButton('Yes!', elementEmoji.wind, 'red', true, 'forfeit')]
-	}
+	},
+	[MENU_ENEMYINFO]: ({char, btl, comps}) => {
+		comps[0] = [makeButton('Finished Looking', '◀️', 'blue', true, 'back')]
+	},
 }
 
 setUpComponents = (char, btl, menustate) => {
 	let comps = []
 	menuStates[parseInt(menustate)]({char, btl, comps})
 
-	if (menustate != MENU_ACT) {
+	if (menustate != MENU_ACT && menustate != MENU_ENEMYINFO) {
 		if (!comps[0] || !comps[0][0]) {
 			comps[0] = [makeButton('Nothing Here :/', '◀️', 'grey', true, 'back')];
 		} else {
@@ -410,6 +414,11 @@ sendCurTurnEmbed = (char, btl) => {
 				btl.action.move = 'backup';
 				btl.action.target = [char.team, undefined];
 				menustate = MENU_TARGET;
+				break;
+
+			case 'enemyinfo':
+				btl.action.move = 'enemyinfo';
+				menustate = MENU_TEAMSEL;
 				break;
 
 			case 'back':
@@ -585,6 +594,35 @@ sendCurTurnEmbed = (char, btl) => {
 							embeds: [DiscordEmbed],
 							components: setUpComponents(char, btl, menustate)
 						})
+					} else if (btl.action.move === 'enemyinfo') {
+						let targ = btl.teams[btl.action.target[0]].members[i.customId];
+
+						if (!targ.enemy) {
+							DiscordEmbed.title = `${targ.name} isn't an enemy!`;
+
+							i.update({
+								content: `<@${char.owner}>`,
+								embeds: [DiscordEmbed],
+								components: setUpComponents(char, btl, menustate)
+							})
+						} else if (!enemyFuncs.encounteredEnemy(targ.truename, message.guild.id)) {
+							DiscordEmbed.title = `We've yet to learn about ${targ.name}.`;
+
+							i.update({
+								content: `<@${char.owner}>`,
+								embeds: [DiscordEmbed],
+								components: setUpComponents(char, btl, menustate)
+							})
+						} else {
+							let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+							menustate = MENU_ENEMYINFO;
+
+							i.update({
+								content: `<@${char.owner}>`,
+								embeds: [longDescription(enemyFile[targ.truename], enemyFile[targ.truename].level, btl.guild.id, i)],
+								components: setUpComponents(char, btl, menustate)
+							})
+						}
 					} else {
 						doAction(char, btl, btl.action);
 						collector.stop();
