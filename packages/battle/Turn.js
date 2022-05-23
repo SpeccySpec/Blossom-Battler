@@ -614,7 +614,7 @@ sendCurTurnEmbed = (char, btl) => {
 								components: setUpComponents(char, btl, menustate)
 							})
 						} else {
-							let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+							let enemyFile = setUpFile(`${dataPath}/json/${btl.guild.id}/enemies.json`);
 							menustate = MENU_ENEMYINFO;
 
 							return i.update({
