@@ -87,5 +87,5 @@ writeEnemy = (creator, guild, name, mainelement, level, health, magicpoints, exp
 
 foundEnemy = (enm, server) => {
 	let settings = setUpSettings(server);
-	return settings.encountered.includes(enmName);
+	return settings.encountered.includes(enm);
 }
