@@ -71,10 +71,11 @@ MENU_TACTICS = 3;
 MENU_TEAMSEL = 4;
 MENU_TARGET = 5;
 MENU_PACIFY = 6;
+MENU_BACKUP = 7;
 
 // Extra States (Misc. Shit like PVP)
-MENU_ENEMYINFO = 7;
-MENU_FORFEIT = 8;
+MENU_ENEMYINFO = 8;
+MENU_FORFEIT = 9;
 
 function CalcCompins(comps, i) {
 	const compins = Math.min(Math.floor(Math.max(i - 0.1, 0) / 4), 3)
@@ -159,6 +160,14 @@ const menuStates = {
 			comps[CalcCompins(comps, i)].push(makeButton(`${n.name}`, `${i}️⃣`, 'blue', true, i.toString()))
 		}
 	},
+	[MENU_BACKUP]: ({char, btl, comps}) => {
+		let members = btl.teams[char.team].backup;
+
+		for (let i in members) {
+			if (!comps[CalcCompins(comps, i)]) comps[CalcCompins(comps, i)] = [];
+			comps[CalcCompins(comps, i)].push(makeButton(`${members[i].name}`, `${i}️⃣`, 'blue', true, i.toString()))
+		}
+	},
 	[MENU_TEAMSEL]: ({btl, comps}) => {
 		for (const i in btl.teams)
 			comps[CalcCompins(comps, i)].push(
@@ -166,51 +175,65 @@ const menuStates = {
 			)
 	},
 	[MENU_TARGET]: ({char, btl, comps}) => {
-		if (btl.action.move === 'melee' || btl.action.move === 'pacify') {
-			const members = btl.teams[btl.action.target[0]].members;
+		let members = btl.teams[btl.action.target[0]].members ?? btl.teams[char.team].members;
 
-			for (const i in members) {
-				if (members[i].hp <= 0 || members[i].pacified) continue;
-				comps[CalcCompins(comps, i)].push(
-					makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
-				)
-			}
-		} else if (btl.action.move === 'item') {
-			const members = btl.teams[btl.action.target[0]].members;
-
-			let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`, true);
-			let item = itemFile[btl.action.index];
-
-			for (const i in members) {
-				if (members[i].pacified) continue;
-				if (item.type === 'revive') {
-					if (members[i].hp > 0) continue;
-				} else {
-					if (members[i].hp <= 0) continue;
+		switch(btl.action.move) {
+			case 'melee':
+			case 'pacify':
+				for (const i in members) {
+					if (members[i].hp <= 0 || members[i].pacified) continue;
+					comps[CalcCompins(comps, i)].push(
+						makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
+					)
 				}
+				break;
 
-				comps[CalcCompins(comps, i)].push(
-					makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
-				)
-			}
-		} else {
-			let skill = skillFile[btl.action.index];
-			const members = btl.teams[btl.action.target[0]].members;
+			case 'backup':
+				for (const i in members) {
+					if (char.id === members[i].id) continue;
+					if (members[i].hp <= 0 || members[i].pacified) continue;
 
-			for (const i in members) {
-				if (!skill) continue;
-				if (members[i].pacified) continue;
-
-				if (skill.type === 'heal' && skill.heal.revive) {
-					if (members[i].hp > 0) continue;
-				} else {
-					if (members[i].hp <= 0) continue;
+					comps[CalcCompins(comps, i)].push(
+						makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
+					)
 				}
+				break;
+		
+			case 'item':
+			case 'items':
+				let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`, true);
+				let item = itemFile[btl.action.index];
 
-				comps[CalcCompins(comps, i)].push(
-					makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
-				)
-			}
+				for (const i in members) {
+					if (members[i].pacified) continue;
+					if (item.type === 'revive') {
+						if (members[i].hp > 0) continue;
+					} else {
+						if (members[i].hp <= 0) continue;
+					}
+
+					comps[CalcCompins(comps, i)].push(
+						makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
+					)
+				}
+				break;
+
+			default:
+				let skill = skillFile[btl.action.index];
+				for (const i in members) {
+					if (!skill) continue;
+					if (members[i].pacified) continue;
+
+					if (skill.type === 'heal' && skill.heal.revive) {
+						if (members[i].hp > 0) continue;
+					} else {
+						if (members[i].hp <= 0) continue;
+					}
+
+					comps[CalcCompins(comps, i)].push(
+						makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
+					)
+				}
 		}
 	},
 	
@@ -259,7 +282,8 @@ sendCurTurnEmbed = (char, btl) => {
 		for (let i in btl.teams[op].members) {
 			let c = btl.teams[op].members[i];
 			let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
-			teamDesc += `${i}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+			let l = c.leader ? leaderEmoji : i;
+			teamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
 		}
 	}
 
@@ -267,7 +291,8 @@ sendCurTurnEmbed = (char, btl) => {
 	for (let i in btl.teams[char.team].members) {
 		let c = btl.teams[char.team].members[i];
 		let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
-		myTeamDesc += `${i}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+		let l = c.leader ? leaderEmoji : i;
+		myTeamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
 	}
 
 	let DiscordEmbed = new Discord.MessageEmbed()
@@ -353,6 +378,8 @@ sendCurTurnEmbed = (char, btl) => {
 					} else {
 						DiscordEmbed.title = "Only the leader can forfeit!";
 					}
+				} else if (!char.leader) {
+					DiscordEmbed.title = "Only the leader can flee from battles!";
 				} else {
 					doAction(char, btl, btl.action);
 					collector.stop();
@@ -367,6 +394,22 @@ sendCurTurnEmbed = (char, btl) => {
 			case 'pacify':
 				btl.action.move = 'pacify';
 				menustate = MENU_TEAMSEL;
+				break;
+
+			case 'backup':
+				if (!char.leader) {
+					DiscordEmbed.title = "Only the leader can change party members!";
+
+					return i.update({
+						content: `<@${char.owner}>`,
+						embeds: [DiscordEmbed],
+						components: setUpComponents(char, btl, menustate)
+					});
+				}
+
+				btl.action.move = 'backup';
+				btl.action.target = [char.team, undefined];
+				menustate = MENU_TARGET;
 				break;
 
 			case 'back':
@@ -403,6 +446,7 @@ sendCurTurnEmbed = (char, btl) => {
 									return i.update({
 										content: `<@${char.owner}>`,
 										embeds: [DiscordEmbed],
+										components: setUpComponents(char, btl, menustate)
 									});
 								}
 							}
@@ -417,6 +461,7 @@ sendCurTurnEmbed = (char, btl) => {
 								return i.update({
 									content: `<@${char.owner}>`,
 									embeds: [DiscordEmbed],
+									components: setUpComponents(char, btl, menustate)
 								});
 							}
 						}
@@ -482,13 +527,14 @@ sendCurTurnEmbed = (char, btl) => {
 					for (let i in btl.teams[btl.action.target[0]].members) {
 						let c = btl.teams[btl.action.target[0]].members[i];
 						let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
-						teamDesc += `${i}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+						let l = c.leader ? leaderEmoji : i;
+						teamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
 					}
 
 					DiscordEmbed.fields = [{name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true}];
 				} else if (menustate == MENU_TARGET && btl.teams[btl.action.target[0]] && btl.teams[btl.action.target[0]].members[i.customId]) {
 					btl.action.target[1] = parseInt(i.customId);
-					
+
 					if (btl.action.move === 'pacify') {
 						let targ = btl.teams[btl.action.target[0]].members[i.customId];
 
@@ -518,6 +564,27 @@ sendCurTurnEmbed = (char, btl) => {
 								components: setUpComponents(char, btl, menustate)
 							})
 						}
+					} else if (btl.action.move === 'backup') {
+						let targ = btl.teams[char.team].members[i.customId];
+						btl.action.target[1] = parseInt(i.customId);
+
+						DiscordEmbed = new Discord.MessageEmbed()
+							.setColor('#fcba03')
+							.setTitle(`__${char.name}__ => __${targ.name}__`)
+							.setDescription(`Select one of your allies to replace ${targ.name} with.`)
+							.addFields()
+
+						for (let k in btl.teams[char.team].backup) {
+							let f = btl.teams[char.team].backup[k];
+							DiscordEmbed.fields.push({name: `**[${k}]** __${f.name}__`, value: `${f.hp}/${f.maxhp}HP\n${f.mp}/${f.maxmp}MP`, inline: true});
+						}
+						menustate = MENU_BACKUP;
+
+						return i.update({
+							content: `<@${char.owner}>`,
+							embeds: [DiscordEmbed],
+							components: setUpComponents(char, btl, menustate)
+						})
 					} else {
 						doAction(char, btl, btl.action);
 						collector.stop();
@@ -551,9 +618,17 @@ sendCurTurnEmbed = (char, btl) => {
 						content: `<@${char.owner}>`,
 						embeds: [DiscordEmbed],
 					});
+				} else if (menustate == MENU_BACKUP) {
+					btl.action.index = parseInt(i.customId);
+					doAction(char, btl, btl.action);
+					collector.stop();
+
+					return i.update({
+						content: `<@${char.owner}>`,
+						embeds: [DiscordEmbed],
+					});
 				}
 		}
-
 
 		switch(menustate) {
 			case MENU_TEAMSEL:
@@ -695,12 +770,26 @@ doAction = (char, btl, action) => {
 		case 'pacify':
 			doPacify(char, btl, btl.action);
 			break;
+
+		case 'backup':
+			let char1 = objClone(btl.teams[char.team].members[action.target[1]]);
+			let char2 = objClone(btl.teams[char.team].backup[action.index]);
+			btl.teams[char.team].backup[action.index] = objClone(char1);
+			btl.teams[char.team].members[action.target[1]] = objClone(char2);
+
+			DiscordEmbed = new Discord.MessageEmbed()
+				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+				.setTitle(`__${char.name}__ => __${char1.name}__, __${char2.name}__`)
+				.setDescription(`__${char.name}__ decided to swap __${char1.name}__ for __${char2.name}__.\n___${char2.name}__ will fight in __${char1.name}'s__ place._`)
+			btl.channel.send({embeds: [DiscordEmbed]});
+			break;
 	}
 
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, '	', 4));
+
 	setTimeout(function() {
 		advanceTurn(btl);
-	}, 2500)
+	}, 2000)
 }
 
 doTurn = (btl, noTurnEmbed) => {
