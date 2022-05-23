@@ -1,106 +1,3 @@
-writeEnemy = (creator, guild, name, mainelement, level, health, magicpoints, experience, attack, magic, perception, endurance, charisma, intelligence, agility, luck, type, description) => {
-    let enemyFile = setUpFile(`${dataPath}/json/${guild.id}/enemies.json`);
-
-    enemyFile[name] = {
-        name: name,
-		mainElement: mainelement,
-
-        // Only the owner can move this character, if they don't have admin permissions.
-        owner: creator.id,
-
-        // Level, HP and MP
-        level: level,
-        hp: health,
-        mp: magicpoints,
-
-
-        // Status Effect
-        status: "none",
-        statusturns: 0,
-
-        // Melee Attack
-        melee: {
-			name: "Strike Attack",
-			type: "strike",
-			pow: 30,
-			acc: 95,
-			crit: 15,
-		},
-
-        // Main stats
-		stats: {
-			atk: attack ? attack : 1,
-			mag: magic ? magic : 1,
-			prc: perception ? perception : 1,
-			end: endurance ? endurance : 1,
-			chr: charisma ? charisma : 1,
-			int: intelligence ? intelligence : 1,
-			agl: agility ? agility : 1,
-			luk: luck ? luck : 1
-		},
-
-        // Limit Break Meter, XP.
-        lb: 0,
-        xp: experience,
-
-        // Affinities & Skills
-		affinities: {
-			superweak: [],
-			weak: [],
-			resist: [],
-			block: [],
-			repel: [],
-			drain: [],
-		},
-
-        skills: [],
-        lb: {},
-
-        // Quotes
-		quotes: {},
-
-        // Dreams
-        dreams: [],
-
-        // Negotiations
-        negotiate: [],
-		negotiateDefs: {
-			required: 5
-		},
-
-        // Loot
-        loot: '',
-
-        // Image
-        image: '',
-
-        type: type,
-        journal: description
-    }
-
-    //im lazy
-	for (const i in quoteTypes) enemyFile[name].quotes[`${quoteTypes[i]}quote`] = [];
-
-    fs.writeFileSync(`${dataPath}/json/${guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
-	return enemyFile[name];
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 commands.registerenemy = new Command({
 	desc: "Register an enemy to use in battle!",
 	section: "enemies",
@@ -1092,32 +989,31 @@ commands.setnegotiation = new Command({
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
-		if (!enemyFile.negotiate)
-			enemyFile.negotiate = [];
+		if (!enemyFile[args[0]].negotiate)
+			enemyFile[args[0]].negotiate = [];
 
 		let isExistent = false;
 		//check if there is a negotiation with the same name
-		for (const i in enemyFile.negotiate) {
-			if (enemyFile.negotiate[i].name == args[1]) {
+		for (const i in enemyFile[args[0]].negotiate) {
+			if (enemyFile[args[0]].negotiate[i].name == args[1]) {
 				isExistent = true;
-				enemyFile.negotiate[i].desc = args[4];
-				enemyFile.negotiate[i].action = args[5];
-				enemyFile.negotiate[i].convince = parseFloat(args[3]);
+				enemyFile[args[0]].negotiate[i].desc = args[4];
+				enemyFile[args[0]].negotiate[i].action = args[5];
+				enemyFile[args[0]].negotiate[i].convince = parseFloat(args[3]);
 				if (args[3] != 'none')
-					enemyFile.negotiate[i].special = args[2].toLowerCase();
+					enemyFile[args[0]].negotiate[i].special = args[2].toLowerCase();
 			}
 		}
 
 		if (!isExistent) {
-			enemyFile.negotiate.push({
+			enemyFile[args[0]].negotiate.push({
 				name: args[1],
 				desc: args[4],
 				action: args[5],
 				convince: parseFloat(args[3])
 			})
 
-			if (args[3] != 'none')
-				enemyFile.negotiate.special = args[2].toLowerCase();
+			if (args[3] != 'none') enemyFile[args[0]].negotiate.special = args[2].toLowerCase();
 		}
 
 		message.channel.send(`${args[0]}'s negotiation named ${args[1]} has been set.`);
@@ -1147,16 +1043,16 @@ commands.clearnegotiation = new Command({
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
-		if (!enemyFile.negotiate || enemyFile.negotiate == []) return message.channel.send(`${args[0]} has no negotiations.`);
+		if (!enemyFile[args[0]].negotiate || enemyFile[args[0]].negotiate == []) return message.channel.send(`${args[0]} has no negotiations.`);
 
 		if (args[1] == 'all') {
-			enemyFile.negotiate = [];
+			enemyFile[args[0]].negotiate = [];
 			message.channel.send(`${args[0]}'s negotiations have been cleared.`);
 		}
 		else {
-			for (const i in enemyFile.negotiate) {
-				if (enemyFile.negotiate[i].name == args[1]) {
-					enemyFile.negotiate.splice(i, 1);
+			for (const i in enemyFile[args[0]].negotiate) {
+				if (enemyFile[args[0]].negotiate[i].name == args[1]) {
+					enemyFile[args[0]].negotiate.splice(i, 1);
 					message.channel.send(`${args[0]}'s negotiation named ${args[1]} has been cleared.`);
 				}
 			}

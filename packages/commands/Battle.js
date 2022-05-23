@@ -194,6 +194,7 @@ commands.startbattle = new Command({
 			teams: [
 				{
 					name: "",
+					id: "",
 					members: [],
 					backup: [],
 					items: {},
@@ -201,6 +202,7 @@ commands.startbattle = new Command({
 				},
 				{
 					name: "Enemies",
+					id: 'enemies',
 					enemyteam: true,
 					forcehorde: true, // more than 4 enemies mean some will be put into backup and automatically switched in, either by the team leader, or once an enemy dies.
 					members: [],
@@ -283,7 +285,8 @@ commands.startbattle = new Command({
 		}
 
 		battle.teams[0].items = objClone(party.items);
-		battle.teams[0].pets = objClone(party.pets);
+		battle.teams[0].pets = objClone(party.negotiateAllies);
+		battle.teams[0].id = args[0];
 
 		// Set up Enemy Side.
 		// == this time, no encounters set until the enemy is killed or pacified == //
@@ -303,6 +306,9 @@ commands.startbattle = new Command({
 
 			// For enemy ai
 			enemy.memory = {};
+
+			// Pacifying
+			enemy.pacify = 0;
 			
 			// Does this battle pass as a boss
 			if (enemy.type.includes('boss') || enemy.type.includes('deity')) battle.bossbattle = true;

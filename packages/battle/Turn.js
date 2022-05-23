@@ -149,6 +149,16 @@ const menuStates = {
 			makeButton('Enemy Info', statusEmojis.silence, 'red')
 		]
 	},
+	[MENU_PACIFY]: ({char, btl, comps}) => {
+		let targ = btl.teams[btl.action.target[0]].members[btl.action.target[1]];
+
+		for (let i in targ.negotiate) {
+			let n = targ.negotiate[i];
+
+			if (!comps[CalcCompins(comps, i)]) comps[CalcCompins(comps, i)] = [];
+			comps[CalcCompins(comps, i)].push(makeButton(`${n.name}`, `${i}️⃣`, 'blue', true, i.toString()))
+		}
+	},
 	[MENU_TEAMSEL]: ({btl, comps}) => {
 		for (const i in btl.teams)
 			comps[CalcCompins(comps, i)].push(
@@ -156,11 +166,11 @@ const menuStates = {
 			)
 	},
 	[MENU_TARGET]: ({char, btl, comps}) => {
-		if (btl.action.move === 'melee') {
+		if (btl.action.move === 'melee' || btl.action.move === 'pacify') {
 			const members = btl.teams[btl.action.target[0]].members;
 
 			for (const i in members) {
-				if (members[i].hp <= 0) continue;
+				if (members[i].hp <= 0 || members[i].pacified) continue;
 				comps[CalcCompins(comps, i)].push(
 					makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
 				)
@@ -172,6 +182,7 @@ const menuStates = {
 			let item = itemFile[btl.action.index];
 
 			for (const i in members) {
+				if (members[i].pacified) continue;
 				if (item.type === 'revive') {
 					if (members[i].hp > 0) continue;
 				} else {
@@ -188,6 +199,7 @@ const menuStates = {
 
 			for (const i in members) {
 				if (!skill) continue;
+				if (members[i].pacified) continue;
 
 				if (skill.type === 'heal' && skill.heal.revive) {
 					if (members[i].hp > 0) continue;
@@ -212,7 +224,7 @@ setUpComponents = (char, btl, menustate) => {
 	menuStates[parseInt(menustate)]({char, btl, comps})
 
 	if (menustate != MENU_ACT) {
-		if (!comps[0]) {
+		if (!comps[0] || !comps[0][0]) {
 			comps[0] = [makeButton('Nothing Here :/', '◀️', 'grey', true, 'back')];
 		} else {
 			for (let i in comps) {
@@ -246,7 +258,7 @@ sendCurTurnEmbed = (char, btl) => {
 	} else {
 		for (let i in btl.teams[op].members) {
 			let c = btl.teams[op].members[i];
-			let s = c.status ? `${statusEmojis[c.status]}` : '';
+			let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
 			teamDesc += `${i}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
 		}
 	}
@@ -254,7 +266,7 @@ sendCurTurnEmbed = (char, btl) => {
 	let myTeamDesc = '';
 	for (let i in btl.teams[char.team].members) {
 		let c = btl.teams[char.team].members[i];
-		let s = c.status ? `${statusEmojis[c.status]}` : '';
+		let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
 		myTeamDesc += `${i}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
 	}
 
@@ -287,7 +299,12 @@ sendCurTurnEmbed = (char, btl) => {
 
 	collector.on('collect', async i => {
 		btl.action.laststate = menustate;
-		DiscordEmbed.title = `Turn #${btl.turn} - ${char.name}'s turn`;
+
+		DiscordEmbed = new Discord.MessageEmbed()
+			.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+			.setTitle(`Turn #${btl.turn} - ${char.name}'s turn`)
+			.setDescription(statDesc)
+			.addFields({name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true})
 
 		switch(i.customId) {
 			case 'melee':
@@ -464,7 +481,7 @@ sendCurTurnEmbed = (char, btl) => {
 					teamDesc = '';
 					for (let i in btl.teams[btl.action.target[0]].members) {
 						let c = btl.teams[btl.action.target[0]].members[i];
-						let s = c.status ? `${statusEmojis[c.status]}` : '';
+						let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
 						teamDesc += `${i}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
 					}
 
@@ -473,6 +490,34 @@ sendCurTurnEmbed = (char, btl) => {
 					btl.action.target[1] = parseInt(i.customId);
 					
 					if (btl.action.move === 'pacify') {
+						let targ = btl.teams[btl.action.target[0]].members[i.customId];
+
+						if (targ.negotiate == [] || targ.negotiate.length <= 0) {
+							DiscordEmbed.title = `${targ.name} seems adamant on attacking and will not listen to reason.`;
+
+							i.update({
+								content: `<@${char.owner}>`,
+								embeds: [DiscordEmbed],
+								components: setUpComponents(char, btl, menustate)
+							})
+						} else {
+							DiscordEmbed = new Discord.MessageEmbed()
+								.setColor('#fcba03')
+								.setTitle(`__${char.name}__ => __${targ.name}__`)
+								.setDescription(`Try pacifying __${targ.name}__ to calm it down! _So far, __${targ.name}__ is **${targ.pacify}% pacified**_!`)
+								.addFields()
+
+							for (let k in targ.negotiate)
+								DiscordEmbed.fields.push({name: `**[${k}]** __${targ.negotiate[k].name}__`, value: targ.negotiate[k].desc, inline: true});
+
+							menustate = MENU_PACIFY;
+
+							return i.update({
+								content: `<@${char.owner}>`,
+								embeds: [DiscordEmbed],
+								components: setUpComponents(char, btl, menustate)
+							})
+						}
 					} else {
 						doAction(char, btl, btl.action);
 						collector.stop();
@@ -497,6 +542,15 @@ sendCurTurnEmbed = (char, btl) => {
 							embeds: [DiscordEmbed],
 						});
 					}
+				} else if (menustate == MENU_PACIFY) {
+					btl.action.index = parseInt(i.customId)
+					doAction(char, btl, btl.action);
+					collector.stop();
+
+					return i.update({
+						content: `<@${char.owner}>`,
+						embeds: [DiscordEmbed],
+					});
 				}
 		}
 
@@ -637,6 +691,10 @@ doAction = (char, btl, action) => {
 				.setDescription(`Team ${btl.teams[char.team].name} is forfeiting the match!`)
 			btl.channel.send({embeds: [DiscordEmbed]});
 			break;
+
+		case 'pacify':
+			doPacify(char, btl, btl.action);
+			break;
 	}
 
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, '	', 4));
@@ -649,8 +707,8 @@ doTurn = (btl, noTurnEmbed) => {
 	let char = getCharFromTurn(btl);
 	let settings = setUpSettings(btl.guild.id);
 	
-	// Skip this turn if we're dead.
-	if (char.hp <= 0) return advanceTurn(btl);
+	// Skip this turn if we're dead or pacified.
+	if (char.hp <= 0 || char.pacified) return advanceTurn(btl);
 
 	// a
 	let statusTxt = '';
@@ -670,7 +728,6 @@ doTurn = (btl, noTurnEmbed) => {
 			}
 		}
 	}
-	console.log(`Checkpoint 1: ${statusTxt}`);
 
 	// Status Effects.
 	let canMove = true;
@@ -701,7 +758,6 @@ doTurn = (btl, noTurnEmbed) => {
 
 		if (statusTxt != '') statusTxt += '\n';
 	}
-	console.log(`Checkpoint 2: ${statusTxt}`);
 
 	let stackable = ['confusion', 'infatuation'];
 
@@ -727,7 +783,6 @@ doTurn = (btl, noTurnEmbed) => {
 			if (statusTxt != '') statusTxt += '\n';
 		}
 	}
-	console.log(`Checkpoint 3: ${statusTxt}`);
 
 	// Custom Variables.
 	if (char.hp > 0 && char.custom) {
@@ -740,7 +795,6 @@ doTurn = (btl, noTurnEmbed) => {
 	}
 
 	// Now send the embed
-	console.log(`Checkpoint 4: ${statusTxt}`);
 	if (statusTxt != '') {
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#ff1fa9')
@@ -782,8 +836,8 @@ advanceTurn = (btl) => {
 		for (let k in btl.teams[i].members) {
 			let char = btl.teams[i].members[k];
 
-			// This character is dead.
-			if (char.hp <= 0) {
+			// This character is dead or pacified.
+			if (char.hp <= 0 || char.pacified) {
 				pLeft--;
 				resetEffects(char);
 				continue;
