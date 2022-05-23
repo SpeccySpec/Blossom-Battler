@@ -84,3 +84,8 @@ writeEnemy = (creator, guild, name, mainelement, level, health, magicpoints, exp
     fs.writeFileSync(`${dataPath}/json/${guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
 	return enemyFile[name];
 }
+
+foundEnemy = (enm, server) => {
+	let settings = setUpSettings(server);
+	return settings.encountered.includes(enmName);
+}

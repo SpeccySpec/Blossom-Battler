@@ -25,7 +25,7 @@ async function longtrialdesc(trial, name, message){
                 if (current[i][j].startsWith('||') && current[i][j].endsWith('||')) {
                     current[i][j] = current[i][j].slice(2, current[i][j].length - 2)
                 }
-                if (!enemyFuncs.encounteredEnemy(current[i][j], message.guild.id)) {
+                if (!foundEnemy(current[i][j], message.guild.id)) {
                     current[i][j] = `||${current[i][j]}||`
                 }
                 if (enemyFile[current[i][j]].type == 'miniboss' || enemyFile[current[i][j]].type == 'boss' || enemyFile[current[i][j]].type == 'bigboss' || enemyFile[current[i][j]].type == 'deity') {

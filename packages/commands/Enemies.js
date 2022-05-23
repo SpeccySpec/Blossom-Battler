@@ -130,7 +130,7 @@ commands.journal = new Command({
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send('Nonexistant Enemy.');
 
-		if (!enemyFuncs.encounteredEnemy(args[0], message.guild.id)) {
+		if (!foundEnemy(args[0], message.guild.id)) {
 			var noEmbed = new Discord.MessageEmbed()
 				.setColor(enemyTypeColors[enemyFile[args[0]].type])
 				.setTitle(`${enemyFile[args[0]].name}`)
@@ -185,8 +185,9 @@ commands.encounter = new Command({
 		if (!enemyFile[args[0]]) return message.channel.send('Nonexistant Enemy.');
 		
 		let settings = setUpSettings(message.guild.id);
+		if (!settings.encountered) settings.encountered = [];
 
-		if (!enemyFuncs.encounteredEnemy(args[0], message.guild.id)) {
+		if (!foundEnemy(args[0], message.guild.id)) {
 			settings.encountered.push(args[0]);
 			message.channel.send(`${args[0]} has been set as encountered.`);
 		} else {
@@ -610,7 +611,7 @@ commands.listenemies = new Command({
 							args[a] = args[a] == 'true' || args[a] == 'yes' || args[a] == 'y' || args[a] == '1';
 
 							if (args[a-1] == 'encountered') {
-								isConditionMet = (enemyFuncs.encounteredEnemy(i, message.guild.id) == args[a])
+								isConditionMet = (foundEnemy(i, message.guild.id) == args[a])
 							}
 
 							if (args[a-1] == 'negotiable') {
@@ -639,7 +640,7 @@ commands.listenemies = new Command({
 			let descTxt = `${enemyFile[i].hp}HP, ${enemyFile[i].mp}MP`;
 			let title = `${elementEmoji[enemyFile[i].mainElement]}${enemyFile[i].name} (${i})`;
 
-			if (!enemyFuncs.encounteredEnemy(i, message.guild.id)) {
+			if (!foundEnemy(i, message.guild.id)) {
 				title = `||${title}||`;
 				descTxt = `||${descTxt}||`;
 			}
@@ -674,7 +675,7 @@ commands.searchenemies = new Command({
 				let descTxt = `${enemyFile[i].hp}HP, ${enemyFile[i].mp}MP`;
 				let title = `${elementEmoji[enemyFile[i].mainElement]}${enemyFile[i].name} (${i})`;
 
-				if (!enemyFuncs.encounteredEnemy(i, message.guild.id)) {
+				if (!foundEnemy(i, message.guild.id)) {
 					title = `||${title}||`;
 					descTxt = `||${descTxt}||`;
 				}
@@ -784,7 +785,7 @@ commands.randenemy = new Command({
 		
 		let enemies = Object.keys(enemyFile);
 
-		enemies = enemies.filter(enemy => enemyFuncs.encounteredEnemy(enemy, message.guild.id));
+		enemies = enemies.filter(enemy => foundEnemy(enemy, message.guild.id));
 		if (enemies.length == 0) return message.channel.send(`No enemies that have been encountered are added yet!`);
 
 		let enemy = enemies[Math.floor(Math.random() * enemies.length)];
@@ -882,7 +883,7 @@ commands.randenemyquote = new Command({
 		let possibleQuotes = []
 		for (const i in quoteTypes) {
 			for (const k in enemyFile) {
-				if (enemyFuncs.encounteredEnemy(k, message.guild.id) && enemyFile[k]['quotes'] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`].length > 1) {
+				if (foundEnemy(k, message.guild.id) && enemyFile[k]['quotes'] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`].length > 1) {
 					possibleQuotes.push([k, quoteTypes[i], enemyFile[k]['quotes'][`${quoteTypes[i]}quote`][utilityFuncs.randNum(enemyFile[k]['quotes'][`${quoteTypes[i]}quote`].length-1)]])
 				}
 			}
@@ -911,7 +912,7 @@ commands.dailyenemyquote = new Command({
 		let possibleQuotes = []
 		for (const i in quoteTypes) {
 			for (const k in enemyFile) {
-				if (enemyFuncs.encounteredEnemy(k, message.guild.id) && enemyFile[k]['quotes'] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`].length > 1) {
+				if (foundEnemy(k, message.guild.id) && enemyFile[k]['quotes'] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`].length > 1) {
 					possibleQuotes.push([k, quoteTypes[i], enemyFile[k]['quotes'][`${quoteTypes[i]}quote`][utilityFuncs.randNum(enemyFile[k]['quotes'][`${quoteTypes[i]}quote`].length-1)]])
 				}
 			}

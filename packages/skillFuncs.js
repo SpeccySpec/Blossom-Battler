@@ -757,7 +757,7 @@ skillDesc = (skillDefs, skillName, server) => {
 	}
 
 	for (const i in enmFile[server]) {
-		if (enemyFuncs.encounteredEnemy(i, server)) {
+		if (foundEnemy(i, server)) {
 			for (const k in enmFile[server][i].skills) {
 				if (enmFile[server][i].skills[k] == skillName) {
 					if (knownBy != "") knownBy += ", ";

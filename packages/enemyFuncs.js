@@ -586,12 +586,6 @@ module.exports = {
 	thinkerFunc: function(charDefs, allyingSide, opposingSide) {
 		return enemyThinker(charDefs, allyingSide, opposingSide)
 	},
-	
-	encounteredEnemy: function(enmName, server) {
-		let settings = setUpSettings(server)
-		
-		return settings.encountered.includes(enmName)
-	},
 
 	makePet: function(enm) {
 		var enemyDefs = {
