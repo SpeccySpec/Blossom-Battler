@@ -615,7 +615,7 @@ sendCurTurnEmbed = (char, btl) => {
 							})
 						} else {
 							let enemyFile = setUpFile(`${dataPath}/json/${btl.guild.id}/enemies.json`);
-							menustate = MENU_ENEMYINFO;
+							menustate = MENU_ENEMYINF;
 
 							return i.update({
 								content: `<@${char.owner}>`,

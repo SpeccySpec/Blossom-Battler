@@ -245,6 +245,10 @@ commands.startbattle = new Command({
 		// Can't battle while another party is!
 		if (btl.battling) return message.channel.send("You can't battle in this channel while another battle is happening!");
 
+		// Save this for errors!
+		if (!battleFiles) battleFiles = [];
+		if (!battleFiles.includes(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`)) battleFiles.push(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`);
+
 		// Set up Ally Side.
 		let battleid = 0;
 		let party = parties[args[0]];

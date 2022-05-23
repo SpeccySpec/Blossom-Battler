@@ -1096,3 +1096,47 @@ makeDirectory(`${dataPath}/userdata`)
 
 client.login(process.env.TOKEN);
 console.log(`The bot is now in session! Enjoy!`)
+
+// Lastly... resend all embeds if a battle errored out!
+
+// On an actual error, either due to my incompetence, others' errors or I suck.
+client.on('shardError', err => {
+	console.log("Let's write this down so we don't forget...");
+	if (battleFiles) {
+		if (battleFiles.length > 0) fs.writeFileSync('./data/error.txt', JSON.stringify(battleFiles, null, '    '));
+		console.log('Written in "./data/error.txt".');
+	}
+});
+
+//a
+battleFiles = [];
+
+let error = fs.readFileSync('./data/error.txt', {flag: 'as+'});
+if (error && error != '') battleFiles = JSON.parse(error);
+
+fs.unlink('./data/error.txt', (err) => {
+    if (err) throw err;
+    console.log("Deleted the Error.txt and noticed it :)");
+});
+
+if (battleFiles.length > 0) {
+	console.log("Pulled from Error.txt!");
+	for (let btlp of battleFiles) {
+		console.log(btlp);
+		let btl = setUpFile(btlp, true);
+
+		// Sadly, no battle.
+		if (!btl.battling) continue;
+
+		// Set channel again
+		client.channels.get(btl.channel.id)
+			.then(channel => {
+				btl.channel = channel;
+				channel.send("I'm so sorry ;-;\nThis battle got interrupted by some sort of error... I'll restart it from it's last position.");
+
+				// Resend the Embed
+				sendCurTurnEmbed(getCharFromTurn(btl), btl)
+			})
+			.catch(console.error)
+	}
+}
