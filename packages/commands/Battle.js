@@ -255,6 +255,8 @@ commands.startbattle = new Command({
 			if (!charFile[party.members[i]]) continue;
 
 			let char = objClone(charFile[party.members[i]]);
+
+			char.truename = party.members[i];
 			if (!char.name) char.name = party.members[i];
 
 			char.id = battleid;
@@ -300,6 +302,7 @@ commands.startbattle = new Command({
 			let enemy = objClone(enmFile[args[i]]);
 			enemy.enemy = true;
 
+			enemy.truename = args[i];
 			if (!enemy.name) enemy.name = args[i];
 			enemy.maxhp = enemy.hp;
 			enemy.maxmp = enemy.mp;

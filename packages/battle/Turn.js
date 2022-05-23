@@ -605,7 +605,7 @@ sendCurTurnEmbed = (char, btl) => {
 								embeds: [DiscordEmbed],
 								components: setUpComponents(char, btl, menustate)
 							})
-						} else if (!enemyFuncs.encounteredEnemy(targ.truename, message.guild.id)) {
+						} else if (!enemyFuncs.encounteredEnemy(targ.truename, btl.guild.id)) {
 							DiscordEmbed.title = `We've yet to learn about ${targ.name}.`;
 
 							i.update({
