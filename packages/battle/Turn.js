@@ -86,6 +86,8 @@ function CalcCompins(comps, i) {
 
 const menuStates = {
 	[MENU_ACT]: ({char, btl, comps}) => {
+		if (btl.action.ally) delete btl.action.ally;
+
 		comps[0] = [
 			makeButton('Melee', elementEmoji.strike, 'red'),
 			makeButton('Skills', elementEmoji.bless, 'blue'),
@@ -94,8 +96,20 @@ const menuStates = {
 			makeButton('Guard', affinityEmoji.block, 'grey')
 		]
 
-		if (btl.canteamcombo) comps[CalcCompins(comps, comps[0].length)].push(makeButton('Team Combo', elementEmoji.slash, 'blue'));
-		if (canUseLb(char, btl)) comps[CalcCompins(comps, comps[0].length)].push(makeButton('Limit Break', elementEmoji.almighty, 'blue'));
+		if (!comps[1]) comps[1] = [];
+
+		// Team Combo checks
+		if (btl.canteamcombo) {
+			for (let i in btl.teams[char.team].members) {
+				if (hasTeamCombo(char, btl.teams[char.team].members[i])) {
+					comps[1].push(makeButton('Team Combo', elementEmoji.slash, 'blue', true, 'tc'));
+					break;
+				}
+			}
+		}
+
+		// Melee checks
+		if (canUseLb(char, btl)) comps[1].push(makeButton('Limit Break', elementEmoji.almighty, 'blue', true, 'lb'));
 	},
 	[MENU_SKILL]: ({char, comps}) => {
 		for (const i in char.skills) {
@@ -181,6 +195,7 @@ const menuStates = {
 			case 'melee':
 			case 'pacify':
 			case 'enemyinfo':
+			case 'lb':
 				for (const i in members) {
 					if (members[i].hp <= 0 || members[i].pacified) continue;
 					comps[CalcCompins(comps, i)].push(
@@ -218,6 +233,25 @@ const menuStates = {
 					)
 				}
 				break;
+			
+			case 'tc':
+				if (!btl.action.ally) {
+					members = btl.teams[char.team].members;
+				} else {
+					members = btl.teams[btl.action.target[0]].members;
+				}
+
+				for (const i in members) {
+					if (members[i].hp <= 0 || members[i].pacified) continue;
+
+					if (members[i].team == char.team) {
+						if (!hasTeamCombo(char, members[i])) continue;
+					}
+
+					comps[CalcCompins(comps, i)].push(
+						makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
+					)
+				}
 
 			default:
 				let skill = skillFile[btl.action.index];
@@ -421,6 +455,37 @@ sendCurTurnEmbed = (char, btl) => {
 				menustate = MENU_TEAMSEL;
 				break;
 
+			case 'lb':
+				btl.action.move = 'lb';
+				
+				if (canUseLb(char, btl)) {
+					let lbDefs = char.lb[canUseLb(char, btl)];
+
+					if (lbDefs.target) {
+						if (lbDefs.target === 'allopposing' || lbDefs.target === 'allallies' || lbDefs.target === 'everyone' || lbDefs.target.includes('random')) {
+							btl.action.target = [undefined, undefined];
+							doAction(char, btl, btl.action);
+							collector.stop();
+
+							return i.update({
+								content: `<@${char.owner}>`,
+								embeds: [DiscordEmbed],
+							});
+						}
+					}
+
+					menustate = MENU_TEAMSEL;
+					break;
+				} else {
+					return btl.channel.send('idk what happened there maybe your lb broke');
+				}
+
+			case 'tc':
+				btl.action.move = 'tc';
+				btl.action.target[0] = char.team;
+				menustate = MENU_TARGET;
+				break;
+
 			case 'back':
 				menustate = MENU_ACT;
 				break;
@@ -530,6 +595,7 @@ sendCurTurnEmbed = (char, btl) => {
 						});
 					}
 				} else if (menustate == MENU_TEAMSEL && btl.teams[i.customId]) {
+					btl.action.target[0] = parseInt(i.customId);
 					menustate = MENU_TARGET;
 
 					teamDesc = '';
@@ -544,93 +610,118 @@ sendCurTurnEmbed = (char, btl) => {
 				} else if (menustate == MENU_TARGET && btl.teams[btl.action.target[0]] && btl.teams[btl.action.target[0]].members[i.customId]) {
 					btl.action.target[1] = parseInt(i.customId);
 
-					if (btl.action.move === 'pacify') {
-						let targ = btl.teams[btl.action.target[0]].members[i.customId];
+					switch(btl.action.move) {
+						case 'pacify':
+							let targ = btl.teams[btl.action.target[0]].members[i.customId];
 
-						if (targ.negotiate == [] || targ.negotiate.length <= 0) {
-							DiscordEmbed.title = `${targ.name} seems adamant on attacking and will not listen to reason.`;
+							if (targ.negotiate == [] || targ.negotiate.length <= 0) {
+								DiscordEmbed.title = `${targ.name} seems adamant on attacking and will not listen to reason.`;
 
-							i.update({
-								content: `<@${char.owner}>`,
-								embeds: [DiscordEmbed],
-								components: setUpComponents(char, btl, menustate)
-							})
-						} else {
+								i.update({
+									content: `<@${char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: setUpComponents(char, btl, menustate)
+								})
+							} else {
+								DiscordEmbed = new Discord.MessageEmbed()
+									.setColor('#fcba03')
+									.setTitle(`__${char.name}__ => __${targ.name}__`)
+									.setDescription(`Try pacifying __${targ.name}__ to calm it down! _So far, __${targ.name}__ is **${targ.pacify}% pacified**_!`)
+									.addFields()
+
+								for (let k in targ.negotiate)
+									DiscordEmbed.fields.push({name: `**[${k}]** __${targ.negotiate[k].name}__`, value: targ.negotiate[k].desc, inline: true});
+
+								menustate = MENU_PACIFY;
+
+								return i.update({
+									content: `<@${char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: setUpComponents(char, btl, menustate)
+								})
+							}
+						
+						case 'backup':
+							let targ = btl.teams[char.team].members[i.customId];
+							btl.action.target[1] = parseInt(i.customId);
+
 							DiscordEmbed = new Discord.MessageEmbed()
 								.setColor('#fcba03')
 								.setTitle(`__${char.name}__ => __${targ.name}__`)
-								.setDescription(`Try pacifying __${targ.name}__ to calm it down! _So far, __${targ.name}__ is **${targ.pacify}% pacified**_!`)
+								.setDescription(`Select one of your allies to replace ${targ.name} with.`)
 								.addFields()
 
-							for (let k in targ.negotiate)
-								DiscordEmbed.fields.push({name: `**[${k}]** __${targ.negotiate[k].name}__`, value: targ.negotiate[k].desc, inline: true});
-
-							menustate = MENU_PACIFY;
-
-							return i.update({
-								content: `<@${char.owner}>`,
-								embeds: [DiscordEmbed],
-								components: setUpComponents(char, btl, menustate)
-							})
-						}
-					} else if (btl.action.move === 'backup') {
-						let targ = btl.teams[char.team].members[i.customId];
-						btl.action.target[1] = parseInt(i.customId);
-
-						DiscordEmbed = new Discord.MessageEmbed()
-							.setColor('#fcba03')
-							.setTitle(`__${char.name}__ => __${targ.name}__`)
-							.setDescription(`Select one of your allies to replace ${targ.name} with.`)
-							.addFields()
-
-						for (let k in btl.teams[char.team].backup) {
-							let f = btl.teams[char.team].backup[k];
-							DiscordEmbed.fields.push({name: `**[${k}]** __${f.name}__`, value: `${f.hp}/${f.maxhp}HP\n${f.mp}/${f.maxmp}MP`, inline: true});
-						}
-						menustate = MENU_BACKUP;
-
-						return i.update({
-							content: `<@${char.owner}>`,
-							embeds: [DiscordEmbed],
-							components: setUpComponents(char, btl, menustate)
-						})
-					} else if (btl.action.move === 'enemyinfo') {
-						let targ = btl.teams[btl.action.target[0]].members[i.customId];
-
-						if (!targ.enemy) {
-							DiscordEmbed.title = `${targ.name} isn't an enemy!`;
+							for (let k in btl.teams[char.team].backup) {
+								let f = btl.teams[char.team].backup[k];
+								DiscordEmbed.fields.push({name: `**[${k}]** __${f.name}__`, value: `${f.hp}/${f.maxhp}HP\n${f.mp}/${f.maxmp}MP`, inline: true});
+							}
+							menustate = MENU_BACKUP;
 
 							return i.update({
 								content: `<@${char.owner}>`,
 								embeds: [DiscordEmbed],
 								components: setUpComponents(char, btl, menustate)
 							})
-						} else if (!foundEnemy(targ.truename, btl.guild.id)) {
-							DiscordEmbed.title = `We've yet to learn about ${targ.name}.`;
+						
+						case 'enemyinfo':
+							let targ = btl.teams[btl.action.target[0]].members[i.customId];
+
+							if (!targ.enemy) {
+								DiscordEmbed.title = `${targ.name} isn't an enemy!`;
+
+								return i.update({
+									content: `<@${char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: setUpComponents(char, btl, menustate)
+								})
+							} else if (!foundEnemy(targ.truename, btl.guild.id)) {
+								DiscordEmbed.title = `We've yet to learn about ${targ.name}.`;
+
+								return i.update({
+									content: `<@${char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: setUpComponents(char, btl, menustate)
+								})
+							} else {
+								let enemyFile = setUpFile(`${dataPath}/json/${btl.guild.id}/enemies.json`);
+								menustate = MENU_ENEMYINFO;
+
+								return i.update({
+									content: `<@${char.owner}>`,
+									embeds: [longDescription(enemyFile[targ.truename], enemyFile[targ.truename].level, btl.guild.id, i)],
+									components: setUpComponents(char, btl, menustate)
+								})
+							}
+						
+						case 'tc':
+							if (!btl.action.ally) {
+								btl.action.ally = parseInt(i.customId);
+								menustate = MENU_TEAMSEL;
+
+								return i.update({
+									content: `<@${char.owner}>`,
+									embeds: [DiscordEmbed],
+								});
+							} else {
+								btl.action.target[1] = parseInt(i.customId);
+
+								doAction(char, btl, btl.action);
+								collector.stop();
+
+								return i.update({
+									content: `<@${char.owner}>`,
+									embeds: [DiscordEmbed],
+								});
+							}
+					
+						default:
+							doAction(char, btl, btl.action);
+							collector.stop();
 
 							return i.update({
 								content: `<@${char.owner}>`,
 								embeds: [DiscordEmbed],
-								components: setUpComponents(char, btl, menustate)
-							})
-						} else {
-							let enemyFile = setUpFile(`${dataPath}/json/${btl.guild.id}/enemies.json`);
-							menustate = MENU_ENEMYINF;
-
-							return i.update({
-								content: `<@${char.owner}>`,
-								embeds: [longDescription(enemyFile[targ.truename], enemyFile[targ.truename].level, btl.guild.id, i)],
-								components: setUpComponents(char, btl, menustate)
-							})
-						}
-					} else {
-						doAction(char, btl, btl.action);
-						collector.stop();
-
-						return i.update({
-							content: `<@${char.owner}>`,
-							embeds: [DiscordEmbed],
-						});
+							});
 					}
 				} else if (menustate == MENU_FORFEIT) {
 					if (i.customId === 'forfeit') {
@@ -821,6 +912,24 @@ doAction = (char, btl, action) => {
 				.setDescription(`__${char.name}__ decided to swap __${char1.name}__ for __${char2.name}__.\n___${char2.name}__ will fight in __${char1.name}'s__ place._`)
 			btl.channel.send({embeds: [DiscordEmbed]});
 			break;
+
+		case 'lb':
+			let atkType = (char.stats.atk > char.stats.mag) ? 'physical' : 'magic';
+			let lbDefs = objClone(char.lb[canUseLb(char, btl)]);
+			lbDefs.acc = 100;
+			lbDefs.crit = 0;
+			lbDefs.costtype = 'lb';
+			lbDefs.limitbreak = true;
+
+			useSkill(char, btl, action, meleeAtk);
+			break;
+
+		case 'tc':
+			DiscordEmbed = new Discord.MessageEmbed()
+				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+				.setTitle(`__${char.name}__ => :(`)
+				.setDescription("TCs dont work :(")
+			btl.channel.send({embeds: [DiscordEmbed]});
 	}
 
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, '	', 4));

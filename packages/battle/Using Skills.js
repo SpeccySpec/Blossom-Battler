@@ -3,7 +3,15 @@ canUseLb = (char, btl) => {
 	if (!settings.mechanics.limitbreaks) return false;
 
 	// We'll sort this out later.
-	return false;
+	let possible = [];
+	for (let i in char.lb) {
+		if (char.lbp >= char.lb[i].cost) possible.push(i);
+	}
+	if (possible.length <= 0) return false;
+	if (possible.length == 1) return possible[0]
+
+	possible.sort(function(a, b) {return char.lb[a].cost - char.lb[b].cost});
+	return char.lb[possible[0]];
 }
 
 // Is this a tech
@@ -55,6 +63,10 @@ useCost = (char, cost, costtype) => {
 		case 'mp':
 			char.mp = Math.max(0, char.mp - cost);
 			break;
+		
+		case 'lb':
+			char.lbp = Math.max(0, char.lbp - cost);
+			break;
 
 		default:
 			char.hp = Math.max(1, char.hp - cost);
@@ -78,15 +90,19 @@ genDmg = (char, targ, btl, skill) => {
 		damageformula = skill.extras.forceformula.toLowerCase();
 	}
 
-	switch(damageformula) {
-		case 'persona':
-			return Math.round(5 * Math.sqrt(def * skill.pow))+randNum(-7, 7);
-		case 'pokemon':
-			return Math.round((((2*char.level)/5+2)*skill.pow*def)/50+2)+randNum(-7, 7);
-		case 'lamonka':
-			return Math.ceil(((skill.pow+char.level)*(def/4)))*(0.95+(Math.random()/20));
-		default:
-			return randNum(char.level+35)+randNum(skill.pow/1.75)+randNum(-7, 7);
+	if (skill.limitbreak) {
+		return Math.round((((skill.pow+(atkStat*2)-targDefs.end)*2) + Math.round(Math.random() * 30))/2);
+	} else {
+		switch(damageformula) {
+			case 'persona':
+				return Math.round(5 * Math.sqrt(def * skill.pow))+randNum(-7, 7);
+			case 'pokemon':
+				return Math.round((((2*char.level)/5+2)*skill.pow*def)/50+2)+randNum(-7, 7);
+			case 'lamonka':
+				return Math.ceil(((skill.pow+char.level)*(def/4)))*(0.95+(Math.random()/20));
+			default:
+				return randNum(char.level+35)+randNum(skill.pow/1.75)+randNum(-7, 7);
+		}
 	}
 }
 
@@ -415,6 +431,13 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					result.txt += `${dmgTxt} damage!_`;
 				}
 
+				// Limit Breaks
+				if (settings.mechanics.limitbreaks) {
+					if (!char.lbp) char.lbp = 0;
+					char.lbp += total/(skill.hits*((skill.target === 'one' || skill.target === 'ally') ? 2 : 8))
+				}
+
+				// Full Combo!
 				if (damages.length > 1) result.txt += ` **(${(totalHits >= skill.hits) ? '__Full Combo!__ ' : (totalHits + ' hits, ')}${total} Total)**`;
 
 				// OnUse

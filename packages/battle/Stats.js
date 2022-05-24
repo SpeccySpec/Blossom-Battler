@@ -8,6 +8,9 @@ setupBattleStats = (f) => {
 		crit: 0,
 	};
 
+	f.lbp = 0;
+	f.donetc = false;
+
 	return true;
 }
 
