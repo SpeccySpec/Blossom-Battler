@@ -3387,3 +3387,7 @@ commands.unequipcharm = new Command({
 		message.channel.send(`${args[0]} has unequipped the ${args[1]} charm!`);
 	}
 })
+
+hasTeamCombo = (char, btl) => {
+	return false;
+}
