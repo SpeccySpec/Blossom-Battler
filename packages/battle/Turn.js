@@ -96,10 +96,9 @@ const menuStates = {
 			makeButton('Guard', affinityEmoji.block, 'grey')
 		]
 
-		if (!comps[1]) comps[1] = [];
-
 		// Team Combo checks
 		if (btl.canteamcombo) {
+			if (!comps[1]) comps[1] = [];
 			for (let i in btl.teams[char.team].members) {
 				if (hasTeamCombo(char, btl.teams[char.team].members[i])) {
 					comps[1].push(makeButton('Team Combo', elementEmoji.slash, 'blue', true, 'tc'));
@@ -108,8 +107,11 @@ const menuStates = {
 			}
 		}
 
-		// Melee checks
-		if (canUseLb(char, btl)) comps[1].push(makeButton('Limit Break', elementEmoji.almighty, 'blue', true, 'lb'));
+		// Limit Breaks
+		if (canUseLb(char, btl)) {
+			if (!comps[1]) comps[1] = [];
+			comps[1].push(makeButton('Limit Break', elementEmoji.almighty, 'blue', true, 'lb'));
+		}
 	},
 	[MENU_SKILL]: ({char, comps}) => {
 		for (const i in char.skills) {
@@ -323,18 +325,28 @@ sendCurTurnEmbed = (char, btl) => {
 	} else {
 		for (let i in btl.teams[op].members) {
 			let c = btl.teams[op].members[i];
-			let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
 			let l = c.leader ? leaderEmoji : i;
-			teamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+
+			if (c.hp <= 0) {
+				teamDesc += `~~${l}: ${c.name} _(DOWN)_~~\n`;
+			} else {
+				let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
+				teamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+			}
 		}
 	}
 
 	let myTeamDesc = '';
 	for (let i in btl.teams[char.team].members) {
 		let c = btl.teams[char.team].members[i];
-		let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
 		let l = c.leader ? leaderEmoji : i;
-		myTeamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+
+		if (c.hp <= 0) {
+			myTeamDesc += `~~${l}: ${c.name} _(DOWN)_~~\n`;
+		} else {
+			let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
+			myTeamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+		}
 	}
 
 	let DiscordEmbed = new Discord.MessageEmbed()
@@ -463,7 +475,7 @@ sendCurTurnEmbed = (char, btl) => {
 				btl.action.move = 'lb';
 				
 				if (canUseLb(char, btl)) {
-					let lbDefs = char.lb[canUseLb(char, btl)];
+					let lbDefs = objClone(canUseLb(char, btl));
 
 					if (lbDefs.target) {
 						if (lbDefs.target === 'allopposing' || lbDefs.target === 'allallies' || lbDefs.target === 'everyone' || lbDefs.target.includes('random')) {
@@ -605,9 +617,14 @@ sendCurTurnEmbed = (char, btl) => {
 					teamDesc = '';
 					for (let i in btl.teams[btl.action.target[0]].members) {
 						let c = btl.teams[btl.action.target[0]].members[i];
-						let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
 						let l = c.leader ? leaderEmoji : i;
-						teamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+
+						if (c.hp <= 0) {
+							teamDesc += `~~${l}: ${c.name} _(DOWN)_~~\n`;
+						} else {
+							let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
+							teamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+						}
 					}
 
 					DiscordEmbed.fields = [{name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true}];
@@ -924,14 +941,14 @@ doAction = (char, btl, action) => {
 
 		case 'lb':
 			let aType = (char.stats.atk > char.stats.mag) ? 'physical' : 'magic';
-			let lbDefs = objClone(char.lb[canUseLb(char, btl)]);
+			let lbDefs = objClone(canUseLb(char, btl));
 			lbDefs.acc = 100;
 			lbDefs.crit = 0;
 			lbDefs.costtype = 'lb';
 			lbDefs.limitbreak = true;
 			lbDefs.atktype = aType;
 
-			useSkill(char, btl, action, meleeAtk);
+			useSkill(char, btl, action, lbDefs);
 			break;
 
 		case 'tc':

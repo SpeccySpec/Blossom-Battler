@@ -8,9 +8,9 @@ canUseLb = (char, btl) => {
 		if (char.lbp >= char.lb[i].cost) possible.push(i);
 	}
 	if (possible.length <= 0) return false;
-	if (possible.length == 1) return possible[0]
+	if (possible.length == 1) return possible[0];
 
-	possible.sort(function(a, b) {return char.lb[a].cost - char.lb[b].cost});
+	possible.sort(function(a, b) {return char.lb[b].cost - char.lb[a].cost});
 	return char.lb[possible[0]];
 }
 
@@ -91,7 +91,7 @@ genDmg = (char, targ, btl, skill) => {
 	}
 
 	if (skill.limitbreak) {
-		return Math.round((((skill.pow+(atkStat*2)-targDefs.end)*2) + Math.round(Math.random() * 30))/2);
+		return Math.round((((skill.pow+(atkStat*2)-endStat)*2) + Math.round(Math.random() * 30))/2);
 	} else {
 		switch(damageformula) {
 			case 'persona':
