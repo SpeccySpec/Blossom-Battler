@@ -1,3 +1,4 @@
+// Can we use a LB
 canUseLb = (char, btl) => {
 	let settings = setUpSettings(btl.guild.id);
 	if (!settings.mechanics.limitbreaks) return false;
@@ -12,6 +13,17 @@ canUseLb = (char, btl) => {
 
 	possible.sort(function(a, b) {return char.lb[b].cost - char.lb[a].cost});
 	return char.lb[possible[0]];
+}
+
+// lol i broke something
+addAtkMsg = (btl, str) => {
+	if (!btl.atkmsg) {
+		btl.atkmsg = str;
+	} else {
+		btl.atkmsg = `\n${str}`;
+	}
+
+	return btl.atkmsg;
 }
 
 // Is this a tech
@@ -713,6 +725,12 @@ useSkill = (char, btl, act, forceskill) => {
 
 	// Take away the cost
 	if (skillCost) useCost(char, skillCost, skill.costtype);
+	
+	// Do we have any final messages
+	if (btl.atkmsg) {
+		finalText += `\n${btl.atkmsg}`;
+		delete btl.atkmsg;
+	} 
 
 	// Now, send the embed!
 	let DiscordEmbed = new Discord.MessageEmbed()

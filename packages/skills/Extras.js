@@ -455,7 +455,7 @@ extrasList = {
 
 			if (num <= vars[0]) {
 				skill.hits += vars[1];
-				addAtkMsg(`${char.name}'s ${skill.name} landed ${vars[1]} extra time(s)!`);
+				addAtkMsg(btl, `${char.name}'s ${skill.name} landed ${vars[1]} extra time(s)!`);
 			}
 		}
 	}
