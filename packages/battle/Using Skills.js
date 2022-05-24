@@ -511,8 +511,9 @@ useSkill = (char, btl, act, forceskill) => {
 
 	// Passives
 	for (let skillName of char.skills) {
-		let psv = skillFile[skillName];
+		if (!skillFile[skillName]) continue;
 
+		let psv = skillFile[skillName];
 		if (psv.type != 'passive' || !psv.passive) continue;
 
 		for (let i in psv.passive) {

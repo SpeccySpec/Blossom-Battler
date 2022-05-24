@@ -1161,7 +1161,6 @@ commands.replaceskill = new Command({
 		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		// Do we know the skill
-		if (!skillFile[args[1]]) return message.channel.send('Invalid skill to replace! Remember that these are case sensitive.');
 		if (!skillFile[args[2]]) return message.channel.send('Invalid skill to replace with! Remember that these are case sensitive.');
 		if (!knowsSkill(thingDefs[args[0]], args[1])) return message.channel.send(`${thingDefs[args[0]].name} doesn't know ${args[1]}!`);
 
@@ -3388,6 +3387,63 @@ commands.unequipcharm = new Command({
 	}
 })
 
+commands.obtainweapon = new Command({
+	desc: 'Gives this character a specified weapon. They can use any weapon class, but can only equip weapons of their class.',
+	aliases: ['findweapon', 'obtainw', 'findw'],
+	section: "characters",
+	checkban: true,
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+	}
+})
+
 hasTeamCombo = (char, btl) => {
 	return false;
 }
+
+commands.registertc = new Command({
+	desc: "Registers a team combo for a duo of characters! In battle, the power is equal to the sum of the duo's strongest skills doubled.",
+	aliases: ['registerteamcombo', 'maketc', 'maketeamcombo'],
+	section: "characters",
+	checkban: true,
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Ally Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Team Combo's Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Status Effect",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Status Effect Chance",
+			type: "Decimal",
+			forced: false
+		},
+		{
+			name: "Hits",
+			type: "Num",
+			forced: false
+		}
+	],
+	func: (message, args) => {
+	}
+})

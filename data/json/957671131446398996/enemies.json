@@ -10185,5 +10185,81 @@
         "image": "",
         "type": "deity",
         "journal": "Harc but he's fucking GOD NOW"
+    },
+    "a": {
+        "name": "a",
+        "mainElement": "fire",
+        "owner": "441198920668938260",
+        "level": 30,
+        "hp": 2,
+        "mp": 2,
+        "status": "none",
+        "statusturns": 0,
+        "melee": {
+            "name": "Strike Attack",
+            "type": "strike",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "stats": {
+            "atk": 2,
+            "mag": 2,
+            "prc": 2,
+            "end": 2,
+            "chr": 2,
+            "int": 2,
+            "agl": 2,
+            "luk": 2
+        },
+        "lb": {},
+        "xp": 2,
+        "affinities": {
+            "superweak": [],
+            "weak": [],
+            "resist": [],
+            "block": [],
+            "repel": [],
+            "drain": []
+        },
+        "skills": [],
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "allyatkquote": [],
+            "lbquote": [],
+            "tcquote": [],
+            "strongquote": [],
+            "badatkquote": [],
+            "landedquote": [],
+            "missquote": [],
+            "superweakquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "dodgequote": [],
+            "deathquote": [],
+            "killquote": [],
+            "pacifyquote": [],
+            "allydeathquote": [],
+            "healquote": [],
+            "helpedquote": [],
+            "consolequote": [],
+            "imfinequote": [],
+            "lvlquote": []
+        },
+        "dreams": [],
+        "negotiate": [],
+        "negotiateDefs": {
+            "required": 5
+        },
+        "loot": "",
+        "image": "",
+        "type": "deity",
+        "journal": ""
     }
 }
