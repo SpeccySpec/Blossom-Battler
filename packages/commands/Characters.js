@@ -3259,7 +3259,7 @@ commands.findcharm = new Command({
 	}
 })
 
-commands.abandomcharm = new Command({
+commands.abandoncharm = new Command({
 	desc: "Lets a character abandon a charm.",
 	section: "characters",
 	args: [
