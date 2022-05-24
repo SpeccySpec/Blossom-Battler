@@ -609,10 +609,11 @@ sendCurTurnEmbed = (char, btl) => {
 					DiscordEmbed.fields = [{name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true}];
 				} else if (menustate == MENU_TARGET && btl.teams[btl.action.target[0]] && btl.teams[btl.action.target[0]].members[i.customId]) {
 					btl.action.target[1] = parseInt(i.customId);
+					let targ;
 
 					switch(btl.action.move) {
 						case 'pacify':
-							let targ = btl.teams[btl.action.target[0]].members[i.customId];
+							targ = btl.teams[btl.action.target[0]].members[i.customId];
 
 							if (targ.negotiate == [] || targ.negotiate.length <= 0) {
 								DiscordEmbed.title = `${targ.name} seems adamant on attacking and will not listen to reason.`;
@@ -640,9 +641,10 @@ sendCurTurnEmbed = (char, btl) => {
 									components: setUpComponents(char, btl, menustate)
 								})
 							}
+							break;
 						
 						case 'backup':
-							let targ = btl.teams[char.team].members[i.customId];
+							targ = btl.teams[char.team].members[i.customId];
 							btl.action.target[1] = parseInt(i.customId);
 
 							DiscordEmbed = new Discord.MessageEmbed()
@@ -662,9 +664,10 @@ sendCurTurnEmbed = (char, btl) => {
 								embeds: [DiscordEmbed],
 								components: setUpComponents(char, btl, menustate)
 							})
+							break;
 						
 						case 'enemyinfo':
-							let targ = btl.teams[btl.action.target[0]].members[i.customId];
+							targ = btl.teams[btl.action.target[0]].members[i.customId];
 
 							if (!targ.enemy) {
 								DiscordEmbed.title = `${targ.name} isn't an enemy!`;
@@ -692,6 +695,7 @@ sendCurTurnEmbed = (char, btl) => {
 									components: setUpComponents(char, btl, menustate)
 								})
 							}
+							break;
 						
 						case 'tc':
 							if (!btl.action.ally) {
@@ -713,6 +717,7 @@ sendCurTurnEmbed = (char, btl) => {
 									embeds: [DiscordEmbed],
 								});
 							}
+							break;
 					
 						default:
 							doAction(char, btl, btl.action);
@@ -914,12 +919,13 @@ doAction = (char, btl, action) => {
 			break;
 
 		case 'lb':
-			let atkType = (char.stats.atk > char.stats.mag) ? 'physical' : 'magic';
+			let aType = (char.stats.atk > char.stats.mag) ? 'physical' : 'magic';
 			let lbDefs = objClone(char.lb[canUseLb(char, btl)]);
 			lbDefs.acc = 100;
 			lbDefs.crit = 0;
 			lbDefs.costtype = 'lb';
 			lbDefs.limitbreak = true;
+			lbDefs.atktype = aType;
 
 			useSkill(char, btl, action, meleeAtk);
 			break;

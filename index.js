@@ -17,12 +17,12 @@ manager.on('shardCreate', (shard) => console.log(`Shard #${shard.id} launched! P
 // On some kind of error :/
 process.on('unhandledRejection', err => {
 	console.log(`Oops! We messed up here! I've written down the error so you can track it! Good luck <3\n\n${err.stack}`, "error");
-	
-	console.log("Let's write this down so we don't forget...");
+	/*
 	if (battleFiles) {
 		if (battleFiles.length > 0) fs.writeFileSync('./data/error.txt', JSON.stringify(battleFiles, null, '    '));
 		console.log('Written in "./data/error.txt".');
 	}
+	*/
 });
 
 // Spawn your shards
