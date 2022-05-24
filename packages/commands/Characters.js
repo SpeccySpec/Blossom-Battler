@@ -3387,6 +3387,38 @@ commands.unequipcharm = new Command({
 	}
 })
 
+commands.obtainweapon = new Command({
+	desc: 'Gives this character a specified weapon. They can use any weapon class, but can only equip weapons of their class.',
+	aliases: ['findweapon', 'obtainw', 'findw'],
+	section: "character",
+	checkban: true,
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+	}
+})
+
 hasTeamCombo = (char, btl) => {
 	return false;
 }
+
+commands.registertc = new Command({
+	desc: 'Gives this party a specified weapon.',
+	aliases: ['registerteamcombo', 'maketc', 'maketeamcombo'],
+	section: "characters",
+	checkban: true,
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+	}
+})
