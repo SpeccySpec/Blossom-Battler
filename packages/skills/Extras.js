@@ -447,7 +447,7 @@ extrasList = {
 					return message.channel.send(`Invalid value for {Number of Hits}. It should be above 0. Be aware that skills cannot exceed 99 hits, and so, the highest this number can be is ${99-(skill.hits ?? 1)}.`);
 			}
 
-			makeExtra(skill, "powhit", [parseInt(extra1), extra2 ? parseInt(extra2) : 1]);
+			makeExtra(skill, "multihit", [parseInt(extra1), extra2 ? parseInt(extra2) : 1]);
 			return true;
 		},
 		statmod: function(char, skill, vars, btl) {
