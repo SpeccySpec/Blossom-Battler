@@ -304,8 +304,12 @@ setUpComponents = (char, btl, menustate) => {
 }
 
 sendCurTurnEmbed = (char, btl) => {
+	let settings = setUpSettings(btl.guild.id);
+
 	let menustate = MENU_ACT;
-	let statDesc = `${getBar('hp', char.hp, char.maxhp)}\t${getBar('mp', char.mp, char.maxmp)}\n${char.hp}/${char.maxhp}HP						${char.mp}/${char.maxmp}MP`;
+	let statDesc = `${getBar('hp', char.hp, char.maxhp)}\t${getBar('mp', char.mp, char.maxmp)}\n${char.hp}/${char.maxhp}HP, ${char.mp}/${char.maxmp}MP`;
+	
+	if (settings.mechanics.limitbreaks) statDesc += `, ${char.lbp}LB%`;
 
 	let teamDesc = '';
 	let op = (char.team <= 0) ? 1 : 0;
