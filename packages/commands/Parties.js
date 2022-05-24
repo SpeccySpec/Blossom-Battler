@@ -587,3 +587,26 @@ commands.partytruename = new Command({
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, '    '));
 	}
 })
+
+commands.obtainweapon = new Command({
+	desc: 'Gives this party a specified weapon.',
+	aliases: ['partymake', 'maketeam', 'teammake', 'registerparty', 'registerteam'],
+	section: "parties",
+	checkban: true,
+	args: [
+		{
+			name: "Party Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Characters",
+			type: "Word",
+			forced: true,
+			multiple: true
+		}
+	],
+	admin: "You don't have permission to make a party.",
+	func: (message, args) => {
+	}
+})

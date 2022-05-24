@@ -1161,7 +1161,6 @@ commands.replaceskill = new Command({
 		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		// Do we know the skill
-		if (!skillFile[args[1]]) return message.channel.send('Invalid skill to replace! Remember that these are case sensitive.');
 		if (!skillFile[args[2]]) return message.channel.send('Invalid skill to replace with! Remember that these are case sensitive.');
 		if (!knowsSkill(thingDefs[args[0]], args[1])) return message.channel.send(`${thingDefs[args[0]].name} doesn't know ${args[1]}!`);
 
