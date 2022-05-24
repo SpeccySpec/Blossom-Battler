@@ -274,7 +274,7 @@ function atkDesc(skillDefs, settings) {
 			finalText += `Takes **${skillDefs.extras.takemp[0]} MP** from the target.\n`;
 
 		if (hasExtra(skillDefs, 'drain'))
-			finalText += `Drains **1/${skillDefs.extras.drain[0]} of the damage**.\n`;
+			finalText += `Drains **1/${skillDefs.extras.drain[0]} of damage dealt**.\n`;
 
 		if (hasExtra(skillDefs, 'steal'))
 			finalText += `Has a **${skillDefs.extras.steal[0][0]}%** chance of stealing **${skillDefs.extras.steal[0][1]}** of the target team's items.\n`;
@@ -664,14 +664,6 @@ skillDesc = (skillDefs, skillName, server) => {
 	
 	if (skillDefs.acc && skillDefs.type != "heal" && skillDefs.type != "passive")
 		finalText += `Has **${skillDefs.acc}%** Accuracy.\n`;
-
-	if (hasExtra(skillDefs, 'drain') && skillDefs.type != "heal") {
-		if (skillDefs.drain > 1) {
-			finalText += `Drains 1/${skillDefs.drain} of damage dealt.\n`;
-		} else {
-			finalText += `Drains all damage dealt.\n`;
-		}
-	}
 
 	if (skillDefs.crit && skillDefs.type != "heal" && skillDefs.type != "status" && skillDefs.type != "passive")
 		finalText += `**${skillDefs.crit}%**<:crit:876905905248145448>\n`;
