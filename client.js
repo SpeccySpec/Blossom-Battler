@@ -584,6 +584,11 @@ randNum = (minNum, maxNum) => {
 	}
 }
 
+truncNum = (x, n) => {
+    let zeros = 10 ** n;
+    return Math.floor(x * zeros) / zeros;
+}
+
 // setUpFile
 fileStore = {};
 setUpFile = (file, force) => {
