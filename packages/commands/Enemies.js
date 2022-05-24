@@ -106,7 +106,7 @@ commands.registerenemy = new Command({
 			args[i] = args[i] > 0 ? args[i] : 1;
 		}
 
-		if (args[14] && args[14].toLowerCase() != 'none' && !utilityFuncs.inArray(args[14].toLowerCase(), enemyTypes)) return message.channel.send({content: 'Please enter a valid enemy type!', embeds: [enemyTypeList()]});
+		if (args[14] && args[14].toLowerCase() != 'none' && !utilityFuncs.inArray(args[14].toLowerCase(), enemyTypes)) return message.channel.send('Please enter a valid enemy type!\n```diff\n- None\n- MiniBoss\n- Boss\n- Big Boss\n- Deity```');
 
 		let enemyDefs = writeEnemy(message.author, message.guild, args[0], args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], args[12], args[13], args[14] ? args[14].toLowerCase() : 'none', args[15] ? args[15] : '');
 		message.channel.send({content: `${args[0]} has been registered!`, embeds: [briefDescription(enemyDefs)]})
