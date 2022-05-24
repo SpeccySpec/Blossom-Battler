@@ -473,7 +473,7 @@ sendCurTurnEmbed = (char, btl) => {
 
 			case 'lb':
 				btl.action.move = 'lb';
-				
+
 				if (canUseLb(char, btl)) {
 					let lbDefs = objClone(canUseLb(char, btl));
 
@@ -492,8 +492,6 @@ sendCurTurnEmbed = (char, btl) => {
 
 					menustate = MENU_TEAMSEL;
 					break;
-				} else {
-					return btl.channel.send('idk what happened there maybe your lb broke');
 				}
 
 			case 'tc':
@@ -639,7 +637,7 @@ sendCurTurnEmbed = (char, btl) => {
 							if (targ.negotiate == [] || targ.negotiate.length <= 0) {
 								DiscordEmbed.title = `${targ.name} seems adamant on attacking and will not listen to reason.`;
 
-								i.update({
+								return i.update({
 									content: `<@${char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
@@ -802,7 +800,7 @@ sendCurTurnEmbed = (char, btl) => {
 				break;
 		}
 
-		i.update({
+		return i.update({
 			content: `<@${char.owner}>`,
 			embeds: [DiscordEmbed],
 			components: setUpComponents(char, btl, menustate)
