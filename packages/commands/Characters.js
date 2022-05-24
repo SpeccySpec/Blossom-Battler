@@ -3390,7 +3390,7 @@ commands.unequipcharm = new Command({
 commands.obtainweapon = new Command({
 	desc: 'Gives this character a specified weapon. They can use any weapon class, but can only equip weapons of their class.',
 	aliases: ['findweapon', 'obtainw', 'findw'],
-	section: "character",
+	section: "characters",
 	checkban: true,
 	args: [
 		{
@@ -3408,7 +3408,7 @@ hasTeamCombo = (char, btl) => {
 }
 
 commands.registertc = new Command({
-	desc: 'Gives this party a specified weapon.',
+	desc: "Registers a team combo for a duo of characters! In battle, the power is equal to the sum of the duo's strongest skills doubled.",
 	aliases: ['registerteamcombo', 'maketc', 'maketeamcombo'],
 	section: "characters",
 	checkban: true,
@@ -3417,6 +3417,31 @@ commands.registertc = new Command({
 			name: "Character Name",
 			type: "Word",
 			forced: true
+		},
+		{
+			name: "Ally Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Team Combo's Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Status Effect",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Status Effect Chance",
+			type: "Decimal",
+			forced: false
+		},
+		{
+			name: "Hits",
+			type: "Num",
+			forced: false
 		}
 	],
 	func: (message, args) => {
