@@ -86,7 +86,7 @@ function CalcCompins(comps, i) {
 
 const menuStates = {
 	[MENU_ACT]: ({char, btl, comps}) => {
-		if (btl.action.ally) delete btl.action.ally;
+		if (btl.action && btl.action.ally) delete btl.action.ally;
 
 		comps[0] = [
 			makeButton('Melee', elementEmoji.strike, 'red'),
