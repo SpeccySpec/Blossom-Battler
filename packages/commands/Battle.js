@@ -266,8 +266,8 @@ commands.removeencounter = new Command({
 
 		// Kill encounters
 		if (!locale.encounters) return message.channel.send("There are no encounters here!");
-		if (!locale.encounters[args[1]]) return message.channel.send(`Encounter #${args[1]} does not exist.`);
-		locale.encounters.splice(args[1], 1);
+		if (!locale.encounters[args[1]-1]) return message.channel.send(`Encounter #${args[1]} does not exist.`);
+		locale.encounters.splice(args[1]-1, 1);
 
 		message.react('👍');
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${args[0].id}/location.json`, JSON.stringify(locale, '	', 4));
@@ -282,7 +282,7 @@ commands.channeldata = new Command({
 		{
 			name: "Channel",
 			type: "RealChannel",
-			forced: true
+			forced: false
 		}
 	],
 	func: (message, args) => {
@@ -304,7 +304,7 @@ commands.channeldata = new Command({
 		if (channel.encounters) {
 			let encounters = '';
 			for (let i in channel.encounters) {
-				encounters += `**[${i+1}]** `;
+				encounters += `**[${parseInt(i)+1}]** `;
 				for (let k in channel.encounters[i]) {
 					encounters += `${channel.encounters[i][k]}`;
 					if (k <= channel.encounters[i].length) encounters += ', ';
