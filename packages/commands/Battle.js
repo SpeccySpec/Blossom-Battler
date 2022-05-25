@@ -241,6 +241,84 @@ commands.addencounter = new Command({
 	}
 })
 
+commands.removeencounter = new Command({
+	desc: "Removes an enemy encounter from the specified channel.",
+	section: "battle",
+	aliases: ['killencounter', 'purgeencounter'],
+	args: [
+		{
+			name: "Location",
+			type: "RealChannel",
+			forced: true
+		},
+		{
+			name: "Encounter Number",
+			type: "Num",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (!args[0].id) return message.channel.send("That isn't a channel!");
+
+		// Set up files
+		makeDirectory(`${dataPath}/json/${message.guild.id}/${args[0].id}`);
+		let locale = setUpFile(`${dataPath}/json/${message.guild.id}/${args[0].id}/location.json`, true);
+
+		// Kill encounters
+		if (!locale.encounters) return message.channel.send("There are no encounters here!");
+		if (!locale.encounters[args[1]]) return message.channel.send(`Encounter #${args[1]} does not exist.`);
+		locale.encounters.splice(args[1], 1);
+
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${args[0].id}/location.json`, JSON.stringify(locale, '	', 4));
+	}
+})
+
+commands.channeldata = new Command({
+	desc: "Lists all of the channel data made for this channel.",
+	section: "battle",
+	aliases: ['getdata', 'getchanneldata'],
+	args: [
+		{
+			name: "Channel",
+			type: "RealChannel",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (!args[0].id) args[0] = message.channel;
+
+		// a
+		const DiscordEmbed = new Discord.MessageEmbed()
+		.setColor('#cc3b69')
+		.setTitle(`Data for ${args[0].name}:`)
+		.addFields()
+
+		// Set up files
+		makeDirectory(`${dataPath}/json/${message.guild.id}/${args[0].id}`);
+		let channel = setUpFile(`${dataPath}/json/${message.guild.id}/${args[0].id}/location.json`, true);
+
+		if (channel.weather) DiscordEmbed.fields.push({name: 'Weather right now:', value: channel.weather.charAt(0).toUpperCase() + channel.weather.slice(1), inline: true})
+		if (channel.terrain) DiscordEmbed.fields.push({name: 'Terrain right now:', value: channel.terrain.charAt(0).toUpperCase() + channel.terrain.slice(1), inline: true})
+
+		if (channel.encounters) {
+			let encounters = '';
+			for (let i in channel.encounters) {
+				encounters += `**[${i+1}]** `;
+				for (let k in channel.encounters[i]) {
+					encounters += `${channel.encounters[i][k]}`;
+					if (k <= channel.encounters[i].length) encounters += ', ';
+				}
+				encounters += '\n';
+			}
+			DiscordEmbed.fields.push({name: "Possible Encounters", value: encounters, inline: false})
+		}
+
+		if (DiscordEmbed.fields.length <= 0) return message.channel.send("There's no data for this channel!");
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
 // IT'S TIME
 // EVERYTHING'S BEEN BUILDING UP TO THIS MOMENT
 // TIME FOR BATTLES!!
