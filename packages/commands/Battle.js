@@ -286,7 +286,7 @@ commands.channeldata = new Command({
 		}
 	],
 	func: (message, args) => {
-		if (!args[0].id) args[0] = message.channel;
+		if (!args[0] || !args[0].id) args[0] = message.channel;
 
 		// a
 		const DiscordEmbed = new Discord.MessageEmbed()
