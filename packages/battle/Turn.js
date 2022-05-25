@@ -313,6 +313,11 @@ sendCurTurnEmbed = (char, btl) => {
 	
 	if (settings.mechanics.limitbreaks) statDesc += `, ${char.lbp}LB%`;
 
+	let weatherTxt = '';
+	if (btl.weather) weatherTxt += `\nCurrently, the weather is ${btl.weather.type}.`;
+	if (btl.terrain) weatherTxt += `\nCurrently, the terrain is ${btl.terrain.type}.`;
+	statDesc += weatherTxt;
+
 	let teamDesc = '';
 	let op = (char.team <= 0) ? 1 : 0;
 	let multipleTeams = false;
@@ -1051,6 +1056,41 @@ doTurn = (btl, noTurnEmbed) => {
 			if (customVariables[i] && customVariables[i].onturn) {
 				statusTxt += (customVariables[i].onturn(btl, char, char.custom[i]) ?? '');
 				if (statusTxt != '') statusTxt += '\n';
+			}
+		}
+	}
+
+	// Lastly, weather and terrain.
+	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].onturn) {
+		let txt = weatherFuncs[btl.weather.type].onturn(char, btl);
+		if (txt != null) statusTxt += `\n${txt}`;
+
+		btl.weather.turns--;
+		if (btl.weather.turns == 0) {
+			statusTxt += `\nThe ${btl.weather.type} is clearing up.`;
+
+			if (btl.weather.force) {
+				btl.weather.type = btl.weather.force
+				btl.weather.turns = -1;
+			} else {
+				delete btl.weather;
+			}
+		}
+	}
+	
+	if (btl.terrain && terrainFuncs && terrainFuncs[btl.terrain.type] && terrainFuncs[btl.terrain.type].onturn) {
+		let txt = terrainFuncs[btl.terrain.type].onturn(char, btl);
+		if (txt != null) statusTxt += `\n${txt}`;
+
+		btl.terrain.turns--;
+		if (btl.terrain.turns == 0) {
+			statusTxt += `\nThe ${btl.weather.type} is clearing up.`;
+	
+			if (btl.terrain.force) {
+				btl.terrain.type = btl.terrain.force
+				btl.terrain.turns = -1;
+			} else {
+				delete btl.terrain;
 			}
 		}
 	}

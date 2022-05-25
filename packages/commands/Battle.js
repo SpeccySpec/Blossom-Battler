@@ -78,7 +78,7 @@ commands.pvpleaderboards = new Command({
 				enemies: {}
 			} 
 			
-			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, '	', 4))
 		}
 
 		let gamemode = "none"
@@ -117,6 +117,134 @@ commands.pvpleaderboards = new Command({
 	}
 })
 
+/*
+	LOCATION SHIT
+	- Location Settings
+	- Enemy Encounter Tables
+							  */
+
+commands.locationsettings = new Command({
+	desc: "Set certain values based on channel. You can change them freely.\n```diff\n=== Weather ===\n" +
+		"+ <Type of Weather>\n" +
+		"Forces the weather to be the one set unless explicitely defined in battle.\n" +
+		"\n" +
+		"=== Terrain ===\n" +
+		"+ <Type of Terrain>\n" +
+		"Forces the terrain to be the one set unless explicitely defined in battle.\n" +
+		"\n" +
+		"=== Perma-Status ===\n" +
+		"+ <Status Effect>\n" +
+		"Forces all battlers to have this status for the entire battle unless inflicted with another one.```",
+
+	section: "battle",
+	aliases: ['localesettings', 'lsettings', 'locationset'],
+	args: [
+		{
+			name: "Location",
+			type: "RealChannel",
+			forced: true
+		},
+		{
+			name: "Setting",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Arguments",
+			type: "Word",
+			forced: true,
+			multiple: true
+		}
+	],
+	func: (message, args) => {
+		if (!args[0].id) return message.channel.send("That isn't a channel!");
+
+		// Set up files
+		makeDirectory(`${dataPath}/json/${message.guild.id}/${args[0].id}`);
+		let locale = setUpFile(`${dataPath}/json/${message.guild.id}/${args[0].id}/location.json`, true);
+
+		switch(args[1].toLowerCase()) {
+			case 'weather':
+			case 'precipitation':
+				if (weathers.includes(args[2].toLowerCase())) {
+					locale.weather = args[2].toLowerCase()
+				} else {
+					return message.channel.send("You entered a nonexistant weather type!");
+				}
+
+				break;
+
+			case 'terrain':
+			case 'floor':
+				if (terrains.includes(args[2].toLowerCase())) {
+					locale.terrain = args[2].toLowerCase()
+				} else {
+					return message.channel.send("You entered a nonexistant terrain type!");
+				}
+
+				break;
+
+			case 'permastatus':
+			case 'perma-status':
+			case 'permstatus':
+				if (terrains.includes(args[2].toLowerCase())) {
+					locale.terrain = args[2].toLowerCase()
+				} else {
+					return message.channel.send("You entered a nonexistant terrain type!");
+				}
+
+				break;
+		}
+
+		message.channel.send(`Set ${args[0]}'s ${args[1]} to ${args[2]}.`);
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${args[0].id}/location.json`, JSON.stringify(locale, '	', 4));
+	}
+})
+
+commands.addencounter = new Command({
+	desc: "Adds an enemy encounter to the specified channel. If no enemies are specified in battle commands, these will be used instead.",
+	section: "battle",
+	aliases: ['makeencounter', 'setencounter'],
+	args: [
+		{
+			name: "Location",
+			type: "RealChannel",
+			forced: true
+		},
+		{
+			name: "Enemies",
+			type: "Word",
+			forced: true,
+			multiple: true
+		}
+	],
+	func: (message, args) => {
+		if (!args[0].id) return message.channel.send("That isn't a channel!");
+
+		// Set up files
+		makeDirectory(`${dataPath}/json/${message.guild.id}/${args[0].id}`);
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let locale = setUpFile(`${dataPath}/json/${message.guild.id}/${args[0].id}/location.json`, true);
+
+		if (!locale.encounters) locale.encounters = [];
+
+		let e = [];
+		for (let i in args) {
+			if (i <= 0) continue;
+			if (!enemyFile[args[i]]) return message.channel.send(`${args[i]} is an invalid enemy!`);
+			e.push(args[i]);
+		}
+
+		message.react('👍');
+		locale.encounters.push(e);
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${args[0].id}/location.json`, JSON.stringify(locale, '	', 4));
+	}
+})
+
+// IT'S TIME
+// EVERYTHING'S BEEN BUILDING UP TO THIS MOMENT
+// TIME FOR BATTLES!!
+
 commands.endbattle = new Command({
 	desc: "Manually ends a battle happening in this channel. No stat changes, xp or money is saved.",
 	admin: "You do not have permission to manually end the battle!",
@@ -138,9 +266,6 @@ commands.endbattle = new Command({
 	}
 })
 
-// IT'S TIME
-// EVERYTHING'S BEEN BUILDING UP TO THIS MOMENT
-// TIME FOR BATTLES!!
 commands.startbattle = new Command({
 	desc: "Start a battle in this channel. Without any enemies, use the set encounters for this channel. I hope you enjoy!\n\nThis definitely won't work without the following:```diff\n+ Characters\n+ Skills\n+ Enemies\n+ Parties```",
 	section: "battle",
@@ -216,31 +341,39 @@ commands.startbattle = new Command({
 		// Validity Check for Parties
 		if (!parties[args[0]]) return message.channel.send(`${args[0]} is an invalid party!`);
 
+		// Battle File!
+		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
+		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
+		let locale = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/location.json`, true);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
+		let enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`, true);
+
+		let weather = locale.weather ?? 'none'
+		let terrain = locale.terrain ?? 'none';
+		if (args[2].toLowerCase() != 'none') weather = args[2].toLowerCase();
+		if (args[3].toLowerCase() != 'none') terrain = args[3].toLowerCase();
+
 		// Weather and stuff
-		if (args[2].toLowerCase() != 'none') {
-			if (!utilityFuncs.inArray(args[2].toLowerCase(), weathers)) return message.channel.send(`${args[2].toLowerCase()} is an invalid weather type!`);
+		if (weather != 'none') {
+			if (!weathers.includes(weather)) return message.channel.send(`${args[2].toLowerCase()} is an invalid weather type!`);
 
 			battle.weather = {
-				type: args[2].toLowerCase(),
-				turns: -1
+				type: weather,
+				turns: -1,
+				force: weather,
 			}
 		}
 
 		// Terrains and stuff
-		if (args[3].toLowerCase() != 'none') {
-			if (!utilityFuncs.inArray(args[3].toLowerCase(), terrains)) return message.channel.send(`${args[3].toLowerCase()} is an invalid terrain type!`);
+		if (terrain != 'none') {
+			if (!terrains.includes(terrain)) return message.channel.send(`${args[3].toLowerCase()} is an invalid terrain type!`);
 
 			battle.terrain = {
-				type: args[3].toLowerCase(),
-				turns: -1
+				type: terrain,
+				turns: -1,
+				force: terrain,
 			}
 		}
-
-		// Battle File!
-		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
-		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
-		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
-		let enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`, true);
 
 		// Can't battle while another party is!
 		if (btl.battling) return message.channel.send("You can't battle in this channel while another battle is happening!");
@@ -298,16 +431,24 @@ commands.startbattle = new Command({
 
 		// Set up Enemy Side.
 		// == this time, no encounters set until the enemy is killed or pacified == //
-		let enmDesc = '';
-		for (let i = 4; i <= args.length; i++) {
-			if (!args[i]) continue;
-			if (!enmFile[args[i]]) return message.channel.send(`${args[i]} is an invalid enemy!`);
+		let encounter = [];
+		if (args.length < 5) {
+			if (!locale.encounters || locale.encounters.length <= 0) return message.channel.send("You've not set any enemies, and there are no encounters assigned to this channel!");
+			encounter = locale.encounters[randNum(0, locale.encounters.length-1)] ?? locale.encounters[0];
+		} else {
+			for (let i = 4; i <= args.length; i++) {
+				if (!enmFile[args[i]]) return message.channel.send(`${args[i]} is an invalid enemy!`);
+				encounter.push(args[i]);
+			}
+		}
 
-			let enemy = objClone(enmFile[args[i]]);
+		let enmDesc = '';
+		for (let i in encounter) {
+			let enemy = objClone(enmFile[encounter[i]]);
 			enemy.enemy = true;
 
-			enemy.truename = args[i];
-			if (!enemy.name) enemy.name = args[i];
+			enemy.truename = encounter[i];
+			if (!enemy.name) enemy.name = encounter[i];
 			enemy.maxhp = enemy.hp;
 			enemy.maxmp = enemy.mp;
 			enemy.id = battleid;

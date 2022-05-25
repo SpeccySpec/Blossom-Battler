@@ -81,6 +81,18 @@
                 "money": 200
             },
             "desc": "Testing new Item thingy"
+        },
+        "l": {
+            "originalAuthor": "441198920668938260",
+            "name": "l",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "none",
+                "0"
+            ],
+            "hidden": false,
+            "items": {}
         }
     }
 }

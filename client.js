@@ -320,6 +320,7 @@ enmHabitats = [
 
 // weather and terrain
 weathers = [
+	'none',
 	"rain", // 1.3x to water
 	"thunder", // 1.3x to elec
 	"sunlight", // 1.3x to fire
@@ -329,6 +330,7 @@ weathers = [
 ]
 
 terrains = [
+	'none',
 	"flaming", // 10 damage with 10% chance of burn
 	"thunder", // 1.2x to elec
 	"grassy", // 10% heal before turn
@@ -935,6 +937,7 @@ typeParsers = {
 	Decimal: ({arg}) => {return isNaN(arg) ? undefined : parseFloat(arg)},
 	Ping: ({message}) => {return message.mentions.users.first()},
 	Channel: ({message, arg}) => {return message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')) ? message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')).id : undefined},
+	RealChannel: ({message, arg}) => {return message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')) ?? undefined},
 	ID: arg => {},
 	Image: ({message}) => {return checkImage(message, undefined, message.attachments.first())}
 }
