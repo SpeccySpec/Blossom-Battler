@@ -85,13 +85,13 @@ commands.registerskill = new Command({
 
 		// So much shit to check :(
 		if (args[3] < 1) return message.channel.send('Skills with 0 power or less will not function!');
-		if (!isFinite(args[3])) return message.channel.send('Please enter a whole number for **Power**!')
+		if (!isFinite(args[3])) return message.channel.send('Please enter a whole number for **Power**!');
 
 		if (args[4] < 1) return message.channel.send('Skills with 0% accuracy or less will not function!');
-		if (!isFinite(args[4])) return message.channel.send('Please enter a decimal or whole number for **Accuracy**!')
+		if (!isFinite(args[4])) return message.channel.send('Please enter a decimal or whole number for **Accuracy**!');
 
 		if (args[6] < 1) return message.channel.send('Skills with 0 hits or less will not function!');
-		if (!isFinite(args[6])) return message.channel.send('Please enter a whole number for **Hits**!')
+		if (!isFinite(args[6])) return message.channel.send('Please enter a whole number for **Hits**!');
 
 		if (!args[7] || !utilityFuncs.inArray(args[7].toLowerCase(), Elements)) {
 			return message.channel.send({content: 'Please enter a valid element for **Element!**', embeds: [elementList()]})
@@ -1084,7 +1084,7 @@ commands.applyextra = new Command({
 			name: "Variable #5",
 			type: "Any",
 			forced: false
-		},
+		}
 	],
 	func: (message, args) => {
 		if (!args[0]) return message.channel.send('Please enter a valid skill name!')

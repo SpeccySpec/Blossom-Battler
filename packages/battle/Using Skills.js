@@ -513,7 +513,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 	return result;
 }
 
-useSkill = (char, btl, act, forceskill) => {
+useSkill = (char, btl, act, forceskill, ally) => {
 	let skill = objClone(forceskill) ?? objClone(skillFile[act.index]);
 
 	// First, we modify stats via passives n shit. This isn't the actual character anyway so we don't care.
@@ -556,12 +556,13 @@ useSkill = (char, btl, act, forceskill) => {
 	}
 
 	// more shit
-	let skillCost = skill.cost ?? null;
+	let skillCost = skill.cost ?? 0;
 
 	// (easy access)
 	let party = btl.teams[char.team];
-
-	if (skill.cost && party.leaderskill && party.leaderskill.type === 'discount') {
+	if (skillCost > 0 && !skill.forcefree) {
+		if (skill.cost && party.leaderskill && party.leaderskill.type === 'discount') {
+		}
 	}
 
 	// Who will this skill target? Each index of "targets" is [ID, Power Multiplier].
@@ -657,7 +658,18 @@ useSkill = (char, btl, act, forceskill) => {
 	if (skill.atktype === 'magic') quotetype = 'mag';
 	if (skill.type === 'heal') quotetype = 'heal';
 
-	let finalText = `${selectQuote(char, quotetype)}\n__${char.name}__ used __${skill.name}__!\n\n`;
+	let finalText = `${selectQuote(char, quotetype)}\n`;
+	if (ally && ally.quotes) {
+		finalText = `${selectQuote(char, quotetype)}\n${selectQuote(ally, quotetype)}\n`;
+	}
+	
+	if (skill.limitbreak) {
+		finalText += `__${char.name}__ struck with their **strongest skill**!\n_**__${skill.name}__**!_\n\n`;
+	} else if (skill.teamcombo) {
+		finalText += `__${char.name}__ ${ally ? ("and __" + ally.name + "__") : ""} struck with a powerful skill: **__${skill.name}__**!\n\n`;
+	} else {
+		finalText += `__${char.name}__ used __${skill.name}__!\n\n`;
+	}
 
 	if (targets.length <= 1) 
 		targTxt += `__${getCharFromId(targets[0][0], btl).name}__`;
@@ -702,7 +714,7 @@ useSkill = (char, btl, act, forceskill) => {
 		let skillDefs = objClone(skill);
 		skillDefs.pow *= targets[i][1];
 
-		let result = attackWithSkill(char, targ, skillDefs, btl);
+		let result = attackWithSkill(char, targ, skillDefs, btl, act);
 		finalText += `${result.txt}\n`;
 
 		if (result.oneMore) btl.doonemore = true;
@@ -724,7 +736,7 @@ useSkill = (char, btl, act, forceskill) => {
 	}
 
 	// Take away the cost
-	if (skillCost) useCost(char, skillCost, skill.costtype);
+	if (skillCost && !skill.forcefree) useCost(char, skillCost, skill.costtype);
 	
 	// Do we have any final messages
 	if (btl.atkmsg) {

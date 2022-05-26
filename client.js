@@ -894,7 +894,7 @@ listArray = async(channel, theArray, author, forceIndex) => {
 }
 
 // Global JSONs
-skillFile = setUpFile(`${dataPath}/json/skills.json`)
+skillFile = setUpFile(`${dataPath}/json/skills.json`);
 shipFile = setUpFile(`${dataPath}/json/ships.json`);
 pmdFile = setUpFile(`${dataPath}/json/pmdquestions.json`);
 
@@ -981,6 +981,7 @@ ArgList = class {
 		const args = this.args.map(arg => {
 			let argdesc = `${arg.type}: ${arg.name}`
 			argdesc = arg.forced ? `<${argdesc}>` : `\{${argdesc}\}`
+			argdesc = arg.long ? `"${argdesc}"` : argdesc;
 			if (arg.multiple) argdesc += " {...}"
 			return argdesc
 		})

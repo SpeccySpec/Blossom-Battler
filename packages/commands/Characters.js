@@ -3139,6 +3139,27 @@ commands.importchar = new Command({
 	}
 })
 
+commands.exportcharjson = new Command({
+	desc: "Exports a character json file. I don't know why you'd want it but... sure.",
+	aliases: ['exportcharfile', 'realexportchar'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is a nonexistant character!`);
+		message.channel.send(`Here is the character data for ${charFile[args[0]].name}!` + "```json\n" + JSON.stringify(charFile[args[0]], '	', 4) + "```");
+	}
+})
+
 /*-----------------------------
              Charms
 ------------------------------*/
@@ -3403,12 +3424,14 @@ commands.obtainweapon = new Command({
 	}
 })
 
-hasTeamCombo = (char, btl) => {
-	return false;
+hasTeamCombo = (char, char2) => {
+	if (!char.teamcombos) return false;
+	if (!char.teamcombos[char2.truename]) return false;
+	return char.teamcombos[char2.truename];
 }
 
 commands.registertc = new Command({
-	desc: "Registers a team combo for a duo of characters! In battle, the power is equal to the sum of the duo's strongest skills doubled.",
+	desc: "Registers a team combo for a duo of characters! In battle, the power is equal to the sum of the duo's strongest skills doubled, which therefore means both people need to have the applicable cost for their skill. This powerful attack can have an extra too, but only one!",
 	aliases: ['registerteamcombo', 'maketc', 'maketeamcombo'],
 	section: "characters",
 	checkban: true,
@@ -3429,6 +3452,12 @@ commands.registertc = new Command({
 			forced: true
 		},
 		{
+			name: "Team Combo's Description",
+			type: "Word",
+			forced: true,
+			long: true
+		},
+		{
 			name: "Status Effect",
 			type: "Word",
 			forced: false
@@ -3442,8 +3471,95 @@ commands.registertc = new Command({
 			name: "Hits",
 			type: "Num",
 			forced: false
+		},
+		{
+			name: "Team Combo Extra",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Variable #1",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable #2",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable #3",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable #4",
+			type: "Any",
+			forced: false
+		},
+		{
+			name: "Variable #5",
+			type: "Any",
+			forced: false
 		}
 	],
-	func: (message, args) => {
+	func: async(message, args) => {
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is a nonexistant character!`);
+		if (!charFile[args[1]]) return message.channel.send(`${args[1]} is a nonexistant character!`);
+
+		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`You don't own ${args[0]}!`);
+
+		let teamcombo = {
+			name: args[2],
+			users: [args[0], args[1]],
+			desc: args[3]
+		}
+
+		if (args[4] && statusEffects.includes(args[4].toLowerCase)) {
+			teamcombo.status = args[4].toLowerCase;
+			teamcombo.statuschance = (args[5] && args[5] < 100) ? args[5] : 100;
+		}
+
+		if (args[6]) {
+			if (args[6] < 1) return message.channel.send('Skills with 0 hits or less will not function!');
+			if (!isFinite(args[6])) return message.channel.send('Please enter a whole number for **Hits**!');
+
+			if (args[6] > 1) teamcombo.hits = args[6];
+		}
+
+		if (args[7])
+			applyExtra(message, teamcombo, args[7].toLowerCase(), args[8], args[9], args[10], args[11], args[12]);
+
+		if (!charFile[args[0]].teamcombos) charFile[args[0]].teamcombos = {};
+		charFile[args[0]].teamcombos[args[1]] = teamcombo;
+
+		if (charFile[args[1]].owner == message.author.id) {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+			message.react('👍');
+		} else {
+			let user = await client.users.fetch(charFile[args[1]].owner);
+			message.channel.send(`${user}, ${message.author} wishes for __${charFile[args[0]].name}__ to have a Team Combo with __${charFile[args[1]].name}__ called _${args[2]}_. Will you accept?`);
+
+			let givenResponce = false;
+			let collector = message.channel.createMessageCollector({ time: 15000 });
+			collector.on('collect', m => {
+				if (m.author.id == charFile[args[1]].owner) {
+					if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
+						m.react('👍');
+						message.react('👍');
+						fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+					} else
+						message.channel.send("The user has declined. Therefore, no team combo will happen.");
+
+					givenResponce = true;
+					collector.stop()
+				}
+			});
+			collector.on('end', c => {
+				if (!givenResponce) message.channel.send("No response given.\nThe user has declined. Therefore, no team combo will happen.");
+			});
+		}
 	}
 })

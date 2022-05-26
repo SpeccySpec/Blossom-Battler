@@ -120,7 +120,7 @@ extrasList = {
 		diffflag: [0, 2],
 		applyfunc: function(message, skill, extra1, extra2, extra3) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
-			if (!utilityFuncs.validStat(extra1)) return message.channel.send("That's not a valid stat!");
+			if (!stats.includes(extra1.toLowerCase()) || extra1.toLowerCase() === 'luck') return message.channel.send("That's not a valid stat!");
 			if (!extra2) extra2 = '-1';
 			if (!extra3) extra3 = '100';
 

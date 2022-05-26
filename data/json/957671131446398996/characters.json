@@ -13650,7 +13650,17 @@
             "var1": "agl",
             "var2": 1
         },
-        "lb": {}
+        "lb": {},
+        "teamcombos": {
+            "Dream": {
+                "name": "testingsmth",
+                "users": [
+                    "Wish",
+                    "Dream"
+                ],
+                "desc": "testingsmth"
+            }
+        }
     },
     "Golena": {
         "name": "Golena",
@@ -18620,6 +18630,26 @@
                 "status": "paralysis",
                 "statuschance": 20,
                 "hits": 4
+            }
+        },
+        "teamcombos": {
+            "Valoria": {
+                "name": "Psychokinetic Webfire",
+                "users": [
+                    "Ramia",
+                    "Valoria"
+                ],
+                "desc": "Ramia fires webs upward, and with Valoria's help, they rain down on the foe, with each one exploding in a purple explosion as they hit the floor. This debuffs the foe's agility 3 times.",
+                "hits": 5,
+                "extras": {
+                    "buff": [
+                        [
+                            "agl",
+                            "-3",
+                            100
+                        ]
+                    ]
+                }
             }
         }
     },

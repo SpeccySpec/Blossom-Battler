@@ -98,9 +98,9 @@ const menuStates = {
 
 		// Team Combo checks
 		if (btl.canteamcombo) {
-			if (!comps[1]) comps[1] = [];
 			for (let i in btl.teams[char.team].members) {
 				if (hasTeamCombo(char, btl.teams[char.team].members[i])) {
+					if (!comps[1]) comps[1] = [];
 					comps[1].push(makeButton('Team Combo', elementEmoji.slash, 'blue', true, 'tc'));
 					break;
 				}
@@ -237,11 +237,7 @@ const menuStates = {
 				break;
 			
 			case 'tc':
-				if (!btl.action.ally) {
-					members = btl.teams[char.team].members;
-				} else {
-					members = btl.teams[btl.action.target[0]].members;
-				}
+				members = btl.teams[btl.action.target[0]].members;
 
 				for (const i in members) {
 					if (members[i].hp <= 0 || members[i].pacified) continue;
@@ -722,13 +718,21 @@ sendCurTurnEmbed = (char, btl) => {
 							break;
 						
 						case 'tc':
-							if (!btl.action.ally) {
+							if (btl.action.target[0] == char.team) {
 								btl.action.ally = parseInt(i.customId);
-								menustate = MENU_TEAMSEL;
+							
+								if (multipleTeams) {
+									menustate = MENU_TEAMSEL;
+									btl.action.target[0] = undefined;
+								} else {
+									menustate = MENU_TARGET;
+									btl.action.target[0] = op;
+								}
 
 								return i.update({
 									content: `<@${char.owner}>`,
 									embeds: [DiscordEmbed],
+									components: setUpComponents(char, btl, menustate)
 								});
 							} else {
 								btl.action.target[1] = parseInt(i.customId);
@@ -955,11 +959,44 @@ doAction = (char, btl, action) => {
 			break;
 
 		case 'tc':
-			DiscordEmbed = new Discord.MessageEmbed()
-				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
-				.setTitle(`__${char.name}__ => :(`)
-				.setDescription("TCs dont work :(")
-			btl.channel.send({embeds: [DiscordEmbed]});
+			// lets get the mean of all 2 participants' stats.
+			let ally = btl.teams[char.team].members[action.ally];
+			let avgchar = objClone(char);
+			for (let i in avgchar.stats) avgchar.stats[i] = (char.stats[i]+ally.stats[i])/2;
+
+			if (!hasTeamCombo(char, ally)) {
+				DiscordEmbed = new Discord.MessageEmbed()
+					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setTitle(`__${char.name}__ => __${ally.name}__`)
+					.setDescription(`__${char.name}__ tried to attack with __${ally.name}__... but it failed...?`)
+				btl.channel.send({embeds: [DiscordEmbed]});
+			} else {
+				// Now...
+				let tc = objClone(hasTeamCombo(char, ally));
+				tc.forcefree = true;
+				tc.teamcombo = true;
+
+				tc.acc = 100;
+				tc.crit = 0;
+				tc.pow = 0;
+				let skills = [objClone(char.skills), objClone(ally.skills)];
+				let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+
+				for (let i in skills) {
+					skills[i].sort(function(a, b) {return skillFile[b].pow - skillFile[a].pow});
+					tc.pow += skillFile[skills[i][0]].pow;
+				}
+
+				tc.pow /= tc.hits;
+				useSkill(avgchar, btl, action, tc, ally);
+
+				if (skillFile[skills[0][0]].cost && skillFile[skills[0][0]].costtype) {
+					useCost(char, skillFile[skills[0][0]].cost, skillFile[skills[0][0]].costtype);
+				}
+				if (skillFile[skills[1][0]].cost && skillFile[skills[1][0]].costtype) {
+					useCost(ally, skillFile[skills[1][0]].cost, skillFile[skills[1][0]].costtype);
+				}
+			}
 	}
 
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, '	', 4));

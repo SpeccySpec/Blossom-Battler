@@ -1,0 +1,5 @@
+weatherFuncs = {
+}
+
+terrainFuncs = {
+}
