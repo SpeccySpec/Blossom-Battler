@@ -1132,6 +1132,17 @@ doTurn = (btl, noTurnEmbed) => {
 		}
 	}
 
+	// Check the status of our allies...
+	for (let i in btl.teams[char.team].members) {
+		let ally = btl.teams[char.team].members;
+
+		if (ally.hp <= 0 && !char.donetc) {
+			btl.canteamcombo = true;
+		} else if (ally.hp <= ally.maxhp/2 && !char.donetc) {
+			btl.canteamcombo = randNum(1, 100) <= 50;
+		}
+	}
+
 	// Now send the embed
 	if (statusTxt != '') {
 		let DiscordEmbed = new Discord.MessageEmbed()
