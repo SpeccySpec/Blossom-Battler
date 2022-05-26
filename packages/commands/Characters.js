@@ -3070,6 +3070,50 @@ commands.exportname = new Command({
 	}
 })
 
+commands.purgeexport = new Command({
+	desc: `Deletes a character from exports. **YOU CANNOT GET IT BACK AFTER DELETION!**`,
+	section: 'characters',
+	aliases: ['unregisterexport', 'exportpurge', 'exportunregister', 'deleteexport', 'exportdelete'],
+	args: [
+		{
+			name: "Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let userdata = setUpUserData(message.author.id);
+
+		if (!userdata[args[0]]) return message.channel.send(`${args[0]} is not a valid character name.`);
+
+		if (userdata[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this character, therefore, you have insufficient permissions to delete it.")
+
+		message.channel.send(`Are you **sure** you want to delete ${userdata[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this character.\n**Y/N**`);
+
+		var givenResponce = false
+		var collector = message.channel.createMessageCollector({ time: 15000 });
+		collector.on('collect', m => {
+			if (m.author.id == message.author.id) {
+				if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
+					message.channel.send(`${userdata[args[0]].name} has been erased from existance.`)
+					delete userdata[args[0]]
+
+					fs.writeFileSync(`${dataPath}/userdata/${message.author.id}.json`, JSON.stringify(settings, null, 4));
+				} else
+					message.channel.send(`${userdata[args[0]].name} will not be deleted.`);
+				
+				givenResponce = true
+				collector.stop()
+			}
+		});
+		collector.on('end', c => {
+			if (givenResponce == false)
+				message.channel.send(`No response given.\n${userdata[args[0]].name} will not be deleted.`);
+		});
+	}
+})
+
 commands.importchar = new Command({
 	desc: "Imports a character from the ''exportchar'' command.",
 	aliases: ['takechar', 'enterchar'],
@@ -3156,7 +3200,7 @@ commands.exportcharjson = new Command({
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is a nonexistant character!`);
-		message.channel.send(`Here is the character data for ${charFile[args[0]].name}!` + "```json\n" + JSON.stringify(charFile[args[0]], '	', 4) + "```");
+		message.author.send(`Here is the character data for ${charFile[args[0]].name}!` + "```json\n" + JSON.stringify(charFile[args[0]], '	', 4) + "```");
 	}
 })
 
