@@ -109,6 +109,9 @@ commands.settings = new Command({
 				case 'goldchance':
 					rateText += `**Golden Enemy Chance**: ${settings['rates'][i]}%\n`
 					break
+				case 'moneyrate':
+					rateText += `**Money Rate**: ${settings['rates'][i]}x\n`
+					break
 				case 'tech':
 					if (settings['mechanics']['technicaldamage'] == true) {
 						rateText += `**Technical Damage Rate**: ${settings['rates'][i]}x\n`
@@ -501,6 +504,31 @@ commands.trustrate = new Command({
 		settings['rates']['trustrate'] = args[0]
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 		message.channel.send('Trust rate set to ' + args[0] + 'x')
+	}
+})
+
+commands.moneyrate = new Command({
+	desc: 'Change the trust rate for the server.',
+	section: 'moderation',
+	aliases: ['setmoneyrate', 'setmoney'],
+	args: [
+		{
+			name: 'Money Rate',
+			type: 'Decimal',
+			forced: true
+		}
+	],
+	admin: "You do not have permission to change the money rate!",
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id)
+
+		if (args[0] < 0) {
+			return message.channel.send('Money rate cannot be less than 0!')
+		}
+
+		settings['rates']['moneyrate'] = args[0]
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+		message.channel.send('Money rate set to ' + args[0] + 'x')
 	}
 })
 

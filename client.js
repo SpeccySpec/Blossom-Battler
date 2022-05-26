@@ -696,6 +696,7 @@ setUpSettings = (guild) => {
 			rates: {
 				xprate: 1,
 				trustrate: 1,
+				moneyrate: 1,
 				goldchance: 0.01,
 				mainelement: 1.2,
 				crit: 1.5,
