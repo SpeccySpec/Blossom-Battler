@@ -3608,3 +3608,51 @@ commands.registertc = new Command({
 		}
 	}
 })
+
+commands.gettc = new Command({
+	desc: 'List the data and information for the specified team combo.',
+	section: "skills",
+	args: [
+		{
+			name: "Initiator Character",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Assistant Character",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is a nonexistant character!`);
+		if (!charFile[args[1]]) return message.channel.send(`${args[1]} is a nonexistant character!`);
+		if (!charFile[args[0]].teamcombos || !charFile[args[0]].teamcombos[args[1]]) return message.channel.send(`${args[0]} & ${args[1]} have no team combo!`);
+
+		let tc = objClone(charFile[args[0]].teamcombos[args[1]]);
+		delete tc.cost;
+		delete tc.costtype;
+
+		tc.teamcombo = true;
+
+		tc.acc = 100;
+		tc.crit = 0;
+		tc.pow = 0;
+		let skills = [objClone(charFile[args[0]].skills), objClone(charFile[args[1]].skills)];
+		let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+
+		for (let i in skills) {
+			skills[i].sort(function(a, b) {return skillFile[b].pow - skillFile[a].pow});
+			tc.pow += skillFile[skills[i][0]].pow;
+		}
+
+		tc.pow /= tc.hits;
+		tc.type = [
+			typeof(skillFile[skills[0][0]].type) === 'object' ? skillFile[skills[0][0]].type[0] : skillFile[skills[0][0]].type,
+			typeof(skillFile[skills[1][0]].type) === 'object' ? skillFile[skills[1][0]].type[0] : skillFile[skills[1][0]].type
+		]
+
+		message.channel.send({content: `Here is the data for ${args[0]} and ${args[1]}'s Team Combo: ${tc.name}.`, embeds: [skillFuncs.skillDesc(tc, tc.name, message.guild.id)]})
+	}
+})
