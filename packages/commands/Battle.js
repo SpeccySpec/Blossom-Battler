@@ -319,9 +319,11 @@ commands.channeldata = new Command({
 	}
 })
 
-// IT'S TIME
-// EVERYTHING'S BEEN BUILDING UP TO THIS MOMENT
-// TIME FOR BATTLES!!
+/*
+	BATTLE STUFF
+	This here starts battles and stuff.
+	We're mostly finished but there's just a few cosmetic things to handle.
+																			 */
 
 // Todo:
 // Weapons and Armors in battle.
