@@ -452,7 +452,7 @@ function atkDesc(skillDefs, settings) {
 			finalText += `Power is multiplied by ${skillDefs.extras.heavenwrath[0]}x if **not alone, and all allies are not down**.\n`;
 
 		if (hasExtra(skillDefs, 'rest'))
-			finalText += `user **must recharge for a turn**.\n`;
+			finalText += `User **must recharge for a turn**.\n`;
 
 		if (hasExtra(skillDefs, 'feint'))
 			finalText += `**Bypasses shielding skills**.\n`;
