@@ -371,6 +371,7 @@ commands.listchars = new Command({
 							break;
 						case 'user':
 							args[a] = args[a].toLowerCase();
+							let variable = args[a];
 							if (variable.startsWith('<@') && variable.endsWith('>')) {
 								let user = message.guild.members.cache.find(m => m.id == variable.slice(2, -1));
 								args[a] = user.id;
