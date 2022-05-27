@@ -631,14 +631,10 @@ commands.dailyall = new Command({
 	section: "roll",
 	args: [],
 	func: (message, args) => {
-		commands.dailyskill.call(message, args)
-		commands.dailyitem.call(message, args)
-		commands.dailyweapon.call(message, args)
-		commands.dailyarmor.call(message, args)
-		commands.dailychar.call(message, args)
-		commands.dailycharquote.call(message, args)
-		commands.dailyship.call(message, args)
-		commands.dailyenemy.call(message, args)
-		commands.dailyenemyquote.call(message, args)
+		const dailies = ['dailyskill', 'dailyitem', 'dailyweapon', 'dailyarmor', 'dailychar', 'dailycharquote', 'dailyship', 'dailyenemy', 'dailyenemyquote']
+
+		for (const i in dailies) {
+			commands[dailies[i]].call(message, args)
+		}
 	}
 })

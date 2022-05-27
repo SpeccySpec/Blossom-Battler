@@ -466,7 +466,7 @@ dailyQuote = {}
 
 let tempQuote = fs.readFileSync(dataPath+'/dailyquote.txt', {flag: 'as+'});
 if (tempQuote && tempQuote != '')
-	dailyQuote = tempQuote.toString();
+	dailyQuote = JSON.parse(tempQuote);
 
 // Daily Skill - Resets at midnight
 dailySkill = 'none'
