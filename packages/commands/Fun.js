@@ -626,13 +626,13 @@ function processQuestion(message, question, number) {
 	]}
 }
 
+dailies = ['dailyskill', 'dailyitem', 'dailyweapon', 'dailyarmor', 'dailychar', 'dailycharquote', 'dailyship', 'dailyenemy', 'dailyenemyquote']
+
 commands.dailyall = new Command({
 	desc: "Starts all commands for daily things.",
 	section: "roll",
 	args: [],
 	func: (message, args) => {
-		let dailies = ['dailyskill', 'dailyitem', 'dailyweapon', 'dailyarmor', 'dailychar', 'dailycharquote', 'dailyship', 'dailyenemy', 'dailyenemyquote']
-
 		for (let i in dailies) {
 			commands[dailies[i]].call(message, args)
 		}
