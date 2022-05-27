@@ -3611,7 +3611,8 @@ commands.registertc = new Command({
 
 commands.gettc = new Command({
 	desc: 'List the data and information for the specified team combo.',
-	section: "skills",
+	aliases: ['getteamcombo', 'listtc', 'listteamcombo'],
+	section: "characters",
 	args: [
 		{
 			name: "Initiator Character",
@@ -3659,7 +3660,8 @@ commands.gettc = new Command({
 
 commands.removetc = new Command({
 	desc: 'Gets rid of a team combo with 2 characters.',
-	section: "skills",
+	aliases: ['removeteamcombo', 'cleartc', 'clearteamcombo'],
+	section: "characters",
 	args: [
 		{
 			name: "Initiator Character",
