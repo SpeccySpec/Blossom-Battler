@@ -713,7 +713,7 @@ skillDesc = (skillDefs, skillName, server) => {
 	if (skillDefs.preskills) {
 		let preskillText = '```diff\n'
 		for (const i in skillDefs.preskills) {
-			preskillText += `- ${skillFile[skillDefs.preskills[i][0]].name} (${skillDefs.preskills[i][0]}), Lv${skillDefs.preskills[i][1]}\n`
+			preskillText += `- ${skillFile[skillDefs.preskills[i][0]] ? `${skillFile[skillDefs.preskills[i][0]].name} (${skillDefs.preskills[i][0]})` : `Remove`}, Lv${skillDefs.preskills[i][1]}\n`
 		}
 		preskillText += '```\n'
 
@@ -723,7 +723,7 @@ skillDesc = (skillDefs, skillName, server) => {
 	if (skillDefs.evoskills) {
 		let evoskilltext = '```diff\n'
 		for (const i in skillDefs.evoskills) {
-			evoskilltext += `+ ${skillFile[skillDefs.evoskills[i][0]].name} (${skillDefs.evoskills[i][0]}), Lv${skillDefs.evoskills[i][1]}\n`
+			evoskilltext += `+ ${skillFile[skillDefs.evoskills[i][0]] ? `${skillFile[skillDefs.evoskills[i][0]].name} (${skillDefs.evoskills[i][0]})` : `Remove`}, Lv${skillDefs.evoskills[i][1]}\n`
 		}
 		evoskilltext += '```\n'
 

@@ -625,3 +625,20 @@ function processQuestion(message, question, number) {
 		.setFooter("Type the number of the answer you want to pick.")
 	]}
 }
+
+commands.dailyall = new Command({
+	desc: "Starts all commands for daily things.",
+	section: "roll",
+	args: [],
+	func: (message, args) => {
+		commands.dailyskill.call(message, args)
+		commands.dailyitem.call(message, args)
+		commands.dailyweapon.call(message, args)
+		commands.dailyarmor.call(message, args)
+		commands.dailychar.call(message, args)
+		commands.dailycharquote.call(message, args)
+		commands.dailyship.call(message, args)
+		commands.dailyenemy.call(message, args)
+		commands.dailyenemyquote.call(message, args)
+	}
+})
