@@ -134,11 +134,11 @@ function statusDesc(skillDefs) {
 	}
 
 	if (hasStatus(skillDefs, 'mimic')) {
-		finalText += `Mimics **an ally or foe** for **${skillDefs.statusses.mimic[0][0]}** turns.\n`
+		finalText += `Mimics **an ally or foe** for **${skillDefs.statusses.mimic[0]}** turns.\n`
 	}
 
 	if (hasStatus(skillDefs, 'clone')) {
-		finalText += `Clones **the caster**.\n`
+		finalText += `Clones **the user**.\n`
 	}
 
 	if (hasStatus(skillDefs, 'makarakarn') || hasStatus(skillDefs, 'tetrakarn') || hasStatus(skillDefs, 'shield')) {
@@ -165,7 +165,7 @@ function statusDesc(skillDefs) {
 	}
 
 	if (hasStatus(skillDefs, 'futuresight')) {
-		finalText += `Strieks with a **${skillDefs.statusses.futuresight[0][0].type}** attack in **${skillDefs.statusses.futuresight[0][0].turns}** turns.\n`
+		finalText += `Strieks with a **${skillDefs.statusses.futuresight[0].type}** attack in **${skillDefs.statusses.futuresight[0].turns}** turns.\n`
 	}
 
 	if (hasStatus(skillDefs, 'analyze') || hasStatus(skillDefs, 'fullanalyse')) {
@@ -175,7 +175,7 @@ function statusDesc(skillDefs) {
 	}
 
 	if (hasStatus(skillDefs, 'shieldbreak')) {
-		finalText += `Breaks the target's **${skillDefs.statusses.shieldbreak[0][0].charAt(0).toUpperCase() + skillDefs.statusses.shieldbreak[0][0].slice(1)}${skillDefs.statusses.shieldbreak[0][0].includes('ra') ? 'karn' : ''}**.\n`
+		finalText += `Breaks the target's **${skillDefs.statusses.shieldbreak[0].charAt(0).toUpperCase() + skillDefs.statusses.shieldbreak[0].slice(1)}${skillDefs.statusses.shieldbreak[0].includes('ra') ? 'karn' : ''}**.\n`
 	}
 
 	if (hasStatus(skillDefs, 'dekunda')) {
@@ -183,15 +183,15 @@ function statusDesc(skillDefs) {
 	}
 
 	if (hasStatus(skillDefs, 'heartswap')) {
-		finalText += `Swaps caster's **stat chances** with the target's.\n`
+		finalText += `Swaps user's **stat chances** with the target's.\n`
 	}
 
 	if (hasStatus(skillDefs, 'pacifystatus')) {
-		finalText += `Pacifies the target with **${skillDefs.statusses.pacifystatus[0][0]}**${skillDefs.statusses.pacifystatus[0][1] >= 100 ? '' : ` by ${skillDefs.statusses.pacifystatus[0][1]}%`}.\n`
+		finalText += `Pacifies the target with **${skillDefs.statusses.pacifystatus[0]}**${skillDefs.statusses.pacifystatus[1] >= 100 ? '' : ` by ${skillDefs.statusses.pacifystatus[1]}%`}.\n`
 	}
 
 	if (hasStatus(skillDefs, 'batonpass')) {
-		finalText += `Switch out caster **with someone in backup**.\n`
+		finalText += `Switch out user **with someone in backup**.\n`
 	}
 
 	if (hasStatus(skillDefs, 'powercharge') || hasStatus(skillDefs, 'mindcharge')) {
@@ -206,11 +206,11 @@ function statusDesc(skillDefs) {
 	}
 
 	if (hasStatus(skillDefs, 'orgiamode')) {
-		finalText += `Modifies caster's ATK and MAG by **${skillDefs.statusses.orgiamode[0][0]}**x and END by **${skillDefs.statusses.orgiamode[0][1]}**x for **${skillDefs.statusses.orgiamode[0][2]}** turns. Falls asleep afterwards.\n`
+		finalText += `Modifies user's ATK and MAG by **${skillDefs.statusses.orgiamode[0]}**x and END by **${skillDefs.statusses.orgiamode[1]}**x for **${skillDefs.statusses.orgiamode[2]}** turns. Falls asleep afterwards.\n`
 	}
 
 	if (hasStatus(skillDefs, 'chaosstir')) {
-		finalText += `Attack back when hit, with a **${skillDefs.statusses.chaosstir[0][1]}%** accuracy attack with **${skillDefs.statusses.chaosstir[0][0]}x** power.\n`
+		finalText += `Attack back when hit, with a **${skillDefs.statusses.chaosstir[1]}%** accuracy attack with **${skillDefs.statusses.chaosstir[0]}x** power.\n`
 	}
 	return finalText;
 }
@@ -226,14 +226,14 @@ function atkDesc(skillDefs, settings) {
 	if (hasExtra(skillDefs, 'metronome')) {
 		finalText += 'Uses a **randomly defined skill**.\n';
 	} else if (hasExtra(skillDefs, 'copyskill')) {
-		finalText += `Copies a **random skill of caster's team**.\n`;
+		finalText += `Copies a **random skill of user's team**.\n`;
 	} else {
 		if (hasExtra(skillDefs, 'affinitypow'))
 			finalText += `Affected by **<:passive:906874477210648576>SpiritCharge** or **<:passive:906874477210648576>Teamwork**, by **${skillDefs.extras.affinitypow[0]} power**.\n`;
 
 		if (hasExtra(skillDefs, 'needlessthan')) {
 			let extraSom = ''
-			switch (skillDefs.extras.needlessthan[0][1]) {
+			switch (skillDefs.extras.needlessthan[1]) {
 				case 'hp':
 					extraSom = ' HP';
 					break;
@@ -261,11 +261,11 @@ function atkDesc(skillDefs, settings) {
 					extraSom = '% of the user Team\'s Money';
 					break;
 			}
-			finalText += `Needs less than **${skillDefs.extras.needlessthan[0][0]}${extraSom}** to use.\n`;
+			finalText += `Needs less than **${skillDefs.extras.needlessthan[0]}${extraSom}** to use.\n`;
 		}
 
 		if (hasExtra(skillDefs, 'sacrifice'))
-			finalText += `${skillDefs.extras.sacrifice[0] <= 0 ? `**Sacrifices the caster**` : `Leaves the caster's health at **${skillDefs.extras.sacrifice[0]}**`}.\n`;
+			finalText += `${skillDefs.extras.sacrifice[0] <= 0 ? `**Sacrifices the user**` : `Leaves the user's health at **${skillDefs.extras.sacrifice[0]}**`}.\n`;
 
 		if (hasExtra(skillDefs, 'stealmp'))
 			finalText += `Steals MP from the target instead of dealing damage.\n`;
@@ -277,7 +277,7 @@ function atkDesc(skillDefs, settings) {
 			finalText += `Drains **1/${skillDefs.extras.drain[0]} of damage dealt**.\n`;
 
 		if (hasExtra(skillDefs, 'steal'))
-			finalText += `Has a **${skillDefs.extras.steal[0][0]}%** chance of stealing **${skillDefs.extras.steal[0][1]}** of the target team's items.\n`;
+			finalText += `Has a **${skillDefs.extras.steal[0]}%** chance of stealing **${skillDefs.extras.steal[1]}** of the target team's items.\n`;
 
 		if (hasExtra(skillDefs, 'buff')) {
 			let buffs = {
@@ -429,18 +429,18 @@ function atkDesc(skillDefs, settings) {
 		if (hasExtra(skillDefs, 'healverse') || hasExtra(skillDefs, 'powerverse') || hasExtra(skillDefs, 'spreadverse')) {
 			finalText += `Surrounds the target with a `;
 			if (hasExtra(skillDefs, 'healverse')) {
-				finalText += `**healing aura** for **${skillDefs.extras.healverse[0][1]}** turns`;
+				finalText += `**healing aura** for **${skillDefs.extras.healverse[1]}** turns`;
 			}
 			if (hasExtra(skillDefs, 'powerverse')) {
 				if (hasExtra(skillDefs, 'healverse') && !hasExtra(skillDefs, 'powerverse')) finalText += ` and a`;
 				else if (hasExtra(skillDefs, 'healverse') && hasExtra(skillDefs, 'powerverse')) finalText += `, a`;
 
-				finalText += ` **power aura** for **${skillDefs.extras.powerverse[0][1]}** turns`;
+				finalText += ` **power aura** for **${skillDefs.extras.powerverse[1]}** turns`;
 			}
 			if (hasExtra(skillDefs, 'spreadverse')) {
 				if (hasExtra(skillDefs, 'healverse') || hasExtra(skillDefs, 'powerverse')) finalText += ` and a`;
 
-				finalText += ` **spread aura** for **${skillDefs.extras.spreadverse[0][1]}** turns`;
+				finalText += ` **spread aura** for **${skillDefs.extras.spreadverse[1]}** turns`;
 			}
 			finalText += `.\n`;
 		}
@@ -452,25 +452,25 @@ function atkDesc(skillDefs, settings) {
 			finalText += `Power is multiplied by ${skillDefs.extras.heavenwrath[0]}x if **not alone, and all allies are not down**.\n`;
 
 		if (hasExtra(skillDefs, 'rest'))
-			finalText += `Caster **must recharge for a turn**.\n`;
+			finalText += `user **must recharge for a turn**.\n`;
 
 		if (hasExtra(skillDefs, 'feint'))
 			finalText += `**Bypasses shielding skills**.\n`;
 
 		if (hasExtra(skillDefs, 'statcalc'))
-			finalText += `Uses caster's **${skillDefs.extras.statcalc[0].toString().toUpperCase()}** for measuring damage.\n`;
+			finalText += `Uses user's **${skillDefs.extras.statcalc[0].toString().toUpperCase()}** for measuring damage.\n`;
 
 		if (hasExtra(skillDefs, 'hpcalc') || hasExtra(skillDefs, 'mpcalc')) {
 			finalText += `Damage boosted or nerfed with`
 
 			if (hasExtra(skillDefs, 'hpcalc')) {
-				finalText += ` caster's **current HP** up to **${skillDefs.extras.hpcalc[0]}%**`
+				finalText += ` user's **current HP** up to **${skillDefs.extras.hpcalc[0]}%**`
 			}
 
 			if (hasExtra(skillDefs, 'mpcalc')) {
 				if (hasExtra(skillDefs, 'hpcalc')) finalText += ` and from`
 
-				finalText += ` caster's **current MP** up to **${skillDefs.extras.mpcalc[0]}%**`
+				finalText += ` user's **current MP** up to **${skillDefs.extras.mpcalc[0]}%**`
 			}
 			finalText += `.\n`;
 		}
@@ -478,9 +478,7 @@ function atkDesc(skillDefs, settings) {
 		if (hasExtra(skillDefs, 'forcetech')) {
 			let techs = []
 			for (let i in skillDefs.extras.forcetech) {
-				for (let j in skillDefs.extras.forcetech[i]) {
-					techs.push(skillDefs.extras.forcetech[i][j])
-				}
+				techs.push(skillDefs.extras.forcetech[i])
 			}
 
 			techs.sort(function(a, b) {
@@ -488,22 +486,21 @@ function atkDesc(skillDefs, settings) {
 			})
 			techset = new Set(techs)
 			techs = Array.from(techset)
-			console.log(techs)
 			techs.filter((value) => value != null)
 
 			finalText += `Forces techs from **${techs.join(', ')}**.\n`;
 		}
 
 		if (hasExtra(skillDefs, 'forceformula')) {
-			finalText += `Forces to use the **${skillDefs.extras.forceformula[0][0].charAt(0).toUpperCase() + skillDefs.extras.forceformula[0][0].slice(1)}**${skillDefs.extras.forceformula[0][0] == 'custom' ? `\`${skillDefs.extras.forceformula[0][1]}\`` : ''} formula.\n`;
+			finalText += `Forces to use the **${skillDefs.extras.forceformula[0].charAt(0).toUpperCase() + skillDefs.extras.forceformula[0].slice(1)}**${skillDefs.extras.forceformula[0] == 'custom' ? `\`${skillDefs.extras.forceformula[1]}\`` : ''} formula.\n`;
 		}
 
 		if (hasExtra(skillDefs, 'rollout')) {
-			finalText += `Forced to repeat, boosting power by **${skillDefs.extras.rollout[0][0]}%** until **${skillDefs.extras.rollout[0][1]}x** pow is reached or for **${skillDefs.extras.rollout[0][2]}** turns.\n`;
+			finalText += `Forced to repeat, boosting power by **${skillDefs.extras.rollout[0]}%** until **${skillDefs.extras.rollout[1]}x** pow is reached or for **${skillDefs.extras.rollout[2]}** turns.\n`;
 		}
 
 		if (hasExtra(skillDefs, 'resistremove')) {
-			finalText += `Removes resisting, blocking, draining and repelling affinities to **${skillDefs.extras.resistremove[0][0].charAt(0).toUpperCase() + skillDefs.extras.resistremove[0][0].slice(1)}**.\n`;
+			finalText += `Removes resisting, blocking, draining and repelling affinities to **${elementEmoji[skillDefs.extras.resistremove[0]]}${skillDefs.extras.resistremove[0].charAt(0).toUpperCase() + skillDefs.extras.resistremove[0].slice(1)}**.\n`;
 		}
 
 		if (hasExtra(skillDefs, 'sustain') || hasExtra(skillDefs, 'reverse') || hasExtra(skillDefs, 'powhit') ) {
@@ -570,7 +567,7 @@ skillDesc = (skillDefs, skillName, server) => {
 	var finalText = ``;
 	if (skillDefs.type != "status" && skillDefs.type != "passive") {
 		if (hasExtra(skillDefs, 'ohko') && skillDefs.type != "heal")
-			finalText += `Defeats the foe ${skillDefs.extras.ohko[0][1] && skillDefs.extras.ohko[0][1] != null ? `inflicted with ${statusEmojis[skillDefs.extras.ohko[0][1]]}${skillDefs.extras.ohko[0][1]}` : ''} in **one shot**!`;
+			finalText += `Defeats the target ${skillDefs.extras.ohko[1] && skillDefs.extras.ohko[1] != null ? `inflicted with ${statusEmojis[skillDefs.extras.ohko[1]]}${skillDefs.extras.ohko[1]}` : ''} in **one shot**!`;
 		else {
 			if (skillDefs.type === 'heal') {
 				if (hasHealType(skillDefs, 'fullheal')) finalText += '**Fully heals**\n';
@@ -578,14 +575,25 @@ skillDesc = (skillDefs, skillName, server) => {
 				if (hasHealType(skillDefs, 'default')) finalText += `Heals **around ${skillDefs.heal.default[0]} HP**\n`;
 				if (hasHealType(skillDefs, 'healmp')) finalText += `Heals **around ${skillDefs.heal.healmp[0]} MP**\n`;
 
-				if (hasHealType(skillDefs, 'regenerate')) finalText += `Regenerates **around ${skillDefs.heal.regenerate[0][0]} HP** for **${skillDefs.heal.regenerate[0][1]} turns**\n`;
-				if (hasHealType(skillDefs, 'invigorate')) finalText += `Regenerates **around ${skillDefs.heal.invigorate[0][0]} MP** for **${skillDefs.heal.invigorate[0][1]} turns**\n`;
+				if (hasHealType(skillDefs, 'regenerate')) finalText += `Regenerates **around ${skillDefs.heal.regenerate[0]} HP** for **${skillDefs.heal.regenerate[1]} turns**\n`;
+				if (hasHealType(skillDefs, 'invigorate')) finalText += `Regenerates **around ${skillDefs.heal.invigorate[0]} MP** for **${skillDefs.heal.invigorate[1]} turns**\n`;
 
 				if (hasHealType(skillDefs, 'revive')) finalText += `**Revives** the target to 1/${skillDefs.heal.revive[0]} of their max HP\n`;
 
-				if (hasHealType(skillDefs, 'statusheal')) finalText += `Cures **${skillDefs.heal.statusheal[0]} ailments**\n`;
+				if (hasHealType(skillDefs, 'statusheal')) {
+					finalText += `Cures **`
+
+					for (let i in skillDefs.heal.statusheal) {
+						finalText += `${statusEmojis[skillDefs.heal.statusheal[i]] ?? ''}${skillDefs.heal.statusheal[i]}`
+
+						if (i < skillDefs.heal.statusheal.length - 1)
+							finalText += `, `
+					}
+
+					finalText += ` ailments**.\n`;
+				}
 				
-				if (hasHealType(skillDefs, 'sacrifice')) finalText += `${skillDefs.heal.sacrifice[0] > 0 ? `**Leaves the caster's health at ${skillDefs.heal.sacrifice[0]}**` : '**Sacrifices the caster**'}\n`;
+				if (hasHealType(skillDefs, 'sacrifice')) finalText += `${skillDefs.heal.sacrifice[0] > 0 ? `**Leaves the user's health at ${skillDefs.heal.sacrifice[0]}**` : '**Sacrifices the user**'}\n`;
 				
 				if (hasHealType(skillDefs, 'wish')) finalText += `Heals after **${skillDefs.heal.wish[0]} turns**\n`;
 
