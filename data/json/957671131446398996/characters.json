@@ -465,6 +465,23 @@
                 "status": "none",
                 "statuschance": 0
             }
+        },
+        "teamcombos": {
+            "Sutela": {
+                "name": "Spirits Aligned",
+                "users": [
+                    "Valoria",
+                    "Sutela"
+                ],
+                "desc": "Valoria and Sutela strike the foe's very soul together, knocking it out of the foe's body and back, which sends them for a dizzying ride! This attack also places down a healing aura that restores 80% of allies' HP who attack them.",
+                "extras": {
+                    "healverse": [
+                        80,
+                        3,
+                        null
+                    ]
+                }
+            }
         }
     },
     "Lanagu": {

@@ -3658,6 +3658,7 @@ commands.gettc = new Command({
 		let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
 
 		for (let i in skills) {
+			skills[i].filter(s => !skillFile[s]);
 			skills[i].sort(function(a, b) {return skillFile[b].pow - skillFile[a].pow});
 			tc.pow += skillFile[skills[i][0]].pow;
 		}
