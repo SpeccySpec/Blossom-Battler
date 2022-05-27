@@ -371,15 +371,15 @@ commands.listchars = new Command({
 							break;
 						case 'user':
 							args[a] = args[a].toLowerCase();
-							if (variable.startsWith('<@') && variable.endsWith('>')) {
-								let user = message.guild.members.cache.find(m => m.id == variable.slice(2, -1));
+							if (args[a].startsWith('<@') && args[a].endsWith('>')) {
+								let user = message.guild.members.cache.find(m => m.id == args[a].slice(2, -1));
 								args[a] = user.id;
-							} else if (variable.startsWith('<@!') && variable.endsWith('>')) {
-								let user = message.guild.members.cache.find(m => m.id == variable.slice(3, -1));
+							} else if (args[a].startsWith('<@!') && args[a].endsWith('>')) {
+								let user = message.guild.members.cache.find(m => m.id == args[a].slice(3, -1));
 								args[a] = user.id;
 							}
-							if (!variable.includes('@') && message.mentions.members.size == 0) {
-								let user = message.guild.members.cache.find(m => m.id == variable);
+							if (!args[a].includes('@') && message.mentions.members.size == 0) {
+								let user = message.guild.members.cache.find(m => m.id == args[a]);
 								args[a] = user.id;
 							}
 							if (message.mentions.members.size > 0) {
