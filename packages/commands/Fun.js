@@ -631,9 +631,9 @@ commands.dailyall = new Command({
 	section: "roll",
 	args: [],
 	func: (message, args) => {
-		const dailies = ['dailyskill', 'dailyitem', 'dailyweapon', 'dailyarmor', 'dailychar', 'dailycharquote', 'dailyship', 'dailyenemy', 'dailyenemyquote']
+		let dailies = ['dailyskill', 'dailyitem', 'dailyweapon', 'dailyarmor', 'dailychar', 'dailycharquote', 'dailyship', 'dailyenemy', 'dailyenemyquote']
 
-		for (const i in dailies) {
+		for (let i in dailies) {
 			commands[dailies[i]].call(message, args)
 		}
 	}
