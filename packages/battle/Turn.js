@@ -992,7 +992,7 @@ doAction = (char, btl, action) => {
 					tc.pow += skillFile[skills[i][0]].pow;
 				}
 
-				tc.pow /= tc.hits;
+				tc.pow /= tc.hits ?? 1;
 				useSkill(avgchar, btl, action, tc, ally);
 
 				if (skillFile[skills[0][0]].cost && skillFile[skills[0][0]].costtype) {
