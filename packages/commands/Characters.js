@@ -1085,6 +1085,8 @@ commands.learnskill = new Command({
 			thingDefs = enemyFile;
 		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
+		if (!thingDefs[args[0]].type && thingDefs[args[0]].skills.length >= settings.caps.skillamount) return message.channel.send(`You cannot have more than ${settings.caps.skillamount} skills!`);
+
 		// Let's learn skills!
 		let learnString = `👍 ${args[0]} learned `;
 		let skillLearn = [];
@@ -1112,7 +1114,6 @@ commands.learnskill = new Command({
 				return message.channel.send(`${args[i]} isn't a valid skill.`);
 		}
 
-		if (!thingDefs[args[0]].type && thingDefs[args[0]].skills.length > settings.caps.skillamount) return message.channel.send(`You cannot have more than ${settings.caps.skillamount} skills!`);
 		message.channel.send(learnString);
 
 		if (thingDefs[args[0]].type) {
