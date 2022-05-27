@@ -63,6 +63,8 @@ makeButton = (name, emoji, color, lowercase, forceid) => {
 	})
 }
 
+// ALL BATTLE OPTIONS ARE FINISHED! LETS GOOOO!
+
 // Menu States
 MENU_ACT = 0;
 MENU_SKILL = 1;
