@@ -836,7 +836,7 @@ commands.dailyenemy = new Command({
 
 commands.setimage = new Command({
 	desc: 'Set an image for an enemy.',
-	section: 'fun',
+	section: 'enemies',
 	args: [
 		{
 			name: "Name",
