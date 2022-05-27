@@ -3086,23 +3086,23 @@ commands.purgeexport = new Command({
 	func: (message, args) => {
 		let userdata = setUpUserData(message.author.id);
 
-		if (!userdata[args[0]]) return message.channel.send(`${args[0]} is not a valid character name.`);
+		if (!userdata.exports[args[0]]) return message.channel.send(`${args[0]} is not a valid character name.`);
 
-		if (userdata[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this character, therefore, you have insufficient permissions to delete it.")
+		if (userdata.exports[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this character, therefore, you have insufficient permissions to delete it.")
 
-		message.channel.send(`Are you **sure** you want to delete ${userdata[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this character.\n**Y/N**`);
+		message.channel.send(`Are you **sure** you want to delete ${userdata.exports[args[0]].name}? You will NEVER get this back, so please, ensure you _WANT_ to delete this character.\n**Y/N**`);
 
 		var givenResponce = false
 		var collector = message.channel.createMessageCollector({ time: 15000 });
 		collector.on('collect', m => {
 			if (m.author.id == message.author.id) {
 				if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
-					message.channel.send(`${userdata[args[0]].name} has been erased from existance.`)
-					delete userdata[args[0]]
+					message.channel.send(`${userdata.exports[args[0]].name} has been erased from existance.`)
+					delete userdata.exports[args[0]]
 
-					fs.writeFileSync(`${dataPath}/userdata/${message.author.id}.json`, JSON.stringify(settings, null, 4));
+					fs.writeFileSync(`${dataPath}/userdata/${message.author.id}.json`, JSON.stringify(userdata, null, 4));
 				} else
-					message.channel.send(`${userdata[args[0]].name} will not be deleted.`);
+					message.channel.send(`${userdata.exports[args[0]].name} will not be deleted.`);
 				
 				givenResponce = true
 				collector.stop()
@@ -3110,7 +3110,7 @@ commands.purgeexport = new Command({
 		});
 		collector.on('end', c => {
 			if (givenResponce == false)
-				message.channel.send(`No response given.\n${userdata[args[0]].name} will not be deleted.`);
+				message.channel.send(`No response given.\n${userdata.exports[args[0]].name} will not be deleted.`);
 		});
 	}
 })
