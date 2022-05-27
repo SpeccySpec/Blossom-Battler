@@ -420,7 +420,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				result.txt += `__${targ.name}__ took _`
 				for (let i in damages) {
 					dmgTxt += `**${damages[i]}**`;
-					if (affinityEmoji[affinities[i]]) dmgTxt += affinityEmoji[affinities[i]];
+					if (affinityEmoji[affinities[i]] && affinities[i].toLowerCase() != 'normal') dmgTxt += affinityEmoji[affinities[i]];
 					if (techs[i]) dmgTxt += statusEmojis[targ.status.toLowerCase()] ?? statusEmojis.burn;
 					if (crits[i]) dmgTxt += critEmoji;
 

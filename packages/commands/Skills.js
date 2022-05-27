@@ -878,7 +878,7 @@ commands.updateskills = new Command({
 				}
 
 				if (skillFile[skill].resistremove) {
-					skillFile[skill].extras.changeaffinity = [['target', skillFile[skill].resistremove, 'resist', null]]; // element
+					skillFile[skill].extras.changeaffinity = [['target', skillFile[skill].resistremove, 'normal', 'resist', null]]; // element
 					delete skillFile[skill].resistremove;
 				}
 

@@ -499,8 +499,109 @@ function atkDesc(skillDefs, settings) {
 			finalText += `Forced to repeat, boosting power by **${skillDefs.extras.rollout[0]}%** until **${skillDefs.extras.rollout[1]}x** pow is reached or for **${skillDefs.extras.rollout[2]}** turns.\n`;
 		}
 
-		if (hasExtra(skillDefs, 'resistremove')) {
-			finalText += `Removes resisting, blocking, draining and repelling affinities to **${elementEmoji[skillDefs.extras.resistremove[0]]}${skillDefs.extras.resistremove[0].charAt(0).toUpperCase() + skillDefs.extras.resistremove[0].slice(1)}**.\n`;
+		if (hasExtra(skillDefs, 'changeaffinity')) {
+			//finalText += `Removes resisting, blocking, draining and repelling affinities to **${elementEmoji[skillDefs.extras.resistremove[0]]}${skillDefs.extras.resistremove[0].charAt(0).toUpperCase() + skillDefs.extras.resistremove[0].slice(1)}**.\n`;
+		
+			let targetAffinities = skillDefs.extras.changeaffinity.filter(x => x.includes('target'))
+			let userAffinities = skillDefs.extras.changeaffinity.filter(x => x.includes('user'))
+
+			let affinityScore = {
+				superweak: 0, 
+				weak: 1, 
+				normal: 2, 
+				resist: 3, 
+				block: 4, 
+				repel: 5, 
+				drain: 6
+			}
+
+			let sideScore = {
+				weak: 0, 
+				both: 1, 
+				resist: 2
+			}
+
+			finalText += `Changes affinities of`
+
+			let affinity = ''
+
+			let oldAffinitySide = ''
+			let affinitySide = ''
+
+			if (targetAffinities.length > 0) {
+				finalText += ` **the target** to:\n`
+
+				targetAffinities.sort(function(a, b) {
+					return (affinityScore[a[2]]*10 + sideScore[a[3]]) - (affinityScore[b[2]]*10 + sideScore[b[3]]);
+				})
+
+				for (let i in targetAffinities) {
+					if (affinity != targetAffinities[i][2]) {
+						if (affinity != '' && affinity != targetAffinities[i][2]) finalText += `\n`
+						affinity = targetAffinities[i][2]
+						finalText += `${affinityEmoji[targetAffinities[i][2]]}: `
+					}
+					affinitySide = targetAffinities[i][3]
+					if (oldAffinitySide == '') {
+						oldAffinitySide = affinitySide
+					}
+					
+					finalText += `${elementEmoji[targetAffinities[i][1]]}`
+
+					if (oldAffinitySide != affinitySide || i == targetAffinities.length - 1) {
+						finalText += ` ${affinityEmoji[oldAffinitySide] ? `from ${affinityEmoji[oldAffinitySide]} side` : 'in general'}`
+
+						if (i < targetAffinities.length - 1) {
+							finalText += `, `
+						}
+					}
+
+					oldAffinitySide = affinitySide
+				}
+			}
+
+			affinity = ''
+			oldAffinitySide = ''
+			affinitySide = ''
+
+			if (userAffinities.length > 0) {
+				if (targetAffinities.length > 0) {
+					finalText += `\nand affinities of **the user** to:\n`
+				} else {
+					finalText += ` **the user** to:\n`
+				}
+
+				userAffinities.sort(function(a, b) {
+					return (affinityScore[a[2]]*10 + sideScore[a[3]]) - (affinityScore[b[2]]*10 + sideScore[b[3]]);
+				})
+
+				for (let i in userAffinities) {
+					if (affinity != userAffinities[i][2]) {
+						if (affinity != '' && affinity != userAffinities[i][2]) finalText += `\n`
+						affinity = userAffinities[i][2]
+						finalText += `${affinityEmoji[userAffinities[i][2]]}: `
+					}
+
+					affinitySide = userAffinities[i][3]
+					if (oldAffinitySide == '') {
+						oldAffinitySide = affinitySide
+					}
+					
+					finalText += `${elementEmoji[userAffinities[i][1]]}`
+
+					if (oldAffinitySide != affinitySide || i == userAffinities.length - 1) {
+						finalText += ` ${affinityEmoji[oldAffinitySide] ? `from ${affinityEmoji[oldAffinitySide]} side` : 'in general'}`
+
+						if (i < userAffinities.length - 1) {
+							finalText += `, `
+						}
+					}
+
+					oldAffinitySide = affinitySide
+				}
+			}
+
+			finalText += `\n`
 		}
 
 		if (hasExtra(skillDefs, 'sustain') || hasExtra(skillDefs, 'reverse') || hasExtra(skillDefs, 'powhit') ) {

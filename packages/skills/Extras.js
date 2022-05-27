@@ -1,3 +1,6 @@
+weakSide = ['superweak', 'weak', 'normal']
+resistSide = ['normal', 'resist', 'block', 'repel', 'drain']
+
 extrasList = {
 	ohko: {
 		name: "One Hit KO",
@@ -81,28 +84,61 @@ extrasList = {
 		}
 	},
 
-	resistremove: {
-		name: "Resist Remove",
-		desc: "_<Element>_\nWill remove user's resisting, blocking, repelling or draining affinities to <Element>.",
+	changeaffinity: {
+		name: "Change Affinity",
+		desc: "_<Target/User> <Element> <Affinity> <Weak/Resist/Both> {Turns}_\nWill change <Target/User>'s affinity from the <Weak/Resist/Both> side of <Element> to <Affinity>. *Keep in mind that if you want it to last {Turns} turns, it can't be overwritten by a different affinity until then.*",
+		multiple: true,
+		diffflag: [0, 1, 2],
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply enough arguments!");
+			if (!extra4) return message.channel.send("You didn't supply enough arguments!");
 
-			if (!Elements.includes(extra1.toLowerCase())) return message.channel.send("You entered an invalid value for <Element>!");
+			if (extra1.toLowerCase() != 'target' && extra1.toLowerCase() != 'user') return message.channel.send("You entered an invalid value for <target/user>! It can be either Target or User.");
 
-			makeExtra(skill, "resistremove", [extra1.toLowerCase()]);
+			if (![...Affinities, 'normal'].includes(extra3.toLowerCase())) return message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: " + Affinities.join(', ') + " or Normal.");
+			if (!Elements.includes(extra2.toLowerCase())) return message.channel.send("You entered an invalid value for <Element>!");
+
+			if (extra4.toLowerCase() != 'weak' && extra4.toLowerCase() != 'resist' && extra4.toLowerCase() != 'both') return message.channel.send("You entered an invalid value for <Weak/Resist/Both>! It can be either Weak, Resist, or Both.");
+
+			if (extra5) {
+				if (parseInt(extra4) < 5) return message.channel.send("You can't have a turn count less than 1!");
+			}
+
+			makeExtra(skill, "changeaffinity", [extra1.toLowerCase(), extra2.toLowerCase(), extra3.toLowerCase(), extra4.toLowerCase(), extra5 ? parseInt(extra5) : null]);
 			return true
 		},
-		onselect: function(char, skill, btl, vars) {
-			let remAff = ['resist', 'block', 'repel', 'drain'];
-			for (let i in remAff) {
-				if (char.affinities[remAff[i]]) {
-					for (let k in char.affinities[remAff[i]]) {
-						if (char.affinities[remAff[i]][k].toLowerCase() === vars[0].toLowerCase()) char.affinities[remAff[i]].splice(k, 1);
-					}
+		onuse: function(char, targ, skill, btl, vars) {
+			let target = vars[0].toLowerCase() == 'target' ? targ : char;
+			if (!target.affinities) target.affinities = [];
+
+			let wasChanged = false;
+
+			if (vars[3] != 'normal') {
+				if (target.affinities[vars[2]] && target.affinities[vars[2]].includes(vars[1])) {
+					return `${target.name} isn't affected by ${skill.name}!`;
 				}
 			}
 
-			return `${char.name}'s resisting affinities to ${vars[0]} have been removed!`;
+			for (let i in target.affinities) {
+				if (vars[3] == 'resist' && !resistSide.includes(i)) continue
+				if (vars[3] == 'weak' && !weakSide.includes(i)) continue
+
+				if (target.affinities[i].includes(vars[1])) {
+					target.affinities[i].splice(target.affinities[i].indexOf(vars[1]), 1);
+					wasChanged = true;
+					break;
+				}
+			}
+
+			if (!wasChanged) {
+				return `${target.name} isn't affected by ${skill.name}!`;
+			}
+
+			if (vars[3] != 'normal') {
+				if (!target.affinities[vars[2]]) target.affinities[vars[2]] = [];
+				target.affinities[vars[2]].push(vars[1]);
+			}
+
+			return `${target.name}'s affinity for ${vars[1]} has changed to ${affinityEmoji[vars[2]]}${vars[2]}!`;
 		}
 	},
 
