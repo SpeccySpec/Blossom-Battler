@@ -404,10 +404,10 @@ commands.updateskills = new Command({
 							delete skillFile[skill].boosttype;
 							break;
 						case 'extrahit':
-							skillFile[skill].passive[passiveType.toLowerCase()] = [[skillFile[skill].pow, skillFile[skill].acc, 100]];  //hits, accuracy, damage rate
+							skillFile[skill].passive[passiveType.toLowerCase()] = [skillFile[skill].pow, skillFile[skill].acc, 100];  //hits, accuracy, damage rate
 							break;
 						case 'counterphys':
-							skillFile[skill].passive.counterphys = [[skillFile[skill].counter.chance, {
+							skillFile[skill].passive.counterphys = [skillFile[skill].counter.chance, {
 								name: skillFile[skill].name,
 								pow: skillFile[skill].counter.skill.pow,
 								acc: skillFile[skill].counter.skill.acc,
@@ -415,11 +415,11 @@ commands.updateskills = new Command({
 								type: skillFile[skill].counter.skill.type,
 								atktype: 'physical',
 								affinitypow: 5
-							}]] //chance, power, accuracy, crit, type
+							}] //chance, power, accuracy, crit, type
 							delete skillFile[skill].counter;
 							break;
 						case 'countermag':
-							skillFile[skill].passive.countermag = [[skillFile[skill].counter.chance, {
+							skillFile[skill].passive.countermag = [skillFile[skill].counter.chance, {
 								name: skillFile[skill].name,
 								pow: skillFile[skill].counter.skill.pow,
 								acc: skillFile[skill].counter.skill.acc,
@@ -427,7 +427,7 @@ commands.updateskills = new Command({
 								type: skillFile[skill].counter.skill.type,
 								atktype: 'magic',
 								affinitypow: 5
-							}]] //chance, power, accuracy, crit, type
+							}] //chance, power, accuracy, crit, type
 							delete skillFile[skill].counter;
 							break;
 						case 'swordbreaker':
@@ -435,21 +435,21 @@ commands.updateskills = new Command({
 						case 'affinityslicer':
 						case 'curestatus':
 						case 'kindheart':
-							skillFile[skill].passive[passiveType.toLowerCase()] = [[skillFile[skill].pow]]; //chance/percent
+							skillFile[skill].passive[passiveType.toLowerCase()] = [skillFile[skill].pow]; //chance/percent
 							break;
 						case 'magicmelee':
 						case 'attackall':
 						case 'wonderguard':
-							skillFile[skill].passive[passiveType.toLowerCase()] = [[true]]; //true
+							skillFile[skill].passive[passiveType.toLowerCase()] = [true]; //true
 							break;
 						case 'guardboost':
 						case 'guarddodge':
 						case 'sacrificial':
 						case 'alterpain':
-							skillFile[skill].passive[passiveType.toLowerCase()] = [[skillFile[skill].pow ? skillFile[skill].pow : 10]]; //percent
+							skillFile[skill].passive[passiveType.toLowerCase()] = [skillFile[skill].pow ? skillFile[skill].pow : 10]; //percent
 							break;
 						case 'moodswing':
-							skillFile[skill].passive[passiveType.toLowerCase()] = [[skillFile[skill].pow, skillFile[skill].turns]]; //% of change, amount of turns
+							skillFile[skill].passive[passiveType.toLowerCase()] = [skillFile[skill].pow, skillFile[skill].turns]; //% of change, amount of turns
 							delete skillFile[skill].turns;
 							break;
 						case 'statusresist':
@@ -463,23 +463,23 @@ commands.updateskills = new Command({
 							break;
 						case 'berserk':
 						case 'enraged':
-							skillFile[skill].passive[passiveType.toLowerCase()] = [[skillFile[skill].pow, skillFile[skill].acc]]; //percent, hp cap
+							skillFile[skill].passive[passiveType.toLowerCase()] = [skillFile[skill].pow, skillFile[skill].acc]; //percent, hp cap
 							break;
 						case 'sacrifice':
-							skillFile[skill].passive[passiveType.toLowerCase()] = [[100, 50]]; //% of enemy's level, % of enemy's level
+							skillFile[skill].passive[passiveType.toLowerCase()] = [100, 50]; //% of enemy's level, % of enemy's level
 							break;
 						case 'teamworkpoint':
-							skillFile[skill].passive.affinitypoint = [[10, 1, ['buff', 'shield']]]; //ap max, ap damage multiplier, conditions
+							skillFile[skill].passive.affinitypoint = [10, 1, ['buff', 'shield']]; //ap max, ap damage multiplier, conditions
 							break;
 						case 'affinitypoint':
-							skillFile[skill].passive.affinitypoint = [[10, 1, ['heal']]]; //ap max, ap damage multiplier, conditions
+							skillFile[skill].passive.affinitypoint = [10, 1, ['heal']]; //ap max, ap damage multiplier, conditions
 							break;
 						case 'repelmag':
-							skillFile[skill].passive[passiveType.toLowerCase()] = [[100, skillFile[skill].repeltypes]]; //chance, types
+							skillFile[skill].passive[passiveType.toLowerCase()] = [100, skillFile[skill].repeltypes]; //chance, types
 							delete skillFile[skill].repeltypes;
 							break;
 						case 'endure':
-							skillFile[skill].passive[passiveType.toLowerCase()] = [[skillFile[skill].pow, 1]]; //amount, hp
+							skillFile[skill].passive[passiveType.toLowerCase()] = [skillFile[skill].pow, 1]; //amount, hp
 							break;
 						}
 
@@ -496,56 +496,56 @@ commands.updateskills = new Command({
 				if (!skillFile[skill].statusses) skillFile[skill].statusses = {};
 
 				if (skillFile[skill].chaosStir) {
-					skillFile[skill].statusses.chaosstir = [[2, 100]] //multiplier of power, accuracy
+					skillFile[skill].statusses.chaosstir = [2, 100] //multiplier of power, accuracy
 					delete skillFile[skill].chaosStir;
 				} else if (skillFile[skill].weather) {
-					skillFile[skill].statusses.weather = [[skillFile[skill].weather]] //weather
+					skillFile[skill].statusses.weather = [skillFile[skill].weather] //weather
 					delete skillFile[skill].weather;
 				} else if (skillFile[skill].terrain) {
-					skillFile[skill].statusses.terrain = [[skillFile[skill].terrain]] //terrain
+					skillFile[skill].statusses.terrain = [skillFile[skill].terrain] //terrain
 					delete skillFile[skill].terrain;
 				} else if (skillFile[skill].reincarnate) {
-					skillFile[skill].statusses.reincarnate = [[1, 20, 25, "%PLAYER% has summoned an undead %UNDEAD%"]] //minimum of a stat, maximum of a stat, percentage of max HP and MP, message
+					skillFile[skill].statusses.reincarnate = [1, 20, 25, "%PLAYER% has summoned an undead %UNDEAD%"] //minimum of a stat, maximum of a stat, percentage of max HP and MP, message
 					delete skillFile[skill].reincarnate;
 				} else if (skillFile[skill].makarakarn) {
-					skillFile[skill].statusses.makarakarn = [[true]] //true
+					skillFile[skill].statusses.makarakarn = [true] //true
 					delete skillFile[skill].makarakarn;
 				} else if (skillFile[skill].tetrakarn) {
-					skillFile[skill].statusses.tetrakarn = [[true]] //true
+					skillFile[skill].statusses.tetrakarn = [true] //true
 					delete skillFile[skill].tetrakarn;
 				} else if (skillFile[skill].mimic) {
 					skillFile[skill].statusses.mimic = [Object.values(skillFile[skill].mimic)] //true
 					delete skillFile[skill].mimic;
 				} else if (skillFile[skill].clone) {
-					skillFile[skill].statusses.clone = [[50, 50, 50]] //% of max HP, % of max MP, % of max stats
+					skillFile[skill].statusses.clone = [50, 50, 50] //% of max HP, % of max MP, % of max stats
 					delete skillFile[skill].clone;
 				} else if (skillFile[skill].shield) {
-					skillFile[skill].statusses.shield = [[skillFile[skill].shield, 1]] //name, amount of hits it can take
+					skillFile[skill].statusses.shield = [skillFile[skill].shield, 1] //name, amount of hits it can take
 					delete skillFile[skill].shield;
 				} else if (skillFile[skill].trap) {
 					if (skillFile[skill].effect) {
 						if (skillFile[skill].effect[0] == 'status') {
-							skillFile[skill].statusses.trap = [[skillFile[skill].name, 0.5, skillFile[skill].effect[0], skillFile[skill].effect[1], 100]] //name, power multiplier, type, status, chance
+							skillFile[skill].statusses.trap = [skillFile[skill].name, 0.5, skillFile[skill].effect[0], skillFile[skill].effect[1], 100] //name, power multiplier, type, status, chance
 						} else if (skillFile[skill].effect[0] == 'damage') {
-							skillFile[skill].statusses.trap = [[skillFile[skill].name, 0.5, skillFile[skill].effect[0], parseInt(skillFile[skill].effect[1]), 'strike']] //name, power multiplier, type, damage, element
+							skillFile[skill].statusses.trap = [skillFile[skill].name, 0.5, skillFile[skill].effect[0], parseInt(skillFile[skill].effect[1]), 'strike'] //name, power multiplier, type, damage, element
 						} else if (skillFile[skill].effect[0] == 'debuff') {
-							skillFile[skill].statusses.trap = [[skillFile[skill].name, 0.5, skillFile[skill].effect[0], skillFile[skill].effect[1], 1]] //name, power multiplier, type, stat, amount of stages
+							skillFile[skill].statusses.trap = [skillFile[skill].name, 0.5, skillFile[skill].effect[0], skillFile[skill].effect[1], 1] //name, power multiplier, type, stat, amount of stages
 						}
 						delete skillFile[skill].effect;
 					} 
 					if (skillFile[skill].trapType) {
 						if (skillFile[skill].trapType.effect[0] == 'status') {
-							skillFile[skill].statusses.trap = [[skillFile[skill].trapType.name, 0.5, skillFile[skill].trapType.effect[0], skillFile[skill].trapType.effect[1], 100]] //name, power multiplier, type, status, chance
+							skillFile[skill].statusses.trap = [skillFile[skill].trapType.name, 0.5, skillFile[skill].trapType.effect[0], skillFile[skill].trapType.effect[1], 100] //name, power multiplier, type, status, chance
 						} else if (skillFile[skill].trapType.effect[0] == 'damage') {
-							skillFile[skill].statusses.trap = [[skillFile[skill].trapType.name, 0.5, skillFile[skill].trapType.effect[0], parseInt(skillFile[skill].trapType.effect[1]), 'strike']] //name, power multiplier, type, damage, element
+							skillFile[skill].statusses.trap = [skillFile[skill].trapType.name, 0.5, skillFile[skill].trapType.effect[0], parseInt(skillFile[skill].trapType.effect[1]), 'strike'] //name, power multiplier, type, damage, element
 						} else if (skillFile[skill].trapType.effect[0] == 'debuff') {
-							skillFile[skill].statusses.trap = [[skillFile[skill].trapType.name, 0.5, skillFile[skill].trapType.effect[0], skillFile[skill].trapType.effect[1], 1]] //name, power multiplier, type, stat, amount of stages
+							skillFile[skill].statusses.trap = [skillFile[skill].trapType.name, 0.5, skillFile[skill].trapType.effect[0], skillFile[skill].trapType.effect[1], 1] //name, power multiplier, type, stat, amount of stages
 						}
 						delete skillFile[skill].trapType;
 					}
 					delete skillFile[skill].trap;
 				} else if (skillFile[skill].futuresight) {
-					skillFile[skill].statusses.futuresight = [[{
+					skillFile[skill].statusses.futuresight = [{
 						name: skillFile[skill].name,
 						type: skillFile[skill].futuresight.type,
 						pow: skillFile[skill].futuresight.pow,
@@ -553,55 +553,55 @@ commands.updateskills = new Command({
 						crit: skillFile[skill].futuresight.crit ?? 0,
 						atktype: 'magic',
 						turns: skillFile[skill].futuresight.turns
-					}]] //pow, acc, crit, element, turns
+					}] //pow, acc, crit, element, turns
 					delete skillFile[skill].futuresight;
 				} else if (skillFile[skill].analyse) {
-					skillFile[skill].statusses.analyze = [[true]] //true
+					skillFile[skill].statusses.analyze = [true] //true
 					delete skillFile[skill].analyse;
 				} else if (skillFile[skill].fullanalyse) {
-					skillFile[skill].statusses.fullanalyze = [[true]] //true
+					skillFile[skill].statusses.fullanalyze = [true] //true
 					delete skillFile[skill].fullanalyse;
 				} else if (skillFile[skill].shieldbreak) {
-					skillFile[skill].statusses.shieldbreak = [['shield', 100]] //shield, accuracy
+					skillFile[skill].statusses.shieldbreak = ['shield', 10] //shield, accuracy
 					delete skillFile[skill].shieldbreak;
 				} else if (skillFile[skill].tetrabreak) {
-					skillFile[skill].statusses.shieldbreak = [['tetra', 100]] //tetrabreak, accuracy
+					skillFile[skill].statusses.shieldbreak = ['tetra', 100] //tetrabreak, accuracy
 					delete skillFile[skill].tetrabreak;
 				} else if (skillFile[skill].makarabreak) {
-					skillFile[skill].statusses.shieldbreak = [['makara', 100]] //makarabreak, accuracy
+					skillFile[skill].statusses.shieldbreak = ['makara', 100] //makarabreak, accuracy
 					delete skillFile[skill].makarabreak;
 				} else if (skillFile[skill].dekunda) {
-					skillFile[skill].statusses.dekunda = [[true]] //true
+					skillFile[skill].statusses.dekunda = [true] //true
 					delete skillFile[skill].dekunda;
 				} else if (skillFile[skill].pacify) {
-					skillFile[skill].statusses.pacifystatus = [[skillFile[skill].pacify, 100]] //status, amount
+					skillFile[skill].statusses.pacifystatus = [skillFile[skill].pacify, 100] //status, amount
 					delete skillFile[skill].pacify;
 				} else if (skillFile[skill].heartswap) {
-					skillFile[skill].statusses.heartswap = [[true]] //true
+					skillFile[skill].statusses.heartswap = [true] //true
 					delete skillFile[skill].heartswap;
 				} else if (skillFile[skill].unmimic) {
-					skillFile[skill].statusses.unmimic = [[true]] //true
+					skillFile[skill].statusses.unmimic = [true] //true
 					delete skillFile[skill].unmimic;
 				} else if (skillFile[skill].orgiamode) {
-					skillFile[skill].statusses.orgiamode = [[2, 0.5, 3]] //ATK & MAG multiplier, END multiplier, turns
+					skillFile[skill].statusses.orgiamode = [2, 0.5, 3] //ATK & MAG multiplier, END multiplier, turns
 					delete skillFile[skill].orgiamode;
 				} else if (skillFile[skill].powercharge) {
-					skillFile[skill].statusses.powercharge = [[2.5]] //power multiplier
+					skillFile[skill].statusses.powercharge = [2.5] //power multiplier
 					delete skillFile[skill].powercharge;
 				} else if (skillFile[skill].mindcharge) {
-					skillFile[skill].statusses.mindcharge = [[2.5]] //power multiplier
+					skillFile[skill].statusses.mindcharge = [2.5] //power multiplier
 					delete skillFile[skill].mindcharge;
 				} else if (skillFile[skill].splash) {
-					skillFile[skill].statusses.splash = [[true]] //true
+					skillFile[skill].statusses.splash = [true] //true
 					delete skillFile[skill].splash;
 				} else if (skillFile[skill].celebrate) {
-					skillFile[skill].statusses.celebrate = [[true]] //true
+					skillFile[skill].statusses.celebrate = [true] //true
 					delete skillFile[skill].celebrate;
 				} else if (skillFile[skill].batonpass) {
-					skillFile[skill].statusses.batonpass = [[true]] //true
+					skillFile[skill].statusses.batonpass = [true] //true
 					delete skillFile[skill].batonpass;
 				} else if (skillFile[skill].ragesoul) {
-					skillFile[skill].statusses.ragesoul = [[2, 2]] //melee power multiplier, ATK multiplier
+					skillFile[skill].statusses.ragesoul = [2, 2] //melee power multiplier, ATK multiplier
 					delete skillFile[skill].ragesoul;
 				}
 
@@ -661,34 +661,34 @@ commands.updateskills = new Command({
 				if (!skillFile[skill].heal) skillFile[skill].heal = {};
 
 				if (skillFile[skill].invigorate) {
-					skillFile[skill].heal.invigorate = [[skillFile[skill].pow, 3]]; //power, turns
+					skillFile[skill].heal.invigorate = [skillFile[skill].pow, 3]; //power, turns
 					delete skillFile[skill].invigorate;
 				} else if (skillFile[skill].regenerate) {
-					skillFile[skill].heal.regenerate = [[skillFile[skill].pow, 3]]; //power, turns
+					skillFile[skill].heal.regenerate = [skillFile[skill].pow, 3]; //power, turns
 					delete skillFile[skill].regenerate;
 				} else if (skillFile[skill].wish) {
-					skillFile[skill].heal.wish = [[skillFile[skill].pow, 2]]; //power, turns
+					skillFile[skill].heal.wish = [skillFile[skill].pow, 2]; //power, turns
 					delete skillFile[skill].wish;
 				} else if (skillFile[skill].recarmdra) {
-					skillFile[skill].heal.recarmdra = [[true]]; //power, turns
+					skillFile[skill].heal.recarmdra = [true]; //power, turns
 					delete skillFile[skill].recarmdra;
 				} else if (skillFile[skill].fullheal) {
-					skillFile[skill].heal.fullheal = [[true]]; //power, turns
+					skillFile[skill].heal.fullheal = [true]; //power, turns
 					delete skillFile[skill].fullheal;
 				} else if (skillFile[skill].statusheal) {
 					skillFile[skill].heal.statusheal = [['all']]; //status type
 					delete skillFile[skill].statusheal;
 				} else if (skillFile[skill].healmp) {
-					skillFile[skill].heal.healmp = [[skillFile[skill].pow]]; //power
+					skillFile[skill].heal.healmp = [skillFile[skill].pow]; //power
 					delete skillFile[skill].healmp;
 				} else if (skillFile[skill].sacrifice) {
-					skillFile[skill].heal.sacrifice = [[0]] //hp left
+					skillFile[skill].heal.sacrifice = [0] //hp left
 					delete skillFile[skill].sacrifice;
 				} else if (skillFile[skill].revive) {
-					skillFile[skill].heal.revive = [[skillFile[skill].revive]]; //1/amount of HP
+					skillFile[skill].heal.revive = [skillFile[skill].revive]; //1/amount of HP
 					delete skillFile[skill].revive;
 				} else {
-					if (!skillFile[skill].heal.default)	skillFile[skill].heal.default = [[skillFile[skill].pow]]; //power
+					if (!skillFile[skill].heal.default)	skillFile[skill].heal.default = [skillFile[skill].pow]; //power
 				}
 
 				delete skillFile[skill].pow;
@@ -746,62 +746,62 @@ commands.updateskills = new Command({
 				}
 				
 				if (skillFile[skill].ohko) {
-					skillFile[skill].extras.ohko = [[skillFile[skill].acc]];  //ohko gets its chance from skill's accuracy
+					skillFile[skill].extras.ohko = [skillFile[skill].acc];  //ohko gets its chance from skill's accuracy
 					delete skillFile[skill].ohko;
 				}
 
 				if (skillFile[skill].rest) {
-					skillFile[skill].extras.rest = [[true]]; //true
+					skillFile[skill].extras.rest = [true]; //true
 					delete skillFile[skill].rest;
 				}
 
 				if (skillFile[skill].feint) {
-					skillFile[skill].extras.feint = [[true]]; //true
+					skillFile[skill].extras.feint = [true]; //true
 					delete skillFile[skill].feint;
 				}
 
 				if (skillFile[skill].stealmp) {
-					skillFile[skill].extras.stealmp = [[true]]; //true
+					skillFile[skill].extras.stealmp = [true]; //true
 					delete skillFile[skill].stealmp;
 				}
 
 				if (skillFile[skill].susDmg) {
-					skillFile[skill].extras.sustain = [[true]]; //true
+					skillFile[skill].extras.sustain = [true]; //true
 					delete skillFile[skill].susDmg;
 				}
 
 				if (skillFile[skill].revDmg) {
-					skillFile[skill].extras.reverse = [[true]]; //true
+					skillFile[skill].extras.reverse = [true]; //true
 					delete skillFile[skill].revDmg;
 				}
 
 				if (skillFile[skill].powHits) {
-					skillFile[skill].extras.powhit = [[skillFile[skill].powHits[0], skillFile[skill].powHits[1] ?? null]]; //power hit 1, power hit 2 (if exists)
+					skillFile[skill].extras.powhit = [skillFile[skill].powHits[0], skillFile[skill].powHits[1] ?? null]; //power hit 1, power hit 2 (if exists)
 					delete skillFile[skill].powHits;
 				}
 
 				if (skillFile[skill].drain) {
-					skillFile[skill].extras.drain = [[skillFile[skill].drain]]; // 1/amount of damage dealt
+					skillFile[skill].extras.drain = [skillFile[skill].drain]; // 1/amount of damage dealt
 					delete skillFile[skill].drain;
 				}
 
 				if (skillFile[skill].takemp) {
-					skillFile[skill].extras.takemp = [[skillFile[skill].takemp]]; // amount
+					skillFile[skill].extras.takemp = [skillFile[skill].takemp]; // amount
 					delete skillFile[skill].takemp;
 				}
 
 				if (skillFile[skill].sacrifice) {
-					skillFile[skill].extras.sacrifice = [[0]]; // HP left
+					skillFile[skill].extras.sacrifice = [0]; // HP left
 					delete skillFile[skill].sacrifice;
 				}
 
 				if (skillFile[skill].lonewolf) {
-					skillFile[skill].extras.lonewolf = [[1.5]]; // damage multiplier
+					skillFile[skill].extras.lonewolf = [1.5]; // damage multiplier
 					delete skillFile[skill].lonewolf;
 				}
 
 				if (skillFile[skill].heavenwrath) {
-					skillFile[skill].extras.heavenwrath = [[1.5]]; // damage multiplier
+					skillFile[skill].extras.heavenwrath = [1.5]; // damage multiplier
 					delete skillFile[skill].heavenwrath;
 				}
 
@@ -821,37 +821,37 @@ commands.updateskills = new Command({
 				}
 
 				if (skillFile[skill].statCalc) {
-					skillFile[skill].extras.statcalc = [[skillFile[skill].statCalc]]; // stat
+					skillFile[skill].extras.statcalc = [skillFile[skill].statCalc]; // stat
 					delete skillFile[skill].statCalc;
 				}
 
 				if (skillFile[skill].steal) {
-					skillFile[skill].extras.steal = [[skillFile[skill].steal, 1]]; // chance, amount
+					skillFile[skill].extras.steal = [skillFile[skill].steal, 1]; // chance, amount
 					delete skillFile[skill].steal;
 				}
 
 				if (skillFile[skill].hpcalc) {
-					skillFile[skill].extras.hpcalc = [[50]]; // maximum percentage
+					skillFile[skill].extras.hpcalc = [50]; // maximum percentage
 					delete skillFile[skill].hpcalc;
 				}
 
 				if (skillFile[skill].mpcalc) {
-					skillFile[skill].extras.mpcalc = [[50]]; // maximum percentage
+					skillFile[skill].extras.mpcalc = [50]; // maximum percentage
 					delete skillFile[skill].mpcalc;
 				}
 
 				if (skillFile[skill].forceTech) {
-					skillFile[skill].extras.forcetech = [[skillFile[skill].forceTech[0], skillFile[skill].forceTech[1] ?? null]]; // statuses
+					skillFile[skill].extras.forcetech = [skillFile[skill].forceTech[0], skillFile[skill].forceTech[1] ?? null]; // statuses
 					delete skillFile[skill].forceTech;
 				}
 
 				if (skillFile[skill].rollout) {
-					skillFile[skill].extras.rollout = [[skillFile[skill].rollout, 2, 4]]; // boost, maximum boost, turn amount
+					skillFile[skill].extras.rollout = [skillFile[skill].rollout, 2, 4]; // boost, maximum boost, turn amount
 					delete skillFile[skill].rollout;
 				}
 
 				if (skillFile[skill].affinitypow) {
-					skillFile[skill].extras.affinitypow = [[skillFile[skill].affinitypow]]; // amount
+					skillFile[skill].extras.affinitypow = [skillFile[skill].affinitypow]; // amount
 					delete skillFile[skill].affinitypow;
 				}
 
@@ -861,12 +861,12 @@ commands.updateskills = new Command({
 				}
 
 				if (skillFile[skill].copyskill) {
-					skillFile[skill].extras.copyskill = [[true]]; // true
+					skillFile[skill].extras.copyskill = [true]; // true
 					delete skillFile[skill].copyskill;
 				}
 
 				if (skillFile[skill].metronome) {
-					skillFile[skill].extras.metronome = [[true]]; // true
+					skillFile[skill].extras.metronome = [true]; // true
 					delete skillFile[skill].metronome;
 				}
 
@@ -876,7 +876,7 @@ commands.updateskills = new Command({
 				}
 
 				if (skillFile[skill].resistremove) {
-					skillFile[skill].extras.resistremove = [[skillFile[skill].resistremove]]; // element
+					skillFile[skill].extras.resistremove = [skillFile[skill].resistremove]; // element
 					delete skillFile[skill].resistremove;
 				}
 

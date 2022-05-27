@@ -407,7 +407,7 @@ function makeStatus(skill, extra, func) {
 		}
 		skill.statusses[extra].push(func);
 	} else {
-		skill.statusses[extra][0] = func;
+		skill.statusses[extra] = func;
 	}
 }
 

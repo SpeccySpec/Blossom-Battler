@@ -497,7 +497,7 @@ function makeExtra(skill, extra, func) {
 		}
 		skill.extras[extra].push(func);
 	} else {
-		skill.extras[extra][0] = func;
+		skill.extras[extra] = func;
 	}
 }
 

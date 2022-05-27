@@ -255,7 +255,7 @@ function makeHeal(skill, extra, func) {
 		}
 		skill.heal[extra].push(func);
 	} else {
-		skill.heal[extra][0] = func;
+		skill.heal[extra] = func;
 	}
 }
 

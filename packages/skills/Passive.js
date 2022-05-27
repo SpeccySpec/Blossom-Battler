@@ -536,7 +536,7 @@ function makePassive(skill, extra, func) {
 		}
 		skill.passive[extra].push(func);
 	} else {
-		skill.passive[extra][0] = func;
+		skill.passive[extra] = func;
 	}
 }
 
