@@ -63,6 +63,8 @@ makeButton = (name, emoji, color, lowercase, forceid) => {
 	})
 }
 
+// ALL BATTLE OPTIONS ARE FINISHED! LETS GOOOO!
+
 // Menu States
 MENU_ACT = 0;
 MENU_SKILL = 1;
@@ -97,7 +99,7 @@ const menuStates = {
 		]
 
 		// Team Combo checks
-		if (btl.canteamcombo) {
+		if (btl.canteamcombo && !char.donetc) {
 			for (let i in btl.teams[char.team].members) {
 				if (hasTeamCombo(char, btl.teams[char.team].members[i])) {
 					if (!comps[1]) comps[1] = [];
@@ -821,6 +823,8 @@ doAction = (char, btl, action) => {
 	let party = btl.teams[char.team];
 	var DiscordEmbed;
 
+	delete btl.canteamcombo;
+
 	switch(action.move) {
 		case 'melee':
 			let atkType = 'physical'
@@ -996,6 +1000,8 @@ doAction = (char, btl, action) => {
 				if (skillFile[skills[1][0]].cost && skillFile[skills[1][0]].costtype) {
 					useCost(ally, skillFile[skills[1][0]].cost, skillFile[skills[1][0]].costtype);
 				}
+
+				char.donetc = true;
 			}
 	}
 
