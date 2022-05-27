@@ -570,7 +570,7 @@ skillDesc = (skillDefs, skillName, server) => {
 	var finalText = ``;
 	if (skillDefs.type != "status" && skillDefs.type != "passive") {
 		if (hasExtra(skillDefs, 'ohko') && skillDefs.type != "heal")
-			finalText += 'Defeats the foe in **one shot**!';
+			finalText += `Defeats the foe ${skillDefs.extras.ohko[0][1] && skillDefs.extras.ohko[0][1] != null ? `inflicted with ${statusEmojis[skillDefs.extras.ohko[0][1]]}${skillDefs.extras.ohko[0][1]}` : ''} in **one shot**!`;
 		else {
 			if (skillDefs.type === 'heal') {
 				if (hasHealType(skillDefs, 'fullheal')) finalText += '**Fully heals**\n';

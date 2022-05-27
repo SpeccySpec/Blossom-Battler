@@ -1,14 +1,20 @@
 extrasList = {
 	ohko: {
 		name: "One Hit KO",
-		desc: '_<Chance>_\nInstantly defeats the foe at a <Chance>% chance.',
+		desc: '_<Chance> {Status}_\nInstantly defeats the foe at a <Chance>% chance. Can have {Status} to make it only affect foes with that status.',
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (parseFloat(extra1) < 0) return message.channel.send("What's the point of using this skill if it never lands?");
 
-			makeExtra(skill, "ohko", [parseFloat(extra1)]);
+			if (extra2) {
+				if (!statusEffects.includes(extra2.toLowerCase())) return message.channel.send("You're adding an invalid status effect!");
+			}
+
+			makeExtra(skill, "ohko", [parseFloat(extra1), extra2.toLowerCase() ? extra2.toLowerCase() : null]);
 			return true
 		},
 		onuseoverride: function(char, targ, skill, btl, vars) {
+			if (vars[1] && vars[1] != null && targ.status != vars[1]) return dodgeTxt(targ);
+
 			let chance = randNum(100);
 			let target = vars[0]+((char.stats.luk-targ.stats.luk)/2)
 
