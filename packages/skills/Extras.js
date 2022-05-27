@@ -114,7 +114,7 @@ extrasList = {
 
 			if (vars[3] != 'normal') {
 				if (target.affinities[vars[2]] && target.affinities[vars[2]].includes(vars[1])) {
-					return `${target.name} isn't affected by ${skill.name}!`;
+					return `${target.name} wasn't affected by ${skill.name}!`;
 				}
 			}
 
@@ -130,7 +130,7 @@ extrasList = {
 			}
 
 			if (!wasChanged) {
-				return `${target.name} isn't affected by ${skill.name}!`;
+				return `${target.name} wasn't affected by ${skill.name}!`;
 			}
 
 			if (vars[3] != 'normal') {
@@ -138,7 +138,7 @@ extrasList = {
 				target.affinities[vars[2]].push(vars[1]);
 			}
 
-			return `${target.name}'s affinity for ${vars[1]} has changed to ${affinityEmoji[vars[2]]}${vars[2]}!`;
+			return `${target.name}'s affinity for ${vars[1]} was changed to ${affinityEmoji[vars[2]]}${vars[2]}!`;
 		}
 	},
 
