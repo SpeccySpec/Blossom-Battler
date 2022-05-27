@@ -323,6 +323,11 @@ commands.channeldata = new Command({
 // EVERYTHING'S BEEN BUILDING UP TO THIS MOMENT
 // TIME FOR BATTLES!!
 
+// Todo:
+// Weapons and Armors in battle.
+// Charms in battle.
+// Finish all Extras, Status Skills and Passives.
+
 commands.endbattle = new Command({
 	desc: "Manually ends a battle happening in this channel. No stat changes, xp or money is saved.",
 	admin: "You do not have permission to manually end the battle!",
