@@ -584,13 +584,13 @@ skillDesc = (skillDefs, skillName, server) => {
 					finalText += `Cures **`
 
 					for (let i in skillDefs.heal.statusheal) {
-						finalText += `${statusEmojis[skillDefs.heal.statusheal[i]]}${skillDefs.heal.statusheal[i]}`
+						finalText += `${statusEmojis[skillDefs.heal.statusheal[i]] ?? ''}${skillDefs.heal.statusheal[i]}`
 
 						if (i < skillDefs.heal.statusheal.length - 1)
 							finalText += `, `
 					}
 
-					finalText += ` ailments**\n`;
+					finalText += ` ailments**.\n`;
 				}
 				
 				if (hasHealType(skillDefs, 'sacrifice')) finalText += `${skillDefs.heal.sacrifice[0] > 0 ? `**Leaves the user's health at ${skillDefs.heal.sacrifice[0]}**` : '**Sacrifices the user**'}\n`;
