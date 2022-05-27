@@ -777,7 +777,7 @@ commands.purgeenemy = new Command({
 
 commands.randenemy = new Command({
 	desc: `Get a random enemy.`,
-	section: 'fun',
+	section: "roll",
 	aliases: ['randomenemy'],
 	args: [],
 	func: (message, args) => {
@@ -805,7 +805,7 @@ commands.randenemy = new Command({
 
 commands.dailyenemy = new Command({
 	desc: 'Any random enemy can be set as a daily one! Test your luck to see if one you desire is here!',
-	section: "fun",
+	section: "roll",
 	args: [],
 	func: (message, args) => {
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
@@ -874,7 +874,7 @@ commands.setimage = new Command({
 commands.randenemyquote = new Command({
 	desc: "Get a random quote from any enemy.",
 	aliases: ['randenemyquote', 'randomenemyquote'],
-	section: "fun",
+	section: "roll",
 	args: [],
 	func: (message, args) => {
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
@@ -903,7 +903,7 @@ commands.randenemyquote = new Command({
 
 commands.dailyenemyquote = new Command({
 	desc: "Any random enemy quote can be set as a daily one! Test your luck to see if theme enemy's that you desire is here!",
-	section: "fun",
+	section: "roll",
 	args: [],
 	func: (message, args) => {
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);

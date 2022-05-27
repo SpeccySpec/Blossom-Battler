@@ -2025,7 +2025,7 @@ commands.purgeskill = new Command({
 				  */
 commands.dailyskill = new Command({
 	desc: 'Any random skill can be set as a daily one! Test your luck to see if yours is here!',
-	section: "fun",
+	section: "roll",
 	args: [],
 	func: (message, args) => {
 		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet!`);
@@ -2054,7 +2054,7 @@ commands.dailyskill = new Command({
 
 commands.randskill = new Command({
 	desc: 'Gets a random skill.',
-	section: "fun",
+	section: "roll",
 	aliases: ['randomskill'],
 	args: [],
 	func: (message, args) => {

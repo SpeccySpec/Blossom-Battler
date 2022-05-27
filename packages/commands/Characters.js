@@ -791,7 +791,7 @@ commands.setaffinity = new Command({
 
 commands.gainxp = new Command({
 	desc: "Gives XP to a character. Enough XP can cause the character to level up! __Affected by the XP Rate of the server__.",
-	aliases: ['xpup', 'getxp'],
+	aliases: ['xpup', 'getxp', 'grantxp', 'givexp'],
 	section: "characters",
 	args: [
 		{
@@ -1909,7 +1909,7 @@ commands.purgechar = new Command({
 
 commands.randchar = new Command({
 	desc: `Get a random character.`,
-	section: 'fun',
+	section: "roll",
 	aliases: ['randomchar'],
 	args: [],
 	func: (message, args) => {
@@ -1926,7 +1926,7 @@ commands.randchar = new Command({
 
 commands.dailychar = new Command({
 	desc: 'Any random character can be set as a daily one! Test your luck to see if yours is here!',
-	section: "fun",
+	section: "roll",
 	args: [],
 	func: (message, args) => {
 		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
@@ -2191,7 +2191,7 @@ commands.getquotes = new Command({
 commands.randcharquote = new Command({
 	desc: "Get a random quote from any character.",
 	aliases: ['randquote', 'randomcharaquote'],
-	section: "fun",
+	section: "roll",
 	args: [],
 	func: (message, args) => {
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -2220,7 +2220,7 @@ commands.randcharquote = new Command({
 
 commands.dailycharquote = new Command({
 	desc: "Any random character quote can be set as a daily one! Test your luck to see if your character's is here!",
-	section: "fun",
+	section: "roll",
 	args: [],
 	func: (message, args) => {
 		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)

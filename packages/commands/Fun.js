@@ -384,7 +384,7 @@ commands.ship = new Command({
 
 commands.randship = new Command({
 	desc: "Ship random characters together.",
-	section: "fun",
+	section: "roll",
 	aliases: ["randmoship"],
 	args: [{
 		name: "Person #1",
@@ -407,7 +407,7 @@ commands.randship = new Command({
 
 commands.dailyship = new Command({
 	desc: "Any ship can be set as a daily one! Test your luck to see if one you desire is here!",
-	section: "fun",
+	section: "roll",
 	args: [],
 	func: (message, args) => {
 		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)

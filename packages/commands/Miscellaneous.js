@@ -13,6 +13,7 @@ const categories = {
 	parties: "Can't battle without parties now, can ya?",
 	battle: "The main part of Blossom Battler is well... the battles of course!",
 	trials: "Trials! Where you test yourself against waves of enemies!",
+	roll: "Random and Daily things! Dailies reroll every day! Roll away!",
 	all: "All of the existing commands"
 }
 

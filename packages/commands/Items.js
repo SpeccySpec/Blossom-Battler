@@ -790,7 +790,7 @@ commands.searchitems = new Command({
 
 commands.randitem = new Command({
     desc: `Get a random item.`,
-    section: 'fun',
+    section: "roll",
     aliases: ['randomitem'],
     args: [],
     func: (message, args) => {
@@ -806,7 +806,7 @@ commands.randitem = new Command({
 
 commands.dailyitem = new Command({
     desc: 'Any random item can be set as a daily one! Test your luck to see if yours is here!',
-    section: "fun",
+    section: "roll",
     args: [],
     func: (message, args) => {
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
@@ -1102,7 +1102,7 @@ commands.searchweapons = new Command({
 
 commands.randweapon = new Command({
     desc: 'Gets a random weapon.',
-    section: 'fun',
+    section: "roll",
     aliases: ['randomweapon'],
     args: [],
     func: (message, args) => {
@@ -1118,7 +1118,7 @@ commands.randweapon = new Command({
 
 commands.dailyweapon = new Command({
     desc: 'Any random weapon can be set as a daily one! Test your luck to see if yours is here!',
-    section: "fun",
+    section: "roll",
     args: [],
     func: (message, args) => {
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
@@ -1621,7 +1621,7 @@ commands.searcharmors = new Command({
 
 commands.randarmor = new Command({
     desc: 'Gets a random armor piece.',
-    section: 'fun',
+    section: "roll",
     aliases: ['randomarmor'],
     args: [],
     func: (message, args) => {
@@ -1637,7 +1637,7 @@ commands.randarmor = new Command({
 
 commands.dailyarmor = new Command({
     desc: 'Any random armor can be set as a daily one! Test your luck to see if yours is the one!',
-    section: 'fun',
+    section: "roll",
     func: (message, args) => {
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
         if (Object.keys(armorFile).length == 0) return message.channel.send(`No armors have been added yet!`);
