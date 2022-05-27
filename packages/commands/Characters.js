@@ -3656,3 +3656,31 @@ commands.gettc = new Command({
 		message.channel.send({content: `Here is the data for ${args[0]} and ${args[1]}'s Team Combo: ${tc.name}.`, embeds: [skillFuncs.skillDesc(tc, tc.name, message.guild.id)]})
 	}
 })
+
+commands.removetc = new Command({
+	desc: 'Gets rid of a team combo with 2 characters.',
+	section: "skills",
+	args: [
+		{
+			name: "Initiator Character",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Assistant Character",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is a nonexistant character!`);
+		if (!charFile[args[1]]) return message.channel.send(`${args[1]} is a nonexistant character!`);
+		if (!charFile[args[0]].teamcombos || !charFile[args[0]].teamcombos[args[1]]) return message.channel.send(`${args[0]} & ${args[1]} have no team combo!`);
+
+		delete charFile[args[0]].teamcombos[args[1]];
+
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
