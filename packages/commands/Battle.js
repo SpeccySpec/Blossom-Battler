@@ -521,7 +521,7 @@ commands.startbattle = new Command({
 			if (!locale.encounters || locale.encounters.length <= 0) return message.channel.send("You've not set any enemies, and there are no encounters assigned to this channel!");
 			encounter = locale.encounters[randNum(0, locale.encounters.length-1)] ?? locale.encounters[0];
 		} else {
-			for (let i = 4; i <= args.length; i++) {
+			for (let i = 4; i < args.length; i++) {
 				if (!enmFile[args[i]]) return message.channel.send(`${args[i]} is an invalid enemy!`);
 				encounter.push(args[i]);
 			}
