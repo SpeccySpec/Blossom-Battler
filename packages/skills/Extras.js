@@ -107,7 +107,7 @@ extrasList = {
 			if (percent < 1)
 				return void message.channel.send("You can't need less than 0%!");
 			if (stat != 'hp' && stat != 'mp' && stat != 'hppercent' && stat != 'mppercent' && stat != 'lb')
-				return void message.channel.send("You entered an invalid value for <Stat>! It can be either HP, HPPercent, MP, MPPercent, or LB.");
+				return void message.channel.send("You entered an invalid value for <Cost Type>! It can be either HP, HPPercent, MP, MPPercent, or LB.");
 			
 			makeExtra(skill, "needlessthan", [percent, stat]);
 			return true
