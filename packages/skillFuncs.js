@@ -233,35 +233,47 @@ function atkDesc(skillDefs, settings) {
 
 		if (hasExtra(skillDefs, 'needlessthan')) {
 			let extraSom = ''
-			switch (skillDefs.extras.needlessthan[1]) {
-				case 'hp':
-					extraSom = ' HP';
-					break;
-				case 'mp':
-					extraSom = ' MP';
-					break;
-				case 'lb':
-					if (settings.mechanics.limitbreaks) extraSom = ' LB';
-					else extraSom = ' MP';
-					break;
-				case 'money':
-					extraSom = ` of Team's Money`;
-					break;
-				case 'hppercent':
-					extraSom = '% of the user\'s Max HP';
-					break;
-				case 'mppercent':
-					extraSom = '% of the user\'s Max MP';
-					break;
-				case 'lbpercent':
-					if (settings.mechanics.limitbreaks) extraSom = '% of the user\'s Max LB';
-					else extraSom = '% of the user\'s Max MP';
-					break;
-				case 'moneypercent':
-					extraSom = '% of the user Team\'s Money';
-					break;
+			finalText += `Needs less than `
+
+			for (i in skillDefs.extras.needlessthan) {
+				switch (skillDefs.extras.needlessthan[i][1]) {
+					case 'hp':
+						extraSom = ' HP';
+						break;
+					case 'mp':
+						extraSom = ' MP';
+						break;
+					case 'lb':
+						if (settings.mechanics.limitbreaks) extraSom = ' LB';
+						else extraSom = ' MP';
+						break;
+					case 'money':
+						extraSom = ` of Team's Money`;
+						break;
+					case 'hppercent':
+						extraSom = '% of the user\'s Max HP';
+						break;
+					case 'mppercent':
+						extraSom = '% of the user\'s Max MP';
+						break;
+					case 'lbpercent':
+						if (settings.mechanics.limitbreaks) extraSom = '% of the user\'s Max LB';
+						else extraSom = '% of the user\'s Max MP';
+						break;
+					case 'moneypercent':
+						extraSom = '% of the user Team\'s Money';
+						break;
+				}
+
+				finalText += `**${skillDefs.extras.needlessthan[i][0]}${extraSom}**`;
+
+				if (skillDefs.extras.needlessthan.length > 1) {
+					if (i < skillDefs.extras.needlessthan.length - 2) finalText += `, `;
+					else if (i == skillDefs.extras.needlessthan.length - 2) finalText += ` and `;
+				}
 			}
-			finalText += `Needs less than **${skillDefs.extras.needlessthan[0]}${extraSom}** to use.\n`;
+			
+			finalText += ` to use.\n`;
 		}
 
 		if (hasExtra(skillDefs, 'sacrifice'))
