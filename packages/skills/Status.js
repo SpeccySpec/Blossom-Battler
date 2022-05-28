@@ -212,6 +212,9 @@ statusList = {
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			extrasList.changeaffinity.applyfunc(message, skill, extra1, extra2, extra3, extra4, extra5);
 		},
+		onselect: function(char, skill, btl, vars) {
+			extrasList.changeaffinity.onselect(char, skill, btl, vars);
+		},
 		onuse: function(char, targ, skill, btl, vars) {
 			extrasList.changeaffinity.onuse(char, targ, skill, btl, vars);
 		}

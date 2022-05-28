@@ -106,9 +106,20 @@ extrasList = {
 			makeExtra(skill, "changeaffinity", [extra1.toLowerCase(), extra2.toLowerCase(), extra3.toLowerCase(), extra4.toLowerCase(), extra5 ? parseInt(extra5) : null]);
 			return true
 		},
+		onselect: function(char, skill, btl, vars) {
+			if (vars[0].toLowerCase() != 'user') return
+
+			return extrasList.changeaffinity.targetchange(char, vars, skill)
+		},
 		onuse: function(char, targ, skill, btl, vars) {
-			let target = vars[0].toLowerCase() == 'target' ? targ : char;
+			if (vars[0].toLowerCase() != 'target') return
+
+			return extrasList.changeaffinity.targetchange(targ, vars, skill)
+		},
+		targetchange: function(target, vars, skill) {
 			if (!target.affinities) target.affinities = [];
+
+			let setAffinities = []
 
 			let wasChanged = false;
 
@@ -118,18 +129,35 @@ extrasList = {
 				}
 			}
 
+			if (vars[4] && vars[4] != null) {
+				if (!target.oldAffinities) target.oldAffinities = {}
+			}
+
 			for (let i in target.affinities) {
+				setAffinities.push(...target.affinities[i])
+
+				if (target.oldAffinities?.[i]?.includes(vars[1])) continue;
+
+				if (vars[4] && vars[4] != null) {
+					if (!target.oldAffinities[i]) target.oldAffinities[i] = {};
+				}
+
 				if (vars[3] == 'resist' && !resistSide.includes(i)) continue
 				if (vars[3] == 'weak' && !weakSide.includes(i)) continue
 
 				if (target.affinities[i].includes(vars[1])) {
 					target.affinities[i].splice(target.affinities[i].indexOf(vars[1]), 1);
 					wasChanged = true;
+					if (vars[4] && vars[4] != null) {
+						if (!target.oldAffinities[i][vars[1]]) target.oldAffinities[i][vars[1]] = vars[4];
+					}
 					break;
 				}
 			}
 
-			if (!wasChanged) {
+			let normalAffinities = Elements.filter(e => !setAffinities.includes(e));
+
+			if (!wasChanged && ((!normalAffinities.includes(vars[1]) && vars[2] != 'normal') || (vars[2] == 'normal' && normalAffinities.includes(vars[1])))) {
 				return `${target.name} wasn't affected by ${skill.name}!`;
 			}
 
@@ -138,7 +166,7 @@ extrasList = {
 				target.affinities[vars[2]].push(vars[1]);
 			}
 
-			return `${target.name}'s affinity for ${vars[1]} was changed to ${affinityEmoji[vars[2]]}${vars[2]}!`;
+			return `${target.name}'s affinity for ${elementEmoji[vars[1]]}${vars[1]} was changed to ${affinityEmoji[vars[2]]}${vars[2]}!`;
 		}
 	},
 
@@ -588,4 +616,11 @@ customVariables = {
 			return `${vars.infname}'s ${vars.name} allowed ${inf.name} to restore ${heal}${vars.type.toUpperCase()}`;
 		}
 	},
+}
+
+// Ah you know what
+// This file will be used for multiple extras anyway
+// We might as well shove some extra stuff in here
+// turnEffectFuncs will be an object that doe ufnnye things for multitudes of extras
+turnEffectFuncs = {
 }
