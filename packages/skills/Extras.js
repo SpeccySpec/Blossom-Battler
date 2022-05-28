@@ -41,9 +41,8 @@ extrasList = {
 			const status = args[1]?.toLowerCase()
 			if (chance < 0) return message.channel.send("What's the point of using this skill if it never lands?");
 
-			if (status) {
-				if (!statusEffects.includes(status)) return message.channel.send("You're adding an invalid status effect!");
-			}
+			if (status && !statusEffects.includes(status))
+				return message.channel.send("You're adding an invalid status effect!");
 
 			makeExtra(skill, "ohko", [chance, status]);
 			return true
