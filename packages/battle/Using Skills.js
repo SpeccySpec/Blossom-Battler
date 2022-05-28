@@ -191,7 +191,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 	if (skill.type === 'heal') {
 		if (skill.heal) {
 			for (let i in skill.heal) {
- 				if (!healList[i]) continue;
+				if (!healList[i]) continue;
 				if (!healList[i].onuse) continue;
 
 				if (healList[i].multiple) {
@@ -748,7 +748,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 		.setTitle(targTxt)
-		.setDescription(finalText)
+		.setDescription(finalText.replace(/\n{3,}/, () => "\n\n"))
 	btl.channel.send({embeds: [DiscordEmbed]});
 
 	// return true or something

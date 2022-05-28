@@ -168,16 +168,17 @@ extrasList = {
 			}
 
 			if (vars[4] && vars[4] != null) {
-				if (!target.oldAffinities) target.oldAffinities = {}
+				if (!target?.custom?.oldAffinities) 
+					addCusVal(target, "oldAffinities", {});
 			}
 
 			for (let i in target.affinities) {
 				setAffinities.push(...target.affinities[i])
 
-				if (target?.oldAffinities?.[i] && Object.keys(target?.oldAffinities?.[i]).includes(vars[1])) continue;
+				if (target?.custom?.oldAffinities?.[i] && Object.keys(target?.custom?.oldAffinities?.[i]).includes(vars[1])) continue;
 
 				if (vars[4] && vars[4] != null) {
-					if (!target.oldAffinities[i]) target.oldAffinities[i] = {};
+					if (!target?.custom?.oldAffinities[i]) target.custom.oldAffinities[i] = {};
 				}
 
 				if (vars[3] == 'resist' && !resistSide.includes(i)) continue
@@ -187,7 +188,7 @@ extrasList = {
 					target.affinities[i].splice(target.affinities[i].indexOf(vars[1]), 1);
 					wasChanged = true;
 					if (vars[4] && vars[4] != null) {
-						if (!target.oldAffinities[i][vars[1]]) target.oldAffinities[i][vars[1]] = vars[4];
+						if (!target?.custom?.oldAffinities[i][vars[1]]) target.custom.oldAffinities[i][vars[1]] = vars[4];
 					}
 					break;
 				}
@@ -200,6 +201,11 @@ extrasList = {
 			}
 
 			if (vars[3] != 'normal') {
+				if (normalAffinities.includes(vars[1])) {
+					if (!target?.custom?.oldAffinities['normal']) target.custom.oldAffinities['normal'] = {};
+					if (!target?.custom?.oldAffinities['normal'][vars[1]]) target.custom.oldAffinities['normal'][vars[1]] = vars[4];
+				}
+
 				if (!target.affinities[vars[2]]) target.affinities[vars[2]] = [];
 				target.affinities[vars[2]].push(vars[1]);
 			}
@@ -653,11 +659,4 @@ customVariables = {
 			return `${vars.infname}'s ${vars.name} allowed ${inf.name} to restore ${heal}${vars.type.toUpperCase()}`;
 		}
 	},
-}
-
-// Ah you know what
-// This file will be used for multiple extras anyway
-// We might as well shove some extra stuff in here
-// turnEffectFuncs will be an object that doe ufnnye things for multitudes of extras
-turnEffectFuncs = {
 }
