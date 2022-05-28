@@ -299,21 +299,31 @@ extrasList = {
 		}
 	}),
 
-	powerbuff: {
+	powerbuff: new Extra({
 		name: "Power Buff",
 		desc: "_<Stat> <Percent>_\nBoosts skill power with <Stat> buffs up to <Percent>%.",
 		multiple: true,
 		diffflag: 0,
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Percent>!");
-			
-			if (!utilityFuncs.validStat(extra1)) return message.channel.send("That's not a valid stat!");
-
-			makeExtra(skill, "powerbuff", [extra1.toLowerCase(), parseInt(extra2)]);
+		args: [
+			{
+				name: "Stat",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Percent",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			const stat = args[0].toLowerCase()
+			if (!utilityFuncs.validStat(stat))
+				return void message.channel.send("That's not a valid stat!");
+			makeExtra(skill, "powerbuff", [stat, args[1]]);
 			return true
 		}
-	},
+	}),
 
 	takemp: {
 		name: "Take MP",
