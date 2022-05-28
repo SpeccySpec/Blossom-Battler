@@ -5,6 +5,8 @@ class Extra extends ArgList {
 	constructor(object) {
 		super(object.args, object.desc)
 		this.name = object.name
+		this.multiple = object.multiple
+		this.diffflag = object.diffflag
 		for (const i in object) {
 			const func = object[i]
 			if (typeof func != "function")
@@ -62,7 +64,7 @@ extrasList = {
 		}
 	}),
 
-	sacrifice: new Extra ({
+	sacrifice: new Extra({
 		name: "Sacrifice",
 		desc: "Will reduce the caster's HP to a {HP}.",
 		args: [
@@ -82,9 +84,9 @@ extrasList = {
 		}
 	}),
 
-	needlessthan: {
+	needlessthan: new Extra({
 		name: "Need less than",
-		desc: '_<Percent> <Stat>_\nWill make the skill require less than <Percent>% of <Stat> for it to work.',
+		desc: 'Will make the skill require less than <Percent>% of <Cost Type> for it to work.',
 		multiple: true,
 		diffflag: 1,
 		args: [
@@ -105,9 +107,9 @@ extrasList = {
 			if (percent < 1)
 				return void message.channel.send("You can't need less than 0%!");
 			if (stat != 'hp' && stat != 'mp' && stat != 'hppercent' && stat != 'mppercent' && stat != 'lb')
-				return message.channel.send("You entered an invalid value for <Stat>! It can be either HP, HPPercent, MP, MPPercent, or LB.");
+				return void message.channel.send("You entered an invalid value for <Stat>! It can be either HP, HPPercent, MP, MPPercent, or LB.");
 			
-			makeExtra(skill, "needlessthan", [parseFloat(extra1), extra2]);
+			makeExtra(skill, "needlessthan", [percent, stat]);
 			return true
 		},
 		canuse(char, skill, btl, vars) {
@@ -133,7 +135,7 @@ extrasList = {
 					return true;
 			}
 		}
-	},
+	}),
 
 	changeaffinity: new Extra({
 		name: "Change Affinity",
@@ -255,10 +257,10 @@ extrasList = {
 		}
 	}),
 
-	rest: {
+	rest: new Extra({
 		name: "Rest",
 		desc: "Forces the caster to rest for one turn.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill) {
 			makeExtra(skill, "rest", [true]);
 			return true
 		},
@@ -266,23 +268,36 @@ extrasList = {
 			char.rest = true;
 			return `_${char.name} must rest to regain their energy!_`;
 		}
-	},
+	}),
 
-	buff: {
+	buff: new Extra({
 		name: "Stat Buff",
-		desc: "_<Stat> <Stages> <Chance>_\nWill buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
+		desc: "Will buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
 		multiple: true,
 		diffflag: [0, 2],
-		applyfunc: function(message, skill, extra1, extra2, extra3) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
-			if (!stats.includes(extra1.toLowerCase()) || extra1.toLowerCase() === 'luck') return message.channel.send("That's not a valid stat!");
-			if (!extra2) extra2 = '-1';
-			if (!extra3) extra3 = '100';
-
-			makeExtra(skill, "buff", [extra1.toLowerCase(), extra2.toLowerCase(), parseInt(extra3)]);
+		args: [
+			{
+				name: "Stat",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Stages",
+				type: "Num"
+			},
+			{
+				name: "Chance",
+				type: "Num"
+			}
+		],
+		applyfunc(message, skill, args) {
+			const stat = args[0].toLowerCase()
+			if (!stats.includes(stat) || stat === 'luck')
+				return void message.channel.send("That's not a valid stat!");
+			makeExtra(skill, "buff", [stat, args[1] ?? "-1", args[2] ?? 100]);
 			return true
 		}
-	},
+	}),
 
 	powerbuff: {
 		name: "Power Buff",
