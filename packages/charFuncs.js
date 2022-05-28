@@ -486,68 +486,6 @@ function copyObj(source) {
 	}
 }
 
-function writeTC(msg, name, ally1, ally2, status, chance, targettype, hitcount, extra1, extra2, extra3, desc) {
-	// Char Path
-    var charPath = `${dataPath}/Characters/characters-${msg.guild.id}.json`
-    var charRead = fs.readFileSync(charPath, {flag: 'as+'});
-
-	if (!charRead || charRead === '') {
-		charRead = '{}';
-		fs.writeFileSync(charPath, charRead);
-	}
-
-    var charFile = JSON.parse(charRead);
-
-	// Team Combos
-    var tcPath = `${dataPath}/TeamCombos/teamcombos-${msg.guild.id}.json`
-    var tcRead = fs.readFileSync(tcPath, {flag: 'as+'});
-
-	if (!tcRead || tcRead === '') {
-		tcRead = '{}';
-		fs.writeFileSync(tcPath, tcRead);
-	}
-
-    var tcFile = JSON.parse(tcRead);
-
-    tcFile[name] = {
-		name: name,
-        user: ally1,
-        ally: ally2,
-        status: status ? status.toLowerCase() : "none",
-        statuschance: chance ? chance : 0,
-		hits: hitcount ? hitcount : 1,
-		target: targettype ? targettype.toLowerCase() : "one",
-		desc: desc ? desc.toString() : null,
-		originalAuthor: msg.author.id
-    };
-
-	if (hitcount && hitcount > 15) tcFile[name].hits = 15;
-	if (!hitcount || hitcount <= 1) delete tcFile[name].hits;
-	if (!desc || desc === "none" || desc === "null") delete tcFile[name].desc;
-
-	if (!status || status == "none" || status == 0 || status == "0" || chance == 0) {
-		delete tcFile[name].status
-		delete tcFile[name].statuschance
-	}
-
-	tcFile[name].levelLock = 1 // hack
-
-	// Extra Effects
-	if (extra1 && extra1 != 'none' && extra1 != '-') {
-		if (!skillFuncs.applyExtra(tcFile[name], extra1, extra2, extra3))
-			msg.channel.send('The Extra Effect you inputted was invalid! The Team Combo will still be registered.');
-	}
-
-	delete tcFile[name].levelLock;
-
-	if (!charFile[ally1].teamCombo) charFile[ally1].teamCombo = {};
-	charFile[ally1].teamCombo[ally2] = name;
-
-    fs.writeFileSync(tcPath, JSON.stringify(tcFile, null, '    '));
-    fs.writeFileSync(charPath, JSON.stringify(charFile, null, '    '));
-	return true
-}
-
 // Export Functions
 module.exports = {
 	makeTransformation: function(userDefs, trnsName, req, auto, hpBuff, atkBuff, magBuff, prcBuff, endBuff, chrBuff, intBuff, aglBuff, lukBuff) {
@@ -858,9 +796,5 @@ module.exports = {
 	
 	untransform: function(charDefs) {
 		deTransformChar(charDefs)
-	},
-	
-	writeTC: function(msg, name, ally1, ally2, status, chance, targettype, hitcount, extra1, extra2, extra3, desc) {
-		writeTC(msg, name, ally1, ally2, status, chance, targettype, hitcount, extra1, extra2, extra3, desc)
 	}
 }

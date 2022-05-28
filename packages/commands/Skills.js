@@ -1063,29 +1063,10 @@ commands.applyextra = new Command({
 			forced: true
 		},
 		{
-			name: "Variable #1",
+			name: "Variables",
 			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable #2",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable #3",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable #4",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable #5",
-			type: "Any",
-			forced: false
+			forced: false,
+			multiple: true,
 		}
 	],
 	func: (message, args) => {
@@ -1095,19 +1076,24 @@ commands.applyextra = new Command({
 				return message.channel.send(`You don't own ${skilldata.name}!`);
 			}
 			
+			let arg = [];
+			for (let i in args) {
+				if (i > 1) arg.push(args[i])
+			}
+
 			let type = typeof skilldata.type == 'object' ? skilldata.type[0] : skilldata.type
 			switch (type) {
 				case 'passive':
-					applyPassive(message, skilldata, args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
+					applyPassive(message, skilldata, args[1].toLowerCase(), arg);
 					break;
 				case 'status':
-					applyStatus(message, skilldata, args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
+					applyStatus(message, skilldata, args[1].toLowerCase(), arg);
 					break;
 				case 'heal':
-					applyHeal(message, skilldata, args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
+					applyHeal(message, skilldata, args[1].toLowerCase(), arg);
 					break;
 				default:
-					applyExtra(message, skilldata, args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
+					applyExtra(message, skilldata, args[1].toLowerCase(), arg);
 					break;
 			}
 

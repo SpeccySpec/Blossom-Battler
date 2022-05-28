@@ -18,14 +18,14 @@ extrasList = {
 	ohko: {
 		name: "One Hit KO",
 		desc: '_<Chance> {Status}_\nInstantly defeats the foe at a <Chance>% chance. Can have {Status} to make it only affect foes with that status.',
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (parseFloat(extra1) < 0) return message.channel.send("What's the point of using this skill if it never lands?");
+		applyfunc: function(message, skill, ...extra) {
+			if (parseFloat(extra[0]) < 0) return message.channel.send("What's the point of using this skill if it never lands?");
 
-			if (extra2) {
-				if (!statusEffects.includes(extra2.toLowerCase())) return message.channel.send("You're adding an invalid status effect!");
+			if (extra[1]) {
+				if (!statusEffects.includes(extra[1].toLowerCase())) return message.channel.send("You're adding an invalid status effect!");
 			}
 
-			makeExtra(skill, "ohko", [parseFloat(extra1), extra2.toLowerCase() ? extra2.toLowerCase() : null]);
+			makeExtra(skill, "ohko", [parseFloat(extra[0]), extra[1].toLowerCase() ? extra[1].toLowerCase() : null]);
 			return true
 		},
 		onuseoverride: function(char, targ, skill, btl, vars) {
@@ -46,8 +46,8 @@ extrasList = {
 	sacrifice: {
 		name: "Sacrifice",
 		desc: "_{HP}_\nWill reduce the caster's HP to a {HP}.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeExtra(skill, "sacrifice", [parseInt(extra1)]);
+		applyfunc: function(message, skill, ...extra) {
+			makeExtra(skill, "sacrifice", [parseInt(extra[0])]);
 			return true
 		},
 		onuse: function(char, targ, skill, btl, vars) {
@@ -62,14 +62,14 @@ extrasList = {
 		desc: '_<Percent> <Stat>_\nWill make the skill require less than <Percent>% of <Stat> for it to work.',
 		multiple: true,
 		diffflag: 1,
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1 || !extra2) return message.channel.send("You didn't supply enough arguments!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0] || !extra[1]) return message.channel.send("You didn't supply enough arguments!");
 
-			if (parseFloat(extra1) < 1) return message.channel.send("You can't need less than 0%!");
+			if (parseFloat(extra[0]) < 1) return message.channel.send("You can't need less than 0%!");
 			if (stat != 'hp' && stat != 'mp' && stat != 'hppercent' && stat != 'mppercent' && stat != 'lb')
 				return message.channel.send("You entered an invalid value for <Stat>! It can be either HP, HPPercent, MP, MPPercent, or LB.");
 			
-			makeExtra(skill, "needlessthan", [parseFloat(extra1), extra2]);
+			makeExtra(skill, "needlessthan", [parseFloat(extra[0]), extra[1]]);
 			return true
 		},
 		canuse: function(char, skill, btl, vars) {
@@ -102,21 +102,21 @@ extrasList = {
 		desc: "_<Target/User> <Element> <Affinity> <Weak/Resist/Both> {Turns}_\nWill change <Target/User>'s affinity from the <Weak/Resist/Both> side of <Element> to <Affinity>. *Keep in mind that if you want it to last {Turns} turns, it can't be overwritten by a different affinity until then.*",
 		multiple: true,
 		diffflag: [0, 1, 2],
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra4) return message.channel.send("You didn't supply enough arguments!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[3]) return message.channel.send("You didn't supply enough arguments!");
 
-			if (extra1.toLowerCase() != 'target' && extra1.toLowerCase() != 'user') return message.channel.send("You entered an invalid value for <target/user>! It can be either Target or User.");
+			if (extra[0].toLowerCase() != 'target' && extra[0].toLowerCase() != 'user') return message.channel.send("You entered an invalid value for <target/user>! It can be either Target or User.");
 
-			if (![...Affinities, 'normal'].includes(extra3.toLowerCase())) return message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: " + Affinities.join(', ') + " or Normal.");
-			if (!Elements.includes(extra2.toLowerCase())) return message.channel.send("You entered an invalid value for <Element>!");
+			if (![...Affinities, 'normal'].includes(extra[2].toLowerCase())) return message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: " + Affinities.join(', ') + " or Normal.");
+			if (!Elements.includes(extra[1].toLowerCase())) return message.channel.send("You entered an invalid value for <Element>!");
 
-			if (extra4.toLowerCase() != 'weak' && extra4.toLowerCase() != 'resist' && extra4.toLowerCase() != 'both') return message.channel.send("You entered an invalid value for <Weak/Resist/Both>! It can be either Weak, Resist, or Both.");
+			if (extra[3].toLowerCase() != 'weak' && extra[3].toLowerCase() != 'resist' && extra[3].toLowerCase() != 'both') return message.channel.send("You entered an invalid value for <Weak/Resist/Both>! It can be either Weak, Resist, or Both.");
 
-			if (extra5) {
-				if (parseInt(extra4) < 5) return message.channel.send("You can't have a turn count less than 1!");
+			if (extra[4]) {
+				if (parseInt(extra[3]) < 5) return message.channel.send("You can't have a turn count less than 1!");
 			}
 
-			makeExtra(skill, "changeaffinity", [extra1.toLowerCase(), extra2.toLowerCase(), extra3.toLowerCase(), extra4.toLowerCase(), extra5 ? parseInt(extra5) : null]);
+			makeExtra(skill, "changeaffinity", [extra[0].toLowerCase(), extra[1].toLowerCase(), extra[2].toLowerCase(), extra[3].toLowerCase(), extra[4] ? parseInt(extra[4]) : null]);
 			return true
 		},
 		onselect: function(char, skill, btl, vars) {
@@ -186,7 +186,7 @@ extrasList = {
 	rest: {
 		name: "Rest",
 		desc: "Forces the caster to rest for one turn.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill, ...extra) {
 			makeExtra(skill, "rest", [true]);
 			return true
 		},
@@ -201,13 +201,13 @@ extrasList = {
 		desc: "_<Stat> <Stages> <Chance>_\nWill buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
 		multiple: true,
 		diffflag: [0, 2],
-		applyfunc: function(message, skill, extra1, extra2, extra3) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
-			if (!stats.includes(extra1.toLowerCase()) || extra1.toLowerCase() === 'luck') return message.channel.send("That's not a valid stat!");
-			if (!extra2) extra2 = '-1';
-			if (!extra3) extra3 = '100';
+		applyfunc: function(message, skill, extra[0], extra[1], extra[2]) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Stat>!");
+			if (!stats.includes(extra[0].toLowerCase()) || extra[0].toLowerCase() === 'luck') return message.channel.send("That's not a valid stat!");
+			if (!extra[1]) extra[1] = '-1';
+			if (!extra[2]) extra[2] = '100';
 
-			makeExtra(skill, "buff", [extra1.toLowerCase(), extra2.toLowerCase(), parseInt(extra3)]);
+			makeExtra(skill, "buff", [extra[0].toLowerCase(), extra[1].toLowerCase(), parseInt(extra[2])]);
 			return true
 		}
 	},
@@ -217,13 +217,13 @@ extrasList = {
 		desc: "_<Stat> <Percent>_\nBoosts skill power with <Stat> buffs up to <Percent>%.",
 		multiple: true,
 		diffflag: 0,
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Percent>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Stat>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <Percent>!");
 			
-			if (!utilityFuncs.validStat(extra1)) return message.channel.send("That's not a valid stat!");
+			if (!utilityFuncs.validStat(extra[0])) return message.channel.send("That's not a valid stat!");
 
-			makeExtra(skill, "powerbuff", [extra1.toLowerCase(), parseInt(extra2)]);
+			makeExtra(skill, "powerbuff", [extra[0].toLowerCase(), parseInt(extra[1])]);
 			return true
 		}
 	},
@@ -231,8 +231,8 @@ extrasList = {
 	takemp: {
 		name: "Take MP",
 		desc: "_<MP>_\nWill take <MP> MP from the foe each hit.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeExtra(skill, "takemp", [parseInt(extra1)]);
+		applyfunc: function(message, skill, ...extra) {
+			makeExtra(skill, "takemp", [parseInt(extra[0])]);
 			return true
 		}
 	},
@@ -240,7 +240,7 @@ extrasList = {
 	stealmp: {
 		name: "Steal MP",
 		desc: "Turns the skill into a skill that takes <Power> MP from the foe.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill, ...extra) {
 			makeExtra(skill, "stealmp", [true]);
 			return true
 		},
@@ -257,13 +257,13 @@ extrasList = {
 	steal: {
 		name: "Steal",
 		desc: "_<Chance> {Amount}_\nHas a <Chance>% chance to steal {Amount} of the foe team's items.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Chance>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Chance>!");
 
-			if (parseFloat(extra1) < 0) return message.channel.send("You can't steal from a foe that doesn't exist!");
-			if (!extra2 && parseInt(extra2) < 1) return message.channel.send("You didn't supply anything for <Amount>!");
+			if (parseFloat(extra[0]) < 0) return message.channel.send("You can't steal from a foe that doesn't exist!");
+			if (!extra[1] && parseInt(extra[1]) < 1) return message.channel.send("You didn't supply anything for <Amount>!");
 
-			makeExtra(skill, "steal", [parseFloat(extra1), parseInt(extra2)]);
+			makeExtra(skill, "steal", [parseFloat(extra[0]), parseInt(extra[1])]);
 			return true
 		}
 	},
@@ -271,8 +271,8 @@ extrasList = {
 	drain: {
 		name: "Drain",
 		desc: "_<Amount>_\nHeals the caster for 1/<Amount> of the damage dealt.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeExtra(skill, "drain", [parseInt(extra1) == 0 ? 1 : parseInt(extra1)]);
+		applyfunc: function(message, skill, ...extra) {
+			makeExtra(skill, "drain", [parseInt(extra[0]) == 0 ? 1 : parseInt(extra[0])]);
 			return true
 		}
 	},
@@ -280,7 +280,7 @@ extrasList = {
 	feint: {
 		name: "Feint",
 		desc: "Bypasses shielding skills like Makarakarn and Tetrakarn.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill, ...extra) {
 			makeExtra(skill, "feint", [true]);
 			return true
 		}
@@ -289,12 +289,12 @@ extrasList = {
 	healverse: {
 		name: "Healverse",
 		desc: "_<Damage Percent> <Turns> {Deploy Message}_\nAfter the foe is hit with this skill, each hit done to it will heal <Damage Percent>% of damage dealt to the attacker. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Damage Percent>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Turns>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Damage Percent>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <Turns>!");
 
-			if (parseInt(extra2) < 1) return message.channel.send("You can't have less than 1 turn for this skill.");
-			makeExtra(skill, "healverse", [parseFloat(extra1), parseInt(extra2), extra3]);
+			if (parseInt(extra[1]) < 1) return message.channel.send("You can't have less than 1 turn for this skill.");
+			makeExtra(skill, "healverse", [parseFloat(extra[0]), parseInt(extra[1]), extra[2]]);
 			return true
 		},
 		onuse: function(char, targ, skill, btl, vars) {
@@ -323,12 +323,12 @@ extrasList = {
 	powerverse: {
 		name: "Powerverse",
 		desc: "_<Percent> <Turns> {Deploy Message}_\nAfter the foe is hit with this skill, each hit done to it will boost LB% by <Damage Percent>%. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Damage Percent>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Turns>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Damage Percent>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <Turns>!");
 
-			if (parseInt(extra2) < 1) return message.channel.send("You can't have less than 1 turn for this skill.");
-			makeExtra(skill, "powerverse", [parseFloat(extra1), parseInt(extra2), extra3]);
+			if (parseInt(extra[1]) < 1) return message.channel.send("You can't have less than 1 turn for this skill.");
+			makeExtra(skill, "powerverse", [parseFloat(extra[0]), parseInt(extra[1]), extra[2]]);
 			return true
 		}
 	},
@@ -336,12 +336,12 @@ extrasList = {
 	spreadverse: {
 		name: "Spreadverse",
 		desc: "_<Damage Percent> <Turns> {Deploy Message}_\nAfter the foe is hit with this skill, each hit done to it will spread <Damage Percent>% of damage to other foes. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Damage Percent>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Turns>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Damage Percent>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <Turns>!");
 
-			if (parseInt(extra2) < 1) return message.channel.send("You can't have less than 1 turn for this skill.");
-			makeExtra(skill, "spreadverse", [parseFloat(extra1), parseInt(extra2), extra3]);
+			if (parseInt(extra[1]) < 1) return message.channel.send("You can't have less than 1 turn for this skill.");
+			makeExtra(skill, "spreadverse", [parseFloat(extra[0]), parseInt(extra[1]), extra[2]]);
 			return true
 		}
 	},
@@ -349,9 +349,9 @@ extrasList = {
 	lonewolf: {
 		name: "Lone Wolf",
 		desc: "_<Multiplier>_\nSkill Power boosted by <Multiplier>x when alone, or all allies are down.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Multiplier>!");
-			makeExtra(skill, "lonewolf", [parseFloat(extra1)]);
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Multiplier>!");
+			makeExtra(skill, "lonewolf", [parseFloat(extra[0])]);
 			return true
 		}
 	},
@@ -359,9 +359,9 @@ extrasList = {
 	heavenwrath: {
 		name: "Heaven's Wrath",
 		desc: "_<Multiplier>_\nSkill Power boosted by <Multiplier>x when not alone, and all allies are alive.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Multiplier>!");
-			makeExtra(skill, "heavenwrath", [parseFloat(extra1)]);
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Multiplier>!");
+			makeExtra(skill, "heavenwrath", [parseFloat(extra[0])]);
 			return true
 		}
 	},
@@ -369,11 +369,11 @@ extrasList = {
 	statcalc: {
 		name: "Stat Calculation",
 		desc: "_<Stat>_\nUses the caster's <Stat> for calculating damage.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Stat>!");
 
-			if (!utilityFuncs.validStat(extra2.toLowerCase())) return message.channel.send("That's not a valid stat!");
-			makeExtra(skill, "statcalc", [extra2.toLowerCase()]);
+			if (!utilityFuncs.validStat(extra[1].toLowerCase())) return message.channel.send("That's not a valid stat!");
+			makeExtra(skill, "statcalc", [extra[1].toLowerCase()]);
 			return true
 		}
 	},
@@ -381,8 +381,8 @@ extrasList = {
 	hpcalc: {
 		name: "HP Calculation",
 		desc: "_<Percent>_\nCurrent HP can boost or decrease damage by up to <Percent>%.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeExtra(skill, "hpcalc", [parseFloat(extra1)]);
+		applyfunc: function(message, skill, ...extra) {
+			makeExtra(skill, "hpcalc", [parseFloat(extra[0])]);
 			return true
 		}
 	},
@@ -390,8 +390,8 @@ extrasList = {
 	mpcalc: {
 		name: "MP Calculation",
 		desc: "_<Percent>_\nCurrent MP can boost or decrease damage by up to <Percent>%.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeExtra(skill, "mpcalc", [parseFloat(extra1)]);
+		applyfunc: function(message, skill, ...extra) {
+			makeExtra(skill, "mpcalc", [parseFloat(extra[0])]);
 			return true
 		}
 	},
@@ -399,12 +399,12 @@ extrasList = {
 	multistatus: {
 		name: "Multistatus",
 		desc: "_<Status> <Status> <Status>_\nThis skill becomes a status skill that will inflict one of multiple statuses.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill, ...extra) {
 			let backupStatus = skill.status;
 			skill.status = [];
-			if (statusEffects.includes(extra1)) skill.status.push(extra1);
-			if (statusEffects.includes(extra2)) skill.status.push(extra2);
-			if (statusEffects.includes(extra3)) skill.status.push(extra3);
+			if (statusEffects.includes(extra[0])) skill.status.push(extra[0]);
+			if (statusEffects.includes(extra[1])) skill.status.push(extra[1]);
+			if (statusEffects.includes(extra[2])) skill.status.push(extra[2]);
 			
 			if (skill.status.length <= 0) {
 				skill.status = backupStatus;
@@ -419,9 +419,9 @@ extrasList = {
 	dualelement: {
 		name: "Dual Element",
 		desc: "_<Element>_\nThe skill may use the 2nd element in addition to the first.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (Elements.includes(extra1.toLowerCase()) && extra1.toLowerCase() != skill.type && extra1.toLowerCase() != 'passive' && extra1.toLowerCase() != 'status' && extra1.toLowerCase() != 'heal') {
-				skill.type = [(typeof skill.type === 'object') ? skill.type[0] : skill.type, extra1.toLowerCase()];
+		applyfunc: function(message, skill, ...extra) {
+			if (Elements.includes(extra[0].toLowerCase()) && extra[0].toLowerCase() != skill.type && extra[0].toLowerCase() != 'passive' && extra[0].toLowerCase() != 'status' && extra[0].toLowerCase() != 'heal') {
+				skill.type = [(typeof skill.type === 'object') ? skill.type[0] : skill.type, extra[0].toLowerCase()];
 			} else
 				return message.channel.send("That's not a valid element!");	
 				
@@ -432,9 +432,9 @@ extrasList = {
 	affinitypow: {
 		name: "Affinity Power",
 		desc: "_<Damage>_\nPower boosted by <Damage> per affinity point. Works only for <:passive:963413845253193758>affinitypoint passives.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Damage>!");
-			makeExtra(skill, "affinitypow", [parseInt(extra1)]);
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Damage>!");
+			makeExtra(skill, "affinitypow", [parseInt(extra[0])]);
 			return true
 		}
 	},
@@ -442,16 +442,16 @@ extrasList = {
 	forcetech: {
 		name: "Force Technical",
 		desc: "_<Status Effect #1> {Status Effect #2} {Status Effect #3} {Status Effect #4} {Status Effect #5}_\nForces a skill to tech off of different status effects instead of the preset ones.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Status Effect #1>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Status Effect #1>!");
 
-			if (!statusEffects.includes(extra1.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-			if (extra2 && !statusEffects.includes(extra2.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-			if (extra3 && !statusEffects.includes(extra3.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-			if (extra4 && !statusEffects.includes(extra4.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-			if (extra5 && !statusEffects.includes(extra5.toLowerCase())) return message.channel.send("That's not a valid status effect!");
+			if (!statusEffects.includes(extra[0].toLowerCase())) return message.channel.send("That's not a valid status effect!");
+			if (extra[1] && !statusEffects.includes(extra[1].toLowerCase())) return message.channel.send("That's not a valid status effect!");
+			if (extra[2] && !statusEffects.includes(extra[2].toLowerCase())) return message.channel.send("That's not a valid status effect!");
+			if (extra[3] && !statusEffects.includes(extra[3].toLowerCase())) return message.channel.send("That's not a valid status effect!");
+			if (extra[4] && !statusEffects.includes(extra[4].toLowerCase())) return message.channel.send("That's not a valid status effect!");
 
-			makeExtra(skill, "forcetech", [extra1.toLowerCase(), extra2, extra3, extra4, extra5]);
+			makeExtra(skill, "forcetech", [extra[0].toLowerCase(), extra[1], extra[2], extra[3], extra[4]]);
 			return true
 		}
 	},
@@ -459,15 +459,15 @@ extrasList = {
 	forceformula: {
 		name: "Force Formula",
 		desc: "_<Formula>_\nForces a skill to use a different damage formula.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Formula>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Formula>!");
 
 			let damageFormulas = ['persona', 'pokemon', 'lamonka']
-			if (damageFormulas.includes(extra1.toLowerCase())) {
+			if (damageFormulas.includes(extra[0].toLowerCase())) {
 				return message.channel.send('Invalid damage formula!\nValid formulas are: Persona, Pokemon, Lamonka')
 			}
 
-			makeExtra(skill, "forceformula", [extra1.toLowerCase(), extra2]);
+			makeExtra(skill, "forceformula", [extra[0].toLowerCase(), extra[1]]);
 			return true;
 		}
 	},
@@ -475,16 +475,16 @@ extrasList = {
 	rollout: {
 		name: "Rollout",
 		desc: "_<Boost> <Max Boost> <Times>_\nBoost the skill's power by <Boost> every consecutive use, but the caster is locked to using it until power reaches <Max Boost>x or skill is used <Times> times in a row.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Boost>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Max Boost>!");
-			if (!extra3) return message.channel.send("You didn't supply anything for <Times>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Boost>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <Max Boost>!");
+			if (!extra[2]) return message.channel.send("You didn't supply anything for <Times>!");
 
-			if (extra2 < extra1) return message.channel.send("You can't have a max boost lower than the boost!");
-			if (parseInt(extra2) < 1) return message.channel.send("You can't have less than 1 max boost!");
-			if (parseInt(extra3) < 1) return message.channel.send("You can't have less than 1 times!");
+			if (extra[1] < extra[0]) return message.channel.send("You can't have a max boost lower than the boost!");
+			if (parseInt(extra[1]) < 1) return message.channel.send("You can't have less than 1 max boost!");
+			if (parseInt(extra[2]) < 1) return message.channel.send("You can't have less than 1 times!");
 
-			makeExtra(skill, "rollout", [parseInt(extra1), parseInt(extra2), parseInt(extra3)]);
+			makeExtra(skill, "rollout", [parseInt(extra[0]), parseInt(extra[1]), parseInt(extra[2])]);
 			return true
 		}
 	},
@@ -492,7 +492,7 @@ extrasList = {
 	sustain: {
 		name: "Sustain",
 		desc: "Multi-Hits do not have power altered as hits go on.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill, ...extra) {
 			makeExtra(skill, "sustain", [true]);
 			return true
 		}
@@ -501,7 +501,7 @@ extrasList = {
 	reverse: {
 		name: "Reverse",
 		desc: "Multi-Hits gradually increase in power instead of decreasing.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill, ...extra) {
 			makeExtra(skill, "reverse", [true]);
 			return true
 		}
@@ -510,10 +510,10 @@ extrasList = {
 	powhit: {
 		name: "Power Hit",
 		desc: "_<Hit #1> {Hit #2} {Hit #3} {Hit #4} {Hit #5}_\nWith multi-hits, hits <Hit #1>, {Hit #2}, {Hit #3}, {Hit #4>, and {Hit #5} will have their power increased.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Hit #1>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Hit #1>!");
 
-			makeExtra(skill, "powhit", [parseInt(extra1), extra2 ? parseInt(extra2) : null, extra3 ? parseInt(extra3) : null, extra4 ? parseInt(extra4) : null, extra5 ? parseInt(extra5) : null]);
+			makeExtra(skill, "powhit", [parseInt(extra[0]), extra[1] ? parseInt(extra[1]) : null, extra[2] ? parseInt(extra[2]) : null, extra[3] ? parseInt(extra[3]) : null, extra[4] ? parseInt(extra[4]) : null]);
 			return true;
 		}
 	},
@@ -521,16 +521,16 @@ extrasList = {
 	multihit: {
 		name: "Multi",
 		desc: "_<Chance> {Number of Hits}_\nA <Chance>% chance to add {Number of Hits} extra hit(s) to the skill, multi-hit already or not.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Chance>!");
-			if (extra1 <= 0 || extra1 > 50) return message.channel.send("Invalid value for <Chance>! It should be above 0 or below 50.");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Chance>!");
+			if (extra[0] <= 0 || extra[0] > 50) return message.channel.send("Invalid value for <Chance>! It should be above 0 or below 50.");
 			
-			if (extra2) {
-				if (extra2 <= 0 || extra2 > 99-(skill.hits ?? 1))
+			if (extra[1]) {
+				if (extra[1] <= 0 || extra[1] > 99-(skill.hits ?? 1))
 					return message.channel.send(`Invalid value for {Number of Hits}. It should be above 0. Be aware that skills cannot exceed 99 hits, and so, the highest this number can be is ${99-(skill.hits ?? 1)}.`);
 			}
 
-			makeExtra(skill, "multihit", [parseInt(extra1), extra2 ? parseInt(extra2) : 1]);
+			makeExtra(skill, "multihit", [parseInt(extra[0]), extra[1] ? parseInt(extra[1]) : 1]);
 			return true;
 		},
 		statmod: function(char, skill, vars, btl) {
@@ -587,11 +587,11 @@ hasExtra = (skill, extra) => {
 }
 
 // Apply Extra Effects to an existing skill using the extrasList above.
-applyExtra = (message, skill, skillExtra, extra1, extra2, extra3, extra4, extra5) => {
+applyExtra = (message, skill, skillExtra, arg) => {
 	if (!skill.extras) skill.extras = {};
 	if (!skillExtra || !extrasList[skillExtra.toLowerCase()]) return message.channel.send("You're adding an invalid extra! Use the ''listatkextras'' command to list all extras.");
 
-	extrasList[skillExtra.toLowerCase()].applyfunc(message, skill, extra1, extra2, extra3, extra4, extra5);
+	extrasList[skillExtra.toLowerCase()].applyfunc(message, skill, ...arg);
 	message.react('👍');
 
 	return true;

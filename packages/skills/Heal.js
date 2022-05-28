@@ -2,12 +2,12 @@ healList = {
 	default: {
 		name: "Default",
 		desc: "_<HP>_\nThe default heal type. Restores HP by <HP>. _Negative values for <HP> will damage the target!_",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <HP>!");
-			if (parseInt(extra1) == 0) extra1 = 60;
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <HP>!");
+			if (parseInt(extra[0]) == 0) extra[0] = 60;
 			
-			skill.pow = parseInt(extra1);
-			makeHeal(skill, "default", [parseInt(extra1)]);
+			skill.pow = parseInt(extra[0]);
+			makeHeal(skill, "default", [parseInt(extra[0])]);
 			return true;
 		},
 		onuse: function(char, targ, skill, btl, vars) {
@@ -21,9 +21,9 @@ healList = {
 	healmp: {
 		name: "Heal MP",
 		desc: "_<MP>_\nRestores MP by <MP>. _Negative values for <MP> will drain the target!_",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <MP>!");
-			makeHeal(skill, "healmp", [parseInt(extra1)]);
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <MP>!");
+			makeHeal(skill, "healmp", [parseInt(extra[0])]);
 			return true;
 		},
 		onuse: function(char, targ, skill, btl, vars) {
@@ -35,12 +35,12 @@ healList = {
 	regenerate: {
 		name: "Regenerate",
 		desc: "_<HP> <Turns>_\nRestores HP by <HP> over time for <Turns> turns. _Negative values for <HP> will damage the target!_",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <HP>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Turns>!");
-			if (parseInt(extra1) == 0) extra1 = 20;
-			if (parseInt(extra1) == 0) extra2 = 3;
-			makeHeal(skill, "regenerate", [parseInt(extra1), parseInt(extra2)]);
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <HP>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <Turns>!");
+			if (parseInt(extra[0]) == 0) extra[0] = 20;
+			if (parseInt(extra[0]) == 0) extra[1] = 3;
+			makeHeal(skill, "regenerate", [parseInt(extra[0]), parseInt(extra[1])]);
 			return true;
 		},
 		onuse: function(char, targ, skill, btl, vars) {
@@ -57,11 +57,11 @@ healList = {
 	invigorate: {
 		name: "Invigorate",
 		desc: "_<MP> <Turns>_\nRestores MP by <MP> over time for <Turns> turns. _Negative values for <MP> will drain the target!_",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <MP>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Turns>!");
-			if (parseInt(extra1) == 0) extra1 = 20;
-			if (parseInt(extra1) == 0) extra2 = 3;
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <MP>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <Turns>!");
+			if (parseInt(extra[0]) == 0) extra[0] = 20;
+			if (parseInt(extra[0]) == 0) extra[1] = 3;
 			return true;
 		},
 		onuse: function(char, targ, skill, btl, vars) {
@@ -78,10 +78,10 @@ healList = {
 	revive: {
 		name: "Revive",
 		desc: "_<Amount>_\nRevives the target to 1/<Amount> of their max HP. _Negative values are not permitted._",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Amount>!");
-			if (parseInt(extra1) <= 0) return message.channel.send("You can't revive to 0 or less!");
-			makeHeal(skill, "revive", [parseInt(extra1)]);
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Amount>!");
+			if (parseInt(extra[0]) <= 0) return message.channel.send("You can't revive to 0 or less!");
+			makeHeal(skill, "revive", [parseInt(extra[0])]);
 			return true;
 		},
 		onuse: function(char, targ, skill, btl, vars) {
@@ -95,7 +95,7 @@ healList = {
 	recarmdra: {
 		name: "Recarmdra",
 		desc: "Fully restores party HP and MP, but downs the caster.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill, ...extra) {
 			makeHeal(skill, "recarmdra", [true]);
 			return true;
 		},
@@ -113,7 +113,7 @@ healList = {
 	fullheal: {
 		name: "Full Heal",
 		desc: "Fully restores HP of the target.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill, ...extra) {
 			makeHeal(skill, "fullheal", [true]);
 			if (hasHealType(skill, "default")) delete skill.heal["default"];
 			return true;
@@ -129,13 +129,13 @@ healList = {
 		desc: "_<Status>_\nCures the target of the specified status. Accepts 'physical', 'mental' and 'all' as statuses.",
 		multiple: true,
 		diffflag: 0,
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Status>!");
-			extra1 = extra1.toLowerCase();
-			if (extra1 != 'physical' || extra1 != 'mental' || extra1 != 'all') {
-				if (!statusEffects.includes(extra1)) return message.channel.send("That's not a valid status!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Status>!");
+			extra[0] = extra[0].toLowerCase();
+			if (extra[0] != 'physical' || extra[0] != 'mental' || extra[0] != 'all') {
+				if (!statusEffects.includes(extra[0])) return message.channel.send("That's not a valid status!");
 			}
-			makeHeal(skill, "statusheal", [extra1]);
+			makeHeal(skill, "statusheal", [extra[0]]);
 			return true;
 		},
 		onuse: function(char, targ, skill, btl, vars) {
@@ -193,8 +193,8 @@ healList = {
 	sacrifice: {
 		name: "Sacrifice",
 		desc: "_{HP}_\nWill reduce the caster's HP to a {HP}.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeHeal(skill, "sacrifice", [extra1 ? parseInt(extra1) : 0]);
+		applyfunc: function(message, skill, ...extra) {
+			makeHeal(skill, "sacrifice", [extra[0] ? parseInt(extra[0]) : 0]);
 			let hasHeal = false;
 			for (var i in skill.heal) {
 				if (i != "wish" && i != "sacrifice") {
@@ -218,10 +218,10 @@ healList = {
 	wish: {
 		name: "Wish",
 		desc: "_<Turns>_\nWill restore after <Turns> turns. _Negative values are not permitted._",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Turns>!");
-			if (parseInt(extra1) <= 0) return message.channel.send("You can't wish for 0 or less!");
-			makeHeal(skill, "wish", [parseInt(extra1)]);
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Turns>!");
+			if (parseInt(extra[0]) <= 0) return message.channel.send("You can't wish for 0 or less!");
+			makeHeal(skill, "wish", [parseInt(extra[0])]);
 			let hasHeal = false
 			for (var i in skill.heal) {
 				if (i != "sacrifice" && i != "wish") {
@@ -268,14 +268,14 @@ hasHealType = (skill, extra) => {
 }
 
 // Apply Extra Effects to an existing skill using the extrasList above.
-applyHeal = (message, skill, skillExtra, extra1, extra2, extra3, extra4, extra5) => {
+applyHeal = (message, skill, skillExtra, ...extra) => {
 	if (!skill.heal) skill.heal = {};
 	if (!skillExtra || !healList[skillExtra.toLowerCase()]) {
 		message.channel.send("You're adding an invalid heal type! Use the ''listhealtypes'' command to list all extras.");
 		return false;
 	}
 
-	if (!healList[skillExtra.toLowerCase()].applyfunc(message, skill, extra1, extra2, extra3, extra4, extra5)) {
+	if (!healList[skillExtra.toLowerCase()].applyfunc(message, skill, ...extra)) {
 		message.channel.send("Something went wrong!");
 		return false;
 	}

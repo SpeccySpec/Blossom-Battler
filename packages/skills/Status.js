@@ -2,14 +2,14 @@ statusList = {
 	status: {
 		name: 'Status',
 		desc: '_<Status> {Chance}_\n<Chance>% to inflict a <Status> on the target.',
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Status>!");
-			extra1 = extra1.toLowerCase();
-			if (!statusEffects.includes(extra1)) return message.channel.send("That's not a valid status!");
-			if (!extra2) extra2 = 100;
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Status>!");
+			extra[0] = extra[0].toLowerCase();
+			if (!statusEffects.includes(extra[0])) return message.channel.send("That's not a valid status!");
+			if (!extra[1]) extra[1] = 100;
 
-			skill.status = extra1;
-			skill.statuschance = extra2;
+			skill.status = extra[0];
+			skill.statuschance = extra[1];
 			return true;
 		},
 		onuse: function(char, targ, skill, btl, vars) {
@@ -31,13 +31,13 @@ statusList = {
 		desc: "_<Stat> <Stages> <Chance>_\nWill buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
 		multiple: true,
 		diffflag: [0, 2],
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
-			if (!utilityFuncs.validStat(extra1)) return message.channel.send("That's not a valid stat!");
-			if (!extra2) extra2 = '1';
-			if (!extra3) extra3 = '100';
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Stat>!");
+			if (!utilityFuncs.validStat(extra[0])) return message.channel.send("That's not a valid stat!");
+			if (!extra[1]) extra[1] = '1';
+			if (!extra[2]) extra[2] = '100';
 
-			makeStatus(skill, "buff", [extra1.toLowerCase(), parseInt(extra2), parseFloat(extra3)]);
+			makeStatus(skill, "buff", [extra[0].toLowerCase(), parseInt(extra[1]), parseFloat(extra[2])]);
 			return true;
 		},
 		onuse: function(char, targ, skill, btl, vars) {
@@ -60,7 +60,7 @@ statusList = {
 	dekunda: {
 		name: "Dekunda",
 		desc: "Removes the target's positive buffs.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill, ...extra) {
 			makeStatus(skill, "dekunda", [true]);
 			return true;
 		},
@@ -76,7 +76,7 @@ statusList = {
 	heartswap: {
 		name: "Heart Swap",
 		desc: "Swaps the target's stat changes with the caster's.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill, ...extra) {
 			makeStatus(skill, "heartswap", [true]);
 			return true;
 		}
@@ -85,14 +85,14 @@ statusList = {
 	mimic: {
 		name: "Mimic",
 		desc: "_<Turns> {Skill}_\nMorphs into an ally or an enemy of the caster's choice for <Turns> turns. The caster can change back with {Skill}.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Turns>!");
-			if (parseInt(extra1) < 1) return message.channel.send("You can't have less than 1 turn!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Turns>!");
+			if (parseInt(extra[0]) < 1) return message.channel.send("You can't have less than 1 turn!");
 
-			if (extra2 && !skillFile[extra2]) return message.channel.send("That's not a valid skill!");
-			if (extra2 && (!skillFile[extra2].statusses || (skillFile[extra2].statusses && !skillFile[extra2].statusses.unmimic))) return message.channel.send("That's not a valid skill!");
+			if (extra[1] && !skillFile[extra[1]]) return message.channel.send("That's not a valid skill!");
+			if (extra[1] && (!skillFile[extra[1]].statusses || (skillFile[extra[1]].statusses && !skillFile[extra[1]].statusses.unmimic))) return message.channel.send("That's not a valid skill!");
 
-			makeStatus(skill, "mimic", [parseInt(extra1), extra2 ?? null]);
+			makeStatus(skill, "mimic", [parseInt(extra[0]), extra[1] ?? null]);
 			return true;
 		}
 	},
@@ -100,7 +100,7 @@ statusList = {
 	unmimic: {
 		name: "Unmimic",
 		desc: "Will return the caster to their original form.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill, ...extra) {
 			makeStatus(skill, "unmimic", [true]);
 			return true;
 		}
@@ -109,12 +109,12 @@ statusList = {
 	clone: {
 		name: "Clone",
 		desc: "_<HP Percent> <MP Percent> <Percent>_\nClones the caster into a new ally with <HP Percent>% of Max HP, <MP Percent>% of Max MP, and <Percent>% of the caster's stats.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <HP Percent>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <MP Percent>!");
-			if (!extra3) return message.channel.send("You didn't supply anything for <Percent>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <HP Percent>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <MP Percent>!");
+			if (!extra[2]) return message.channel.send("You didn't supply anything for <Percent>!");
 
-			makeStatus(skill, "clone", [parseFloat(extra1), parseFloat(extra2), parseFloat(extra3)]);
+			makeStatus(skill, "clone", [parseFloat(extra[0]), parseFloat(extra[1]), parseFloat(extra[2])]);
 			return true;
 		}
 	},
@@ -122,12 +122,12 @@ statusList = {
 	shield: {
 		name: "Shield",
 		desc: "_<Shield Name> <Hits>_\nProtects the target with a shield called <Shield Name> that can take <Hits> hits.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Shield Name>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Hits>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Shield Name>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <Hits>!");
 
-			if (parseInt(extra2) < 1) return message.channel.send("You can't have less than 1 hit!");
-			makeStatus(skill, "shield", [extra1, parseInt(extra2)]);
+			if (parseInt(extra[1]) < 1) return message.channel.send("You can't have less than 1 hit!");
+			makeStatus(skill, "shield", [extra[0], parseInt(extra[1])]);
 			return true;
 		}
 	},
@@ -135,7 +135,7 @@ statusList = {
 	makarakarn: {
 		name: "Makarakarn",
 		desc: "Protects the target with a shield that repels magic attacks.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill, ...extra) {
 			makeStatus(skill, "makarakarn", [true]);
 			return true;
 		}
@@ -144,7 +144,7 @@ statusList = {
 	tetrakarn: {
 		name: "Tetrakarn",
 		desc: "Protects the target with a shield that repels physical attacks.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill, ...extra) {
 			makeStatus(skill, "tetrakarn", [true]);
 			return true;
 		}
@@ -153,13 +153,13 @@ statusList = {
 	shieldbreak: {
 		name: "Shield Break",
 		desc: "_<Shield/Tetra/Makara> <Accuracy>_\nHas a <Accuracy>% chance to break the target's <Shield/Tetra/Makara>.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Shield/Tetra/Makara>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Accuracy>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Shield/Tetra/Makara>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <Accuracy>!");
 
-			if (!["shield", "tetra", "makara"].includes(extra1.toLowerCase())) return message.channel.send("That's not shield/tetra/makara!");
-			if (parseFloat(extra2) < 1) return message.channel.send("You can't have less than 1 hit!");
-			makeStatus(skill, "shieldbreak", [extra1.toLowerCase(), parseFloat(extra2)]);
+			if (!["shield", "tetra", "makara"].includes(extra[0].toLowerCase())) return message.channel.send("That's not shield/tetra/makara!");
+			if (parseFloat(extra[1]) < 1) return message.channel.send("You can't have less than 1 hit!");
+			makeStatus(skill, "shieldbreak", [extra[0].toLowerCase(), parseFloat(extra[1])]);
 			return true;
 		}
 	},
@@ -167,38 +167,38 @@ statusList = {
 	trap: {
 		name: "Trap",
 		desc: "_<Trap Name> <Power Multiplier> <Type> <Variable #1> <Variable #2>_\nProtects the target with a trap called <Trap Name> that is set off once a physical attack strikes them and multiplies power by <Power Multiplier>x. <Variable #1> and <Variable #2> differ based on <Type>\n```diff\n+ Debuff: Debuffable Stat, Stages\n+ Status: Valid Status Effect, Chance\n+ Damage: Fixed Damage, Element```",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Trap Name>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Power Multiplier>!");
-			if (!extra3) return message.channel.send("You didn't supply anything for <Type>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Trap Name>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <Power Multiplier>!");
+			if (!extra[2]) return message.channel.send("You didn't supply anything for <Type>!");
 
 			let validTypes = ["debuff", "status", "damage"];
-			if (!validTypes.includes(extra3.toLowerCase())) return message.channel.send("That's not a valid type!");
-			if (extra3.toLowerCase() == "debuff") {
-				if (!extra4) return message.channel.send("You didn't supply anything for <Debuff Name>!");
-				if (!extra5) return message.channel.send("You didn't supply anything for <Debuff Stages>!");
+			if (!validTypes.includes(extra[2].toLowerCase())) return message.channel.send("That's not a valid type!");
+			if (extra[2].toLowerCase() == "debuff") {
+				if (!extra[3]) return message.channel.send("You didn't supply anything for <Debuff Name>!");
+				if (!extra[4]) return message.channel.send("You didn't supply anything for <Debuff Stages>!");
 
 				let validStats = ["atk", "mag", "prc", "end", "chr", "int", "agl", "luk"];
-				if (!validStats.includes(extra4.toLowerCase())) return message.channel.send("That's not a valid stat!");
+				if (!validStats.includes(extra[3].toLowerCase())) return message.channel.send("That's not a valid stat!");
 
-				makeStatus(skill, "trap", [extra1, parseFloat(extra2), extra3.toLowerCase(), extra4.toLowerCase(), parseInt(extra5)]);
-			} else if (extra3.toLowerCase() == "status") {
-				if (!extra4) return message.channel.send("You didn't supply anything for <Status Name>!");
+				makeStatus(skill, "trap", [extra[0], parseFloat(extra[1]), extra[2].toLowerCase(), extra[3].toLowerCase(), parseInt(extra[4])]);
+			} else if (extra[2].toLowerCase() == "status") {
+				if (!extra[3]) return message.channel.send("You didn't supply anything for <Status Name>!");
 
-				if (!statusEffects.includes(extra4.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-				if (!extra5) extra5 = '-1';
+				if (!statusEffects.includes(extra[3].toLowerCase())) return message.channel.send("That's not a valid status effect!");
+				if (!extra[4]) extra[4] = '-1';
 
-				makeStatus(skill, "trap", [extra1, parseFloat(extra2), extra3.toLowerCase(), extra4.toLowerCase(), parseInt(extra5)]);
-			} else if (extra3.toLowerCase() == "damage") {
-				if (!extra4) return message.channel.send("You didn't supply anything for <Fixed Damage>!");
-				if (!extra5) return message.channel.send("You didn't supply anything for <Element>!");
+				makeStatus(skill, "trap", [extra[0], parseFloat(extra[1]), extra[2].toLowerCase(), extra[3].toLowerCase(), parseInt(extra[4])]);
+			} else if (extra[2].toLowerCase() == "damage") {
+				if (!extra[3]) return message.channel.send("You didn't supply anything for <Fixed Damage>!");
+				if (!extra[4]) return message.channel.send("You didn't supply anything for <Element>!");
 
-				if (!Elements.includes(extra5.toLowerCase())) return message.channel.send("That's not a valid element!");
-				if (extra5.toLowerCase() == "heal") return message.channel.send("You can't set a trap to heal!");
-				if (extra5.toLowerCase() == "status") return message.channel.send("You can't set a trap to status!");
-				if (extra5.toLowerCase() == "passive") return message.channel.send("You can't set a trap to passive!");
+				if (!Elements.includes(extra[4].toLowerCase())) return message.channel.send("That's not a valid element!");
+				if (extra[4].toLowerCase() == "heal") return message.channel.send("You can't set a trap to heal!");
+				if (extra[4].toLowerCase() == "status") return message.channel.send("You can't set a trap to status!");
+				if (extra[4].toLowerCase() == "passive") return message.channel.send("You can't set a trap to passive!");
 
-				makeStatus(skill, "trap", [extra1, parseFloat(extra2), extra3.toLowerCase(), extra4, extra5.toLowerCase()]);
+				makeStatus(skill, "trap", [extra[0], parseFloat(extra[1]), extra[2].toLowerCase(), extra[3], extra[4].toLowerCase()]);
 			}
 			return true;
 		}
@@ -209,8 +209,8 @@ statusList = {
 		desc: extrasList.changeaffinity.desc,
 		multiple: true,
 		diffflag: [0, 1, 2],
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			extrasList.changeaffinity.applyfunc(message, skill, extra1, extra2, extra3, extra4, extra5);
+		applyfunc: function(message, skill, ...extra) {
+			extrasList.changeaffinity.applyfunc(message, skill, ...extra);
 		},
 		onselect: function(char, skill, btl, vars) {
 			extrasList.changeaffinity.onselect(char, skill, btl, vars);
@@ -223,11 +223,11 @@ statusList = {
 	weather: {
 		name: "Weather",
 		desc: "_<Weather>_\nChanges the weather to <Weather>, which will affect the battle.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Weather>!");
-			if (!weathers.includes(extra1.toLowerCase())) return message.channel.send("That's not a valid weather!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Weather>!");
+			if (!weathers.includes(extra[0].toLowerCase())) return message.channel.send("That's not a valid weather!");
 
-			makeStatus(skill, "weather", [extra1.toLowerCase()]);
+			makeStatus(skill, "weather", [extra[0].toLowerCase()]);
 			return true;
 		}
 	},
@@ -235,11 +235,11 @@ statusList = {
 	terrain: {
 		name: "Terrain",
 		desc: "_<Terrain>_\nChanges the terrain to <Terrain>, which will affect the battle.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Terrain>!");
-			if (!terrains.includes(extra1.toLowerCase())) return message.channel.send("That's not a valid terrain!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Terrain>!");
+			if (!terrains.includes(extra[0].toLowerCase())) return message.channel.send("That's not a valid terrain!");
 
-			makeStatus(skill, "terrain", [extra1.toLowerCase()]);
+			makeStatus(skill, "terrain", [extra[0].toLowerCase()]);
 			return true;
 		}
 	},
@@ -247,17 +247,17 @@ statusList = {
 	reincarnate: {
 		name: "Reincarnate",
 		desc: "_<Mininum Stat> <Maximum Stat> <Percent> {Deploy Message}_\nSummons a reincarnate to the caster's team. The reincarnate will have stats randomized between <Minimum Stat> and <Maximum Stat> and HP and MP at <Percent>% of caster's Max HP and Max MP. You can add flair to this skill with a {Deploy Message}. These can use %PLAYER% to replace with the caster, and %UNDEAD% to replace with the undead.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Minimum Stat>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Maximum Stat>!");
-			if (!extra3) return message.channel.send("You didn't supply anything for <Percent>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Minimum Stat>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <Maximum Stat>!");
+			if (!extra[2]) return message.channel.send("You didn't supply anything for <Percent>!");
 			
-			if (parseInt(extra1) < 1) return message.channel.send("Minimum Stat must be above 0!");
-			if (parseInt(extra2) < 1) return message.channel.send("Maximum Stat must be above 0!");
-			if (parseInt(extra2) < parseInt(extra1)) return message.channel.send("Maximum Stat must be greater than Minimum Stat!");
-			if (parseFloat(extra3) < 1) return message.channel.send("Percent must be above 0!");
+			if (parseInt(extra[0]) < 1) return message.channel.send("Minimum Stat must be above 0!");
+			if (parseInt(extra[1]) < 1) return message.channel.send("Maximum Stat must be above 0!");
+			if (parseInt(extra[1]) < parseInt(extra[0])) return message.channel.send("Maximum Stat must be greater than Minimum Stat!");
+			if (parseFloat(extra[2]) < 1) return message.channel.send("Percent must be above 0!");
 
-			makeStatus(skill, "reincarnate", [parseInt(extra1), parseInt(extra2), parseFloat(extra3), extra4 ? extra4 : "%PLAYER% has summoned an undead %UNDEAD%"]);
+			makeStatus(skill, "reincarnate", [parseInt(extra[0]), parseInt(extra[1]), parseFloat(extra[2]), extra[3] ? extra[3] : "%PLAYER% has summoned an undead %UNDEAD%"]);
 			return true;
 		}
 	},
@@ -265,29 +265,29 @@ statusList = {
 	futuresight: {
 		name: "Futuresight",
 		desc: "_<Power> <Accuracy> {Crit} <Element> <Turns>_\nThis skill becomes an attacking skill that strikes the foe in <Turns> turns with <Power> power, <Accuracy>% accuracy, <Crit>% critical chance, and element of <Element>.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Power>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Accuracy>!");
-			if (!extra4) return message.channel.send("You didn't supply anything for <Type>!");
-			if (!extra5) return message.channel.send("You didn't supply anything for <Turns>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Power>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <Accuracy>!");
+			if (!extra[3]) return message.channel.send("You didn't supply anything for <Type>!");
+			if (!extra[4]) return message.channel.send("You didn't supply anything for <Turns>!");
 
-			if (parseInt(extra1) < 1) return message.channel.send("Power must be above 0!");
-			if (parseFloat(extra2) < 1) return message.channel.send("Accuracy must be above 0!");
-			if (parseInt(extra5) < 1) return message.channel.send("Turns must be above 0!");
+			if (parseInt(extra[0]) < 1) return message.channel.send("Power must be above 0!");
+			if (parseFloat(extra[1]) < 1) return message.channel.send("Accuracy must be above 0!");
+			if (parseInt(extra[4]) < 1) return message.channel.send("Turns must be above 0!");
 
-			if (!Elements.includes(extra4.toLowerCase())) return message.channel.send("That's not a valid element!");
-			if (extra4.toLowerCase() == "heal") return message.channel.send("You can't set a futuresight to heal!");
-			if (extra4.toLowerCase() == "status") return message.channel.send("You can't set a futuresight to status!");
-			if (extra4.toLowerCase() == "passive") return message.channel.send("You can't set a futuresight to passive!");
+			if (!Elements.includes(extra[3].toLowerCase())) return message.channel.send("That's not a valid element!");
+			if (extra[3].toLowerCase() == "heal") return message.channel.send("You can't set a futuresight to heal!");
+			if (extra[3].toLowerCase() == "status") return message.channel.send("You can't set a futuresight to status!");
+			if (extra[3].toLowerCase() == "passive") return message.channel.send("You can't set a futuresight to passive!");
 
 			makeStatus(skill, "futuresight", [{
 				name: skill.name,
-				pow: parseInt(extra1),
-				acc: parseFloat(extra2),
-				crit: Math.max(0, Math.min(parseFloat(extra3), 100)),
-				type: extra4.toLowerCase(),
+				pow: parseInt(extra[0]),
+				acc: parseFloat(extra[1]),
+				crit: Math.max(0, Math.min(parseFloat(extra[2]), 100)),
+				type: extra[3].toLowerCase(),
 				atktype: 'magic',
-				turns: parseInt(extra5)
+				turns: parseInt(extra[4])
 			}]);
 			return true
 		}
@@ -296,12 +296,12 @@ statusList = {
 	multistatus: {
 		name: "Multistatus",
 		desc: "_<Status> <Status> <Status>_\nThis skill becomes a status skill that will inflict one of multiple statuses.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill, ...extra) {
 			let backupStatus = skill.status;
 			skill.status = [];
-			if (statusEffects.includes(extra1)) skill.status.push(extra1);
-			if (statusEffects.includes(extra2)) skill.status.push(extra2);
-			if (statusEffects.includes(extra3)) skill.status.push(extra3);
+			if (statusEffects.includes(extra[0])) skill.status.push(extra[0]);
+			if (statusEffects.includes(extra[1])) skill.status.push(extra[1]);
+			if (statusEffects.includes(extra[2])) skill.status.push(extra[2]);
 			
 			if (skill.status.length <= 0) {
 				skill.status = backupStatus;
@@ -316,14 +316,14 @@ statusList = {
 	chaosstir: {
 		name: "Chaos Stir",
 		desc: "_<Power Multiplier> <Accuracy>_\nUpon getting hit with a skill, the caster strikes back with the skill with <Power Multiplier>x power and <Accuracy>% accuracy.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Power>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Accuracy>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Power>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <Accuracy>!");
 
-			if (parseInt(extra1) < 1) return message.channel.send("Power must be above 0!");
-			if (parseFloat(extra2) < 1) return message.channel.send("Accuracy must be above 0!");
+			if (parseInt(extra[0]) < 1) return message.channel.send("Power must be above 0!");
+			if (parseFloat(extra[1]) < 1) return message.channel.send("Accuracy must be above 0!");
 
-			makeStatus(skill, "chaosstir", [parseInt(extra1), parseFloat(extra2)]);
+			makeStatus(skill, "chaosstir", [parseInt(extra[0]), parseFloat(extra[1])]);
 			return true;
 		}
 	},
@@ -331,15 +331,15 @@ statusList = {
 	pacifystatus: {
 		name: "Pacify Status",
 		desc: "_<Status Effect> <Amount>_\nPacifies the target if they have <Status Effect>, by <Amount>. Accepts 'physical', 'mental', and 'all' as statuses.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Status Effect>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Amount>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Status Effect>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <Amount>!");
 
-			if (!extra1.toLowerCase() == "physical" && !extra1.toLowerCase() == "mental" && !extra1.toLowerCase() == "all") {
-				if (!statusEffects.includes(extra1)) return message.channel.send("That's not a valid status effect!");
+			if (!extra[0].toLowerCase() == "physical" && !extra[0].toLowerCase() == "mental" && !extra[0].toLowerCase() == "all") {
+				if (!statusEffects.includes(extra[0])) return message.channel.send("That's not a valid status effect!");
 			}
 
-			makeStatus(skill, "pacifystatus", [extra1, parseInt(extra2)]);
+			makeStatus(skill, "pacifystatus", [extra[0], parseInt(extra[1])]);
 			return true;
 		}
 	},
@@ -347,11 +347,11 @@ statusList = {
 	ragesoul: {
 		name: "Rage Soul",
 		desc: "_<Melee Power Multiplier> <ATK Stat Multiplier>_\nMultiplies the caster's Melee Attack Power by <Melee Power Multiplier> and their Attack Stat by <ATK Stat Multiplier>, but locks them into using Melee Attacks.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Melee Power Multiplier>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <ATK Stat Multiplier>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Melee Power Multiplier>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <ATK Stat Multiplier>!");
 
-			makeStatus(skill, "ragesoul", [parseFloat(extra1), parseFloat(extra2)]);
+			makeStatus(skill, "ragesoul", [parseFloat(extra[0]), parseFloat(extra[1])]);
 			return true;
 		}
 	},
@@ -359,10 +359,10 @@ statusList = {
 	powercharge: {
 		name: "Power Charge",
 		desc: "_<Power Multiplier>_\nBoosts physical damage by <Power Multiplier>x for one turn. Removed whether attacked or not.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Power Multiplier>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Power Multiplier>!");
 
-			makeStatus(skill, "powercharge", [parseFloat(extra1)]);
+			makeStatus(skill, "powercharge", [parseFloat(extra[0])]);
 			return true;
 		}
 	},
@@ -370,10 +370,10 @@ statusList = {
 	mindcharge: {
 		name: "Mind Charge",
 		desc: "_<Power Multiplier>_\nBoosts magic damage by <Power Multiplier>x for one turn. Removed whether attacked or not.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Power Multiplier>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <Power Multiplier>!");
 
-			makeStatus(skill, "mindcharge", [parseFloat(extra1)]);
+			makeStatus(skill, "mindcharge", [parseFloat(extra[0])]);
 			return true;
 		}
 	},
@@ -381,13 +381,13 @@ statusList = {
 	orgiamode: {
 		name: "Orgia Mode",
 		desc: "_<ATK & MAG Multiplier> <END Multiplier> <Turns>_\nModifies caster's ATK and MAG by <ATK & MAG Multiplier>x and END by <END Multiplier>x for <Turns> turns. Falls asleep afterwards.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <ATK & MAG Multiplier>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <END Multiplier>!");
+		applyfunc: function(message, skill, ...extra) {
+			if (!extra[0]) return message.channel.send("You didn't supply anything for <ATK & MAG Multiplier>!");
+			if (!extra[1]) return message.channel.send("You didn't supply anything for <END Multiplier>!");
 
-			if (parseInt(extra3) < 1) return message.channel.send("Turns must be above 0!");
+			if (parseInt(extra[2]) < 1) return message.channel.send("Turns must be above 0!");
 
-			makeStatus(skill, "orgiamode", [parseFloat(extra1), parseFloat(extra2), parseInt(extra3)]);
+			makeStatus(skill, "orgiamode", [parseFloat(extra[0]), parseFloat(extra[1]), parseInt(extra[2])]);
 			return true;
 		}
 	}
@@ -436,14 +436,14 @@ hasStatus = (skill, extra) => {
 }
 
 // Apply Extra Effects to an existing skill using the extrasList above.
-applyStatus = (message, skill, skillExtra, extra1, extra2, extra3, extra4, extra5) => {
+applyStatus = (message, skill, skillExtra, ...extra) => {
 	if (!skill.statusses) skill.statusses = {};
 	if (!skillExtra || !statusList[skillExtra.toLowerCase()]) {
 		message.channel.send("You're adding an invalid status type! Use the ''liststatus'' command to list all extras.");
 		return false;
 	}
 
-	if (!statusList[skillExtra.toLowerCase()].applyfunc(message, skill, extra1, extra2, extra3, extra4, extra5)) {
+	if (!statusList[skillExtra.toLowerCase()].applyfunc(message, skill, ...extra)) {
 		message.channel.send("Something went wrong!");
 		return false;
 	}
