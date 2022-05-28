@@ -251,7 +251,7 @@ extrasList = {
 				target.affinities[vars[2]].push(vars[1]);
 			}
 
-			return `${target.name}'s affinity for ${elementEmoji[vars[1]]}${vars[1]} was changed to ${affinityEmoji[vars[2]]}${vars[2]}!`;
+			return `${target.name}'s affinity for ${elementEmoji[vars[1]]}**${vars[1]}** was changed to ${affinityEmoji[vars[2]]}**${vars[2]}**!`;
 		}
 	}),
 
@@ -676,6 +676,16 @@ addCusVal = (char, name, vars) => {
 	return char.custom[name];
 }
 
+killVar = (char, name) => {
+	if (!char.custom) return;
+	if (!char.custom[name]) return;
+
+	delete char.custom[name];
+
+	if (Object.keys(char.custom).length == 0)
+		delete char.custom;
+}
+
 customVariables = {
 	healverse: {
 		onturn: function(btl, char, vars) {
@@ -700,4 +710,45 @@ customVariables = {
 			return `${vars.infname}'s ${vars.name} allowed ${inf.name} to restore ${heal}${vars.type.toUpperCase()}`;
 		}
 	},
+
+	oldAffinities: {
+		onturn: function(btl, char, vars) {
+			let text = ''
+
+			for (i in vars) {
+				for (j in vars[i]) {
+					vars[i][j]--;
+
+					if (vars[i][j] <= 0) {
+						for (aff in char.affinities) {
+							if (char.affinities[aff].includes(j)) {
+								char.affinities[aff].splice(char.affinities[aff].indexOf(j), 1);
+							}
+						}
+
+						if (i != 'normal' && !char.affinities[i])  char.affinities[i] = [];
+
+						if (i != 'normal') {
+							char.affinities[i].push(j);
+						}
+
+						text += `${char.name}'s ${affinityEmoji[aff]}**${aff}** affinity to ${elementEmoji[j]}**${j}** was restored to ${affinityEmoji[i]}**${i}**!\n`;
+
+						delete vars[i][j];
+					}
+				}
+
+				if (vars[i] && Object.keys(vars[i]).length == 0) {
+					delete vars[i];
+				}
+			}
+
+			if (Object.keys(vars).length == 0) {
+				killVar(char, "oldAffinities");
+			}
+
+			if (text == '') return null;
+			return text;
+		}
+	}
 }
