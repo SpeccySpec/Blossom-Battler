@@ -5,6 +5,8 @@ class Extra extends ArgList {
 	constructor(object) {
 		super(object.args, object.desc)
 		this.name = object.name
+		this.multiple = object.multiple
+		this.diffflag = object.diffflag
 		for (const i in object) {
 			const func = object[i]
 			if (typeof func != "function")
@@ -82,19 +84,32 @@ extrasList = {
 		}
 	}),
 
-	needlessthan: {
+	needlessthan: new Extra({
 		name: "Need less than",
-		desc: '_<Percent> <Stat>_\nWill make the skill require less than <Percent>% of <Stat> for it to work.',
+		desc: 'Will make the skill require less than <Percent>% of <Stat> for it to work.',
 		multiple: true,
 		diffflag: 1,
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1 || !extra2) return message.channel.send("You didn't supply enough arguments!");
-
-			if (parseFloat(extra1) < 1) return message.channel.send("You can't need less than 0%!");
+		args: [
+			{
+				name: "Percent",
+				type: "Float",
+				forced: true
+			},
+			{
+				name: "Cost Type",
+				type: "Word",
+				forced: true
+			}
+		],
+		applyfunc: function(message, skill, args) {
+			const percent = args[0]
+			const stat = args[1].toLowerCase()
+			if (percent < 1)
+				return void message.channel.send("You can't need less than 0%!");
 			if (stat != 'hp' && stat != 'mp' && stat != 'hppercent' && stat != 'mppercent' && stat != 'lb')
-				return message.channel.send("You entered an invalid value for <Stat>! It can be either HP, HPPercent, MP, MPPercent, or LB.");
+				return void message.channel.send("You entered an invalid value for <Stat>! It can be either HP, HPPercent, MP, MPPercent, or LB.");
 			
-			makeExtra(skill, "needlessthan", [parseFloat(extra1), extra2]);
+			makeExtra(skill, "needlessthan", [percent, stat]);
 			return true
 		},
 		canuse: function(char, skill, btl, vars) {
@@ -120,7 +135,7 @@ extrasList = {
 					return true;
 			}
 		}
-	},
+	}),
 
 	changeaffinity: {
 		name: "Change Affinity",
