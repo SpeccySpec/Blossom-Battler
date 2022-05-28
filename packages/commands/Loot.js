@@ -196,7 +196,14 @@ commands.listloots = new Command({
         const validTypes = ['user', 'weapon', 'item', 'armor'];
 
         if (args[0]) {
-			if (args.length % 2 != 0) return message.channel.send('The number of arguments must be even.');
+			if (args.length % 2 != 0) {
+				//check if the last argument exists in validTypes
+				if (validTypes.includes(args[args.length - 1])) {
+					return message.channel.send(`The **${args[args.length - 1]}** type is missing a variable.`);
+				} else {
+					return message.channel.send(`**${args[args.length - 1].charAt(0).toUpperCase() + args[args.length - 1].slice(1)}** is invalid! Valid types are: \n -\`${validTypes.join('\`\n -\`')}\``);
+				}
+			}
 
 			for (i in args) {
 				if (i % 2 == 1) {

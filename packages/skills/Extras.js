@@ -1,3 +1,19 @@
+weakSide = ['superweak', 'weak', 'normal']
+resistSide = ['normal', 'resist', 'block', 'repel', 'drain']
+
+class Extra extends ArgList {
+	constructor(object) {
+		super(object.args, object.desc)
+		this.name = object.name
+		for (const i in object) {
+			const func = object[i]
+			if (typeof func != "function")
+				continue
+			this[i] = func
+		}
+	}
+}
+
 extrasList = {
 	ohko: {
 		name: "One Hit KO",
@@ -81,28 +97,89 @@ extrasList = {
 		}
 	},
 
-	resistremove: {
-		name: "Resist Remove",
-		desc: "_<Element>_\nWill remove user's resisting, blocking, repelling or draining affinities to <Element>.",
+	changeaffinity: {
+		name: "Change Affinity",
+		desc: "_<Target/User> <Element> <Affinity> <Weak/Resist/Both> {Turns}_\nWill change <Target/User>'s affinity from the <Weak/Resist/Both> side of <Element> to <Affinity>. *Keep in mind that if you want it to last {Turns} turns, it can't be overwritten by a different affinity until then.*",
+		multiple: true,
+		diffflag: [0, 1, 2],
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply enough arguments!");
+			if (!extra4) return message.channel.send("You didn't supply enough arguments!");
 
-			if (!Elements.includes(extra1.toLowerCase())) return message.channel.send("You entered an invalid value for <Element>!");
+			if (extra1.toLowerCase() != 'target' && extra1.toLowerCase() != 'user') return message.channel.send("You entered an invalid value for <target/user>! It can be either Target or User.");
 
-			makeExtra(skill, "resistremove", [extra1.toLowerCase()]);
+			if (![...Affinities, 'normal'].includes(extra3.toLowerCase())) return message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: " + Affinities.join(', ') + " or Normal.");
+			if (!Elements.includes(extra2.toLowerCase())) return message.channel.send("You entered an invalid value for <Element>!");
+
+			if (extra4.toLowerCase() != 'weak' && extra4.toLowerCase() != 'resist' && extra4.toLowerCase() != 'both') return message.channel.send("You entered an invalid value for <Weak/Resist/Both>! It can be either Weak, Resist, or Both.");
+
+			if (extra5) {
+				if (parseInt(extra4) < 5) return message.channel.send("You can't have a turn count less than 1!");
+			}
+
+			makeExtra(skill, "changeaffinity", [extra1.toLowerCase(), extra2.toLowerCase(), extra3.toLowerCase(), extra4.toLowerCase(), extra5 ? parseInt(extra5) : null]);
 			return true
 		},
 		onselect: function(char, skill, btl, vars) {
-			let remAff = ['resist', 'block', 'repel', 'drain'];
-			for (let i in remAff) {
-				if (char.affinities[remAff[i]]) {
-					for (let k in char.affinities[remAff[i]]) {
-						if (char.affinities[remAff[i]][k].toLowerCase() === vars[0].toLowerCase()) char.affinities[remAff[i]].splice(k, 1);
-					}
+			if (vars[0].toLowerCase() != 'user') return
+
+			return extrasList.changeaffinity.targetchange(char, vars, skill)
+		},
+		onuse: function(char, targ, skill, btl, vars) {
+			if (vars[0].toLowerCase() != 'target') return
+
+			return extrasList.changeaffinity.targetchange(targ, vars, skill)
+		},
+		targetchange: function(target, vars, skill) {
+			if (!target.affinities) target.affinities = [];
+
+			let setAffinities = []
+
+			let wasChanged = false;
+
+			if (vars[3] != 'normal') {
+				if (target.affinities[vars[2]] && target.affinities[vars[2]].includes(vars[1])) {
+					return `${target.name} wasn't affected by ${skill.name}!`;
 				}
 			}
 
-			return `${char.name}'s resisting affinities to ${vars[0]} have been removed!`;
+			if (vars[4] && vars[4] != null) {
+				if (!target.oldAffinities) target.oldAffinities = {}
+			}
+
+			for (let i in target.affinities) {
+				setAffinities.push(...target.affinities[i])
+
+				if (target?.oldAffinities?.[i] && Object.keys(target?.oldAffinities?.[i]).includes(vars[1])) continue;
+
+				if (vars[4] && vars[4] != null) {
+					if (!target.oldAffinities[i]) target.oldAffinities[i] = {};
+				}
+
+				if (vars[3] == 'resist' && !resistSide.includes(i)) continue
+				if (vars[3] == 'weak' && !weakSide.includes(i)) continue
+
+				if (target.affinities[i].includes(vars[1])) {
+					target.affinities[i].splice(target.affinities[i].indexOf(vars[1]), 1);
+					wasChanged = true;
+					if (vars[4] && vars[4] != null) {
+						if (!target.oldAffinities[i][vars[1]]) target.oldAffinities[i][vars[1]] = vars[4];
+					}
+					break;
+				}
+			}
+
+			let normalAffinities = Elements.filter(e => !setAffinities.includes(e));
+
+			if (!wasChanged && ((!normalAffinities.includes(vars[1]) && vars[2] != 'normal') || (vars[2] == 'normal' && normalAffinities.includes(vars[1])))) {
+				return `${target.name} wasn't affected by ${skill.name}!`;
+			}
+
+			if (vars[3] != 'normal') {
+				if (!target.affinities[vars[2]]) target.affinities[vars[2]] = [];
+				target.affinities[vars[2]].push(vars[1]);
+			}
+
+			return `${target.name}'s affinity for ${elementEmoji[vars[1]]}${vars[1]} was changed to ${affinityEmoji[vars[2]]}${vars[2]}!`;
 		}
 	},
 
@@ -552,4 +629,11 @@ customVariables = {
 			return `${vars.infname}'s ${vars.name} allowed ${inf.name} to restore ${heal}${vars.type.toUpperCase()}`;
 		}
 	},
+}
+
+// Ah you know what
+// This file will be used for multiple extras anyway
+// We might as well shove some extra stuff in here
+// turnEffectFuncs will be an object that doe ufnnye things for multitudes of extras
+turnEffectFuncs = {
 }

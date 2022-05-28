@@ -145,6 +145,7 @@ affinityEmoji = {
 	deadly: '<:deadly:963413916879319072>',
 	superweak: '<:supereffective:963413917198082048>',
 	weak: '<:effective:963413917038694401>',
+	normal: '<:normal:979825616809508895>',
 	resist: '<:resist:963413917185491014>',
 	block: '<:block:963413916191432764>',
 	repel: '<:repel:963413917063860234>',

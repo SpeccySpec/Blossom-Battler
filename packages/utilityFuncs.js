@@ -9,7 +9,7 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 	if (!settings) settings = setUpSettings(message.guild.id);
 
 	if (!validTypes.includes(type)) {
-		message.channel.send(`Invalid type! Valid types are: \n -\`${validTypes.join('\`\n -\`')}\``);
+		message.channel.send(`**${type.charAt(0).toUpperCase() + type.slice(1)}** is invalid! Valid types are: \n -\`${validTypes.join('\`\n -\`')}\``);
 		return false
 	}
 

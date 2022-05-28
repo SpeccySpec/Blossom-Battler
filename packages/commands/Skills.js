@@ -363,6 +363,8 @@ commands.updateskills = new Command({
 
 			if (!skillFile[skill].type) skillFile[skill].type = 'strike';
 
+			if (!skillFile[skill].name) skillFile[skill].name = skill;
+
 			if (skillFile[skill].type == 'passive') {
 				if (typeof skillFile[skill].passive == 'string') {
 					let passiveType = ''
@@ -876,7 +878,7 @@ commands.updateskills = new Command({
 				}
 
 				if (skillFile[skill].resistremove) {
-					skillFile[skill].extras.resistremove = [skillFile[skill].resistremove]; // element
+					skillFile[skill].extras.changeaffinity = [['target', skillFile[skill].resistremove, 'normal', 'resist', null]]; // element
 					delete skillFile[skill].resistremove;
 				}
 
@@ -1087,27 +1089,25 @@ commands.applyextra = new Command({
 		}
 	],
 	func: (message, args) => {
-		if (!args[0]) return message.channel.send('Please enter a valid skill name!')
-		if (!args[1]) return message.channel.send('Please enter a valid extra! You can list them all with "listatkextras".')
-
-		if (skillFile[args[0]]) {
-			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skillFile[args[0]].originalAuthor != message.author.id) {
-				return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
+		const skilldata = skillFile[args[0]]
+		if (skilldata) {
+			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skilldata.originalAuthor != message.author.id) {
+				return message.channel.send(`You don't own ${skilldata.name}!`);
 			}
 			
-			let type = typeof skillFile[args[0]].type == 'object' ? skillFile[args[0]].type[0] : skillFile[args[0]].type
+			let type = typeof skilldata.type == 'object' ? skilldata.type[0] : skilldata.type
 			switch (type) {
 				case 'passive':
-					applyPassive(message, skillFile[args[0]], args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
+					applyPassive(message, skilldata, args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
 					break;
 				case 'status':
-					applyStatus(message, skillFile[args[0]], args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
+					applyStatus(message, skilldata, args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
 					break;
 				case 'heal':
-					applyHeal(message, skillFile[args[0]], args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
+					applyHeal(message, skilldata, args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
 					break;
 				default:
-					applyExtra(message, skillFile[args[0]], args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
+					applyExtra(message, skilldata, args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6]);
 					break;
 			}
 
@@ -1136,36 +1136,37 @@ commands.clearextras = new Command({
 		},
 	],
 	func: (message, args) => {
-		if (skillFile[args[0]]) {
-			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skillFile[args[0]].originalAuthor != message.author.id) {
-				return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
+		const skilldata = skillFile[args[0]]
+		if (skilldata) {
+			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skilldata.originalAuthor != message.author.id) {
+				return message.channel.send(`You don't own ${skilldata.name}!`);
 			}
 
-			let type = typeof skillFile[args[0]].type == 'object' ? skillFile[args[0]].type[0] : skillFile[args[0]].type
+			let type = typeof skilldata.type == 'object' ? skilldata.type[0] : skilldata.type
 			switch (type) {
 				case 'passive':
-					if (!skillFile[args[0]].passive) return message.channel.send(`${skillFile[args[0]].name} has no extras!`);
-					if (!skillFile[args[0]].passive[args[1].toLowerCase()]) return message.channel.send(`${skillFile[args[0]].name} has no ${args[1]} extras!`);
+					if (!skilldata.passive) return message.channel.send(`${skilldata.name} has no extras!`);
+					if (!skilldata.passive[args[1].toLowerCase()]) return message.channel.send(`${skilldata.name} has no ${args[1]} extras!`);
 
-					delete skillFile[args[0]].passive[args[1].toLowerCase()];
+					delete skilldata.passive[args[1].toLowerCase()];
 					break;
 				case 'status':
-					if (!skillFile[args[0]].statusses) return message.channel.send(`${skillFile[args[0]].name} has no extras!`);
-					if (!skillFile[args[0]].statusses[args[1].toLowerCase()]) return message.channel.send(`${skillFile[args[0]].name} has no ${args[1]} extras!`);
+					if (!skilldata.statusses) return message.channel.send(`${skilldata.name} has no extras!`);
+					if (!skilldata.statusses[args[1].toLowerCase()]) return message.channel.send(`${skilldata.name} has no ${args[1]} extras!`);
 
-					delete skillFile[args[0]].statusses[args[1].toLowerCase()];
+					delete skilldata.statusses[args[1].toLowerCase()];
 					break;
 				case 'heal':
-					if (!skillFile[args[0]].heal) return message.channel.send(`${skillFile[args[0]].name} has no extras!`);
-					if (!skillFile[args[0]].heal[args[1].toLowerCase()]) return message.channel.send(`${skillFile[args[0]].name} has no ${args[1]} extras!`);
+					if (!skilldata.heal) return message.channel.send(`${skilldata.name} has no extras!`);
+					if (!skilldata.heal[args[1].toLowerCase()]) return message.channel.send(`${skilldata.name} has no ${args[1]} extras!`);
 
-					delete skillFile[args[0]].heal[args[1].toLowerCase()];
+					delete skilldata.heal[args[1].toLowerCase()];
 					break;
 				default:
-					if (!skillFile[args[0]].extras) return message.channel.send(`${skillFile[args[0]].name} has no extras!`);
-					if (!skillFile[args[0]].extras[args[1].toLowerCase()]) return message.channel.send(`${skillFile[args[0]].name} has no ${args[1]} extras!`);
+					if (!skilldata.extras) return message.channel.send(`${skilldata.name} has no extras!`);
+					if (!skilldata.extras[args[1].toLowerCase()]) return message.channel.send(`${skilldata.name} has no ${args[1]} extras!`);
 
-					delete skillFile[args[0]].extras[args[1].toLowerCase()];
+					delete skilldata.extras[args[1].toLowerCase()];
 					break;
 			}
 
@@ -1687,7 +1688,14 @@ commands.listskills = new Command({
 		const validTypes = ['user', 'element', 'cost', 'costtype', 'pow', 'acc', 'crit', 'hits', 'atktype', 'target', 'status', 'statuschance', 'preskill', 'evoskill', 'levellock', 'extra']
 
         if (args[0]) {
-			if (args.length % 2 != 0) return message.channel.send('The number of arguments must be even.');
+			if (args.length % 2 != 0) {
+				//check if the last argument exists in validTypes
+				if (validTypes.includes(args[args.length - 1])) {
+					return message.channel.send(`The **${args[args.length - 1]}** type is missing a variable.`);
+				} else {
+					return message.channel.send(`**${args[args.length - 1].charAt(0).toUpperCase() + args[args.length - 1].slice(1)}** is invalid! Valid types are: \n -\`${validTypes.join('\`\n -\`')}\``);
+				}
+			}
 
 			for (i in args) {
 				if (i % 2 == 1) {

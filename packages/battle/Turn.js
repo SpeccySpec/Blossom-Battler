@@ -1025,7 +1025,7 @@ doTurn = (btl, noTurnEmbed) => {
 
 	// Start Of Turn passives.
 	for (let skill of char.skills) {
-		if (skill.type === 'passive') {
+		if (skill.type == 'passive') {
 			for (let i in skill.passive) {
 				if (passiveList[i] && passiveList[i].onturn) {
 					if (passiveList[i].multiple) {
@@ -1147,6 +1147,17 @@ doTurn = (btl, noTurnEmbed) => {
 			btl.canteamcombo = true;
 		} else if (ally.hp <= ally.maxhp/2 && !char.donetc) {
 			btl.canteamcombo = randNum(1, 100) <= 50;
+		}
+	}
+
+	//Miscellaneous Turn Things
+	for (i in char) {
+		console.log(i);
+		if (turnEffectFuncs[i]) {
+			let awl = (turnEffectFuncs[i].onturn(btl, char) ?? '');
+			if (awl != '') statusTxt += '\n';
+	
+			statusTxt += awl;
 		}
 	}
 
