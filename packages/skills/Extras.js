@@ -16,8 +16,8 @@ class Extra extends ArgList {
 	apply(message, skill, rawargs) {
 		const args = this.parse(message, rawargs)
 		if (!args)
-			return
-		this.applyfunc(message, skill, args)
+			return false
+		return this.applyfunc(message, skill, args)
 	}
 }
 
@@ -39,10 +39,10 @@ extrasList = {
 		applyfunc(message, skill, args) {
 			const chance = args[0]
 			const status = args[1]?.toLowerCase()
-			if (chance < 0) return message.channel.send("What's the point of using this skill if it never lands?");
+			if (chance < 0) return void message.channel.send("What's the point of using this skill if it never lands?");
 
 			if (status && !statusEffects.includes(status))
-				return message.channel.send("You're adding an invalid status effect!");
+				return void message.channel.send("You're adding an invalid status effect!");
 
 			makeExtra(skill, "ohko", [chance, status]);
 			return true
@@ -616,8 +616,8 @@ applyExtra = (message, skill, skillExtra, rawargs) => {
 	if (!skill.extras) skill.extras = {};
 	if (!skillExtra || !extrasList[skillExtra]) return message.channel.send("You're adding an invalid extra! Use the ''listatkextras'' command to list all extras.");
 
-	extrasList[skillExtra].apply(message, skill, rawargs);
-	message.react('👍');
+	if (extrasList[skillExtra].apply(message, skill, rawargs))
+		message.react('👍');
 
 	return true;
 }
