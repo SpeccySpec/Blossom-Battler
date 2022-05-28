@@ -22,7 +22,7 @@ class Extra extends ArgList {
 }
 
 extrasList = {
-	ohko: {
+	ohko: new Extra({
 		name: "One Hit KO",
 		desc: 'Instantly defeats the foe at a <Chance>% chance. Can have {Status} to make it only affect foes with that status.',
 		args: [
@@ -61,7 +61,7 @@ extrasList = {
 				return dodgeTxt(targ);
 			}
 		}
-	},
+	}),
 
 	sacrifice: {
 		name: "Sacrifice",
