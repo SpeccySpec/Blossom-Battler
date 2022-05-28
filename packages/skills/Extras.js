@@ -36,7 +36,7 @@ extrasList = {
 				type: "Word",
 			}
 		],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			const chance = args[0]
 			const status = args[1]?.toLowerCase()
 			if (chance < 0) return message.channel.send("What's the point of using this skill if it never lands?");
@@ -47,7 +47,7 @@ extrasList = {
 			makeExtra(skill, "ohko", [chance, status]);
 			return true
 		},
-		onuseoverride: function(char, targ, skill, btl, vars) {
+		onuseoverride(char, targ, skill, btl, vars) {
 			if (vars[1] && vars[1] != null && targ.status != vars[1]) return dodgeTxt(targ);
 
 			let chance = randNum(100);
@@ -62,19 +62,25 @@ extrasList = {
 		}
 	}),
 
-	sacrifice: {
+	sacrifice: new Extra ({
 		name: "Sacrifice",
-		desc: "_{HP}_\nWill reduce the caster's HP to a {HP}.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeExtra(skill, "sacrifice", [parseInt(extra1)]);
+		desc: "Will reduce the caster's HP to a {HP}.",
+		args: [
+			{
+				name: "HP",
+				type: "Num"
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "sacrifice", [args[0] ?? 0]);
 			return true
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			char.hp = vars[0];
 
 			return `${char.name} sacrificed themselves! Their HP dropped to ${vars[0]}!`;
 		}
-	},
+	}),
 
 	needlessthan: {
 		name: "Need less than",
