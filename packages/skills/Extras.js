@@ -301,7 +301,7 @@ extrasList = {
 
 	powerbuff: new Extra({
 		name: "Power Buff",
-		desc: "_<Stat> <Percent>_\nBoosts skill power with <Stat> buffs up to <Percent>%.",
+		desc: "Boosts skill power with <Stat> buffs up to <Percent>%.",
 		multiple: true,
 		diffflag: 0,
 		args: [
