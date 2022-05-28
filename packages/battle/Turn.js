@@ -1150,17 +1150,6 @@ doTurn = (btl, noTurnEmbed) => {
 		}
 	}
 
-	//Miscellaneous Turn Things
-	for (i in char) {
-		console.log(i);
-		if (turnEffectFuncs[i]) {
-			let awl = (turnEffectFuncs[i].onturn(btl, char) ?? '');
-			if (awl != '') statusTxt += '\n';
-	
-			statusTxt += awl;
-		}
-	}
-
 	// Now send the embed
 	if (statusTxt != '') {
 		let DiscordEmbed = new Discord.MessageEmbed()
