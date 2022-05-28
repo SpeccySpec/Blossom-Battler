@@ -615,9 +615,8 @@ hasExtra = (skill, extra) => {
 applyExtra = (message, skill, skillExtra, rawargs) => {
 	if (!skill.extras) skill.extras = {};
 	if (!skillExtra || !extrasList[skillExtra]) return message.channel.send("You're adding an invalid extra! Use the ''listatkextras'' command to list all extras.");
-
 	if (extrasList[skillExtra].apply(message, skill, rawargs))
-		message.react('👍');
+		message.react('👍')
 
 	return true;
 }

@@ -1094,7 +1094,6 @@ commands.applyextra = new Command({
 			}
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
-			message.react('👍');
 		} else {
 			return message.channel.send(`${args[0]} is an invalid Skill Name!`)
 		}
