@@ -101,7 +101,7 @@ extrasList = {
 				forced: true
 			}
 		],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			const percent = args[0]
 			const stat = args[1].toLowerCase()
 			if (percent < 1)
@@ -112,7 +112,7 @@ extrasList = {
 			makeExtra(skill, "needlessthan", [percent, stat]);
 			return true
 		},
-		canuse: function(char, skill, btl, vars) {
+		canuse(char, skill, btl, vars) {
 			switch(vars[1].toLowerCase()) {
 				case 'mp':
 					if (char.mp > vars[0]) return `You need less than ${vars[0]}MP to use this move!`;
@@ -137,39 +137,67 @@ extrasList = {
 		}
 	}),
 
-	changeaffinity: {
+	changeaffinity: new Extra({
 		name: "Change Affinity",
-		desc: "_<Target/User> <Element> <Affinity> <Weak/Resist/Both> {Turns}_\nWill change <Target/User>'s affinity from the <Weak/Resist/Both> side of <Element> to <Affinity>. *Keep in mind that if you want it to last {Turns} turns, it can't be overwritten by a different affinity until then.*",
+		desc: "Will change <Target/User>'s affinity from the <Weak/Resist/Both> side of <Element> to <Affinity>. *Keep in mind that if you want it to last {Turns} turns, it can't be overwritten by a different affinity until then.*",
 		multiple: true,
 		diffflag: [0, 1, 2],
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra4) return message.channel.send("You didn't supply enough arguments!");
-
-			if (extra1.toLowerCase() != 'target' && extra1.toLowerCase() != 'user') return message.channel.send("You entered an invalid value for <target/user>! It can be either Target or User.");
-
-			if (![...Affinities, 'normal'].includes(extra3.toLowerCase())) return message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: " + Affinities.join(', ') + " or Normal.");
-			if (!Elements.includes(extra2.toLowerCase())) return message.channel.send("You entered an invalid value for <Element>!");
-
-			if (extra4.toLowerCase() != 'weak' && extra4.toLowerCase() != 'resist' && extra4.toLowerCase() != 'both') return message.channel.send("You entered an invalid value for <Weak/Resist/Both>! It can be either Weak, Resist, or Both.");
-
-			if (extra5) {
-				if (parseInt(extra4) < 5) return message.channel.send("You can't have a turn count less than 1!");
+		args: [
+			{
+				name: "Target/User",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Element",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Affinity",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Weak/Resist/Both",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num",
 			}
-
-			makeExtra(skill, "changeaffinity", [extra1.toLowerCase(), extra2.toLowerCase(), extra3.toLowerCase(), extra4.toLowerCase(), extra5 ? parseInt(extra5) : null]);
+		],
+		applyfunc(message, skill, args) {
+			const target = args[0].toLowerCase()
+			const element = args[1].toLowerCase()
+			const affinity = args[2].toLowerCase()
+			const side = args[3].toLowerCase()
+			const turns = args[4]
+			if (target != 'target' && target != 'user')
+				return void message.channel.send("You entered an invalid value for <target/user>! It can be either Target or User.");
+			if (![...Affinities, 'normal'].includes(affinity))
+				return void message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: " + Affinities.join(', ') + " or Normal.");
+			if (!Elements.includes(element))
+				return void message.channel.send("You entered an invalid value for <Element>!");
+			if (side != 'weak' && side != 'resist' && side != 'both')
+				return void message.channel.send("You entered an invalid value for <Weak/Resist/Both>! It can be either Weak, Resist, or Both.");
+			if (turns && turns < 5)
+				return void message.channel.send("You can't have a turn count less than 1!");
+			makeExtra(skill, "changeaffinity", [target, element, affinity, side, turns]);
 			return true
 		},
-		onselect: function(char, skill, btl, vars) {
+		onselect(char, skill, btl, vars) {
 			if (vars[0].toLowerCase() != 'user') return
 
 			return extrasList.changeaffinity.targetchange(char, vars, skill)
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			if (vars[0].toLowerCase() != 'target') return
 
 			return extrasList.changeaffinity.targetchange(targ, vars, skill)
 		},
-		targetchange: function(target, vars, skill) {
+		targetchange(target, vars, skill) {
 			if (!target.affinities) target.affinities = [];
 
 			let setAffinities = []
@@ -227,7 +255,7 @@ extrasList = {
 
 			return `${target.name}'s affinity for ${elementEmoji[vars[1]]}${vars[1]} was changed to ${affinityEmoji[vars[2]]}${vars[2]}!`;
 		}
-	},
+	}),
 
 	rest: {
 		name: "Rest",
