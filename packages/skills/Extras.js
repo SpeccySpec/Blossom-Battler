@@ -136,7 +136,7 @@ extrasList = {
 			for (let i in target.affinities) {
 				setAffinities.push(...target.affinities[i])
 
-				if (target.oldAffinities?.[i]?.includes(vars[1])) continue;
+				if (Object.keys(target?.oldAffinities?.[i]).includes(vars[1])) continue;
 
 				if (vars[4] && vars[4] != null) {
 					if (!target.oldAffinities[i]) target.oldAffinities[i] = {};
