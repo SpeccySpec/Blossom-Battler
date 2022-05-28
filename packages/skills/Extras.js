@@ -12,20 +12,40 @@ class Extra extends ArgList {
 			this[i] = func
 		}
 	}
+
+	apply(message, skill, rawargs) {
+		const args = this.parse(message, rawargs)
+		if (!args)
+			return
+		this.applyfunc(message, skill, args)
+	}
 }
 
 extrasList = {
 	ohko: {
 		name: "One Hit KO",
-		desc: '_<Chance> {Status}_\nInstantly defeats the foe at a <Chance>% chance. Can have {Status} to make it only affect foes with that status.',
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (parseFloat(extra1) < 0) return message.channel.send("What's the point of using this skill if it never lands?");
+		desc: 'Instantly defeats the foe at a <Chance>% chance. Can have {Status} to make it only affect foes with that status.',
+		args: [
+			{
+				name: "Chance",
+				type: "Float",
+				forced: true
+			},
+			{
+				name: "Status",
+				type: "Word",
+			}
+		],
+		applyfunc: function(message, skill, args) {
+			const chance = args[0]
+			const status = args[1]?.toLowerCase()
+			if (chance < 0) return message.channel.send("What's the point of using this skill if it never lands?");
 
-			if (extra2) {
-				if (!statusEffects.includes(extra2.toLowerCase())) return message.channel.send("You're adding an invalid status effect!");
+			if (status) {
+				if (!statusEffects.includes(status)) return message.channel.send("You're adding an invalid status effect!");
 			}
 
-			makeExtra(skill, "ohko", [parseFloat(extra1), extra2.toLowerCase() ? extra2.toLowerCase() : null]);
+			makeExtra(skill, "ohko", [chance, status]);
 			return true
 		},
 		onuseoverride: function(char, targ, skill, btl, vars) {
@@ -587,11 +607,11 @@ hasExtra = (skill, extra) => {
 }
 
 // Apply Extra Effects to an existing skill using the extrasList above.
-applyExtra = (message, skill, skillExtra, extra1, extra2, extra3, extra4, extra5) => {
+applyExtra = (message, skill, skillExtra, rawargs) => {
 	if (!skill.extras) skill.extras = {};
-	if (!skillExtra || !extrasList[skillExtra.toLowerCase()]) return message.channel.send("You're adding an invalid extra! Use the ''listatkextras'' command to list all extras.");
+	if (!skillExtra || !extrasList[skillExtra]) return message.channel.send("You're adding an invalid extra! Use the ''listatkextras'' command to list all extras.");
 
-	extrasList[skillExtra.toLowerCase()].applyfunc(message, skill, extra1, extra2, extra3, extra4, extra5);
+	extrasList[skillExtra].apply(message, skill, rawargs);
 	message.react('👍');
 
 	return true;
