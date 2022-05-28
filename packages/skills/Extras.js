@@ -1,6 +1,19 @@
 weakSide = ['superweak', 'weak', 'normal']
 resistSide = ['normal', 'resist', 'block', 'repel', 'drain']
 
+class Extra extends ArgList {
+	constructor(object) {
+		super(object.args, object.desc)
+		this.name = object.name
+		for (const i in object) {
+			const func = object[i]
+			if (typeof func != "function")
+				continue
+			this[i] = func
+		}
+	}
+}
+
 extrasList = {
 	ohko: {
 		name: "One Hit KO",
