@@ -1224,7 +1224,6 @@ commands.forgetskill = new Command({
 		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		// Do we know the skill
-		if (!skillFile[args[1]]) return message.channel.send('Invalid skill to replace! Remember that these are case sensitive.');
 		if (!knowsSkill(thingDefs[args[0]], args[1])) return message.channel.send(`${thingDefs[args[0]].name} doesn't know ${args[1]}!`);
 
 		// Let's kill it!
@@ -3658,12 +3657,14 @@ commands.gettc = new Command({
 		let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
 
 		for (let i in skills) {
-			skills[i].filter(s => !skillFile[s]);
-			skills[i].sort(function(a, b) {return skillFile[b].pow - skillFile[a].pow});
-			tc.pow += skillFile[skills[i][0]].pow;
+			let pain = skills[i].filter(s => (skillFile[s] && skillFile[s].pow));
+			pain.sort(function(a, b) {
+				return skillFile[b].pow - skillFile[a].pow;
+			});
+			tc.pow += skillFile[pain[0]].pow;
 		}
 
-		tc.pow /= tc.hits;
+		tc.pow /= tc.hits ?? 1;
 		tc.type = [
 			typeof(skillFile[skills[0][0]].type) === 'object' ? skillFile[skills[0][0]].type[0] : skillFile[skills[0][0]].type,
 			typeof(skillFile[skills[1][0]].type) === 'object' ? skillFile[skills[1][0]].type[0] : skillFile[skills[1][0]].type
