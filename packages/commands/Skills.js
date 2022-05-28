@@ -1070,7 +1070,8 @@ commands.applyextra = new Command({
 		}
 	],
 	func: (message, args) => {
-		const skilldata = skillFile[args[0]]
+		const skilldata = skillFile[args.shift()]
+		const extra = args.shift().toLowerCase()
 		if (skilldata) {
 			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skilldata.originalAuthor != message.author.id) {
 				return message.channel.send(`You don't own ${skilldata.name}!`);
