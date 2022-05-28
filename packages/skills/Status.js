@@ -41,6 +41,8 @@ statusList = {
 			return true;
 		},
 		onuse: function(char, targ, skill, btl, vars) {
+			if (targ.charms && targ.charms.includes("PureVision") && vars[0].toLowerCase() === 'prc') return `${targ.name}'s Pure Vision negated the change.`;
+
 			if (vars[2]) {
 				let chance = randNum(1, 100);
 

@@ -11,6 +11,14 @@ setupBattleStats = (f) => {
 	f.lbp = 0;
 	f.donetc = false;
 
+	if (f.charms) {
+		if (f.charms.includes("StalwartShell")) f.stats.end += 5;
+
+		if (f.charms.includes("FragileHeart") || f.charms.includes("UnbreakableHeart")) {
+			f.maxhp += 50; f.hp += 50;
+		}
+	}
+
 	return true;
 }
 
