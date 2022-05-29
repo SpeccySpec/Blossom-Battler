@@ -1,5 +1,6 @@
-weakSide = ['superweak', 'weak', 'normal']
-resistSide = ['normal', 'resist', 'block', 'repel', 'drain']
+const weakSide = ['superweak', 'weak', 'normal']
+const resistSide = ['normal', 'resist', 'block', 'repel', 'drain']
+const damageFormulas = ['persona', 'pokemon', 'lamonka']
 
 class Extra extends ArgList {
 	constructor(object) {
@@ -41,7 +42,8 @@ extrasList = {
 		applyfunc(message, skill, args) {
 			const chance = args[0]
 			const status = args[1]?.toLowerCase()
-			if (chance < 0) return void message.channel.send("What's the point of using this skill if it never lands?");
+			if (chance <= 0)
+				return void message.channel.send("What's the point of using this skill if it never lands?");
 
 			if (status && !statusEffects.includes(status))
 				return void message.channel.send("You're adding an invalid status effect!");
@@ -325,23 +327,30 @@ extrasList = {
 		}
 	}),
 
-	takemp: {
+	takemp: new Extra({
 		name: "Take MP",
-		desc: "_<MP>_\nWill take <MP> MP from the foe each hit.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeExtra(skill, "takemp", [parseInt(extra1)]);
+		desc: "Will take <MP> MP from the foe each hit.",
+		args: [
+			{
+				name: "MP",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "takemp", [args[0]]);
 			return true
 		}
-	},
+	}),
 
-	stealmp: {
+	stealmp: new Extra({
 		name: "Steal MP",
 		desc: "Turns the skill into a skill that takes <Power> MP from the foe.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc(message, skill) {
 			makeExtra(skill, "stealmp", [true]);
 			return true
 		},
-		onuseoverride: function(char, targ, skill, btl, vars) {
+		onuseoverride(char, targ, skill, btl, vars) {
 			let mpStolen = Math.max(1, skill.pow+randNum(-10, 10));
 			
 			targ.mp = Math.max(0, targ.mp-mpStolen)
@@ -349,52 +358,84 @@ extrasList = {
 			
 			return `${char.name} managed to steal ${mpStolen} MP!`;
 		}
-	},
+	}),
 
-	steal: {
+	steal: new Extra({
 		name: "Steal",
-		desc: "_<Chance> {Amount}_\nHas a <Chance>% chance to steal {Amount} of the foe team's items.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Chance>!");
-
-			if (parseFloat(extra1) < 0) return message.channel.send("You can't steal from a foe that doesn't exist!");
-			if (!extra2 && parseInt(extra2) < 1) return message.channel.send("You didn't supply anything for <Amount>!");
-
-			makeExtra(skill, "steal", [parseFloat(extra1), parseInt(extra2)]);
+		desc: "Has a <Chance>% chance to steal {Amount} of the foe team's items.",
+		args: [
+			{
+				name: "Chance",
+				type: "Float",
+				forced: true
+			},
+			{
+				name: "Amount",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			const chance = args[0]
+			const amount = args[1]
+			if (chance <= 0)
+				return void message.channel.send("What's the point of stealing if the extra never lands?");
+			makeExtra(skill, "steal", [chance, amount]);
 			return true
 		}
-	},
+	}),
 
-	drain: {
+	drain: new Extra({
 		name: "Drain",
-		desc: "_<Amount>_\nHeals the caster for 1/<Amount> of the damage dealt.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeExtra(skill, "drain", [parseInt(extra1) == 0 ? 1 : parseInt(extra1)]);
+		desc: "Heals the caster for 1/<Amount> of the damage dealt.",
+		args: [
+			{
+				name: "Amount",
+				type: "Num"
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "drain", [args[0] ?? 1]);
 			return true
 		}
-	},
+	}),
 
-	feint: {
+	feint: new Extra({
 		name: "Feint",
 		desc: "Bypasses shielding skills like Makarakarn and Tetrakarn.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc(message, skill) {
 			makeExtra(skill, "feint", [true]);
 			return true
 		}
-	},
+	}),
 
-	healverse: {
+	healverse: new Extra({
 		name: "Healverse",
-		desc: "_<Damage Percent> <Turns> {Deploy Message}_\nAfter the foe is hit with this skill, each hit done to it will heal <Damage Percent>% of damage dealt to the attacker. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Damage Percent>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Turns>!");
-
-			if (parseInt(extra2) < 1) return message.channel.send("You can't have less than 1 turn for this skill.");
-			makeExtra(skill, "healverse", [parseFloat(extra1), parseInt(extra2), extra3]);
+		desc: "After the foe is hit with this skill, each hit done to it will heal <Damage Percent>% of damage dealt to the attacker. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
+		args: [
+			{
+				name: "Damage Percent",
+				type: "Float",
+				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Deploy Message",
+				type: "Word"
+			}
+		],
+		applyfunc(message, skill, args) {
+			const turns = args[1]
+			if (turns < 1)
+				return void message.channel.send("You can't have less than 1 turn for this skill.");
+			makeExtra(skill, "healverse", [args[0], turns, args[2]]);
 			return true
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			if (targ.hp > 0) {
 				addCusVal(targ, "healverse", {
 					name: skill.name,
@@ -415,159 +456,257 @@ extrasList = {
 				}
 			}
 		}
-	},
+	}),
 
-	powerverse: {
+	powerverse: new Extra({
 		name: "Powerverse",
-		desc: "_<Percent> <Turns> {Deploy Message}_\nAfter the foe is hit with this skill, each hit done to it will boost LB% by <Damage Percent>%. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Damage Percent>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Turns>!");
-
-			if (parseInt(extra2) < 1) return message.channel.send("You can't have less than 1 turn for this skill.");
-			makeExtra(skill, "powerverse", [parseFloat(extra1), parseInt(extra2), extra3]);
-			return true
-		}
-	},
-
-	spreadverse: {
-		name: "Spreadverse",
-		desc: "_<Damage Percent> <Turns> {Deploy Message}_\nAfter the foe is hit with this skill, each hit done to it will spread <Damage Percent>% of damage to other foes. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Damage Percent>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Turns>!");
-
-			if (parseInt(extra2) < 1) return message.channel.send("You can't have less than 1 turn for this skill.");
-			makeExtra(skill, "spreadverse", [parseFloat(extra1), parseInt(extra2), extra3]);
-			return true
-		}
-	},
-
-	lonewolf: {
-		name: "Lone Wolf",
-		desc: "_<Multiplier>_\nSkill Power boosted by <Multiplier>x when alone, or all allies are down.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Multiplier>!");
-			makeExtra(skill, "lonewolf", [parseFloat(extra1)]);
-			return true
-		}
-	},
-
-	heavenwrath: {
-		name: "Heaven's Wrath",
-		desc: "_<Multiplier>_\nSkill Power boosted by <Multiplier>x when not alone, and all allies are alive.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Multiplier>!");
-			makeExtra(skill, "heavenwrath", [parseFloat(extra1)]);
-			return true
-		}
-	},
-
-	statcalc: {
-		name: "Stat Calculation",
-		desc: "_<Stat>_\nUses the caster's <Stat> for calculating damage.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
-
-			if (!utilityFuncs.validStat(extra2.toLowerCase())) return message.channel.send("That's not a valid stat!");
-			makeExtra(skill, "statcalc", [extra2.toLowerCase()]);
-			return true
-		}
-	},
-
-	hpcalc: {
-		name: "HP Calculation",
-		desc: "_<Percent>_\nCurrent HP can boost or decrease damage by up to <Percent>%.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeExtra(skill, "hpcalc", [parseFloat(extra1)]);
-			return true
-		}
-	},
-
-	mpcalc: {
-		name: "MP Calculation",
-		desc: "_<Percent>_\nCurrent MP can boost or decrease damage by up to <Percent>%.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeExtra(skill, "mpcalc", [parseFloat(extra1)]);
-			return true
-		}
-	},
-
-	multistatus: {
-		name: "Multistatus",
-		desc: "_<Status> <Status> <Status>_\nThis skill becomes a status skill that will inflict one of multiple statuses.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			let backupStatus = skill.status;
-			skill.status = [];
-			if (statusEffects.includes(extra1)) skill.status.push(extra1);
-			if (statusEffects.includes(extra2)) skill.status.push(extra2);
-			if (statusEffects.includes(extra3)) skill.status.push(extra3);
-			
-			if (skill.status.length <= 0) {
-				skill.status = backupStatus;
-				return message.channel.send('All 3 status effects were invalid.');
+		desc: "After the foe is hit with this skill, each hit done to it will boost LB% by <Damage Percent>%. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
+		args: [
+			{
+				name: "Damage Percent",
+				type: "Float",
+				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Deploy Message",
+				type: "Word"
 			}
-			
+		],
+		applyfunc(message, skill, args) {
+			const turns = args[1]
+			if (turns < 1)
+				return void message.channel.send("You can't have less than 1 turn for this skill.");
+			makeExtra(skill, "powerverse", [args[0], turns, args[2]]);
+			return true
+		}
+	}),
+
+	spreadverse: new Extra({
+		name: "Spreadverse",
+		desc: "After the foe is hit with this skill, each hit done to it will spread <Damage Percent>% of damage to other foes. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
+		args: [
+			{
+				name: "Damage Percent",
+				type: "Float",
+				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Deploy Message",
+				type: "Word"
+			}
+		],
+		applyfunc(message, skill, args) {
+			const turns = args[1]
+			if (turns < 1)
+				return void message.channel.send("You can't have less than 1 turn for this skill.");
+			makeExtra(skill, "spreadverse", [args[0], turns, args[2]]);
+			return true
+		}
+	}),
+
+	lonewolf: new Extra({
+		name: "Lone Wolf",
+		desc: "Skill Power boosted by <Multiplier>x when alone, or all allies are down.",
+		args: [
+			{
+				name: "Mulitplier",
+				type: "Float"
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "lonewolf", [args[0] ?? 1.5]);
+			return true
+		}
+	}),
+
+	heavenwrath: new Extra({
+		name: "Heaven's Wrath",
+		desc: "kill Power boosted by <Multiplier>x when not alone, and all allies are alive.",
+		args: [
+			{
+				name: "Mulitplier",
+				type: "Float"
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "heavenwrath", [args[0] ?? 1.5]);
+			return true
+		}
+	}),
+
+	statcalc: new Extra({
+		name: "Stat Calculation",
+		desc: "Uses the caster's <Stat> for calculating damage.",
+		args: [
+			{
+				name: "Stat",
+				type: "Word",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			const stat = args[0].toLowerCase()
+			if (!utilityFuncs.validStat(stat))
+				return void message.channel.send("That's not a valid stat!");
+			makeExtra(skill, "statcalc", [stat]);
+			return true
+		}
+	}),
+
+	hpcalc: new Extra({
+		name: "HP Calculation",
+		desc: "Current HP can boost or decrease damage by up to <Percent>%.",
+		args: [
+			{
+				name: "Percent",
+				type: "Float"
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "hpcalc", [args[0] ?? 50]);
+			return true
+		}
+	}),
+
+	mpcalc: new Extra({
+		name: "MP Calculation",
+		desc: "Current MP can boost or decrease damage by up to <Percent>%.",
+		args: [
+			{
+				name: "Percent",
+				type: "Float"
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "mpcalc", [args[0] ?? 50]);
+			return true
+		}
+	}),
+
+	multistatus: new Extra({
+		name: "Multistatus",
+		desc: "This skill becomes a status skill that will inflict one of multiple statuses.",
+		args: [
+			{
+				name: "Status #1",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Status #2",
+				type: "Word",
+				forced: true,
+				multiple: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			try {
+				skill.status = args.map(status => {
+					status = status.toLowerCase()
+					if (!statusEffects.includes(status))
+						throw void message.channel.send(`The status ${status} does not exist!`)
+					return status
+				})
+			} catch {
+				return false
+			}
 			if (!skill.statuschance) skill.statuschance = 100;
 			return true;
 		}
-	},
+	}),
 
-	dualelement: {
+	dualelement: new Extra({
 		name: "Dual Element",
-		desc: "_<Element>_\nThe skill may use the 2nd element in addition to the first.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (Elements.includes(extra1.toLowerCase()) && extra1.toLowerCase() != skill.type && extra1.toLowerCase() != 'passive' && extra1.toLowerCase() != 'status' && extra1.toLowerCase() != 'heal') {
-				skill.type = [(typeof skill.type === 'object') ? skill.type[0] : skill.type, extra1.toLowerCase()];
-			} else
-				return message.channel.send("That's not a valid element!");	
-				
-			return true;
-		}
-	},
-
-	affinitypow: {
-		name: "Affinity Power",
-		desc: "_<Damage>_\nPower boosted by <Damage> per affinity point. Works only for <:passive:963413845253193758>affinitypoint passives.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Damage>!");
-			makeExtra(skill, "affinitypow", [parseInt(extra1)]);
-			return true
-		}
-	},
-
-	forcetech: {
-		name: "Force Technical",
-		desc: "_<Status Effect #1> {Status Effect #2} {Status Effect #3} {Status Effect #4} {Status Effect #5}_\nForces a skill to tech off of different status effects instead of the preset ones.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Status Effect #1>!");
-
-			if (!statusEffects.includes(extra1.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-			if (extra2 && !statusEffects.includes(extra2.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-			if (extra3 && !statusEffects.includes(extra3.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-			if (extra4 && !statusEffects.includes(extra4.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-			if (extra5 && !statusEffects.includes(extra5.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-
-			makeExtra(skill, "forcetech", [extra1.toLowerCase(), extra2, extra3, extra4, extra5]);
-			return true
-		}
-	},
-
-	forceformula: {
-		name: "Force Formula",
-		desc: "_<Formula>_\nForces a skill to use a different damage formula.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Formula>!");
-
-			let damageFormulas = ['persona', 'pokemon', 'lamonka']
-			if (damageFormulas.includes(extra1.toLowerCase())) {
-				return message.channel.send('Invalid damage formula!\nValid formulas are: Persona, Pokemon, Lamonka')
+		desc: "The skill may use the 2nd element in addition to the first.",
+		args: [
+			{
+				name: "Element",
+				type: "Word",
+				forced: true
 			}
-
-			makeExtra(skill, "forceformula", [extra1.toLowerCase(), extra2]);
+		],
+		applyfunc(message, skill, args) {
+			const element = args[0].toLowerCase()
+			if (Elements.includes(element) && element != skill.type && element != 'passive' && element != 'status' && element != 'heal') {
+				skill.type = [(typeof skill.type === 'object') ? skill.type[0] : skill.type, element];
+			} else
+				return void message.channel.send("That's not a valid element!");	
 			return true;
 		}
-	},
+	}),
+
+	affinitypow: new Extra({
+		name: "Affinity Power",
+		desc: "Power boosted by <Damage> per affinity point. Works only for <:passive:963413845253193758>affinitypoint passives.",
+		args: [
+			{
+				name: "Damage",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "affinitypow", [args[0]]);
+			return true
+		}
+	}),
+
+	forcetech: new Extra({
+		name: "Force Technical",
+		desc: "Forces a skill to tech off of different status effects instead of the preset ones.",
+		args: [
+			{
+				name: "Status Effect #1",
+				type: "Word",
+				forced: true,
+				multiple: true
+			}	
+		],
+		applyfunc(message, skill, args) {
+			let statuses
+			try {
+				statuses = args.map(status => {
+					status = status.toLowerCase()
+					if (!statusEffects.includes(status))
+						throw void message.channel.send(`The status ${status} does not exist!`)
+					return status
+				})
+			} catch {
+				return false
+			}
+			makeExtra(skill, "forcetech", statuses)
+			return true;
+		}
+	}),
+
+	forceformula: new Extra({
+		name: "Force Formula",
+		desc: "Forces a skill to use a different damage formula.",
+		args: [
+			{
+				name: "Formula",
+				type: "Word",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			const formula = args[0].toLowerCase()
+			if (damageFormulas.includes(formula))
+				return void message.channel.send('Invalid damage formula!\nValid formulas are: Persona, Pokemon, Lamonka')
+			makeExtra(skill, "forceformula", [formula]);
+			return true;
+		}
+	}),
 
 	rollout: {
 		name: "Rollout",

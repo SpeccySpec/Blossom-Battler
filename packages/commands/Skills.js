@@ -1070,7 +1070,8 @@ commands.applyextra = new Command({
 		}
 	],
 	func: (message, args) => {
-		const skilldata = skillFile[args.shift()]
+		const skillname = args.shift()
+		const skilldata = skillFile[skillname]
 		const extra = args.shift().toLowerCase()
 		if (skilldata) {
 			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skilldata.originalAuthor != message.author.id) {
@@ -1095,7 +1096,7 @@ commands.applyextra = new Command({
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 		} else {
-			return message.channel.send(`${args[0]} is an invalid Skill Name!`)
+			return message.channel.send(`${skillname} is an invalid Skill Name!`)
 		}
 	}
 })
