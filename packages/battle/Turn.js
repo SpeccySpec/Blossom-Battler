@@ -384,14 +384,20 @@ sendCurTurnEmbed = (char, btl) => {
 
 	collector.on('collect', async i => {
 		btl.action.laststate = menustate;
+		let alreadyResponded = false;
 
 		let testbtl = setUpFile(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, true);
 		if (testbtl.forcemessage && i.message.id != testbtl.forcemessage) {
-			return i.update({
+			collector.stop();
+			alreadyResponded = true;
+
+			await i.update({
 				content: `<@${char.owner}>`,
 				embeds: [DiscordEmbed],
 				components: setUpComponents(char, testbtl, menustate)
 			});
+
+			return;
 		}
 
 		DiscordEmbed = new Discord.MessageEmbed()
@@ -425,10 +431,12 @@ sendCurTurnEmbed = (char, btl) => {
 				btl.action.move = 'guard';
 				btl.action.index = 'guard';
 				btl.action.target = [char.team, char.id];
+				alreadyResponded = true;
+
 				doAction(char, btl, btl.action);
 				collector.stop();
 
-				return i.update({
+				await i.update({
 					content: `<@${char.owner}>`,
 					embeds: [DiscordEmbed]
 				});
@@ -453,8 +461,9 @@ sendCurTurnEmbed = (char, btl) => {
 					doAction(char, btl, btl.action);
 					collector.stop();
 				}
+				alreadyResponded = true;
 
-				return i.update({
+				await i.update({
 					content: `<@${char.owner}>`,
 					embeds: [DiscordEmbed],
 					components: setUpComponents(char, btl, menustate)
@@ -468,8 +477,9 @@ sendCurTurnEmbed = (char, btl) => {
 			case 'backup':
 				if (!char.leader) {
 					DiscordEmbed.title = "Only the leader can change party members!";
+					alreadyResponded = true;
 
-					return i.update({
+					await i.update({
 						content: `<@${char.owner}>`,
 						embeds: [DiscordEmbed],
 						components: setUpComponents(char, btl, menustate)
@@ -495,10 +505,11 @@ sendCurTurnEmbed = (char, btl) => {
 					if (lbDefs.target) {
 						if (lbDefs.target === 'allopposing' || lbDefs.target === 'allallies' || lbDefs.target === 'everyone' || lbDefs.target.includes('random')) {
 							btl.action.target = [undefined, undefined];
+							alreadyResponded = true;
 							doAction(char, btl, btl.action);
 							collector.stop();
 
-							return i.update({
+							await i.update({
 								content: `<@${char.owner}>`,
 								embeds: [DiscordEmbed],
 							});
@@ -534,8 +545,9 @@ sendCurTurnEmbed = (char, btl) => {
 									let txt = extrasList[i].canuse(char, skill, btl, skill.extras[i][k]);
 									if (txt != true) {
 										DiscordEmbed.title = txt;
+										alreadyResponded = true;
 
-										return i.update({
+										await i.update({
 											content: `<@${char.owner}>`,
 											embeds: [DiscordEmbed],
 										});
@@ -545,8 +557,9 @@ sendCurTurnEmbed = (char, btl) => {
 								let txt = extrasList[i].canuse(char, skill, btl, skill.extras[i]);
 								if (txt != true) {
 									DiscordEmbed.title = txt;
+									alreadyResponded = true;
 
-									return i.update({
+									await i.update({
 										content: `<@${char.owner}>`,
 										embeds: [DiscordEmbed],
 										components: setUpComponents(char, btl, menustate)
@@ -560,8 +573,9 @@ sendCurTurnEmbed = (char, btl) => {
 
 							if (canUse && canUse[1] != true) {
 								DiscordEmbed.title = canUse[0];
+								alreadyResponded = true;
 
-								return i.update({
+								await i.update({
 									content: `<@${char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
@@ -577,10 +591,11 @@ sendCurTurnEmbed = (char, btl) => {
 						menustate = MENU_TARGET;
 					} else if (skill.target === "caster") {
 						btl.action.target = [char.team, char.id];
+						alreadyResponded = true;
 						doAction(char, btl, btl.action);
 						collector.stop();
 
-						return i.update({
+						await i.update({
 							content: `<@${char.owner}>`,
 							embeds: [DiscordEmbed],
 						});
@@ -588,8 +603,9 @@ sendCurTurnEmbed = (char, btl) => {
 						btl.action.target = [undefined, undefined];
 						doAction(char, btl, btl.action);
 						collector.stop();
+						alreadyResponded = true;
 
-						return i.update({
+						await i.update({
 							content: `<@${char.owner}>`,
 							embeds: [DiscordEmbed],
 						});
@@ -606,19 +622,21 @@ sendCurTurnEmbed = (char, btl) => {
 						menustate = MENU_TARGET;
 					} else if (itemdta.target === "caster") {
 						btl.action.target = [char.team, char.id];
+						alreadyResponded = true;
 						doAction(char, btl, btl.action);
 						collector.stop();
 
-						return i.update({
+						await i.update({
 							content: `<@${char.owner}>`,
 							embeds: [DiscordEmbed],
 						});
 					} else {
 						btl.action.target = [undefined, undefined];
+						alreadyResponded = true;
 						doAction(char, btl, btl.action);
 						collector.stop();
 
-						return i.update({
+						await i.update({
 							content: `<@${char.owner}>`,
 							embeds: [DiscordEmbed],
 						});
@@ -651,8 +669,9 @@ sendCurTurnEmbed = (char, btl) => {
 
 							if (targ.negotiate == [] || targ.negotiate.length <= 0) {
 								DiscordEmbed.title = `${targ.name} seems adamant on attacking and will not listen to reason.`;
+								alreadyResponded = true;
 
-								return i.update({
+								await i.update({
 									content: `<@${char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
@@ -668,8 +687,9 @@ sendCurTurnEmbed = (char, btl) => {
 									DiscordEmbed.fields.push({name: `**[${k}]** __${targ.negotiate[k].name}__`, value: targ.negotiate[k].desc, inline: true});
 
 								menustate = MENU_PACIFY;
+								alreadyResponded = true;
 
-								return i.update({
+								await i.update({
 									content: `<@${char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
@@ -692,38 +712,41 @@ sendCurTurnEmbed = (char, btl) => {
 								DiscordEmbed.fields.push({name: `**[${k}]** __${f.name}__`, value: `${f.hp}/${f.maxhp}HP\n${f.mp}/${f.maxmp}MP`, inline: true});
 							}
 							menustate = MENU_BACKUP;
+							alreadyResponded = true;
 
-							return i.update({
+							await i.update({
 								content: `<@${char.owner}>`,
 								embeds: [DiscordEmbed],
 								components: setUpComponents(char, btl, menustate)
-							})
-							break;
+							});
 						
 						case 'enemyinfo':
 							targ = btl.teams[btl.action.target[0]].members[i.customId];
 
 							if (!targ.enemy) {
 								DiscordEmbed.title = `${targ.name} isn't an enemy!`;
+								alreadyResponded = true;
 
-								return i.update({
+								await i.update({
 									content: `<@${char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
-								})
+								});
 							} else if (!foundEnemy(targ.truename, btl.guild.id)) {
 								DiscordEmbed.title = `We've yet to learn about ${targ.name}.`;
+								alreadyResponded = true;
 
-								return i.update({
+								await i.update({
 									content: `<@${char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
 								})
 							} else {
 								let enemyFile = setUpFile(`${dataPath}/json/${btl.guild.id}/enemies.json`);
+								alreadyResponded = true;
 								menustate = MENU_ENEMYINFO;
 
-								return i.update({
+								await i.update({
 									content: `<@${char.owner}>`,
 									embeds: [longDescription(enemyFile[targ.truename], enemyFile[targ.truename].level, btl.guild.id, i)],
 									components: setUpComponents(char, btl, menustate)
@@ -743,18 +766,19 @@ sendCurTurnEmbed = (char, btl) => {
 									btl.action.target[0] = op;
 								}
 
-								return i.update({
+								await i.update({
 									content: `<@${char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
 								});
 							} else {
 								btl.action.target[1] = parseInt(i.customId);
+								alreadyResponded = true;
 
 								doAction(char, btl, btl.action);
 								collector.stop();
 
-								return i.update({
+								await i.update({
 									content: `<@${char.owner}>`,
 									embeds: [DiscordEmbed],
 								});
@@ -763,9 +787,10 @@ sendCurTurnEmbed = (char, btl) => {
 					
 						default:
 							doAction(char, btl, btl.action);
+							alreadyResponded = true;
 							collector.stop();
 
-							return i.update({
+							await i.update({
 								content: `<@${char.owner}>`,
 								embeds: [DiscordEmbed],
 							});
@@ -773,6 +798,7 @@ sendCurTurnEmbed = (char, btl) => {
 				} else if (menustate == MENU_FORFEIT) {
 					if (i.customId === 'forfeit') {
 						btl.action.move = 'forfeit';
+						alreadyResponded = true;
 
 						for (let i in btl.teams[char.team].members)
 							btl.teams[char.team].members[i].hp = 0;
@@ -780,26 +806,28 @@ sendCurTurnEmbed = (char, btl) => {
 						doAction(char, btl, btl.action);
 						collector.stop();
 
-						return i.update({
+						await i.update({
 							content: `<@${char.owner}>`,
 							embeds: [DiscordEmbed],
 						});
 					}
 				} else if (menustate == MENU_PACIFY) {
-					btl.action.index = parseInt(i.customId)
+					btl.action.index = parseInt(i.customId);
+					alreadyResponded = true;
 					doAction(char, btl, btl.action);
 					collector.stop();
 
-					return i.update({
+					await i.update({
 						content: `<@${char.owner}>`,
 						embeds: [DiscordEmbed],
 					});
 				} else if (menustate == MENU_BACKUP) {
 					btl.action.index = parseInt(i.customId);
+					alreadyResponded = true;
 					doAction(char, btl, btl.action);
 					collector.stop();
 
-					return i.update({
+					await i.update({
 						content: `<@${char.owner}>`,
 						embeds: [DiscordEmbed],
 					});
@@ -823,7 +851,9 @@ sendCurTurnEmbed = (char, btl) => {
 				break;
 		}
 
-		return i.update({
+		if (alreadyResponded) return;
+
+		await i.update({
 			content: `<@${char.owner}>`,
 			embeds: [DiscordEmbed],
 			components: setUpComponents(char, btl, menustate)
@@ -1025,7 +1055,7 @@ doAction = (char, btl, action) => {
 	}, 2000)
 }
 
-doTurn = (btl, noTurnEmbed) => {
+doTurn = async(btl, noTurnEmbed) => {
 	let char = getCharFromTurn(btl);
 	let settings = setUpSettings(btl.guild.id);
 	
