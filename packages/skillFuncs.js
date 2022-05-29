@@ -507,13 +507,15 @@ function atkDesc(skillDefs, settings) {
 			finalText += `Forces to use the **${skillDefs.extras.forceformula[0].charAt(0).toUpperCase() + skillDefs.extras.forceformula[0].slice(1)}**${skillDefs.extras.forceformula[0] == 'custom' ? `\`${skillDefs.extras.forceformula[1]}\`` : ''} formula.\n`;
 		}
 
+		if (hasExtra(skillDefs, 'multihit')) {
+			finalText += `Has a **${skillDefs.extras.multihit[0]}%** chance to add **${skillDefs.extras.multihit[1]}** extra hit(s) to the skill.\n`;
+		}
+
 		if (hasExtra(skillDefs, 'rollout')) {
 			finalText += `Forced to repeat, boosting power by **${skillDefs.extras.rollout[0]}%** until **${skillDefs.extras.rollout[1]}x** pow is reached or for **${skillDefs.extras.rollout[2]}** turns.\n`;
 		}
 
 		if (hasExtra(skillDefs, 'changeaffinity')) {
-			//finalText += `Removes resisting, blocking, draining and repelling affinities to **${elementEmoji[skillDefs.extras.resistremove[0]]}${skillDefs.extras.resistremove[0].charAt(0).toUpperCase() + skillDefs.extras.resistremove[0].slice(1)}**.\n`;
-		
 			let targetAffinities = skillDefs.extras.changeaffinity.filter(x => x.includes('target'))
 			let userAffinities = skillDefs.extras.changeaffinity.filter(x => x.includes('user'))
 
