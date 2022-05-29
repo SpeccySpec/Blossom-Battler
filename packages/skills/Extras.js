@@ -399,14 +399,14 @@ extrasList = {
 		}
 	}),
 
-	feint: {
+	feint: new Extra({
 		name: "Feint",
 		desc: "Bypasses shielding skills like Makarakarn and Tetrakarn.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc: function(message, skill) {
 			makeExtra(skill, "feint", [true]);
 			return true
 		}
-	},
+	}),
 
 	healverse: {
 		name: "Healverse",
