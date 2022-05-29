@@ -359,19 +359,30 @@ extrasList = {
 		}
 	}),
 
-	steal: {
+	steal: new Extra({
 		name: "Steal",
-		desc: "_<Chance> {Amount}_\nHas a <Chance>% chance to steal {Amount} of the foe team's items.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Chance>!");
-
-			if (parseFloat(extra1) < 0) return message.channel.send("You can't steal from a foe that doesn't exist!");
-			if (!extra2 && parseInt(extra2) < 1) return message.channel.send("You didn't supply anything for <Amount>!");
-
-			makeExtra(skill, "steal", [parseFloat(extra1), parseInt(extra2)]);
+		desc: "Has a <Chance>% chance to steal {Amount} of the foe team's items.",
+		args: [
+			{
+				name: "Chance",
+				type: "Float",
+				forced: true
+			},
+			{
+				name: "Amount",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			const chance = args[0]
+			const amount = args[1]
+			if (chance <= 0)
+				return void message.channel.send("What's the point of stealing if the extra never lands?");
+			makeExtra(skill, "steal", [chance, amount]);
 			return true
 		}
-	},
+	}),
 
 	drain: {
 		name: "Drain",
