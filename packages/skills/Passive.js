@@ -542,17 +542,22 @@ passiveList = {
 		}
 	}),
 
-	affinitycutter: {
+	affinitycutter: new Extra({
 		name: "Affinity Cutter",
-		desc: "_<Chance>_\n<Chance>% chance to bypass resist affinities.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Chance>!");
-
-			if (parseFloat(extra1) < 1) return message.channel.send("You entered an invalid value for <Chance>!");
-			makePassive(skill, "affinitycutter", [parseFloat(extra1)]);
+		desc: "<Chance>% chance to bypass resist affinities.",
+		args: [
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (args[0] < 1) return void message.channel.send("If it never happens, why bother?");
+			makePassive(skill, "affinitycutter", [args[0]]);
 			return true;
 		},
-		affinitymod: function(inf, char, skill, affinity, btl, vars) {
+		affinitymod(inf, char, skill, affinity, btl, vars) {
 			if (affinity === 'resist' || affinity === 'block') {
 				if (randNum(1, 100) <= vars[0]) {
 					return ['normal', `${inf.name} cuts through ${char.name}'s ${affinity} affinity!`];
@@ -561,19 +566,24 @@ passiveList = {
 
 			return null;
 		}
-	},
+	}),
 
-	affinityslicer: {
+	affinityslicer: new Extra({
 		name: "Affinity Slicer",
-		desc: "_<Chance>_\n<Chance>% chance to bypass all affinities, turning them into a resist or better.\n```diff\n+ Drain, Repel, Block ---> Resist\n+ Resist ---> Normal\n```",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Chance>!");
-
-			if (parseFloat(extra1) < 1) return message.channel.send("You entered an invalid value for <Chance>!");
-			makePassive(skill, "affinityslicer", [parseFloat(extra1)]);
+		desc: "\n<Chance>% chance to bypass all affinities, turning them into a resist or better.\n```diff\n+ Drain, Repel, Block ---> Resist\n+ Resist ---> Normal\n```",
+		args: [
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (args[0] < 1) return void message.channel.send("If it never happens, why bother?");
+			makePassive(skill, "affinityslicer", [args[0]]);
 			return true;
 		},
-		affinitymod: function(inf, char, skill, affinity, btl, vars) {
+		affinitymod(inf, char, skill, affinity, btl, vars) {
 			if (affinity === 'resist' || affinity === 'block' || affinity === 'repel' || affinity === 'drain') {
 				if (randNum(1, 100) <= vars[0]) {
 					return ['normal', `${inf.name} cuts through ${char.name}'s ${affinity} affinity!`];
@@ -582,19 +592,24 @@ passiveList = {
 
 			return null;
 		}
-	},
+	}),
 
-	swordbreaker: {
+	swordbreaker: new Extra({
 		name: "Sword Breaker",
-		desc: "_<Chance>_\n<Chance>% chance to physical attacks that hit the user to a resist.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Chance>!");
-
-			if (parseFloat(extra1) < 1) return message.channel.send("You entered an invalid value for <Chance>!");
-			makePassive(skill, "swordbreaker", [parseFloat(extra1)]);
+		desc: "<Chance>% chance to physical attacks that hit the user to a resist.",
+		args: [
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (args[0] < 1) return void message.channel.send("If it never happens, why bother?");
+			makePassive(skill, "swordbreaker", [args[0]]);
 			return true;
 		},
-		affinitymodoninf: function(char, inf, skill, passive, affinity, btl, vars) {
+		affinitymodoninf(char, inf, skill, passive, affinity, btl, vars) {
 			if (affinity === 'deadly' || affinity === 'superweak' || affinity === 'weak' || affinity === 'normal') {
 				if (randNum(1, 100) <= vars[0]) {
 					return ['resist', `${char.name}'s ${passive.name} changed ${skill.name}'s attack to a resist!`];
@@ -603,41 +618,44 @@ passiveList = {
 
 			return null;
 		}
-	},
+	}),
 
-	magicmelee: {
+	magicmelee: new Extra({
 		name: "Magic Melee",
 		desc: "Turns caster's melee attack into a magic attack.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		args: [],
+		applyfunc(message, skill, args) {
 			makePassive(skill, "magicmelee", [true]);
 			return true;
 		}
-	},
+	}),
 
-	attackall: {
+	attackall: new Extra({
 		name: "Attack All",
 		desc: "Melee Attack targets all foes.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		args: [],
+		applyfunc(message, skill, args) {
 			makePassive(skill, "attackall", [true]);
 			return true;
 		}
-	},
+	}),
 
-	wonderguard: {
+	wonderguard: new Extra({
 		name: "Wonder Guard",
 		desc: "Nullifies damage from attacks that the caster is not weak to.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		args: [],
+		applyfunc(message, skill, args) {
 			makePassive(skill, "wonderguard", [true]);
 			return true;
 		},
-		affinitymodoninf: function(char, inf, skill, passive, affinity, btl, vars) {
+		affinitymodoninf(char, inf, skill, passive, affinity, btl, vars) {
 			if (affinity === 'deadly' || affinity === 'superweak' || affinity === 'weak') {
 				return null;
 			}
 
 			return ['block', `${char.name}'s ${passive.name} made the skill have no affect!`];
 		}
-	},
+	}),
 
 	repelmag: {
 		name: "Repel Magic",
