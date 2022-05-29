@@ -597,7 +597,12 @@ extrasList = {
 		desc: "This skill becomes a status skill that will inflict one of multiple statuses.",
 		args: [
 			{
-				name: "Status",
+				name: "Status #1",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Status #2",
 				type: "Word",
 				forced: true,
 				multiple: true
