@@ -457,9 +457,9 @@ extrasList = {
 		}
 	}),
 
-	powerverse: {
+	powerverse: new Extra({
 		name: "Powerverse",
-		desc: "_<Percent> <Turns> {Deploy Message}_\nAfter the foe is hit with this skill, each hit done to it will boost LB% by <Damage Percent>%. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
+		desc: "After the foe is hit with this skill, each hit done to it will boost LB% by <Damage Percent>%. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
 		args: [
 			{
 				name: "Damage Percent",
@@ -483,20 +483,35 @@ extrasList = {
 			makeExtra(skill, "powerverse", [args[0], turns, args[2]]);
 			return true
 		}
-	},
+	}),
 
-	spreadverse: {
+	spreadverse: new Extra({
 		name: "Spreadverse",
-		desc: "_<Damage Percent> <Turns> {Deploy Message}_\nAfter the foe is hit with this skill, each hit done to it will spread <Damage Percent>% of damage to other foes. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Damage Percent>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Turns>!");
-
-			if (parseInt(extra2) < 1) return message.channel.send("You can't have less than 1 turn for this skill.");
-			makeExtra(skill, "spreadverse", [parseFloat(extra1), parseInt(extra2), extra3]);
+		desc: "After the foe is hit with this skill, each hit done to it will spread <Damage Percent>% of damage to other foes. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
+		args: [
+			{
+				name: "Damage Percent",
+				type: "Float",
+				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Deploy Message",
+				type: "Word"
+			}
+		],
+		applyfunc(message, skill, args) {
+			const turns = args[1]
+			if (turns < 1)
+				return void message.channel.send("You can't have less than 1 turn for this skill.");
+			makeExtra(skill, "spreadverse", [args[0], turns, args[2]]);
 			return true
 		}
-	},
+	}),
 
 	lonewolf: {
 		name: "Lone Wolf",
