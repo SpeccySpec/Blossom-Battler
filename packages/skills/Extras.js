@@ -513,7 +513,7 @@ extrasList = {
 		}
 	}),
 
-	lonewolf: new Exstra({
+	lonewolf: new Extra({
 		name: "Lone Wolf",
 		desc: "Skill Power boosted by <Multiplier>x when alone, or all allies are down.",
 		args: [
@@ -592,25 +592,32 @@ extrasList = {
 		}
 	}),
 
-	multistatus: {
+	multistatus: new Extra({
 		name: "Multistatus",
-		desc: "_<Status> <Status> <Status>_\nThis skill becomes a status skill that will inflict one of multiple statuses.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			let backupStatus = skill.status;
-			skill.status = [];
-			if (statusEffects.includes(extra1)) skill.status.push(extra1);
-			if (statusEffects.includes(extra2)) skill.status.push(extra2);
-			if (statusEffects.includes(extra3)) skill.status.push(extra3);
-			
-			if (skill.status.length <= 0) {
-				skill.status = backupStatus;
-				return message.channel.send('All 3 status effects were invalid.');
+		desc: "This skill becomes a status skill that will inflict one of multiple statuses.",
+		args: [
+			{
+				name: "Status",
+				type: "Word",
+				forced: true,
+				multiple: true
 			}
-			
+		],
+		applyfunc(message, skill, args) {
+			try {
+				skill.status = args.map(status => {
+					status = status.toLowerCase()
+					if (!statusEffects.includes(status))
+						throw void message.channel.send(`The status ${status} does not exist!`)
+					return status
+				})
+			} catch {
+				return false
+			}
 			if (!skill.statuschance) skill.statuschance = 100;
 			return true;
 		}
-	},
+	}),
 
 	dualelement: {
 		name: "Dual Element",
