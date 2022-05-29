@@ -332,14 +332,14 @@ weathers = [
 
 terrains = [
 	'none',
-	"flaming", // 10 damage with 10% chance of burn. Also puts out freezing fighters.
-	"thunder", // 1.2x to elec.
-	"grassy", // 10% heal before turn.
-	"light", // 1.2x to bless.
+	"flaming", // 10 damage with 10% chance of burn to non fire main elements. Also puts out freezing fighters.
+	"thunder", // 1.2x to elec. 1.25x paralysis chance.
+	"grassy", // 10% heal before turn. 17% for grass mains.
+	"light", // 1.3x to bless. 0.5x to curse.
 	"psychic", // reverse turn order.
 	"misty", // ignore status inflictions. Also removes all status effects on turn.
-	"sky", // 1.2x to wind.
-	"muddy", // 1.2x to earth, -33% agl.
+	"sky", // 1.2x to wind. 0.9x to earth. +25% agl. +40% to wind mains.
+	"muddy", // 1.35x to earth, 0.8x accuracy to physicals, -33% agl to non earth mains.
 
 	// boss specific
 	"flooded", // 1.3x to water. Makes physical skills dualelement water.

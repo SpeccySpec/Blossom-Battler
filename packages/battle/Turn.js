@@ -563,7 +563,7 @@ sendCurTurnEmbed = (char, btl) => {
 										DiscordEmbed.title = txt;
 										alreadyResponded = true;
 
-										await i.update({
+										return i.update({
 											content: `<@${char.owner}>`,
 											embeds: [DiscordEmbed],
 										});
@@ -575,13 +575,33 @@ sendCurTurnEmbed = (char, btl) => {
 									DiscordEmbed.title = txt;
 									alreadyResponded = true;
 
-									await i.update({
+									return i.update({
 										content: `<@${char.owner}>`,
 										embeds: [DiscordEmbed],
 										components: setUpComponents(char, btl, menustate)
 									});
 								}
 							}
+						}
+
+						if (btl.terrain && btl.terrain.type === "blindingradiance" && ((typeof(skill.type) === "string" && skill.type === "curse") || typeof(skill.type) === "object" && skill.type.includes("curse")) {
+							DiscordEmbed.title = "The cursed energy dissapears as soon as it appears...";
+							alreadyResponded = true;
+
+							return i.update({
+								content: `<@${char.owner}>`,
+								embeds: [DiscordEmbed],
+								components: setUpComponents(char, btl, menustate)
+							});
+						} else if (btl.terrain && btl.terrain.type === "eternaldarkness" && ((typeof(skill.type) === "string" && skill.type === "bless") || typeof(skill.type) === "object" && skill.type.includes("bless")) {
+							DiscordEmbed.title = "The blessed energy dissapears as soon as it appears...";
+							alreadyResponded = true;
+
+							return i.update({
+								content: `<@${char.owner}>`,
+								embeds: [DiscordEmbed],
+								components: setUpComponents(char, btl, menustate)
+							});
 						}
 
 						if (char.status && statusEffectFuncs[char.status.toLowerCase()] && statusEffectFuncs[char.status.toLowerCase()].canuse) {

@@ -508,7 +508,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					if (isPhysicalStatus(status.toLowerCase())) chance = (skill.statuschance ?? 5) + ((char.stats.luk-targ.stats.luk)/2);
 
 					if (randNum(1, 100) <= chance) {
-						result.txt += `${inflictStatus(targ, status.toLowerCase())}\n${selectQuote(char, 'landed', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}\n${selectQuote(targ, 'hurt', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
+						result.txt += `\n${inflictStatus(targ, status.toLowerCase())}\n${selectQuote(char, 'landed', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}\n${selectQuote(targ, 'hurt', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 					}
 				}
 			}
