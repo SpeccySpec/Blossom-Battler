@@ -624,18 +624,25 @@ extrasList = {
 		}
 	}),
 
-	dualelement: {
+	dualelement: new Extra({
 		name: "Dual Element",
-		desc: "_<Element>_\nThe skill may use the 2nd element in addition to the first.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (Elements.includes(extra1.toLowerCase()) && extra1.toLowerCase() != skill.type && extra1.toLowerCase() != 'passive' && extra1.toLowerCase() != 'status' && extra1.toLowerCase() != 'heal') {
-				skill.type = [(typeof skill.type === 'object') ? skill.type[0] : skill.type, extra1.toLowerCase()];
+		desc: "The skill may use the 2nd element in addition to the first.",
+		args: [
+			{
+				name: "Element",
+				type: "Word",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			const element = args[0].toLowerCase()
+			if (Elements.includes(element) && element != skill.type && element != 'passive' && element != 'status' && element != 'heal') {
+				skill.type = [(typeof skill.type === 'object') ? skill.type[0] : skill.type, element];
 			} else
-				return message.channel.send("That's not a valid element!");	
-				
+				return void message.channel.send("That's not a valid element!");	
 			return true;
 		}
-	},
+	}),
 
 	affinitypow: {
 		name: "Affinity Power",
