@@ -543,17 +543,24 @@ extrasList = {
 		}
 	}),
 
-	statcalc: {
+	statcalc: new Extra({
 		name: "Stat Calculation",
-		desc: "_<Stat>_\nUses the caster's <Stat> for calculating damage.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
-
-			if (!utilityFuncs.validStat(extra2.toLowerCase())) return message.channel.send("That's not a valid stat!");
-			makeExtra(skill, "statcalc", [extra2.toLowerCase()]);
+		desc: "Uses the caster's <Stat> for calculating damage.",
+		args: [
+			{
+				name: "Stat",
+				type: "Word",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			const stat = args[0].toLowerCase()
+			if (!utilityFuncs.validStat(stat))
+				return void message.channel.send("That's not a valid stat!");
+			makeExtra(skill, "statcalc", [stat]);
 			return true
 		}
-	},
+	}),
 
 	hpcalc: {
 		name: "HP Calculation",
