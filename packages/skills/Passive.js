@@ -1,78 +1,147 @@
 passiveList = {
 	// On Attack.
-	boost: {
+	boost: new Extra({
 		name: "Boost",
-		desc: "_<Element> <Percentage>_\nBoosts the powers of skills of a specific element. Values for <Percentage> that are less than 100% will actually have negative effects! Negative values may even heal the foe... somehow.",
+		desc: "Boosts the powers of skills of a specific element. Values for <Percentage> that are less than 100% will actually have negative effects! Negative values may even heal the foe... somehow.",
+		args: [
+			{
+				name: "Element",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Percentage",
+				type: "Decimal",
+				forced: true
+			}
+		],
 		multiple: true,
 		diffflag: 0,
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Element>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Percentage>!");
+		applyfunc(message, skill, args) {
+			let element = args[0]?.toLowerCase();
+			let percentage = args[1];
 
-			let element = extra1.toLowerCase();
-			if ((!utilityFuncs.inArray(element, Elements) && element != 'all' && element != 'magic' && element != 'physical') || element === 'almighty') return message.channel.send("You entered an invalid element!");
+			if ((!utilityFuncs.inArray(element, Elements) && element != 'all' && element != 'magic' && element != 'physical') || element === 'almighty') return void message.channel.send("You entered an invalid element!");
 
-			makePassive(skill, "boost", [element, parseFloat(extra2)]);
+			makePassive(skill, "boost", [element, percentage]);
 			return true;
 		},
-		statmod: function(btl, char, skill, vars) {
+		statmod(btl, char, skill, vars) {
 			if ((typeof(skill.type) === 'object' && skill.type.includes(vars[0])) || (typeof(skill.type) === 'string' && skill.type == vars[0])) {
 				skill.pow *= vars[1]/100;
 			}
 		}
-	},
+	}),
 
-	moodswing: {
+	moodswing: new Extra({
 		name: "Mood Swing",
-		desc: "_<Percentage Boost/Decrease> <Turns>_\nEvery <Turns> turns, your mood will switch from Calm to Angry and back, buffing/nerfing skills respectively.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1 || parseFloat(extra1) < 1) return message.channel.send("You didn't supply anything for <Element>!");
-			if (!extra2 || parseInt(extra2) < 1) return message.channel.send("You didn't supply anything for <Percentage>!");
-			makePassive(skill, "boost", [parseFloat(extra1), parseInt(extra2)]);
+		desc: "Every <Turns> turns, your mood will switch from Calm to Angry and back, buffing/nerfing skills respectively.",
+		args: [
+			{
+				name: "Percentage Boost",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let percentage = args[0];
+			let turns = args[1];
+
+			if (percentage == 0) return void message.channel.send("What's the point if you're not boosting anything?");
+			if (turns <= 0) return void message.channel.send("You can't set it to last 0 turns or less!");
+
+			makePassive(skill, "moodswing", [percentage, turns]);
 			return true;
 		}
-	},
+	}),
 
-	berserk: {
+	berserk: new Extra({
 		name: "Berserk",
-		desc: "_<Percentage Multiplier> <Highest HP Percent>_\n.With more HP, the user is more willing to fight. <Percentage Multiplier> should be over 100%... or you might get the opposite!",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1 || parseFloat(extra1) < 1) return message.channel.send("You didn't supply anything for <Element>!");
-			if (!extra2 || parseFloat(extra2) < 1) return message.channel.send("You didn't supply anything for <Percentage>!");
-			makePassive(skill, "boost", [parseFloat(extra1), parseFloat(extra2)]);
-			return true;
-		}
-	},
+		desc: "With more HP, the user is more willing to fight. <Percentage Multiplier> should be over 100%... or you might get the opposite!",
+		args: [
+			{
+				name: "Percentage Multiplier",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Highest HP Percent",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let percentage = args[0];
+			let hpPercent = args[1];
 
-	enraged: {
-		name: "Enraged",
-		desc: "_<Percentage Multiplier> <Highest HP Percent>_\n.With less HP, the user is more angered. <Percentage Multiplier> should be over 100%... or you might get the opposite!",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1 || parseFloat(extra1) < 1) return message.channel.send("You didn't supply anything for <Element>!");
-			if (!extra2 || parseFloat(extra2) < 1) return message.channel.send("You didn't supply anything for <Percentage>!");
-			makePassive(skill, "boost", [parseFloat(extra1), parseFloat(extra2)]);
+			if (percentage == 0) return void message.channel.send("What's the point if you're not boosting anything?");
+
+			makePassive(skill, "berserk", [percentage, hpPercent]);
 			return true;
 		}
-	},
+	}),
+
+	enraged: new Extra({
+		name: "Enraged",
+		desc: "With less HP, the user is more angered. <Percentage Multiplier> should be over 100%... or you might get the opposite!",
+		args: [
+			{
+				name: "Percentage Multiplier",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Highest HP Percent",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let percentage = args[0];
+			let hpPercent = args[1];
+
+			if (percentage == 0) return void message.channel.send("What's the point if you're not boosting anything?");
+
+			makePassive(skill, "enraged", [percentage, hpPercent]);
+			return true;
+		}
+	}),
 
 	// Start Of Turn
-	heal: {
+	heal: new Extra({
 		name: "Heal",
-		desc: "_<Amount> <Stat>_\nRestores <Amount> of max <Stat> on the start of your turn, <Stat> being either HP, HPPercent, MP, MPPercent, or LB.",
+		desc: "Restores <Amount> of max <Cost Type> on the start of your turn, <Cost Type> being either HP, HPPercent, MP, MPPercent, or LB.",
+		args: [
+			{
+				name: "Amount",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Cost Type",
+				type: "Word",
+				forced: true
+			}
+		],
 		multiple: true,
 		diffflag: 1,
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1 || parseInt(extra1) < 1) return message.channel.send("You didn't supply anything for <Amount>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Stat>!");
-			
-			let stat = extra2.toLowerCase();
-			if (stat != 'hp' && stat != 'mp' && stat != 'hppercent' && stat != 'mppercent' && stat != 'lb')
-				return message.channel.send("You entered an invalid value for <Stat>! It can be either HP, HPPercent, MP, MPPercent, or LB.");
+		applyfunc(message, skill, args) {
+			let amount = args[0];
+			let stat = args[1]?.toLowerCase();
 
-			makePassive(skill, "heal", [parseInt(extra1), stat]);
+			if (amount == 0) return void message.channel.send("What's the point if you're healing nothing?")
+			if (stat != 'hp' && stat != 'mp' && stat != 'hppercent' && stat != 'mppercent' && stat != 'lb')
+				return void message.channel.send("You entered an invalid value for <Stat>! It can be either HP, HPPercent, MP, MPPercent, or LB.");
+
+			makePassive(skill, "heal", [amount, stat]);
 			return true;
 		},
-		onturn: function(btl, char, vars) {
+		onturn(btl, char, vars) {
 			let finalTxt = '';
 			let settings = setUpSettings(btl.guild.id);
 
@@ -113,112 +182,224 @@ passiveList = {
 			char.mp = Math.min(char.maxmp, char.mp);
 			return finalTxt;
 		}
-	},
+	}),
 
-	damage: {
+	damage: new Extra({
 		name: "Damage",
-		desc: "_<Phys/Mag> <Damage> <Element>_\nInflicts <Damage> of <Element> damage to the target when attacked with a <Phys/Mag> skill.",
+		desc: "Inflicts <Damage> of <Element> damage to the target when attacked with a <Phys/Mag> skill.",
+		args: [
+			{
+				name: "Phys/Mag",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Damage",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Element",
+				type: "Word",
+				forced: true
+			}
+		],
 		multiple: true,
 		diffflag: 0,
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Phys/Mag>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Damage>!");
-			if (!extra3) return message.channel.send("You didn't supply anything for <Element>!");
+		applyfunc(message, skill, args) {
+			let physmag = args[0]?.toLowerCase();
+			let damage = args[1];
+			let element = args[2]?.toLowerCase();
 
-			let physmag = extra1.toLowerCase();
 			if (physmag != 'phys' && physmag != 'mag')
-				return message.channel.send("You entered an invalid value for <Phys/Mag>! It can be either PHYS or MAG.");
+				return void message.channel.send("You entered an invalid value for <Phys/Mag>! It can be either PHYS or MAG.");
 
-			if (!Elements.includes(extra3.toLowerCase())) return message.channel.send("You entered an invalid value for <Element>!");
+			if (damage == 0) return void message.channel.send("What's the point if it's dealing no damage?");
+
+			if (!Elements.includes(element.toLowerCase())) return void message.channel.send("You entered an invalid value for <Element>!");
 			if (skill.type == 'status' || skill.type == 'heal' || skill.type == 'passive')
-				return message.channel.send("You can't use this element!");
+				return void message.channel.send("You can't use this element!");
 			
-			makePassive(skill, "damage", [physmag, parseInt(extra2), extra3.toLowerCase()]);
+			makePassive(skill, "damage", [physmag, damage, element]);
 			return true;
 		}
-	},
+	}),
 
-	dodge: {
+	dodge: new Extra({
 		name: "Dodge",
-		desc: "_<Phys/Mag> <Chance>_\nHas a <Chance>% chance to dodge attacks from a <Phys/Mag> skill.",
+		desc: "Has a <Chance>% chance to dodge attacks from a <Phys/Mag> skill.",
+		args: [
+			{
+				name: "Phys/Mag",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			}
+		],
 		multiple: true,
 		diffflag: 0,
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Phys/Mag>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Chance>!");
+		applyfunc(message, skill, args) {
+			let physmag = args[0]?.toLowerCase();
+			let chance = args[1];
 
-			let physmag = extra1.toLowerCase();
 			if (physmag != 'phys' && physmag != 'mag')
-				return message.channel.send("You entered an invalid value for <Phys/Mag>! It can be either PHYS or MAG.");
+				return void message.channel.send("You entered an invalid value for <Phys/Mag>! It can be either PHYS or MAG.");
 
-			if (parseInt(extra2) < 1) return message.channel.send("You entered an invalid value for <Chance>!");
+			if (chance < 1) return void message.channel.send("What's the point if it never dodges?");
 
-			makePassive(skill, "dodge", [physmag, parseInt(extra2)]);
+			makePassive(skill, "dodge", [physmag, chance]);
 			return true;
 		}
-	},
+	}),
 
-	counterphys: {
-		name: "Counter Physical",
-		desc: "_<Chance> <Power> <Accuracy> {Crit} <Element>_\nHas a <Chance>% chance to counter physical attacks with a skill with <Power> power, <Accuracy>% accuracy, {Crit}% crit chance, and <Element> element.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Chance>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Power>!");
-			if (!extra3) return message.channel.send("You didn't supply anything for <Accuracy>!");
-			if (!extra5) return message.channel.send("You didn't supply anything for <Element>!");
+	counter: new Extra({
+		name: "Counter",
+		desc: "Has a <Chance>% chance to counter <Phys/Mag> attacks with an <Attack Type> skill named <Counter Name> with <Power> power, <Accuracy>% accuracy, {Critical Hit Chance}% crit chance, and such. *Treat it like a regular skill, but without cost.*",
+		args: [
+			{
+				name: "Phys/Mag",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Counter Name",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Power",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Accuracy",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Critical Hit Chance",
+				type: "Decimal",
+				forced: false
+			},
+			{
+				name: "Hits",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Element",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Attack Type",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Targets",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Status",
+				type: "Word",
+				forced: false
+			},
+			{
+				name: "Status Chance",
+				type: "Decimal",
+				forced: false
+			}
+		],
+		applyfunc(message, skill, args) {
+			let physmag = args[0]?.toLowerCase();
+			let chance = args[1];
+			let counterName = args[2];
+			let power = args[3];
+			let accuracy = args[4];
+			let critChance = math.max((args[5] || 0), 0);
+			let hits = args[6];
+			let element = args[7]?.toLowerCase();
+			let atype = args[8]?.toLowerCase();
+			let targets = args[9]?.toLowerCase();
+			let status = args[10] || "none";
+			let statusChance = math.max((args[11] || 0), 0);
 
-			if (parseInt(extra1) < 1) return message.channel.send("You entered an invalid value for <Chance>!");
-			if (parseInt(extra2) < 1) return message.channel.send("You entered an invalid value for <Power>!");
-			if (parseFloat(extra3) < 1) return message.channel.send("You entered an invalid value for <Accuracy>!");
+			if (physmag != 'phys' && physmag != 'mag')
+				return void message.channel.send("You entered an invalid value for <Phys/Mag>! It can be either PHYS or MAG.");
 
-			if (!Elements.includes(extra5.toLowerCase())) return message.channel.send("You entered an invalid value for <Element>!");
-			if (skill.type != 'strike' || skill.type != 'slash' || skill.type != 'pierce' || skill.type != 'explode')
-				return message.channel.send("That is not a physical element!");
+			if (chance < 1) return void message.channel.send("What's the point if it never happens?");
 
-			makePassive(skill, "counterphys", [parseInt(extra1), {
-				name: skill.name,
-				pow: parseInt(extra2),
-				acc: parseFloat(extra3),
-				crit: Math.max(0, Math.min(parseFloat(extra4), 100)),
-				type: extra5.toLowerCase(),
-				atktype: 'physical',
-				affinitypow: 5
-			}]);
+			if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return void message.channel.send("Don't even try it.");
+			if (counterName.length > 50) return void message.channel.send(`${counterName} is too long of a counter name.`);
+
+			if (power < 1) return void message.channel.send('Counters with 0 power or less will not function!');
+
+			if (accuracy < 1) return void message.channel.send('Counters with 0% accuracy or less will not function!');
+
+			if (hits < 1) return void message.channel.send('Counters with 0 hits or less will not function!');
+
+			if (!Elements.includes(element)) {
+				return void message.channel.send({content: 'Please enter a valid element for **Element!**', embeds: [elementList()]})
+			}
+			if (element == 'passive' || element == 'heal' || element == 'status')
+				return void message.channel.send("The counter must be an attack!");
+
+			if (atype != 'physical' && atype != 'magic' && atype != 'ranged') return void message.channel.send(`${atype} is an invalid form of contact! Try physical, magic or ranged.`);
+
+			if (Targets.includes(targets)) return void message.channel.send('Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n-SpreadOpposing\n- SpreadAllies```')
+
+			if (status != 'none') {
+				if (!utilityFuncs.inArray(status, statusEffects)) {
+					let str = `${status} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
+					for (let i in statusEffects) str += `\n-${statusEffects[i]}`;
+					str += '```'
+	
+					return void message.channel.send(str)
+				}
+				makePassive(skill, "counter", [physmag, chance, {
+					name: counterName,
+					pow: power,
+					acc: accuracy,
+					crit: critChance,
+					type: element,
+					atktype: atype,
+					target: targets,
+					hits: hits,
+					extras: {
+						affinitypow: [5]
+					},
+					status: status,
+					statuschance: statusChance
+				}]);
+			} else {
+				makePassive(skill, "counter", [physmag, chance, {
+					name: counterName,
+					pow: power,
+					acc: accuracy,
+					crit: critChance,
+					type: element,
+					atktype: atype,
+					target: targets,
+					hits: hits,
+					extras: {
+						affinitypow: [5]
+					}
+				}]);
+			}
 			return true;
 		}
-	},
-
-	countermag: {
-		name: "Counter Magic",
-		desc: "_<Chance> <Power> <Accuracy> {Crit} <Element>_\nHas a <Chance>% chance to counter magical attacks with a skill with <Power> power, <Accuracy>% accuracy, {Crit}% crit chance, and <Element> element.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Chance>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Power>!");
-			if (!extra3) return message.channel.send("You didn't supply anything for <Accuracy>!");
-			if (!extra5) return message.channel.send("You didn't supply anything for <Element>!");
-
-			if (parseInt(extra1) < 1) return message.channel.send("You entered an invalid value for <Chance>!");
-			if (parseInt(extra2) < 1) return message.channel.send("You entered an invalid value for <Power>!");
-			if (parseFloat(extra3) < 1) return message.channel.send("You entered an invalid value for <Accuracy>!");
-
-			if (!Elements.includes(extra5.toLowerCase())) return message.channel.send("You entered an invalid value for <Element>!");
-			if (skill.type != 'status' || skill.type != 'heal' || skill.type != 'passive')
-				return message.channel.send("That is not a magical element!");
-			if (skill.type == 'strike' || skill.type == 'slash' || skill.type == 'pierce')
-				return message.channel.send("That is not a magical element!");
-
-			makePassive(skill, "countermag", [parseInt(extra1), {
-				name: skill.name,
-				pow: parseInt(extra2),
-				acc: parseFloat(extra3),
-				crit: Math.max(0, Math.min(parseFloat(extra4), 100)),
-				type: extra5.toLowerCase(),
-				atktype: 'magic',
-				affinitypow: 5
-			}]);
-			return true;
-		}
-	},
+	}),
 
 	status: {
 		name: "Status",
@@ -549,17 +730,11 @@ hasPassiveType = (skill, extra) => {
 }
 
 // Apply Extra Effects to an existing skill using the extrasList above.
-applyPassive = (message, skill, skillExtra, extra1, extra2, extra3, extra4, extra5) => {
+applyPassive = (message, skill, skillExtra, rawargs) => {
 	if (!skill.passive) skill.passive = {};
-	if (!skillExtra || !passiveList[skillExtra.toLowerCase()]) {
-		message.channel.send("You're adding an invalid passive type! Use the ''listpassivetypes'' command to list all extras.");
-		return false;
-	}
-
-	if (!passiveList[skillExtra.toLowerCase()].applyfunc(message, skill, extra1, extra2, extra3, extra4, extra5)) {
-		message.channel.send("Something went wrong!");
-		return false;
-	}
+	if (!passiveList || !passiveList[skillExtra]) return message.channel.send("You're adding an invalid extra! Use the ''listpassiveextras'' command to list all extras.");
+	if (passiveList[skillExtra].apply(message, skill, rawargs))
+		message.react('👍')
 	
 	skill.done = true;
 
