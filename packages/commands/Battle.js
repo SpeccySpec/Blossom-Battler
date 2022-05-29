@@ -733,6 +733,11 @@ commands.startpvp = new Command({
 
 			if (!party.discoveries) party.discoveries = {};
 
+			battle.teams[i-2] = {
+				members: [],
+				backup: []
+			};
+
 			for (const k in party.members) {
 				if (!charFile[party.members[k]]) continue;
 
@@ -751,7 +756,7 @@ commands.startpvp = new Command({
 					battle.teams[i-2].leaderskill = char.leaderskill;
 				}
 
-				char.team = 0;
+				char.team = i-2;
 				battle.teams[i-2].members.push(char);
 			}
 
@@ -766,7 +771,7 @@ commands.startpvp = new Command({
 
 				setupBattleStats(char);
 
-				char.team = 0;
+				char.team = i-2;
 				battle.teams[i-2].backup.push(char);
 			}
 
@@ -775,9 +780,6 @@ commands.startpvp = new Command({
 		}
 
 		for (party of battle.teams) leaderSkillsAtBattleStart(party);
-
-		// turn order :)
-		battle.turnorder = getTurnOrder(battle);
 
 		// Now THIS is a battle!
 		battle.pvp = true
@@ -808,8 +810,8 @@ commands.startpvp = new Command({
 							// StatFuck Stats
 							char.maxhp = 200 + randNum(400);
 							char.maxmp = 150 + randNum(250);
-							char.hp = charDefs.maxhp
-							char.mp = charDefs.maxmp
+							char.hp = char.maxhp
+							char.mp = char.maxmp
 							for (const k in char.stats) char.stats[i] = randNum(1, 99);
 						}
 					}
@@ -845,11 +847,14 @@ commands.startpvp = new Command({
 							// CharFuck Stats
 							char.maxhp = 200 + randNum(400);
 							char.maxmp = 150 + randNum(250);
-							char.hp = charDefs.maxhp
-							char.mp = charDefs.maxmp
+							char.hp = char.maxhp
+							char.mp = char.maxmp
 							for (const k in char.stats) char.stats[i] = randNum(1, 99);
 
 							// CharFuck Affinities
+							if (!char.affinities) char.affinities = {};
+							if (!char.statusaffinities) char.statusaffinities = {};
+
 							for (let k in char.affinities) char.affinities[k] = [];
 							for (let k in char.statusaffinities) char.statusaffinities[k] = [];
 
@@ -858,13 +863,19 @@ commands.startpvp = new Command({
 								if (type === "status" || type === "heal" || type === "passive" || type === "almighty") continue;
 
 								let j = randNum(aMod.length-1);
-								if (affinities[j] != "normal") char.affinities[affinities[j]].push(type);
+								if (aMod[j] != "normal") {
+									if (!char.affinities[aMod[j]]) char.affinities[aMod[j]] = [];
+									char.affinities[aMod[j]].push(type);
+								}
 							}
 
 							aMod = ["weak", "weak", "weak", "normal", "normal", "normal", "normal", "resist", "resist", "block"];
 							for (const type of statusEffects) {
 								let j = randNum(aMod.length-1);
-								if (affinities[j] != "normal") char.statusaffinities[affinities[j]].push(type);
+								if (aMod[j] != "normal") {
+									if (!char.statusaffinities[aMod[j]]) char.statusaffinities[aMod[j]] = [];
+									char.statusaffinities[aMod[j]].push(type);
+								}
 							}
 						}
 					}
@@ -873,6 +884,9 @@ commands.startpvp = new Command({
 
 			battle.pvpmode = args[1].toLowerCase();
 		}
+
+		// turn order :)
+		battle.turnorder = getTurnOrder(battle);
 
 		// Save all this data to a file.
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, JSON.stringify(battle, null, '    '));
