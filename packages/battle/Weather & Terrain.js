@@ -299,7 +299,7 @@ terrainFuncs = {
 			if (skill.type === "bless") skill.pow *= 1.5;
 			if (skill.status) delete skill.status;
 			if (skill.statuschance) delete skill.statuschance;
-		}
+		},
 		hardcoded: true
 	},
 
@@ -309,7 +309,7 @@ terrainFuncs = {
 				skill.pow *= 1.5;
 				makeExtra(skill, "feint", [true]);
 			}
-		}
+		},
 		hardcoded: true
 	},
 }
