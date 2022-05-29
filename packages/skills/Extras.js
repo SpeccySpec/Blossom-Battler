@@ -402,21 +402,36 @@ extrasList = {
 	feint: new Extra({
 		name: "Feint",
 		desc: "Bypasses shielding skills like Makarakarn and Tetrakarn.",
-		applyfunc: function(message, skill) {
+		applyfunc(message, skill) {
 			makeExtra(skill, "feint", [true]);
 			return true
 		}
 	}),
 
-	healverse: {
+	healverse: new Extra({
 		name: "Healverse",
 		desc: "_<Damage Percent> <Turns> {Deploy Message}_\nAfter the foe is hit with this skill, each hit done to it will heal <Damage Percent>% of damage dealt to the attacker. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Damage Percent>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Turns>!");
-
-			if (parseInt(extra2) < 1) return message.channel.send("You can't have less than 1 turn for this skill.");
-			makeExtra(skill, "healverse", [parseFloat(extra1), parseInt(extra2), extra3]);
+		args: [
+			{
+				name: "Damage Percent",
+				type: "Float",
+				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Deploy Message",
+				type: "Word"
+			}
+		],
+		applyfunc(message, skill, args) {
+			const turns = args[1]
+			if (turns < 1)
+				return void message.channel.send("You can't have less than 1 turn for this skill.");
+			makeExtra(skill, "healverse", [args[0], turns, args[2]]);
 			return true
 		},
 		onuse: function(char, targ, skill, btl, vars) {
@@ -440,7 +455,7 @@ extrasList = {
 				}
 			}
 		}
-	},
+	}),
 
 	powerverse: {
 		name: "Powerverse",
