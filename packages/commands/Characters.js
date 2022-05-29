@@ -3206,12 +3206,14 @@ commands.exportcharjson = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func: async(message, args) => {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is a nonexistant character!`);
-		message.author.send(`Here is the character data for ${charFile[args[0]].name}!` + "```json\n" + JSON.stringify(charFile[args[0]], '	', 4) + "```");
+
+		let link = await hastebin(JSON.stringify(charFile[args[0]], '	', 4), {extension: "json"});
+		message.author.send(`Here is the character data for ${charFile[args[0]].name}!\n${link}`);
 	}
 })
 
