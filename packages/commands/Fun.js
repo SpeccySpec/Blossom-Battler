@@ -385,7 +385,7 @@ commands.ship = new Command({
 commands.randship = new Command({
 	desc: "Ship random characters together.",
 	section: "roll",
-	aliases: ["randmoship"],
+	aliases: ["randomship"],
 	args: [{
 		name: "Person #1",
 		type: "Word",
