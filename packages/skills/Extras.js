@@ -2,7 +2,7 @@ const weakSide = ['superweak', 'weak', 'normal']
 const resistSide = ['normal', 'resist', 'block', 'repel', 'drain']
 const damageFormulas = ['persona', 'pokemon', 'lamonka']
 
-class Extra extends ArgList {
+Extra = class extends ArgList {
 	constructor(object) {
 		super(object.args, object.desc)
 		this.name = object.name
