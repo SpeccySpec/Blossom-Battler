@@ -160,13 +160,22 @@ const menuStates = {
 			k++;
 		}
 	},
-	[MENU_TACTICS]: ({comps}) => {
-		comps[0] = [
-			makeButton('Run!', elementEmoji.wind, 'grey', true, 'run'),
-			makeButton('Backup', '<:mental:973077052053921792>', 'blue'),
-			makeButton('Pacify', itemTypeEmoji.pacify, 'green'),
-			makeButton('Enemy Info', statusEmojis.silence, 'red', true, 'enemyinfo')
-		]
+	[MENU_TACTICS]: ({btl, comps}) => {
+		comps[0] = [];
+
+		if (btl.pvp) {
+			comps[0] = [
+				makeButton('Forfeit', elementEmoji.wind, 'grey', true, 'run'),
+				makeButton('Backup', '<:mental:973077052053921792>', 'blue')
+			]
+		} else {
+			comps[0] = [
+				makeButton('Run!', elementEmoji.wind, 'grey', true, 'run'),
+				makeButton('Backup', '<:mental:973077052053921792>', 'blue'),
+				makeButton('Pacify', itemTypeEmoji.pacify, 'green'),
+				makeButton('Enemy Info', statusEmojis.silence, 'red', true, 'enemyinfo')
+			]
+		}
 	},
 	[MENU_PACIFY]: ({char, btl, comps}) => {
 		let targ = btl.teams[btl.action.target[0]].members[btl.action.target[1]];
