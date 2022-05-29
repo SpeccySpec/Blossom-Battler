@@ -322,34 +322,34 @@ enmHabitats = [
 // weather and terrain
 weathers = [
 	'none',
-	"rain", // 1.3x to water
-	"thunder", // 1.3x to elec
-	"sunlight", // 1.3x to fire
-	"windy", // 1.3x to wind
-	"sandstorm", // -33% perception to non earth main elements
-	"hail" // 10 damage per turn to non ice main elements
+	"rain", // 1.3x to water, 0.7x to fire. Also puts out burning fighters.
+	"thunder", // 1.3x to elec, water skills become dualelement electric.
+	"sunlight", // 1.3x to fire, 1.1x to nuclear, 0.7x to water, grass. Also thaws freezing fighters.
+	"windy", // 1.3x to wind, physicals get dualelement wind.
+	"sandstorm", // -33% perception to non earth main elements.
+	"hail" // 10 ice based damage per turn to non ice main elements. Yes, that means this is affected by affinities.
 ]
 
 terrains = [
 	'none',
-	"flaming", // 10 damage with 10% chance of burn
-	"thunder", // 1.2x to elec
-	"grassy", // 10% heal before turn
-	"light", // 1.2x to bless
-	"psychic", // reverse turn order
-	"misty", // ignore status inflictions
-	"sky", // 1.2x to wind
-	"muddy", // 1.2x to earth, -33% agl
+	"flaming", // 10 damage with 10% chance of burn. Also puts out freezing fighters.
+	"thunder", // 1.2x to elec.
+	"grassy", // 10% heal before turn.
+	"light", // 1.2x to bless.
+	"psychic", // reverse turn order.
+	"misty", // ignore status inflictions. Also removes all status effects on turn.
+	"sky", // 1.2x to wind.
+	"muddy", // 1.2x to earth, -33% agl.
 
 	// boss specific
-	"flooded", // 1.3x to water
-	"swamp", // 1.3x to earth and grass
-	"glacial", // 1.3x to ice, +20% freeze chance on ice skills
-	"fairydomain",
-	"graveyard",
-	"factory",
-	"blindingradiance",
-	"eternaldarkness"
+	"flooded", // 1.3x to water. Makes physical skills dualelement water.
+	"swamp", // 1.3x to earth and grass. Grass or Earth skills become dualelement with eachother.
+	"glacial", // 1.3x to ice, +20% freeze chance on ice skills. Water skills become ice.
+	"fairydomain", // 1.2x to Psychic and Bless. Psychic, Spirit skills become dualelement bless.
+	"graveyard", // 1.3x to Spirit. Curse Skills become DualElement Spirit.
+	"factory", // 1.5x to Metal.
+	"blindingradiance", // 1.5x to Bless. Curse Skills become unusable. Ignore Status Inflictions.
+	"eternaldarkness" //1.5x to Curse. Bless Skills become unusable. All Curse Skills get Feint.
 ]
 
 Targets = [

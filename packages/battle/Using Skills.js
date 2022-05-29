@@ -92,6 +92,11 @@ genDmg = (char, targ, btl, skill) => {
 	let charStats = (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].statmod) ? statusEffectFuncs[char.status].statmod(char, char.stats) : objClone(char.stats);
 	let targStats = (targ.status && statusEffectFuncs[targ.status] && statusEffectFuncs[targ.status].statmod) ? statusEffectFuncs[targ.status].statmod(targ, targ.stats) : objClone(targ.stats);
 
+	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].statmod) {
+		charStats = weatherFuncs[btl.weather.type].statmod(char, charStats, btl) ?? charStats;
+		targStats = weatherFuncs[btl.weather.type].statmod(targ, targStats, btl) ?? targStats;
+	}
+
 	let atkStat = (skill.atktype === 'phys') ? statWithBuff(charStats.atk, char.buffs.atk) : statWithBuff(charStats.mag, char.buffs.mag);
 	let endStat = statWithBuff(targStats.end, targ.buffs.end);
 	let def = atkStat/endStat;
@@ -553,6 +558,11 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	// Status Effects
 	if (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].skillmod) {
 		statusEffectFuncs[char.status].skillmod(char, skill, btl);
+	}
+
+	// Weather
+	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].onselect) {
+		weatherFuncs[btl.weather.type].onselect(char, skill, btl)
 	}
 
 	// more shit
