@@ -9,13 +9,13 @@ healList = {
 				forced: true
 			}
 		],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			if (args[0] == 0) args[0] = 60;
 			
 			makeHeal(skill, "default", [args[0]]);
 			return true;
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			if (!vars[0] || vars[0] === null) return '';
 
 			targ.hp = Math.min(targ.maxhp, targ.hp+vars[0]);
@@ -33,12 +33,12 @@ healList = {
 				forced: true
 			}
 		],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			if (args[0] == 0) args[0] = 30;
 			makeHeal(skill, "healmp", [args[0]]);
 			return true;
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			targ.mp = Math.min(targ.maxmp, targ.mp+vars[0]);
 			return `${targ.name}'s MP was restored by ${vars[0]}!`;
 		}
@@ -59,7 +59,7 @@ healList = {
 				forced: true
 			}
 		],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			const hp = args[0];
 			const turns = args[1];
 
@@ -68,7 +68,7 @@ healList = {
 			makeHeal(skill, "regenerate", [hp, turns]);
 			return true;
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			targ.regenheal = {
 				heal: vars[0],
 				turns: vars[1],
@@ -94,7 +94,7 @@ healList = {
 				forced: true
 			}
 		],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			const mp = args[0];
 			const turns = args[1];
 
@@ -124,12 +124,12 @@ healList = {
 				forced: true
 			}
 		],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			if (args[0] <= 0) return void message.channel.send("You can't revive to 0 or less!");
 			makeHeal(skill, "revive", [args[0]]);
 			return true;
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			if (targ.hp > 0) return 'But it failed!';
 
 			targ.hp = targ.maxhp/vars[0];
@@ -141,11 +141,11 @@ healList = {
 		name: "Recarmdra",
 		desc: "Fully restores party HP and MP, but downs the caster.",
 		args: [],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			makeHeal(skill, "recarmdra", [true]);
 			return true;
 		},
-		override: function(char, skill, btl, vars) {
+		override(char, skill, btl, vars) {
 			char.hp = 0;
 			for (let i in btl.teams[char.team]) {
 				targ.hp = targ.maxhp;
@@ -160,12 +160,12 @@ healList = {
 		name: "Full Heal",
 		desc: "Fully restores HP of the target.",
 		args: [],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			makeHeal(skill, "fullheal", [true]);
 			if (hasHealType(skill, "default")) delete skill.heal["default"];
 			return true;
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			targ.hp = targ.maxhp
 			return `${targ.name}'s HP was fully restored!`;
 		}
@@ -183,15 +183,15 @@ healList = {
 		],
 		multiple: true,
 		diffflag: 0,
-		applyfunc: function(message, skill, args) {
-			const status = args[0].toLowerCase();
+		applyfunc(message, skill, args) {
+			const status = args[0]?.toLowerCase();
 			if (status != 'physical' || status != 'mental' || status != 'all') {
 				if (!statusEffects.includes(status)) return void message.channel.send("That's not a valid status!");
 			}
 			makeHeal(skill, "statusheal", [status]);
 			return true;
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			switch(vars[0]) {
 				case 'physical':
 					if (targ.confusion) delete targ.confusion;
@@ -252,7 +252,7 @@ healList = {
 				type: "Num"
 			}
 		],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			makeHeal(skill, "sacrifice", [args[0] ?? 0]);
 			let hasHeal = false;
 			for (var i in skill.heal) {
@@ -266,7 +266,7 @@ healList = {
 			}
 			return true;
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			if (!vars[0])
 				char.hp = 0;
 			else
@@ -286,7 +286,7 @@ healList = {
 				forced: true
 			}
 		],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			const turns = args[0];
 
 			if (turns <= 0) return void message.channel.send("You can't wish for 0 or less!");
@@ -301,7 +301,7 @@ healList = {
 			if (!hasHeal) makeHeal(skill, "default", [60]);
 			return true;
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			targ.wishheal = vars[0];
 			return `${char.name} will experience a healing wish in ${vars[0]} turns.`;
 		}
@@ -337,17 +337,11 @@ hasHealType = (skill, extra) => {
 }
 
 // Apply Extra Effects to an existing skill using the extrasList above.
-applyHeal = (message, skill, skillExtra, extra1, extra2, extra3, extra4, extra5) => {
+applyHeal = (message, skill, skillExtra, rawargs) => {
 	if (!skill.heal) skill.heal = {};
-	if (!skillExtra || !healList[skillExtra.toLowerCase()]) {
-		message.channel.send("You're adding an invalid heal type! Use the ''listhealtypes'' command to list all extras.");
-		return false;
-	}
-
-	if (!healList[skillExtra.toLowerCase()].applyfunc(message, skill, extra1, extra2, extra3, extra4, extra5)) {
-		message.channel.send("Something went wrong!");
-		return false;
-	}
+	if (!skillExtra || !healList[skillExtra]) return message.channel.send("You're adding an invalid extra! Use the ''listhealextras'' command to list all extras.");
+	if (healList[skillExtra].apply(message, skill, rawargs))
+		message.react('👍')
 	
 	skill.done = true;
 	message.react('👍');
