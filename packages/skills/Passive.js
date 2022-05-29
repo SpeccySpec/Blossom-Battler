@@ -288,7 +288,6 @@ passiveList = {
 			{
 				name: "Critical Hit Chance",
 				type: "Decimal",
-				forced: false
 			},
 			{
 				name: "Hits",
@@ -313,12 +312,10 @@ passiveList = {
 			{
 				name: "Status",
 				type: "Word",
-				forced: false
 			},
 			{
 				name: "Status Chance",
 				type: "Decimal",
-				forced: false
 			}
 		],
 		applyfunc(message, skill, args) {
@@ -401,61 +398,99 @@ passiveList = {
 		}
 	}),
 
-	status: {
+	status: new Extra({
 		name: "Status",
-		desc: "_<Status Effect> <Chance>_\nHas a <Chance>% chance of inflicting <Status Effect> on a fighter if they use a physical attack.",
-		multiple: true,
-		diffflag: 0,
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Status Effect>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Chance>!");
-
-			if (!Status.includes(extra1.toLowerCase())) return message.channel.send("You entered an invalid value for <Status Effect>!");
-			if (parseFloat(extra2) < 1) return message.channel.send("You entered an invalid value for <Chance>!");
-
-			makePassive(skill, "status", [extra1.toLowerCase(), parseFloat(extra2)]);
-			return true;
-		}
-	},
-
-	statusdodge: {
-		name: "Status Dodge",
-		desc: "_<Status Effect> <Chance>_\nHas a <Chance>% chance to avoid <Status Effect> from being inflicted. Accepts 'physical', 'mental' and 'all' as status effects.",
-		multiple: true,
-		diffflag: 0,
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Status Effect>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Chance>!");
-
-			if (!extra1.toLowerCase() == 'physical' && !extra1.toLowerCase() == 'mental' && !extra1.toLowerCase() == 'all') {
-				if (!Status.includes(extra1.toLowerCase())) return message.channel.send("You entered an invalid value for <Status Effect>!");
+		desc: "Has a <Chance>% chance of inflicting <Status Effect> on a fighter if they use a physical attack.",
+		args: [
+			{
+				name: "Status Effect",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
 			}
-			if (parseFloat(extra2) < 1) return message.channel.send("You entered an invalid value for <Chance>!");
+		],
+		multiple: true,
+		diffflag: 0,
+		applyfunc(message, skill, args) {
+			let status = args[0].toLowerCase();
+			let chance = args[1];
 
-			makePassive(skill, "statusdodge", [extra1.toLowerCase(), parseFloat(extra2)]);
+			if (!Status.includes(status)) return message.channel.send("You entered an invalid value for <Status Effect>!");
+			if (chance < 1) return void message.channel.send("What's the point if it never happens?");
+
+			makePassive(skill, "status", [status, chance]);
 			return true;
 		}
-	},
+	}),
 
-	curestatus: {
+	statusdodge: new Extra({
+		name: "Status Dodge",
+		desc: "Has a <Chance>% chance to avoid <Status Effect> from being inflicted. Accepts 'physical', 'mental' and 'all' as status effects.",
+		args: [
+			{
+				name: "Status Effect",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		multiple: true,
+		diffflag: 0,
+		applyfunc(message, skill, extra1, extra2, extra3, extra4, extra5) {
+			let status = args[0].toLowerCase();
+			let chance = args[1];
+
+			if (!status == 'physical' && !status == 'mental' && !status == 'all') {
+				if (!Status.includes(status)) return void message.channel.send("You entered an invalid value for <Status Effect>!");
+			}
+			if (chance < 1) return void message.channel.send("What's the point if it never happens?");
+
+			makePassive(skill, "statusdodge", [status, chance]);
+			return true;
+		}
+	}),
+
+	curestatus: new Extra({
 		name: "Cure Status",
-		desc: "_<Chance>_\n<Chance>% chance to cure a negative status effect on the start of your turn.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1 || parseFloat(extra1) < 1) return message.channel.send("You didn't supply anything for <Amount>!");
-			makePassive(skill, "curestatus", [parseFloat(extra1)]);
+		desc: "<Chance>% chance to cure a negative status effect on the start of your turn.",
+		args: [
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (args[0] < 1) return message.channel.send("What's the point if it never cures?");
+			makePassive(skill, "curestatus", [args[0]]);
 			return true;
 		}
-	},
+	}),
 
-	perfectkeeper: {
+	perfectkeeper: new Extra({
 		name: "Perfect Keeper",
-		desc: "_<Percent>_\nPower of Physical Attacks is boosted at higher HP, and decreased at lower HP up to <Percent>%.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1 || parseFloat(extra1) < 1) return message.channel.send("You didn't supply anything for <Percent>!");
-			makePassive(skill, "perfectkeeper", [parseFloat(extra1)]);
+		desc: "Power of Physical Attacks is boosted at higher HP, and decreased at lower HP up to <Percent>%.",
+		args: [
+			{
+				name: "Percent",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (args[0] == 0) return message.channel.send("What's the point if it never changes?");
+			makePassive(skill, "perfectkeeper", [args[0]]);
 			return true;
 		}
-	},
+	}),
 
 	extrahit: {
 		name: "Extra Hit",
