@@ -380,6 +380,8 @@ extrasList = {
 			const amount = args[1]
 			if (chance <= 0)
 				return void message.channel.send("What's the point of stealing if the extra never lands?");
+			if (amount <= 0)
+				return void message.channel.send("What's the point of stealing if you're not stealing anything?");
 			makeExtra(skill, "steal", [chance, amount]);
 			return true
 		}
