@@ -724,6 +724,8 @@ commands.startpvp = new Command({
 
 		// Set up the parties
 		let battleid = 0;
+		let clone = false;
+		let existant = []
 
 		for (let i in args) {
 			if (i <= 1) continue;
@@ -746,12 +748,15 @@ commands.startpvp = new Command({
 				char.truename = party.members[k];
 				if (!char.name) char.name = party.members[k];
 
+				if (existant.includes(char.truename)) clone = true;
+				existant.push(char.truename)
+
 				char.id = battleid;
 				battleid++;
 
 				setupBattleStats(char);
 
-				if (i <= 0) {
+				if (k <= 0) {
 					char.leader = true;
 					battle.teams[i-2].leaderskill = char.leaderskill;
 				}
@@ -785,8 +790,10 @@ commands.startpvp = new Command({
 		battle.pvp = true
 
 		// Is this battle ranked
-		if (args[0].toLowerCase() == 'y' || args[0].toLowerCase() == 'yes' || args[0].toLowerCase() == 'true')
+		if (args[0].toLowerCase() == 'y' || args[0].toLowerCase() == 'yes' || args[0].toLowerCase() == 'true') {
 			battle.ranked = true;
+			if (clone) return message.channel.send("You cannot have a clone of a character in a __Ranked Battle__!");
+		}
 
 		// Is this battle a specific gamemode
 		if (args[1].toLowerCase() != 'none' || args[1].toLowerCase() != 'normal') {

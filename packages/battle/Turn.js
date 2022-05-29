@@ -186,11 +186,11 @@ const menuStates = {
 			comps[CalcCompins(comps, i)].push(makeButton(`${members[i].name}`, `${i}️⃣`, 'blue', true, i.toString()))
 		}
 	},
-	[MENU_TEAMSEL]: ({btl, comps}) => {
-		for (const i in btl.teams)
-			comps[CalcCompins(comps, i)].push(
-				makeButton(`Team ${btl.teams[i].name}`, '#️⃣', 'green', true, i.toString())
-			)
+	[MENU_TEAMSEL]: ({char, btl, comps}) => {
+		for (const i in btl.teams) {
+			if (char.team == i) continue;
+			comps[CalcCompins(comps, i)].push(makeButton(`Team ${btl.teams[i].name}`, '#️⃣', 'blue', true, i.toString()))
+		}
 	},
 	[MENU_TARGET]: ({char, btl, comps}) => {
 		let members = btl.teams[btl.action.target[0]].members ?? btl.teams[char.team].members;
@@ -543,13 +543,13 @@ sendCurTurnEmbed = (char, btl) => {
 					let skill = skillFile[i.customId];
 
 					if (skill.extras) {
-						for (let i in skill.extras) {
-							if (!extrasList[i]) continue;
-							if (!extrasList[i].canuse) continue;
+						for (let k in skill.extras) {
+							if (!extrasList[k]) continue;
+							if (!extrasList[k].canuse) continue;
 
-							if (extrasList[i].multiple) {
+							if (extrasList[k].multiple) {
 								for (let k in skill.extras[i]) {
-									let txt = extrasList[i].canuse(char, skill, btl, skill.extras[i][k]);
+									let txt = extrasList[k].canuse(char, skill, btl, skill.extras[k][k]);
 									if (txt != true) {
 										DiscordEmbed.title = txt;
 										alreadyResponded = true;
@@ -561,7 +561,7 @@ sendCurTurnEmbed = (char, btl) => {
 									}
 								}
 							} else {
-								let txt = extrasList[i].canuse(char, skill, btl, skill.extras[i]);
+								let txt = extrasList[k].canuse(char, skill, btl, skill.extras[i]);
 								if (txt != true) {
 									DiscordEmbed.title = txt;
 									alreadyResponded = true;
@@ -1103,15 +1103,15 @@ doTurn = async(btl, noTurnEmbed) => {
 		
 		if (char.hp <= 0) {
 			canMove = false;
+			if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(char);
 			delete char.status;
 			delete char.statusturns;
-			if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(char);
 		} else {
 			char.statusturns--;
 			if (char.statusturns == 0) {
+				if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(char);
 				delete char.status;
 				delete char.statusturns;
-				if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(char);
 			}
 		}
 

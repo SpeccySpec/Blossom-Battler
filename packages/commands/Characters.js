@@ -1963,7 +1963,7 @@ commands.dailychar = new Command({
 })
 
 // Quotes... oh boy.
-selectQuote = (char, quote, neverEmpty) => {
+selectQuote = (char, quote, neverEmpty, ...rep) => {
 	if (char.status && (char.status === 'sleep' || char.status === 'freeze')) return '';
 
 	let emptyTxt = neverEmpty ? 'No quotes in this section!' : '';
@@ -1972,7 +1972,11 @@ selectQuote = (char, quote, neverEmpty) => {
 	if (char.quotes[`${quote}quote`].length < 1) return emptyTxt;
 
 	let randQuote = Math.round(Math.random() * (char.quotes[`${quote}quote`].length-1));
-	return `_${char.name}: "${char.quotes[`${quote}quote`][randQuote]}"_`;
+
+	let q = char.quotes[`${quote}quote`][randQuote];
+	if (rep && rep.length > 1) replaceTxt(q, ...rep);
+
+	return `_${char.name}: "${q}"_`;
 }
 
 commands.setquote = new Command({

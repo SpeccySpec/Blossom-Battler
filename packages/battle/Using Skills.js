@@ -54,9 +54,9 @@ isPhysicalStatus = (status) => {
 // im lazy
 dodgeTxt = (char, targ) => {
 	if (targ) {
-		return `${targ.name} dodged it!\n${selectQuote(targ, 'dodge')}\n${selectQuote(char, 'miss')}`;
+		return `${targ.name} dodged it!\n${selectQuote(targ, 'dodge', null, "%ENEMY%", char.name)}\n${selectQuote(char, 'miss', null, "%ENEMY%", char.name)}`;
 	} else {
-		return `${char.name} dodged it!\n${selectQuote(char, 'dodge')}`;
+		return `${char.name} dodged it!\n${selectQuote(char, 'dodge', null, "%ENEMY%", "them")}`;
 	}
 }
 
@@ -250,7 +250,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 		
 		let affinity = getAffinity(targ, skill.type);
 		if (affinity == 'block' || (affinity == 'repel' && noRepel)) {
-			result.txt += `${targ.name} blocked it!\n${selectQuote(char, 'badatk')}\n${selectQuote(targ, 'block')}`;
+			result.txt += `${targ.name} blocked it!\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}\n${selectQuote(targ, 'block', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 			return result;
 		} else if (affinity == 'repel' && !noRepel) {
 			skill.acc = 999; // Never miss a repel - just to be flashy :D
@@ -259,7 +259,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			result.oneMore = newResults.oneMore;
 			result.teamCombo = newResults.teamCombo;
 
-			result.txt += `${selectQuote(targ, 'repel')}\n${targ.name} repelled it!\n${newResults.txt}`;
+			result.txt += `${selectQuote(targ, 'repel', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}\n${targ.name} repelled it!\n${newResults.txt}`;
 			return result;
 		}
 
@@ -420,7 +420,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				if (damages.length > 1) result.txt += ` **(${totalHits} hits, ${total} Total)**`;
 				targ.hp = Math.min(targ.maxhp, targ.hp+total);
 
-				result.txt += `\n${selectQuote(char, 'badatk')}\n${selectQuote(targ, 'drain')}`;
+				result.txt += `\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}\n${selectQuote(targ, 'drain', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 			} else {
 				result.txt += `__${targ.name}__ took _`
 				for (let i in damages) {
@@ -485,15 +485,15 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				// Quotes
 				let quotetype = affinity;
 				if (affinity === 'normal') quotetype = 'hurt';
-				if (affinity === 'resist') result.txt += `\n${selectQuote(char, 'badatk')}`;
+				if (affinity === 'resist') result.txt += `\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name, "%AFFINITY%", affinity)}`;
 
 				if (targ.hp <= 0) {
 					quotetype = 'dead';
-					result.txt += `\n${selectQuote(char, 'kill')}`;
+					result.txt += `\n${selectQuote(char, 'kill', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}`;
 				} else
-					result.txt += `\n${selectQuote(char, 'landed')}`;
+					result.txt += `\n${selectQuote(char, 'landed', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}`;
 
-				result.txt += `\n${selectQuote(targ, quotetype)}`;
+				result.txt += `\n${selectQuote(targ, quotetype, null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 
 				// Lastly, Status Effects
 				if (skill.status && !targ.status) {
@@ -508,7 +508,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					if (isPhysicalStatus(status.toLowerCase())) chance = (skill.statuschance ?? 5) + ((char.stats.luk-targ.stats.luk)/2);
 
 					if (randNum(1, 100) <= chance) {
-						result.txt += `${inflictStatus(targ, status.toLowerCase())}\n${selectQuote(char, 'landed')}\n${selectQuote(targ, 'hurt')}`;
+						result.txt += `${inflictStatus(targ, status.toLowerCase())}\n${selectQuote(char, 'landed', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}\n${selectQuote(targ, 'hurt', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 					}
 				}
 			}
@@ -692,10 +692,12 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	let quotetype = 'phys';
 	if (skill.atktype === 'magic') quotetype = 'mag';
 	if (skill.type === 'heal') quotetype = 'heal';
+	if (skill.limitbreak) quotetype = 'lb';
+	if (skill.teamcombo) quotetype = 'tc';
 
-	let finalText = `${selectQuote(char, quotetype)}\n`;
+	let finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}\n`;
 	if (ally && ally.quotes) {
-		finalText = `${selectQuote(char, quotetype)}\n${selectQuote(ally, quotetype)}\n`;
+		finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}\n${selectQuote(ally, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}\n`;
 	}
 	
 	if (skill.limitbreak) {
