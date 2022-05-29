@@ -986,7 +986,7 @@ commands.listatkextras = new Command({
 
 		let extras = []
 		for (let i in extrasList) {
-			extras.push({name: `${extrasList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${extrasList[i].getFullDesc()}\n${extrasList[i].desc}`, inline: true});
+			extras.push({name: `${extrasList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${extrasList[i].getFullDesc()}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['fire'])
@@ -1022,7 +1022,7 @@ commands.listhealextras = new Command({
 
 		let extras = []
 		for (let i in healList) {
-			extras.push({name: `${healList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${healList[i].desc}`, inline: true});
+			extras.push({name: `${healList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${healList[i].getFullDesc()}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['heal'])
