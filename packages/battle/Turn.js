@@ -452,7 +452,7 @@ sendCurTurnEmbed = (char, btl) => {
 				doAction(char, btl, btl.action);
 				collector.stop();
 
-				await i.update({
+				return i.update({
 					content: `<@${char.owner}>`,
 					embeds: [DiscordEmbed]
 				});
@@ -479,7 +479,7 @@ sendCurTurnEmbed = (char, btl) => {
 				}
 				alreadyResponded = true;
 
-				await i.update({
+				return i.update({
 					content: `<@${char.owner}>`,
 					embeds: [DiscordEmbed],
 					components: setUpComponents(char, btl, menustate)
