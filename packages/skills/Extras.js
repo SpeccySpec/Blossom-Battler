@@ -644,15 +644,21 @@ extrasList = {
 		}
 	}),
 
-	affinitypow: {
+	affinitypow: new Extra({
 		name: "Affinity Power",
-		desc: "_<Damage>_\nPower boosted by <Damage> per affinity point. Works only for <:passive:963413845253193758>affinitypoint passives.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Damage>!");
-			makeExtra(skill, "affinitypow", [parseInt(extra1)]);
+		desc: "Power boosted by <Damage> per affinity point. Works only for <:passive:963413845253193758>affinitypoint passives.",
+		args: [
+			{
+				name: "Damage",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "affinitypow", [args[0]]);
 			return true
 		}
-	},
+	}),
 
 	forcetech: {
 		name: "Force Technical",
