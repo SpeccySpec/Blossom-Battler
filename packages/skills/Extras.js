@@ -41,7 +41,8 @@ extrasList = {
 		applyfunc(message, skill, args) {
 			const chance = args[0]
 			const status = args[1]?.toLowerCase()
-			if (chance < 0) return void message.channel.send("What's the point of using this skill if it never lands?");
+			if (chance <= 0)
+				return void message.channel.send("What's the point of using this skill if it never lands?");
 
 			if (status && !statusEffects.includes(status))
 				return void message.channel.send("You're adding an invalid status effect!");
