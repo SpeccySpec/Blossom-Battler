@@ -323,7 +323,14 @@ sendCurTurnEmbed = (char, btl) => {
 		multipleTeams = true;
 
 		for (let i in btl.teams) {
-			if (i != char.team) teamDesc += `Team ${btl.teams[i].name}`;
+			if (i != char.team) {
+				let m = 0;
+				for (let k in btl.teams[i].members) {
+					if (btl.teams[i].members[k].hp > 0) m++;
+				}
+
+				teamDesc += `Team __${btl.teams[i].name}__ _(${m}/${btl.teams[i].members.length} Left)_\n`;
+			}
 		}
 	} else {
 		for (let i in btl.teams[op].members) {
