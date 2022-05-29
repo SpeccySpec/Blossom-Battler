@@ -1,5 +1,6 @@
-weakSide = ['superweak', 'weak', 'normal']
-resistSide = ['normal', 'resist', 'block', 'repel', 'drain']
+const weakSide = ['superweak', 'weak', 'normal']
+const resistSide = ['normal', 'resist', 'block', 'repel', 'drain']
+const damageFormulas = ['persona', 'pokemon', 'lamonka']
 
 class Extra extends ArgList {
 	constructor(object) {
@@ -688,21 +689,24 @@ extrasList = {
 		}
 	}),
 
-	forceformula: {
+	forceformula: new Extra({
 		name: "Force Formula",
-		desc: "_<Formula>_\nForces a skill to use a different damage formula.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Formula>!");
-
-			let damageFormulas = ['persona', 'pokemon', 'lamonka']
-			if (damageFormulas.includes(extra1.toLowerCase())) {
-				return message.channel.send('Invalid damage formula!\nValid formulas are: Persona, Pokemon, Lamonka')
+		desc: "Forces a skill to use a different damage formula.",
+		args: [
+			{
+				name: "Formula",
+				type: "Word",
+				forced: true
 			}
-
-			makeExtra(skill, "forceformula", [extra1.toLowerCase(), extra2]);
+		],
+		applyfunc(message, skill, args) {
+			const formula = args[0].toLowerCase()
+			if (damageFormulas.includes(formula))
+				return void message.channel.send('Invalid damage formula!\nValid formulas are: Persona, Pokemon, Lamonka')
+			makeExtra(skill, "forceformula", [formula]);
 			return true;
 		}
-	},
+	}),
 
 	rollout: {
 		name: "Rollout",
