@@ -419,7 +419,7 @@ passiveList = {
 			let status = args[0].toLowerCase();
 			let chance = args[1];
 
-			if (!Status.includes(status)) return message.channel.send("You entered an invalid value for <Status Effect>!");
+			if (!Status.includes(status)) return void message.channel.send("You entered an invalid value for <Status Effect>!");
 			if (chance < 1) return void message.channel.send("What's the point if it never happens?");
 
 			makePassive(skill, "status", [status, chance]);
@@ -469,7 +469,7 @@ passiveList = {
 			}
 		],
 		applyfunc(message, skill, args) {
-			if (args[0] < 1) return message.channel.send("What's the point if it never cures?");
+			if (args[0] < 1) return void message.channel.send("What's the point if it never cures?");
 			makePassive(skill, "curestatus", [args[0]]);
 			return true;
 		}
@@ -486,38 +486,61 @@ passiveList = {
 			}
 		],
 		applyfunc(message, skill, args) {
-			if (args[0] == 0) return message.channel.send("What's the point if it never changes?");
+			if (args[0] == 0) return void message.channel.send("What's the point if it never changes?");
 			makePassive(skill, "perfectkeeper", [args[0]]);
 			return true;
 		}
 	}),
 
-	extrahit: {
+	extrahit: new Extra({
 		name: "Extra Hit",
-		desc: "_<Hits> <Chance> <Power Multiplier>_\nHas a <Chance>% chance to hit <Hits> more times from a single hit skill with <Power Multiplier>x as much power.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Hits>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Chance>!");
-			if (!extra3) return message.channel.send("You didn't supply anything for <Power Multiplier>!");
+		desc: "Has a <Chance>% chance to hit <Hits> more times from a single hit skill with <Power Multiplier>x as much power.",
+		args: [
+			{
+				name: "Hits",
+				type: "Number",
+				forced: true
+			},
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Power Multiplier",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let hits = args[0];
+			let chance = args[1];
+			let powerMult = args[2];
 
-			if (parseInt(extra1) < 1) return message.channel.send("You entered an invalid value for <Hits>!");
-			if (parseInt(extra2) < 1) return message.channel.send("You entered an invalid value for <Chance>!");
+			if (parseInt(hits) == 0) return void message.channel.send("Why bother if it doesn't add any hits?");
+			if (parseInt(chance) < 1) return void message.channel.send("What's the point if it never happens?");
 
-			makePassive(skill, "extrahit", [parseInt(extra1), parseInt(extra2), parseFloat(extra3)]);
+			makePassive(skill, "extrahit", [hits, chance, powerMult]);
 			return true;
 		}
-	},
+	}),
 
-	kindheart: {
+	kindheart: new Extra({
 		name: "Kind Heart",
 		desc: "_<Percent>_\nBoosts pacify rate by <Percent>%.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Percent>!");
-
-			makePassive(skill, "kindheart", [parseFloat(extra1)]);
+		args: [
+			{
+				name: "Percent",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc: function(message, skill, args) {
+			if (args[0] == 0) return void message.channel.send("What's the point if it never changes?");
+			makePassive(skill, "kindheart", [args[0]]);
 			return true;
 		}
-	},
+	}),
 
 	affinitycutter: {
 		name: "Affinity Cutter",
