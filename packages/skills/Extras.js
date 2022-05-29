@@ -735,9 +735,9 @@ extrasList = {
 			let maxboost = args[1]
 			let times = args[2]
 
-			if (maxboost < boost) return message.channel.send("You can't have a max boost lower than the boost!");
-			if (parseInt(maxboost) < 1) return message.channel.send("You can't have less than 1 max boost!");
-			if (parseInt(times) < 1) return message.channel.send("You can't have less than 1 times!");
+			if (maxboost < boost) return void message.channel.send("You can't have a max boost lower than the boost!");
+			if (parseInt(maxboost) < 1) return void message.channel.send("You can't have less than 1 max boost!");
+			if (parseInt(times) < 1) return void message.channel.send("You can't have less than 1 times!");
 
 			makeExtra(skill, "rollout", [boost, maxboost, times]);
 			return true
@@ -776,7 +776,7 @@ extrasList = {
 			}
 		],
 		applyfunc: function(message, skill, args) {
-			if (args.some(arg => arg < 1)) return message.channel.send("You can't use a hit less than 1!");
+			if (args.some(arg => arg < 1)) return void message.channel.send("You can't use a hit less than 1!");
 
 			makeExtra(skill, "powhit", [args]);
 			return true;
@@ -805,7 +805,7 @@ extrasList = {
 			if (chance <= 0 || chance > 50) return message.channel.send("Invalid value for <Chance>! It should be above 0 or below 50.");
 			
 			if (hits <= 0 || hits > 99-(skill.hits ?? 1))
-				return message.channel.send(`Invalid value for <Number of Hits>. It should be above 0. Be aware that skills cannot exceed 99 hits, and so, the highest this number can be is ${99-(skill.hits ?? 1)}.`);
+				return void message.channel.send(`Invalid value for <Number of Hits>. It should be above 0. Be aware that skills cannot exceed 99 hits, and so, the highest this number can be is ${99-(skill.hits ?? 1)}.`);
 
 			makeExtra(skill, "multihit", [chance, hits]);
 			return true;
