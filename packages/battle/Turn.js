@@ -364,15 +364,17 @@ sendCurTurnEmbed = (char, btl) => {
 		components: setUpComponents(char, btl, menustate)
 	};
 
-	btl.channel.send(message).then(msg => btl.forcemessage = msg.id);
-
 	// Now...
 	btl.action = {
 		move: 'melee',
 		index: 0,
 		target: [0, 0],
 	}
-	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, '	', 4));
+
+	btl.channel.send(message).then(msg => {
+		btl.forcemessage = msg.id;
+		fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, '	', 4));
+	});
 
 	let collector = btl.channel.createMessageComponentCollector({
 		filter: ({user}) => user.id == char.owner
@@ -383,7 +385,7 @@ sendCurTurnEmbed = (char, btl) => {
 	collector.on('collect', async i => {
 		btl.action.laststate = menustate;
 
-		let testbtl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
+		let testbtl = setUpFile(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, true);
 		if (testbtl.forcemessage && i.message.id != testbtl.forcemessage) {
 			return i.update({
 				content: `<@${char.owner}>`,
