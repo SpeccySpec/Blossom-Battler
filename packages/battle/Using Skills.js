@@ -576,25 +576,25 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	}
 
 	// Charms
-	if (f.charms) {
-		if (f.charms.includes("ShamanStone") && skill.atktype === 'magic') {
+	if (char.charms) {
+		if (char.charms.includes("ShamanStone") && skill.atktype === 'magic') {
 			skill.pow *= 1.5;
 			skillCost *= 1.5;
 		}
 
-		if (f.charms.includes("GrubberflysElegy") && skill.atktype != 'physical') skill.acc *= 1.5;
+		if (char.charms.includes("GrubberflysElegy") && skill.atktype != 'physical') skill.acc *= 1.5;
 
-		if ((f.charms.includes("FragileStrength") || f.charms.includes("UnbreakableStrength")) && skill.atktype === 'physical') {
+		if ((char.charms.includes("FragileStrength") || char.charms.includes("UnbreakableStrength")) && skill.atktype === 'physical') {
 			skill.pow *= 1.65;
 			skillCost *= 1.1;
 		}
 
-		if (f.charms.includes("DeepFocus") && typeof(skill.type) === 'string' && skill.type === 'heal') {
+		if (char.charms.includes("DeepFocus") && typeof(skill.type) === 'string' && skill.type === 'heal') {
 			skill.pow *= 1.25;
 			skillCost *= 1.15;
 		}
 
-		if (f.charms.includes("QuickFocus") && typeof(skill.type) === 'string' && skill.type === 'heal') {
+		if (char.charms.includes("QuickFocus") && typeof(skill.type) === 'string' && skill.type === 'heal') {
 			skill.pow *= 1.25;
 			skillCost *= 0.75;
 		}

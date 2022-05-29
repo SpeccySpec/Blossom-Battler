@@ -633,6 +633,9 @@ commands.resendembed = new Command({
 		btl.channel = message.channel;
 		message.react('👍');
 
+		// bruh
+		if (btl.action) delete btl.action;
+
 		// Resend the Embed
 		sendCurTurnEmbed(getCharFromTurn(btl), btl)
 	}
