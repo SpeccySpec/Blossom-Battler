@@ -289,7 +289,7 @@ healList = {
 		applyfunc: function(message, skill, args) {
 			const turns = args[0];
 
-			if (turns <= 0) return message.channel.send("You can't wish for 0 or less!");
+			if (turns <= 0) return void message.channel.send("You can't wish for 0 or less!");
 			makeHeal(skill, "wish", [turns]);
 			let hasHeal = false
 			for (var i in skill.heal) {
