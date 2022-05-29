@@ -92,6 +92,11 @@ genDmg = (char, targ, btl, skill) => {
 	let charStats = (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].statmod) ? statusEffectFuncs[char.status].statmod(char, char.stats) : objClone(char.stats);
 	let targStats = (targ.status && statusEffectFuncs[targ.status] && statusEffectFuncs[targ.status].statmod) ? statusEffectFuncs[targ.status].statmod(targ, targ.stats) : objClone(targ.stats);
 
+	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].statmod) {
+		charStats = weatherFuncs[btl.weather.type].statmod(char, charStats, btl) ?? charStats;
+		targStats = weatherFuncs[btl.weather.type].statmod(targ, targStats, btl) ?? targStats;
+	}
+
 	let atkStat = (skill.atktype === 'phys') ? statWithBuff(charStats.atk, char.buffs.atk) : statWithBuff(charStats.mag, char.buffs.mag);
 	let endStat = statWithBuff(targStats.end, targ.buffs.end);
 	let def = atkStat/endStat;
@@ -555,6 +560,11 @@ useSkill = (char, btl, act, forceskill, ally) => {
 		statusEffectFuncs[char.status].skillmod(char, skill, btl);
 	}
 
+	// Weather
+	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].onselect) {
+		weatherFuncs[btl.weather.type].onselect(char, skill, btl)
+	}
+
 	// more shit
 	let skillCost = skill.cost ?? 0;
 
@@ -566,25 +576,25 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	}
 
 	// Charms
-	if (f.charms) {
-		if (f.charms.includes("ShamanStone") && skill.atktype === 'magic') {
+	if (char.charms) {
+		if (char.charms.includes("ShamanStone") && skill.atktype === 'magic') {
 			skill.pow *= 1.5;
 			skillCost *= 1.5;
 		}
 
-		if (f.charms.includes("GrubberflysElegy") && skill.atktype != 'physical') skill.acc *= 1.5;
+		if (char.charms.includes("GrubberflysElegy") && skill.atktype != 'physical') skill.acc *= 1.5;
 
-		if ((f.charms.includes("FragileStrength") || f.charms.includes("UnbreakableStrength")) && skill.atktype === 'physical') {
+		if ((char.charms.includes("FragileStrength") || char.charms.includes("UnbreakableStrength")) && skill.atktype === 'physical') {
 			skill.pow *= 1.65;
 			skillCost *= 1.1;
 		}
 
-		if (f.charms.includes("DeepFocus") && typeof(skill.type) === 'string' && skill.type === 'heal') {
+		if (char.charms.includes("DeepFocus") && typeof(skill.type) === 'string' && skill.type === 'heal') {
 			skill.pow *= 1.25;
 			skillCost *= 1.15;
 		}
 
-		if (f.charms.includes("QuickFocus") && typeof(skill.type) === 'string' && skill.type === 'heal') {
+		if (char.charms.includes("QuickFocus") && typeof(skill.type) === 'string' && skill.type === 'heal') {
 			skill.pow *= 1.25;
 			skillCost *= 0.75;
 		}
