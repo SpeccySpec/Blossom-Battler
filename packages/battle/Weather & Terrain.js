@@ -54,7 +54,7 @@ weatherFuncs = {
 	sandstorm: {
 		statmod: function(char, stats, btl) {
 			if (char.mainElement != "earth")
-				stats.prc *= 0.66666666666666666666666666666; //okthats enough 6s.
+				stats.prc *= 1/3;
 
 			return stats;
 		}
