@@ -528,15 +528,20 @@ extrasList = {
 		}
 	}),
 
-	heavenwrath: {
+	heavenwrath: new Extra({
 		name: "Heaven's Wrath",
-		desc: "_<Multiplier>_\nSkill Power boosted by <Multiplier>x when not alone, and all allies are alive.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Multiplier>!");
-			makeExtra(skill, "heavenwrath", [parseFloat(extra1)]);
+		desc: "kill Power boosted by <Multiplier>x when not alone, and all allies are alive.",
+		args: [
+			{
+				name: "Mulitplier",
+				type: "Float"
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "heavenwrath", [args[0] ?? 1.5]);
 			return true
 		}
-	},
+	}),
 
 	statcalc: {
 		name: "Stat Calculation",
