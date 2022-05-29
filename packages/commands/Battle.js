@@ -126,11 +126,11 @@ commands.pvpleaderboards = new Command({
 commands.locationsettings = new Command({
 	desc: "Set certain values based on channel. You can change them freely.\n```diff\n=== Weather ===\n" +
 		"+ <Type of Weather>\n" +
-		"Forces the weather to be the one set unless explicitely defined in battle.\n" +
+		"Forces the weather to be the one set unless Explicitly defined in battle.\n" +
 		"\n" +
 		"=== Terrain ===\n" +
 		"+ <Type of Terrain>\n" +
-		"Forces the terrain to be the one set unless explicitely defined in battle.\n" +
+		"Forces the terrain to be the one set unless Explicitly defined in battle.\n" +
 		"\n" +
 		"=== Perma-Status ===\n" +
 		"+ <Status Effect>\n" +
