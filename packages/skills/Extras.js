@@ -783,19 +783,31 @@ extrasList = {
 		}
 	}),
 
-	multihit: {
+	multihit: new Extra({
 		name: "Multi",
-		desc: "_<Chance> {Number of Hits}_\nA <Chance>% chance to add {Number of Hits} extra hit(s) to the skill, multi-hit already or not.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Chance>!");
-			if (extra1 <= 0 || extra1 > 50) return message.channel.send("Invalid value for <Chance>! It should be above 0 or below 50.");
-			
-			if (extra2) {
-				if (extra2 <= 0 || extra2 > 99-(skill.hits ?? 1))
-					return message.channel.send(`Invalid value for {Number of Hits}. It should be above 0. Be aware that skills cannot exceed 99 hits, and so, the highest this number can be is ${99-(skill.hits ?? 1)}.`);
+		desc: "A <Chance>% chance to add <Number of Hits> extra hit(s) to the skill, multi-hit already or not.",
+		args: [
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Number of Hits",
+				type: "Num",
+				forced: true
 			}
+		],
+		applyfunc: function(message, skill, args) {
+			const chance = args[0]
+			const hits = args[1]
 
-			makeExtra(skill, "multihit", [parseInt(extra1), extra2 ? parseInt(extra2) : 1]);
+			if (chance <= 0 || chance > 50) return message.channel.send("Invalid value for <Chance>! It should be above 0 or below 50.");
+			
+			if (hits <= 0 || hits > 99-(skill.hits ?? 1))
+				return message.channel.send(`Invalid value for <Number of Hits>. It should be above 0. Be aware that skills cannot exceed 99 hits, and so, the highest this number can be is ${99-(skill.hits ?? 1)}.`);
+
+			makeExtra(skill, "multihit", [chance, hits]);
 			return true;
 		},
 		statmod: function(char, skill, vars, btl) {
@@ -806,7 +818,7 @@ extrasList = {
 				addAtkMsg(btl, `${char.name}'s ${skill.name} landed ${vars[1]} extra time(s)!`);
 			}
 		}
-	}
+	})
 }
 
 // Make an Extra for a skill. "func" should be an array of 1-5 values indicating what the extra does.
