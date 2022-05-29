@@ -184,6 +184,10 @@ commands.prefix = new Command({
 	],
 	admin: "You do not have permission to change the prefix!",
 	func: (message, args) => {
+		if (args[0].length == 0 || args[0] == ' ') {
+			return message.channel.send('You must enter a prefix!')
+		}
+
 		let settings = setUpSettings(message.guild.id)
 		settings['prefix'] = args[0]
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
