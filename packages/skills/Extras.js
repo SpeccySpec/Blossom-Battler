@@ -577,14 +577,20 @@ extrasList = {
 		}
 	}),
 
-	mpcalc: {
+	mpcalc: new Extra({
 		name: "MP Calculation",
-		desc: "_<Percent>_\nCurrent MP can boost or decrease damage by up to <Percent>%.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeExtra(skill, "mpcalc", [parseFloat(extra1)]);
+		desc: "Current MP can boost or decrease damage by up to <Percent>%.",
+		args: [
+			{
+				name: "Percent",
+				type: "Float"
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "mpcalc", [args[0] ?? 50]);
 			return true
 		}
-	},
+	}),
 
 	multistatus: {
 		name: "Multistatus",
