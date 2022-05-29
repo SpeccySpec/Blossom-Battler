@@ -986,7 +986,7 @@ commands.listatkextras = new Command({
 
 		let extras = []
 		for (let i in extrasList) {
-			extras.push({name: `${extrasList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: extrasList[i].desc, inline: true});
+			extras.push({name: `${extrasList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${extrasList[i].getFullDesc()}\n${extrasList[i].desc}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['fire'])
@@ -1004,7 +1004,7 @@ commands.liststatusextras = new Command({
 
 		let extras = []
 		for (let i in statusList) {
-			extras.push({name: `${statusList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: statusList[i].desc, inline: true});
+			extras.push({name: `${statusList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${statusList[i].desc}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['status'])
@@ -1022,7 +1022,7 @@ commands.listhealextras = new Command({
 
 		let extras = []
 		for (let i in healList) {
-			extras.push({name: `${healList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: healList[i].desc, inline: true});
+			extras.push({name: `${healList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${healList[i].desc}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['heal'])
@@ -1040,7 +1040,7 @@ commands.listpassiveextras = new Command({
 
 		let extras = []
 		for (let i in passiveList) {
-			extras.push({name: `${passiveList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: passiveList[i].desc, inline: true});
+			extras.push({name: `${passiveList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${passiveList[i].desc}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['passive'])
