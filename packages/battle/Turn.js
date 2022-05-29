@@ -584,7 +584,7 @@ sendCurTurnEmbed = (char, btl) => {
 							}
 						}
 
-						if (btl.terrain && btl.terrain.type === "blindingradiance" && ((typeof(skill.type) === "string" && skill.type === "curse") || typeof(skill.type) === "object" && skill.type.includes("curse")) {
+						if (btl.terrain && btl.terrain.type === "blindingradiance" && ((typeof(skill.type) === "string" && skill.type === "curse") || (typeof(skill.type) === "object" && skill.type.includes("curse")))) {
 							DiscordEmbed.title = "The cursed energy dissapears as soon as it appears...";
 							alreadyResponded = true;
 
@@ -593,7 +593,7 @@ sendCurTurnEmbed = (char, btl) => {
 								embeds: [DiscordEmbed],
 								components: setUpComponents(char, btl, menustate)
 							});
-						} else if (btl.terrain && btl.terrain.type === "eternaldarkness" && ((typeof(skill.type) === "string" && skill.type === "bless") || typeof(skill.type) === "object" && skill.type.includes("bless")) {
+						} else if (btl.terrain && btl.terrain.type === "eternaldarkness" && ((typeof(skill.type) === "string" && skill.type === "bless") || (typeof(skill.type) === "object" && skill.type.includes("bless")))) {
 							DiscordEmbed.title = "The blessed energy dissapears as soon as it appears...";
 							alreadyResponded = true;
 
