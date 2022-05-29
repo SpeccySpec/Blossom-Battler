@@ -660,22 +660,33 @@ extrasList = {
 		}
 	}),
 
-	forcetech: {
+	forcetech: new Extra({
 		name: "Force Technical",
-		desc: "_<Status Effect #1> {Status Effect #2} {Status Effect #3} {Status Effect #4} {Status Effect #5}_\nForces a skill to tech off of different status effects instead of the preset ones.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Status Effect #1>!");
-
-			if (!statusEffects.includes(extra1.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-			if (extra2 && !statusEffects.includes(extra2.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-			if (extra3 && !statusEffects.includes(extra3.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-			if (extra4 && !statusEffects.includes(extra4.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-			if (extra5 && !statusEffects.includes(extra5.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-
-			makeExtra(skill, "forcetech", [extra1.toLowerCase(), extra2, extra3, extra4, extra5]);
-			return true
+		desc: "Forces a skill to tech off of different status effects instead of the preset ones.",
+		args: [
+			{
+				name: "Status Effect #1",
+				type: "Word",
+				forced: true,
+				multiple: true
+			}	
+		],
+		applyfunc(message, skill, args) {
+			let statuses
+			try {
+				statuses = args.map(status => {
+					status = status.toLowerCase()
+					if (!statusEffects.includes(status))
+						throw void message.channel.send(`The status ${status} does not exist!`)
+					return status
+				})
+			} catch {
+				return false
+			}
+			makeExtra(skill, "forcetech", statuses)
+			return true;
 		}
-	},
+	}),
 
 	forceformula: {
 		name: "Force Formula",
