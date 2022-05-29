@@ -640,3 +640,246 @@ commands.resendembed = new Command({
 		sendCurTurnEmbed(getCharFromTurn(btl), btl)
 	}
 })
+
+commands.startpvp = new Command({
+	desc: "Start a PVP battle in this channel. The best fighter(s) win, strike down your foes in a classic 1v1, free for all, or a team battle!\nAlso comes with gamemode DLC (free lol)```diff\n=== NORMAL ===\nYour generic PVP battle. Show them who's boss without any quirky business!\n\n=== SKILLSCRAMBLE ===\nFight with a set of 8 random skills! You'll never know what you get, so adapt to win!\n\n=== STATSCRAMBLE ===\nFight with random stats, HP and MP! You could be turned into the tankiest fighter, or the frailest one - maybe you go from a physical main to a magical one! Try your best to defeat your foe in the fray!\n\n=== METRONOME ===\nAll fighters only have the skill Metronome! It's an Almighty Type skill that allows you to use ANY defined move! If ya like RNG, you'll love this!\n\n=== CHARACTERSCRAMBLE ===\nScramble your characters' stats, skills, affinities, and more for a jolly good session of Rage Quit!```",
+	section: "battle",
+	aliases: ["pvp", "playerversusplayer"],
+	args: [
+		{
+			name: "Ranked",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Gamemode",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Parties",
+			type: "Word",
+			forced: true,
+			multiple: true
+		}
+	],
+	func: (message, args) => {
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true);
+		let settings = setUpSettings(message.guild.id);
+
+		// Set up Battle Field
+		let battle = {
+			battling: true,
+			channel: message.channel, // so i dont have to do it later
+			guild: message.guild, // so i dont have to do it later
+
+			turn: 0,
+//			curturn: -1,
+			turnorder: [],
+
+//			weather: 'none',
+//			terrain: 'none',
+			effects: {},
+			teams: []
+		}
+
+		// Battle File!
+		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
+		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
+		let locale = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/location.json`, true);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
+
+		// Preset Weather & Terrain.
+		let weather = locale.weather ?? 'none'
+		let terrain = locale.terrain ?? 'none';
+
+		// Weather and stuff.
+		if (weather != 'none') {
+			if (!weathers.includes(weather)) return message.channel.send(`${args[2].toLowerCase()} is an invalid weather type!`);
+
+			battle.weather = {
+				type: weather,
+				turns: -1,
+				force: weather,
+			}
+		}
+
+		// Terrains and stuff.
+		if (terrain != 'none') {
+			if (!terrains.includes(terrain)) return message.channel.send(`${args[3].toLowerCase()} is an invalid terrain type!`);
+
+			battle.terrain = {
+				type: terrain,
+				turns: -1,
+				force: terrain,
+			}
+		}
+
+		// Can't battle while another party is!
+		if (btl.battling) return message.channel.send("You can't battle in this channel while another battle is happening!");
+
+		// Save this for errors!
+		if (!battleFiles) battleFiles = [];
+		if (!battleFiles.includes(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`)) battleFiles.push(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`);
+
+		// Set up the parties
+		let battleid = 0;
+
+		for (let i in args) {
+			if (i <= 1) continue;
+
+			let party = parties[args[i]];
+			if (!party) return message.channel.send(`${args[i]} is a nonexistant party!`);
+
+			if (!party.discoveries) party.discoveries = {};
+
+			for (const k in party.members) {
+				if (!charFile[party.members[k]]) continue;
+
+				let char = objClone(charFile[party.members[k]]);
+
+				char.truename = party.members[k];
+				if (!char.name) char.name = party.members[k];
+
+				char.id = battleid;
+				battleid++;
+
+				setupBattleStats(char);
+
+				if (i <= 0) {
+					char.leader = true;
+					battle.teams[i-2].leaderskill = char.leaderskill;
+				}
+
+				char.team = 0;
+				battle.teams[i-2].members.push(char);
+			}
+
+			for (const k in party.backup) {
+				if (!charFile[party.backup[k]]) continue;
+
+				let char = objClone(charFile[party.backup[k]]);
+				if (!char.name) char.name = party.backup[k];
+
+				char.id = battleid;
+				battleid++;
+
+				setupBattleStats(char);
+
+				char.team = 0;
+				battle.teams[i-2].backup.push(char);
+			}
+
+			battle.teams[i-2].name = party.name;
+			battle.teams[i-2].id = args[i];
+		}
+
+		for (party of battle.teams) leaderSkillsAtBattleStart(party);
+
+		// turn order :)
+		battle.turnorder = getTurnOrder(battle);
+
+		// Now THIS is a battle!
+		battle.pvp = true
+
+		// Is this battle ranked
+		if (args[0].toLowerCase() == 'y' || args[0].toLowerCase() == 'yes' || args[0].toLowerCase() == 'true')
+			battle.ranked = true;
+
+		// Is this battle a specific gamemode
+		if (args[1].toLowerCase() != 'none' || args[1].toLowerCase() != 'normal') {
+			switch(args[1].toLowerCase()) {
+				case 'anyskill':
+				case 'metronome':
+					for (party of battle.teams) {
+						for (let i in party.members) {
+							party.members[i].skills = ["Metronome"]
+						}
+					}
+					break;
+
+				case 'statscramble':
+				case 'statfuck':
+				case 'randstats':
+					for (party of battle.teams) {
+						for (let i in party.members) {
+							let char = party.members[i];
+
+							// StatFuck Stats
+							char.maxhp = 200 + randNum(400);
+							char.maxmp = 150 + randNum(250);
+							char.hp = charDefs.maxhp
+							char.mp = charDefs.maxmp
+							for (const k in char.stats) char.stats[i] = randNum(1, 99);
+						}
+					}
+					break;
+
+				case 'skillscramble':
+				case 'skillfuck':
+				case 'randskills':
+					for (party of battle.teams) {
+						for (let i in party.members) {
+							let char = party.members[i];
+	
+							// SkillFuck Skills
+							for (let k = 0; k < 8; k++) {
+								char.skills[k] = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
+							}
+						}
+					}
+					break;
+
+				case 'characterscramble':
+				case 'charfuck':
+				case 'charscramble':
+					for (party of battle.teams) {
+						for (let i in party.members) {
+							let char = party.members[i];
+	
+							// CharFuck Skills
+							for (let k = 0; k < 8; k++) {
+								char.skills[k] = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
+							}
+
+							// CharFuck Stats
+							char.maxhp = 200 + randNum(400);
+							char.maxmp = 150 + randNum(250);
+							char.hp = charDefs.maxhp
+							char.mp = charDefs.maxmp
+							for (const k in char.stats) char.stats[i] = randNum(1, 99);
+
+							// CharFuck Affinities
+							for (let k in char.affinities) char.affinities[k] = [];
+							for (let k in char.statusaffinities) char.statusaffinities[k] = [];
+
+							let aMod = ["superweak", "weak", "weak", "weak", "normal", "normal", "normal", "normal", "resist", "resist", "block", "repel", "drain"];
+							for (const type of Elements) {
+								if (type === "status" || type === "heal" || type === "passive" || type === "almighty") continue;
+
+								let j = randNum(aMod.length-1);
+								if (affinities[j] != "normal") char.affinities[affinities[j]].push(type);
+							}
+
+							aMod = ["weak", "weak", "weak", "normal", "normal", "normal", "normal", "resist", "resist", "block"];
+							for (const type of statusEffects) {
+								let j = randNum(aMod.length-1);
+								if (affinities[j] != "normal") char.statusaffinities[affinities[j]].push(type);
+							}
+						}
+					}
+					break;
+			}
+
+			battle.pvpmode = args[1].toLowerCase();
+		}
+
+		// Save all this data to a file.
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, JSON.stringify(battle, null, '    '));
+
+		message.channel.send("A PVP Battle has begun! Good luck to the participants!");
+		setTimeout(function() {
+			advanceTurn(battle)
+        }, 500)
+	}
+})
