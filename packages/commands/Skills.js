@@ -409,26 +409,34 @@ commands.updateskills = new Command({
 							skillFile[skill].passive[passiveType.toLowerCase()] = [skillFile[skill].pow, skillFile[skill].acc, 100];  //hits, accuracy, damage rate
 							break;
 						case 'counterphys':
-							skillFile[skill].passive.counterphys = [skillFile[skill].counter.chance, {
+							skillFile[skill].passive.counter = ['phys', skillFile[skill].counter.chance, {
 								name: skillFile[skill].name,
 								pow: skillFile[skill].counter.skill.pow,
 								acc: skillFile[skill].counter.skill.acc,
 								crit: skillFile[skill].counter.skill.crit,
 								type: skillFile[skill].counter.skill.type,
+								target: 'one',
+								hits: 1,
 								atktype: 'physical',
-								affinitypow: 5
+								extras: {
+									affinitypow: [5]
+								}
 							}] //chance, power, accuracy, crit, type
 							delete skillFile[skill].counter;
 							break;
 						case 'countermag':
-							skillFile[skill].passive.countermag = [skillFile[skill].counter.chance, {
+							skillFile[skill].passive.counter = ['mag', skillFile[skill].counter.chance, {
 								name: skillFile[skill].name,
 								pow: skillFile[skill].counter.skill.pow,
 								acc: skillFile[skill].counter.skill.acc,
 								crit: skillFile[skill].counter.skill.crit,
 								type: skillFile[skill].counter.skill.type,
+								target: 'one',
+								hits: 1,
 								atktype: 'magic',
-								affinitypow: 5
+								extras: {
+									affinitypow: [5]
+								}
 							}] //chance, power, accuracy, crit, type
 							delete skillFile[skill].counter;
 							break;
