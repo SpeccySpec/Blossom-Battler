@@ -418,15 +418,6 @@ passiveList = {
 		}
 	},
 
-	statusresist: {
-		name: "Status Resist",
-		desc: "Resists status effects in some way.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makePassive(skill, "statusresist", [true]);
-			return true;
-		}
-	},
-
 	statusdodge: {
 		name: "Status Dodge",
 		desc: "_<Status Effect> <Chance>_\nHas a <Chance>% chance to avoid <Status Effect> from being inflicted. Accepts 'physical', 'mental' and 'all' as status effects.",
