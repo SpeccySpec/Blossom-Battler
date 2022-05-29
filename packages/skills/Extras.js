@@ -384,14 +384,20 @@ extrasList = {
 		}
 	}),
 
-	drain: {
+	drain: new Extra({
 		name: "Drain",
-		desc: "_<Amount>_\nHeals the caster for 1/<Amount> of the damage dealt.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeExtra(skill, "drain", [parseInt(extra1) == 0 ? 1 : parseInt(extra1)]);
+		desc: "Heals the caster for 1/<Amount> of the damage dealt.",
+		args: [
+			{
+				name: "Amount",
+				type: "Num"
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "drain", [args[0] ?? 1]);
 			return true
 		}
-	},
+	}),
 
 	feint: {
 		name: "Feint",
