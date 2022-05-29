@@ -730,7 +730,7 @@ extrasList = {
 				forced: true
 			}
 		],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			let boost = args[0]
 			let maxboost = args[1]
 			let times = args[2]
@@ -748,7 +748,7 @@ extrasList = {
 		name: "Sustain",
 		desc: "Multi-Hits do not have power altered as hits go on.",
 		args: [],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			makeExtra(skill, "sustain", [true]);
 			return true
 		}
@@ -758,7 +758,7 @@ extrasList = {
 		name: "Reverse",
 		desc: "Multi-Hits gradually increase in power instead of decreasing.",
 		args: [],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			makeExtra(skill, "reverse", [true]);
 			return true
 		}
@@ -775,7 +775,7 @@ extrasList = {
 				multiple: true
 			}
 		],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			if (args.some(arg => arg < 1)) return void message.channel.send("You can't use a hit less than 1!");
 
 			makeExtra(skill, "powhit", [args]);
@@ -798,7 +798,7 @@ extrasList = {
 				forced: true
 			}
 		],
-		applyfunc: function(message, skill, args) {
+		applyfunc(message, skill, args) {
 			const chance = args[0]
 			const hits = args[1]
 
@@ -810,7 +810,7 @@ extrasList = {
 			makeExtra(skill, "multihit", [chance, hits]);
 			return true;
 		},
-		statmod: function(char, skill, vars, btl) {
+		statmod(char, skill, vars, btl) {
 			let num = randNum(100);
 
 			if (num <= vars[0]) {
