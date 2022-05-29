@@ -325,14 +325,21 @@ extrasList = {
 		}
 	}),
 
-	takemp: {
+	takemp: new Extra({
 		name: "Take MP",
-		desc: "_<MP>_\nWill take <MP> MP from the foe each hit.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeExtra(skill, "takemp", [parseInt(extra1)]);
+		desc: "Will take <MP> MP from the foe each hit.",
+		args: [
+			{
+				name: "MP",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "takemp", [args[0]]);
 			return true
 		}
-	},
+	}),
 
 	stealmp: {
 		name: "Steal MP",
