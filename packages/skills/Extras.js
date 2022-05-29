@@ -513,15 +513,20 @@ extrasList = {
 		}
 	}),
 
-	lonewolf: {
+	lonewolf: new Exstra({
 		name: "Lone Wolf",
-		desc: "_<Multiplier>_\nSkill Power boosted by <Multiplier>x when alone, or all allies are down.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Multiplier>!");
-			makeExtra(skill, "lonewolf", [parseFloat(extra1)]);
+		desc: "Skill Power boosted by <Multiplier>x when alone, or all allies are down.",
+		args: [
+			{
+				name: "Mulitplier",
+				type: "Float"
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "lonewolf", [args[0] ?? 1.5]);
 			return true
 		}
-	},
+	}),
 
 	heavenwrath: {
 		name: "Heaven's Wrath",
