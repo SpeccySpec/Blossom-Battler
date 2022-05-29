@@ -89,12 +89,20 @@ useCost = (char, cost, costtype) => {
 genDmg = (char, targ, btl, skill) => {
 	let settings = setUpSettings(btl.guild.id);
 
+	// Status Effect StatMod.
 	let charStats = (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].statmod) ? statusEffectFuncs[char.status].statmod(char, char.stats) : objClone(char.stats);
 	let targStats = (targ.status && statusEffectFuncs[targ.status] && statusEffectFuncs[targ.status].statmod) ? statusEffectFuncs[targ.status].statmod(targ, targ.stats) : objClone(targ.stats);
 
+	// Weather StatMod.
 	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].statmod) {
 		charStats = weatherFuncs[btl.weather.type].statmod(char, charStats, btl) ?? charStats;
 		targStats = weatherFuncs[btl.weather.type].statmod(targ, targStats, btl) ?? targStats;
+	}
+
+	// Terrain StatMod.
+	if (btl.terrain && terrainFuncs && terrainFuncs[btl.terrain.type] && terrainFuncs[btl.terrain.type].statmod) {
+		charStats = terrainFuncs[btl.weather.type].statmod(char, charStats, btl) ?? charStats;
+		targStats = terrainFuncs[btl.terrain.type].statmod(targ, targStats, btl) ?? targStats;
 	}
 
 	let atkStat = (skill.atktype === 'phys') ? statWithBuff(charStats.atk, char.buffs.atk) : statWithBuff(charStats.mag, char.buffs.mag);
@@ -563,6 +571,11 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	// Weather
 	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].onselect) {
 		weatherFuncs[btl.weather.type].onselect(char, skill, btl)
+	}
+
+	// Terrain
+	if (btl.terrain && terrainFuncs && terrainFuncs[btl.terrain.type] && terrainFuncs[btl.terrain.type].onselect) {
+		terrainFuncs[btl.terrain.type].onselect(char, skill, btl)
 	}
 
 	// more shit
