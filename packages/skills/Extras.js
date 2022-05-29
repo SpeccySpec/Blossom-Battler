@@ -380,6 +380,8 @@ extrasList = {
 			const amount = args[1]
 			if (chance <= 0)
 				return void message.channel.send("What's the point of stealing if the extra never lands?");
+			if (amount <= 0)
+				return void message.channel.send("What's the point of stealing if you're not stealing anything?");
 			makeExtra(skill, "steal", [chance, amount]);
 			return true
 		}
@@ -708,65 +710,104 @@ extrasList = {
 		}
 	}),
 
-	rollout: {
+	rollout: new Extra({
 		name: "Rollout",
-		desc: "_<Boost> <Max Boost> <Times>_\nBoost the skill's power by <Boost> every consecutive use, but the caster is locked to using it until power reaches <Max Boost>x or skill is used <Times> times in a row.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Boost>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Max Boost>!");
-			if (!extra3) return message.channel.send("You didn't supply anything for <Times>!");
+		desc: "Boost the skill's power by <Boost> every consecutive use, but the caster is locked to using it until power reaches <Max Boost>x or skill is used <Times> times in a row.",
+		args: [
+			{
+				name: "Boost",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Max Boost",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Times",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc: function(message, skill, args) {
+			let boost = args[0]
+			let maxboost = args[1]
+			let times = args[2]
 
-			if (extra2 < extra1) return message.channel.send("You can't have a max boost lower than the boost!");
-			if (parseInt(extra2) < 1) return message.channel.send("You can't have less than 1 max boost!");
-			if (parseInt(extra3) < 1) return message.channel.send("You can't have less than 1 times!");
+			if (maxboost < boost) return message.channel.send("You can't have a max boost lower than the boost!");
+			if (parseInt(maxboost) < 1) return message.channel.send("You can't have less than 1 max boost!");
+			if (parseInt(times) < 1) return message.channel.send("You can't have less than 1 times!");
 
-			makeExtra(skill, "rollout", [parseInt(extra1), parseInt(extra2), parseInt(extra3)]);
+			makeExtra(skill, "rollout", [boost, maxboost, times]);
 			return true
 		}
-	},
+	}),
 
-	sustain: {
+	sustain: new Extra({
 		name: "Sustain",
 		desc: "Multi-Hits do not have power altered as hits go on.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		args: [],
+		applyfunc: function(message, skill, args) {
 			makeExtra(skill, "sustain", [true]);
 			return true
 		}
-	},
+	}),
 
-	reverse: {
+	reverse: new Extra({
 		name: "Reverse",
 		desc: "Multi-Hits gradually increase in power instead of decreasing.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		args: [],
+		applyfunc: function(message, skill, args) {
 			makeExtra(skill, "reverse", [true]);
 			return true
 		}
-	},
+	}),
 
-	powhit: {
+	powhit: new Extra({
 		name: "Power Hit",
-		desc: "_<Hit #1> {Hit #2} {Hit #3} {Hit #4} {Hit #5}_\nWith multi-hits, hits <Hit #1>, {Hit #2}, {Hit #3}, {Hit #4>, and {Hit #5} will have their power increased.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Hit #1>!");
+		desc: "With multi-hits, specific hits will have their power increased.",
+		args: [
+			{
+				name: "Hit #1",
+				type: "Num",
+				forced: true,
+				multiple: true
+			}
+		],
+		applyfunc: function(message, skill, args) {
+			if (args.some(arg => arg < 1)) return message.channel.send("You can't use a hit less than 1!");
 
-			makeExtra(skill, "powhit", [parseInt(extra1), extra2 ? parseInt(extra2) : null, extra3 ? parseInt(extra3) : null, extra4 ? parseInt(extra4) : null, extra5 ? parseInt(extra5) : null]);
+			makeExtra(skill, "powhit", [args]);
 			return true;
 		}
-	},
+	}),
 
-	multihit: {
+	multihit: new Extra({
 		name: "Multi",
-		desc: "_<Chance> {Number of Hits}_\nA <Chance>% chance to add {Number of Hits} extra hit(s) to the skill, multi-hit already or not.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Chance>!");
-			if (extra1 <= 0 || extra1 > 50) return message.channel.send("Invalid value for <Chance>! It should be above 0 or below 50.");
-			
-			if (extra2) {
-				if (extra2 <= 0 || extra2 > 99-(skill.hits ?? 1))
-					return message.channel.send(`Invalid value for {Number of Hits}. It should be above 0. Be aware that skills cannot exceed 99 hits, and so, the highest this number can be is ${99-(skill.hits ?? 1)}.`);
+		desc: "A <Chance>% chance to add <Number of Hits> extra hit(s) to the skill, multi-hit already or not.",
+		args: [
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Number of Hits",
+				type: "Num",
+				forced: true
 			}
+		],
+		applyfunc: function(message, skill, args) {
+			const chance = args[0]
+			const hits = args[1]
 
-			makeExtra(skill, "multihit", [parseInt(extra1), extra2 ? parseInt(extra2) : 1]);
+			if (chance <= 0 || chance > 50) return message.channel.send("Invalid value for <Chance>! It should be above 0 or below 50.");
+			
+			if (hits <= 0 || hits > 99-(skill.hits ?? 1))
+				return message.channel.send(`Invalid value for <Number of Hits>. It should be above 0. Be aware that skills cannot exceed 99 hits, and so, the highest this number can be is ${99-(skill.hits ?? 1)}.`);
+
+			makeExtra(skill, "multihit", [chance, hits]);
 			return true;
 		},
 		statmod: function(char, skill, vars, btl) {
@@ -777,7 +818,7 @@ extrasList = {
 				addAtkMsg(btl, `${char.name}'s ${skill.name} landed ${vars[1]} extra time(s)!`);
 			}
 		}
-	}
+	})
 }
 
 // Make an Extra for a skill. "func" should be an array of 1-5 values indicating what the extra does.
