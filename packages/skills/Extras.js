@@ -562,14 +562,20 @@ extrasList = {
 		}
 	}),
 
-	hpcalc: {
+	hpcalc: new Extra({
 		name: "HP Calculation",
-		desc: "_<Percent>_\nCurrent HP can boost or decrease damage by up to <Percent>%.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			makeExtra(skill, "hpcalc", [parseFloat(extra1)]);
+		desc: "Current HP can boost or decrease damage by up to <Percent>%.",
+		args: [
+			{
+				name: "Percent",
+				type: "Float"
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "hpcalc", [args[0] ?? 50]);
 			return true
 		}
-	},
+	}),
 
 	mpcalc: {
 		name: "MP Calculation",
