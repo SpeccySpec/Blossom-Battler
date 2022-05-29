@@ -3042,7 +3042,7 @@ commands.exportchar = new Command({
 
 commands.exportname = new Command({
 	desc: "Changes an export character's truename from the ''exportchar'' command.",
-	aliases: ['exportcharname', 'exportnamechance'],
+	aliases: ['exportcharname', 'exportnamechange'],
 	section: "characters",
 	args: [
 		{

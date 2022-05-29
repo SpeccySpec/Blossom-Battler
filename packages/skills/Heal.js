@@ -350,8 +350,7 @@ applyHeal = (message, skill, skillExtra, extra1, extra2, extra3, extra4, extra5)
 	}
 	
 	skill.done = true;
-
-	console.log("win")
+	message.react('👍');
 	return true;
 }
 
