@@ -186,6 +186,7 @@ commands.registerstatus = new Command({
 		if (!skill) return;
 
 		skillFile[args[0]] = skill;
+		if (args[4].toLowerCase != 'none') skillFile[args[0]].desc = args[4];
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 		
 		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
@@ -241,6 +242,7 @@ commands.registerheal = new Command({
 		if (!skill) return;
 
 		skillFile[args[0]] = skill;
+		if (args[4].toLowerCase != 'none') skillFile[args[0]].desc = args[4];
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
 		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
@@ -281,6 +283,7 @@ commands.registerpassive = new Command({
 		if (!skill) return;
 
 		skillFile[args[0]] = skill;
+		if (args[1].toLowerCase != 'none') skillFile[args[0]].desc = args[1];
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
 		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
