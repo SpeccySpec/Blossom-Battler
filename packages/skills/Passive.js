@@ -790,37 +790,68 @@ passiveList = {
 		}
 	}),
 
-	sacrifice: {
+	sacrifice: new Extra({
 		name: "Sacrifice",
-		desc: "_<HP Percent> <MP Percent>_\nUpon foe defeat, restores HP equal to <HP Percent>% of the foe's level and MP equal to <MP Percent>% of the foe's level.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1 || !extra2) return message.channel.send("You didn't supply anything for <HP Percent> or <MP Percent>!");
+		desc: "Upon foe defeat, restores HP equal to <HP Percent>% of the foe's level and MP equal to <MP Percent>% of the foe's level.",
+		args: [
+			{
+				name: "HP Percent",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "MP Percent",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let hp = args[0];
+			let mp = args[1];
 
-			makePassive(skill, "sacrifice", [parseFloat(extra1), parseFloat(extra2)]);
+			if (hp == 0 || mp == 0) return void message.channel.send("Why do this if it never changes anything?");
+
+			makePassive(skill, "sacrifice", [hp, mp]);
 			return true
 		}
-	},
+	}),
 
-	elementstore: {
+	elementstore: new Extra({
 		name: "Element Store",
-		desc: "_<Element> <Percent of Damage> <Chance>_\n<Chance>% chance to store <Damage Percent>% of damage taken from <Element> attacks to add up for the next attack. Stackable. Once hit, the stored damage is reset.",
+		desc: "<Chance>% chance to store <Damage Percent>% of damage taken from <Element> attacks to add up for the next attack. Stackable. Once hit, the stored damage is reset.",
+		args: [
+			{
+				name: "Element",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Damage Percent",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			}
+		],
 		multiple: true,
 		diffflag: 0,
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Element>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Damage Percent>!");
-			if (!extra3) return message.channel.send("You didn't supply anything for <Chance>!");
+		applyfunc(message, skill, args) {
+			let element = args[0].toLowerCase()
+			let damage = args[1];
+			let chance = args[2];
 
-			extra1 = extra1.toLowerCase();
-			if (!Elements.includes(extra1)) return message.channel.send("You entered an invalid value for <Element>!");
-			if (extra1 === "heal" || extra1 === "status" || extra1 === "passive") return message.channel.send("You entered an invalid value for <Element>!");
+			if (!Elements.includes(element)) return void message.channel.send("You didn't supply a valid element!");
+			if (element === "heal" || element === "status" || element === "passive") return void message.channel.send("This element doesn't deal damage!");
+			if (damage == 0) return void message.channel.send("Why do this if it never changes anything?");
+			if (chance <= 0) return void message.channel.send("When you're trying to store damage, you need to have it happen at least once!");
 
-			if (parseFloat(extra3) < 0) return message.channel.send("You entered an invalid value for <Chance>!");
-
-			makePassive(skill, "elementstore", [extra1, parseFloat(extra2), parseFloat(extra3)]);
+			makePassive(skill, "elementstore", [element, damage, chance]);
 			return true;
 		}
-	}
+	})
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.
