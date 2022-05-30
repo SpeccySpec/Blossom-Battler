@@ -657,72 +657,137 @@ passiveList = {
 		}
 	}),
 
-	repelmag: {
+	repelmag: new Extra({
 		name: "Repel Magic",
-		desc: "_<Chance> <Element #1> {Element #2} {Element #3} {Element #4}_\n<Chance>% chance to repel magic of type <Element #1>, {Element #2}, {Element #3}, and {Element #4}.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Chance>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Element #1>!");
+		desc: "<Chance>% chance to repel magic of specific types.",
+		args: [
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Element #1",
+				type: "Element",
+				forced: true,
+				multiple: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let chance = args[0]
+			let elements = args.slice(1);
 
-			if (parseFloat(extra1) < 1) return message.channel.send("You entered an invalid value for <Chance>!");
+			if (chance < 1) return void message.channel.send("Why do this if it never happens?");
 
-			var elements = [];
-			if (Elements.includes(extra2.toLowerCase())) elements.push(extra2.toLowerCase());
-			if (extra3 && Elements.includes(extra3.toLowerCase())) elements.push(extra3.toLowerCase());
-			if (extra4 && Elements.includes(extra4.toLowerCase())) elements.push(extra4.toLowerCase());
-			if (extra5 && Elements.includes(extra5.toLowerCase())) elements.push(extra5.toLowerCase());
+			elements = elements.filter(e => (Elements.includes(e) && e !== 'passive' && e !== 'heal' && e !== 'status' && e !== 'almighty'));
 
-			if (elements.length < 1) return message.channel.send("You didn't supply any valid elements!");
-			makePassive(skill, "repelmag", [parseFloat(extra1), elements]);
+			if (elements.length < 1) return void message.channel.send("You didn't supply any valid elements!");
+			makePassive(skill, "repelmag", [chance, elements]);
 			return true;
 		}
-	},
+	}),
 
-	endure: {
+	endure: new Extra({
 		name: "Endure",
-		desc: "_<Amount> {HP}_\nUpon defeat, revives the caster up to <Amount> times with {HP} HP.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Amount>!");
+		desc: "Upon defeat, revives the caster until <Amount> times with {HP} HP.",
+		args: [
+			{
+				name: "Amount",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "HP",
+				type: "Num"
+			}
+		],
+		applyfunc(message, skill, args) {
+			let amount = args[0];
+			let hp = args[1] ?? 1;
 
-			if (parseInt(extra1) < 1) return message.channel.send("You entered an invalid value for <Amount>!");
-			if (extra2 && parseInt(extra2) < 1) return message.channel.send("You entered an invalid value for <HP>!");
-			makePassive(skill, "endure", [parseInt(extra1), parseInt(extra2)]);
+			if (amount < 1) return void message.channel.send("Why do this if it never happens?");
+			if (hp < 1) return void message.channel.send("One would think that you'd be able to survive with less than 1 HP.");
+			
+			makePassive(skill, "endure", [amount, hp]);
 			return true;
 		}
-	},
+	}),
 
-	guardboost: {
+	guardboost: new Extra({
 		name: "Guard Boost",
-		desc: "_<Percent>_\nReduces damage taken when guarding further by <Percent>%.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Percent>!");
+		desc: "Reduces damage taken when guarding further by <Percent>%.",
+		args: [
+			{
+				name: "Percent",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let percent = args[0];
 
-			makePassive(skill, "guardboost", [parseFloat(extra1)]);
+			if (percent == 0) return void message.channel.send("Why do this if it never changes anything?");
+			makePassive(skill, "guardboost", [percent]);
 			return true
 		}
-	},
+	}),
 
-	guarddodge: {
+	guarddodge: new Extra({
 		name: "Guard Dodge",
-		desc: "_<Percent>_\nBoosts dodigng attacks when guarding by <Percent>%.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Percent>!");
+		desc: "Boosts dodigng attacks when guarding by <Percent>%.",
+		args: [
+			{
+				name: "Percent",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let percent = args[0];
 
-			makePassive(skill, "guarddodge", [parseFloat(extra1)]);
+			if (percent == 0) return void message.channel.send("Why do this if it never changes anything?");
+			makePassive(skill, "guarddodge", [percent]);
 			return true
 		}
-	},
+	}),
 
-	sacrificial: {
+	sacrificial: new Extra({
 		name: "Sacrificial",
-		desc: "_<Percent>_\nBoosts the power of sacrifice skills by <Percent>%.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Percent>!");
+		desc: "Boosts the power of sacrifice skills by <Percent>%.",
+		args: [
+			{
+				name: "Percent",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let percent = args[0];
 
-			makePassive(skill, "sacrificial", [parseFloat(extra1)]);
+			if (percent == 0) return void message.channel.send("Why do this if it never changes anything?");
+			makePassive(skill, "sacrificial", [percent]);
 			return true
 		}
-	},
+	}),
+
+	alterpain: new Extra({
+		name: "Alter Pain",
+		desc: "Gain <Percent>% of damage taken as MP.",
+		args: [
+			{
+				name: "Percent",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let percent = args[0];
+
+			if (percent == 0) return void message.channel.send("Why do this if it never changes anything?");
+			makePassive(skill, "alterpain", [percent]);
+			return true
+		}
+	}),
 
 	sacrifice: {
 		name: "Sacrifice",
@@ -731,17 +796,6 @@ passiveList = {
 			if (!extra1 || !extra2) return message.channel.send("You didn't supply anything for <HP Percent> or <MP Percent>!");
 
 			makePassive(skill, "sacrifice", [parseFloat(extra1), parseFloat(extra2)]);
-			return true
-		}
-	},
-
-	alterpain: {
-		name: "Alter Pain",
-		desc: "_<Percent>_\nGain <Percent>% of damage taken as MP.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Percent>!");
-
-			makePassive(skill, "alterpain", [parseFloat(extra1)]);
 			return true
 		}
 	},
