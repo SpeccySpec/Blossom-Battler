@@ -1172,49 +1172,55 @@ doTurn = async(btl, noTurnEmbed) => {
 		}
 	}
 
-	// Custom Variables.
-	if (char.hp > 0 && char.custom) {
-		for (let i in char.custom) {
-			if (customVariables[i] && customVariables[i].onturn) {
-				statusTxt += (customVariables[i].onturn(btl, char, char.custom[i]) ?? '');
-				if (statusTxt != '') statusTxt += '\n';
+	if (char.ignorestatus)
+		delete char.ignorestatus;
+	else {
+		// Custom Variables.
+		if (char.hp > 0 && char.custom) {
+			for (let i in char.custom) {
+				if (customVariables[i] && customVariables[i].onturn) {
+					statusTxt += (customVariables[i].onturn(btl, char, char.custom[i]) ?? '');
+					if (statusTxt != '') statusTxt += '\n';
+				}
 			}
 		}
-	}
 
-	// Lastly, weather and terrain.
-	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].onturn) {
-		let txt = weatherFuncs[btl.weather.type].onturn(char, btl);
-		if (txt != null) statusTxt += `\n${txt}`;
+		// Lastly, weather and terrain.
+		if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].onturn) {
+			let txt = weatherFuncs[btl.weather.type].onturn(char, btl);
+			if (txt != null) statusTxt += `\n${txt}`;
 
-		btl.weather.turns--;
-		if (btl.weather.turns == 0) {
-			statusTxt += `\nThe ${btl.weather.type} is clearing up.`;
+			btl.weather.turns--;
+			if (btl.weather.turns == 0) {
+				statusTxt += `\nThe ${btl.weather.type} is clearing up.`;
 
-			if (btl.weather.force) {
-				btl.weather.type = btl.weather.force
-				btl.weather.turns = -1;
-			} else {
-				delete btl.weather;
+				if (btl.weather.force) {
+					btl.weather.type = btl.weather.force
+					btl.weather.turns = -1;
+				} else {
+					delete btl.weather;
+				}
 			}
 		}
-	}
-	
-	if (btl.terrain && terrainFuncs && terrainFuncs[btl.terrain.type] && terrainFuncs[btl.terrain.type].onturn) {
-		let txt = terrainFuncs[btl.terrain.type].onturn(char, btl);
-		if (txt != null) statusTxt += `\n${txt}`;
 
-		btl.terrain.turns--;
-		if (btl.terrain.turns == 0) {
-			statusTxt += `\nThe ${btl.weather.type} is clearing up.`;
-	
-			if (btl.terrain.force) {
-				btl.terrain.type = btl.terrain.force
-				btl.terrain.turns = -1;
-			} else {
-				delete btl.terrain;
+		if (btl.terrain && terrainFuncs && terrainFuncs[btl.terrain.type] && terrainFuncs[btl.terrain.type].onturn) {
+			let txt = terrainFuncs[btl.terrain.type].onturn(char, btl);
+			if (txt != null) statusTxt += `\n${txt}`;
+
+			btl.terrain.turns--;
+			if (btl.terrain.turns == 0) {
+				statusTxt += `\nThe ${btl.weather.type} is clearing up.`;
+		
+				if (btl.terrain.force) {
+					btl.terrain.type = btl.terrain.force
+					btl.terrain.turns = -1;
+				} else {
+					delete btl.terrain;
+				}
 			}
 		}
+
+		if (char.type && (char.type.includes("boss") || char.type === "deity")) char.ignorestatus = true;
 	}
 
 	// Check the status of our allies...
