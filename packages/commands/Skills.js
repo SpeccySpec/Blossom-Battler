@@ -1048,7 +1048,7 @@ commands.listpassiveextras = new Command({
 
 		let extras = []
 		for (let i in passiveList) {
-			extras.push({name: `${passiveList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${passiveList[i].desc}`, inline: true});
+			extras.push({name: `${passiveList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${passiveList[i].getFullDesc()}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['passive'])
