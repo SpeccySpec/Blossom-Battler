@@ -570,7 +570,7 @@ passiveList = {
 
 	affinityslicer: new Extra({
 		name: "Affinity Slicer",
-		desc: "\n<Chance>% chance to bypass all affinities, turning them into a resist or better.\n```diff\n+ Drain, Repel, Block ---> Resist\n+ Resist ---> Normal\n```",
+		desc: "<Chance>% chance to bypass all affinities, turning them into a resist or better.\n```diff\n+ Drain, Repel, Block ---> Resist\n+ Resist ---> Normal\n```",
 		args: [
 			{
 				name: "Chance",
