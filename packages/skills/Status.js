@@ -1,18 +1,33 @@
 statusList = {
-	status: {
+	status: new Extra({
 		name: 'Status',
-		desc: '_<Status> {Chance}_\n<Chance>% to inflict a <Status> on the target.',
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Status>!");
-			extra1 = extra1.toLowerCase();
-			if (!statusEffects.includes(extra1)) return message.channel.send("That's not a valid status!");
-			if (!extra2) extra2 = 100;
+		desc: '<Chance>% to inflict one of multiple <Status Effect> on the target.',
+		args: [
+			{
+				name: 'Status Effect #1',
+				type: 'Word',
+				forced: true,
+				multiple: true,
+			},
+			{
+				name: 'Chance',
+				type: 'Decimal'
+			}
+		],
+		applyfunc(message, skill, args) {
+			let statusEffect = args.filter(x => statusEffects.includes(x.toLowerCase()))
+			if (statusEffect.length === 0) return message.channel.send("You're not adding any valid status effects! Use the ''liststatus'' command to list all status effects.");
+			statusEffect = statusEffect.map(x => x.toLowerCase())
 
-			skill.status = extra1;
-			skill.statuschance = extra2;
+			let chance = args[args.length - 1] > 0 ? args[args.length - 1] : 100;
+
+			if (statusEffect.length === 1) statusEffect = statusEffect[0];
+
+			skill.status = statusEffect;
+			skill.statuschance = chance;
 			return true;
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			if (hasStatusAffinity(char, skill.status.toLowerCase(), 'block')) return `${targ.name} blocked it!\n${selectQuote(char, 'badatk')}\n${selectQuote(targ, 'block')}`;
 
 			let chance = (skill.statusChance ?? skill.statuschance) + ((char.stats.chr-targ.stats.chr)/2);
@@ -24,7 +39,7 @@ statusList = {
 				return dodgeTxt(char, targ);
 			}
 		}
-	},
+	}),
 
 	buff: {
 		name: "Stat Buff",
@@ -295,26 +310,6 @@ statusList = {
 		}
 	},
 
-	multistatus: {
-		name: "Multistatus",
-		desc: "_<Status> <Status> <Status>_\nThis skill becomes a status skill that will inflict one of multiple statuses.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			let backupStatus = skill.status;
-			skill.status = [];
-			if (statusEffects.includes(extra1)) skill.status.push(extra1);
-			if (statusEffects.includes(extra2)) skill.status.push(extra2);
-			if (statusEffects.includes(extra3)) skill.status.push(extra3);
-			
-			if (skill.status.length <= 0) {
-				skill.status = backupStatus;
-				return message.channel.send('All 3 status effects were invalid.');
-			}
-			
-			if (!skill.statusChance) skill.statusChance = 100;
-			return true;
-		}
-	},
-
 	chaosstir: {
 		name: "Chaos Stir",
 		desc: "_<Power Multiplier> <Accuracy>_\nUpon getting hit with a skill, the caster strikes back with the skill with <Power Multiplier>x power and <Accuracy>% accuracy.",
@@ -438,25 +433,18 @@ hasStatus = (skill, extra) => {
 }
 
 // Apply Extra Effects to an existing skill using the extrasList above.
-applyStatus = (message, skill, skillExtra, extra1, extra2, extra3, extra4, extra5) => {
+applyStatus = (message, skill, skillExtra, rawargs) => {
 	if (!skill.statusses) skill.statusses = {};
-	if (!skillExtra || !statusList[skillExtra.toLowerCase()]) {
-		message.channel.send("You're adding an invalid status type! Use the ''liststatus'' command to list all extras.");
-		return false;
-	}
-
-	if (!statusList[skillExtra.toLowerCase()].applyfunc(message, skill, extra1, extra2, extra3, extra4, extra5)) {
-		message.channel.send("Something went wrong!");
-		return false;
-	}
+	if (!skillExtra || !statusList[skillExtra]) return message.channel.send("You're adding an invalid extra! Use the ''liststatusextras'' command to list all extras.");
+	if (!statusList[skillExtra].apply(message, skill, rawargs)) return false
 	
+	message.react('👍')
 	skill.done = true;
-
 	console.log("win")
 	return true;
 }
 
-buildStatus = (message, args) => {
+buildStatus = (message, extra, args) => {
 	let skill = {
 		name: args[0],
 		type: 'status',
@@ -466,7 +454,7 @@ buildStatus = (message, args) => {
 		originalAuthor: message.author.id
 	}
 
-	applyStatus(message, skill, args[4].toLowerCase(), args[5], args[6], args[7], args[8], args[9])
+	applyStatus(message, skill, extra, args.slice(5))
 	
 	if (skill.done) {
 		delete skill.done;
