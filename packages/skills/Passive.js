@@ -886,23 +886,22 @@ hasPassiveType = (skill, extra) => {
 applyPassive = (message, skill, skillExtra, rawargs) => {
 	if (!skill.passive) skill.passive = {};
 	if (!passiveList || !passiveList[skillExtra]) return message.channel.send("You're adding an invalid extra! Use the ''listpassiveextras'' command to list all extras.");
-	if (passiveList[skillExtra].apply(message, skill, rawargs))
-		message.react('👍')
+	if (!passiveList[skillExtra].apply(message, skill, rawargs)) return false
 	
+	message.react('👍')
 	skill.done = true;
-
 	console.log("win")
 	return true;
 }
 
-buildPassive = (message, args) => {
+buildPassive = (message, extra, args) => {
 	let skill = {
 		name: args[0],
 		type: 'passive',
 		originalAuthor: message.author.id
 	}
 
-	applyPassive(message, skill, args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6])
+	applyPassive(message, skill, extra, args.slice(2))
 	
 	if (skill.done) {
 		delete skill.done;

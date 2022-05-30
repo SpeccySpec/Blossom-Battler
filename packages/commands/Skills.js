@@ -201,7 +201,7 @@ commands.registerstatus = new Command({
 		},
 	],
 	func: (message, args) => {
-		let skill = buildStatus(message, args)
+		let skill = buildStatus(message, args[4], args)
 		if (!skill) return;
 
 		skillFile[args[0]] = skill;
@@ -275,7 +275,7 @@ commands.registerheal = new Command({
 		},
 	],
 	func: (message, args) => {
-		let skill = buildHeal(message, args)
+		let skill = buildHeal(message, args[4], args)
 		if (!skill) return;
 
 		skillFile[args[0]] = skill;
@@ -334,7 +334,7 @@ commands.registerpassive = new Command({
 		},
 	],
 	func: (message, args) => {
-		let skill = buildPassive(message, args)
+		let skill = buildPassive(message, args[1], args)
 		if (!skill) return;
 
 		skillFile[args[0]] = skill;

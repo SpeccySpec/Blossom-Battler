@@ -340,15 +340,14 @@ hasHealType = (skill, extra) => {
 applyHeal = (message, skill, skillExtra, rawargs) => {
 	if (!skill.heal) skill.heal = {};
 	if (!skillExtra || !healList[skillExtra]) return message.channel.send("You're adding an invalid extra! Use the ''listhealextras'' command to list all extras.");
-	if (healList[skillExtra].apply(message, skill, rawargs))
-		message.react('👍')
+	if (!healList[skillExtra].apply(message, skill, rawargs)) return false
 	
+	message.react('👍')
 	skill.done = true;
-	message.react('👍');
 	return true;
 }
 
-buildHeal = (message, args) => {
+buildHeal = (message, extra, args) => {
 	let skill = {
 		name: args[0],
 		type: 'heal',
@@ -358,7 +357,7 @@ buildHeal = (message, args) => {
 		originalAuthor: message.author.id
 	}
 
-	applyHeal(message, skill, args[4].toLowerCase(), args[5], args[6], args[7], args[8], args[9])
+	applyHeal(message, skill, extra, args.slice(5))
 	
 	if (skill.done) {
 		delete skill.done;
