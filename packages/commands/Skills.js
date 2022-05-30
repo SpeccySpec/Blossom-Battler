@@ -165,43 +165,24 @@ commands.registerstatus = new Command({
 			forced: true
 		},
 		{
+			name: "Description",
+			type: "Any",
+			forced: false
+		},
+		{
 			name: "Status Type",
 			type: "Word",
 			forced: true
 		},
 		{
-			name: "Variable 1",
+			name: "Variable #1",
 			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable 2",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable 3",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable 4",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable 5",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Description",
-			type: "Any",
-			forced: false
-		},
+			forced: false,
+			multiple: true
+		}
 	],
 	func: (message, args) => {
-		let skill = buildStatus(message, args[4], args)
+		let skill = buildStatus(message, args[5], args)
 		if (!skill) return;
 
 		skillFile[args[0]] = skill;
@@ -239,43 +220,24 @@ commands.registerheal = new Command({
 			forced: true
 		},
 		{
+			name: "Description",
+			type: "Any",
+			forced: false
+		},
+		{
 			name: "Heal Type",
 			type: "Word",
 			forced: true
 		},
 		{
-			name: "Variable 1",
+			name: "Variable #1",
 			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable 2",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable 3",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable 4",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable 5",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Description",
-			type: "Any",
-			forced: false
+			forced: false,
+			multiple: true
 		},
 	],
 	func: (message, args) => {
-		let skill = buildHeal(message, args[4], args)
+		let skill = buildHeal(message, args[5], args)
 		if (!skill) return;
 
 		skillFile[args[0]] = skill;
@@ -298,43 +260,24 @@ commands.registerpassive = new Command({
 			forced: true
 		},
 		{
+			name: "Description",
+			type: "Any",
+			forced: false
+		},
+		{
 			name: "Passive Type",
 			type: "Word",
 			forced: true
 		},
 		{
-			name: "Variable 1",
+			name: "Variable #1",
 			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable 2",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable 3",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable 4",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable 5",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Description",
-			type: "Any",
-			forced: false
-		},
+			forced: false,
+			multiple: true
+		}
 	],
 	func: (message, args) => {
-		let skill = buildPassive(message, args[1], args)
+		let skill = buildPassive(message, args[2], args)
 		if (!skill) return;
 
 		skillFile[args[0]] = skill;

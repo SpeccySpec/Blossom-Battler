@@ -357,7 +357,7 @@ buildHeal = (message, extra, args) => {
 		originalAuthor: message.author.id
 	}
 
-	applyHeal(message, skill, extra, args.slice(5))
+	applyHeal(message, skill, extra, args.slice(6))
 	
 	if (skill.done) {
 		delete skill.done;

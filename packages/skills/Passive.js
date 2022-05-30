@@ -901,7 +901,7 @@ buildPassive = (message, extra, args) => {
 		originalAuthor: message.author.id
 	}
 
-	applyPassive(message, skill, extra, args.slice(2))
+	applyPassive(message, skill, extra, args.slice(3))
 	
 	if (skill.done) {
 		delete skill.done;

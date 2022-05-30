@@ -454,7 +454,7 @@ buildStatus = (message, extra, args) => {
 		originalAuthor: message.author.id
 	}
 
-	applyStatus(message, skill, extra, args.slice(5))
+	applyStatus(message, skill, extra, args.slice(6))
 	
 	if (skill.done) {
 		delete skill.done;
