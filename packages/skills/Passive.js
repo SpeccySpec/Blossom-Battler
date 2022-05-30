@@ -676,6 +676,7 @@ passiveList = {
 		applyfunc(message, skill, args) {
 			let chance = args[0]
 			let elements = args.slice(1);
+			for (let i = 0; i < elements.length; i++) elements[i] = elements[i].toLowerCase();
 
 			if (chance < 1) return void message.channel.send("Why do this if it never happens?");
 
