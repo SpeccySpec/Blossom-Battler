@@ -122,20 +122,32 @@ statusList = {
 		}
 	}),
 
-	mimic: {
+	mimic: new Extra({
 		name: "Mimic",
 		desc: "_<Turns> {Skill}_\nMorphs into an ally or an enemy of the caster's choice for <Turns> turns. The caster can change back with {Skill}.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Turns>!");
-			if (parseInt(extra1) < 1) return message.channel.send("You can't have less than 1 turn!");
+		args: [
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Skill",
+				type: "Word"
+			}
+		],
+		applyfunc(message, skill, args) {
+			let turns = args[0]
+			let skillName = args[1]
+			if (turns < 1) return void message.channel.send("You can't have less than 1 turn!");
 
-			if (extra2 && !skillFile[extra2]) return message.channel.send("That's not a valid skill!");
-			if (extra2 && (!skillFile[extra2].statusses || (skillFile[extra2].statusses && !skillFile[extra2].statusses.unmimic))) return message.channel.send("That's not a valid skill!");
+			if (skillName && !skillFile[skillName]) return void message.channel.send("That's not a valid skill!");
+			if (skillName && skillFile[skillName] && (!skillFile[skillName].statusses || (skillFile[skillName].statusses && !skillFile[skillName].statusses.unmimic))) return void message.channel.send("That skill can't unmimic people!");
 
-			makeStatus(skill, "mimic", [parseInt(extra1), extra2 ?? null]);
+			makeStatus(skill, "mimic", [turns, skillName ?? null]);
 			return true;
 		}
-	},
+	}),
 
 	unmimic: {
 		name: "Unmimic",
