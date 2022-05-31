@@ -112,14 +112,15 @@ statusList = {
 		}
 	}),
 
-	heartswap: {
+	heartswap: new Extra({
 		name: "Heart Swap",
 		desc: "Swaps the target's stat changes with the caster's.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		args: [],
+		applyfunc(message, skill, args) {
 			makeStatus(skill, "heartswap", [true]);
 			return true;
 		}
-	},
+	}),
 
 	mimic: {
 		name: "Mimic",
