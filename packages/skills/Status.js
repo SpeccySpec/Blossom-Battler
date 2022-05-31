@@ -95,21 +95,22 @@ statusList = {
 		}
 	}),
 
-	dekunda: {
+	dekunda: new Extra({
 		name: "Dekunda",
 		desc: "Removes the target's positive buffs.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		args: [],
+		applyfunc(message, skill, args) {
 			makeStatus(skill, "dekunda", [true]);
 			return true;
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			for (let i in targ.buffs) {
 				if (targ.buffs[i] > 0) targ.buffs[i] = 0;
 			}
 
 			return `__${targ.name}__'s positive buffs were nullified!`;
 		}
-	},
+	}),
 
 	heartswap: {
 		name: "Heart Swap",
