@@ -35,6 +35,46 @@ removeFromParty = (party, char) => {
 		return false;
 }
 
+mergeParties = (party, party2) => {
+	party.currency += party2.currency;
+
+	for (let i in party2.members) {
+		if (party.members.length < 4) {
+			party.members.push(party2.members[i]);
+		} else {
+			party.backup.push(party2.members[i]);
+		}
+	}
+
+	if (party2.backup && party2.backup.length > 0) {
+		for (let i in party2.backup) {
+			party.backup.push(party2.backup[i]);
+		}
+	}
+
+	let numeric = ['items', 'negotiates'];
+	for (let k in numeric) {
+		if (party2[k]) {
+			for (let i in party2[k]) {
+				if (!party[k]) party[k] = {};
+				if (!party[k][i]) party[k][i] = 0;
+				party[k][i] += party2[k][i];
+			}
+		}
+	}
+
+	let equipment = ['weapons', 'armors', 'negotiateAllies'];
+	for (let k in equipment) {
+		if (party2[k]) {
+			for (let i in party2[k]) {
+				let id = i;
+				if (party[k][id]) id = `${i}-2`;
+				party[k][id] = party2[k][i];
+			}
+		}
+	}
+}
+
 commands.makeparty = new Command({
 	desc: 'Makes a team to battle with! They can consist of up to 4 members in a main group, and an unlimited amount in backup by default.',
 	aliases: ['partymake', 'maketeam', 'teammake', 'registerparty', 'registerteam'],
@@ -58,6 +98,10 @@ commands.makeparty = new Command({
 		let settings = setUpSettings(message.guild.id);
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		if (parties[args[0]]) {
+			if (!isPartyLeader(message.author, parties[args[0]], message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send(`${args[0]} is an existing party and cannot be overwritten.`);
+		}
 
 		parties[args[0]] = {
 			name: args[0],
@@ -319,6 +363,153 @@ commands.backup = new Command({
 
 		message.react('👍');
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
+	}
+})
+
+commands.splitparty = new Command({
+	desc: 'Split one team into 2. You can choose to split items between the two teams or not.',
+	aliases: ['partysplit', 'cutparty', 'partycut'],
+	section: "parties",
+	checkban: true,
+	args: [
+		{
+			name: "Party Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Second Party Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Position",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Split Items?",
+			type: "Word",
+			forced: false
+		}
+	],
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+
+		if (!parties[args[0]]) return message.channel.send(`${args[0]} is a nonexistant party!`);
+		if (parties[args[1]]) return message.channel.send(`${args[1]} is an existing party and cannot be overwritten.`);
+		if (!isPartyLeader(message.author, parties[args[0]], message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send("You cannot split this party!")
+
+		parties[args[1]] = {
+			name: args[1],
+			currency: 0,
+			members: [],
+			backup: [],
+			items: {},
+			weapons: {},
+			armors: {},
+			negotiates: {},
+			negotiateAllies: {}
+		}
+
+		if (!parties[args[0]].members[args[2]]) return message.channel.send(`${args[2]} is an invalid position in team ${parties[args[0]].name}`);
+
+		// Remove members from the 1st party, and then put them in the 2nd.
+		for (let i = args[2]; i < parties[args[0]].members.length; i++) {
+			parties[args[1]].members.push(parties[args[0]].members[i]);
+		}
+		parties[args[0]].members.splice(args[2], parties[args[0]].members.length-args[2]);
+
+		// Check for the 4th argument.
+		if (args[3]) {
+			if (args[3].toLowerCase() === 'y' || args[3].toLowerCase() === 'yes' || args[3].toLowerCase() === 'true') {
+				// Split Currency.
+				if (parties[args[0]].currency > 1) {
+					parties[args[1]].currency = Math.round(parties[args[0]].currency/2);
+					parties[args[0]].currency = Math.round(parties[args[0]].currency/2);
+				}
+
+				// Split Items.
+				for (let i in parties[args[0]].items) {
+					if (parties[args[0]].items[i] <= 1) continue;
+					parties[args[1]].items[i] = Math.round(parties[args[0]].items[i]/2);
+					parties[args[0]].items[i] = Math.round(parties[args[0]].items[i]/2);
+				}
+			}
+		}
+
+		// Save File :)
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
+		message.channel.send(`${args[0]} was split into 2 parties! ${args[1]} is the result of this split.`);
+	}
+})
+
+commands.mergeparty = new Command({
+	desc: 'Merge 2 teams into one! This places all members, backup, items, pets and more into one party.',
+	aliases: ['partymerge', 'combineparty', 'partycombine'],
+	section: "parties",
+	checkban: true,
+	args: [
+		{
+			name: "Party Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Second Party Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Delete Second Party",
+			type: "Word",
+			forced: false
+		}
+	],
+	func: async(message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+
+		if (!parties[args[0]]) return message.channel.send(`${args[0]} is a nonexistant party!`);
+		if (!parties[args[1]]) return message.channel.send(`${args[1]} is a nonexistant party!`);
+
+		if (!isPartyLeader(message.author, parties[args[0]], message.guild.id)) return message.channel.send(`You cannot merge ${args[0]} with other parties!`);
+
+		mergeParties(parties[args[0]], parties[args[1]]);
+
+		if (args[2]) {
+			if (args[2].toLowerCase() === 'yes' || args[2].toLowerCase() === 'y' || args[2].toLowerCase() === 'true') delete parties[args[1]];
+		}
+
+		if (!isPartyLeader(message.author, parties[args[1]], message.guild.id)) {
+			if (!parties[args[1]].members[0]) return message.channel.send("Nobody... owns this party?");
+	
+			let user = await client.users.fetch(parties[args[1]].members[0].owner);
+			message.channel.send(`${user}, ${message.author} wishes for their party ${args[0]} to be merged with yours, ${args[1]}. Do you accept?`);
+
+			let givenResponce = false;
+			let collector = message.channel.createMessageCollector({ time: 15000 });
+			collector.on('collect', m => {
+				if (m.author.id == charFile[args[1]].owner) {
+					if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
+						m.react('👍');
+						message.react('👍');
+						fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
+					} else
+						message.channel.send("The user has declined. Therefore, no team merge will happen.");
+
+					givenResponce = true;
+					collector.stop()
+				}
+			});
+			collector.on('end', c => {
+				if (!givenResponce) message.channel.send("No response given.\nThe user has declined. Therefore, no team merge will happen.");
+			});
+		} else {
+			message.react('👍');
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
+		}
 	}
 })
 
