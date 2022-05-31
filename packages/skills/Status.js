@@ -1,7 +1,7 @@
 statusList = {
 	status: new Extra({
 		name: 'Status',
-		desc: '<Chance>% to inflict one of multiple <Status Effect> on the target.',
+		desc: '<Chance>% to inflict one of multiple <Status Effect>s on the target.',
 		args: [
 			{
 				name: 'Status Effect #1',
@@ -41,21 +41,42 @@ statusList = {
 		}
 	}),
 
-	buff: {
+	buff: new Extra({
 		name: "Stat Buff",
-		desc: "_<Stat> <Stages> <Chance>_\nWill buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
+		desc: "Will buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
+		args: [
+			{
+				name: "Stat",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Stages",
+				type: "Num"
+			},
+			{
+				name: "Chance",
+				type: "Decimal"
+			}
+		],
 		multiple: true,
 		diffflag: [0, 2],
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
-			if (!utilityFuncs.validStat(extra1)) return message.channel.send("That's not a valid stat!");
-			if (!extra2) extra2 = '1';
-			if (!extra3) extra3 = '100';
+		applyfunc(message, skill, args) {
+			const stat = args[0].toLowerCase()
+			const stages = args[1] ?? 1
+			const chance = Math.min(args[2] ?? 100, 100)
 
-			makeStatus(skill, "buff", [extra1.toLowerCase(), parseInt(extra2), parseFloat(extra3)]);
-			return true;
+			if (!stats.includes(stat))
+				return void message.channel.send("That's not a valid stat!");
+			if (args[1] == 0)
+				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
+			if (args[2] <= 0)
+				return void message.channel.send("You can't have a percentage less than 0, as then it would never happen!");
+				
+			makeStatus(skill, "buff", [stat, stages, chance]);
+			return true
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			if (targ.charms && targ.charms.includes("PureVision") && vars[0].toLowerCase() === 'prc') return `${targ.name}'s Pure Vision negated the change.`;
 
 			if (vars[2]) {
@@ -72,7 +93,7 @@ statusList = {
 				return `__${targ.name}__'s _${vars[0].toUpperCase()}_ was buffed ${vars[1]} time(s)!`;
 			}
 		}
-	},
+	}),
 
 	dekunda: {
 		name: "Dekunda",
