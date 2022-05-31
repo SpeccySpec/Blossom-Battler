@@ -124,7 +124,7 @@ statusList = {
 
 	mimic: new Extra({
 		name: "Mimic",
-		desc: "_<Turns> {Skill}_\nMorphs into an ally or an enemy of the caster's choice for <Turns> turns. The caster can change back with {Skill}.",
+		desc: "Morphs into an ally or an enemy of the caster's choice for <Turns> turns. The caster can change back with {Skill}.",
 		args: [
 			{
 				name: "Turns",
@@ -149,14 +149,15 @@ statusList = {
 		}
 	}),
 
-	unmimic: {
+	unmimic: new Extra({
 		name: "Unmimic",
 		desc: "Will return the caster to their original form.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		args: [],
+		applyfunc: function(message, skill, args) {
 			makeStatus(skill, "unmimic", [true]);
 			return true;
 		}
-	},
+	}),
 
 	clone: {
 		name: "Clone",
