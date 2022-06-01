@@ -677,7 +677,7 @@ statusList = {
 		}
 	}),
 
-	charge: {
+	charge: new Extra({
 		name: "Charge",
 		desc: "Boosts <Phys/Mag> damage by <Power Multiplier>x for one turn. Removed whether attacked or not.",
 		args: [
@@ -703,9 +703,9 @@ statusList = {
 			makeStatus(skill, "charge", [type, power]);
 			return true;
 		}
-	},
+	}),
 
-	orgiamode: {
+	orgiamode: new Extra({
 		name: "Orgia Mode",
 		desc: "Modifies user's ATK and MAG by <ATK & MAG Multiplier>x and END by <END Multiplier>x for <Turns> turns. Falls asleep afterwards.",
 		args: [
@@ -731,7 +731,7 @@ statusList = {
 			makeStatus(skill, "orgiamode", [args[0], args[1], args[2]]);
 			return true;
 		}
-	}
+	})
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.

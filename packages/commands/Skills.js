@@ -960,7 +960,7 @@ commands.liststatusextras = new Command({
 
 		let extras = []
 		for (let i in statusList) {
-			extras.push({name: `${statusList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${statusList[i].desc}`, inline: true});
+			extras.push({name: `${statusList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${statusList[i].getFullDesc()}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['status'])
