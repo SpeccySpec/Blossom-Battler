@@ -52,8 +52,8 @@ mergeParties = (party, party2) => {
 		}
 	}
 
-	let numeric = ['items', 'negotiates'];
-	for (let k in numeric) {
+	let numeric = ["items", "negotiates"];
+	for (let k of numeric) {
 		if (party2[k]) {
 			for (let i in party2[k]) {
 				if (!party[k]) party[k] = {};
@@ -64,7 +64,7 @@ mergeParties = (party, party2) => {
 	}
 
 	let equipment = ['weapons', 'armors', 'negotiateAllies'];
-	for (let k in equipment) {
+	for (let k of equipment) {
 		if (party2[k]) {
 			for (let i in party2[k]) {
 				let id = i;
