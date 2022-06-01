@@ -248,19 +248,32 @@ statusList = {
 		}
 	}),
 
-	shieldbreak: {
+	shieldbreak: new Extra({
 		name: "Shield Break",
-		desc: "_<Shield/Tetra/Makara> <Accuracy>_\nHas a <Accuracy>% chance to break the target's <Shield/Tetra/Makara>.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Shield/Tetra/Makara>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Accuracy>!");
+		desc: "_<Shield/Tetra/Makara> <Chance>_\nHas a <Chance>% chance to break the target's <Shield/Tetra/Makara>.",
+		args: [
+			{
+				name: "Shield/Tetra/Makara",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let type = args[0].toLowerCase()
+			let chance = args[1]
 
-			if (!["shield", "tetra", "makara"].includes(extra1.toLowerCase())) return message.channel.send("That's not shield/tetra/makara!");
-			if (parseFloat(extra2) < 1) return message.channel.send("You can't have less than 1 hit!");
-			makeStatus(skill, "shieldbreak", [extra1.toLowerCase(), parseFloat(extra2)]);
+			if (!["shield", "tetra", "makara"].includes(type)) return void message.channel.send("That's not shield/tetra/makara!");
+			if (chance < 1) return void message.channel.send("How would you break a shield with a less than 1% chance?");
+			
+			makeStatus(skill, "shieldbreak", [type, chance]);
 			return true;
 		}
-	},
+	}),
 
 	trap: {
 		name: "Trap",
