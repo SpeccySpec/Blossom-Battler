@@ -445,7 +445,7 @@ getPrefix = (server) => {
 
 getCurrency = (server) => {
 	let settings = setUpSettings(server)
-	return settings['currency']
+	return ((settings['currency_emoji'] != '' && settings['currency_emoji'] != '') ? settings['currency_emoji'] : '') + ' ' + settings['currency']
 }
 
 getCurrentDate = () => {
@@ -717,6 +717,7 @@ setUpSettings = (guild) => {
 				xpCalcFormula: "original"
 			},
 			currency: 'BB Token',
+			currency_emoji: '<:token:981579648993460355>',
 			pvpstuff: {
 				none: {},
 				metronome: {},

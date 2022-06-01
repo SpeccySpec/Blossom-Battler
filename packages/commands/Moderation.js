@@ -122,7 +122,7 @@ commands.settings = new Command({
 
 		let miscText = ''
 		miscText += `**Prefix**: ${settings['prefix']}\n`
-		miscText += `**Currency**: ${settings['currency']}, ${settings['currency']}s\n`
+		miscText += `**Currency**: ${getCurrency(message.guild.id)}, ${settings['currency']}s\n`
 
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
@@ -313,6 +313,39 @@ commands.currency = new Command({
 		settings['currency'] = args[0]
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 		message.channel.send('Currency set to ' + args[0])
+	}
+})
+
+commands.currencyemoji = new Command({
+	desc: 'Change the currency emoji for the server.',
+	section: 'moderation',
+	aliases: ['setcurrencyemoji', 'setmoneyemoji', 'setmoneyemoji'],
+	args: [
+		{
+			name: 'Emoji',
+			type: 'Word',
+			forced: true
+		}
+	],
+	admin: "You do not have permission to change the currency emoji!",
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id)
+
+		let emotes = message.content.match(/<a?:.+?:\d{18}>|\p{Extended_Pictographic}/gu);
+		let emoj = emotes?.[0]
+
+		if (emoj == undefined) {
+			return message.channel.send('You must provide an emoji!')
+		}
+
+		if (emoj.length > 3 && !message.guild.emojis.cache.find(emoji => emoj == emoji.toString())) {
+			return message.channel.send('The emoji you provided is not valid in this server!')
+		}
+
+		settings['currency_emoji'] = emoj
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+
+		message.channel.send('Currency emoji set to ' + emoj)
 	}
 })
 
