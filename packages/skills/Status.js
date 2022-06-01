@@ -345,21 +345,38 @@ statusList = {
 		}
 	}),
 
-	changeaffinity: {
+	changeaffinity: new Extra({
 		name: "Change Affinity",
 		desc: extrasList.changeaffinity.desc,
+		args: extrasList.changeaffinity.args,
 		multiple: true,
-		diffflag: [0, 1, 2],
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			extrasList.changeaffinity.applyfunc(message, skill, extra1, extra2, extra3, extra4, extra5);
+		diffflag: extrasList.changeaffinity.diffflag,
+		applyfunc(message, skill, args) {
+			const target = args[0].toLowerCase()
+			const element = args[1].toLowerCase()
+			const affinity = args[2].toLowerCase()
+			const side = args[3].toLowerCase()
+			const turns = args[4]
+			if (target != 'target' && target != 'user')
+				return void message.channel.send("You entered an invalid value for <target/user>! It can be either Target or User.");
+			if (![...Affinities, 'normal'].includes(affinity))
+				return void message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: " + Affinities.join(', ') + " or Normal.");
+			if (!Elements.includes(element))
+				return void message.channel.send("You entered an invalid value for <Element>!");
+			if (side != 'weak' && side != 'resist' && side != 'both')
+				return void message.channel.send("You entered an invalid value for <Weak/Resist/Both>! It can be either Weak, Resist, or Both.");
+			if (turns && turns < 5)
+				return void message.channel.send("You can't have a turn count less than 1!");
+			makeStatus(skill, "changeaffinity", [target, element, affinity, side, turns]);
+			return true
 		},
-		onselect: function(char, skill, btl, vars) {
+		onselect(char, skill, btl, vars) {
 			extrasList.changeaffinity.onselect(char, skill, btl, vars);
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			extrasList.changeaffinity.onuse(char, targ, skill, btl, vars);
 		}
-	},
+	}),
 
 	weather: {
 		name: "Weather",

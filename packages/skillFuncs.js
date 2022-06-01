@@ -164,6 +164,109 @@ function statusDesc(skillDefs) {
 		finalText += `Sets up a **trap**.\n`
 	}
 
+	if (hasStatus(skillDefs, 'changeaffinity')) {
+		let targetAffinities = skillDefs.statusses.changeaffinity.filter(x => x.includes('target'))
+		let userAffinities = skillDefs.statusses.changeaffinity.filter(x => x.includes('user'))
+
+		let affinityScore = {
+			superweak: 0, 
+			weak: 1, 
+			normal: 2, 
+			resist: 3, 
+			block: 4, 
+			repel: 5, 
+			drain: 6
+		}
+
+		let sideScore = {
+			weak: 0, 
+			both: 1, 
+			resist: 2
+		}
+
+		finalText += `Changes affinities of`
+
+		let affinity = ''
+
+		let oldAffinitySide = ''
+		let affinitySide = ''
+
+		if (targetAffinities.length > 0) {
+			finalText += ` **the target** to:\n`
+
+			targetAffinities.sort(function(a, b) {
+				return (affinityScore[a[2]]*10 + sideScore[a[3]]) - (affinityScore[b[2]]*10 + sideScore[b[3]]);
+			})
+
+			for (let i in targetAffinities) {
+				if (affinity != targetAffinities[i][2]) {
+					if (affinity != '' && affinity != targetAffinities[i][2]) finalText += `\n`
+					affinity = targetAffinities[i][2]
+					finalText += `${affinityEmoji[targetAffinities[i][2]]}: `
+				}
+				affinitySide = targetAffinities[i][3]
+				if (oldAffinitySide == '') {
+					oldAffinitySide = affinitySide
+				}
+				
+				finalText += `${elementEmoji[targetAffinities[i][1]]}`
+
+				if (oldAffinitySide != affinitySide || i == targetAffinities.length - 1) {
+					finalText += ` ${affinityEmoji[oldAffinitySide] ? `from ${affinityEmoji[oldAffinitySide]} side` : 'in general'}`
+
+					if (i < targetAffinities.length - 1) {
+						finalText += `, `
+					}
+				}
+
+				oldAffinitySide = affinitySide
+			}
+		}
+
+		affinity = ''
+		oldAffinitySide = ''
+		affinitySide = ''
+
+		if (userAffinities.length > 0) {
+			if (targetAffinities.length > 0) {
+				finalText += `\nand affinities of **the user** to:\n`
+			} else {
+				finalText += ` **the user** to:\n`
+			}
+
+			userAffinities.sort(function(a, b) {
+				return (affinityScore[a[2]]*10 + sideScore[a[3]]) - (affinityScore[b[2]]*10 + sideScore[b[3]]);
+			})
+
+			for (let i in userAffinities) {
+				if (affinity != userAffinities[i][2]) {
+					if (affinity != '' && affinity != userAffinities[i][2]) finalText += `\n`
+					affinity = userAffinities[i][2]
+					finalText += `${affinityEmoji[userAffinities[i][2]]}: `
+				}
+
+				affinitySide = userAffinities[i][3]
+				if (oldAffinitySide == '') {
+					oldAffinitySide = affinitySide
+				}
+				
+				finalText += `${elementEmoji[userAffinities[i][1]]}`
+
+				if (oldAffinitySide != affinitySide || i == userAffinities.length - 1) {
+					finalText += ` ${affinityEmoji[oldAffinitySide] ? `from ${affinityEmoji[oldAffinitySide]} side` : 'in general'}`
+
+					if (i < userAffinities.length - 1) {
+						finalText += `, `
+					}
+				}
+
+				oldAffinitySide = affinitySide
+			}
+		}
+
+		finalText += `\n`
+	}
+
 	if (hasStatus(skillDefs, 'futuresight')) {
 		finalText += `Strieks with a **${skillDefs.statusses.futuresight[0].type}** attack in **${skillDefs.statusses.futuresight[0].turns}** turns.\n`
 	}
