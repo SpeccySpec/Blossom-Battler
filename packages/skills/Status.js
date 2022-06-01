@@ -707,7 +707,7 @@ statusList = {
 
 	orgiamode: {
 		name: "Orgia Mode",
-		desc: "_<ATK & MAG Multiplier> <END Multiplier> <Turns>_\nModifies user's ATK and MAG by <ATK & MAG Multiplier>x and END by <END Multiplier>x for <Turns> turns. Falls asleep afterwards.",
+		desc: "Modifies user's ATK and MAG by <ATK & MAG Multiplier>x and END by <END Multiplier>x for <Turns> turns. Falls asleep afterwards.",
 		args: [
 			{
 				name: "ATK & MAG Multiplier",
