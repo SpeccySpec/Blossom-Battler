@@ -482,36 +482,117 @@ statusList = {
 		}
 	}),
 
-	futuresight: {
+	futuresight: new Extra({
 		name: "Futuresight",
-		desc: "_<Power> <Accuracy> {Crit} <Element> <Turns>_\nThis skill becomes an attacking skill that strikes the foe in <Turns> turns with <Power> power, <Accuracy>% accuracy, <Crit>% critical chance, and element of <Element>.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Power>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Accuracy>!");
-			if (!extra4) return message.channel.send("You didn't supply anything for <Type>!");
-			if (!extra5) return message.channel.send("You didn't supply anything for <Turns>!");
+		desc: "This skill becomes an attacking skill that strikes the foe in <Turns>.",
+		args: [
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Power",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Accuracy",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Critical Hit Chance",
+				type: "Decimal",
+			},
+			{
+				name: "Hits",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Element",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Attack Type",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Targets",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Status",
+				type: "Word",
+			},
+			{
+				name: "Status Chance",
+				type: "Decimal",
+			}
+		],
+		applyfunc(message, skill, args) {
+			let turns = args[0];
+			let power = args[1];
+			let accuracy = args[2];
+			let critChance = math.max((args[3] ?? 0), 0);
+			let hits = args[4];
+			let element = args[5]?.toLowerCase();
+			let atype = args[6]?.toLowerCase();
+			let targets = args[7]?.toLowerCase();
+			let status = args[8] || "none";
+			let statusChance = math.min(math.max((args[9] ?? 0), 0), 100);
 
-			if (parseInt(extra1) < 1) return message.channel.send("Power must be above 0!");
-			if (parseFloat(extra2) < 1) return message.channel.send("Accuracy must be above 0!");
-			if (parseInt(extra5) < 1) return message.channel.send("Turns must be above 0!");
+			if (turns < 1) return void message.channel.send("Turns must be at least 1!");
 
-			if (!Elements.includes(extra4.toLowerCase())) return message.channel.send("That's not a valid element!");
-			if (extra4.toLowerCase() == "heal") return message.channel.send("You can't set a futuresight to heal!");
-			if (extra4.toLowerCase() == "status") return message.channel.send("You can't set a futuresight to status!");
-			if (extra4.toLowerCase() == "passive") return message.channel.send("You can't set a futuresight to passive!");
+			if (power < 1) return void message.channel.send('Counters with 0 power or less will not function!');
 
-			makeStatus(skill, "futuresight", [{
+			if (accuracy < 1) return void message.channel.send('Counters with 0% accuracy or less will not function!');
+
+			if (hits < 1) return void message.channel.send('Counters with 0 hits or less will not function!');
+
+			if (!Elements.includes(element)) {
+				return void message.channel.send({content: 'Please enter a valid element for **Element!**', embeds: [elementList()]})
+			}
+			if (element == 'passive' || element == 'heal' || element == 'status')
+				return void message.channel.send("The counter must be an attack!");
+
+			if (atype != 'physical' && atype != 'magic' && atype != 'ranged') return void message.channel.send(`${atype} is an invalid form of contact! Try physical, magic or ranged.`);
+
+			if (Targets.includes(targets)) return void message.channel.send('Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n-SpreadOpposing\n- SpreadAllies```')
+
+			let definition = {
 				name: skill.name,
-				pow: parseInt(extra1),
-				acc: parseFloat(extra2),
-				crit: Math.max(0, Math.min(parseFloat(extra3), 100)),
-				type: extra4.toLowerCase(),
-				atktype: 'magic',
-				turns: parseInt(extra5)
-			}]);
+				pow: power,
+				acc: accuracy,
+				crit: critChance,
+				type: element,
+				target: targets,
+				hits: hits,
+				atktype: atype,
+				turns: turns,
+			}
+
+			if (status != 'none') {
+				if (!utilityFuncs.inArray(status, statusEffects)) {
+					let str = `${status} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
+					for (let i in statusEffects) str += `\n-${statusEffects[i]}`;
+					str += '```'
+	
+					return void message.channel.send(str)
+				}
+
+				definition.status = status;
+				definition.statuschance = statusChance;
+			}
+
+			makeStatus(skill, "futuresight", [definition]);
 			return true
 		}
-	},
+	}),
 
 	chaosstir: {
 		name: "Chaos Stir",

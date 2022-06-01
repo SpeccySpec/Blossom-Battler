@@ -508,7 +508,9 @@ commands.updateskills = new Command({
 						acc: skillFile[skill].futuresight.acc,
 						crit: skillFile[skill].futuresight.crit ?? 0,
 						atktype: 'magic',
-						turns: skillFile[skill].futuresight.turns
+						turns: skillFile[skill].futuresight.turns,
+						hits: 1,
+						target: 'one'
 					}] //pow, acc, crit, element, turns
 					delete skillFile[skill].futuresight;
 				} else if (skillFile[skill].analyse) {
