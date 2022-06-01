@@ -473,7 +473,7 @@ statusList = {
 			if (mp <= 0) return void message.channel.send("MP Percent must be at least 1!");
 			if (deploy.length <= 0 || deploy.length > 500) return void message.channel.send("Deploy Message must be between 1 and 500 characters!");
 
-			skills.filter(skill => skillFile[skill.name] && (!skill.levellock || (skill.levellock && (!skill.levellock != 'unobtainable' && skill.levellock <= level))))
+			skills.filter(skill => skillFile[skill] && (!skill.levellock || (skill.levellock && (!skill.levellock != 'unobtainable' && skill.levellock <= level))))
 
 			if (skills.length < 1) return void message.channel.send("None of the skills you entered are valid! They either don't exist or their level lock is higher than the level chosen.");
 
