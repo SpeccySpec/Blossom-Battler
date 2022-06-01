@@ -416,8 +416,13 @@ statusList = {
 
 	reincarnate: new Extra({
 		name: "Reincarnate",
-		desc: "Summons a reincarnate to the caster's team. The reincarnate will have stats randomized between <Minimum of Stat> and <Maximum of Stat>, HP at <HP Percent>% of user's Max HP and MP at <Percent>% of user's Max HP. You can add flair to this skill with a {Deploy Message}. These can use %PLAYER% to replace with the caster, and %UNDEAD% to replace with the undead.",
+		desc: "Summons a level <Level> reincarnate to the caster's team. The reincarnate will have stats randomized between <Minimum of Stat> and <Maximum of Stat>, HP at <HP Percent>% of user's Max HP and MP at <Percent>% of user's Max HP. You also choose which skills the reincarnated has. You can add flair to this skill with a {Deploy Message}. These can use %PLAYER% to replace with the caster, and %UNDEAD% to replace with the undead.",
 		args: [
+			{
+				name: "Level",
+				type: "Num",
+				forced: true
+			},
 			{
 				name: "Minimum of Stat",
 				type: "Num",
@@ -441,15 +446,26 @@ statusList = {
 			{
 				name: "Deploy Message",
 				type: "Word"
-			}
+			},
+			{
+				name: "Skill #1",
+				type: "Word",
+				forced: true,
+				multiple: true
+			},
 		],
 		applyfunc(message, skill, args) {
-			let min = args[0]
-			let max = args[1]
-			let hp = args[2]
-			let mp = args[3]
-			let deploy = args[4] ?? "%PLAYER% has summoned an undead %UNDEAD%"
+			const level = args[0];
+			let min = args[1]
+			let max = args[2]
+			let hp = args[3]
+			let mp = args[4]
+			let deploy = (args[5] && args[5].toLowerCase() != 'none') ? args[5] : "%PLAYER% has summoned an undead %UNDEAD%"
+			let skills = args.slice(6)
 			
+			let settings = setUpSettings(message.guild.id)
+
+			if (level < 1 || level > settings.caps.levelcap) return void message.channel.send("You can't have a level less than 1 or greater than " + settings.caps.levelcap + "!");
 			if (min < 1) return void message.channel.send("Minimum of Stat must be at least 1!");
 			if (max < 1) return void message.channel.send("Maximum of Stat must be at least 1!");
 			if (max < min) return void message.channel.send("Maximum of Stat must be greater than or equal to Minimum of Stat!");
@@ -457,7 +473,11 @@ statusList = {
 			if (mp <= 0) return void message.channel.send("MP Percent must be at least 1!");
 			if (deploy.length <= 0 || deploy.length > 500) return void message.channel.send("Deploy Message must be between 1 and 500 characters!");
 
-			makeStatus(skill, "reincarnate", [min, max, hp, mp, deploy]);
+			skills.filter(skill => skillFile[skill.name] && (!skill.levellock || (skill.levellock && (!skill.levellock != 'unobtainable' && skill.levellock <= level))))
+
+			if (skills.length < 1) return void message.channel.send("None of the skills you entered are valid! They either don't exist or their level lock is higher than the level chosen.");
+
+			makeStatus(skill, "reincarnate", [min, max, hp, mp, deploy, skills]);
 			return true;
 		}
 	}),

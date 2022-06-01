@@ -461,7 +461,7 @@ commands.updateskills = new Command({
 					skillFile[skill].statusses.terrain = [skillFile[skill].terrain] //terrain
 					delete skillFile[skill].terrain;
 				} else if (skillFile[skill].reincarnate) {
-					skillFile[skill].statusses.reincarnate = [1, 20, 25, 25, "%PLAYER% has summoned an undead %UNDEAD%"] //minimum of a stat, maximum of a stat, percentage of max HP and MP, message
+					skillFile[skill].statusses.reincarnate = [50, 1, 20, 25, 25, "%PLAYER% has summoned an undead %UNDEAD%", ["Agilao", "Bufula", "Zionga", "Garula", "Hanama", "Aques", "Psio", "Jino", "Diarama", "Makakaja", "Tarukaja"]] //minimum of a stat, maximum of a stat, percentage of max HP and MP, message
 					delete skillFile[skill].reincarnate;
 				} else if (skillFile[skill].makarakarn) {
 					skillFile[skill].statusses.karn = [['phys']] //true
