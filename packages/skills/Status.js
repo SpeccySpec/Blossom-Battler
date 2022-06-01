@@ -726,7 +726,7 @@ statusList = {
 			}
 		],
 		applyfunc(message, skill, args) {
-			if (args[2] < 1) return message.channel.send("Turns must be above 0!");
+			if (args[2] < 1) return void message.channel.send("Turns must be above 0!");
 
 			makeStatus(skill, "orgiamode", [args[0], args[1], args[2]]);
 			return true;
