@@ -483,9 +483,9 @@ commands.updateskills = new Command({
 						if (skillFile[skill].effect[0] == 'status') {
 							skillFile[skill].statusses.trap = [skillFile[skill].name, 0.5, skillFile[skill].effect[0], skillFile[skill].effect[1], 100] //name, power multiplier, type, status, chance
 						} else if (skillFile[skill].effect[0] == 'damage') {
-							skillFile[skill].statusses.trap = [skillFile[skill].name, 0.5, skillFile[skill].effect[0], parseInt(skillFile[skill].effect[1]), 'strike'] //name, power multiplier, type, damage, element
+							skillFile[skill].statusses.trap = [skillFile[skill].name, 0.5, skillFile[skill].effect[0], parseInt(skillFile[skill].effect[1]), 100, 'strike'] //name, power multiplier, type, damage, element
 						} else if (skillFile[skill].effect[0] == 'debuff') {
-							skillFile[skill].statusses.trap = [skillFile[skill].name, 0.5, skillFile[skill].effect[0], skillFile[skill].effect[1], 1] //name, power multiplier, type, stat, amount of stages
+							skillFile[skill].statusses.trap = [skillFile[skill].name, 0.5, 'buff', skillFile[skill].effect[1], -1, 100] //name, power multiplier, type, stat, amount of stages
 						}
 						delete skillFile[skill].effect;
 					} 

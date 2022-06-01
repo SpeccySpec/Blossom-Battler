@@ -275,45 +275,75 @@ statusList = {
 		}
 	}),
 
-	trap: {
+	trap: new Extra({
 		name: "Trap",
-		desc: "_<Trap Name> <Power Multiplier> <Type> <Variable #1> <Variable #2>_\nProtects the target with a trap called <Trap Name> that is set off once a physical attack strikes them and multiplies power by <Power Multiplier>x. <Variable #1> and <Variable #2> differ based on <Type>\n```diff\n+ Debuff: Debuffable Stat, Stages\n+ Status: Valid Status Effect, Chance\n+ Damage: Fixed Damage, Element```",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Trap Name>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Power Multiplier>!");
-			if (!extra3) return message.channel.send("You didn't supply anything for <Type>!");
+		desc: "Protects the target with a trap called <Trap Name> that is set off once a physical attack strikes them and multiplies power by <Power Multiplier>x. Variables differ based on <Type>\n```diff\n+ Buff: Stat, Stages, Chance\n+ Status: Valid Status Effect, Chance\n+ Damage: Power, Accuracy, Element```",
+		args: [
+			{
+				name: "Trap Name",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Power Multiplier",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Type",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Variable #1",
+				type: "Word",
+				forced: true,
+				multiple: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let trapName = args[0]
+			let powerMult = args[1]
+			let type = args[2].toLowerCase()
 
-			let validTypes = ["debuff", "status", "damage"];
-			if (!validTypes.includes(extra3.toLowerCase())) return message.channel.send("That's not a valid type!");
-			if (extra3.toLowerCase() == "debuff") {
-				if (!extra4) return message.channel.send("You didn't supply anything for <Debuff Name>!");
-				if (!extra5) return message.channel.send("You didn't supply anything for <Debuff Stages>!");
+			if (trapName.length < 1) return void message.channel.send("You need to name the trap!");
+			if (!["buff", "status", "damage"].includes(trapName)) return void message.channel.send("That's not a valid trap type! The trap can only be a buff, status, or damage type.");
 
-				let validStats = ["atk", "mag", "prc", "end", "chr", "int", "agl", "luk"];
-				if (!validStats.includes(extra4.toLowerCase())) return message.channel.send("That's not a valid stat!");
+			if (type == "buff") {
+				let stat = args[3].toLowerCase()
+				let stages = (args[4] && parseInt(args[4])) ? parseInt(args[4]) : -1
+				let chance = (args[5] && parseFloat(args[4])) ? parseFloat(args[4]) : 100
 
-				makeStatus(skill, "trap", [extra1, parseFloat(extra2), extra3.toLowerCase(), extra4.toLowerCase(), parseInt(extra5)]);
-			} else if (extra3.toLowerCase() == "status") {
-				if (!extra4) return message.channel.send("You didn't supply anything for <Status Name>!");
+				if (!stats.includes(stat)) return void message.channel.send("That's not a valid stat!");
+				if (chance <= 0) return void message.channel.send("The trap would be useless if it had a chance of 0%!");
 
-				if (!statusEffects.includes(extra4.toLowerCase())) return message.channel.send("That's not a valid status effect!");
-				if (!extra5) extra5 = '-1';
+				makeStatus(skill, "trap", [trapName, powerMult, type, stat, stages, chance]);
+			} else if (type == "status") {
+				let status = args[3].toLowerCase()
+				let chance = (args[4] && parseFloat(args[4])) ? parseFloat(args[4]) : 100
 
-				makeStatus(skill, "trap", [extra1, parseFloat(extra2), extra3.toLowerCase(), extra4.toLowerCase(), parseInt(extra5)]);
-			} else if (extra3.toLowerCase() == "damage") {
-				if (!extra4) return message.channel.send("You didn't supply anything for <Fixed Damage>!");
-				if (!extra5) return message.channel.send("You didn't supply anything for <Element>!");
+				if (!statusEffects.includes(status)) return void message.channel.send("That's not a valid status effect!");
+				if (chance <= 0) return void message.channel.send("The trap would be useless if it had a chance of 0%!");
 
-				if (!Elements.includes(extra5.toLowerCase())) return message.channel.send("That's not a valid element!");
-				if (extra5.toLowerCase() == "heal") return message.channel.send("You can't set a trap to heal!");
-				if (extra5.toLowerCase() == "status") return message.channel.send("You can't set a trap to status!");
-				if (extra5.toLowerCase() == "passive") return message.channel.send("You can't set a trap to passive!");
+				makeStatus(skill, "trap", [trapName, powerMult, type, status, chance]);
+			} else if (type == "damage") {
+				let power = (args[3] && parseInt(args[3])) ? parseInt(args[3]) : 60
+				let accuracy = (args[4] && parseFloat(args[4])) ? parseFloat(args[4]) : 100
+				let element = args[5] ? args[5].toLowerCase() : "strike"
 
-				makeStatus(skill, "trap", [extra1, parseFloat(extra2), extra3.toLowerCase(), extra4, extra5.toLowerCase()]);
+				if (power < 1) return void message.channel.send("The trap would be useless if it had a power of less than 1!");
+				if (accuracy <= 0) return void message.channel.send("The trap would be useless if it had an accuracy of 0%!");
+
+				if (!Elements.includes(element)) return void message.channel.send("That's not a valid element!");
+				if (element == "heal") return void message.channel.send("You can't set a trap to heal!");
+				if (element == "status") return void message.channel.send("You can't set a trap to status!");
+				if (element == "passive") return void message.channel.send("You can't set a trap to passive!");
+
+				makeStatus(skill, "trap", [trapName, powerMult, type, power, accuracy, element]);
 			}
 			return true;
 		}
-	},
+	}),
 
 	changeaffinity: {
 		name: "Change Affinity",
