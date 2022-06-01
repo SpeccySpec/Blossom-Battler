@@ -378,29 +378,41 @@ statusList = {
 		}
 	}),
 
-	weather: {
+	weather: new Extra({
 		name: "Weather",
-		desc: "_<Weather>_\nChanges the weather to <Weather>, which will affect the battle.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Weather>!");
-			if (!weathers.includes(extra1.toLowerCase())) return message.channel.send("That's not a valid weather!");
+		desc: "Changes the weather to <Weather>, which will affect the battle.",
+		args: [
+			{
+				name: "Weather",
+				type: "Word",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (!weathers.includes(args[0].toLowerCase())) return void message.channel.send("That's not a valid weather!");
 
-			makeStatus(skill, "weather", [extra1.toLowerCase()]);
+			makeStatus(skill, "weather", [args[0].toLowerCase()]);
 			return true;
 		}
-	},
+	}),
 
-	terrain: {
+	terrain: new Extra({
 		name: "Terrain",
-		desc: "_<Terrain>_\nChanges the terrain to <Terrain>, which will affect the battle.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Terrain>!");
-			if (!terrains.includes(extra1.toLowerCase())) return message.channel.send("That's not a valid terrain!");
+		desc: "Changes the terrain to <Terrain>, which will affect the battle.",
+		args: [
+			{
+				name: "Terrain",
+				type: "Word",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (!terrains.includes(args[0].toLowerCase())) return void message.channel.send("That's not a valid terrain!");
 
-			makeStatus(skill, "terrain", [extra1.toLowerCase()]);
+			makeStatus(skill, "terrain", [args[0].toLowerCase()]);
 			return true;
 		}
-	},
+	}),
 
 	reincarnate: {
 		name: "Reincarnate",
