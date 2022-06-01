@@ -193,18 +193,31 @@ statusList = {
 		}
 	}),
 
-	shield: {
+	shield: new Extra({
 		name: "Shield",
-		desc: "_<Shield Name> <Hits>_\nProtects the target with a shield called <Shield Name> that can take <Hits> hits.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Shield Name>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Hits>!");
+		desc: "Protects the target with a shield called <Shield Name> that can take {Hits} hits.",
+		args: [
+			{
+				name: "Shield Name",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Hits",
+				type: "Num",
+			}
+		],
+		applyfunc(message, skill, args) {
+			let shieldName = args[0]
+			let hits = args[1] ?? 1
 
-			if (parseInt(extra2) < 1) return message.channel.send("You can't have less than 1 hit!");
-			makeStatus(skill, "shield", [extra1, parseInt(extra2)]);
+			if (shieldName.length < 1) return void message.channel.send("You need to name the shield!");
+			if (hits < 1) return void message.channel.send("The shield would be destroyed before it can even serve its purpose!");
+			
+			makeStatus(skill, "shield", [shieldName, hits]);
 			return true;
 		}
-	},
+	}),
 
 	makarakarn: {
 		name: "Makarakarn",
