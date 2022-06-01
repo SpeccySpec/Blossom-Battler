@@ -708,13 +708,27 @@ statusList = {
 	orgiamode: {
 		name: "Orgia Mode",
 		desc: "_<ATK & MAG Multiplier> <END Multiplier> <Turns>_\nModifies user's ATK and MAG by <ATK & MAG Multiplier>x and END by <END Multiplier>x for <Turns> turns. Falls asleep afterwards.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <ATK & MAG Multiplier>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <END Multiplier>!");
+		args: [
+			{
+				name: "ATK & MAG Multiplier",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "END Multiplier",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (args[2] < 1) return message.channel.send("Turns must be above 0!");
 
-			if (parseInt(extra3) < 1) return message.channel.send("Turns must be above 0!");
-
-			makeStatus(skill, "orgiamode", [parseFloat(extra1), parseFloat(extra2), parseInt(extra3)]);
+			makeStatus(skill, "orgiamode", [args[0], args[1], args[2]]);
 			return true;
 		}
 	}
