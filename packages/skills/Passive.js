@@ -330,7 +330,7 @@ passiveList = {
 			let atype = args[8]?.toLowerCase();
 			let targets = args[9]?.toLowerCase();
 			let status = args[10] || "none";
-			let statusChance = math.max((args[11] ?? 0), 0);
+			let statusChance = math.min(math.max((args[11] ?? 0), 0), 100);
 
 			if (physmag != 'phys' && physmag != 'mag')
 				return void message.channel.send("You entered an invalid value for <Phys/Mag>! It can be either PHYS or MAG.");
