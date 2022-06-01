@@ -740,7 +740,7 @@ function atkDesc(skillDefs, settings) {
 			finalText += `\n**Multi-hit Properties:**\n`;
 
 			if (hasExtra(skillDefs, 'sustain')) {
-				finalText += `- Does not decreate in power with hits.\n`;
+				finalText += `- Does not decrease in power with hits.\n`;
 			}
 			if (hasExtra(skillDefs, 'reverse')) {
 				finalText += `- Gains in power with hits.\n`;
