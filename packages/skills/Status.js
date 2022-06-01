@@ -621,21 +621,35 @@ statusList = {
 		}
 	}),
 
-	pacifystatus: {
+	pacifystatus: new Extra({
 		name: "Pacify Status",
 		desc: "_<Status Effect> <Amount>_\nPacifies the target if they have <Status Effect>, by <Amount>. Accepts 'physical', 'mental', and 'all' as statuses.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Status Effect>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Amount>!");
+		args: [
+			{
+				name: "Status Effect",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Amount",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let status = args[0].toLowerCase();
+			let amount = args[1];
 
-			if (!extra1.toLowerCase() == "physical" && !extra1.toLowerCase() == "mental" && !extra1.toLowerCase() == "all") {
-				if (!statusEffects.includes(extra1)) return message.channel.send("That's not a valid status effect!");
+			if (!status == "physical" && !status == "mental" && !status == "all") {
+				if (!statusEffects.includes(status)) return void message.channel.send("That's not a valid status effect!");
 			}
 
-			makeStatus(skill, "pacifystatus", [extra1, parseInt(extra2)]);
+			if (amount == 0) return void message.channel.send("It won't change anything if you set the amount to 0!");
+
+			makeStatus(skill, "pacifystatus", [status, amount]);
 			return true;
 		}
-	},
+	}),
 
 	ragesoul: {
 		name: "Rage Soul",
