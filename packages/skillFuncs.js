@@ -155,7 +155,7 @@ function statusDesc(skillDefs) {
 		}
 		if (hasStatus(skillDefs, 'shield')) {
 			if (hasStatus(skillDefs, 'karn')) finalText += ` and `;
-			finalText += ` a **shield named ${skillDefs.statusses.shield[0]}**`;
+			finalText += ` a **shield named ${elementEmoji[skillDefs.statusses.shield[1]]}${skillDefs.statusses.shield[0]}**`;
 		}
 		finalText += `.\n`;
 	}

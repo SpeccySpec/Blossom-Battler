@@ -195,10 +195,15 @@ statusList = {
 
 	shield: new Extra({
 		name: "Shield",
-		desc: "Protects the target with a shield called <Shield Name> that can take {Hits} hits.",
+		desc: "Protects the target with an <Element> shield called <Shield Name> that can take {Hits} hits.",
 		args: [
 			{
 				name: "Shield Name",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Element",
 				type: "Word",
 				forced: true
 			},
@@ -209,12 +214,14 @@ statusList = {
 		],
 		applyfunc(message, skill, args) {
 			let shieldName = args[0]
-			let hits = args[1] ?? 1
+			let element = args[1].toLowerCase()
+			let hits = args[2] ?? 1
 
 			if (shieldName.length < 1) return void message.channel.send("You need to name the shield!");
+			if (!Elements.includes(element)) return void message.channel.send("That's not a valid element!");
 			if (hits < 1) return void message.channel.send("The shield would be destroyed before it can even serve its purpose!");
 			
-			makeStatus(skill, "shield", [shieldName, hits]);
+			makeStatus(skill, "shield", [shieldName, element, hits]);
 			return true;
 		}
 	}),

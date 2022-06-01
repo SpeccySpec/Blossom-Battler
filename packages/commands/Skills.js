@@ -476,7 +476,7 @@ commands.updateskills = new Command({
 					skillFile[skill].statusses.clone = [50, 50, 50] //% of max HP, % of max MP, % of max stats
 					delete skillFile[skill].clone;
 				} else if (skillFile[skill].shield) {
-					skillFile[skill].statusses.shield = [skillFile[skill].shield, 1] //name, amount of hits it can take
+					skillFile[skill].statusses.shield = [skillFile[skill].shield, 'strike', 1] //name, amount of hits it can take
 					delete skillFile[skill].shield;
 				} else if (skillFile[skill].trap) {
 					if (skillFile[skill].effect) {
