@@ -114,7 +114,7 @@ statusList = {
 
 	heartswap: new Extra({
 		name: "Heart Swap",
-		desc: "Swaps the target's stat changes with the caster's.",
+		desc: "Swaps the target's stat changes with the user's.",
 		args: [],
 		applyfunc(message, skill, args) {
 			makeStatus(skill, "heartswap", [true]);
@@ -124,7 +124,7 @@ statusList = {
 
 	mimic: new Extra({
 		name: "Mimic",
-		desc: "Morphs into an ally or an enemy of the caster's choice for <Turns> turns. The caster can change back with {Skill}.",
+		desc: "Morphs into an ally or an enemy of the user's choice for <Turns> turns. The user can change back with {Skill}.",
 		args: [
 			{
 				name: "Turns",
@@ -151,7 +151,7 @@ statusList = {
 
 	unmimic: new Extra({
 		name: "Unmimic",
-		desc: "Will return the caster to their original form.",
+		desc: "Will return the user to their original form.",
 		args: [],
 		applyfunc: function(message, skill, args) {
 			makeStatus(skill, "unmimic", [true]);
@@ -161,7 +161,7 @@ statusList = {
 
 	clone: new Extra({
 		name: "Clone",
-		desc: "Clones the caster into a new ally with <HP Percent>% of Max HP, <MP Percent>% of Max MP, and <Percent>% of the caster's stats.",
+		desc: "Clones the user into a new ally with <HP Percent>% of Max HP, <MP Percent>% of Max MP, and <Percent>% of the user's stats.",
 		args: [
 			{
 				name: "HP Percent",
@@ -416,7 +416,7 @@ statusList = {
 
 	reincarnate: new Extra({
 		name: "Reincarnate",
-		desc: "Summons a level <Level> reincarnate to the caster's team. The reincarnate will have stats randomized between <Minimum of Stat> and <Maximum of Stat>, HP at <HP Percent>% of user's Max HP and MP at <Percent>% of user's Max HP. You also choose which skills the reincarnated has. You can add flair to this skill with a {Deploy Message}. These can use %PLAYER% to replace with the caster, and %UNDEAD% to replace with the undead.",
+		desc: "Summons a level <Level> reincarnate to the user's team. The reincarnate will have stats randomized between <Minimum of Stat> and <Maximum of Stat>, HP at <HP Percent>% of user's Max HP and MP at <Percent>% of user's Max HP. You also choose which skills the reincarnated has. You can add flair to this skill with a {Deploy Message}. These can use %PLAYER% to replace with the user, and %UNDEAD% to replace with the undead.",
 		args: [
 			{
 				name: "Level",
@@ -515,7 +515,7 @@ statusList = {
 
 	chaosstir: {
 		name: "Chaos Stir",
-		desc: "_<Power Multiplier> <Accuracy>_\nUpon getting hit with a skill, the caster strikes back with the skill with <Power Multiplier>x power and <Accuracy>% accuracy.",
+		desc: "_<Power Multiplier> <Accuracy>_\nUpon getting hit with a skill, the user strikes back with the skill with <Power Multiplier>x power and <Accuracy>% accuracy.",
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Power>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <Accuracy>!");
@@ -546,7 +546,7 @@ statusList = {
 
 	ragesoul: {
 		name: "Rage Soul",
-		desc: "_<Melee Power Multiplier> <ATK Stat Multiplier>_\nMultiplies the caster's Melee Attack Power by <Melee Power Multiplier> and their Attack Stat by <ATK Stat Multiplier>, but locks them into using Melee Attacks.",
+		desc: "_<Melee Power Multiplier> <ATK Stat Multiplier>_\nMultiplies the user's Melee Attack Power by <Melee Power Multiplier> and their Attack Stat by <ATK Stat Multiplier>, but locks them into using Melee Attacks.",
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <Melee Power Multiplier>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <ATK Stat Multiplier>!");
@@ -580,7 +580,7 @@ statusList = {
 
 	orgiamode: {
 		name: "Orgia Mode",
-		desc: "_<ATK & MAG Multiplier> <END Multiplier> <Turns>_\nModifies caster's ATK and MAG by <ATK & MAG Multiplier>x and END by <END Multiplier>x for <Turns> turns. Falls asleep afterwards.",
+		desc: "_<ATK & MAG Multiplier> <END Multiplier> <Turns>_\nModifies user's ATK and MAG by <ATK & MAG Multiplier>x and END by <END Multiplier>x for <Turns> turns. Falls asleep afterwards.",
 		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
 			if (!extra1) return message.channel.send("You didn't supply anything for <ATK & MAG Multiplier>!");
 			if (!extra2) return message.channel.send("You didn't supply anything for <END Multiplier>!");

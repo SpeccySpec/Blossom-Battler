@@ -139,7 +139,7 @@ healList = {
 
 	recarmdra: new Extra({
 		name: "Recarmdra",
-		desc: "Fully restores party HP and MP, but downs the caster.",
+		desc: "Fully restores party HP and MP, but downs the user.",
 		args: [],
 		applyfunc(message, skill, args) {
 			makeHeal(skill, "recarmdra", [true]);
@@ -245,7 +245,7 @@ healList = {
 
 	sacrifice: new Extra({
 		name: "Sacrifice",
-		desc: "Will reduce the caster's HP to a {HP}.",
+		desc: "Will reduce the user's HP to a {HP}.",
 		args: [
 			{
 				name: "HP",

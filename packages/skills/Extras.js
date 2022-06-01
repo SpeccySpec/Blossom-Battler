@@ -68,7 +68,7 @@ extrasList = {
 
 	sacrifice: new Extra({
 		name: "Sacrifice",
-		desc: "Will reduce the caster's HP to a {HP}.",
+		desc: "Will reduce the user's HP to a {HP}.",
 		args: [
 			{
 				name: "HP",
@@ -261,7 +261,7 @@ extrasList = {
 
 	rest: new Extra({
 		name: "Rest",
-		desc: "Forces the caster to rest for one turn.",
+		desc: "Forces the user to rest for one turn.",
 		applyfunc: function(message, skill) {
 			makeExtra(skill, "rest", [true]);
 			return true
@@ -400,7 +400,7 @@ extrasList = {
 
 	drain: new Extra({
 		name: "Drain",
-		desc: "Heals the caster for 1/<Amount> of the damage dealt.",
+		desc: "Heals the user for 1/<Amount> of the damage dealt.",
 		args: [
 			{
 				name: "Amount",
@@ -559,7 +559,7 @@ extrasList = {
 
 	statcalc: new Extra({
 		name: "Stat Calculation",
-		desc: "Uses the caster's <Stat> for calculating damage.",
+		desc: "Uses the user's <Stat> for calculating damage.",
 		args: [
 			{
 				name: "Stat",
@@ -723,7 +723,7 @@ extrasList = {
 
 	rollout: new Extra({
 		name: "Rollout",
-		desc: "Boost the skill's power by <Boost> every consecutive use, but the caster is locked to using it until power reaches <Max Boost>x or skill is used <Times> times in a row.",
+		desc: "Boost the skill's power by <Boost> every consecutive use, but the user is locked to using it until power reaches <Max Boost>x or skill is used <Times> times in a row.",
 		args: [
 			{
 				name: "Boost",

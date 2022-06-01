@@ -622,7 +622,7 @@ passiveList = {
 
 	magicmelee: new Extra({
 		name: "Magic Melee",
-		desc: "Turns caster's melee attack into a magic attack.",
+		desc: "Turns user's melee attack into a magic attack.",
 		args: [],
 		applyfunc(message, skill, args) {
 			makePassive(skill, "magicmelee", [true]);
@@ -642,7 +642,7 @@ passiveList = {
 
 	wonderguard: new Extra({
 		name: "Wonder Guard",
-		desc: "Nullifies damage from attacks that the caster is not weak to.",
+		desc: "Nullifies damage from attacks that the user is not weak to.",
 		args: [],
 		applyfunc(message, skill, args) {
 			makePassive(skill, "wonderguard", [true]);
@@ -690,7 +690,7 @@ passiveList = {
 
 	endure: new Extra({
 		name: "Endure",
-		desc: "Upon defeat, revives the caster until <Amount> times with {HP} HP.",
+		desc: "Upon defeat, revives the user until <Amount> times with {HP} HP.",
 		args: [
 			{
 				name: "Amount",
