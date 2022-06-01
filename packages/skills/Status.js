@@ -594,20 +594,32 @@ statusList = {
 		}
 	}),
 
-	chaosstir: {
+	chaosstir: new Extra({
 		name: "Chaos Stir",
-		desc: "_<Power Multiplier> <Accuracy>_\nUpon getting hit with a skill, the user strikes back with the skill with <Power Multiplier>x power and <Accuracy>% accuracy.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Power>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Accuracy>!");
+		desc: "Upon getting hit with a skill, the user strikes back with the skill with <Power Multiplier>x power and <Accuracy>% accuracy.",
+		args: [
+			{
+				name: "Power Multiplier",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Accuracy",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let power = args[0];
+			let accuracy = args[1];
 
-			if (parseInt(extra1) < 1) return message.channel.send("Power must be above 0!");
-			if (parseFloat(extra2) < 1) return message.channel.send("Accuracy must be above 0!");
+			if (power < 1) return void message.channel.send("Power must be above 0!");
+			if (accuracy < 1) return void message.channel.send("Accuracy must be above 0!");
 
-			makeStatus(skill, "chaosstir", [parseInt(extra1), parseFloat(extra2)]);
+			makeStatus(skill, "chaosstir", [power, accuracy]);
 			return true;
 		}
-	},
+	}),
 
 	pacifystatus: {
 		name: "Pacify Status",
