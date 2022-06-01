@@ -653,17 +653,29 @@ statusList = {
 		}
 	}),
 
-	ragesoul: {
+	ragesoul: new Extra({
 		name: "Rage Soul",
-		desc: "_<Melee Power Multiplier> <ATK Stat Multiplier>_\nMultiplies the user's Melee Attack Power by <Melee Power Multiplier> and their Attack Stat by <ATK Stat Multiplier>, but locks them into using Melee Attacks.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Melee Power Multiplier>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <ATK Stat Multiplier>!");
+		desc: "=Multiplies the user's Melee Attack Power by <Melee Power Multiplier> and their Attack Stat by <ATK Stat Multiplier>, but locks them into using Melee Attacks.",
+		args: [
+			{
+				name: "Melee Power Multiplier",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "ATK Stat Multiplier",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let power = args[0];
+			let atk = args[1];
 
-			makeStatus(skill, "ragesoul", [parseFloat(extra1), parseFloat(extra2)]);
+			makeStatus(skill, "ragesoul", [power, atk]);
 			return true;
 		}
-	},
+	}),
 
 	powercharge: {
 		name: "Power Charge",
