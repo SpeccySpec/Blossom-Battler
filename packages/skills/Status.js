@@ -705,17 +705,6 @@ statusList = {
 		}
 	},
 
-	mindcharge: {
-		name: "Mind Charge",
-		desc: "_<Power Multiplier>_\nBoosts magic damage by <Power Multiplier>x for one turn. Removed whether attacked or not.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Power Multiplier>!");
-
-			makeStatus(skill, "mindcharge", [parseFloat(extra1)]);
-			return true;
-		}
-	},
-
 	orgiamode: {
 		name: "Orgia Mode",
 		desc: "_<ATK & MAG Multiplier> <END Multiplier> <Turns>_\nModifies user's ATK and MAG by <ATK & MAG Multiplier>x and END by <END Multiplier>x for <Turns> turns. Falls asleep afterwards.",
