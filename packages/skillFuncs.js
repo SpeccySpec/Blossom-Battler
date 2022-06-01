@@ -141,20 +141,20 @@ function statusDesc(skillDefs) {
 		finalText += `Clones **the user**.\n`
 	}
 
-	if (hasStatus(skillDefs, 'makarakarn') || hasStatus(skillDefs, 'tetrakarn') || hasStatus(skillDefs, 'shield')) {
+	if (hasStatus(skillDefs, 'karn') || hasStatus(skillDefs, 'shield')) {
 		finalText += `Surrounds the target with`;
 
-		if (hasStatus(skillDefs, 'makarakarn')) {
-			finalText += ` **Makarakarn**`;
-		}
-		if (hasStatus(skillDefs, 'tetrakarn')) {
-			if (hasStatus(skillDefs, 'makarakarn') && !hasStatus(skillDefs, 'shield')) finalText += ` and `;
-			else if (hasStatus(skillDefs, 'makarakarn') && hasStatus(skillDefs, 'shield')) finalText += `, `;
+		if (hasStatus(skillDefs, 'karn')) {
+			for (let i in skillDefs.statusses.karn) {
+				finalText += ` **${skillDefs.statusses.karn[i] == 'phys' ? 'Tetra' : 'Makara'}karn**`;
 
-			finalText += ` **Tetrakarn**`;
+				if (i < skillDefs.statusses.karn.length - 2) finalText += `, `;
+
+				if (i == skillDefs.statusses.karn.length - 2 && !hasStatus(skillDefs, 'shield')) finalText += ` and `;
+			}
 		}
 		if (hasStatus(skillDefs, 'shield')) {
-			if (hasStatus(skillDefs, 'makarakarn') || hasStatus(skillDefs, 'tetrakarn')) finalText += ` and `;
+			if (hasStatus(skillDefs, 'karn')) finalText += ` and `;
 			finalText += ` a **shield named ${skillDefs.statusses.shield[0]}**`;
 		}
 		finalText += `.\n`;

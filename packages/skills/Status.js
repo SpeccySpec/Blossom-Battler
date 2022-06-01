@@ -219,20 +219,24 @@ statusList = {
 		}
 	}),
 
-	makarakarn: new Extra({
-		name: "Makarakarn",
-		desc: "Protects the target with a shield that repels magic attacks.",
+	karn: new Extra({
+		name: "Karn",
+		desc: "Protects the target with a shield that repels <Phys/Mag> attacks.",
+		args: [
+			{
+				name: "Phys/Mag",
+				type: "Word",
+				forced: true
+			}
+		],
+		multiple: true,
+		diffflag: 0,
 		applyfunc(message, skill, args) {
-			makeStatus(skill, "makarakarn", [true]);
-			return true;
-		}
-	}),
+			let phys = args[0].toLowerCase()
 
-	tetrakarn: new Extra({
-		name: "Tetrakarn",
-		desc: "Protects the target with a shield that repels physical attacks.",
-		applyfunc(message, skill, args) {
-			makeStatus(skill, "tetrakarn", [true]);
+			if (!["phys", "mag"].includes(phys)) return void message.channel.send("That's not a valid type! The shield can only repel physical or magical attacks.");
+
+			makeStatus(skill, "karn", [phys]);
 			return true;
 		}
 	}),

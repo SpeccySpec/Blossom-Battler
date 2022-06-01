@@ -464,10 +464,10 @@ commands.updateskills = new Command({
 					skillFile[skill].statusses.reincarnate = [1, 20, 25, "%PLAYER% has summoned an undead %UNDEAD%"] //minimum of a stat, maximum of a stat, percentage of max HP and MP, message
 					delete skillFile[skill].reincarnate;
 				} else if (skillFile[skill].makarakarn) {
-					skillFile[skill].statusses.makarakarn = [true] //true
+					skillFile[skill].statusses.karn = [['phys']] //true
 					delete skillFile[skill].makarakarn;
 				} else if (skillFile[skill].tetrakarn) {
-					skillFile[skill].statusses.tetrakarn = [true] //true
+					skillFile[skill].statusses.karn = [['mag']] //true
 					delete skillFile[skill].tetrakarn;
 				} else if (skillFile[skill].mimic) {
 					skillFile[skill].statusses.mimic = [Object.values(skillFile[skill].mimic)] //true
