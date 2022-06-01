@@ -636,6 +636,8 @@ statusList = {
 				forced: true
 			}
 		],
+		multiple: true,
+		diffflag: 0,
 		applyfunc(message, skill, args) {
 			let status = args[0].toLowerCase();
 			let amount = args[1];

@@ -290,7 +290,19 @@ function statusDesc(skillDefs) {
 	}
 
 	if (hasStatus(skillDefs, 'pacifystatus')) {
-		finalText += `Pacifies the target with **${skillDefs.statusses.pacifystatus[0]}**${skillDefs.statusses.pacifystatus[1] >= 100 ? '' : ` by ${skillDefs.statusses.pacifystatus[1]}%`}.\n`
+		finalText += `Pacifies the target with `
+
+		for (let i in skillDefs.statusses.pacifystatus) {
+			finalText += `${statusEmojis[skillDefs.statusses.pacifystatus[0]]}**${skillDefs.statusses.pacifystatus[0]}**${skillDefs.statusses.pacifystatus[1] >= 100 ? '' : ` by ${skillDefs.statusses.pacifystatus[1]}%`}`
+
+			if (i < skillDefs.statusses.pacifystatus.length - 2) {
+				finalText += `, `
+			} else if (i == skillDefs.statusses.pacifystatus.length - 2) {
+				finalText += ` and `
+			} else {
+				finalText += `.\n`
+			}
+		}
 	}
 
 	if (hasStatus(skillDefs, 'batonpass')) {
