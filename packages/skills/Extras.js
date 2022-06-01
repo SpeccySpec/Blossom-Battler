@@ -289,15 +289,26 @@ extrasList = {
 			},
 			{
 				name: "Chance",
-				type: "Num"
+				type: "Decimal"
 			}
 		],
 		applyfunc(message, skill, args) {
 			const stat = args[0].toLowerCase()
-			if (!stats.includes(stat) || stat === 'luck')
+			const stages = args[1] ?? -1
+			const chance = Math.min(args[2] ?? 100, 100)
+
+			if (!stats.includes(stat))
 				return void message.channel.send("That's not a valid stat!");
-			makeExtra(skill, "buff", [stat, args[1] ?? "-1", args[2] ?? 100]);
+			if (args[1] == 0)
+				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
+			if (args[2] <= 0)
+				return void message.channel.send("You can't have a percentage less than 0, as then it would never happen!");
+
+			makeExtra(skill, "buff", [stat, stages, chance]);
 			return true
+		},
+		onuse(char, targ, skill, btl, vars) {
+			statusList.buff.onuse(char, targ, skill, btl, vars)
 		}
 	}),
 

@@ -1,7 +1,7 @@
 statusList = {
 	status: new Extra({
 		name: 'Status',
-		desc: '<Chance>% to inflict one of multiple <Status Effect> on the target.',
+		desc: '<Chance>% to inflict one of multiple <Status Effect>s on the target.',
 		args: [
 			{
 				name: 'Status Effect #1',
@@ -41,21 +41,42 @@ statusList = {
 		}
 	}),
 
-	buff: {
+	buff: new Extra({
 		name: "Stat Buff",
-		desc: "_<Stat> <Stages> <Chance>_\nWill buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
+		desc: "Will buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
+		args: [
+			{
+				name: "Stat",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Stages",
+				type: "Num"
+			},
+			{
+				name: "Chance",
+				type: "Decimal"
+			}
+		],
 		multiple: true,
 		diffflag: [0, 2],
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Stat>!");
-			if (!utilityFuncs.validStat(extra1)) return message.channel.send("That's not a valid stat!");
-			if (!extra2) extra2 = '1';
-			if (!extra3) extra3 = '100';
+		applyfunc(message, skill, args) {
+			const stat = args[0].toLowerCase()
+			const stages = args[1] ?? 1
+			const chance = Math.min(args[2] ?? 100, 100)
 
-			makeStatus(skill, "buff", [extra1.toLowerCase(), parseInt(extra2), parseFloat(extra3)]);
-			return true;
+			if (!stats.includes(stat))
+				return void message.channel.send("That's not a valid stat!");
+			if (args[1] == 0)
+				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
+			if (args[2] <= 0)
+				return void message.channel.send("You can't have a percentage less than 0, as then it would never happen!");
+				
+			makeStatus(skill, "buff", [stat, stages, chance]);
+			return true
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			if (targ.charms && targ.charms.includes("PureVision") && vars[0].toLowerCase() === 'prc') return `${targ.name}'s Pure Vision negated the change.`;
 
 			if (vars[2]) {
@@ -72,56 +93,71 @@ statusList = {
 				return `__${targ.name}__'s _${vars[0].toUpperCase()}_ was buffed ${vars[1]} time(s)!`;
 			}
 		}
-	},
+	}),
 
-	dekunda: {
+	dekunda: new Extra({
 		name: "Dekunda",
 		desc: "Removes the target's positive buffs.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		args: [],
+		applyfunc(message, skill, args) {
 			makeStatus(skill, "dekunda", [true]);
 			return true;
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars) {
 			for (let i in targ.buffs) {
 				if (targ.buffs[i] > 0) targ.buffs[i] = 0;
 			}
 
 			return `__${targ.name}__'s positive buffs were nullified!`;
 		}
-	},
+	}),
 
-	heartswap: {
+	heartswap: new Extra({
 		name: "Heart Swap",
 		desc: "Swaps the target's stat changes with the caster's.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		args: [],
+		applyfunc(message, skill, args) {
 			makeStatus(skill, "heartswap", [true]);
 			return true;
 		}
-	},
+	}),
 
-	mimic: {
+	mimic: new Extra({
 		name: "Mimic",
-		desc: "_<Turns> {Skill}_\nMorphs into an ally or an enemy of the caster's choice for <Turns> turns. The caster can change back with {Skill}.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Turns>!");
-			if (parseInt(extra1) < 1) return message.channel.send("You can't have less than 1 turn!");
+		desc: "Morphs into an ally or an enemy of the caster's choice for <Turns> turns. The caster can change back with {Skill}.",
+		args: [
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Skill",
+				type: "Word"
+			}
+		],
+		applyfunc(message, skill, args) {
+			let turns = args[0]
+			let skillName = args[1]
+			if (turns < 1) return void message.channel.send("You can't have less than 1 turn!");
 
-			if (extra2 && !skillFile[extra2]) return message.channel.send("That's not a valid skill!");
-			if (extra2 && (!skillFile[extra2].statusses || (skillFile[extra2].statusses && !skillFile[extra2].statusses.unmimic))) return message.channel.send("That's not a valid skill!");
+			if (skillName && !skillFile[skillName]) return void message.channel.send("That's not a valid skill!");
+			if (skillName && skillFile[skillName] && (!skillFile[skillName].statusses || (skillFile[skillName].statusses && !skillFile[skillName].statusses.unmimic))) return void message.channel.send("That skill can't unmimic people!");
 
-			makeStatus(skill, "mimic", [parseInt(extra1), extra2 ?? null]);
+			makeStatus(skill, "mimic", [turns, skillName ?? null]);
 			return true;
 		}
-	},
+	}),
 
-	unmimic: {
+	unmimic: new Extra({
 		name: "Unmimic",
 		desc: "Will return the caster to their original form.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		args: [],
+		applyfunc: function(message, skill, args) {
 			makeStatus(skill, "unmimic", [true]);
 			return true;
 		}
-	},
+	}),
 
 	clone: {
 		name: "Clone",
