@@ -655,7 +655,7 @@ statusList = {
 
 	ragesoul: new Extra({
 		name: "Rage Soul",
-		desc: "=Multiplies the user's Melee Attack Power by <Melee Power Multiplier> and their Attack Stat by <ATK Stat Multiplier>, but locks them into using Melee Attacks.",
+		desc: "Multiplies the user's Melee Attack Power by <Melee Power Multiplier> and their Attack Stat by <ATK Stat Multiplier>, but locks them into using Melee Attacks.",
 		args: [
 			{
 				name: "Melee Power Multiplier",
