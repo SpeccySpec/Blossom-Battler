@@ -544,10 +544,10 @@ commands.updateskills = new Command({
 					skillFile[skill].statusses.orgiamode = [2, 0.5, 3] //ATK & MAG multiplier, END multiplier, turns
 					delete skillFile[skill].orgiamode;
 				} else if (skillFile[skill].powercharge) {
-					skillFile[skill].statusses.powercharge = [2.5] //power multiplier
+					skillFile[skill].statusses.charge = ['phys', 2.5] //power multiplier
 					delete skillFile[skill].powercharge;
 				} else if (skillFile[skill].mindcharge) {
-					skillFile[skill].statusses.mindcharge = [2.5] //power multiplier
+					skillFile[skill].statusses.charge = ['mag', 2.5] //power multiplier
 					delete skillFile[skill].mindcharge;
 				} else if (skillFile[skill].splash) {
 					skillFile[skill].statusses.splash = [true] //true

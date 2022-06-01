@@ -677,13 +677,30 @@ statusList = {
 		}
 	}),
 
-	powercharge: {
-		name: "Power Charge",
-		desc: "_<Power Multiplier>_\nBoosts physical damage by <Power Multiplier>x for one turn. Removed whether attacked or not.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Power Multiplier>!");
+	charge: {
+		name: "Charge",
+		desc: "Boosts <Phys/Mag> damage by <Power Multiplier>x for one turn. Removed whether attacked or not.",
+		args: [
+			{
+				name: "Phys/Mag",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Power Multiplier",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		multiple: true,
+		diffflag: 0,
+		applyfunc(message, skill, args) {
+			let type = args[0].toLowerCase();
+			let power = args[1];
 
-			makeStatus(skill, "powercharge", [parseFloat(extra1)]);
+			if (type != "phys" && type != "mag") return void message.channel.send("That's not a valid type! Try phys or mag.");
+
+			makeStatus(skill, "charge", [type, power]);
 			return true;
 		}
 	},

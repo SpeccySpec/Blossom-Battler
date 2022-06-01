@@ -309,15 +309,18 @@ function statusDesc(skillDefs) {
 		finalText += `Switch out user **with someone in backup**.\n`
 	}
 
-	if (hasStatus(skillDefs, 'powercharge') || hasStatus(skillDefs, 'mindcharge')) {
-		finalText += `Boosts`
-		if (hasStatus(skillDefs, 'powercharge')) finalText += ` **Physical** damage by ${skillDefs.statusses.powercharge[0]}x for one turn`;
+	if (hasStatus(skillDefs, 'charge')) {
+		finalText += 'Boosts'
+		
+		for (let i in skillDefs.statusses.charge) {
+			finalText += ` **${skillDefs.statusses.charge[i][0]}** damage by ${skillDefs.statusses.charge[i][1]}x`
 
-		if (hasStatus(skillDefs, 'mindcharge')) {
-			if (hasStatus(skillDefs, 'powercharge')) finalText += ` and`;
-			finalText += ` **Magic** damage by ${skillDefs.statusses.mindcharge[0]}x for one turn`;
+			if (i < skillDefs.statusses.charge.length - 1) {
+				finalText += ` and `
+			} else {
+				finalText += ` for one turn.\n`
+			}
 		}
-		finalText += `.\n`
 	}
 
 	if (hasStatus(skillDefs, 'orgiamode')) {
