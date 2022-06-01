@@ -101,7 +101,7 @@ genDmg = (char, targ, btl, skill) => {
 
 	// Terrain StatMod.
 	if (btl.terrain && terrainFuncs && terrainFuncs[btl.terrain.type] && terrainFuncs[btl.terrain.type].statmod) {
-		charStats = terrainFuncs[btl.weather.type].statmod(char, charStats, btl) ?? charStats;
+		charStats = terrainFuncs[btl.terrain.type].statmod(char, charStats, btl) ?? charStats;
 		targStats = terrainFuncs[btl.terrain.type].statmod(targ, targStats, btl) ?? targStats;
 	}
 

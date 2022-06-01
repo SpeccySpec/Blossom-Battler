@@ -7,13 +7,23 @@ xpBar = (charDefs) => {
 	return getBar('xp', charDefs.xp, charDefs.maxxp);
 }
 
-gainXp = (message, charDefs, xp) => {
+gainXp = (message, charDefs, xp, allone) => {
     charDefs.xp += xp;
 
-    message.channel.send(`${xpBar(charDefs)}\n${charDefs.name} got _${xp}XP_!`);
-    console.log(`${charDefs.name} ${charDefs.xp}/${charDefs.maxxp}XP`)
+	console.log(`${charDefs.name} ${charDefs.xp}/${charDefs.maxxp}XP`)
 
-	lvlUpWithXpInMind(charDefs, false, message);
+	if (allone) {
+		let embed = lvlUpWithXpInMind(charDefs, false, message, true);
+
+		if (embed) {
+			message.channel.send({content: `${xpBar(charDefs)}\n${charDefs.name} got _${xp}XP_!`, embeds: [embed]});
+		} else {
+			message.channel.send(`${xpBar(charDefs)}\n${charDefs.name} got _${xp}XP_!`);
+		}
+	} else {
+		message.channel.send(`${xpBar(charDefs)}\n${charDefs.name} got _${xp}XP_!`);
+		lvlUpWithXpInMind(charDefs, false, message);
+	}
 }
 
 updateStats = (charDefs, server, updateXp) => {
@@ -157,7 +167,7 @@ levelDown = (charDefs, server) => {
 }
 
 // Convert all XP into Levels
-lvlUpWithXpInMind = (charDefs, forceEvo, message) => {
+lvlUpWithXpInMind = (charDefs, forceEvo, message, returnembed) => {
 	let lvlCount = 0;
 	while (charDefs.xp >= charDefs.maxxp) {
 		if (charDefs.level < 99) {
@@ -167,13 +177,16 @@ lvlUpWithXpInMind = (charDefs, forceEvo, message) => {
 	}
 
 	if (lvlCount <= 0) return;
-	if (!message) return;
+	if (!message && !returnembed) return;
 
 	let DiscordEmbed = briefDescription(charDefs);
 	DiscordEmbed.title = `${charDefs.name} levelled up${(lvlCount <= 1) ? '!' : ' ' + lvlCount + ' times!'}`;
-//	DiscordEmbed.description = `_${charDefs.name}: "${selectQuote(charDefs, 'lvl')}"_\n\n${DiscordEmbed.description}`;
-	DiscordEmbed.description = `_${charDefs.name}: "ae"_\n\n**Level ${charDefs.level}**\n${DiscordEmbed.description}`;
-	message.channel.send({embeds: [DiscordEmbed]});
+	DiscordEmbed.description = `_${charDefs.name}: "${selectQuote(charDefs, 'lvl')}"_\n\n**Level ${charDefs.level}**\n${DiscordEmbed.description}`;
+
+	if (returnembed)
+		return DiscordEmbed;
+	else if (message)
+		message.channel.send({embeds: [DiscordEmbed]});
 }
 
 // Level up a set number of times
