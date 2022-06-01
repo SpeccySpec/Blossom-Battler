@@ -219,23 +219,23 @@ statusList = {
 		}
 	}),
 
-	makarakarn: {
+	makarakarn: new Extra({
 		name: "Makarakarn",
 		desc: "Protects the target with a shield that repels magic attacks.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc(message, skill, args) {
 			makeStatus(skill, "makarakarn", [true]);
 			return true;
 		}
-	},
+	}),
 
-	tetrakarn: {
+	tetrakarn: new Extra({
 		name: "Tetrakarn",
 		desc: "Protects the target with a shield that repels physical attacks.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
+		applyfunc(message, skill, args) {
 			makeStatus(skill, "tetrakarn", [true]);
 			return true;
 		}
-	},
+	}),
 
 	shieldbreak: {
 		name: "Shield Break",
