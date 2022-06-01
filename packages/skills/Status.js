@@ -159,18 +159,39 @@ statusList = {
 		}
 	}),
 
-	clone: {
+	clone: new Extra({
 		name: "Clone",
-		desc: "_<HP Percent> <MP Percent> <Percent>_\nClones the caster into a new ally with <HP Percent>% of Max HP, <MP Percent>% of Max MP, and <Percent>% of the caster's stats.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <HP Percent>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <MP Percent>!");
-			if (!extra3) return message.channel.send("You didn't supply anything for <Percent>!");
+		desc: "Clones the caster into a new ally with <HP Percent>% of Max HP, <MP Percent>% of Max MP, and <Percent>% of the caster's stats.",
+		args: [
+			{
+				name: "HP Percent",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "MP Percent",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Percent",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let hpPercent = args[0]
+			let mpPercent = args[1]
+			let percent = args[2]
 
-			makeStatus(skill, "clone", [parseFloat(extra1), parseFloat(extra2), parseFloat(extra3)]);
+			if (hpPercent < 10) return void message.channel.send("The clone would be dead with such a low HP!");
+			if (mpPercent < 10) return void message.channel.send("The clone wouldn't really be able to use skills if the one it cloned is a magic user!");
+			if (percent < 10) return void message.channel.send("With such low stats, the clone would be useless!");
+
+			makeStatus(skill, "clone", [hpPercent, mpPercent, percent]);
 			return true;
 		}
-	},
+	}),
 
 	shield: {
 		name: "Shield",
