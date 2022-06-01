@@ -532,7 +532,7 @@ commands.updateskills = new Command({
 					skillFile[skill].statusses.dekunda = [true] //true
 					delete skillFile[skill].dekunda;
 				} else if (skillFile[skill].pacify) {
-					skillFile[skill].statusses.pacifystatus = [skillFile[skill].pacify, 100] //status, amount
+					skillFile[skill].statusses.pacifystatus = [[skillFile[skill].pacify, 100]] //status, amount
 					delete skillFile[skill].pacify;
 				} else if (skillFile[skill].heartswap) {
 					skillFile[skill].statusses.heartswap = [true] //true
@@ -544,10 +544,10 @@ commands.updateskills = new Command({
 					skillFile[skill].statusses.orgiamode = [2, 0.5, 3] //ATK & MAG multiplier, END multiplier, turns
 					delete skillFile[skill].orgiamode;
 				} else if (skillFile[skill].powercharge) {
-					skillFile[skill].statusses.charge = ['phys', 2.5] //power multiplier
+					skillFile[skill].statusses.charge = [['phys', 2.5]] //power multiplier
 					delete skillFile[skill].powercharge;
 				} else if (skillFile[skill].mindcharge) {
-					skillFile[skill].statusses.charge = ['mag', 2.5] //power multiplier
+					skillFile[skill].statusses.charge = [['mag', 2.5]] //power multiplier
 					delete skillFile[skill].mindcharge;
 				} else if (skillFile[skill].splash) {
 					skillFile[skill].statusses.splash = [true] //true
