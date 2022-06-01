@@ -414,23 +414,53 @@ statusList = {
 		}
 	}),
 
-	reincarnate: {
+	reincarnate: new Extra({
 		name: "Reincarnate",
-		desc: "_<Mininum Stat> <Maximum Stat> <Percent> {Deploy Message}_\nSummons a reincarnate to the caster's team. The reincarnate will have stats randomized between <Minimum Stat> and <Maximum Stat> and HP and MP at <Percent>% of caster's Max HP and Max MP. You can add flair to this skill with a {Deploy Message}. These can use %PLAYER% to replace with the caster, and %UNDEAD% to replace with the undead.",
-		applyfunc: function(message, skill, extra1, extra2, extra3, extra4, extra5) {
-			if (!extra1) return message.channel.send("You didn't supply anything for <Minimum Stat>!");
-			if (!extra2) return message.channel.send("You didn't supply anything for <Maximum Stat>!");
-			if (!extra3) return message.channel.send("You didn't supply anything for <Percent>!");
+		desc: "Summons a reincarnate to the caster's team. The reincarnate will have stats randomized between <Minimum of Stat> and <Maximum of Stat>, HP at <HP Percent>% of user's Max HP and MP at <Percent>% of user's Max HP. You can add flair to this skill with a {Deploy Message}. These can use %PLAYER% to replace with the caster, and %UNDEAD% to replace with the undead.",
+		args: [
+			{
+				name: "Minimum of Stat",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Maximum of Stat",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "HP Percent",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "MP Percent",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Deploy Message",
+				type: "Word"
+			}
+		],
+		applyfunc(message, skill, args) {
+			let min = args[0]
+			let max = args[1]
+			let hp = args[2]
+			let mp = args[3]
+			let deploy = args[4] ?? "%PLAYER% has summoned an undead %UNDEAD%"
 			
-			if (parseInt(extra1) < 1) return message.channel.send("Minimum Stat must be above 0!");
-			if (parseInt(extra2) < 1) return message.channel.send("Maximum Stat must be above 0!");
-			if (parseInt(extra2) < parseInt(extra1)) return message.channel.send("Maximum Stat must be greater than Minimum Stat!");
-			if (parseFloat(extra3) < 1) return message.channel.send("Percent must be above 0!");
+			if (min < 1) return void message.channel.send("Minimum of Stat must be at least 1!");
+			if (max < 1) return void message.channel.send("Maximum of Stat must be at least 1!");
+			if (max < min) return void message.channel.send("Maximum of Stat must be greater than or equal to Minimum of Stat!");
+			if (hp <= 0) return void message.channel.send("HP Percent must be at least 1!");
+			if (mp <= 0) return void message.channel.send("MP Percent must be at least 1!");
+			if (deploy.length <= 0 || deploy.length > 500) return void message.channel.send("Deploy Message must be between 1 and 500 characters!");
 
-			makeStatus(skill, "reincarnate", [parseInt(extra1), parseInt(extra2), parseFloat(extra3), extra4 ? extra4 : "%PLAYER% has summoned an undead %UNDEAD%"]);
+			makeStatus(skill, "reincarnate", [min, max, hp, mp, deploy]);
 			return true;
 		}
-	},
+	}),
 
 	futuresight: {
 		name: "Futuresight",
