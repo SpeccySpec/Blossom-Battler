@@ -15,7 +15,7 @@ getTurnOrder = (btl) => {
 		}
 	}
 
-	if (btl.terrain.type === 'psychic') {
+	if (btl?.terrain?.type === 'psychic') {
 		turnorder.sort(function(a, b) {
 			let agl1 = statWithBuff(a.stats.agl, a.buffs.agl);
 			let agl2 = statWithBuff(b.stats.agl, b.buffs.agl);
