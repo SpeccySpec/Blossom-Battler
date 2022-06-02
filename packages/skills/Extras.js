@@ -31,7 +31,7 @@ extrasList = {
 		args: [
 			{
 				name: "Chance",
-				type: "Float",
+				type: "Decimal",
 				forced: true
 			},
 			{
@@ -103,7 +103,7 @@ extrasList = {
 			},
 			{
 				name: "Percent",
-				type: "Float",
+				type: "Decimal",
 				forced: true
 			},
 			{
@@ -388,7 +388,7 @@ extrasList = {
 		args: [
 			{
 				name: "Chance",
-				type: "Float",
+				type: "Decimal",
 				forced: true
 			},
 			{
@@ -439,7 +439,7 @@ extrasList = {
 		args: [
 			{
 				name: "Damage Percent",
-				type: "Float",
+				type: "Decimal",
 				forced: true
 			},
 			{
@@ -488,7 +488,7 @@ extrasList = {
 		args: [
 			{
 				name: "Damage Percent",
-				type: "Float",
+				type: "Decimal",
 				forced: true
 			},
 			{
@@ -516,7 +516,7 @@ extrasList = {
 		args: [
 			{
 				name: "Damage Percent",
-				type: "Float",
+				type: "Decimal",
 				forced: true
 			},
 			{
@@ -544,7 +544,7 @@ extrasList = {
 		args: [
 			{
 				name: "Mulitplier",
-				type: "Float"
+				type: "Decimal"
 			}
 		],
 		applyfunc(message, skill, args) {
@@ -559,7 +559,7 @@ extrasList = {
 		args: [
 			{
 				name: "Mulitplier",
-				type: "Float"
+				type: "Decimal"
 			}
 		],
 		applyfunc(message, skill, args) {
@@ -593,7 +593,7 @@ extrasList = {
 		args: [
 			{
 				name: "Percent",
-				type: "Float"
+				type: "Decimal"
 			}
 		],
 		applyfunc(message, skill, args) {
@@ -608,7 +608,7 @@ extrasList = {
 		args: [
 			{
 				name: "Percent",
-				type: "Float"
+				type: "Decimal"
 			}
 		],
 		applyfunc(message, skill, args) {
