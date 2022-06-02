@@ -86,12 +86,21 @@ extrasList = {
 		}
 	}),
 
-	needlessthan: new Extra({
-		name: "Need less than",
-		desc: 'Will make the skill require less than <Percent>% of <Cost Type> for it to work.',
+	need: new Extra({
+		name: "Need",
+		desc: 'Will make the skill require <Less/More> than <Percent>% of <Cost Type> for it to work.',
 		multiple: true,
-		diffflag: 1,
+		diffflag: [0, 3],
 		args: [
+			{
+				name: "Less/More",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Equal?",
+				type: "Word"
+			},
 			{
 				name: "Percent",
 				type: "Float",
@@ -104,38 +113,40 @@ extrasList = {
 			}
 		],
 		applyfunc(message, skill, args) {
-			const percent = args[0]
-			const stat = args[1].toLowerCase()
+			let less = args[0].toLowerCase()
+			let equal = (args[1] == 'true' || args[1] == 'yes' || args[1] == 'y' || args[1] == '1')
+			const percent = args[2]
+			const stat = args[3].toLowerCase()
+
+			if (less != "less" && less != "more") return void message.channel.send("You specify if the skill needs to be less or more of something, not whatever you said.");
 			if (percent < 1)
 				return void message.channel.send("You can't need less than 0%!");
 			if (stat != 'hp' && stat != 'mp' && stat != 'hppercent' && stat != 'mppercent' && stat != 'lb')
 				return void message.channel.send("You entered an invalid value for <Cost Type>! It can be either HP, HPPercent, MP, MPPercent, or LB.");
 			
-			makeExtra(skill, "needlessthan", [percent, stat]);
+			makeExtra(skill, "need", [less, equal, percent, stat]);
 			return true
 		},
 		canuse(char, skill, btl, vars) {
-			switch(vars[1].toLowerCase()) {
+			let check = vars[0] == 'less' ? '<' : '>';
+			if (vars[1]) check += '=';
+
+			const applyOperator = new Function('a', 'b', `return b ${check} a;`);
+
+			switch(vars[3].toLowerCase()) {
 				case 'mp':
-					if (char.mp > vars[0]) return `You need less than ${vars[0]}MP to use this move!`;
-					return true;
-
+					if (applyOperator(char.mp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}MP to use this move!`;
 				case 'lb':
-					if (char.lbpercent > vars[0]) return `You need less than ${vars[0]}LB% to use this move!`;
-					return true;
-
+					if (applyOperator(char.lbpercent, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}LB% to use this move!`;
 				case 'mppercent':
-					if (char.mp > (char.mp/char.maxmp)*vars[0]) return `You need less than ${(char.mp/char.maxmp)*vars[0]}MP to use this move!`;
-					return true;
-
+					if (applyOperator((char.mp/char.maxmp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${(char.mp/char.maxmp)*vars[2]}% MP to use this move!`;
 				case 'hppercent':
-					if (char.mp > (char.hp/char.maxhp)*vars[0]) return `You need less than ${(char.hp/char.maxhp)*vars[0]}HP to use this move!`;
-					return true;
-				
+					if (applyOperator((char.hp/char.maxhp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}% HP to use this move!`;
 				default:
-					if (char.hp > vars[0]) return `You need less than ${vars[0]}HP to use this move!`;
-					return true;
+					if (applyOperator(char.hp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}HP to use this move!`;
 			}
+
+			return true;
 		}
 	}),
 

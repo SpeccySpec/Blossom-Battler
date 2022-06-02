@@ -829,7 +829,7 @@ commands.updateskills = new Command({
 				}
 
 				if (skillFile[skill].needlessthan) {
-					skillFile[skill].extras.needlessthan = [[skillFile[skill].needlessthan, 'hppercent']]; // amount, type
+					skillFile[skill].extras.need = [['less', false, skillFile[skill].needlessthan, 'hppercent']]; // amount, type
 					delete skillFile[skill].needlessthan;
 				}
 

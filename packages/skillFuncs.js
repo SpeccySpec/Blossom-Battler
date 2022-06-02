@@ -349,12 +349,14 @@ function atkDesc(skillDefs, settings) {
 		if (hasExtra(skillDefs, 'affinitypow'))
 			finalText += `Affected by **<:passive:906874477210648576>SpiritCharge** or **<:passive:906874477210648576>Teamwork**, by **${skillDefs.extras.affinitypow[0]} power**.\n`;
 
-		if (hasExtra(skillDefs, 'needlessthan')) {
+		if (hasExtra(skillDefs, 'need')) {
 			let extraSom = ''
-			finalText += `Needs less than `
+			finalText += `Needs`
 
-			for (i in skillDefs.extras.needlessthan) {
-				switch (skillDefs.extras.needlessthan[i][1]) {
+			for (i in skillDefs.extras.need) {
+				finalText += ` **${skillDefs.extras.need[i][0]} ${skillDefs.extras.need[i][1] ? 'or equal to' : 'than'}** `
+
+				switch (skillDefs.extras.need[i][3]) {
 					case 'hp':
 						extraSom = ' HP';
 						break;
@@ -383,11 +385,11 @@ function atkDesc(skillDefs, settings) {
 						break;
 				}
 
-				finalText += `**${skillDefs.extras.needlessthan[i][0]}${extraSom}**`;
+				finalText += `**${skillDefs.extras.need[i][2]}${extraSom}**`;
 
-				if (skillDefs.extras.needlessthan.length > 1) {
-					if (i < skillDefs.extras.needlessthan.length - 2) finalText += `, `;
-					else if (i == skillDefs.extras.needlessthan.length - 2) finalText += ` and `;
+				if (skillDefs.extras.need.length > 1) {
+					if (i < skillDefs.extras.need.length - 2) finalText += `, `;
+					else if (i == skillDefs.extras.need.length - 2) finalText += ` and `;
 				}
 			}
 			
