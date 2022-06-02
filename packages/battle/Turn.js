@@ -557,9 +557,9 @@ sendCurTurnEmbed = (char, btl) => {
 							if (!extrasList[k].canuse) continue;
 
 							if (extrasList[k].multiple) {
-								for (let k in skill.extras[i]) {
-									let txt = extrasList[k].canuse(char, skill, btl, skill.extras[k][k]);
-									if (txt != true) {
+								for (let l in skill.extras[k]) {
+									let txt = extrasList[k].canuse(char, skill, btl, skill.extras[k][l]);
+									if (txt !== true) {
 										DiscordEmbed.title = txt;
 										alreadyResponded = true;
 
@@ -570,8 +570,8 @@ sendCurTurnEmbed = (char, btl) => {
 									}
 								}
 							} else {
-								let txt = extrasList[k].canuse(char, skill, btl, skill.extras[i]);
-								if (txt != true) {
+								let txt = extrasList[k].canuse(char, skill, btl, skill.extras[k]);
+								if (txt !== true) {
 									DiscordEmbed.title = txt;
 									alreadyResponded = true;
 
