@@ -398,9 +398,6 @@ function atkDesc(skillDefs, settings) {
 
 				oldTxt = curTxt
 
-				console.log(i - lastIndex)
-				console.log(needThing.filter(x => x[0] == needThing[i][0]).length - 2)
-
 				if (needThing.length > 1) {
 					if ((i - lastIndex) < needThing.filter(x => x[0] == needThing[i][0]).length - 2) {
 						finalText += `, `
