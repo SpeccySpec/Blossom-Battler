@@ -7,22 +7,19 @@ function lootDesc(lootDefs, lootName, message, itemFile, weaponFile, armorFile) 
     let finalText = "";
 
     for (const i in lootDefs.items) {
-        if (i % 4 == 0) finalText += `- **${lootDefs.items[i]}:** ` //${lootDefs.items[i+2]} (${lootDefs.items[i+1]}x) (${lootDefs.items[i+3]}% Chance)\n`;
-        else if (i % 4 == 1) {
-            switch (lootDefs.items[i-1]) {
-                case "item":
-                    finalText += `**${itemTypeEmoji[itemFile[lootDefs.items[i]].type]}${itemFile[lootDefs.items[i]].rarity && itemFile[lootDefs.items[i]].rarity != 'none' ? itemRarityEmoji[itemFile[lootDefs.items[i]].rarity] : ``} ${itemFile[lootDefs.items[i]].name ? itemFile[lootDefs.items[i]].name : lootDefs.items[i]}** `;
-                    break;
-                case "weapon":
-                    finalText += `**${elementEmoji[weaponFile[lootDefs.items[i]].element]} ${weaponFile[lootDefs.items[i]].name ? weaponFile[lootDefs.items[i]].name : lootDefs.items[i]}** `;
-                    break;
-                case "armor":
-                    finalText += `**${elementEmoji[armorFile[lootDefs.items[i]].element]} ${armorFile[lootDefs.items[i]].name ? armorFile[lootDefs.items[i]].name : lootDefs.items[i]}** `;
-                    break;
-            }
+        finalText += `- **${lootDefs.items[i].type}:** `
+        switch (lootDefs.items[i].type) {
+            case "item":
+                finalText += `**${itemTypeEmoji[itemFile[lootDefs.items[i].id].type]}${itemFile[lootDefs.items[i].id].rarity && itemFile[lootDefs.items[i].id].rarity != 'none' ? itemRarityEmoji[itemFile[lootDefs.items[i].id].rarity] : ``} ${itemFile[lootDefs.items[i].id].name ? itemFile[lootDefs.items[i].id].name : lootDefs.items[i].id}** `;
+                break;
+            case "weapon":
+                finalText += `**${elementEmoji[weaponFile[lootDefs.items[i].id].element]} ${weaponFile[lootDefs.items[i].id].name ? weaponFile[lootDefs.items[i].id].name : lootDefs.items[i].id}** `;
+                break;
+            case "armor":
+                finalText += `**${elementEmoji[armorFile[lootDefs.items[i].id].element]} ${armorFile[lootDefs.items[i].id].name ? armorFile[lootDefs.items[i].id].name : lootDefs.items[i].id}** `;
+                break;
         }
-        else if (i % 4 == 2) finalText += `(${lootDefs.items[i]}x) `;
-        else finalText += `(${lootDefs.items[i]}% Chance)\n`;
+        finalText += `(${lootDefs.items[i].amount}x) (${lootDefs.items[i].chance}% Chance)\n`;
     }
     
     let userTxt = getServerUser(lootDefs.originalAuthor, message);
@@ -102,7 +99,18 @@ commands.registerloot = new Command({
         lootFile[name] = {
             name: name,
             originalAuthor: message.author.id,
-            items: args
+            items: []
+        }
+
+        for (i in args) {
+            if (i % 4 == 3) {
+                lootFile[name].items.push({
+                    type: args[i-3],
+                    id: args[i-2],
+                    amount: args[i-1],
+                    chance: args[i]
+                })
+            }
         }
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/loot.json`, JSON.stringify(lootFile, null, 4))
@@ -257,19 +265,17 @@ commands.listloots = new Command({
                                 isConditionMet = false
                                 if (lootFile[loot].items) {
                                     for (let i in lootFile[loot].items) {
-                                        if (i % 4 == 1) {
-                                            if (lootFile[loot].items[i] == args[a] && lootFile[loot].items[i-1] == args[a-1]) {
-                                                isConditionMet = true
-                                                break;
-                                            }
+                                        if (lootFile[loot].items[i].id == args[a] && lootFile[loot].items[i].type == args[a-1]) {
+                                            isConditionMet = true
+                                            break;
                                         }
                                     }
                                 }
                             } else {
                                 if (args[a].toString().toLowerCase() == 'true') {
-                                    isConditionMet = (lootFile[loot].items && lootFile[loot].items.includes(args[a-1]))
+                                    isConditionMet = (lootFile[loot].items && lootFile[loot].items.some(item => item.type == args[a-1]))
                                 } else {
-                                    isConditionMet = (!lootFile[loot].items || (lootFile[loot].items && !lootFile[loot].items.includes(args[a-1])))
+                                    isConditionMet = (!lootFile[loot].items || (lootFile[loot].items && !lootFile[loot].items.some(item => item.type == args[a-1])))
                                 }
                             }
                             break;
@@ -281,7 +287,7 @@ commands.listloots = new Command({
 
             let amount = 0
             for (i in lootFile[loot].items) {
-                if (i % 4 == 2) amount += lootFile[loot].items[i]
+                amount += lootFile[loot].items[i].amount
             }
             array.push({title: `${lootFile[loot].name} (${loot})`, desc: `${amount} items`});
         }
@@ -310,7 +316,7 @@ commands.searchloots = new Command({
             if (lootFile[loot].name.includes(args[0]) || loot.includes(args[0])) {
                 let amount = 0
                 for (i in lootFile[loot].items) {
-                    if (i % 4 == 2) amount += lootFile[loot].items[i]
+                    amount += lootFile[loot].items[i].amount
                 }
                 array.push({title: `${lootFile[loot].name} (${loot})`, desc: `${amount} items`});
             }

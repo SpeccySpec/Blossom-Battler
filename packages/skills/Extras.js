@@ -361,11 +361,13 @@ extrasList = {
 						if (!targ?.custom?.buffTurns) 
 							addCusVal(targ, "buffTurns", []);
 
-						if (!((vars[2] < 0 && targ.custom.buffTurns.filter(x => x[0] == vars[1].toLowerCase() && x[1] < 0).length >= 3) || (vars[2] > 0 && targ.custom.buffTurns.filter(x => x[0] == vars[1].toLowerCase() && x[1] > 0).length >= 3))) {
-							targ.custom.buffTurns.push([
-								vars[1].toLowerCase(),
-								vars[4] * (vars[2] / Math.abs(vars[2]))
-							])
+						for (let i = 0; i < Math.abs(vars[2]); i++) {
+							if (!((vars[2] < 0 && targ.custom.buffTurns.filter(x => x[0] == vars[1].toLowerCase() && x[1] < 0).length >= 3) || (vars[2] > 0 && targ.custom.buffTurns.filter(x => x[0] == vars[1].toLowerCase() && x[1] > 0).length >= 3))) {
+								targ.custom.buffTurns.push([
+									vars[1].toLowerCase(),
+									vars[4] * (vars[2] / Math.abs(vars[2]))
+								])
+							}
 						}
 					}
 
@@ -438,8 +440,21 @@ extrasList = {
 			}
 		],
 		applyfunc(message, skill, args) {
+			if (args[0] == 0) return void message.channel.send("One would take no MP from a foe.");
 			makeExtra(skill, "takemp", [args[0]]);
 			return true
+		},
+		onuse(char, targ, skill, btl, vars) {
+			if (targ.mp <= 0) return `But it failed!`;
+			let MPtaken = vars[0] * skill.hits ?? 1;
+			if (targ.mp < MPtaken) MPtaken = targ.mp;
+
+			char.mp += MPtaken;
+			if (char.mp > char.maxmp) char.mp = char.maxmp;
+			targ.mp -= MPtaken;
+			if (targ.mp < 0) targ.mp = 0;
+
+			return `__${char.name}__ took **${MPtaken} MP** from __${targ.name}__!`;
 		}
 	}),
 
@@ -451,7 +466,9 @@ extrasList = {
 			return true
 		},
 		onuseoverride(char, targ, skill, btl, vars) {
+			if (targ.mp <= 0) return `But it failed!`;
 			let mpStolen = Math.max(1, skill.pow+randNum(-10, 10));
+			if (targ.mp < mpStolen) mpStolen = targ.mp;
 			
 			targ.mp = Math.max(0, targ.mp-mpStolen)
 			char.mp = Math.min(char.maxmp, char.mp+mpStolen)

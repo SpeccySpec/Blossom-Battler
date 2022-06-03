@@ -224,11 +224,9 @@ commands.registerchest = new Command({
                     for (let j = 0; j < args[i]; j++) {
                         if (lootFile[args[i-1]].items) {
                             for (let k in lootFile[args[i-1]].items) {
-                                if (k % 4 == 3) {
-                                    itemsDef.push(lootFile[args[i-1]].items[k-3])
-                                    itemsDef.push(lootFile[args[i-1]].items[k-2])
-                                    itemsDef.push(lootFile[args[i-1]].items[k-1])
-                                }
+                                itemsDef.push(lootFile[args[i-1]].items[k].type)
+                                itemsDef.push(lootFile[args[i-1]].items[k].id)
+                                itemsDef.push(lootFile[args[i-1]].items[k].amount)
                             }
                         }
                     }

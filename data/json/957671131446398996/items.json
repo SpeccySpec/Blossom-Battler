@@ -15,16 +15,13 @@
         "originalAuthor": "441198920668938260",
         "healmp": 60,
         "recipe": {
-            "amount": 3,
+            "amount": 1,
             "shapeless": false,
-            "recipe": [
-                0,
-                "Sweet",
-                3,
-                "Sweet",
-                8,
-                "Sweet"
-            ]
+            "recipe": {
+                "0": "Sweet",
+                "3": "Sweet",
+                "8": "Sweet"
+            }
         }
     },
     "Sweet": {

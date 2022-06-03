@@ -4,9 +4,10 @@ function getRecipe(itemDefs) {
     if (itemDefs.recipe) { 
         finalText += `Can be ${itemDefs.recipe.shapeless ? `**shapelessly**` : ``} crafted from:\n`;
         let itemTxt = {}
-        for (let i = 1; i <= itemDefs.recipe.recipe.length; i += 2) {
-            if (!itemTxt[itemDefs.recipe.recipe[i]]) itemTxt[itemDefs.recipe.recipe[i]] = 0;
-            itemTxt[itemDefs.recipe.recipe[i]] += 1;
+        for (const i in itemDefs.recipe.recipe) {
+            const item = Object.values(itemDefs.recipe.recipe[i])[0];
+            if (!itemTxt[item]) itemTxt[item] = 0;
+            itemTxt[item] += 1;
         }
         for (let i in itemTxt) {
             finalText += `- **${itemTxt[i]}x** ${i}\n`;
@@ -527,13 +528,8 @@ commands.purgeitem = new Command({
                     lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
                     for (let item in lootFile) {
                         for (const i in lootFile[item].items) {
-                            if (i % 4 == 3) {
-                                if (lootFile[item].items[i-2] == args[0] && lootFile[item].items[i-3] == 'item') {
-                                    lootFile[item].items[i-3] = ''
-                                    lootFile[item].items[i-2] = ''
-                                    lootFile[item].items[i-1] = ''
-                                    lootFile[item].items[i] = ''
-                                }
+                            if (lootFile[item].items[i].id == args[0] && lootFile[item].items[i].type == 'item') {
+                                lootFile[item].items[i] = ''
                             }
                         }
                         if (lootFile[item].items.includes('')) warningText['loot'] += `- ${lootFile[item].name}\n`
@@ -719,8 +715,8 @@ commands.edititem = new Command({
                     lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
                     for (let item in lootFile) {
                         if (lootFile[item].items) {
-                            if (i % 4 == 1 && lootFile[item].items[i-1] == 'item' && lootFile[item].items[i] == args[0]) {
-                                lootFile[item].items[i] = args[2]
+                            if (lootFile[item].items[i].type == 'item' && lootFile[item].items[i].id == args[0]) {
+                                lootFile[item].items[i].id = args[2]
                             }
                         }
                     }
@@ -1241,8 +1237,8 @@ commands.editweapon = new Command({
                     lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
                     for (let item in lootFile) {
                         if (lootFile[item].items) {
-                            if (i % 4 == 1 && lootFile[item].items[i-1] == 'weapon' && lootFile[item].items[i] == args[0]) {
-                                lootFile[item].items[i] = args[2]
+                            if (lootFile[item].items[i].type == 'weapon' && lootFile[item].items[i].id == args[0]) {
+                                lootFile[item].items[i].id = args[2]
                             }
                         }
                     }
@@ -1342,13 +1338,8 @@ commands.purgeweapon = new Command({
                     chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
                     for (let item in lootFile) {
                         for (const i in lootFile[item].items) {
-                            if (i % 4 == 3) {
-                                if (lootFile[item].items[i-2] == args[0] && lootFile[item].items[i-3] == 'weapon') {
-                                    lootFile[item].items[i-3] = ''
-                                    lootFile[item].items[i-2] = ''
-                                    lootFile[item].items[i-1] = ''
-                                    lootFile[item].items[i] = ''
-                                }
+                            if (lootFile[item].items[i].id == args[0] && lootFile[item].items[i].type == 'weapon') {
+                                lootFile[item].items[i] = ''
                             }
                         }
                         if (lootFile[item].items.includes('')) warningText['loot'] += `- ${lootFile[item].name}\n`
@@ -1760,8 +1751,8 @@ commands.editarmor = new Command({
                     lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
                     for (let item in lootFile) {
                         if (lootFile[item].items) {
-                            if (i % 4 == 1 && lootFile[item].items[i-1] == 'armor' && lootFile[item].items[i] == args[0]) {
-                                lootFile[item].items[i] = args[2]
+                            if (lootFile[item].items[i].type == 'armor' && lootFile[item].items[i].id == args[0]) {
+                                lootFile[item].items[i].id = args[2]
                             }
                         }
                     }
@@ -1856,14 +1847,8 @@ commands.purgearmor = new Command({
                     lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
                     for (let item in lootFile) {
                         for (const i in lootFile[item].items) {
-                            if (i % 4 == 3) {
-                                if (lootFile[item].items[i-2] == args[0] && lootFile[item].items[i-3] == 'armor') {
-                                    warningText['loot'] += `- ${lootFile[item].name}\n`
-                                    lootFile[item].items[i-3] = ''
-                                    lootFile[item].items[i-2] = ''
-                                    lootFile[item].items[i-1] = ''
-                                    lootFile[item].items[i] = ''
-                                }
+                            if (lootFile[item].items[i].id == args[0] && lootFile[item].items[i].type == 'armor') {
+                                lootFile[item].items[i] = ''
                             }
                         }
                         if (lootFile[item].items.includes('')) warningText['loot'] += `- ${lootFile[item].name}\n`
@@ -2042,9 +2027,16 @@ commands.makecraftingrecipe = new Command({
                     collector.stop()
                 }
 
+                let newRecipe = {}
+                for (i in margs) {
+                    if (i % 2 == 1) {
+                        newRecipe[margs[i-1]] = margs[i]
+                    }
+                }
+
                 for (i in itemFile) {
                     if (itemFile[i].recipe) {
-                        if (itemFile[i].recipe.recipe == margs) {
+                        if (itemFile[i].recipe.recipe == newRecipe) {
                             message.channel.send(`This crafting recipe is already in use by ${itemFile[i].name}.`);
                             givenResponce = true
                             collector.stop()
@@ -2054,7 +2046,7 @@ commands.makecraftingrecipe = new Command({
                 }
                 for (i in weaponFile) {
                     if (weaponFile[i].recipe) {
-                        if (weaponFile[i].recipe.recipe == margs) {
+                        if (weaponFile[i].recipe.recipe == newRecipe) {
                             message.channel.send(`This crafting recipe is already in use by ${weaponFile[i].name}.`);
                             givenResponce = true
                             collector.stop()
@@ -2064,7 +2056,7 @@ commands.makecraftingrecipe = new Command({
                 }
                 for (i in armorFile) {
                     if (armorFile[i].recipe) {
-                        if (armorFile[i].recipe.recipe == margs) {
+                        if (armorFile[i].recipe.recipe == newRecipe) {
                             message.channel.send(`This crafting recipe is already in use by ${armorFile[i].name}.`);
                             givenResponce = true
                             collector.stop()
@@ -2076,9 +2068,8 @@ commands.makecraftingrecipe = new Command({
                 itemDefs.recipe = {
                     amount: args[2],
                     shapeless: args[3],
-                    recipe: margs
+                    recipe: newRecipe
                 }
-                
 
                 switch (args[0].toLowerCase()) {
                     case 'item':
@@ -2236,11 +2227,9 @@ commands.obtainitems = new Command({
                     for (let j = 0; j < args[i]; j++) {
                         if (lootFile[args[i-1]].items) {
                             for (let k in lootFile[args[i-1]].items) {
-                                if (k % 4 == 3) {
-                                    itemsDef.push(lootFile[args[i-1]].items[k-3])
-                                    itemsDef.push(lootFile[args[i-1]].items[k-2])
-                                    itemsDef.push(lootFile[args[i-1]].items[k-1])
-                                }
+                                itemsDef.push(lootFile[args[i-1]].items[k].type)
+                                itemsDef.push(lootFile[args[i-1]].items[k].id)
+                                itemsDef.push(lootFile[args[i-1]].items[k].amount)
                             }
                         }
                     }
