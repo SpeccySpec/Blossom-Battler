@@ -814,7 +814,7 @@ commands.updateskills = new Command({
 				}
 
 				if (skillFile[skill].powerbuff) {
-					skillFile[skill].extras.powerbuff = [[skillFile[skill].powerbuff[0], skillFile[skill].powerbuff[1], false]]; // stat, percent
+					skillFile[skill].extras.powerbuff = [[skillFile[skill].powerbuff[0], skillFile[skill].powerbuff[1], false, false]]; // stat, percent
 					delete skillFile[skill].powerbuff;
 				}
 

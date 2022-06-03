@@ -437,7 +437,7 @@ function atkDesc(skillDefs, settings) {
 
 				curPB = powerbuffs[i]
 
-				finalText += ` by **up to ${curPB[1] + (curPB[2] ? 100 : 0) }${curPB[2] ? '%' : ''} power**`
+				finalText += ` by **${curPB[2] ? 'up to' : ''} ${curPB[1] + (curPB[2] ? 100 : 0) }${curPB[3] ? '%' : ''} power**`
 
 				if (i < powerbuffs.length - 2) {
 					finalText += `, `
