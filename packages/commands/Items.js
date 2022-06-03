@@ -527,13 +527,8 @@ commands.purgeitem = new Command({
                     lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
                     for (let item in lootFile) {
                         for (const i in lootFile[item].items) {
-                            if (i % 4 == 3) {
-                                if (lootFile[item].items[i-2] == args[0] && lootFile[item].items[i-3] == 'item') {
-                                    lootFile[item].items[i-3] = ''
-                                    lootFile[item].items[i-2] = ''
-                                    lootFile[item].items[i-1] = ''
-                                    lootFile[item].items[i] = ''
-                                }
+                            if (lootFile[item].items[i].id == args[0] && lootFile[item].items[i].type == 'item') {
+                                lootFile[item].items[i] = ''
                             }
                         }
                         if (lootFile[item].items.includes('')) warningText['loot'] += `- ${lootFile[item].name}\n`
@@ -719,8 +714,8 @@ commands.edititem = new Command({
                     lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
                     for (let item in lootFile) {
                         if (lootFile[item].items) {
-                            if (i % 4 == 1 && lootFile[item].items[i-1] == 'item' && lootFile[item].items[i] == args[0]) {
-                                lootFile[item].items[i] = args[2]
+                            if (lootFile[item].items[i].type == 'item' && lootFile[item].items[i].id == args[0]) {
+                                lootFile[item].items[i].id = args[2]
                             }
                         }
                     }
@@ -1241,8 +1236,8 @@ commands.editweapon = new Command({
                     lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
                     for (let item in lootFile) {
                         if (lootFile[item].items) {
-                            if (i % 4 == 1 && lootFile[item].items[i-1] == 'weapon' && lootFile[item].items[i] == args[0]) {
-                                lootFile[item].items[i] = args[2]
+                            if (lootFile[item].items[i].type == 'weapon' && lootFile[item].items[i].id == args[0]) {
+                                lootFile[item].items[i].id = args[2]
                             }
                         }
                     }
@@ -1342,13 +1337,8 @@ commands.purgeweapon = new Command({
                     chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
                     for (let item in lootFile) {
                         for (const i in lootFile[item].items) {
-                            if (i % 4 == 3) {
-                                if (lootFile[item].items[i-2] == args[0] && lootFile[item].items[i-3] == 'weapon') {
-                                    lootFile[item].items[i-3] = ''
-                                    lootFile[item].items[i-2] = ''
-                                    lootFile[item].items[i-1] = ''
-                                    lootFile[item].items[i] = ''
-                                }
+                            if (lootFile[item].items[i].id == args[0] && lootFile[item].items[i].type == 'weapon') {
+                                lootFile[item].items[i] = ''
                             }
                         }
                         if (lootFile[item].items.includes('')) warningText['loot'] += `- ${lootFile[item].name}\n`
@@ -1760,8 +1750,8 @@ commands.editarmor = new Command({
                     lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
                     for (let item in lootFile) {
                         if (lootFile[item].items) {
-                            if (i % 4 == 1 && lootFile[item].items[i-1] == 'armor' && lootFile[item].items[i] == args[0]) {
-                                lootFile[item].items[i] = args[2]
+                            if (lootFile[item].items[i].type == 'armor' && lootFile[item].items[i].id == args[0]) {
+                                lootFile[item].items[i].id = args[2]
                             }
                         }
                     }
@@ -1856,14 +1846,8 @@ commands.purgearmor = new Command({
                     lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
                     for (let item in lootFile) {
                         for (const i in lootFile[item].items) {
-                            if (i % 4 == 3) {
-                                if (lootFile[item].items[i-2] == args[0] && lootFile[item].items[i-3] == 'armor') {
-                                    warningText['loot'] += `- ${lootFile[item].name}\n`
-                                    lootFile[item].items[i-3] = ''
-                                    lootFile[item].items[i-2] = ''
-                                    lootFile[item].items[i-1] = ''
-                                    lootFile[item].items[i] = ''
-                                }
+                            if (lootFile[item].items[i].id == args[0] && lootFile[item].items[i].type == 'armor') {
+                                lootFile[item].items[i] = ''
                             }
                         }
                         if (lootFile[item].items.includes('')) warningText['loot'] += `- ${lootFile[item].name}\n`
@@ -2236,11 +2220,9 @@ commands.obtainitems = new Command({
                     for (let j = 0; j < args[i]; j++) {
                         if (lootFile[args[i-1]].items) {
                             for (let k in lootFile[args[i-1]].items) {
-                                if (k % 4 == 3) {
-                                    itemsDef.push(lootFile[args[i-1]].items[k-3])
-                                    itemsDef.push(lootFile[args[i-1]].items[k-2])
-                                    itemsDef.push(lootFile[args[i-1]].items[k-1])
-                                }
+                                itemsDef.push(lootFile[args[i-1]].items[k].type)
+                                itemsDef.push(lootFile[args[i-1]].items[k].id)
+                                itemsDef.push(lootFile[args[i-1]].items[k].amount)
                             }
                         }
                     }

@@ -3,70 +3,96 @@
         "name": "Beef",
         "originalAuthor": "441198920668938260",
         "items": [
-            "weapon",
-            "Buff",
-            5,
-            23.5,
-            "item",
-            "Sweet",
-            25,
-            69,
-            "armor",
-            "Bluff",
-            1,
-            30,
-            "item",
-            "Sweet",
-            2,
-            50,
-            "item",
-            "Sweet",
-            2,
-            10,
-            "item",
-            "Sweet",
-            2,
-            50,
-            "item",
-            "Sweet",
-            2,
-            1,
-            "armor",
-            "Bluff",
-            25,
-            23,
-            "weapon",
-            "Buff",
-            25,
-            34.789,
-            "armor",
-            "Bluff",
-            1,
-            30,
-            "item",
-            "Sweet",
-            2,
-            50,
-            "item",
-            "Sweet",
-            2,
-            10,
-            "item",
-            "Sweet",
-            2,
-            50,
-            "item",
-            "Sweet",
-            2,
-            1,
-            "armor",
-            "Bluff",
-            25,
-            23,
-            "weapon",
-            "Buff",
-            25,
-            34.789
+            {
+                "type": "weapon",
+                "id": "Buff",
+                "amount": 5,
+                "chance": 23.5
+            },
+            {
+                "type": "weapon",
+                "id": "Buff",
+                "amount": 5,
+                "chance": 23.5
+            },
+            {
+                "type": "weapon",
+                "id": "Buff",
+                "amount": 5,
+                "chance": 23.5
+            },
+            {
+                "type": "weapon",
+                "id": "Buff",
+                "amount": 5,
+                "chance": 23.5
+            },
+            {
+                "type": "weapon",
+                "id": "Buff",
+                "amount": 5,
+                "chance": 23.5
+            },
+            {
+                "type": "weapon",
+                "id": "Buff",
+                "amount": 5,
+                "chance": 23.5
+            },
+            {
+                "type": "weapon",
+                "id": "Buff",
+                "amount": 5,
+                "chance": 23.5
+            },
+            {
+                "type": "weapon",
+                "id": "Buff",
+                "amount": 5,
+                "chance": 23.5
+            },
+            {
+                "type": "weapon",
+                "id": "Buff",
+                "amount": 5,
+                "chance": 23.5
+            },
+            {
+                "type": "weapon",
+                "id": "Buff",
+                "amount": 5,
+                "chance": 23.5
+            },
+            {
+                "type": "weapon",
+                "id": "Buff",
+                "amount": 5,
+                "chance": 23.5
+            },
+            {
+                "type": "weapon",
+                "id": "Buff",
+                "amount": 5,
+                "chance": 23.5
+            },
+            {
+                "type": "weapon",
+                "id": "Buff",
+                "amount": 5,
+                "chance": 23.5
+            },
+            {
+                "type": "weapon",
+                "id": "Buff",
+                "amount": 5,
+                "chance": 23.5
+            },
+            {
+                "type": "weapon",
+                "id": "Buff",
+                "amount": 5,
+                "chance": 23.5
+            }
         ]
     }
 }

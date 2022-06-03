@@ -358,21 +358,19 @@ longDescription = (charDefs, level, server, message) => {
 			armorFile = setUpFile(`${dataPath}/json/${server}/armors.json`)
 
 			for (const i in lootDefs.items) {
-				if (i % 4 == 0) enmLoot += `- **${lootDefs.items[i]}:** `
-				else if (i % 4 == 1) {
-					switch (lootDefs.items[i-1]) {
-						case "item":
-							enmLoot += `${itemFile[lootDefs.items[i]].name ? itemFile[lootDefs.items[i]].name : lootDefs.items[i]} `;
-							break;
-						case "weapon":
-							enmLoot += `${weaponFile[lootDefs.items[i]].name ? weaponFile[lootDefs.items[i]].name : lootDefs.items[i]} `;
-							break;
-						case "armor":
-							enmLoot += `${armorFile[lootDefs.items[i]].name ? armorFile[lootDefs.items[i]].name : lootDefs.items[i]} `;
-							break;
-					}
+				enmLoot += `- **${lootDefs.items[i].type}:** `
+				switch (lootDefs.items[i].type) {
+					case "item":
+						enmLoot += `${itemFile[lootDefs.items[i].id].name ? itemFile[lootDefs.items[i].id].name : lootDefs.items[i].id} `;
+						break;
+					case "weapon":
+						enmLoot += `${weaponFile[lootDefs.items[i].id].name ? weaponFile[lootDefs.items[i].id].name : lootDefs.items[i].id} `;
+						break;
+					case "armor":
+						enmLoot += `${armorFile[lootDefs.items[i].id].name ? armorFile[lootDefs.items[i].id].name : lootDefs.items[i].id} `;
+						break;
 				}
-				else if (i % 4 == 2) enmLoot += `(${lootDefs.items[i]}x)\n`;
+				enmLoot += `(${lootDefs.items[i].amount}x)\n`;
 			}
 		}
 	}
