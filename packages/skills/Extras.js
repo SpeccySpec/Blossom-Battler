@@ -290,10 +290,15 @@ extrasList = {
 
 	buff: new Extra({
 		name: "Stat Buff",
-		desc: "Will buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
+		desc: "Will buff or debuff the <Target/User>'s <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff. You can also make a buff/debuff last {Turns} turns.",
 		multiple: true,
-		diffflag: [0, 2],
+		diffflag: [0, 1, 3],
 		args: [
+			{
+				name: "Target/User",
+				type: "Word",
+				forced: true
+			},
 			{
 				name: "Stat",
 				type: "Word",
@@ -306,25 +311,72 @@ extrasList = {
 			{
 				name: "Chance",
 				type: "Decimal"
+			},
+			{
+				name: "Turns",
+				type: "Num"
 			}
 		],
 		applyfunc(message, skill, args) {
-			const stat = args[0].toLowerCase()
-			const stages = args[1] ?? -1
-			const chance = Math.min(args[2] ?? 100, 100)
+			const target = args[0].toLowerCase()
+			const stat = args[1].toLowerCase()
+			const stages = args[2] ?? 1
+			const chance = Math.min(args[3] ?? 100, 100)
+			const turns = args[4] ?? null
 
+			if (target != 'user' && target != 'target') 
+				return void message.channel.send(`You typed ${target} as the target. It must be either \`user\` or \`target\`.`)
 			if (!stats.includes(stat))
 				return void message.channel.send("That's not a valid stat!");
-			if (args[1] == 0)
+			if (stages == 0)
 				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
-			if (args[2] <= 0)
+			if (chance <= 0)
 				return void message.channel.send("You can't have a percentage less than 0, as then it would never happen!");
+			if (turns && turns <= 0)
+				return void message.channel.send("You can't have a turn amount less than 0, as then it would revert to normal too soon.");
 
-			makeExtra(skill, "buff", [stat, stages, chance]);
+			makeExtra(skill, "buff", [target, stat, stages, chance, turns])
 			return true
 		},
+		onselect(char, skill, btl, vars) {
+			if (vars[0] != 'user') return;
+			
+			return extrasList.buff.buffChange(char, skill, btl, vars);
+		},
 		onuse(char, targ, skill, btl, vars) {
-			statusList.buff.onuse(char, targ, skill, btl, vars)
+			if (vars[0] != 'target') return;
+			
+			return extrasList.buff.buffChange(targ, skill, btl, vars);
+		},
+		buffChange(targ, skill, btl, vars) {
+			if (targ.charms && targ.charms.includes("PureVision") && vars[1].toLowerCase() === 'prc') return `${targ.name}'s Pure Vision negated the change.`;
+
+			if (vars[3]) {
+				let chance = randNum(1, 100);
+
+				if (chance <= vars[3]) {
+					buffStat(targ, vars[1].toLowerCase(), vars[2]);
+
+					if (vars[4] && vars[4] != null) {
+						if (!targ?.custom?.buffTurns) 
+							addCusVal(targ, "buffTurns", []);
+
+						if (!((vars[2] < 0 && targ.custom.buffTurns.filter(x => x[0] == vars[1].toLowerCase() && x[1] < 0).length >= 3) || (vars[2] > 0 && targ.custom.buffTurns.filter(x => x[0] == vars[1].toLowerCase() && x[1] > 0).length >= 3))) {
+							targ.custom.buffTurns.push([
+								vars[1].toLowerCase(),
+								vars[4] * (vars[2] / Math.abs(vars[2]))
+							])
+						}
+					}
+
+					return `__${targ.name}__'s _${vars[1].toUpperCase()}_ was buffed ${vars[2]} time(s)!`;
+				} else {
+					return `But it missed __${targ.name}__!`;
+				}
+			} else {
+				buffStat(targ, vars[1].toLowerCase(), vars[2]);
+				return `__${targ.name}__'s _${vars[1].toUpperCase()}_ was buffed ${vars[2]} time(s)!`;
+			}
 		}
 	}),
 
@@ -977,6 +1029,31 @@ customVariables = {
 
 			if (Object.keys(vars).length == 0) {
 				killVar(char, "oldAffinities");
+			}
+
+			if (text == '') return null;
+			return text;
+		}
+	},
+
+	buffTurns: {
+		onturn: function(btl, char, vars) {
+			let text = ''
+
+			for (i in vars) {
+				let wasPositive = vars[i][1] > 0;
+				vars[i][1] += vars[i][1] > 0 ? -1 : 1;
+
+				if (vars[i][1] == 0) {
+					buffStat(char, vars[i][0].toLowerCase(), wasPositive ? -1 : 1);
+					text += `${char.name}'s ${vars[i][0].toUpperCase()} ${wasPositive ? '' : 'de'}buff has worn off!\n`;
+					vars[i] = ''
+				}
+			}
+			
+			vars = vars.filter(x => x.length != 0);
+			if (vars.length == 0) {
+				killVar(char, "buffTurns");
 			}
 
 			if (text == '') return null;

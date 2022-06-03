@@ -568,7 +568,7 @@ commands.updateskills = new Command({
 					if (!skillFile[skill].statusses.buff) skillFile[skill].statusses.buff = []
 					if (skillFile[skill].buffchance == 0) skillFile[skill].buffchance = 100
 
-					skillFile[skill].statusses.buff.push([skillFile[skill].buff, skillFile[skill].buffCount ? skillFile[skill].buffCount : 1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
+					skillFile[skill].statusses.buff.push(['target', skillFile[skill].buff, skillFile[skill].buffCount ? skillFile[skill].buffCount : 1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance, null]) //stat, stages, chance
 					if (skillFile[skill].buffchance == 0) skillFile[skill].buffchance = 100
 					delete skillFile[skill].buff;
 					delete skillFile[skill].buffchance;
@@ -577,7 +577,7 @@ commands.updateskills = new Command({
 				if (skillFile[skill].debuff) {
 					if (!skillFile[skill].statusses.buff) skillFile[skill].statusses.buff = []
 
-					skillFile[skill].statusses.buff.push([skillFile[skill].debuff, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
+					skillFile[skill].statusses.buff.push(['target', skillFile[skill].debuff, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance, null]) //stat, stages, chance
 					if (skillFile[skill].buffchance == 0) skillFile[skill].buffchance = 100
 					delete skillFile[skill].debuff;
 					delete skillFile[skill].buffchance;
@@ -586,7 +586,7 @@ commands.updateskills = new Command({
 				if (skillFile[skill].debuffuser) {
 					if (!skillFile[skill].statusses.buff) skillFile[skill].statusses.buff = []
 
-					skillFile[skill].statusses.buff.push([skillFile[skill].debuffuser, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
+					skillFile[skill].statusses.buff.push(['user', skillFile[skill].debuffuser, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance, null]) //stat, stages, chance
 					if (skillFile[skill].buffchance == 0) skillFile[skill].buffchance = 100
 					delete skillFile[skill].debuffuser;
 					delete skillFile[skill].buffchance;
@@ -596,7 +596,7 @@ commands.updateskills = new Command({
 					if (!skillFile[skill].statusses.buff) skillFile[skill].statusses.buff = []
 
 					for (let i = 0; i < 2; i++) {
-						skillFile[skill].statusses.buff.push([skillFile[skill].dualbuff[i], 1, 100]) //stat, stages, chance
+						skillFile[skill].statusses.buff.push(['target', skillFile[skill].dualbuff[i], 1, 100, null]) //stat, stages, chance
 					}
 					delete skillFile[skill].dualbuff;
 				} 
@@ -604,7 +604,7 @@ commands.updateskills = new Command({
 					if (!skillFile[skill].statusses.buff) skillFile[skill].statusses.buff = []
 
 					for (let i = 0; i < 2; i++) {
-						skillFile[skill].statusses.buff.push([skillFile[skill].dualdebuff[i], -1, 100]) //stat, stages, chance
+						skillFile[skill].statusses.buff.push(['target', skillFile[skill].dualdebuff[i], -1, 100, null]) //stat, stages, chance
 					}
 					delete skillFile[skill].dualdebuff;
 				}
@@ -663,7 +663,7 @@ commands.updateskills = new Command({
 					if (skillFile[skill].buffchance == 0) skillFile[skill].buffchance = 100
 					if (!skillFile[skill].extras.buff) skillFile[skill].extras.buff = []
 
-					skillFile[skill].extras.buff.push([skillFile[skill].buff, skillFile[skill].buffCount ? skillFile[skill].buffCount : 1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
+					skillFile[skill].extras.buff.push(['user', skillFile[skill].buff, skillFile[skill].buffCount ? skillFile[skill].buffCount : 1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance, null]) //stat, stages, chance
 					delete skillFile[skill].buff;
 					delete skillFile[skill].buffchance;
 					delete skillFile[skill].buffCount;
@@ -672,7 +672,7 @@ commands.updateskills = new Command({
 					if (skillFile[skill].buffchance == 0) skillFile[skill].buffchance = 100
 					if (!skillFile[skill].extras.buff) skillFile[skill].extras.buff = []
 
-					skillFile[skill].extras.buff.push([skillFile[skill].debuff, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
+					skillFile[skill].extras.buff.push(['user', skillFile[skill].debuff, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance, null]) //stat, stages, chance
 					delete skillFile[skill].debuff;
 					delete skillFile[skill].buffchance;
 					delete skillFile[skill].debuffCount;
@@ -681,7 +681,7 @@ commands.updateskills = new Command({
 					if (skillFile[skill].buffchance == 0) skillFile[skill].buffchance = 100
 					if (!skillFile[skill].extras.buff) skillFile[skill].extras.buff = []
 
-					skillFile[skill].extras.buff.push([skillFile[skill].debuffuser, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance]) //stat, stages, chance
+					skillFile[skill].extras.buff.push(['user', skillFile[skill].debuffuser, skillFile[skill].debuffCount ? skillFile[skill].debuffCount : -1, isNaN(skillFile[skill].buffchance) ? 100 : skillFile[skill].buffchance, null]) //stat, stages, chance
 					delete skillFile[skill].debuffuser;
 					delete skillFile[skill].buffchance;
 					delete skillFile[skill].debuffCount;
@@ -690,7 +690,7 @@ commands.updateskills = new Command({
 					if (!skillFile[skill].extras.buff) skillFile[skill].extras.buff = []
 
 					for (let i = 0; i < 2; i++) {
-						skillFile[skill].extras.buff.push([skillFile[skill].dualbuff[i], 1, 100]) //stat, stages, chance
+						skillFile[skill].extras.buff.push(['user', skillFile[skill].dualbuff[i], 1, 100, null]) //stat, stages, chance
 					}
 					delete skillFile[skill].dualbuff;
 				} 
@@ -698,7 +698,7 @@ commands.updateskills = new Command({
 					if (!skillFile[skill].extras.buff) skillFile[skill].extras.buff = []
 
 					for (let i = 0; i < 2; i++) {
-						skillFile[skill].extras.buff.push([skillFile[skill].dualdebuff[i], -1, 100]) //stat, stages, chance
+						skillFile[skill].extras.buff.push(['user', skillFile[skill].dualdebuff[i], -1, 100, null]) //stat, stages, chance
 					}
 					delete skillFile[skill].dualdebuff;
 				}

@@ -43,55 +43,36 @@ statusList = {
 
 	buff: new Extra({
 		name: "Stat Buff",
-		desc: "Will buff or debuff the foe's <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff.",
-		args: [
-			{
-				name: "Stat",
-				type: "Word",
-				forced: true
-			},
-			{
-				name: "Stages",
-				type: "Num"
-			},
-			{
-				name: "Chance",
-				type: "Decimal"
-			}
-		],
+		desc: extrasList.buff.desc,
+		args: extrasList.buff.args,
 		multiple: true,
-		diffflag: [0, 2],
+		diffflag: [0, 1, 3],
 		applyfunc(message, skill, args) {
-			const stat = args[0].toLowerCase()
-			const stages = args[1] ?? 1
-			const chance = Math.min(args[2] ?? 100, 100)
+			const target = args[0].toLowerCase()
+			const stat = args[1].toLowerCase()
+			const stages = args[2] ?? 1
+			const chance = Math.min(args[3] ?? 100, 100)
+			const turns = args[4] ?? null
 
+			if (target != 'user' && target != 'target') 
+				return void message.channel.send(`You typed ${target} as the target. It must be either \`user\` or \`target\`.`)
 			if (!stats.includes(stat))
 				return void message.channel.send("That's not a valid stat!");
-			if (args[1] == 0)
+			if (stages == 0)
 				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
-			if (args[2] <= 0)
+			if (chance <= 0)
 				return void message.channel.send("You can't have a percentage less than 0, as then it would never happen!");
-				
-			makeStatus(skill, "buff", [stat, stages, chance]);
+			if (turns && turns <= 0)
+				return void message.channel.send("You can't have a turn amount less than 0, as then it would revert to normal too soon.");
+
+			makeStatus(skill, "buff", [target, stat, stages, chance, turns])
 			return true
 		},
+		onselect(char, skill, btl, vars) {
+			return extrasList.buff.onselect(char, skill, btl, vars);
+		},
 		onuse(char, targ, skill, btl, vars) {
-			if (targ.charms && targ.charms.includes("PureVision") && vars[0].toLowerCase() === 'prc') return `${targ.name}'s Pure Vision negated the change.`;
-
-			if (vars[2]) {
-				let chance = randNum(1, 100);
-
-				if (chance <= vars[2]) {
-					buffStat(targ, vars[0].toLowerCase(), vars[1]);
-					return `__${targ.name}__'s _${vars[0].toUpperCase()}_ was buffed ${vars[1]} time(s)!`;
-				} else {
-					return `But it missed __${targ.name}__!`;
-				}
-			} else {
-				buffStat(targ, vars[0].toLowerCase(), vars[1]);
-				return `__${targ.name}__'s _${vars[0].toUpperCase()}_ was buffed ${vars[1]} time(s)!`;
-			}
+			return extrasList.buff.onuse(char, targ, skill, btl, vars)
 		}
 	}),
 

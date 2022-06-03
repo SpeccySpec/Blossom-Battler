@@ -1,117 +1,104 @@
+function buffText(buffArray) {
+	let finalText = '';
+
+	buffArray.sort((a, b) => {
+		return (((a[0] == 'target' ? 2000000 : 1000000) + (100000 * (stats.indexOf(a[1]) + 1)) + [100 - a[3]]) - ((b[0] == 'target' ? 2000000 : 1000000) + (100000 * (stats.indexOf(b[1]) + 1)) + [100 - b[3]]))
+	})
+
+	let uhh = 0
+
+	while (uhh <= 3) {
+		for (i in buffArray) {
+			if (i > 0 && buffArray[i][0] == buffArray[i - 1][0] && buffArray[i][1] == buffArray[i - 1][1] && buffArray[i][3] == buffArray[i - 1][3]) {
+				buffArray[i - 1][2] += buffArray[i][2]
+				buffArray.splice(i, 1)
+			}
+		}
+		uhh++
+	}
+
+	buffArray.sort((a, b) => {
+		return (((a[0] == 'target' ? 2000000 : 1000000) + (100 * a[2] < 0 ? (a[2] * -0.2) : a[2]) + [10000 - a[3]]) - ((b[0] == 'target' ? 2000000 : 1000000) + (100 * b[2] < 0 ? (b[2] * -0.2) : b[2]) + [10000 - b[3]]))
+	})
+
+	for (i in buffArray) {
+		buffArray[i][1] = [buffArray[i][1]]
+	}
+
+	uhh = 0
+	while (uhh <= 3) {
+		for (i in buffArray) {
+			if (i > 0 && buffArray[i][0] == buffArray[i - 1][0] && buffArray[i][2] == buffArray[i - 1][2] && buffArray[i][3] == buffArray[i - 1][3]) {
+				buffArray[i - 1][1].push(...buffArray[i][1])
+				buffArray.splice(i, 1)
+			}
+		}
+
+		uhh++
+	}
+
+	buffArray.sort((a, b) => {
+		return (((a[0] == 'target' ? 2000000 : 1000000) + (100000 * (stats.indexOf(a[1]) + 1)) + [100 - a[3]]) - ((b[0] == 'target' ? 2000000 : 1000000) + (100000 * (stats.indexOf(b[1]) + 1)) + [100 - b[3]]))
+	})
+
+	let curBuff = []
+	let oldBuff = []
+
+	for (i in buffArray) {
+		curBuff = buffArray[i]
+
+		if (oldBuff == []) {
+			if (curBuff[3] != 100) finalText += `Has`
+		}
+
+		if (oldBuff == [] || curBuff[3] != oldBuff[3]) {
+			if (curBuff[3] != 100) finalText += `${i == 0 ? '' : 'Has'} a **${curBuff[3]}%** chance to buff `
+			else {
+				if (i == 0) finalText += `Buffs `
+				else finalText += ` buffs `
+			}
+		}
+
+		if (oldBuff == [] || curBuff[0] != oldBuff[0])
+			finalText += ` ${curBuff[0] == 'target' ? "**the target's** " : "**the user's** "}`
+
+		for (j in curBuff[1]) {
+			finalText += `**${curBuff[1][j].toUpperCase()}**`
+
+			if (j < curBuff[1].length - 2) {
+				finalText += `, `
+			} else if (j == curBuff[1].length - 2) {
+				finalText += ` and `
+			}
+		}
+
+		if (curBuff[2] != oldBuff[2] || oldBuff == []) {
+			finalText += ` by **${curBuff[2]}** stage${Math.abs(curBuff[2]) <= 1 ? '' : 's'}`
+
+			if (i < buffArray.filter(x => x[3] == curBuff[3]).length - 2) {
+				finalText += `, `
+			} else if (i == buffArray.filter(x => x[3] == curBuff[3]).length - 2) {
+				finalText += ` and `
+			} else {
+				finalText += `.\n`
+			}
+		}
+
+		oldBuff = curBuff
+	}
+
+	return finalText
+}
+
+
+
+
+
 function statusDesc(skillDefs) {
 	var finalText = '';
 	
 	if (hasStatus(skillDefs, 'buff')) {
-		let buffs = {
-			buffs: {},
-			debuffs: {},
-		}
-
-		for (let i = 0; i < skillDefs.statusses.buff.length; i++) {
-			if (skillDefs.statusses.buff[i][1] > 0) {
-				if (!buffs.buffs[skillDefs.statusses.buff[i][2]]) buffs.buffs[skillDefs.statusses.buff[i][2]] = {};
-				if (!buffs.buffs[skillDefs.statusses.buff[i][2]][skillDefs.statusses.buff[i][0]]) buffs.buffs[skillDefs.statusses.buff[i][2]][skillDefs.statusses.buff[i][0]] = 0;
-				buffs.buffs[skillDefs.statusses.buff[i][2]][skillDefs.statusses.buff[i][0]] += Math.abs(skillDefs.statusses.buff[i][1]);
-			} else {
-				if (!buffs.debuffs[skillDefs.statusses.buff[i][2]]) buffs.debuffs[skillDefs.statusses.buff[i][2]] = {};
-				if (!buffs.debuffs[skillDefs.statusses.buff[i][2]][skillDefs.statusses.buff[i][0]]) buffs.debuffs[skillDefs.statusses.buff[i][2]][skillDefs.statusses.buff[i][0]] = 0;
-				buffs.debuffs[skillDefs.statusses.buff[i][2]][skillDefs.statusses.buff[i][0]] += Math.abs(skillDefs.statusses.buff[i][1]);
-			}
-		}
-
-		let buffArray = []
-		let fullBuffArray = []
-		if (Object.keys(buffs.buffs).length > 0) {
-			for (let i in buffs.buffs) {
-				for (let j in buffs.buffs[i]) {
-					buffArray = []
-					for (let k in buffs.buffs[i]) {
-						buffArray.push([k, buffs.buffs[i][k]])
-					}
-				}
-				buffArray.sort(function(a, b) {
-					return b[1] - a[1];
-				})
-
-				fullBuffArray.push([i, buffArray])
-				fullBuffArray.sort(function(a, b) {
-					return b[0] - a[0];
-				})
-			}
-		}
-
-		for (i in fullBuffArray) {
-			if (fullBuffArray[i][0] == 100) finalText += `Buffs `
-			else finalText += `Has a **${fullBuffArray[i][0]}%** chance to buff `
-
-			for (let j in fullBuffArray[i][1]) {
-				finalText += ` **${fullBuffArray[i][1][j][0].toUpperCase()}**`;
-
-				let sameValue = 0;
-				for (let k in fullBuffArray[i][1]) {
-					if (k <= j) continue
-					if (fullBuffArray[i][1][j][1] == fullBuffArray[i][1][k][1]) sameValue++;
-				}
-				if (sameValue == 0) finalText += ` by ${fullBuffArray[i][1][j][1]} stage${fullBuffArray[i][1][j][1] > 1 ? 's' : ''}`;
-
-				if (sameValue != 0) {
-					if (sameValue == 1) finalText += ` and `;
-					else finalText += `, `;
-				} else {
-					if (j < fullBuffArray[i][1].length - 2) finalText += `, `;
-					else if (j == fullBuffArray[i][1].length - 2) finalText += ` and `;
-					else finalText += `.`;
-				}
-			}
-			finalText += `\n`;
-		}
-
-		buffArray = []
-		fullBuffArray = []
-		if (Object.keys(buffs.debuffs).length > 0) {
-			for (let i in buffs.debuffs) {
-				for (let j in buffs.debuffs[i]) {
-					buffArray = []
-					for (let k in buffs.debuffs[i]) {
-						buffArray.push([k, buffs.debuffs[i][k]])
-					}
-				}
-				buffArray.sort(function(a, b) {
-					return b[1] - a[1];
-				})
-
-				fullBuffArray.push([i, buffArray])
-				fullBuffArray.sort(function(a, b) {
-					return b[0] - a[0];
-				})
-			}
-		}
-
-		for (i in fullBuffArray) {
-			if (fullBuffArray[i][0] == 100) finalText += `Debuffs `
-			else finalText += `Has a **${fullBuffArray[i][0]}%** chance to debuff `
-
-			for (let j in fullBuffArray[i][1]) {
-				finalText += ` **${fullBuffArray[i][1][j][0].toUpperCase()}**`;
-
-				let sameValue = 0;
-				for (let k in fullBuffArray[i][1]) {
-					if (k <= j) continue
-					if (fullBuffArray[i][1][j][1] == fullBuffArray[i][1][k][1]) sameValue++;
-				}
-				if (sameValue == 0) finalText += ` by ${fullBuffArray[i][1][j][1]} stage${fullBuffArray[i][1][j][1] > 1 ? 's' : ''}`;
-
-				if (sameValue != 0) {
-					if (sameValue == 1) finalText += ` and `;
-					else finalText += `, `;
-				} else {
-					if (j < fullBuffArray[i][1].length - 2) finalText += `, `;
-					else if (j == fullBuffArray[i][1].length - 2) finalText += ` and `;
-					else finalText += `.`;
-				}
-			}
-			finalText += `\n`;
-		}
+		finalText += buffText(skillDefs.statusses.buff)
 	}
 	
 	if (hasStatus(skillDefs, 'weather') || hasStatus(skillDefs, 'terrain')) {
@@ -432,116 +419,7 @@ function atkDesc(skillDefs, settings) {
 			finalText += `Has a **${skillDefs.extras.steal[0]}%** chance of stealing **${skillDefs.extras.steal[1]}** of the target team's items.\n`;
 
 		if (hasExtra(skillDefs, 'buff')) {
-			let buffs = {
-				buffs: {},
-				debuffs: {},
-			}
-
-			for (let i = 0; i < skillDefs.extras.buff.length; i++) {
-				if (skillDefs.extras.buff[i][1] > 0) {
-					if (!buffs.buffs[skillDefs.extras.buff[i][2]]) buffs.buffs[skillDefs.extras.buff[i][2]] = {};
-					if (!buffs.buffs[skillDefs.extras.buff[i][2]][skillDefs.extras.buff[i][0]]) buffs.buffs[skillDefs.extras.buff[i][2]][skillDefs.extras.buff[i][0]] = 0;
-					buffs.buffs[skillDefs.extras.buff[i][2]][skillDefs.extras.buff[i][0]] += Math.abs(skillDefs.extras.buff[i][1]);
-				} else {
-					if (!buffs.debuffs[skillDefs.extras.buff[i][2]]) buffs.debuffs[skillDefs.extras.buff[i][2]] = {};
-					if (!buffs.debuffs[skillDefs.extras.buff[i][2]][skillDefs.extras.buff[i][0]]) buffs.debuffs[skillDefs.extras.buff[i][2]][skillDefs.extras.buff[i][0]] = 0;
-					buffs.debuffs[skillDefs.extras.buff[i][2]][skillDefs.extras.buff[i][0]] += Math.abs(skillDefs.extras.buff[i][1]);
-				}
-			}
-
-			let buffArray = []
-			let fullBuffArray = []
-			if (Object.keys(buffs.buffs).length > 0) {
-				for (let i in buffs.buffs) {
-					for (let j in buffs.buffs[i]) {
-						buffArray = []
-						for (let k in buffs.buffs[i]) {
-							buffArray.push([k, buffs.buffs[i][k]])
-						}
-					}
-					buffArray.sort(function(a, b) {
-						return b[1] - a[1];
-					})
-
-					fullBuffArray.push([i, buffArray])
-					fullBuffArray.sort(function(a, b) {
-						return b[0] - a[0];
-					})
-				}
-			}
-
-			for (i in fullBuffArray) {
-				if (fullBuffArray[i][0] == 100) finalText += `Buffs `
-				else finalText += `Has a **${fullBuffArray[i][0]}%** chance to buff `
-
-				for (let j in fullBuffArray[i][1]) {
-					finalText += ` **${fullBuffArray[i][1][j][0].toUpperCase()}**`;
-
-					let sameValue = 0;
-					for (let k in fullBuffArray[i][1]) {
-						if (k <= j) continue
-						if (fullBuffArray[i][1][j][1] == fullBuffArray[i][1][k][1]) sameValue++;
-					}
-					if (sameValue == 0) finalText += ` by ${fullBuffArray[i][1][j][1]} stage${fullBuffArray[i][1][j][1] > 1 ? 's' : ''}`;
-
-					if (sameValue != 0) {
-						if (sameValue == 1) finalText += ` and `;
-						else finalText += `, `;
-					} else {
-						if (j < fullBuffArray[i][1].length - 2) finalText += `, `;
-						else if (j == fullBuffArray[i][1].length - 2) finalText += ` and `;
-						else finalText += `.`;
-					}
-				}
-				finalText += `\n`;
-			}
-
-			buffArray = []
-			fullBuffArray = []
-			if (Object.keys(buffs.debuffs).length > 0) {
-				for (let i in buffs.debuffs) {
-					for (let j in buffs.debuffs[i]) {
-						buffArray = []
-						for (let k in buffs.debuffs[i]) {
-							buffArray.push([k, buffs.debuffs[i][k]])
-						}
-					}
-					buffArray.sort(function(a, b) {
-						return b[1] - a[1];
-					})
-
-					fullBuffArray.push([i, buffArray])
-					fullBuffArray.sort(function(a, b) {
-						return b[0] - a[0];
-					})
-				}
-			}
-
-			for (i in fullBuffArray) {
-				if (fullBuffArray[i][0] == 100) finalText += `Debuffs `
-				else finalText += `Has a **${fullBuffArray[i][0]}%** chance to debuff `
-
-				for (let j in fullBuffArray[i][1]) {
-					finalText += ` **${fullBuffArray[i][1][j][0].toUpperCase()}**`;
-
-					let sameValue = 0;
-					for (let k in fullBuffArray[i][1]) {
-						if (k <= j) continue
-						if (fullBuffArray[i][1][j][1] == fullBuffArray[i][1][k][1]) sameValue++;
-					}
-					if (sameValue == 0) finalText += ` by ${fullBuffArray[i][1][j][1]} stage${fullBuffArray[i][1][j][1] > 1 ? 's' : ''}`;
-
-					if (sameValue != 0) {
-						if (sameValue == 1) finalText += ` and `;
-						else finalText += `, `;
-					} else {
-						if (j < fullBuffArray[i][1].length - 2) finalText += `, `;
-						else if (j == fullBuffArray[i][1].length - 2) finalText += ` and `;
-						else finalText += `.`;
-					}
-				}
-				finalText += `\n`;
-			}
+			finalText += buffText(skillDefs.extras.buff)
 		}
 
 		if (hasExtra(skillDefs, 'powerbuff')) {
