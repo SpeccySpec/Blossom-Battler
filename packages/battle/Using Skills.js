@@ -182,7 +182,7 @@ getAffinity = (char, skillType) => {
 			else if (points == 2)
 				affinity = affinityToConsider != '' ? affinityToConsider : 'block'
 			else if (points == -4)
-				affinity = "deathly"
+				affinity = "deadly"
 			else if (points == -3)
 				affinity = "superweak"
 		}
