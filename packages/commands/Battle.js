@@ -430,8 +430,8 @@ commands.startbattle = new Command({
 		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
 		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
 		let locale = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/location.json`, true);
-		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
-		let enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`, true);
+		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
+		enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`, true);
 
 		let weather = locale.weather ?? 'none'
 		let terrain = locale.terrain ?? 'none';
@@ -510,6 +510,7 @@ commands.startbattle = new Command({
 			battle.teams[0].backup.push(char);
 		}
 
+		battle.teams[0].name = args[0];
 		battle.teams[0].items = objClone(party.items);
 		battle.teams[0].pets = objClone(party.negotiateAllies);
 		battle.teams[0].id = args[0];

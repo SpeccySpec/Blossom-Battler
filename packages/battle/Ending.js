@@ -66,7 +66,7 @@ winBattle = (btl, i) => {
 
 			for (let char2 of btl.teams[i].members) {
 				if (char2.id  == char.id) continue;
-				embedtxt += `\n{changeTrust(char, char2, Math.round(35*settings.rates.trustrate), false)}`;
+				embedtxt += `${changeTrust(char, char2, Math.round(35*settings.rates.trustrate), false)}`;
 				charFile[char.truename].trust = char.trust;
 				charFile[char2.truename].trust = char2.trust;
 			}
@@ -74,9 +74,61 @@ winBattle = (btl, i) => {
 	}
 
 	// Loot
-	// (unfinished)
 	let items = {};
-	
+	let parties = setUpFile(`${dataPath}/json/${btl.guild.id}/parties.json`, true);
+	lootFile = setUpFile(`${dataPath}/json/${btl.guild.id}/loot.json`, true);
+	weaponFile = setUpFile(`${dataPath}/json/${btl.guild.id}/weapons.json`);
+	armorFile = setUpFile(`${dataPath}/json/${btl.guild.id}/armor.json`);
+    itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`);
+	let party = parties[btl.teams[i].name];
+
+	for (let p of btl.teams) {
+		for (let k in p.members) {
+			if (p.members[k].loot && lootFile[p.members[k].loot]) {
+				let loot = lootFile[p.members[k].loot];
+
+				for (let item of loot.items) {
+					for (let j = 0; j < item.amount; j++) {
+						if (randNum(1, 100) <= item.chance) {
+							switch(item.type.toLowerCase()) {
+								case 'item':
+									if (itemFile[item.id]) {
+										if (!items[itemFile[item.id].name]) items[itemFile[item.id].name] = 0;
+										if (!party.items[item.id]) party.items[item.id] = 0;
+										items[itemFile[item.id].name]++;
+										party.items[item.id]++;
+									}
+									break;
+
+								// btw we should only be able to aquire one weapon or armor of each type.
+								case 'weapon':
+									if (!party.weapons[item.id] && weaponFile[item.id]) {
+										party.weapons[item.id] = objClone(weaponFile[item.id]);
+										items[item.id] = 1;
+									}
+									break;
+
+								case 'armor':
+									if (!party.armors[item.id] && armorFile[item.id]) {
+										party.armors[item.id] = objClone(armorFile[item.id]);
+										items[item.id] = 1;
+									}
+									break;
+							}
+						}
+					}
+				}
+
+				for (let j in items) {
+					if (items[j] && items[j] > 0) {
+						embedtxt += `\nThe ${p.members[k].name} dropped ${(items[j] <= 1) ? 'a' : items[j]} ${itemFile[j].name}${(items[j] > 1) ? 's' : ''}`;
+					}
+				}
+
+				fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/parties.json`, JSON.stringify(parties, '	', 4))
+			}
+		}
+	}
 
 	// Save character shit.
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));

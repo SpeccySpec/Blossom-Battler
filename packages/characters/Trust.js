@@ -32,7 +32,7 @@ changeTrust = (char, char2, i, send, channel) => {
 				.setDescription(`${char.name} & ${char2.name} reached _Trust Level __${char.trust[char2.truename].level}___!`)
 			return void channel.send({embeds: [DiscordEmbed]});
 		} else {
-			return `${trustemoji} ${char.name} & ${char2.name} grow closer, reaching _Trust Level __${char.trust[char2.truename].level}___! ${trustemoji}`;
+			return `\n${trustemoji} ${char.name} & ${char2.name} grow closer, reaching _Trust Level __${char.trust[char2.truename].level}___! ${trustemoji}`;
 		}
 	}
 
