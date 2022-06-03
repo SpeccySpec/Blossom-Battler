@@ -9,19 +9,20 @@ xpBar = (charDefs) => {
 
 gainXp = (message, charDefs, xp, allone) => {
     charDefs.xp += xp;
+	console.log(`${charDefs.name} ${charDefs.xp}/${charDefs.maxxp}XP`);
 
-	console.log(`${charDefs.name} ${charDefs.xp}/${charDefs.maxxp}XP`)
+	let channel = message.channel ?? message;
 
 	if (allone) {
 		let embed = lvlUpWithXpInMind(charDefs, false, message, true);
 
 		if (embed) {
-			message.channel.send({content: `${xpBar(charDefs)}\n${charDefs.name} got _${xp}XP_!`, embeds: [embed]});
+			channel.send({content: `${xpBar(charDefs)}\n${charDefs.name} got _${xp}XP_!`, embeds: [embed]});
 		} else {
-			message.channel.send(`${xpBar(charDefs)}\n${charDefs.name} got _${xp}XP_!`);
+			channel.send(`${xpBar(charDefs)}\n${charDefs.name} got _${xp}XP_!`);
 		}
 	} else {
-		message.channel.send(`${xpBar(charDefs)}\n${charDefs.name} got _${xp}XP_!`);
+		channel.send(`${xpBar(charDefs)}\n${charDefs.name} got _${xp}XP_!`);
 		lvlUpWithXpInMind(charDefs, false, message);
 	}
 }
@@ -183,10 +184,12 @@ lvlUpWithXpInMind = (charDefs, forceEvo, message, returnembed) => {
 	DiscordEmbed.title = `${charDefs.name} levelled up${(lvlCount <= 1) ? '!' : ' ' + lvlCount + ' times!'}`;
 	DiscordEmbed.description = `_${charDefs.name}: "${selectQuote(charDefs, 'lvl')}"_\n\n**Level ${charDefs.level}**\n${DiscordEmbed.description}`;
 
+	let channel = message.channel ?? message;
+
 	if (returnembed)
 		return DiscordEmbed;
 	else if (message)
-		message.channel.send({embeds: [DiscordEmbed]});
+		channel.send({embeds: [DiscordEmbed]});
 }
 
 // Level up a set number of times

@@ -40,11 +40,6 @@ winBattle = (btl, i) => {
 
 	embedtxt += pacified;
 
-	let DiscordEmbed = new Discord.MessageEmbed()
-		.setColor(elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike)
-		.setTitle("Well done!")
-		.setDescription(embedtxt)
-
 	// Now let's talk about XP.
 	let enemyxp = intendedxp;
 
@@ -58,26 +53,39 @@ winBattle = (btl, i) => {
 	enemyxp = Math.round(enemyxp*(settings.rates.xprate ?? 1));
 
 	// Alright, let's award XP!
-	btl.channel.send({embeds: [DiscordEmbed]}).then(message => {
-		let charFile = setUpFile(`${dataPath}/json/${btl.guild.id}/characters.json`);
-	
-		for (let char of btl.teams[i].members) {
-			if (charFile[char.truename]) {
-				gainXp(message, charFile[char.truename], enemyxp, true);
-				charFile[char.truename].hp = Math.min(charFile[char.truename].maxhp, char.hp);
-				charFile[char.truename].mp = Math.min(charFile[char.truename].maxmp, char.mp);
+	let charFile = setUpFile(`${dataPath}/json/${btl.guild.id}/characters.json`);
+
+	for (let char of btl.teams[i].members) {
+		if (charFile[char.truename]) {
+			gainXp(btl.channel, charFile[char.truename], enemyxp, true);
+			charFile[char.truename].hp = Math.min(charFile[char.truename].maxhp, char.hp);
+			charFile[char.truename].mp = Math.min(charFile[char.truename].maxmp, char.mp);
+
+			// While I'm here... why don't I sort out Trust!
+			if (!char.trust) char.trust = {};
+
+			for (let char2 of btl.teams[i].members) {
+				if (char2.id  == char.id) continue;
+				embedtxt += `\n{changeTrust(char, char2, Math.round(35*settings.rates.trustrate), false)}`;
+				charFile[char.truename].trust = char.trust;
+				charFile[char2.truename].trust = char2.trust;
 			}
 		}
+	}
 
-		// We'll uh... do the rest in here for async reasons.
+	// Loot
+	// (unfinished)
+	let items = {};
+	
 
-		// Loot
-		// (unfinished)
+	// Save character shit.
+	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 
-		// Trust
-		// (unfinished)
-		fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
-	})
+	let DiscordEmbed = new Discord.MessageEmbed()
+		.setColor(elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike)
+		.setTitle("__Battle Results__")
+		.setDescription(embedtxt)
+	btl.channel.send({embeds: [DiscordEmbed]})
 
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, '{}');
 }
