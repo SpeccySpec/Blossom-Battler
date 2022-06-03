@@ -445,6 +445,7 @@ extrasList = {
 			return true
 		},
 		onuse(char, targ, skill, btl, vars) {
+			if (targ.mp <= 0) return `But it failed!`;
 			let MPtaken = vars[0] * skill.hits ?? 1;
 			if (targ.mp < MPtaken) MPtaken = targ.mp;
 
@@ -465,6 +466,7 @@ extrasList = {
 			return true
 		},
 		onuseoverride(char, targ, skill, btl, vars) {
+			if (targ.mp <= 0) return `But it failed!`;
 			let mpStolen = Math.max(1, skill.pow+randNum(-10, 10));
 			
 			targ.mp = Math.max(0, targ.mp-mpStolen)
