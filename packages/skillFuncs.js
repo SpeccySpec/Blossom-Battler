@@ -353,19 +353,29 @@ function atkDesc(skillDefs, settings) {
 			let extraSom = ''
 			finalText += `Needs`
 
-			for (i in skillDefs.extras.need) {
-				finalText += ` **${skillDefs.extras.need[i][0]} ${skillDefs.extras.need[i][1] ? 'or equal to' : 'than'}** `
+			let needThing = skillDefs.extras.need.sort((a, b) => {
+				return ((a[0] == 'less' ? 10 : 20) + (a[1] == true ? 2 : 1)) - ((b[0] == 'less' ? 10 : 20) + (b[1] == true ? 2 : 1))
+			})
 
-				switch (skillDefs.extras.need[i][3]) {
-					case 'hp':
-						extraSom = ' HP';
-						break;
+			let curTxt = ''
+			let oldTxt = ''
+			let lastIndex = 0
+
+			for (i in needThing) {
+				curTxt = ` **${needThing[i][0]} ${needThing[i][1] ? 'or equal to' : 'than'}** `
+
+				if (curTxt != oldTxt) {
+					finalText += curTxt
+					lastIndex = i
+				}
+
+				switch (needThing[i][3]) {
 					case 'mp':
 						extraSom = ' MP';
 						break;
 					case 'lb':
-						if (settings.mechanics.limitbreaks) extraSom = ' LB';
-						else extraSom = ' MP';
+						if (settings.mechanics.limitbreaks) extraSom = '% LB';
+						else extraSom = '% of the user\'s Max MP';
 						break;
 					case 'money':
 						extraSom = ` of Team's Money`;
@@ -376,20 +386,33 @@ function atkDesc(skillDefs, settings) {
 					case 'mppercent':
 						extraSom = '% of the user\'s Max MP';
 						break;
-					case 'lbpercent':
-						if (settings.mechanics.limitbreaks) extraSom = '% of the user\'s Max LB';
-						else extraSom = '% of the user\'s Max MP';
-						break;
 					case 'moneypercent':
 						extraSom = '% of the user Team\'s Money';
 						break;
+					default:
+						extraSom = ' HP';
+						break;
 				}
 
-				finalText += `**${skillDefs.extras.need[i][2]}${extraSom}**`;
+				finalText += `**${needThing[i][2]}${extraSom}**`;
 
-				if (skillDefs.extras.need.length > 1) {
-					if (i < skillDefs.extras.need.length - 2) finalText += `, `;
-					else if (i == skillDefs.extras.need.length - 2) finalText += ` and `;
+				oldTxt = curTxt
+
+				console.log(i - lastIndex)
+				console.log(needThing.filter(x => x[0] == needThing[i][0]).length - 2)
+
+				if (needThing.length > 1) {
+					if ((i - lastIndex) < needThing.filter(x => x[0] == needThing[i][0]).length - 2) {
+						finalText += `, `
+					} else if ((i - lastIndex) == needThing.filter(x => x[0] == needThing[i][0]).length - 2) {
+						finalText += ` and `
+					} else {
+						if (i < needThing.length - 2) {
+							finalText += `, `
+						} else if (i == needThing.length - 2) {
+							finalText += ` and `
+						}
+					}
 				}
 			}
 			
