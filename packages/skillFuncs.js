@@ -423,34 +423,26 @@ function atkDesc(skillDefs, settings) {
 		}
 
 		if (hasExtra(skillDefs, 'powerbuff')) {
-			let powerbuffs = {}
-			for (let i in skillDefs.extras.powerbuff) {
-				for (let j in skillDefs.extras.powerbuff[i]) {
-					if (j % 2 == 0) {
-						if (!powerbuffs[skillDefs.extras.powerbuff[i][j]]) powerbuffs[skillDefs.extras.powerbuff[i][j]] = 0;
-					} else {
-						powerbuffs[skillDefs.extras.powerbuff[i][j-1]] += skillDefs.extras.powerbuff[i][j];
-					}
-				}
-			}
+			let powerbuffs = skillDefs.extras.powerbuff
+
+			powerbuffs.sort((a, b) => {
+				return (stats.indexOf(a[0])*10000 + a[1]*10 + a[2] ? 0 : 1) - (stats.indexOf(b[0])*10000 + b[1]*10 + b[2] ? 0 : 1)
+			})
+
+			let curPB = []
+
 			finalText += `Increases in power with`
 			for (let i in powerbuffs) {
-				finalText += ` **${i.toUpperCase()}** buffs`;
+				finalText += ` **${powerbuffs[i][0].toUpperCase()}** buffs`;
 
-				let sameValue = 0;
-				for (let j in powerbuffs) {
-					if (i == j) continue
-					if (powerbuffs[i] == powerbuffs[j]) sameValue++;
-				}
-				if (sameValue == 0) finalText += ` up to **${powerbuffs[i]}%**`;
+				curPB = powerbuffs[i]
 
-				if (sameValue != 0) {
-					if (sameValue == 1) finalText += ` and`;
-					else finalText += `,`;
-				} else {
-					if (i < Object.keys(powerbuffs).length - 2) finalText += `,`;
-					else if (i == Object.keys(powerbuffs).length - 2) finalText += ` and`;
-					else finalText += `.`;
+				finalText += ` by **up to ${curPB[1] + (curPB[2] ? 100 : 0) }${curPB[2] ? '%' : ''} power**`
+
+				if (i < powerbuffs.length - 2) {
+					finalText += `, `
+				} else if (i == powerbuffs.length - 2) {
+					finalText += ` and `
 				}
 			}
 			finalText += `\n`;

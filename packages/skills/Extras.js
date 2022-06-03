@@ -382,7 +382,7 @@ extrasList = {
 
 	powerbuff: new Extra({
 		name: "Power Buff",
-		desc: "Boosts skill power with <Stat> buffs up to <Percent>%.",
+		desc: "Boosts skill power with <Stat> buffs by up to <Number>, or <Number>% of power.",
 		multiple: true,
 		diffflag: 0,
 		args: [
@@ -392,17 +392,30 @@ extrasList = {
 				forced: true
 			},
 			{
-				name: "Percent",
+				name: "Number",
 				type: "Num",
 				forced: true
+			},
+			{
+				name: "Percent?",
+				type: "Word"
 			}
 		],
 		applyfunc(message, skill, args) {
 			const stat = args[0].toLowerCase()
+			const trueFa = (args[2] == 'true' || args[2] == 'yes' || args[2] == 'y' || args[2] == '1')
 			if (!utilityFuncs.validStat(stat))
 				return void message.channel.send("That's not a valid stat!");
-			makeExtra(skill, "powerbuff", [stat, args[1]]);
+			makeExtra(skill, "powerbuff", [stat, args[1], trueFa]);
 			return true
+		},
+		statmod(char, skill, vars, btl) {
+			if (char?.buffs?.[vars[0]]) {
+				if (vars[2])
+					skill.pow += skill.power * vars[1] / 100 * char.buffs[vars[0]]/3;
+				else
+					skill.pow += vars[1] * char.buffs[vars[0]];
+			}
 		}
 	}),
 
