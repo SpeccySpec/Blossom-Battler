@@ -4,9 +4,10 @@ function getRecipe(itemDefs) {
     if (itemDefs.recipe) { 
         finalText += `Can be ${itemDefs.recipe.shapeless ? `**shapelessly**` : ``} crafted from:\n`;
         let itemTxt = {}
-        for (let i = 1; i <= itemDefs.recipe.recipe.length; i += 2) {
-            if (!itemTxt[itemDefs.recipe.recipe[i]]) itemTxt[itemDefs.recipe.recipe[i]] = 0;
-            itemTxt[itemDefs.recipe.recipe[i]] += 1;
+        for (const i in itemDefs.recipe.recipe) {
+            const item = Object.values(itemDefs.recipe.recipe[i])[0];
+            if (!itemTxt[item]) itemTxt[item] = 0;
+            itemTxt[item] += 1;
         }
         for (let i in itemTxt) {
             finalText += `- **${itemTxt[i]}x** ${i}\n`;
@@ -2026,9 +2027,16 @@ commands.makecraftingrecipe = new Command({
                     collector.stop()
                 }
 
+                let newRecipe = {}
+                for (i in margs) {
+                    if (i % 2 == 1) {
+                        newRecipe[margs[i-1]] = margs[i]
+                    }
+                }
+
                 for (i in itemFile) {
                     if (itemFile[i].recipe) {
-                        if (itemFile[i].recipe.recipe == margs) {
+                        if (itemFile[i].recipe.recipe == newRecipe) {
                             message.channel.send(`This crafting recipe is already in use by ${itemFile[i].name}.`);
                             givenResponce = true
                             collector.stop()
@@ -2038,7 +2046,7 @@ commands.makecraftingrecipe = new Command({
                 }
                 for (i in weaponFile) {
                     if (weaponFile[i].recipe) {
-                        if (weaponFile[i].recipe.recipe == margs) {
+                        if (weaponFile[i].recipe.recipe == newRecipe) {
                             message.channel.send(`This crafting recipe is already in use by ${weaponFile[i].name}.`);
                             givenResponce = true
                             collector.stop()
@@ -2048,7 +2056,7 @@ commands.makecraftingrecipe = new Command({
                 }
                 for (i in armorFile) {
                     if (armorFile[i].recipe) {
-                        if (armorFile[i].recipe.recipe == margs) {
+                        if (armorFile[i].recipe.recipe == newRecipe) {
                             message.channel.send(`This crafting recipe is already in use by ${armorFile[i].name}.`);
                             givenResponce = true
                             collector.stop()
@@ -2060,9 +2068,8 @@ commands.makecraftingrecipe = new Command({
                 itemDefs.recipe = {
                     amount: args[2],
                     shapeless: args[3],
-                    recipe: margs
+                    recipe: newRecipe
                 }
-                
 
                 switch (args[0].toLowerCase()) {
                     case 'item':
