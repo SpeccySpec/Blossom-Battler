@@ -73,7 +73,7 @@ function buffText(buffArray) {
 		}
 
 		if (curBuff[2] != oldBuff[2] || oldBuff == []) {
-			finalText += ` by **${curBuff[2]}** stage${Math.abs(curBuff[2]) <= 1 ? "" : 's'}`
+			finalText += ` by **${curBuff[2]}** stage${Math.abs(curBuff[2]) <= 1 ? '' : 's'}`
 
 			if (i < buffArray.filter(x => x[3] == curBuff[3]).length - 2) {
 				finalText += `, `
