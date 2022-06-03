@@ -556,7 +556,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 		for (let i in skill.extras) {
 			if (extrasList[i] && extrasList[i].statmod) {
 				if (extrasList[i].multiple) {
-					for (let k in skill.extras) extrasList[i].statmod(char, skill, skill.extras[i][k], btl)
+					for (let k in skill.extras[i]) extrasList[i].statmod(char, skill, skill.extras[i][k], btl)
 				} else
 					extrasList[i].statmod(char, skill, skill.extras[i], btl)
 			}
