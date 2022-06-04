@@ -602,6 +602,25 @@ extrasList = {
 				return void message.channel.send("You can't have less than 1 turn for this skill.");
 			makeExtra(skill, "powerverse", [args[0], turns, args[2]]);
 			return true
+		},
+		onuse(char, targ, skill, btl, vars) {
+			if (targ.hp > 0) {
+				addCusVal(targ, "powerverse", {
+					name: skill.name,
+					infname: char.name,
+					turns: vars[1]
+				});
+
+				if (vars[2]) {
+					let txt = vars[2];
+					while (txt.includes('%SKILL%')) txt = txt.replace('%SKILL%', skill.name);
+					while (txt.includes('%USER%')) txt = txt.replace('%USER%', char.name);
+					while (txt.includes('%ENEMY%')) txt = txt.replace('%ENEMY%', targ.name);
+					return txt;
+				} else {
+					return `A red aura is deployed around ${targ.name}!`;
+				}
+			}
 		}
 	}),
 
@@ -630,6 +649,25 @@ extrasList = {
 				return void message.channel.send("You can't have less than 1 turn for this skill.");
 			makeExtra(skill, "spreadverse", [args[0], turns, args[2]]);
 			return true
+		},
+		onuse(char, targ, skill, btl, vars) {
+			if (targ.hp > 0) {
+				addCusVal(targ, "spreadverse", {
+					name: skill.name,
+					infname: char.name,
+					turns: vars[1]
+				});
+
+				if (vars[2]) {
+					let txt = vars[2];
+					while (txt.includes('%SKILL%')) txt = txt.replace('%SKILL%', skill.name);
+					while (txt.includes('%USER%')) txt = txt.replace('%USER%', char.name);
+					while (txt.includes('%ENEMY%')) txt = txt.replace('%ENEMY%', targ.name);
+					return txt;
+				} else {
+					return `A yellow aura is deployed around ${targ.name}!`;
+				}
+			}
 		}
 	}),
 
@@ -1009,6 +1047,30 @@ killVar = (char, name) => {
 }
 
 customVariables = {
+	healverse: {
+		onturn: function(btl, char, vars) {
+			vars.turns--;
+			if (vars.turns <= 0) {
+				killVar(char, "healverse");
+				return `${vars.infname}'s ${vars.name} has worn off for ${char.name}!`;
+			}
+
+			return null;
+		},
+		onhit: function(btl, char, inf, dmg, vars) {
+			let heal = Math.round((dmg/100)*vars.heal);
+			switch(vars.type) {
+				case 'mp':
+					inf.mp = Math.min(inf.maxmp, inf.mp+heal);
+
+				default:
+					inf.hp = Math.min(inf.maxhp, inf.hp+heal);
+			}
+
+			return `${vars.infname}'s ${vars.name} allowed ${inf.name} to restore ${heal}${vars.type.toUpperCase()}`;
+		}
+	},
+
 	healverse: {
 		onturn: function(btl, char, vars) {
 			vars.turns--;
