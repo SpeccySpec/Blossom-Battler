@@ -778,7 +778,7 @@ commands.updateskills = new Command({
 				}
 
 				if (skillFile[skill].steal) {
-					skillFile[skill].extras.steal = [skillFile[skill].steal, 1]; // chance, amount
+					skillFile[skill].extras.steal = [[skillFile[skill].steal, 1]]; // chance, amount
 					delete skillFile[skill].steal;
 				}
 

@@ -415,8 +415,21 @@ function atkDesc(skillDefs, settings) {
 		if (hasExtra(skillDefs, 'drain'))
 			finalText += `Drains **1/${skillDefs.extras.drain[0]} of damage dealt**.\n`;
 
-		if (hasExtra(skillDefs, 'steal'))
-			finalText += `Has a **${skillDefs.extras.steal[0]}%** chance of stealing **${skillDefs.extras.steal[1]}** of the target team's items.\n`;
+		if (hasExtra(skillDefs, 'steal')) {
+			finalText += `Has a ` 
+
+			for (i in skillDefs.extras.steal) {
+				finalText += `**${skillDefs.extras.steal[i][0]}%** chance of stealing **${skillDefs.extras.steal[i][1]}**`
+
+				if (i < skillDefs.extras.steal.length - 2) {
+					finalText += `, `
+				} else if (i == skillDefs.extras.steal.length - 2) {
+					finalText += ` and `
+				}
+			}
+
+			finalText +=`of the target team's items.\n`
+		}
 
 		if (hasExtra(skillDefs, 'buff')) {
 			finalText += buffText(skillDefs.extras.buff)

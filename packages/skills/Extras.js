@@ -492,6 +492,8 @@ extrasList = {
 				forced: true
 			}
 		],
+		multiple: true,
+		diffflag: 0,
 		applyfunc(message, skill, args) {
 			const chance = args[0]
 			const amount = args[1]
