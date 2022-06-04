@@ -11,6 +11,15 @@ loseBattle = (btl, i) => {
 	let lostmoney = randNum(Math.round(party.currency/2), party.currency);
 	party.currency -= lostmoney;
 
+	// Fully restore characters' HP and MP because we lost.
+	let charFile = setUpFile(`${dataPath}/json/${btl.guild.id}/characters.json`);
+	for (let char of btl.teams[i].members) {
+		if (charFile[char.truename]) {
+			charFile[char.truename].hp = charFile[char.truename].maxhp;
+			charFile[char.truename].mp = charFile[char.truename].maxmp;
+		}
+	}
+
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike)
 		.setTitle("__Battle Results__")
@@ -37,7 +46,7 @@ winBattle = (btl, i) => {
 	let settings = setUpSettings(btl.guild.id);
 	let parties = setUpFile(`${dataPath}/json/${btl.guild.id}/parties.json`, true);
 
-	let embedtxt = "**[BATTLE COMPLETE!]**\n"
+	let embedtxt = "**[BATTLE COMPLETE!]**\n";
 
 	// How did we win this battle. Were we murderers or friends :)
 	let pacified = `Team ${btl.teams[i].name} defeated the enemies!`;
