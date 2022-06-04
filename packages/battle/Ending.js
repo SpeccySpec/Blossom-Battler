@@ -128,6 +128,14 @@ winBattle = (btl, i) => {
 	// Money, increased for pacifying
 	let moneyamount = Math.round(intendedmon*settings.rates.moneyrate);
 	if (pacifycount >= maxcount) moneyamount = Math.round(moneyamount*1.38);
+
+	// Greed charms
+	for (let char of btl.teams[i].members) {
+		if (!char.charms) continue;
+		if (char.chamrms.includes("FragileGreed") || char.chamrms.includes("UnbreakableGreed")) moneyamount = Math.round(moneyamount*1.4);
+	}
+
+	// Award Money!
 	embedtxt += `\nThe team got ${moneyamount} ${settings.currency_emoji}${settings.currency}s from the enemies!\n`;
 	parties[btl.teams[i].name].currency += moneyamount;
 
@@ -136,7 +144,7 @@ winBattle = (btl, i) => {
 
 	for (let char of btl.teams[i].members) {
 		if (charFile[char.truename]) {
-			gainXp(btl.channel, charFile[char.truename], enemyxp, true);
+			if (enemyxp > 0) gainXp(btl.channel, charFile[char.truename], enemyxp, true);
 			charFile[char.truename].hp = Math.min(charFile[char.truename].maxhp, char.hp);
 			charFile[char.truename].mp = Math.min(charFile[char.truename].maxmp, char.mp);
 
