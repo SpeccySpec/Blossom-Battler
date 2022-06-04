@@ -463,7 +463,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				}
 
 				// Full Combo!
-				if (damages.length > 1) result.txt += ` **(${(totalHits >= skill.hits) ? '__Full Combo!__ ' : (totalHits + ' hits, ')}${total} Total)**`;
+				if (skill.hits && skill.hits > 1) result.txt += ` **(${(totalHits >= skill.hits) ? '__Full Combo!__ ' : (totalHits + ' hits, ')}${total} Total)**`;
 
 				// OnUse
 				if (skill.extras) {
