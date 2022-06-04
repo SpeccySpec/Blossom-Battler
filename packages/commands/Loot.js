@@ -28,6 +28,22 @@ function lootDesc(lootDefs, lootName, message, itemFile, weaponFile, armorFile) 
         .setColor('#00C917')
 		.setTitle(`${lootDefs.name ? lootDefs.name : lootDefs} *(${userTxt})*`)
 		.setDescription(finalText)
+
+    var knownBy = ""
+
+    var enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
+
+    for (const i in enmFile) {
+        if (foundEnemy(i, message.guild.id)) {
+            if (enmFile[i].loot == lootName) {
+                if (knownBy != "") knownBy += ", ";
+                knownBy += `${i}`
+            }
+        }
+    }
+    
+    if (knownBy != "") DiscordEmbed.fields.push({name: 'Used By:', value: knownBy, inline: false})
+
 	return DiscordEmbed;
 }
 
