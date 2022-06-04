@@ -20,6 +20,7 @@ loseBattle = (btl, i) => {
 			charFile[char.truename].trust = char.trust;
 		}
 	}
+	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/characters.json`, JSON.stringify(charFile));
 
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike)
