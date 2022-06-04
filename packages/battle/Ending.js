@@ -4,7 +4,32 @@ pvpWin = (btl, i) => {
 }
 
 loseBattle = (btl, i) => {
-	btl.channel.send('**[DEBUG]**\nEnemy team won');
+	let settings = setUpSettings(btl.guild.id);
+	let parties = setUpFile(`${dataPath}/json/${btl.guild.id}/parties.json`, true);
+	let party = parties[btl.teams[i].name];
+
+	let lostmoney = randNum(Math.round(party.currency/2), party.currency);
+	party.currency -= lostmoney;
+
+	let DiscordEmbed = new Discord.MessageEmbed()
+		.setColor(elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike)
+		.setTitle("__Battle Results__")
+		.setDescription(`**[BATTLE LOST...]**\nThe enemies defeated you...\nYou lost all of your items and ${lostmoney} ${settings.currency_emoji}${settings.currency}s...`)
+	btl.channel.send({embeds: [DiscordEmbed]}).then(message => {
+		let items = [`Team ${btl.teams[i].name}'s lost items`, btl.channel.id, 'true', 'none', '0', `Team ${btl.teams[i].name} lost a battle on ${getCurrentDate()}. This is what happened to their items.`];
+		for (let i in party.items) {
+			items.push('item');
+			items.push(i);
+			items.push(party.items[i]);
+		}
+
+		console.log(items);
+		commands.registerchest.call(message, [...items]);
+
+		party.items = {};
+		fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/parties.json`, parties);
+	})
+
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, '{}');
 }
 

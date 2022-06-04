@@ -275,7 +275,10 @@ commands.registerchest = new Command({
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4))
 
-        if (!hidden) message.channel.send({content: `Chest ${name} has been created.`, embeds: [chestDesc(chestFile[channel][name], name, message, itemFile, weaponFile, armorFile)]})
+		if (message.author.bot) return;
+
+        if (!hidden) 
+			message.channel.send({content: `Chest ${name} has been created.`, embeds: [chestDesc(chestFile[channel][name], name, message, itemFile, weaponFile, armorFile)]})
         else {
             message.delete()
             message.channel.send(`Chest ${name} has been created.`)
