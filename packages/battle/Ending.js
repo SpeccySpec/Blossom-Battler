@@ -132,7 +132,7 @@ winBattle = (btl, i) => {
 	// Greed charms
 	for (let char of btl.teams[i].members) {
 		if (!char.charms) continue;
-		if (char.chamrms.includes("FragileGreed") || char.chamrms.includes("UnbreakableGreed")) moneyamount = Math.round(moneyamount*1.4);
+		if (char.charms.includes("FragileGreed") || char.charms.includes("UnbreakableGreed")) moneyamount = Math.round(moneyamount*1.4);
 	}
 
 	// Award Money!
