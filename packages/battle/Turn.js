@@ -130,13 +130,15 @@ const menuStates = {
 				btncolor = 'grey'
 			else if (skillinfo?.atktype === 'physical') 
 				btncolor = 'red'
-			comps[compins].push(makeButton(
-				skillinfo?.name ?? skillname,
-				skillinfo
-					? elementEmoji[skillinfo.type]
-					: elementEmoji.strike,
-				btncolor, true, skillname)
-			)
+
+			let emoji1 = skillinfo ? elementEmoji[skillinfo.type] : elementEmoji.strike;
+			let emoji2 = '';
+			if (typeof(skillinfo.type) === 'object') {
+				emoji1 = skillinfo ? elementEmoji[skillinfo.type[0]] : elementEmoji.strike;
+				emoji2 = skillinfo ? elementEmoji[skillinfo.type[1]] : elementEmoji.strike;
+			}
+
+			comps[compins].push(makeButton(`${emoji2}${skillinfo?.name ?? skillname}`, emoji1, btncolor, true, skillname))
 		}
 	},
 	[MENU_ITEM]: ({char, btl, comps}) => {
