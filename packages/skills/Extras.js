@@ -503,6 +503,83 @@ extrasList = {
 				return void message.channel.send("What's the point of stealing if you're not stealing anything?");
 			makeExtra(skill, "steal", [chance, amount]);
 			return true
+		},
+		onuse(char, targ, skill, btl, vars) {
+			let num = randNum(100)
+			let stealTxt = ''
+
+			if (targ?.loot && num <= vars[0]) {
+				let weaponFile = setUpFile(`${dataPath}/json/${btl.guild.id}/weapons.json`);
+				let armorFile = setUpFile(`${dataPath}/json/${btl.guild.id}/armor.json`);
+				let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`);
+				
+				let party = btl.teams[0];
+
+				let amount = vars[1]
+				let curAmount = 0
+
+				let items = {}
+
+				while (curAmount != amount) {
+					let chosenItem = targ.loot[randNum(targ.loot.length - 1)]
+					let index = targ.loot.indexOf(chosenItem)
+
+					switch(chosenItem.type.toLowerCase()) {
+						case 'item':
+							if (itemFile[chosenItem.id]) {
+								if (!items[itemFile[chosenItem.id].name]) items[itemFile[chosenItem.id].name] = 0;
+								if (!party.items[chosenItem.id]) party.items[chosenItem.id] = 0;
+								items[itemFile[chosenItem.id].name]++;
+								party.items[chosenItem.id]++;
+							}
+							break;
+
+						// btw we should only be able to aquire one weapon or armor of each type.
+						case 'weapon':
+							if (!party.weapons[chosenItem.id] && weaponFile[chosenItem.id]) {
+								party.weapons[chosenItem.id] = objClone(weaponFile[chosenItem.id]);
+								items[weaponFile[chosenItem.id].name] = 1;
+							}
+							break;
+
+						case 'armor':
+							if (!party.armors[chosenItem.id] && armorFile[chosenItem.id]) {
+								party.armors[chosenItem.id] = objClone(armorFile[chosenItem.id]);
+								items[armorFile[chosenItem.id].name] = 1;
+							}
+							break;
+					}
+
+					targ.loot[index].amount--;
+
+					if (targ.loot[index].amount == 0) {
+						targ.loot.splice(index, 1);
+					}
+
+					curAmount++
+				}
+
+				stealTxt += `__${char.name}__ stole _`
+
+				for (let j in items) {
+					if (items[j] && items[j] > 0) {
+						stealTxt += `__${(items[j] <= 1) ? 'a' : items[j]} ${j}${(items[j] > 1) ? 's' : ''}__`;
+
+						if (Object.keys(items).indexOf(j) < Object.keys(items).length - 2) {
+							stealTxt += ', ';
+						} else if (Object.keys(items).indexOf(j) == Object.keys(items).length - 2) {
+							stealTxt += ' and ';
+						}
+					}
+				}
+
+				stealTxt += `_ from __${targ.name}__`
+
+				btl.teams[0] = party;
+				
+				return stealTxt;
+			}
+			return `__${char.name}__ failed to steal anything.`
 		}
 	}),
 

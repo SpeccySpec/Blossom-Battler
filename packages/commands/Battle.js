@@ -528,6 +528,8 @@ commands.startbattle = new Command({
 			}
 		}
 
+		let lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`, true);
+
 		let enmDesc = '';
 		for (let i in encounter) {
 			let enemy = objClone(enmFile[encounter[i]]);
@@ -563,6 +565,10 @@ commands.startbattle = new Command({
 				battle.teams[1].members.push(enemy);
 			} else
 				battle.teams[1].backup.push(enemy);
+
+			if (enemy.loot) {
+				enemy.loot = objClone(lootFile?.[enemy.loot]?.items) ?? [];
+			}
 		}
 
 		for (party of battle.teams) leaderSkillsAtBattleStart(party);

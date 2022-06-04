@@ -168,12 +168,23 @@ winBattle = (btl, i) => {
     itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`);
 	let party = parties[btl.teams[i].name];
 
+	//in case the steal extra had done something, or someone used an item (it was not accounted for, Spectra)
+	if (btl.teams[i].items != parties[btl.teams[i].name].items)
+		parties[btl.teams[i].name].items = btl.teams[i].items;
+
+	if (btl.teams[i].weapons != parties[btl.teams[i].name].weapons)
+		parties[btl.teams[i].name].weapons = btl.teams[i].weapons;
+
+	if (btl.teams[i].armors != parties[btl.teams[i].name].armors)
+		parties[btl.teams[i].name].armors = btl.teams[i].armors;
+
+	//the real deal
 	for (let p of btl.teams) {
 		for (let k in p.members) {
-			if (p.members[k].loot && lootFile[p.members[k].loot]) {
-				let loot = lootFile[p.members[k].loot];
+			if (p?.members[k]?.loot && p.members[k].loot.length > 0) {
+				let loot = p.members[k].loot;
 
-				for (let item of loot.items) {
+				for (let item of loot) {
 					for (let j = 0; j < item.amount; j++) {
 						if (randNum(1, 100) <= item.chance) {
 							switch(item.type.toLowerCase()) {
@@ -190,14 +201,14 @@ winBattle = (btl, i) => {
 								case 'weapon':
 									if (!party.weapons[item.id] && weaponFile[item.id]) {
 										party.weapons[item.id] = objClone(weaponFile[item.id]);
-										items[item.id] = 1;
+										items[weaponFile[item.id].name] = 1;
 									}
 									break;
 
 								case 'armor':
 									if (!party.armors[item.id] && armorFile[item.id]) {
 										party.armors[item.id] = objClone(armorFile[item.id]);
-										items[item.id] = 1;
+										items[armorFile[item.id].name] = 1;
 									}
 									break;
 							}
@@ -205,9 +216,19 @@ winBattle = (btl, i) => {
 					}
 				}
 
+				embedtxt += `\nThe ${p.members[k].name} dropped`
+
 				for (let j in items) {
 					if (items[j] && items[j] > 0) {
-						embedtxt += `\nThe ${p.members[k].name} dropped ${(items[j] <= 1) ? 'a' : items[j]} ${itemFile[j].name}${(items[j] > 1) ? 's' : ''}`;
+						embedtxt += ` ${(items[j] <= 1) ? 'a' : items[j]} ${j}${(items[j] > 1) ? 's' : ''}`;
+					
+						if (Object.keys(items).indexOf(j) < Object.keys(items).length - 2) {
+							embedtxt += ', ';
+						} else if (Object.keys(items).indexOf(j) == Object.keys(items).length - 2) {
+							embedtxt += ' and ';
+						} else {
+							embedtxt += '.';
+						}
 					}
 				}
 
