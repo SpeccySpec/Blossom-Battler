@@ -621,7 +621,34 @@ sendCurTurnEmbed = (char, btl) => {
 					}
 
 					if (skill.target === "one" || skill.target === "spreadopposing") {
-						menustate = MENU_TEAMSEL;
+						let alivecount = 0;
+						let alivenum = [0, 0];
+
+						for (let k in btl.teams) {
+							if (k == char.team) continue;
+
+							for (let j in btl.teams[k].members) {
+								if (btl.teams[k].members[j].hp > 0) {
+									alivenum = [k, j];
+									alivecount++;
+								}
+							}
+						}
+
+						if (alivecount == 1) {
+							btl.action.target = alivenum;
+							alreadyResponded = true;
+
+							doAction(char, btl, btl.action);
+							collector.stop();
+
+							return i.update({
+								content: `<@${char.owner}>`,
+								embeds: [DiscordEmbed],
+							});
+						} else {
+							menustate = MENU_TEAMSEL;
+						}
 					} else if (skill.target === "ally" || skill.target === "spreadallies") {
 						btl.action.target[0] = char.team;
 						menustate = MENU_TARGET;

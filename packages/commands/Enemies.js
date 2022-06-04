@@ -289,6 +289,63 @@ commands.updateenemies = new Command({
 	}
 })
 
+commands.setmoney = new Command({
+    desc: "Sets the amount of money an enemy can give you after battle. You can set it to be constant or varying. If it's constant, you'll get that exact amount of money every time, otherwise, it'll be up to 25 currency different. Setting it to -1 will allow me to give you a value after battles!",
+    section: 'enemies',
+    args: [
+        {
+            name: "Enemy",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Money",
+            type: "Num",
+            forced: true
+        },
+        {
+            name: "Constant or Varying?",
+            type: "Word",
+            forced: false
+        }
+    ],
+	checkban: true,
+	admin: 'You do not have permission to assign loot to an enemy.',
+    func: (message, args) => {
+        enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+
+        if (!lootFile[args[1]]) return message.channel.send(`${args[1]} is not a valid loot table name.`);
+
+        if (enemyFile[args[0]]) {
+			let settings = setUpSettings(message.guild.id);
+
+			if (args[1] <= -1) {
+				delete enemyFile[args[0]].money;
+				message.channel.send(`${args[0]} will now give you autoset ${settings.currency_emoji}${settings.currency}s by me!`);
+			} else {
+				let constant = false;
+				if (args[2]) {
+					switch(args[2].toLowerCase()) {
+						case 'constant':
+						case 'unchanging':
+						case 'notvarying':
+						case 'not varying':
+							constant = true;
+							break;
+					}
+				}
+
+				enemyFile[args[0]].money = [args[1], constant];
+				message.channel.send(`${args[0]} will now give you ${args[1]} ${settings.currency_emoji}${settings.currency}s.`);
+			}
+
+        } else
+            return message.channel.send(`${args[0]} is not a valid enemy.`)
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, 4));
+    }
+})
+
 commands.assignloot = new Command({
     desc: `Assigns a loot table to an enemy.`,
     section: 'enemies',

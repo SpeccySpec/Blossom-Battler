@@ -10,6 +10,8 @@ loseBattle = (btl, i) => {
 
 winBattle = (btl, i) => {
 	let settings = setUpSettings(btl.guild.id);
+	let parties = setUpFile(`${dataPath}/json/${btl.guild.id}/parties.json`, true);
+
 	let embedtxt = "**[BATTLE COMPLETE!]**\n"
 
 	// How did we win this battle. Were we murderers or friends :)
@@ -18,6 +20,7 @@ winBattle = (btl, i) => {
 	let maxcount = 0;
 	
 	let intendedxp = 0; // psst lets sneak xp in here too
+	let intendedmon = 0; // psst lets sneak money in here too
 	for (let k in btl.teams) {
 		if (k == i) continue;
 		for (let char of btl.teams[k].members) {
@@ -30,6 +33,41 @@ winBattle = (btl, i) => {
 
 				intendedxp += Math.round(xp);
 			}
+
+			let money = 0;
+			if (char.money) {
+				if (char.money[0] > 0) {
+					money = char.money[0];
+					if (char.money[1]) money += randNum(-25, 25);
+				}
+			} else {
+				if (char.type) {
+					switch(char.type) {
+						case 'miniboss':
+							money = randNum(100, 250);
+							break;
+
+						case 'boss':
+							money = randNum(200, 400);
+							break;
+
+						case 'bigboss':
+							money = randNum(450, 600);
+							break;
+
+						case 'deity':
+							money = randNum(750, 1000);
+							break;
+
+						default:
+							money = randNum(5, 50);
+					}
+				} else {
+					money = randNum(5, 50);
+				}
+			}
+
+			if (money > 0) intendedmon += money;
 		}
 	}
 
@@ -51,6 +89,12 @@ winBattle = (btl, i) => {
 
 	// XP Rate
 	enemyxp = Math.round(enemyxp*(settings.rates.xprate ?? 1));
+
+	// Money, increased for pacifying
+	let moneyamount = Math.round(intendedmon*settings.rates.moneyrate);
+	if (pacifycount >= maxcount) moneyamount = Math.round(moneyamount*1.38);
+	embedtxt += `\nThe team got ${moneyamount} ${settings.currency_emoji}${settings.currency}s from the enemies!\n`;
+	parties[btl.teams[i].name].currency += moneyamount;
 
 	// Alright, let's award XP!
 	let charFile = setUpFile(`${dataPath}/json/${btl.guild.id}/characters.json`);
@@ -75,7 +119,6 @@ winBattle = (btl, i) => {
 
 	// Loot
 	let items = {};
-	let parties = setUpFile(`${dataPath}/json/${btl.guild.id}/parties.json`, true);
 	lootFile = setUpFile(`${dataPath}/json/${btl.guild.id}/loot.json`, true);
 	weaponFile = setUpFile(`${dataPath}/json/${btl.guild.id}/weapons.json`);
 	armorFile = setUpFile(`${dataPath}/json/${btl.guild.id}/armor.json`);
