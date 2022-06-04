@@ -20,25 +20,29 @@ loseBattle = (btl, i) => {
 			charFile[char.truename].trust = char.trust;
 		}
 	}
-	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/characters.json`, JSON.stringify(charFile));
+	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/characters.json`, JSON.stringify(charFile, null, 4));
 
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike)
 		.setTitle("__Battle Results__")
 		.setDescription(`**[BATTLE LOST...]**\nThe enemies defeated you...\nYou lost all of your items and ${lostmoney} ${settings.currency_emoji}${settings.currency}s...`)
 	btl.channel.send({embeds: [DiscordEmbed]}).then(message => {
-		let items = [`Team ${btl.teams[i].name}'s lost items`, btl.channel.id, 'true', 'none', '0', `Team ${btl.teams[i].name} lost a battle on ${getCurrentDate()}. This is what happened to their items.`];
-		for (let i in party.items) {
-			items.push('item');
-			items.push(i);
-			items.push(party.items[i]);
+		if (Object.keys(party.items).length > 0) {
+			let items = [`Team ${btl.teams[i].name}'s lost items`, btl.channel.id, 'true', 'none', '0', `Team ${btl.teams[i].name} lost a battle on ${getCurrentDate()}. This is what happened to their items.`];
+			for (let i in party.items) {
+				items.push('item');
+				items.push(i);
+				items.push(party.items[i]);
+			}
+
+			console.log(items);
+			commands.registerchest.call(message, [...items]);
+
+			party.items = {};
 		}
 
-		console.log(items);
-		commands.registerchest.call(message, [...items]);
-
-		party.items = {};
-		fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/parties.json`, parties);
+		parties[btl.teams[i].name] = party;
+		fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/parties.json`, JSON.stringify(parties, null, 4))
 	})
 
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, '{}');
