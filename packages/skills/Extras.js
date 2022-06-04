@@ -689,7 +689,7 @@ extrasList = {
 
 	heavenwrath: new Extra({
 		name: "Heaven's Wrath",
-		desc: "kill Power boosted by <Multiplier>x when not alone, and all allies are alive.",
+		desc: "Skill Power boosted by <Multiplier>x when not alone, and all allies are alive.",
 		args: [
 			{
 				name: "Mulitplier",
