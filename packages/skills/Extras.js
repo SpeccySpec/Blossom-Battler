@@ -278,11 +278,11 @@ extrasList = {
 	rest: new Extra({
 		name: "Rest",
 		desc: "Forces the user to rest for one turn.",
-		applyfunc: function(message, skill) {
+		applyfunc(message, skill) {
 			makeExtra(skill, "rest", [true]);
 			return true
 		},
-		onselect: function(char, skill, btl, vars) {
+		onselect(char, skill, btl, vars) {
 			char.rest = true;
 			return `_${char.name} must rest to regain their energy!_`;
 		}
@@ -608,7 +608,8 @@ extrasList = {
 				addCusVal(targ, "powerverse", {
 					name: skill.name,
 					infname: char.name,
-					turns: vars[1]
+					turns: vars[1],
+					percent: vars[0]
 				});
 
 				if (vars[2]) {
@@ -1048,7 +1049,7 @@ killVar = (char, name) => {
 
 customVariables = {
 	healverse: {
-		onturn: function(btl, char, vars) {
+		onturn(btl, char, vars) {
 			vars.turns--;
 			if (vars.turns <= 0) {
 				killVar(char, "healverse");
@@ -1057,7 +1058,7 @@ customVariables = {
 
 			return null;
 		},
-		onhit: function(btl, char, inf, dmg, vars) {
+		onhit(btl, char, inf, dmg, vars) {
 			let heal = Math.round((dmg/100)*vars.heal);
 			switch(vars.type) {
 				case 'mp':
@@ -1071,32 +1072,44 @@ customVariables = {
 		}
 	},
 
-	healverse: {
-		onturn: function(btl, char, vars) {
+	powerverse: {
+		onturn(btl, char, vars) {
 			vars.turns--;
 			if (vars.turns <= 0) {
-				killVar(char, "healverse");
+				killVar(char, "powerverse");
 				return `${vars.infname}'s ${vars.name} has worn off for ${char.name}!`;
 			}
 
 			return null;
 		},
-		onhit: function(btl, char, inf, dmg, vars) {
-			let heal = Math.round((dmg/100)*vars.heal);
-			switch(vars.type) {
-				case 'mp':
-					inf.mp = Math.min(inf.maxmp, inf.mp+heal);
-
-				default:
-					inf.hp = Math.min(inf.maxhp, inf.hp+heal);
+		onhit(btl, char, inf, dmg, vars) {
+			let settings = setUpSettings(btl.guild.id);
+			
+			if (settings.mechanics.limitbreaks) {
+				inf.lbp += truncNum((total/(skill.hits*((skill.target === 'one' || skill.target === 'ally') ? 2 : 8)))*(vars.percent/100), 2)
+				return `${vars.infname}'s ${vars.name} allowed ${inf.name} to restore ${heal}${vars.type.toUpperCase()}`;
 			}
 
-			return `${vars.infname}'s ${vars.name} allowed ${inf.name} to restore ${heal}${vars.type.toUpperCase()}`;
+			return null;
 		}
+	},
+
+	spreadverse: {
+		onturn(btl, char, vars) {
+			vars.turns--;
+			if (vars.turns <= 0) {
+				killVar(char, "spreadverse");
+				return `${vars.infname}'s ${vars.name} has worn off for ${char.name}!`;
+			}
+
+			return null;
+		}
+
+		// soon...
 	},
 
 	oldAffinities: {
-		onturn: function(btl, char, vars) {
+		onturn(btl, char, vars) {
 			let text = ''
 
 			for (i in vars) {
@@ -1137,7 +1150,7 @@ customVariables = {
 	},
 
 	buffTurns: {
-		onturn: function(btl, char, vars) {
+		onturn(btl, char, vars) {
 			let text = ''
 
 			for (i in vars) {
