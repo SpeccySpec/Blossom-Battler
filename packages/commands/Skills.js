@@ -135,7 +135,7 @@ commands.registerskill = new Command({
 		skillFile[args[0]] = skillDefs;
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
-		message.channel.send({content: `${skillDefs.name} has been registered:`, embeds: [skillFuncs.skillDesc(skillDefs, skillDefs.name, message.guild.id)]})
+		skillFuncs.skillDesc(skillDefs, skillDefs.name, message, `${skillDefs.name} has been registered:`)
 	}
 })
 
@@ -189,9 +189,7 @@ commands.registerstatus = new Command({
 		if (args[4].toLowerCase != 'none') skillFile[args[0]].desc = args[4];
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 		
-		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
-
-		message.channel.send({content: `${skill.name} has been registered:`, embeds: [embed]})
+		skillFuncs.skillDesc(skill, skill.name, message, `${skill.name} has been registered:`)
 	}
 })
 
@@ -245,9 +243,7 @@ commands.registerheal = new Command({
 		if (args[4].toLowerCase != 'none') skillFile[args[0]].desc = args[4];
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
-		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
-
-		message.channel.send({content: `${skill.name} has been registered:`, embeds: [embed]})
+		skillFuncs.skillDesc(skill, skill.name, message, `${skill.name} has been registered:`)
 	}
 })
 
@@ -286,9 +282,7 @@ commands.registerpassive = new Command({
 		if (args[1].toLowerCase != 'none') skillFile[args[0]].desc = args[1];
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
-		let embed = skillFuncs.skillDesc(skill, skill.name, message.guild.id)
-
-		message.channel.send({content: `${skill.name} has been registered:`, embeds: [embed]})
+		skillFuncs.skillDesc(skill, skill.name, message, `${skill.name} has been registered:`)
 	}
 })
 
@@ -1603,7 +1597,7 @@ commands.getskill = new Command({
 	],
 	func: (message, args) => {
 		if (skillFile[args[0]])
-			message.channel.send({content: `Here is the data for ${skillFile[args[0]].name}`, embeds: [skillFuncs.skillDesc(skillFile[args[0]], skillFile[args[0]].name, message.guild.id)]})
+			skillFuncs.skillDesc(skillFile[args[0]], skillFile[args[0]].name, message, `Here is the data for ${skillFile[args[0]].name}`)	
 		else
 			return message.channel.send(`${args[0]} is an invalid Skill Name!`)
 	}
@@ -1992,7 +1986,7 @@ commands.dailyskill = new Command({
 				fs.writeFileSync(dataPath+'/dailyskill.txt', dailySkill.toString());
 
 				let skillTxt = `**[${today}]**\n${notice}`
-				message.channel.send({content: skillTxt, embeds: [skillFuncs.skillDesc(skillFile[dailySkill], skillFile[dailySkill].name, message.guild.id)]});	
+				skillFuncs.skillDesc(skillFile[dailySkill], skillFile[dailySkill].name, message, skillTxt);	
 			}
 		}, 500);
 	}
@@ -2007,7 +2001,7 @@ commands.randskill = new Command({
 		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet.`);
 
 		let skill = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
-		message.channel.send({embeds: [skillFuncs.skillDesc(skillFile[skill], skillFile[skill].name, message.guild.id)]})
+		skillFuncs.skillDesc(skillFile[skill], skillFile[skill].name, message)
 	}
 })
 

@@ -662,14 +662,14 @@ function atkDesc(skillDefs, settings) {
 	return finalText;
 }
 
-skillDesc = (skillDefs, skillName, server) => {
+skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 	let userTxt = ''
 	if (skillDefs.originalAuthor) {
 		if (skillDefs.originalAuthor === 'Default')
 			userTxt = 'Default/Official';
 		else {
-			let user = client.users.fetch(skillDefs.originalAuthor)
-			userTxt = user.username
+			let user = await client.users.fetch(skillDefs.originalAuthor)
+			userTxt = user?.username ?? `<@${skillDefs.originalAuthor}>`
 		}
 	} else
 		userTxt = 'Default/Official';
@@ -688,7 +688,7 @@ skillDesc = (skillDefs, skillName, server) => {
 		.setTitle(`${type}${skillDefs.name ? skillDefs.name : skillName} *(${userTxt})*`)
 	
 	
-	let settings = setUpSettings(server);
+	let settings = setUpSettings(message.guild.id);
 	var finalText = ``;
 	if (skillDefs.type != "status" && skillDefs.type != "passive") {
 		if (hasExtra(skillDefs, 'ohko') && skillDefs.type != "heal")
@@ -867,8 +867,8 @@ skillDesc = (skillDefs, skillName, server) => {
 
 	if (skillDefs.desc) DiscordEmbed.fields.push({name: 'Description:', value: skillDefs.desc, inline: false})
 
-	var charFile = setUpFile(`${dataPath}/json/${server}/characters.json`)
-	var enmFile = setUpFile(`${dataPath}/json/${server}/enemies.json`)
+	var charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
+	var enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
 	
 	var knownBy = ""
 
@@ -881,10 +881,10 @@ skillDesc = (skillDefs, skillName, server) => {
 		}
 	}
 
-	for (const i in enmFile[server]) {
-		if (foundEnemy(i, server)) {
-			for (const k in enmFile[server][i].skills) {
-				if (enmFile[server][i].skills[k] == skillName) {
+	for (const i in enmFile[message.guild.id]) {
+		if (foundEnemy(i, message.guild.id)) {
+			for (const k in enmFile[message.guild.id][i].skills) {
+				if (enmFile[message.guild.id][i].skills[k] == skillName) {
 					if (knownBy != "") knownBy += ", ";
 					knownBy += `${i}`
 				}
@@ -895,7 +895,10 @@ skillDesc = (skillDefs, skillName, server) => {
 	if (knownBy != "") DiscordEmbed.fields.push({name: 'Known By:', value: knownBy, inline: false})
 
 	DiscordEmbed.setDescription(finalText ?? 'Invalid Description :(')
-	return DiscordEmbed;
+	if (additionalMessage)
+		message.channel.send({content: additionalMessage, embeds: [DiscordEmbed]})
+	else
+		message.channel.send({embeds: [DiscordEmbed]})
 }
 
 module.exports = {skillDesc}
