@@ -261,6 +261,15 @@ runFromBattle = (char, btl) => {
 		.setDescription("**[RAN AWAY!]**\nYou ran from battle!\n_(All rewards you would have gotten are not obtained.)_")
 	btl.channel.send({embeds: [DiscordEmbed]})
 
+	if (btl.teams[0].items != parties[btl.teams[0].name].items)
+		parties[btl.teams[0].name].items = btl.teams[0].items;
+
+	if (btl.teams[0].weapons != parties[btl.teams[0].name].weapons)
+		parties[btl.teams[0].name].weapons = btl.teams[0].weapons;
+
+	if (btl.teams[0].armors != parties[btl.teams[0].name].armors)
+		parties[btl.teams[0].name].armors = btl.teams[0].armors;
+
 	// Save HP, MP and trust.
 	let charFile = setUpFile(`${dataPath}/json/${btl.guild.id}/characters.json`);
 	for (let char of btl.teams[i].members) {
@@ -270,6 +279,7 @@ runFromBattle = (char, btl) => {
 			charFile[char.truename].trust = char.trust;
 		}
 	}
+	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, '{}');
 }
