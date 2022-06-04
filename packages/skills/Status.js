@@ -28,7 +28,7 @@ statusList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
-			if (hasStatusAffinity(char, skill.status.toLowerCase(), 'block')) return `${targ.name} blocked it!\n${selectQuote(char, 'badatk')}\n${selectQuote(targ, 'block')}`;
+			if (hasStatusAffinity(char, skill.status.toLowerCase(), 'block')) return `__${targ.name}__ blocked it!\n${selectQuote(char, 'badatk')}\n${selectQuote(targ, 'block')}`;
 
 			let chance = (skill.statusChance ?? skill.statuschance) + ((char.stats.chr-targ.stats.chr)/2);
 			if (isPhysicalStatus(skill.status.toLowerCase())) chance = (skill.statusChance ?? skill.statuschance) + ((char.stats.luk-targ.stats.luk)/2);

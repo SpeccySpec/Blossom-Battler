@@ -148,33 +148,33 @@ passiveList = {
 			switch(vars[1].toLowerCase()) {
 				case 'mp':
 					char.mp += parseInt(vars[0]);
-					finalTxt = `${char.name}'s MP was restored by ${vars[0]}!`;
+					finalTxt = `__${char.name}__'s MP was restored by **${vars[0]}**!`;
 					break;
 
 				case 'lb':
 					if (settings.mechanics.limitbreaks) {
 						char.lbpercent += parseInt(vars[0]);
-						finalTxt = `${char.name}'s LB% was restored by ${vars[0]}!`;
+						finalTxt = `__${char.name}__'s LB% was restored by **${vars[0]}**!`;
 					} else {
 						char.mp += (char.maxmp/100)*parseInt(vars[0]);
-						finalTxt = `${char.name}'s MP was restored by ${(char.maxmp/100)*parseInt(vars[0])}!`;
+						finalTxt = `__${char.name}__'s MP was restored by **${(char.maxmp/100)*parseInt(vars[0])}**!`;
 					}
 
 					break;
 
 				case 'hppercent':
 					char.hp += (char.maxhp/100)*parseInt(vars[0]);
-					finalTxt = `${char.name}'s HP was restored by ${(char.maxhp/100)*parseInt(vars[0])}!`;
+					finalTxt = `__${char.name}__'s HP was restored by **${(char.maxhp/100)*parseInt(vars[0])}**!`;
 					break;
 
 				case 'mppercent':
 					char.mp += (char.maxmp/100)*parseInt(vars[0]);
-					finalTxt = `${char.name}'s MP was restored by ${(char.maxmp/100)*parseInt(vars[0])}!`;
+					finalTxt = `__${char.name}__'s MP was restored by **${(char.maxmp/100)*parseInt(vars[0])}**!`;
 					break;
 
 				default:
 					char.hp += parseInt(vars[0]);
-					finalTxt = `${char.name}'s HP was restored by ${vars[0]}!`;
+					finalTxt = `__${char.name}__'s HP was restored by **${vars[0]}**!`;
 					break;
 			}
 
@@ -560,7 +560,7 @@ passiveList = {
 		affinitymod(inf, char, skill, affinity, btl, vars) {
 			if (affinity === 'resist' || affinity === 'block') {
 				if (randNum(1, 100) <= vars[0]) {
-					return ['normal', `${inf.name} cuts through ${char.name}'s ${affinity} affinity!`];
+					return ['normal', `__${inf.name}__ cuts through __${char.name}__'s ${affinityEmoji[affinity]}**${affinity}** affinity!`];
 				}
 			}
 
@@ -586,7 +586,7 @@ passiveList = {
 		affinitymod(inf, char, skill, affinity, btl, vars) {
 			if (affinity === 'resist' || affinity === 'block' || affinity === 'repel' || affinity === 'drain') {
 				if (randNum(1, 100) <= vars[0]) {
-					return ['normal', `${inf.name} cuts through ${char.name}'s ${affinity} affinity!`];
+					return ['normal', `__${inf.name}__ cuts through __${char.name}__'s ${affinityEmoji[affinity]}**${affinity}** affinity!`];
 				}
 			}
 
@@ -612,7 +612,7 @@ passiveList = {
 		affinitymodoninf(char, inf, skill, passive, affinity, btl, vars) {
 			if (affinity === 'deadly' || affinity === 'superweak' || affinity === 'weak' || affinity === 'normal') {
 				if (randNum(1, 100) <= vars[0]) {
-					return ['resist', `${char.name}'s ${passive.name} changed ${skill.name}'s attack to a resist!`];
+					return ['resist', `__${char.name}__'s __${passive.name}__ changed __${skill.name}__'s attack to a resist!`];
 				}
 			}
 
@@ -653,7 +653,7 @@ passiveList = {
 				return null;
 			}
 
-			return ['block', `${char.name}'s ${passive.name} made the skill have no affect!`];
+			return ['block', `__${char.name}__'s __${passive.name}__ made the skill have no affect!`];
 		}
 	}),
 

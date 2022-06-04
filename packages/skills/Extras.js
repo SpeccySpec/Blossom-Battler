@@ -59,7 +59,7 @@ extrasList = {
 
 			if (chance <= target) {
 				targ.hp = 0;
-				return `${char.name} instantly KO'd ${targ.name}!`;
+				return `__${char.name}__ instantly KO'd __${targ.name}__!`;
 			} else {
 				return dodgeTxt(targ);
 			}
@@ -82,7 +82,7 @@ extrasList = {
 		onuse(char, targ, skill, btl, vars) {
 			char.hp = vars[0];
 
-			return `${char.name} sacrificed themselves! Their HP dropped to ${vars[0]}!`;
+			return `__${char.name}__ sacrificed themselves! Their HP dropped to **${vars[0]}**!`;
 		}
 	}),
 
@@ -224,7 +224,7 @@ extrasList = {
 
 			if (vars[3] != 'normal') {
 				if (target.affinities[vars[2]] && target.affinities[vars[2]].includes(vars[1])) {
-					return `${target.name} wasn't affected by ${skill.name}!`;
+					return `__${target.name}__ wasn't affected by __${skill.name}__!`;
 				}
 			}
 
@@ -258,7 +258,7 @@ extrasList = {
 			let normalAffinities = Elements.filter(e => !setAffinities.includes(e));
 
 			if (!wasChanged && ((!normalAffinities.includes(vars[1]) && vars[2] != 'normal') || (vars[2] == 'normal' && normalAffinities.includes(vars[1])))) {
-				return `${target.name} wasn't affected by ${skill.name}!`;
+				return `__${target.name}__ wasn't affected by __${skill.name}__!`;
 			}
 
 			if (vars[3] != 'normal') {
@@ -271,7 +271,7 @@ extrasList = {
 				target.affinities[vars[2]].push(vars[1]);
 			}
 
-			return `${target.name}'s affinity for ${elementEmoji[vars[1]]}**${vars[1]}** was changed to ${affinityEmoji[vars[2]]}**${vars[2]}**!`;
+			return `__${target.name}__'s affinity for ${elementEmoji[vars[1]]}**${vars[1]}** was changed to ${affinityEmoji[vars[2]]}**${vars[2]}**!`;
 		}
 	}),
 
@@ -284,7 +284,7 @@ extrasList = {
 		},
 		onselect(char, skill, btl, vars) {
 			char.rest = true;
-			return `_${char.name} must rest to regain their energy!_`;
+			return `__${char.name}__ must rest to regain their energy!`;
 		}
 	}),
 
@@ -371,13 +371,13 @@ extrasList = {
 						}
 					}
 
-					return `__${targ.name}__'s _${vars[1].toUpperCase()}_ was buffed ${vars[2]} time(s)!`;
+					return `__${targ.name}__'s _${vars[1].toUpperCase()}_ was buffed **${vars[2]}** time(s)!`;
 				} else {
 					return `But it missed __${targ.name}__!`;
 				}
 			} else {
 				buffStat(targ, vars[1].toLowerCase(), vars[2]);
-				return `__${targ.name}__'s _${vars[1].toUpperCase()}_ was buffed ${vars[2]} time(s)!`;
+				return `__${targ.name}__'s _${vars[1].toUpperCase()}_ was buffed **${vars[2]}** time(s)!`;
 			}
 		}
 	}),
@@ -473,7 +473,7 @@ extrasList = {
 			targ.mp = Math.max(0, targ.mp-mpStolen)
 			char.mp = Math.min(char.maxmp, char.mp+mpStolen)
 			
-			return `${char.name} managed to steal ${mpStolen} MP!`;
+			return `__${char.name}__ managed to steal **${mpStolen}** MP!`;
 		}
 	}),
 
@@ -559,11 +559,11 @@ extrasList = {
 					curAmount++
 				}
 
-				stealTxt += `__${char.name}__ stole _`
+				stealTxt += `__${char.name}__ stole **`
 
 				for (let j in items) {
 					if (items[j] && items[j] > 0) {
-						stealTxt += `__${(items[j] <= 1) ? 'a' : items[j]} ${j}${(items[j] > 1) ? 's' : ''}__`;
+						stealTxt += `${(items[j] <= 1) ? 'a' : items[j]} ${j}${(items[j] > 1) ? 's' : ''}`;
 
 						if (Object.keys(items).indexOf(j) < Object.keys(items).length - 2) {
 							stealTxt += ', ';
@@ -573,10 +573,10 @@ extrasList = {
 					}
 				}
 
-				stealTxt += `_ from __${targ.name}__`
+				stealTxt += `** from __${targ.name}__`
 
 				btl.teams[0] = party;
-				
+
 				return stealTxt;
 			}
 			return `__${char.name}__ failed to steal anything.`
@@ -650,7 +650,7 @@ extrasList = {
 					while (txt.includes('%ENEMY%')) txt = txt.replace('%ENEMY%', targ.name);
 					return txt;
 				} else {
-					return `A green aura is deployed around ${targ.name}!`;
+					return `A green aura is deployed around __${targ.name}__!`;
 				}
 			}
 		}
@@ -698,7 +698,7 @@ extrasList = {
 					while (txt.includes('%ENEMY%')) txt = txt.replace('%ENEMY%', targ.name);
 					return txt;
 				} else {
-					return `A red aura is deployed around ${targ.name}!`;
+					return `A red aura is deployed around __${targ.name}__!`;
 				}
 			}
 		}
@@ -745,7 +745,7 @@ extrasList = {
 					while (txt.includes('%ENEMY%')) txt = txt.replace('%ENEMY%', targ.name);
 					return txt;
 				} else {
-					return `A yellow aura is deployed around ${targ.name}!`;
+					return `A yellow aura is deployed around __${targ.name}__!`;
 				}
 			}
 		}
@@ -1050,7 +1050,7 @@ extrasList = {
 
 			if (num <= vars[0]) {
 				skill.hits += vars[1];
-				addAtkMsg(btl, `${char.name}'s ${skill.name} landed ${vars[1]} extra time(s)!`);
+				addAtkMsg(btl, `__${char.name}__'s __${skill.name}__ landed **${vars[1]}** extra time(s)!`);
 			}
 		}
 	})

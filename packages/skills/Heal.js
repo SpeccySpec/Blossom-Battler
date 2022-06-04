@@ -19,7 +19,7 @@ healList = {
 			if (!vars[0] || vars[0] === null) return '';
 
 			targ.hp = Math.min(targ.maxhp, targ.hp+vars[0]);
-			return `${targ.name}'s HP was restored by ${vars[0]}!`;
+			return `__${targ.name}__'s HP was restored by **${vars[0]}**!`;
 		}
 	}),
 
@@ -40,7 +40,7 @@ healList = {
 		},
 		onuse(char, targ, skill, btl, vars) {
 			targ.mp = Math.min(targ.maxmp, targ.mp+vars[0]);
-			return `${targ.name}'s MP was restored by ${vars[0]}!`;
+			return `__${targ.name}__'s MP was restored by **${vars[0]}**!`;
 		}
 	}),
 
@@ -75,7 +75,7 @@ healList = {
 				type: "hp"
 			}
 
-			return `${targ.name} is surrounded in a lime coloured aura!`;
+			return `__${targ.name}__ is surrounded in a lime coloured aura!`;
 		}
 	}),
 
@@ -110,7 +110,7 @@ healList = {
 				type: "mp"
 			}
 
-			return `${targ.name} is surrounded in a violet coloured aura!`;
+			return `__${targ.name}__ is surrounded in a violet coloured aura!`;
 		}
 	}),
 
@@ -133,7 +133,7 @@ healList = {
 			if (targ.hp > 0) return 'But it failed!';
 
 			targ.hp = targ.maxhp/vars[0];
-			return `${targ.name} was revived!`;
+			return `__${targ.name}__ was revived!`;
 		}
 	}),
 
@@ -152,7 +152,7 @@ healList = {
 				targ.mp = targ.maxmp;
 			}
 
-			return `The party's HP & MP was fully restored, but at the cost of ${char.name}'s sacrifice!`;
+			return `The party's HP & MP was fully restored, but at the cost of __${char.name}__'s sacrifice!`;
 		}
 	}),
 
@@ -167,7 +167,7 @@ healList = {
 		},
 		onuse(char, targ, skill, btl, vars) {
 			targ.hp = targ.maxhp
-			return `${targ.name}'s HP was fully restored!`;
+			return `__${targ.name}__'s HP was fully restored!`;
 		}
 	}),
 
@@ -201,7 +201,7 @@ healList = {
 						delete targ.statusturns;
 					}
 
-					return `${targ.name} had physical status ailments cured!`;
+					return `__${targ.name}__ had physical status ailments cured!`;
 					break;
 			
 				case 'mental':
@@ -212,7 +212,7 @@ healList = {
 						delete targ.statusturns;
 					}
 
-					return `${targ.name} had mental status ailments cured!`;
+					return `__${targ.name}__ had mental status ailments cured!`;
 					break;
 
 				case 'all':
@@ -221,7 +221,7 @@ healList = {
 					delete targ.status;
 					delete targ.statusturns;
 
-					return `${targ.name} had their status ailments cured!`;
+					return `__${targ.name}__ had their status ailments cured!`;
 					break;
 				
 				default:
@@ -236,7 +236,7 @@ healList = {
 						}
 					}
 
-					return `${targ.name} had their ${vars[0]} status effect cured!`;
+					return `__${targ.name}__ had their ${statusEmojis[vars[0]]}**${vars[0]}** status effect cured!`;
 			}
 
 			return '...';
@@ -272,7 +272,7 @@ healList = {
 			else
 				char.hp = vars[0];
 
-			return `${char.name} sacrificed themselves, lowering their HP to ${vars[0]}!`;
+			return `__${char.name}__ sacrificed themselves, lowering their HP to __${vars[0]}__!`;
 		}
 	}),
 
@@ -303,7 +303,7 @@ healList = {
 		},
 		onuse(char, targ, skill, btl, vars) {
 			targ.wishheal = vars[0];
-			return `${char.name} will experience a healing wish in ${vars[0]} turns.`;
+			return `__${char.name}__ will experience a healing wish in **${vars[0]}** turns.`;
 		}
 	})
 }
