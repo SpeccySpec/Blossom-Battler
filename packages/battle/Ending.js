@@ -11,12 +11,13 @@ loseBattle = (btl, i) => {
 	let lostmoney = randNum(Math.round(party.currency/2), party.currency);
 	party.currency -= lostmoney;
 
-	// Fully restore characters' HP and MP because we lost.
+	// Fully restore characters' HP and MP because we lost. Also, save trust.
 	let charFile = setUpFile(`${dataPath}/json/${btl.guild.id}/characters.json`);
 	for (let char of btl.teams[i].members) {
 		if (charFile[char.truename]) {
 			charFile[char.truename].hp = charFile[char.truename].maxhp;
 			charFile[char.truename].mp = charFile[char.truename].maxmp;
+			charFile[char.truename].trust = char.trust;
 		}
 	}
 
@@ -220,6 +221,21 @@ winBattle = (btl, i) => {
 }
 
 runFromBattle = (char, btl) => {
-	btl.channel.send('**[DEBUG]**\nRan from Battle :/');
+	let DiscordEmbed = new Discord.MessageEmbed()
+		.setColor(elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike)
+		.setTitle("__Battle Results__")
+		.setDescription("**[RAN AWAY!]**\nYou ran from battle!\n_(All rewards you would have gotten are not obtained.)_")
+	btl.channel.send({embeds: [DiscordEmbed]})
+
+	// Save HP, MP and trust.
+	let charFile = setUpFile(`${dataPath}/json/${btl.guild.id}/characters.json`);
+	for (let char of btl.teams[i].members) {
+		if (charFile[char.truename]) {
+			charFile[char.truename].hp = Math.min(charFile[char.truename].maxhp, char.hp);
+			charFile[char.truename].mp = Math.min(charFile[char.truename].maxmp, char.mp);
+			charFile[char.truename].trust = char.trust;
+		}
+	}
+
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, '{}');
 }
