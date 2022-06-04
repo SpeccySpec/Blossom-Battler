@@ -881,10 +881,10 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 		}
 	}
 
-	for (const i in enmFile[message.guild.id]) {
+	for (const i in enmFile) {
 		if (foundEnemy(i, message.guild.id)) {
-			for (const k in enmFile[message.guild.id][i].skills) {
-				if (enmFile[message.guild.id][i].skills[k] == skillName) {
+			for (const k in enmFile[i].skills) {
+				if (enmFile[i].skills[k] == skillName) {
 					if (knownBy != "") knownBy += ", ";
 					knownBy += `${i}`
 				}
