@@ -93,6 +93,62 @@
             ],
             "hidden": false,
             "items": {}
+        },
+        "FuckMyAss": {
+            "originalAuthor": "441198920668938260",
+            "name": "FuckMyAss",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "none",
+                "0"
+            ],
+            "hidden": false,
+            "items": {
+                "weapon": {
+                    "Buff": 5
+                },
+                "item": {
+                    "Sweet": 4,
+                    "S": 5
+                },
+                "armor": {
+                    "Bluff": 2
+                }
+            }
+        },
+        "FuckMyAss_LootEdition": {
+            "originalAuthor": "441198920668938260",
+            "name": "FuckMyAss_LootEdition",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "none",
+                "0"
+            ],
+            "hidden": false,
+            "items": {
+                "money": 99999
+            }
+        }
+    },
+    "967822532017274980": {
+        "Team Spacies's lost items": {
+            "originalAuthor": "957671901197647912",
+            "name": "Team Spacies's lost items",
+            "channel": "967822532017274980",
+            "party": "",
+            "lock": [
+                "none",
+                "0"
+            ],
+            "hidden": true,
+            "items": {
+                "item": {
+                    "Sweet": 64
+                }
+            },
+            "desc": "Team Spacies lost a battle on 04/06/2022. This is what happened to their items."
         }
     }
 }

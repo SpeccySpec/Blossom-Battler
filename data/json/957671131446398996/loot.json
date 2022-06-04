@@ -94,5 +94,17 @@
                 "chance": 23.5
             }
         ]
+    },
+    "Grassimp": {
+        "name": "Grassimp",
+        "originalAuthor": "516359709779820544",
+        "items": [
+            {
+                "type": "item",
+                "id": "Sweet",
+                "amount": 25,
+                "chance": 33.3333333
+            }
+        ]
     }
 }
