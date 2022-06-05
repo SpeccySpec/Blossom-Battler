@@ -109,7 +109,7 @@ genDmg = (char, targ, btl, skill) => {
 	let endStat = statWithBuff(targStats.end, targ.buffs.end);
 	let def = atkStat/endStat;
 	
-	let formulas = ['persona', 'pokemon', 'lamonka'];
+	let formulas = ['persona', 'pokemon', 'lamonka', 'beta'];
 	let damageformula = settings.formulas.damageFormula ?? 'persona';
 	if (skill.extras && skill.extras.forceformula && formulas.includes(skill.extras.forceformula.toLowerCase())) {
 		damageformula = skill.extras.forceformula.toLowerCase();
@@ -125,7 +125,7 @@ genDmg = (char, targ, btl, skill) => {
 				return Math.round((((2*char.level)/5+2)*skill.pow*def)/50+2)+randNum(-7, 7);
 			case 'lamonka':
 				return Math.ceil(((skill.pow+char.level)*(def/4)))*(0.95+(Math.random()/20));
-			default:
+			case 'beta':
 				return randNum(char.level+35)+randNum(skill.pow/1.75)+randNum(-7, 7);
 		}
 	}
