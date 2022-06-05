@@ -403,6 +403,8 @@ commands.updateskills = new Command({
 							delete skillFile[skill].turns;
 							break;
 						case 'statusresist':
+							delete skillFile[skill];
+							break;
 						case 'statusdodge':
 						case 'perfectkeeper':
 							//no one made this
