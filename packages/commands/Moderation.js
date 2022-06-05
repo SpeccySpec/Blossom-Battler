@@ -68,9 +68,10 @@ commands.settings = new Command({
 
 		let formulaText = ''
 		let damageFormulas = {
-			'persona': '5*√(Attack/Endurance * Skill Power)',
+			'persona': '5*√(Attack/Endurance * Skill Power) + (-7 to 7)',
 			'pokemon': '(((2*level)/5+2)*Power*Attack/Endurance)/50+2',
-			'custom': 'uhhhh Spectra you handle this'
+			'lamonka': '((Power+Level)*((Attack/Endurance)/4))*(0.95 to 1.05)',
+			'beta': '(0 to Level+35) + (0 to Power/1.75) + (-7 to 7)'
 		}
 
 		formulaText += `**Damage Formula:**\n${settings['formulas']['damageFormula'].charAt(0).toUpperCase() + settings['formulas']['damageFormula'].slice(1)}\n\`${damageFormulas[settings['formulas']['damageFormula']]}\``
@@ -79,7 +80,7 @@ commands.settings = new Command({
 			'original': 'No Specific Formula',
 			'assist': '(BaseStat+3) * (1 + ((Level-1) * 0.06751))',
 			'percent': 'BaseStat * (1 + ((Level-1) * 0.091))',
-			'custom': 'uhhhh Spectra you handle this'
+			'custom': 'bruh'
 		}
 
 		formulaText += `\n**Level Up Formula**\n${settings['formulas']['levelUpFormula'].charAt(0).toUpperCase() + settings['formulas']['levelUpFormula'].slice(1)}\n\`${levelUpFormulas[settings['formulas']['levelUpFormula']]}\``
