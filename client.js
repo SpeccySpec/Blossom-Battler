@@ -375,6 +375,7 @@ costTypes = [
 	'hp',
 	'hppercent',
 	'lb',
+	'lbpercent',
 	'money',
 	'moneypercent'
 ]
