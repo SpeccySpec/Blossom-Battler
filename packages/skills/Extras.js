@@ -1,6 +1,6 @@
 const weakSide = ['superweak', 'weak', 'normal']
 const resistSide = ['normal', 'resist', 'block', 'repel', 'drain']
-const damageFormulas = ['persona', 'pokemon', 'lamonka']
+const damageFormulas = ['persona', 'pokemon', 'lamonka', 'beta']
 
 Extra = class extends ArgList {
 	constructor(object) {
@@ -521,6 +521,11 @@ extrasList = {
 				let items = {}
 
 				while (curAmount != amount) {
+					if (targ.loot.weapons.length <= 0) {
+						curAmount = amount;
+						break;
+					}
+
 					let chosenItem = targ.loot[randNum(targ.loot.length - 1)]
 					let index = targ.loot.indexOf(chosenItem)
 
@@ -559,25 +564,27 @@ extrasList = {
 					curAmount++
 				}
 
-				stealTxt += `__${char.name}__ stole **`
+				if (Object.keys(items).length > 0) {
+					stealTxt += `__${char.name}__ stole **`
 
-				for (let j in items) {
-					if (items[j] && items[j] > 0) {
-						stealTxt += `${(items[j] <= 1) ? 'a' : items[j]} ${j}${(items[j] > 1) ? 's' : ''}`;
+					for (let j in items) {
+						if (items[j] && items[j] > 0) {
+							stealTxt += `${(items[j] <= 1) ? 'a' : items[j]} ${j}${(items[j] > 1) ? 's' : ''}`;
 
-						if (Object.keys(items).indexOf(j) < Object.keys(items).length - 2) {
-							stealTxt += ', ';
-						} else if (Object.keys(items).indexOf(j) == Object.keys(items).length - 2) {
-							stealTxt += ' and ';
+							if (Object.keys(items).indexOf(j) < Object.keys(items).length - 2) {
+								stealTxt += ', ';
+							} else if (Object.keys(items).indexOf(j) == Object.keys(items).length - 2) {
+								stealTxt += ' and ';
+							}
 						}
 					}
+
+					stealTxt += `** from __${targ.name}__`
+
+					btl.teams[0] = party;
+
+					return stealTxt;
 				}
-
-				stealTxt += `** from __${targ.name}__`
-
-				btl.teams[0] = party;
-
-				return stealTxt;
 			}
 			return `__${char.name}__ failed to steal anything.`
 		}
@@ -939,7 +946,7 @@ extrasList = {
 		applyfunc(message, skill, args) {
 			const formula = args[0].toLowerCase()
 			if (damageFormulas.includes(formula))
-				return void message.channel.send('Invalid damage formula!\nValid formulas are: Persona, Pokemon, Lamonka')
+				return void message.channel.send('Invalid damage formula!\nValid formulas are: Persona, Pokemon, Lamonka, Beta')
 			makeExtra(skill, "forceformula", [formula]);
 			return true;
 		}
