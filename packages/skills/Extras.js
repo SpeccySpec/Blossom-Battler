@@ -1,6 +1,6 @@
 const weakSide = ['superweak', 'weak', 'normal']
 const resistSide = ['normal', 'resist', 'block', 'repel', 'drain']
-const damageFormulas = ['persona', 'pokemon', 'lamonka']
+const damageFormulas = ['persona', 'pokemon', 'lamonka', 'beta']
 
 Extra = class extends ArgList {
 	constructor(object) {
@@ -946,7 +946,7 @@ extrasList = {
 		applyfunc(message, skill, args) {
 			const formula = args[0].toLowerCase()
 			if (damageFormulas.includes(formula))
-				return void message.channel.send('Invalid damage formula!\nValid formulas are: Persona, Pokemon, Lamonka')
+				return void message.channel.send('Invalid damage formula!\nValid formulas are: Persona, Pokemon, Lamonka, Beta')
 			makeExtra(skill, "forceformula", [formula]);
 			return true;
 		}
