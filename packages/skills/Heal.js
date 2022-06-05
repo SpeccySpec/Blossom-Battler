@@ -16,9 +16,14 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
-			if (!vars[0] || vars[0] === null) return '';
+			if (!vars[0] || vars[0] == null || vars[0] == 0) return '';
 
 			targ.hp = Math.min(targ.maxhp, targ.hp+vars[0]);
+
+			if (vars[0] > 0 && targ.team == char.team) {
+				settings = setUpSettings(btl.guild.id);
+				changeTrust(targ, char, Math.round(20*(settings.rates.trustrate ?? 1)), true, btl.channel)
+			}
 			return `__${targ.name}__'s HP was restored by **${vars[0]}**!`;
 		}
 	}),
@@ -39,7 +44,14 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
+			if (!vars[0] || vars[0] == null || vars[0] == 0) return '';
+
 			targ.mp = Math.min(targ.maxmp, targ.mp+vars[0]);
+
+			if (vars[0] > 0 && targ.team == char.team) {
+				settings = setUpSettings(btl.guild.id);
+				changeTrust(targ, char, Math.round(20*(settings.rates.trustrate ?? 1)), true, btl.channel);
+			}
 			return `__${targ.name}__'s MP was restored by **${vars[0]}**!`;
 		}
 	}),
@@ -69,12 +81,17 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
-			targ.regenheal = {
+			addCusVal(targ, "regenheal", {
 				heal: vars[0],
 				turns: vars[1],
-				type: "hp"
-			}
+				type: "hp",
+				user: char.id
+			})
 
+			if (vars[0] > 0 && targ.team == char.team) {
+				settings = setUpSettings(btl.guild.id);
+				changeTrust(targ, char, Math.round(5*(settings.rates.trustrate ?? 1)), true, btl.channel);
+			}
 			return `__${targ.name}__ is surrounded in a lime coloured aura!`;
 		}
 	}),
@@ -104,12 +121,17 @@ healList = {
 			return true;
 		},
 		onuse: function(char, targ, skill, btl, vars) {
-			targ.regenheal = {
+			addCusVal(targ, "regenheal", {
 				heal: vars[0],
 				turns: vars[1],
-				type: "mp"
-			}
+				type: "mp",
+				user: char.id
+			})
 
+			if (vars[0] > 0 && targ.team == char.team) {
+				settings = setUpSettings(btl.guild.id);
+				changeTrust(targ, char, Math.round(5*(settings.rates.trustrate ?? 1)), true, btl.channel);
+			}
 			return `__${targ.name}__ is surrounded in a violet coloured aura!`;
 		}
 	}),
@@ -133,6 +155,11 @@ healList = {
 			if (targ.hp > 0) return 'But it failed!';
 
 			targ.hp = targ.maxhp/vars[0];
+
+			if (targ.team == char.team) {
+				settings = setUpSettings(btl.guild.id);
+				changeTrust(targ, char, Math.round(30*(settings.rates.trustrate ?? 1)), true, btl.channel);
+			}
 			return `__${targ.name}__ was revived!`;
 		}
 	}),
@@ -150,6 +177,11 @@ healList = {
 			for (let i in btl.teams[char.team]) {
 				targ.hp = targ.maxhp;
 				targ.mp = targ.maxmp;
+
+				if (targ.team == char.team) {
+					settings = setUpSettings(btl.guild.id);
+					changeTrust(targ, char, Math.round(40*(settings.rates.trustrate ?? 1)), true, btl.channel);
+				}
 			}
 
 			return `The party's HP & MP was fully restored, but at the cost of __${char.name}__'s sacrifice!`;
@@ -166,7 +198,12 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
-			targ.hp = targ.maxhp
+			targ.hp = targ.maxhp;
+
+			if (targ.team == char.team) {
+				settings = setUpSettings(btl.guild.id);
+				changeTrust(targ, char, Math.round(23*(settings.rates.trustrate ?? 1)), true, btl.channel);
+			}
 			return `__${targ.name}__'s HP was fully restored!`;
 		}
 	}),
@@ -192,6 +229,11 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
+			if (targ.team == char.team) {
+				settings = setUpSettings(btl.guild.id);
+				changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl.channel);
+			}
+
 			switch(vars[0]) {
 				case 'physical':
 					if (targ.confusion) delete targ.confusion;
@@ -302,7 +344,14 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
-			targ.wishheal = vars[0];
+			let s = objClone(skill)
+			delete s.heal.wish;
+
+			addCusVal(targ, "wishheal", {
+				turns: vars[0],
+				skill: s
+			})
+
 			return `__${char.name}__ will experience a healing wish in **${vars[0]}** turns.`;
 		}
 	})

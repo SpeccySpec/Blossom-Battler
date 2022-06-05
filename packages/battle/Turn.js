@@ -1343,21 +1343,26 @@ advanceTurn = (btl) => {
 	}
 
 	// Now, go to the next turn.
-	let newTurn = false;
-
-	if (btl.curturn == null) {
-		btl.curturn = 0;
-		btl.turn = 1;
+	if (btl.doonemore) {
+		btl.channel.send("**[ONE MORE]**");
+		delete btl.doonemore;
 	} else {
-		let toTurn = btl.curturn+1;
+		let newTurn = false;
 
-		if (btl.turnorder[toTurn] == null) {
+		if (btl.curturn == null) {
 			btl.curturn = 0;
+			btl.turn = 1;
+		} else {
+			let toTurn = btl.curturn+1;
 
-			newTurn = true;
-			btl.turn++;
-		} else
-			btl.curturn++;
+			if (btl.turnorder[toTurn] == null) {
+				btl.curturn = 0;
+
+				newTurn = true;
+				btl.turn++;
+			} else
+				btl.curturn++;
+		}
 	}
 
 	// Write Data.

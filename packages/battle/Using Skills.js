@@ -362,10 +362,20 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				if (affinity == 'superweak' && !targ.guard) dmg *= settings.rates.affinities.superweak ?? 2.1;
 				if (affinity == 'deadly' && !targ.guard) dmg *= settings.rates.affinities.deadly ?? 4.2;
 
+				if (affinity == 'weak' || affinity == 'superweak' || affinity == 'deadly' && settings.mechanics.onemores) {
+					result.oneMore = true;
+					targ.down = true;
+				}
+
 				// Critical Hits
 				if (skill.crit) {
 					let c = randNum(100);
 					if (c <= skill.crit+((char.stats.luk-targ.stats.luk)/2)) {
+						if (settings.mechanics.onemores) {
+							result.oneMore = true;
+							targ.down = true;
+						}
+
 						crits[i] = true;
 						dmg *= settings.rates.crit ?? 1.5;
 					}
@@ -375,6 +385,11 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				if (targ.status && isTech(targ, skill.type)) {
 					dmg *= settings.rates.tech ?? 1.2;
 					techs[i] = true;
+
+					if (randNum(1, 100) <= 50 && settings.mechanics.onemores) {
+						result.oneMore = true;
+						targ.down = true;
+					}
 				}
 
 				// DmgMod
