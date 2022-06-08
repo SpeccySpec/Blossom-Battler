@@ -19,6 +19,21 @@ setupBattleStats = (f) => {
 		}
 	}
 
+	if (f.curweapon) {
+		let boost = {
+			atk: f.curweapon.atk ?? 0,
+			mag: f.curweapon.mag ?? 0,
+			end: f.curweapon.end ?? 0,
+			agl: f.curweapon.agl ?? 0
+		}
+		for (let i in boost) {
+			if (f.basestats[i] > 7) boost[i] = Math.round(boost[i]*0.75);
+			f.stats[i] += boost[i];
+		}
+
+		if (f.curweapon.skill) f.skills.push(f.curweapon.skill);
+	}
+
 	return true;
 }
 

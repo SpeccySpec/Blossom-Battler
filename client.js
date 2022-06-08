@@ -389,6 +389,23 @@ enemyTypes = [
 	'deity'
 ]
 
+weaponClasses = {
+	none: "A class that implies the character cannot use weapons.",
+	bludgeon: "Hammers, Maces, Clubs",
+	bladed: "Swords, Daggers, Katanas",
+	longbladed: "Longswords, Greatswords",
+	pierce: "Rapiers, Knives",
+	ranged: "Bow & Arrow, Ninja Stars",
+	books: "Magical Books that allow one to cast spells.",
+	staff: "Magical Staffs or Wands"
+}
+
+armorClasses = {
+	light: "Lighter, smaller pieces of armor like Shields.",
+	heavy: "Entire suits of armor.",
+	magic: "Magical pieces of armor, like barriers."
+}
+
 enemyTypeColors = {
 	none: '#00FF24',
 	miniboss: '#F6FF00',

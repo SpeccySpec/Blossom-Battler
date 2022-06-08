@@ -2258,8 +2258,23 @@ commands.obtainitems = new Command({
             }
         }
 
+		//okay.
+		// what happened here
+		// im uh... just not going to touch it.
+		// i'm only here to change weapon and armor strings into objects o-o'
+		let aeaeaea = ['weapons', 'armors'];
+		for (let i of aeaeaea) {
+			if (parties[args[0]][i] && typeof(parties[args[0]][i]) === "string") {
+				if (i === 'weapons')
+					parties[args[0]][i] = objClone(weaponFile[parties[args[0]][i]]);
+				else
+					parties[args[0]][i] = objClone(armorFile[parties[args[0]][i]]);
+			}
+		}
+
+		// Save File
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, 4));
-        message.channel.send(`${args[0]} has been given the items.`)
+        message.channel.send(`Team ${args[0]} has been given the items.`)
     }
 })
 
