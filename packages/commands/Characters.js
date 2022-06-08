@@ -3473,7 +3473,7 @@ commands.unequipcharm = new Command({
 })
 
 commands.obtainweapon = new Command({
-	desc: 'Gives this character a specified weapon. They can use any weapon class, but can only equip weapons of their class.',
+	desc: 'Gives this character a specified weapon. They can obtain any weapon class, but can only equip weapons of their class.',
 	aliases: ['findweapon', 'obtainw', 'findw'],
 	section: "characters",
 	checkban: true,
@@ -3482,9 +3482,69 @@ commands.obtainweapon = new Command({
 			name: "Character Name",
 			type: "Word",
 			forced: true
+		},
+		{
+			name: "Weapon Name",
+			type: "Word",
+			forced: true
 		}
 	],
 	func: (message, args) => {
+        let weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		let char = charFile[args[0]];
+		if (!char.weapons) char.weapons = {};
+		if (!char.armors) char.armors = {};
+		if (!char.weaponclass) char.weaponclass = 'none';
+		if (!char.armorclass) char.armorclass = 'none';
+
+		if (charFile[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
+		if (!weaponFile[args[1]]) return message.channel.send(`${args[1]} is an invalid weapon!`);
+		if (char.weapons[args[1]]) return message.channel.send(`${char.name} already owns a ${weaponFile[args[1]].name}.`);
+
+		char.weapons[args[1]] = objClone(weaponFile[args[1]]);
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+commands.obtainarmor = new Command({
+	desc: "Gives this character the specified armor. They can obtain any armor class, but equipping armor that isn't of their armor class may have drawbacks since they're not used to it.",
+	aliases: ['findarmor', 'obtaina', 'finda'],
+	section: "characters",
+	checkban: true,
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Armor Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+        let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		let char = charFile[args[0]];
+		if (!char.weapons) char.weapons = {};
+		if (!char.armors) char.armors = {};
+		if (!char.weaponclass) char.weaponclass = 'none';
+		if (!char.armorclass) char.armorclass = 'none';
+
+		if (charFile[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
+		if (!armorFile[args[1]]) return message.channel.send(`${args[1]} is an invalid weapon!`);
+		if (char.weapons[args[1]]) return message.channel.send(`${char.name} already owns a ${armorFile[args[1]].name}.`);
+
+		char.weapons[args[1]] = objClone(armorFile[args[1]]);
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
 

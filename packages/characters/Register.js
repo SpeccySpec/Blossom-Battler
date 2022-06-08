@@ -4,6 +4,8 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
     charFile[name] = {
 		name: name,
 		mainElement: element,
+		weaponclass: 'none',
+		armorclass: 'none',
 
         // Only the owner can move this character, if they don't have admin permissions.
         owner: creator.id,

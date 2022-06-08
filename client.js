@@ -401,6 +401,7 @@ weaponClasses = {
 }
 
 armorClasses = {
+	none: "Every armor can be worn. Heavy will decrease agility, Magic will decrease endurance",
 	light: "Lighter, smaller pieces of armor like Shields.",
 	heavy: "Entire suits of armor.",
 	magic: "Magical pieces of armor, like barriers."
