@@ -3541,9 +3541,79 @@ commands.obtainarmor = new Command({
 
 		if (charFile[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
 		if (!armorFile[args[1]]) return message.channel.send(`${args[1]} is an invalid weapon!`);
-		if (char.weapons[args[1]]) return message.channel.send(`${char.name} already owns a ${armorFile[args[1]].name}.`);
+		if (char.armors[args[1]]) return message.channel.send(`${char.name} already owns a ${armorFile[args[1]].name}.`);
 
-		char.weapons[args[1]] = objClone(armorFile[args[1]]);
+		char.armors[args[1]] = objClone(armorFile[args[1]]);
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+commands.trashequipment = new Command({
+	desc: "Trashes an equipment. This removes it from the character's inventory __forever__.",
+	aliases: ['removeequipment'],
+	section: "characters",
+	checkban: true,
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Weapon or Armor",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Equipment Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		let char = charFile[args[0]];
+		if (!char.weapons) char.weapons = {};
+		if (!char.armors) char.armors = {};
+		if (!char.weaponclass) char.weaponclass = 'none';
+		if (!char.armorclass) char.armorclass = 'none';
+
+		if (char.owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
+
+		switch(args[1].toLowerCase()) {
+			case 'weapon':
+				if (char.weapons[args[2]]) {
+					delete char.weapons[args[2]];
+				} else if (args[2].toLowerCase() === 'all') {
+					char.weapons = {};
+				} else {
+					return message.channel.send(`${args[2]} is a nonexistant weapon.`);
+				}
+				break;
+
+			case 'armor':
+				if (char.armors[args[2]]) {
+					delete char.armors[args[2]];
+				} else if (args[2].toLowerCase() === 'all') {
+					char.armors = {};
+				} else {
+					return message.channel.send(`${args[2]} is a nonexistant armor.`);
+				}
+				break;
+
+			case 'all':
+				char.weapons = {};
+				char.armors = {};
+				break;
+			
+			default:
+				return message.channel.send("Please enter either ''Weapon'' or ''Armor''. Or you can enter ''All''...");
+		}
+
+		message.react('👍');
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
