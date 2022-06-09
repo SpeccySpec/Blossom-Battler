@@ -671,10 +671,10 @@ commands.weaponclass = new Command({
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
-		if (!weaponClasses[args[1].toLowerCase()) return message.channel.send(`${args[1]} is an invalid weapon class.`)
+		if (!weaponClasses[args[1].toLowerCase()]) return message.channel.send(`${args[1]} is an invalid weapon class.`)
 
 		if (args[2]) {
-			if (!weaponClasses[args[2].toLowerCase()) return message.channel.send(`${args[2]} is an invalid weapon class.`);
+			if (!weaponClasses[args[2].toLowerCase()]) return message.channel.send(`${args[2]} is an invalid weapon class.`);
 			char.weaponclass = [args[1].toLowerCase(), args[2].toLowerCase()];
 		} else {
 			char.weaponclass = args[1].toLowerCase();
@@ -708,7 +708,7 @@ commands.armorclass = new Command({
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
-		if (!armorClasses[args[1].toLowerCase()) return message.channel.send(`${args[1]} is an invalid weapon class.`)
+		if (!armorClasses[args[1].toLowerCase()]) return message.channel.send(`${args[1]} is an invalid armor class.`)
 		char.armorclass = args[1].toLowerCase();
 
 		message.channel.send(`👍 ${charFile[args[0]].name}'s armor class was changed to ${args[1]}.`)
