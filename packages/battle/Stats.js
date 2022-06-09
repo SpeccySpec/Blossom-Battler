@@ -40,7 +40,7 @@ setupBattleStats = (f) => {
 			atk: f.curarmor.atk ?? 0,
 			mag: f.curarmor.mag ?? 0,
 			end: f.curarmor.end ?? 0,
-			agl: f.curarmor.agl ?? 
+			agl: f.curarmor.agl ?? 0
 		}
 		for (let i in boost) {
 			if (f.basestats[i] > 7) boost[i] = Math.round(boost[i]*0.75);
