@@ -3511,8 +3511,8 @@ commands.obtainweapon = new Command({
 	}
 })
 
-commands.equiparmor = new Command({
-	desc: "Makes the character wear the specified armor. They can only wear armor of their class.",
+commands.equipweapon = new Command({
+	desc: "Makes the character wear the specified weapon. They can only use a weapon of their class.",
 	section: "characters",
 	checkban: true,
 	args: [
@@ -3522,7 +3522,7 @@ commands.equiparmor = new Command({
 			forced: true
 		},
 		{
-			name: "Armor Name",
+			name: "Weapon Name",
 			type: "Word",
 			forced: true
 		}
