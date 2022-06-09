@@ -28,10 +28,26 @@ setupBattleStats = (f) => {
 		}
 		for (let i in boost) {
 			if (f.basestats[i] > 7) boost[i] = Math.round(boost[i]*0.75);
+			if (typeof(f.weaponclass) === 'object') boost[i] = Math.round(boost[i]*0.66666667);
 			f.stats[i] += boost[i];
 		}
 
 		if (f.curweapon.skill) f.skills.push(f.curweapon.skill);
+	}
+
+	if (f.curarmor) {
+		let boost = {
+			atk: f.curarmor.atk ?? 0,
+			mag: f.curarmor.mag ?? 0,
+			end: f.curarmor.end ?? 0,
+			agl: f.curarmor.agl ?? 
+		}
+		for (let i in boost) {
+			if (f.basestats[i] > 7) boost[i] = Math.round(boost[i]*0.75);
+			f.stats[i] += boost[i];
+		}
+
+		if (f.curarmor.skill) f.skills.push(f.curarmor.skill);
 	}
 
 	return true;
