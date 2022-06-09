@@ -671,6 +671,8 @@ commands.weaponclass = new Command({
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
+		let char = charFile[args[0]];
+
 		if (!weaponClasses[args[1].toLowerCase()]) return message.channel.send(`${args[1]} is an invalid weapon class.`)
 
 		if (args[2]) {
@@ -707,6 +709,8 @@ commands.armorclass = new Command({
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+		let char = charFile[args[0]];
 
 		if (!armorClasses[args[1].toLowerCase()]) return message.channel.send(`${args[1]} is an invalid armor class.`)
 		char.armorclass = args[1].toLowerCase();
