@@ -3,8 +3,8 @@
         "name": "Valoria",
         "owner": "516359709779820544",
         "level": 77,
-        "hp": 448,
-        "mp": 210,
+        "hp": 440,
+        "mp": 160,
         "maxhp": 448,
         "maxmp": 529,
         "basehp": 30,
@@ -16,7 +16,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 653705,
+        "xp": 663809,
         "maxxp": 26403897,
         "skills": [
             "Prakrti",
@@ -64,7 +64,7 @@
                 "value": 45,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]353535"
+                "amount": "[object Object]35353535"
             },
             "Lena": {
                 "value": 45,
@@ -75,13 +75,13 @@
                 "value": 125,
                 "nextLevel": 150,
                 "level": 2,
-                "amount": "[object Object]353535"
+                "amount": "[object Object]35353535"
             },
             "Ramia": {
                 "value": 5,
                 "nextLevel": 190,
                 "level": 4,
-                "amount": "[object Object]353535"
+                "amount": "[object Object]35353535"
             },
             "Ira": {
                 "value": 65,
@@ -241,6 +241,11 @@
             "Sky(H)": {
                 "value": 80,
                 "nextLevel": 100,
+                "level": 1
+            },
+            "Valoria": {
+                "amount": 20,
+                "maximum": 100,
                 "level": 1
             }
         },
@@ -500,7 +505,17 @@
         },
         "armors": {},
         "weaponclass": "none",
-        "armorclass": "none"
+        "armorclass": "none",
+        "curweapon": {
+            "name": "Royal Rapier",
+            "cost": 6955,
+            "element": "pierce",
+            "desc": "A shining rapier passed down the Cosmarian royal family. Younger ones who were part of the royal family were to be skilled in rapier usage just in case the worst happened.",
+            "originalAuthor": "516359709779820544",
+            "skill": "Pralaya",
+            "melee": "300",
+            "atk": "12"
+        }
     },
     "Lanagu": {
         "name": "Lanagu",
@@ -1192,7 +1207,7 @@
         "name": "Dusk",
         "owner": "516359709779820544",
         "level": 65,
-        "hp": 40,
+        "hp": 477,
         "mp": 175,
         "maxhp": 690,
         "maxmp": 175,
@@ -1205,7 +1220,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 55314,
+        "xp": 65418,
         "maxxp": 4741253,
         "skills": [
             "BraveBlade",
@@ -1246,7 +1261,7 @@
                 "value": 125,
                 "nextLevel": 150,
                 "level": 2,
-                "amount": "[object Object]353535"
+                "amount": "[object Object]3535352035"
             },
             "Sky": {
                 "value": 80,
@@ -1272,7 +1287,7 @@
                 "value": 65,
                 "nextLevel": 140,
                 "level": 3,
-                "amount": "[object Object]353535"
+                "amount": "[object Object]35353535"
             },
             "Rainbow": {
                 "value": 5,
@@ -1288,7 +1303,7 @@
                 "value": 40,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]353535"
+                "amount": "[object Object]35353535"
             },
             "Croato": {
                 "value": 60,
@@ -1496,8 +1511,8 @@
         "name": "Euphorica",
         "owner": "516359709779820544",
         "level": 65,
-        "hp": 483,
-        "mp": 123,
+        "hp": 424,
+        "mp": 102,
         "maxhp": 483,
         "maxmp": 350,
         "basehp": 35,
@@ -1509,7 +1524,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 2425940,
+        "xp": 2436044,
         "maxxp": 4741253,
         "skills": [
             "Bufudyne",
@@ -1548,13 +1563,13 @@
                 "value": 45,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]353535"
+                "amount": "[object Object]3535352035"
             },
             "Ramia": {
                 "value": 95,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]353535"
+                "amount": "[object Object]35353535"
             },
             "Sky": {
                 "value": 65,
@@ -1565,7 +1580,7 @@
                 "value": 30,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]353535"
+                "amount": "[object Object]35353535"
             },
             "Flara": {
                 "value": 20,
@@ -18343,8 +18358,8 @@
         "name": "Ramia",
         "owner": "516359709779820544",
         "level": 65,
-        "hp": 40,
-        "mp": 294,
+        "hp": 418,
+        "mp": 278,
         "maxhp": 426,
         "maxmp": 310,
         "basehp": 36,
@@ -18356,7 +18371,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 55314,
+        "xp": 65418,
         "maxxp": 4741253,
         "skills": [
             "VileAssault",
@@ -18411,13 +18426,13 @@
                 "value": 35,
                 "nextLevel": 190,
                 "level": 4,
-                "amount": "[object Object]353535"
+                "amount": "[object Object]3535352035"
             },
             "Euphorica": {
                 "value": 105,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]353535"
+                "amount": "[object Object]35353535"
             },
             "Ira": {
                 "value": 75,
@@ -18433,7 +18448,7 @@
                 "value": 35,
                 "nextLevel": 140,
                 "level": 3,
-                "amount": "[object Object]353535"
+                "amount": "[object Object]35353535"
             },
             "Flara": {
                 "value": 45,

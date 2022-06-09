@@ -643,6 +643,79 @@ commands.mainelement = new Command({
 	}
 })
 
+commands.weaponclass = new Command({
+	desc: `Change the character's weapon class.`,
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Weapon Class",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Weapon Class #2",
+			type: "Word",
+			forced: false
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+		
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+		if (!weaponClasses[args[1].toLowerCase()) return message.channel.send(`${args[1]} is an invalid weapon class.`)
+
+		if (args[2]) {
+			if (!weaponClasses[args[2].toLowerCase()) return message.channel.send(`${args[2]} is an invalid weapon class.`);
+			char.weaponclass = [args[1].toLowerCase(), args[2].toLowerCase()];
+		} else {
+			char.weaponclass = args[1].toLowerCase();
+		}
+
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+commands.armorclass = new Command({
+	desc: `Change the character's armor class.`,
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Armor Class",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+		
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+
+		if (!armorClasses[args[1].toLowerCase()) return message.channel.send(`${args[1]} is an invalid weapon class.`)
+		char.armorclass = args[1].toLowerCase();
+
+		message.channel.send(`👍 ${charFile[args[0]].name}'s armor class was changed to ${args[1]}.`)
+		fs.writeFileSync(`${dataPath}/json/${guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
 // Affinities
 
 // Get element affinity.
@@ -3544,7 +3617,7 @@ commands.equipweapon = new Command({
 			if (char.weapons[args[1]].class) {
 				if (char.weaponclass === 'none')
 					return message.channel.send(`${char.name} cannot equip any weapons.`);
-				else if (char.weaponclass === char.weapons[args[1]].class) {
+				else if ((typeof(char.weaponclass) == 'string' && char.weaponclass === char.weapons[args[1]].class) || (typeof(char.weaponclass) == 'object' && char.weaponclass.includes(char.weapons[args[1]].class))) {
 					char.curweapon = objClone(char.weapons[args[1]]);
 
 					message.react('👍');
@@ -3646,6 +3719,61 @@ commands.equiparmor = new Command({
 				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 			}
 		}
+	}
+})
+
+commands.unequipequipment = new Command({
+	desc: "Stop using equipment. This will unequip it from the character's inventory.",
+	aliases: ['stopusingequipment'],
+	section: "characters",
+	checkban: true,
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Weapon or Armor",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		let char = charFile[args[0]];
+		if (!char.weapons) char.weapons = {};
+		if (!char.armors) char.armors = {};
+		if (!char.weaponclass) char.weaponclass = 'none';
+		if (!char.armorclass) char.armorclass = 'none';
+
+		if (char.owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
+
+		switch(args[1].toLowerCase()) {
+			case 'weapon':
+				if (char.curweapon == {}) return message.channel.send(`${char.name} has no weapon equipped.`);
+				char.curweapon = {};
+				break;
+
+			case 'armor':
+				if (char.curarmor == {}) return message.channel.send(`${char.name} has no armor equipped.`);
+				char.curarmor = {};
+				break;
+
+			case 'all':
+				char.curweapon = {};
+				char.curarmor = {};
+				break;
+			
+			default:
+				return message.channel.send("Please enter either ''Weapon'' or ''Armor''. Or you can enter ''All''...");
+		}
+
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
 
