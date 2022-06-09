@@ -683,7 +683,7 @@ commands.weaponclass = new Command({
 		}
 
 		message.react('👍');
-		fs.writeFileSync(`${dataPath}/json/${guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
 
@@ -716,7 +716,7 @@ commands.armorclass = new Command({
 		char.armorclass = args[1].toLowerCase();
 
 		message.channel.send(`👍 ${charFile[args[0]].name}'s armor class was changed to ${args[1]}.`)
-		fs.writeFileSync(`${dataPath}/json/${guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
 
