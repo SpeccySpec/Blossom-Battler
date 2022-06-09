@@ -485,7 +485,22 @@
                     ]
                 }
             }
-        }
+        },
+        "weapons": {
+            "RoyalRapier": {
+                "name": "Royal Rapier",
+                "cost": 6955,
+                "element": "pierce",
+                "desc": "A shining rapier passed down the Cosmarian royal family. Younger ones who were part of the royal family were to be skilled in rapier usage just in case the worst happened.",
+                "originalAuthor": "516359709779820544",
+                "skill": "Pralaya",
+                "melee": "300",
+                "atk": "12"
+            }
+        },
+        "armors": {},
+        "weaponclass": "none",
+        "armorclass": "none"
     },
     "Lanagu": {
         "name": "Lanagu",

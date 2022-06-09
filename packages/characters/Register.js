@@ -4,8 +4,14 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
     charFile[name] = {
 		name: name,
 		mainElement: element,
+
+		// Weapons n Shit
 		weaponclass: 'none',
 		armorclass: 'none',
+		weapons: {},
+		armors: {},
+		curweapon: {},
+		curarmor: {},
 
         // Only the owner can move this character, if they don't have admin permissions.
         owner: creator.id,
@@ -33,10 +39,6 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
 			acc: 95,
 			crit: 15,
 		},
-
-		// Weapons and Armor
-		weapon: {},
-		armor: {},
 
         // Main stats
 		stats: {

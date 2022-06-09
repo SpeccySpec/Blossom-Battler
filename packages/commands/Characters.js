@@ -3505,8 +3505,59 @@ commands.obtainweapon = new Command({
 		if (!weaponFile[args[1]]) return message.channel.send(`${args[1]} is an invalid weapon!`);
 		if (char.weapons[args[1]]) return message.channel.send(`${char.name} already owns a ${weaponFile[args[1]].name}.`);
 
+		message.react('👍');
 		char.weapons[args[1]] = objClone(weaponFile[args[1]]);
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+commands.equiparmor = new Command({
+	desc: "Makes the character wear the specified armor. They can only wear armor of their class.",
+	section: "characters",
+	checkban: true,
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Armor Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+       let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		let char = charFile[args[0]];
+		if (!char.weapons) char.weapons = {};
+		if (!char.armors) char.armors = {};
+		if (!char.weaponclass) char.weaponclass = 'none';
+		if (!char.armorclass) char.armorclass = 'none';
+
+		if (charFile[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
+		
+		if (char.weapons[args[1]]) {
+			if (char.weapons[args[1]].class) {
+				if (char.weaponclass === 'none')
+					return message.channel.send(`${char.name} cannot equip any weapons.`);
+				else if (char.weaponclass === char.weapons[args[1]].class) {
+					char.curweapon = objClone(char.weapons[args[1]]);
+
+					message.react('👍');
+					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+				} else
+					return message.channel.send(`${char.name} is incapable of using this weapon as it's class is not ${char.weaponclass}.`);
+			} else {
+				char.curweapon = objClone(char.weapons[args[1]]);
+
+				message.react('👍');
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+			}
+		}
 	}
 })
 
@@ -3543,8 +3594,58 @@ commands.obtainarmor = new Command({
 		if (!armorFile[args[1]]) return message.channel.send(`${args[1]} is an invalid weapon!`);
 		if (char.armors[args[1]]) return message.channel.send(`${char.name} already owns a ${armorFile[args[1]].name}.`);
 
+		message.react('👍');
 		char.armors[args[1]] = objClone(armorFile[args[1]]);
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+commands.equiparmor = new Command({
+	desc: "Makes the character wear the specified armor. They can only wear armor of their class.",
+	section: "characters",
+	checkban: true,
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Armor Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+       let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+
+		let char = charFile[args[0]];
+		if (!char.weapons) char.weapons = {};
+		if (!char.armors) char.armors = {};
+		if (!char.weaponclass) char.weaponclass = 'none';
+		if (!char.armorclass) char.armorclass = 'none';
+
+		if (charFile[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
+		
+		if (char.armors[args[1]]) {
+			if (char.armors[args[1]].class) {
+				if (char.armorclass === 'none' || char.armorclass === char.armors[args[1]].class) {
+					char.curarmor = objClone(char.armors[args[1]]);
+
+					message.react('👍');
+					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+				} else {
+					return message.channel.send(`${char.name} is incapable of wearing this armor as it's armor class is not ${char.armorclass}.`);
+				}
+			} else {
+				char.curarmor = objClone(char.armors[args[1]]);
+
+				message.react('👍');
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+			}
+		}
 	}
 })
 
