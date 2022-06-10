@@ -380,6 +380,13 @@ costTypes = [
 	'moneypercent'
 ]
 
+trustLvl = {
+	meleeatk: 3,
+	showoff: 6,
+	healbuff: 10,
+	morehealbuff: 20
+}
+
 quoteTypes = ['melee', 'phys', 'mag', 'allyatk', 'lb', 'tc', 'strong', 'badatk', 'landed', 'miss', 'superweak', 'weak', 'hurt', 'resist', 'block', 'repel', 'drain', 'dodge', 'death', 'kill', 'pacify', 'allydeath', 'heal', 'helped', 'console', 'imfine', 'lvl']
 
 enemyTypes = [

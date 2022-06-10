@@ -807,7 +807,44 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	if (btl.atkmsg) {
 		finalText += `\n${btl.atkmsg}`;
 		delete btl.atkmsg;
-	} 
+	}
+
+	// Another thing... Trust shit.
+	if (!skill.noassistance && targets.length <= 1 && !skill.limitbreak && !skill.teamcombo) {
+		for (let i in party) {
+			if (char.trust && char.trust[party[i].truename] && char.trust[party[i].truename].level > trustLvls.meleeatk) {
+				let targ = getCharFromId(targets[0][0], btl);
+
+				if (targ.hp > 0) {
+					let atkType = 'physical'
+					let targType = 'one'
+					for (let skillName of char.skills) {
+						let psv = skillFile[skillName];
+						if (psv.type != 'passive' || !psv.passive) continue;
+
+						if (psv.passive.magicmelee) atkType = 'magic';
+						if (psv.passive.attackall) targType = 'allopposing';
+					}
+
+					let meleeAtk = {
+						name: char.melee.name,
+						type: char.melee.type,
+						pow: char.melee.pow,
+						acc: Math.round(Math.min(100, char.melee.acc)*2.5),
+						crit: char.melee.crit,
+						atktype: atkType,
+						target: 'one',
+						noassistance: true
+					}
+
+					finalText += `\n${party[i].name} wants to assist in attacking!\n`;
+					let result = attackWithSkill(party[i], targ, meleeAtk, btl, act);
+					finalText += `${result.txt}\n`;
+					if (result.teamCombo) btl.canteamcombo = true;
+				}
+			}
+		}
+	}
 
 	// Now, send the embed!
 	let DiscordEmbed = new Discord.MessageEmbed()
