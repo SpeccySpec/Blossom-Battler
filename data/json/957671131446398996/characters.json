@@ -504,8 +504,11 @@
             }
         },
         "armors": {},
-        "weaponclass": "none",
-        "armorclass": "none",
+        "weaponclass": [
+            "staff",
+            "pierce"
+        ],
+        "armorclass": "light",
         "curweapon": {
             "name": "Royal Rapier",
             "cost": 6955,
@@ -26127,7 +26130,11 @@
                 "status": "dizzy",
                 "statuschance": 60
             }
-        }
+        },
+        "weaponclass": [
+            "bludgeon",
+            "bladed"
+        ]
     },
     "Sakuya": {
         "name": "Sakuya",

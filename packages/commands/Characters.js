@@ -715,7 +715,7 @@ commands.armorclass = new Command({
 		if (!armorClasses[args[1].toLowerCase()]) return message.channel.send(`${args[1]} is an invalid armor class.`)
 		char.armorclass = args[1].toLowerCase();
 
-		message.channel.send(`👍 ${charFile[args[0]].name}'s armor class was changed to ${args[1]}.`)
+		message.react('👍');
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
@@ -3623,6 +3623,7 @@ commands.equipweapon = new Command({
 					return message.channel.send(`${char.name} cannot equip any weapons.`);
 				else if ((typeof(char.weaponclass) == 'string' && char.weaponclass === char.weapons[args[1]].class) || (typeof(char.weaponclass) == 'object' && char.weaponclass.includes(char.weapons[args[1]].class))) {
 					char.curweapon = objClone(char.weapons[args[1]]);
+					delete char.weapons[args[1]];
 
 					message.react('👍');
 					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
@@ -3710,6 +3711,7 @@ commands.equiparmor = new Command({
 			if (char.armors[args[1]].class) {
 				if (char.armorclass === 'none' || char.armorclass === char.armors[args[1]].class) {
 					char.curarmor = objClone(char.armors[args[1]]);
+					delete char.armors[args[1]];
 
 					message.react('👍');
 					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
@@ -3718,6 +3720,7 @@ commands.equiparmor = new Command({
 				}
 			} else {
 				char.curarmor = objClone(char.armors[args[1]]);
+				delete char.armors[args[1]];
 
 				message.react('👍');
 				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
@@ -3759,21 +3762,18 @@ commands.unequipequipment = new Command({
 		switch(args[1].toLowerCase()) {
 			case 'weapon':
 				if (char.curweapon == {}) return message.channel.send(`${char.name} has no weapon equipped.`);
+				char.weapons[char.curweapon.id] = objClone(char.curweapon);
 				char.curweapon = {};
 				break;
 
 			case 'armor':
 				if (char.curarmor == {}) return message.channel.send(`${char.name} has no armor equipped.`);
-				char.curarmor = {};
-				break;
-
-			case 'all':
-				char.curweapon = {};
+				char.armors[char.curarmor.id] = objClone(char.curarmor);
 				char.curarmor = {};
 				break;
 			
 			default:
-				return message.channel.send("Please enter either ''Weapon'' or ''Armor''. Or you can enter ''All''...");
+				return message.channel.send("Please enter either ''Weapon'' or ''Armor''.");
 		}
 
 		message.react('👍');
