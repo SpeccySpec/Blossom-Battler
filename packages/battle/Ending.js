@@ -226,7 +226,7 @@ winBattle = (btl, i) => {
 				for (let j in items) {
 					if (items[j] && items[j] > 0) {
 						embedtxt += ` ${(items[j] <= 1) ? 'a' : items[j]} ${j}${(items[j] > 1) ? 's' : ''}`;
-					
+
 						if (Object.keys(items).indexOf(j) < Object.keys(items).length - 2) {
 							embedtxt += ', ';
 						} else if (Object.keys(items).indexOf(j) == Object.keys(items).length - 2) {
