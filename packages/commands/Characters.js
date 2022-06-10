@@ -3851,6 +3851,81 @@ commands.trashequipment = new Command({
 	}
 })
 
+commands.tradeequipment = new Command({
+	desc: "Gives equipment to another character.",
+	aliases: ['giveequipment'],
+	section: "characters",
+	checkban: true,
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Weapon or Armor",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Equipment Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Target Character",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
+		if (!charFile[args[3]]) return message.channel.send(`${args[3]} is not a valid character!`);
+
+		let char = charFile[args[0]];
+		let char2 = charFile[args[3]];
+
+		if (!char.weapons) char.weapons = {};
+		if (!char.armors) char.armors = {};
+		if (!char.weaponclass) char.weaponclass = 'none';
+		if (!char.armorclass) char.armorclass = 'none';
+		if (!char2.weapons) char2.weapons = {};
+		if (!char2.armors) char2.armors = {};
+		if (!char2.weaponclass) char2.weaponclass = 'none';
+		if (!char2.armorclass) char2.armorclass = 'none';
+
+		if (char.owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
+
+		switch(args[1].toLowerCase()) {
+			case 'weapon':
+				if (char.weapons[args[2]]) {
+					char2.weapons[args[2]] = objClone(char.weapons[args[2]]);
+					delete char.weapons[args[2]];
+				} else {
+					return message.channel.send(`${args[2]} is a nonexistant weapon.`);
+				}
+				break;
+
+			case 'armor':
+				if (char.armors[args[2]]) {
+					char2.armors[args[2]] = objClone(char.armors[args[2]]);
+					delete char.armors[args[2]];
+				} else {
+					return message.channel.send(`${args[2]} is a nonexistant armor.`);
+				}
+				break;
+			
+			default:
+				return message.channel.send("Please enter either ''Weapon'' or ''Armor''.");
+		}
+
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
 hasTeamCombo = (char, char2) => {
 	if (!char.teamcombos) return false;
 	if (!char.teamcombos[char2.truename]) return false;
