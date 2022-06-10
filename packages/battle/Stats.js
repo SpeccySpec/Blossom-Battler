@@ -48,6 +48,17 @@ setupBattleStats = (f) => {
 		}
 
 		if (f.curarmor.skill) f.skills.push(f.curarmor.skill);
+
+		// Wrong Armor Class Drawbacks
+		if (f.armorclass === 'none' && f.curarmor.class) {
+			if (f.curarmor.class === "light") {
+				f.stats.end = Math.max(1, f.stats.end-Math.round(f.level/10));
+			} else if (f.curarmor.class === "heavy") {
+				f.stats.agl = Math.max(1, f.stats.agl-Math.round(f.level/8));
+			} else if (f.curarmor.class === "magic") {
+				f.stats.atk = Math.max(1, f.stats.atk-Math.round(f.level/10));
+			}
+		}
 	}
 
 	return true;
