@@ -225,9 +225,16 @@ longDescription = (charDefs, level, server, message) => {
 	for (const i in char.stats) statDesc += `\n${char.stats[i]}${i.toUpperCase()}${!char.type ? ` (${char.basestats['base'+i]} Base)` : ''}`;
 
 	DiscordEmbed.fields.push({ name: 'Stats', value: statDesc, inline: true });
-	
+
 	// Skills
-	let skillDesc = `**Melee Attack**:\n${elementEmoji[char.melee.type]}${char.melee.name}\n_${char.melee.pow} Power, ${char.melee.acc}% Accuracy_\n\n`
+	let skillDesc = '';
+	if (char.melee) {
+		skillDesc += `**Melee Attack**:\n`
+		if (char.melee.type) skillDesc += elementEmoji[char.melee.type]
+		skillDesc += `${char.melee.name}\n_${char.melee.pow}<:physical:973077052129423411>, ${char.melee.acc}% Accuracy,\n${char.melee.crit}%${critEmoji}`
+		if (char.melee.status && char.melee.statuschance) skillDesc += `, ${char.melee.statuschance}%${statusEmojis[char.melee.status]}`;
+		skillDesc += '_\n\n';
+	}
 
 	if (char.skills && char.skills.length > 0) {
 		skillDesc += '**Skills**:\n';

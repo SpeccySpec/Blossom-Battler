@@ -38,3 +38,9 @@ changeTrust = (char, char2, i, send, channel) => {
 
 	return send ? undefined : '';
 }
+
+trustLevel = (char, char2) => {
+	if (!char.trust) return 0;
+	if (!char.trust[char2.truename ?? char2.name]) return 0;
+	return char.trust[char2.truename ?? char2.name].level;
+}
