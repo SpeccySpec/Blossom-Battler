@@ -208,6 +208,16 @@ longDescription = (charDefs, level, server, message) => {
 		.setTitle(`${elementEmoji[char.mainElement]}${char.name} ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
 
 	let desc = ''
+	if (char.weaponclass) {
+		if (typeof(char.weaponclass) == 'object') {
+			desc += `_Can wield ${char.weaponclass[0]} and ${char.weaponclass[1]} weapons._\n`;
+		} else {
+			desc += `_Can wield ${char.weaponclass} weapons._\n`;
+		}
+	}
+	if (char.armorclass) desc += `_Can wear ${char.armorclass} armor._\n`;
+	desc += '\n';
+
 	if (char.leaderskill && settings.mechanics.leaderskills) desc += `**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} ${char.leaderskill.var1 ? ("toward " + char.leaderskill.var1.toUpperCase()) : ''};`
 	if (char.journal) desc += `\n${char.journal ? `\n\n${char.journal}` : ''}`
 
