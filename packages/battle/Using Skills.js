@@ -541,6 +541,12 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 	return result;
 }
 
+let trustQuotes = [
+	"%PLAYER1%'s feels a rush of power at the sight of %PLAYER2%",
+	"%PLAYER1% hopes to show off to %PLAYER2%.",
+	"%PLAYER1%'s eyes connect with %PLAYER2%'s.",
+];
+
 useSkill = (char, btl, act, forceskill, ally) => {
 	let skill = objClone(forceskill) ?? objClone(skillFile[act.index]);
 
@@ -628,8 +634,26 @@ useSkill = (char, btl, act, forceskill, ally) => {
 		}
 	}
 
+	// Final Text
+	let finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}\n`;
+	if (ally && ally.quotes) {
+		finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}\n${selectQuote(ally, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}\n`;
+	}
+
 	// Trust
 	for (let i in party.members) {
+		let char2 = party.members[i];
+		if (char.id === char2.id) continue;
+
+		if (trustLevel(char, char2) >= 6 && randNum(1, 100) <= 7) {
+			let a = trustQuotes[randNum(trustQuotes.length-1)];
+			replaceTxt(a, '%PLAYER1%', char.name, '%PLAYER2%', char2.name);
+
+			finalText += `\n_${a}_\n`;
+
+			skill.pow *= 1.5+(trustLevel(char, char2)/40)
+		}
+	}
 
 	// Who will this skill target? Each index of "targets" is [ID, Power Multiplier].
 	let targets = [];
@@ -725,11 +749,6 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	if (skill.type === 'heal') quotetype = 'heal';
 	if (skill.limitbreak) quotetype = 'lb';
 	if (skill.teamcombo) quotetype = 'tc';
-
-	let finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}\n`;
-	if (ally && ally.quotes) {
-		finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}\n${selectQuote(ally, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}\n`;
-	}
 	
 	if (skill.limitbreak) {
 		finalText += `__${char.name}__ struck with their **strongest skill**!\n_**__${skill.name}__**!_\n\n`;
