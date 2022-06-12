@@ -628,6 +628,9 @@ useSkill = (char, btl, act, forceskill, ally) => {
 		}
 	}
 
+	// Trust
+	for (let i in party.members) {
+
 	// Who will this skill target? Each index of "targets" is [ID, Power Multiplier].
 	let targets = [];
 	let possible = [];
@@ -811,14 +814,17 @@ useSkill = (char, btl, act, forceskill, ally) => {
 
 	// Another thing... Trust shit.
 	if (!skill.noassistance && targets.length <= 1 && !skill.limitbreak && !skill.teamcombo) {
-		for (let i in party) {
-			if ((trustLevel(char, party[i]) > trustLvls.meleeatk) && (randNum(1, 100) <= 20*(trustLevel(char, party[i])/5))) {
+		for (let i in party.members) {
+			let char2 = party.members[i];
+			if (char.id === char2.id) continue;
+
+			if ((trustLevel(char, char2) > trustLvls.meleeatk) && (randNum(1, 100) <= 20*(trustLevel(char, char2)/5))) {
 				let targ = getCharFromId(targets[0][0], btl);
 
 				if (targ.hp > 0) {
 					let atkType = 'physical'
 					let targType = 'one'
-					for (let skillName of char.skills) {
+					for (let skillName of char2.skills) {
 						let psv = skillFile[skillName];
 						if (psv.type != 'passive' || !psv.passive) continue;
 
@@ -827,18 +833,18 @@ useSkill = (char, btl, act, forceskill, ally) => {
 					}
 
 					let meleeAtk = {
-						name: char.melee.name,
-						type: char.melee.type,
-						pow: char.melee.pow,
-						acc: Math.round(Math.min(100, char.melee.acc)*2.5),
-						crit: char.melee.crit,
+						name: char2.melee.name,
+						type: char2.melee.type,
+						pow: char2.melee.pow,
+						acc: Math.round(Math.min(100, char2.melee.acc)*2.5),
+						crit: char2.melee.crit,
 						atktype: atkType,
 						target: 'one',
 						noassistance: true
 					}
 
-					finalText += `\n${party[i].name} wants to assist in attacking!\n`;
-					let result = attackWithSkill(party[i], targ, meleeAtk, btl, act);
+					finalText += `\n${char2.name} wants to assist in attacking!\n`;
+					let result = attackWithSkill(char2, targ, meleeAtk, btl, act);
 					finalText += `${result.txt}\n`;
 					if (result.teamCombo) btl.canteamcombo = true;
 				}
