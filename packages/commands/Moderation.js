@@ -546,7 +546,7 @@ commands.trustrate = new Command({
 })
 
 commands.moneyrate = new Command({
-	desc: 'Change the trust rate for the server.',
+	desc: 'Change the money rate for the server.',
 	section: 'moderation',
 	aliases: ['setmoneyrate', 'setmoney'],
 	args: [
