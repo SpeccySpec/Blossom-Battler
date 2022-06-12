@@ -812,7 +812,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	// Another thing... Trust shit.
 	if (!skill.noassistance && targets.length <= 1 && !skill.limitbreak && !skill.teamcombo) {
 		for (let i in party) {
-			if (char.trust && char.trust[party[i].truename] && char.trust[party[i].truename].level > trustLvls.meleeatk) {
+			if ((trustLevel(char, party[i]) > trustLvls.meleeatk) && (randNum(1, 100) <= 20*(trustLevel(char, party[i])/5))) {
 				let targ = getCharFromId(targets[0][0], btl);
 
 				if (targ.hp > 0) {
