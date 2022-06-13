@@ -6,7 +6,7 @@
 	
 	"1": {
 		"title": "Page 1 - Character Creation",
-		"desc": "Let's start with the most essential part! **Character creation**!\nWe'll be covering the command 'rpg!registerchar'. If you use it with no arguments, you'll get information about what each stat is for; I'm here to tell you about how characters here work in general!\n\nCharacters in RPGBot can be used for **battle**... well mostly battle. They can grow trust to other characters, have pets help... and more! Let's get started with the biggest parts.",
+		"desc": "Let's start with the most essential part! **Character creation**!\nWe'll be covering the command 'rpg!registerchar'. If you use it with no arguments, you'll get information about what each stat is for; I'm here to tell you about how characters here work in general!\n\nCharacters in Blossom Battler can be used for **battle**... well mostly battle. They can grow trust to other characters, have pets help... and more! Let's get started with the biggest parts.",
 		"fields": [
 			{
 				"title": "Stats",
