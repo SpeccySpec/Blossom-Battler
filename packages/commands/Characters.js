@@ -1022,6 +1022,45 @@ commands.forcelevel = new Command({
 	}
 })
 
+// Trust
+commands.trustxp = new Command({
+	desc: "Gives Trust XP to a pair of characters. Enough XP can cause the characters to grow closer, learning new abilities and fighting styles together! __Affected by the Trust Rate of the server__.",
+	aliases: ['trustxpup', 'gettrustxp', 'granttrustxp', 'givetrustxp', 'increasetrust', 'uptrust'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Character #2 Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "XP",
+			type: "Num",
+			forced: true
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id)
+		if (args[0] == "" || args[0] == " " || args[1] == "" || args[1] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// Checks
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]] || !charFile[args[1]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (args[2] <= 0) return message.channel.send("Don't even try it.");
+
+		// changeTrust function handles everything.
+		changeTrust(charFile[args[0]], charFile[args[1]], Math.round(args[2]*(settings.rates.trustrate ?? 1)), true, message.channel)
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
 // Melee Attacks!
 commands.setmelee = new Command({
 	desc: "A melee attack is a basic, low power skill, that you can use to save on resources or test a potentially risky plan.",
