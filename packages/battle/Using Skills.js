@@ -203,6 +203,11 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 	// Healing Skills
 	if (skill.type === 'heal') {
 		if (skill.heal) {
+			if (trustLevel(char, targ) >= trustLvl.morehealbuff)
+				skill.pow *= 1.2;
+			else if (trustLevel(char, targ) >= trustLvl.healbuff)
+				skill.pow *= 1.1;
+
 			for (let i in skill.heal) {
 				if (!healList[i]) continue;
 				if (!healList[i].onuse) continue;
