@@ -22,7 +22,7 @@ healList = {
 
 			if (vars[0] > 0 && targ.team == char.team) {
 				settings = setUpSettings(btl.guild.id);
-				changeTrust(targ, char, Math.round(20*(settings.rates.trustrate ?? 1)), true, btl.channel)
+				changeTrust(targ, char, Math.round(20*(settings.rates.trustrate ?? 1)), true, btl.channel);
 			}
 			return `__${targ.name}__'s HP was restored by **${vars[0]}**!`;
 		}
