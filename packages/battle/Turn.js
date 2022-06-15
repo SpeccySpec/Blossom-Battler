@@ -1146,30 +1146,34 @@ doTurn = async(btl, noTurnEmbed) => {
 	let canMove = true;
 
 	if (char.status && statusEffectFuncs[char.status.toLowerCase()]) {
-		let statusEff = (statusEffectFuncs[char.status.toLowerCase()].onturn(btl, char) ?? '');
+		if (statusEffectFuncs[char.status.toLowerCase()].onturn(btl, char)) {
+			let statusEff = (statusEffectFuncs[char.status.toLowerCase()].onturn(btl, char) ?? '');
 
-		if (typeof(statusEff) === 'string')
-			statusTxt += statusEff
-		else if (typeof(statusEff) === 'object') {
-			if (!statusEff[1]) canMove = false;
-			statusTxt += statusEff[0]
-		}
-		
-		if (char.hp <= 0) {
-			canMove = false;
-			if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(char);
-			delete char.status;
-			delete char.statusturns;
-		} else {
-			char.statusturns--;
-			if (char.statusturns == 0) {
+			if (typeof(statusEff) === 'string')
+				statusTxt += statusEff
+			else if (typeof(statusEff) === 'object') {
+				if (!statusEff[1]) canMove = false;
+				statusTxt += statusEff[0]
+			}
+			
+			if (char.hp <= 0) {
+				canMove = false;
 				if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(char);
 				delete char.status;
 				delete char.statusturns;
+			} else {
+				char.statusturns--;
+				if (char.statusturns == 0) {
+					if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(char);
+					delete char.status;
+					delete char.statusturns;
+				}
 			}
-		}
 
-		if (statusTxt != '') statusTxt += '\n';
+			if (statusTxt != '') statusTxt += '\n';
+		} else if (statusEffectFuncs[char.status.toLowerCase()].turnoverride) {
+			if (!statusEffectFuncs[char.status.toLowerCase()].turnoverride(btl, char)) canMove = false;
+		}
 	}
 
 	let stackable = ['confusion', 'infatuation'];
