@@ -58,7 +58,7 @@ doPacify = (char, btl, action) => {
 						let party = parties[btl.teams[char.team].id];
 
 						if (!party.negotiates) party.negotiates = {};
-						party.negotiates[targ.name] = party.negotiates[targ.name] ? party.negotiates[targ.name]+1 : 1
+						party.negotiates[targ.name] = party.negotiates[targ.name] ? party.negotiates[targ.name]+1 : 1;
 
 						if (party.negotiates[targ.name] == targ.negotiateDefs.required) {
 							finaltxt += 'and wants to join your team!';
