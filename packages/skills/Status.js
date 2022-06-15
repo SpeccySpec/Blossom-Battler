@@ -816,11 +816,11 @@ statusEffectFuncs = {
 		},
 		statmod: function(char, stats) {
 			if (hasStatusAffinity(char, 'burn', 'weak')) {
-				stats.mag /= 4;
+				stats.atk /= 4;
 			} else if (hasStatusAffinity(char, 'burn', 'resist')) {
-				stats.mag /= 1.25;
+				stats.atk /= 1.25;
 			} else {
-				stats.mag /= 2;
+				stats.atk /= 2;
 			}
 
 			return stats;
@@ -980,6 +980,45 @@ statusEffectFuncs = {
 			}
 
 			return `${char.name} lost ${dmg}${affinityTxt}MP from their despair!`;
+		}
+	},
+
+	brainwash: {
+		turnoverride: function(btl, char) {
+			let skill = char.skills[randNum(char.skills.length-1)];
+
+			let result = {
+				move: 'skills',
+				index: skill,
+				target: [char.team, randNum(btl.teams[char.team].members.length-1)],
+			}
+
+			// Get the skill we use.
+			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+			let skillDefs = objClone(skillFile[skill]);
+
+			// Flip the skill's target.
+			let targFlip = {
+				one: 'ally',
+				ally: 'one',
+				caster: 'caster',
+				allopposing: 'allallies',
+				allallies: 'allopposing',
+				randomopposing: 'randomallies',
+				random: 'random',
+				everyone: 'everyone',
+				spreadopposing: 'spreadallies',
+				spreadallies: 'spreadopposing'
+			}
+			skillDefs.target = targFlip[skillDefs.target];
+
+			useSkill(char, btl, result, skillDefs);
+		}
+	},
+
+	fear: {
+		onturn: function(btl, char) {
+			if (randNum(1, 100) <= 50) return [`${char.name} is stopped in their tracks by fear, losing their turn!`, false];
 		}
 	},
 }
