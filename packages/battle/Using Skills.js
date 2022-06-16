@@ -591,7 +591,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 
 	// Status Effects
 	if (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].skillmod) {
-		statusEffectFuncs[char.status].skillmod(char, skill, btl);
+		statusEffectFuncs[char.status].skillmod(char, char.stats, btl);
 	}
 
 	// Weather

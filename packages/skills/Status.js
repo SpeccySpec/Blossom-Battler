@@ -1021,4 +1021,137 @@ statusEffectFuncs = {
 			if (randNum(1, 100) <= 50) return [`${char.name} is stopped in their tracks by fear, losing their turn!`, false];
 		}
 	},
+
+	rage: {
+		turnoverride: function(btl, char) {
+			let randteam = randNum(btl.teams.length-1);
+			while (randteam == char.team) randteam = randNum(btl.teams.length-1);
+
+			let randchar = randNum(btl.teams[randteam].members.length-1);
+
+			let result = {
+				move: 'melee',
+				index: 0,
+				target: [randteam, randchar],
+			}
+
+			doAction(char, btl, result);
+		}
+	},
+
+	ego: {
+		hardcoded: true
+	},
+
+	silence: {
+		hardcoded: true
+	},
+
+	dazed: {
+		hardcoded: true
+	},
+
+	hunger: {
+		statmod: function(char, stats) {
+			if (hasStatusAffinity(char, 'hunger', 'weak')) {
+				stats.atk /= 4;
+				stats.mag /= 4;
+			} else if (hasStatusAffinity(char, 'hunger', 'resist')) {
+				stats.atk /= 1.5;
+				stats.mag /= 1.5;
+			} else {
+				stats.atk /= 2;
+				stats.mag /= 2;
+			}
+
+			return stats;
+		}
+	},
+
+	infatuation: {
+		stackable: true,
+		onturn: function(btl, char) {
+			if (randNum(1, 100) <= 50) return [`${char.name} is stopped in their tracks by lust, losing their turn!`, false];
+		}
+	},
+
+	blind: {
+		statmod: function(char, stats) {
+			if (hasStatusAffinity(char, 'blind', 'weak')) {
+				stats.agl /= 4;
+				stats.prc /= 4;
+			} else if (hasStatusAffinity(char, 'blind', 'resist')) {
+				stats.agl /= 1.5;
+				stats.prc /= 1.5;
+			} else {
+				stats.agl /= 2;
+				stats.prc /= 2;
+			}
+
+			return stats;
+		}
+	},
+
+	confusion: {
+		stackable: true,
+		onturn: function(btl, char) {
+			if (randNum(1, 100) <= 50) {
+				let dmg = Math.max(1, randNum(char.stats.atk-10, char.stats.atk+10));
+				char.hp -= dmg;
+
+				let txt = `${char.name} is confused! They hit themselves in confusion, taking ${dmg} damage`;
+
+				if (char.hp <= 0) {
+					txt += ' and was defeated!';
+					char.hp = 0;
+				} else {
+					txt += '!';
+				}
+
+				return [txt, false];
+			} else {
+				return `${char.name} is confused...`;
+			}
+		}
+	},
+
+	irradiation: {
+		oninflict: function(char) {
+			char.originalstats = objClone(char.stats);
+
+			if (hasStatusAffinity(char, 'irradiation', 'weak')) {
+				char.statusturns = 5;
+			} else if (hasStatusAffinity(char, 'irradiation', 'resist')) {
+				char.statusturns = 1;
+			}
+		},
+		onremove: function(char) {
+			char.stats = objClone(char.originalstats);
+			delete char.originalstats;
+		},
+		onturn: function(btl, char) {
+			let statswap = [];
+			let swapnum = hasStatusAffinity(char, 'irradiation', 'weak') ? 3 : 2;
+
+			for (let i = 0; i < swapnum; i++) {
+				let stat = stats[randNum(stats.length-1)];
+				while (statswap.includes(stat)) stat = stats[randNum(stats.length-1)];
+
+				statswap.push(stat);
+			}
+
+			let newarray = objClone(statswap);
+			newarray.sort(() => Math.random() - 0.5);
+
+			for (let i in statswap) {
+				char.stats[statswap[i]] = char.originalstats[newarray[i]];
+			}
+
+			return `${swapnum} of ${char.name}'s stats have been __randomised__!`;
+		}
+	},
+
+	sensitive: {
+		hardcoded: true
+	}
 }

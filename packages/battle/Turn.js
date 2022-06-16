@@ -17,14 +17,26 @@ getTurnOrder = (btl) => {
 
 	if (btl?.terrain?.type === 'psychic') {
 		turnorder.sort(function(a, b) {
+			// Status Effects
+			if (a.status && statusEffectFuncs[a.status] && statusEffectFuncs[a.status].skillmod) statusEffectFuncs[char.status].skillmod(a, a.stats, btl);
+			if (b.status && statusEffectFuncs[b.status] && statusEffectFuncs[b.status].skillmod) statusEffectFuncs[char.status].skillmod(b, b.stats, btl);
+
+			// Buffs
 			let agl1 = statWithBuff(a.stats.agl, a.buffs.agl);
 			let agl2 = statWithBuff(b.stats.agl, b.buffs.agl);
+
 			return agl1 - agl2;
 		});
 	} else {
 		turnorder.sort(function(a, b) {
+			// Status Effects
+			if (a.status && statusEffectFuncs[a.status] && statusEffectFuncs[a.status].skillmod) statusEffectFuncs[char.status].skillmod(a, a.stats, btl);
+			if (b.status && statusEffectFuncs[b.status] && statusEffectFuncs[b.status].skillmod) statusEffectFuncs[char.status].skillmod(b, b.stats, btl);
+
+			// Buffs
 			let agl1 = statWithBuff(a.stats.agl, a.buffs.agl);
 			let agl2 = statWithBuff(b.stats.agl, b.buffs.agl);
+
 			return agl2 - agl1;
 		});
 	}
@@ -54,12 +66,13 @@ const btnType = {
 }
 
 // Send an Interactable Turn Embed, buttons and all
-makeButton = (name, emoji, color, lowercase, forceid) => {
+makeButton = (name, emoji, color, lowercase, forceid, disabled) => {
 	return new Discord.MessageButton({
 		label: name,
 		customId: forceid ?? (lowercase ? name : name.toLowerCase()),
 		style: btnType[color.toLowerCase()] ?? 'SECONDARY',
-		emoji: emoji
+		emoji: emoji,
+		disabled: disabled ?? false
 	})
 }
 
@@ -134,7 +147,24 @@ const menuStates = {
 			let emoji1 = skillinfo ? elementEmoji[skillinfo.type] : elementEmoji.strike;
 			if (typeof(skillinfo.type) === 'object') emoji1 = skillinfo ? elementEmoji[skillinfo.type[0]] : elementEmoji.strike;
 
-			comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname))
+			let canselect = true;
+			if (char.status) {
+				switch(char.status.toLowerCase()) {
+					case 'ego':
+						if (skillinfo?.type === 'heal') canselect = false;
+						break;
+
+					case 'silence':
+						if (skillinfo?.atktype === 'magic') canselect = false;
+						break;
+
+					case 'dazed':
+						if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'ranged') canselect = false;
+						break;
+				}
+			}
+
+			comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
 		}
 	},
 	[MENU_ITEM]: ({char, btl, comps}) => {
