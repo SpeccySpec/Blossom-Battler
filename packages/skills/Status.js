@@ -1153,5 +1153,20 @@ statusEffectFuncs = {
 
 	sensitive: {
 		hardcoded: true
-	}
+	},
+
+	happy: {
+		statmod: function(char, stats) {
+			stats.agl += char.level/10;
+			stats.luk += char.level/10;
+			stats.prc -= char.level/10;
+			return stats;
+		}
+	},
+
+	mirror: {
+		onturn: function(btl, char) {
+			return [`${char.name} is encased in a mirror.`, false];
+		}
+	},
 }
