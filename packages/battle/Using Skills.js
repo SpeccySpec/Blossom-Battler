@@ -133,7 +133,14 @@ genDmg = (char, targ, btl, skill) => {
 
 // Also Placeholder
 getAffinity = (char, skillType) => {
-	let affinity = 'normal'
+	let affinity = 'normal';
+
+	if (char.status === 'mirror') {
+		if (skillType === 'strike' || skillType === 'slash' || skillType === 'pierce' || skillType === 'explode')
+			return 'superweak';
+		else
+			return 'repel';
+	}
 
 	if (typeof skillType === 'object') {
 		skillType = skillType.filter((_, index) => _ != "almighty");

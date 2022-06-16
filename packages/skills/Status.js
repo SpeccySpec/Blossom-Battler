@@ -1165,6 +1165,7 @@ statusEffectFuncs = {
 	},
 
 	mirror: {
+		hardcoded: true,
 		onturn: function(btl, char) {
 			return [`${char.name} is encased in a mirror.`, false];
 		}
