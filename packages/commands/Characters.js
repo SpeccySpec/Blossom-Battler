@@ -4185,3 +4185,68 @@ commands.removetc = new Command({
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
+
+/*
+	UTILITY COMMANDS
+					  */
+
+commands.fullheal = new Command({
+	desc: "Fully heal a character, party or everyone in the server.",
+	aliases: ['fullyheal', 'fullrestore', 'maxheal', 'maxrestore', 'maxhp'],
+	section: "characters",
+	args: [
+		{
+			name: "Character/Party/Everyone",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Character or Party",
+			type: "Word",
+			forced: false
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id)
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// Set up files.
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+
+		// Checks
+		let charcheck = args[0].toLowerCase();
+		switch(charcheck) {
+			case 'character':
+			case 'one':
+				if (!charFile[args[1]]) return message.channel.send(`${args[1]} is an invalid character.`);
+				if (!utilityFuncs.isAdmin(message) && charFile[args[1]].owner != message.author.id) return message.channel.send(`You don't own ${args[1]}!`);
+
+				charFile[args[1]].hp = charFile[args[1]].maxhp;
+				charFile[args[1]].mp = charFile[args[1]].maxmp;
+
+			case 'party':
+			case 'team':
+				if (!parties[args[1]]) return message.channel.send(`${args[1]} is an invalid party.`);
+
+				for (let i of parties[args[1]].members) {
+					charFile[i].hp = charFile[i].maxhp;
+					charFile[i].mp = charFile[i].maxmp;
+				}
+				for (let i of parties[args[1]].backup) {
+					charFile[i].hp = charFile[i].maxhp;
+					charFile[i].mp = charFile[i].maxmp;
+				}
+
+			case 'all':
+			case 'everyone':
+				for (let i in charFile) {
+					charFile[i].hp = charFile[i].maxhp;
+					charFile[i].mp = charFile[i].maxmp;
+				}
+		}
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
