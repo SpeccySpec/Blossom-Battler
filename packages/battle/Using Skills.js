@@ -517,6 +517,21 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					}
 				}
 
+				if (skill.extras) {
+					for (let i in skill.extras) {
+						if (!extrasList[i]) continue;
+						if (!extrasList[i].ondamage) continue;
+
+						if (extrasList[i].multiple) {
+							for (let k in skill.extras[i]) {
+								extrasList[i].ondamage(char, targ, dmg, skill, btl, skill.extras[i][k]);
+							}
+						} else {
+							extrasList[i].ondamage(char, targ, dmg, skill, btl, skill.extras[i]);
+						}
+					}
+				}
+
 				// Quotes
 				let quotetype = affinity;
 				if (affinity === 'normal') quotetype = 'hurt';

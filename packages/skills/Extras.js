@@ -602,6 +602,12 @@ extrasList = {
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "drain", [args[0] ?? 1]);
 			return true
+		},
+		ondamage(char, targ, dmg, skill, btl, vars) {
+			let heal = dmg/vars[0];
+			char.hp = Math.min(char.maxhp, char.hp+heal);
+
+			return `__${char.name}__ drained **${vars[0]}** HP from ${targ.name}!`;
 		}
 	}),
 
@@ -610,8 +616,9 @@ extrasList = {
 		desc: "Bypasses shielding skills like Makarakarn and Tetrakarn.",
 		applyfunc(message, skill) {
 			makeExtra(skill, "feint", [true]);
-			return true
-		}
+			return true;
+		},
+		hardcoded = true
 	}),
 
 	healverse: new Extra({
