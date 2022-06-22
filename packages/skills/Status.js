@@ -100,6 +100,14 @@ statusList = {
 		applyfunc(message, skill, args) {
 			makeStatus(skill, "heartswap", [true]);
 			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			let charbuffs = objClone(char.buffs);
+			let targbuffs = objClone(targ.buffs);
+			char.buffs = objClone(targbuffs);
+			targ.buffs = objClone(charbuffs);
+
+			return `__${char.name}__'s buffs were switched with __${targ.name}__!`;
 		}
 	}),
 
