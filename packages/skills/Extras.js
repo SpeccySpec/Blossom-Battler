@@ -873,7 +873,8 @@ extrasList = {
 			}
 			if (!skill.statuschance) skill.statuschance = 100;
 			return true;
-		}
+		},
+		hardcoded = true
 	}),
 
 	dualelement: new Extra({
@@ -893,7 +894,8 @@ extrasList = {
 			} else
 				return void message.channel.send("That's not a valid element!");	
 			return true;
-		}
+		},
+		hardcoded = true
 	}),
 
 	affinitypow: new Extra({
