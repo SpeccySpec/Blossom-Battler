@@ -1282,6 +1282,12 @@ doTurn = async(btl, noTurnEmbed) => {
 		if (char.type && (char.type.includes("boss") || char.type === "deity")) char.ignorestatus = true;
 	}
 
+	// Rest
+	if (char.rest) {
+		statusTxt += `\n${char.name} must rest to regain their energy.`;
+		delete char.rest;
+	}
+
 	// Check the status of our allies...
 	for (let i in btl.teams[char.team].members) {
 		let ally = btl.teams[char.team].members;
@@ -1292,6 +1298,7 @@ doTurn = async(btl, noTurnEmbed) => {
 			btl.canteamcombo = randNum(1, 100) <= 50;
 		}
 	}
+
 
 	// Now send the embed
 	if (statusTxt != '') {
