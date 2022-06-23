@@ -72,7 +72,7 @@ statusList = {
 			return extrasList.buff.onselect(char, skill, btl, vars);
 		},
 		onuse(char, targ, skill, btl, vars) {
-			return extrasList.buff.onuse(char, targ, skill, btl, vars)
+			return extrasList.buff.onuse(char, targ, skill, btl, vars);
 		}
 	}),
 

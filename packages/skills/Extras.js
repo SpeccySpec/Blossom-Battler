@@ -340,12 +340,10 @@ extrasList = {
 		},
 		onselect(char, skill, btl, vars) {
 			if (vars[0] != 'user') return;
-			
 			return extrasList.buff.buffChange(char, skill, btl, vars);
 		},
 		onuse(char, targ, skill, btl, vars) {
 			if (vars[0] != 'target') return;
-			
 			return extrasList.buff.buffChange(targ, skill, btl, vars);
 		},
 		buffChange(targ, skill, btl, vars) {
@@ -377,6 +375,21 @@ extrasList = {
 				}
 			} else {
 				buffStat(targ, vars[1].toLowerCase(), vars[2]);
+
+				if (vars[4] && vars[4] != null) {
+					if (!targ?.custom?.buffTurns) 
+						addCusVal(targ, "buffTurns", []);
+
+					for (let i = 0; i < Math.abs(vars[2]); i++) {
+						if (!((vars[2] < 0 && targ.custom.buffTurns.filter(x => x[0] == vars[1].toLowerCase() && x[1] < 0).length >= 3) || (vars[2] > 0 && targ.custom.buffTurns.filter(x => x[0] == vars[1].toLowerCase() && x[1] > 0).length >= 3))) {
+							targ.custom.buffTurns.push([
+								vars[1].toLowerCase(),
+								vars[4] * (vars[2] / Math.abs(vars[2]))
+							])
+						}
+					}
+				}
+
 				return `__${targ.name}__'s _${vars[1].toUpperCase()}_ was buffed **${vars[2]}** time(s)!`;
 			}
 		}
@@ -618,7 +631,7 @@ extrasList = {
 			makeExtra(skill, "feint", [true]);
 			return true;
 		},
-		hardcoded = true
+		hardcoded: true
 	}),
 
 	healverse: new Extra({
@@ -874,7 +887,7 @@ extrasList = {
 			if (!skill.statuschance) skill.statuschance = 100;
 			return true;
 		},
-		hardcoded = true
+		hardcoded: true
 	}),
 
 	dualelement: new Extra({
@@ -895,7 +908,7 @@ extrasList = {
 				return void message.channel.send("That's not a valid element!");	
 			return true;
 		},
-		hardcoded = true
+		hardcoded: true
 	}),
 
 	affinitypow: new Extra({
