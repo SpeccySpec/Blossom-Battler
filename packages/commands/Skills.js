@@ -612,6 +612,9 @@ commands.updateskills = new Command({
 
 				if (Object.keys(skillFile[skill].statusses).length == 0) delete skillFile[skill].statusses;
 			} else if (skillFile[skill].type == 'heal') {
+				if (skillFile[skill].target == 'one') skillFile[skill].target = 'ally';
+				if (skillFile[skill].target == 'allopposing') skillFile[skill].target = 'allallies';
+
 				if (!skillFile[skill].heal) skillFile[skill].heal = {};
 
 				if (skillFile[skill].invigorate) {
