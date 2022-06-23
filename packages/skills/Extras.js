@@ -371,7 +371,10 @@ extrasList = {
 
 					return `__${targ.name}__'s _${vars[1].toUpperCase()}_ was buffed **${vars[2]}** time(s)!`;
 				} else {
-					return `But it missed __${targ.name}__!`;
+					if (skill.type == 'status')
+						return `But it missed __${targ.name}__!`;
+					else
+						return '';
 				}
 			} else {
 				buffStat(targ, vars[1].toLowerCase(), vars[2]);
