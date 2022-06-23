@@ -1175,7 +1175,7 @@ doTurn = async(btl, noTurnEmbed) => {
 	// Status Effects.
 	let canMove = true;
 
-	if (char.status && statusEffectFuncs[char.status.toLowerCase()]) {
+	if (char.status && statusEffectFuncs[char.status.toLowerCase()] && statusEffectFuncs[char.status.toLowerCase()].onturn) {
 		if (statusEffectFuncs[char.status.toLowerCase()].onturn(btl, char)) {
 			let statusEff = (statusEffectFuncs[char.status.toLowerCase()].onturn(btl, char) ?? '');
 
@@ -1209,7 +1209,7 @@ doTurn = async(btl, noTurnEmbed) => {
 	let stackable = ['confusion', 'infatuation'];
 
 	for (let i in stackable) {
-		if (char[stackable[i]] && statusEffectFuncs[stackable[i]]) {
+		if (char[stackable[i]] && statusEffectFuncs[stackable[i]] && statusEffectFuncs[stackable[i]].onturn) {
 			let statusEff = (statusEffectFuncs[stackable[i]].onturn(btl, char) ?? '');
 
 			if (typeof statusEff === 'string')
@@ -1383,8 +1383,10 @@ advanceTurn = (btl) => {
 		return;
 	}
 
+	let settings = setUpSettings(btl.guild.id);
+
 	// Now, go to the next turn.
-	if (btl.doonemore) {
+	if (btl.doonemore && settings.mechanics.onemores) {
 		btl.channel.send("**[ONE MORE]**");
 		delete btl.doonemore;
 	} else {
