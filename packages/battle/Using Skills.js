@@ -662,6 +662,11 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	}
 
 	// Final Text
+	let quotetype = 'phys';
+	if (skill.atktype === 'magic') quotetype = 'mag';
+	if (skill.type === 'heal') quotetype = 'heal';
+	if (skill.limitbreak) quotetype = 'lb';
+	if (skill.teamcombo) quotetype = 'tc';
 	let finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}\n`;
 	if (ally && ally.quotes) {
 		finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}\n${selectQuote(ally, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}\n`;
@@ -771,12 +776,6 @@ useSkill = (char, btl, act, forceskill, ally) => {
 
 	let targTxt = `__${char.name}__ => `;
 	
-	let quotetype = 'phys';
-	if (skill.atktype === 'magic') quotetype = 'mag';
-	if (skill.type === 'heal') quotetype = 'heal';
-	if (skill.limitbreak) quotetype = 'lb';
-	if (skill.teamcombo) quotetype = 'tc';
-	
 	if (skill.limitbreak) {
 		finalText += `__${char.name}__ struck with their **strongest skill**!\n_**__${skill.name}__**!_\n\n`;
 	} else if (skill.teamcombo) {
@@ -864,7 +863,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 			let char2 = party.members[i];
 			if (char.id === char2.id) continue;
 
-			if ((trustLevel(char, char2) > trustLvls.meleeatk) && (randNum(1, 100) <= 20*(trustLevel(char, char2)/5))) {
+			if ((trustLevel(char, char2) > trustLvl.meleeatk) && (randNum(1, 100) <= 20*(trustLevel(char, char2)/5))) {
 				let targ = getCharFromId(targets[0][0], btl);
 
 				if (targ.hp > 0) {
