@@ -793,6 +793,14 @@ extrasList = {
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "lonewolf", [args[0] ?? 1.5]);
 			return true
+		},
+		statmod(char, skill, vars, btl) {
+			let allies = 0;
+			for (let ally of btl.teams[char.team].members) {
+				if (ally.hp > 0) allies++;
+			}
+
+			if (allies <= 1) skill.pow *= vars[0];
 		}
 	}),
 
