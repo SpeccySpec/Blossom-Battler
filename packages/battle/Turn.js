@@ -145,10 +145,13 @@ const menuStates = {
 				btncolor = 'red'
 
 			let emoji1 = skillinfo ? elementEmoji[skillinfo.type] : elementEmoji.strike;
-			if (typeof(skillinfo.type) === 'object') emoji1 = skillinfo ? elementEmoji[skillinfo.type[0]] : elementEmoji.strike;
+			if (typeof(skillinfo?.type) === 'object') emoji1 = skillinfo ? elementEmoji[skillinfo.type[0]] : elementEmoji.strike;
 
 			let canselect = true;
-			if (char.status) {
+
+			if (!canAfford(char, skillinfo)) {
+				canselect = false;
+			} else if (char.status) {
 				switch(char.status.toLowerCase()) {
 					case 'ego':
 						if (skillinfo?.type === 'heal') canselect = false;
@@ -1091,6 +1094,9 @@ doAction = (char, btl, action) => {
 			lbDefs.costtype = 'lb';
 			lbDefs.limitbreak = true;
 			lbDefs.atktype = aType;
+
+			lbDefs.pow += Math.round((char.lbp-lbDefs.cost)/3);
+			lbDefs.cost = char.lbp;
 
 			useSkill(char, btl, action, lbDefs);
 			break;
