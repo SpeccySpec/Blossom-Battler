@@ -1015,7 +1015,8 @@ extrasList = {
 				return void message.channel.send('Invalid damage formula!\nValid formulas are: Persona, Pokemon, Lamonka, Beta')
 			makeExtra(skill, "forceformula", [formula]);
 			return true;
-		}
+		},
+		hardcoded: true
 	}),
 
 	rollout: new Extra({
@@ -1049,6 +1050,28 @@ extrasList = {
 
 			makeExtra(skill, "rollout", [boost, maxboost, times]);
 			return true
+		},
+		onselect(char, skill, btl, vars) {
+			if (!char.forcemove) {
+				char.rollouts = 1;
+				char.forcemove = [vars[2], btl.action];
+			} else {
+				char.rollouts++;
+				if (char.rollouts >= vars[2]) {
+					delete char.rollouts
+					delete char.forcemove
+				}
+			}
+		},
+		statmod(char, skill, vars, btl) {
+			if (char.rollouts) {
+				let bst = (vars[0]-1)*char.rollouts;
+				skill.pow *= bst;
+				if (bst >= vars[1]) {
+					delete char.rollouts;
+					delete char.forcemove;
+				}
+			}
 		}
 	}),
 
@@ -1058,7 +1081,7 @@ extrasList = {
 		args: [],
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "sustain", [true]);
-			return true
+			return true;
 		}
 	}),
 
@@ -1068,7 +1091,7 @@ extrasList = {
 		args: [],
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "reverse", [true]);
-			return true
+			return true;
 		}
 	}),
 
