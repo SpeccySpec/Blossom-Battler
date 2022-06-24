@@ -302,6 +302,9 @@ const menuStates = {
 
 					if (skill.type === 'heal' && skill.heal.revive) {
 						if (members[i].hp > 0) continue;
+					} else if (skill.type === 'status' && skill.statusses.mimic) {
+						if (members[i].hp <= 0) continue;
+						if (isBoss(members[i])) continue;
 					} else {
 						if (members[i].hp <= 0) continue;
 					}
@@ -430,7 +433,7 @@ sendCurTurnEmbed = (char, btl) => {
 	});
 
 	let collector = btl.channel.createMessageComponentCollector({
-		filter: ({user}) => user.id == char.owner
+		filter: ({user}) => (user.id == char.owner || utilityFuncs.RPGBotAdmin(char.owner))
 	})
 
 	let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`, true);
@@ -1107,6 +1110,8 @@ doAction = (char, btl, action) => {
 
 			lbDefs.pow += Math.round((char.lbp-lbDefs.cost)/3);
 			lbDefs.cost = char.lbp;
+
+			lbDefs.target =  'one';
 
 			useSkill(char, btl, action, lbDefs);
 			break;

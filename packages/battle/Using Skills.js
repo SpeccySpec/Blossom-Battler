@@ -63,8 +63,7 @@ dodgeTxt = (char, targ) => {
 canAfford = (char, skill) => {
 	let cost = parseInt(skill.cost);
 	let costtype = skill.costtype;
-
-	if (!costtype) costtype === 'mp';
+	if (!costtype) costtype = 'mp';
 
 	switch(costtype.toLowerCase()) {
 		case 'hppercent':
@@ -402,7 +401,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 						for (let k in skillFile[targ.skills[i]].passive) {
 							if (passiveList[k] && passiveList[k].affinitymodoninf) {
-								let a = passiveList[k].affinitymodoninf(targ, char, skill, skillFile[char.skills[i]], btl, skillFile[char.skills[i]].passive[k])
+								let a = passiveList[k].affinitymodoninf(targ, char, skill, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k])
 								
 								if (a && a != null && a != false) {
 									if (typeof(a) === 'string') {
@@ -577,10 +576,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) {
-								extrasList[i].ondamage(char, targ, dmg, skill, btl, skill.extras[i][k]);
+								extrasList[i].ondamage(char, targ, total, skill, btl, skill.extras[i][k]);
 							}
 						} else {
-							extrasList[i].ondamage(char, targ, dmg, skill, btl, skill.extras[i]);
+							extrasList[i].ondamage(char, targ, total, skill, btl, skill.extras[i]);
 						}
 					}
 				}

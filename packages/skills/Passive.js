@@ -858,6 +858,11 @@ passiveList = {
 		desc: "Every heal you obtain nets you a <Point Name>. These will buff your attacks depending on the power of the affinitypoint buff on the skill.",
 		args: [
 			{
+				name: "Max Points",
+				type: "Number",
+				forced: true
+			},
+			{
 				name: "Point Name",
 				type: "Word",
 				forced: true
@@ -869,9 +874,11 @@ passiveList = {
 		},
 		onheal(char, ally, skill, heal, btl, vars) {
 			if (!char.custom.affinitypoint) addCusVal(char, 'affinitypoint', 0);
-			char.custom.affinitypoint++;
 
-			return `${char.name} obtained a __${vars[0]}__.`;
+			if (char.custom.affinitypoint < vars[0]) {
+				char.custom.affinitypoint++;
+				return `${char.name} obtained a __${vars[1]}__. _(${char.custom.affinitypoint}/${vars[0]})_`;
+			}
 		}
 	})
 }
