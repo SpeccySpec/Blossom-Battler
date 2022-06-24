@@ -141,10 +141,10 @@ statusList = {
 			if (char.id === targ.id) return '...but you cannot transform into yourself!';
 			addCusVal(char, 'revert', [vars[0], {}, `__${char.name}__ stopped mimicking __${targ.name}__!`]);
 
-			if (char.custom?.unmimic) {
-				char.custom.unmimic[1].stats = objClone(char.stats);
-				char.custom.unmimic[1].skills = char.skills;
-				char.custom.unmimic[1].name = char.name;
+			if (char.custom?.revert) {
+				char.custom.revert[1].stats = objClone(char.stats);
+				char.custom.revert[1].skills = char.skills;
+				char.custom.revert[1].name = char.name;
 
 				char.mimic = true;
 				char.name = `${targ.name} (${char.name})`;
@@ -169,12 +169,12 @@ statusList = {
 		},
 		onuse(char, targ, skill, btl, vars) {
 			delete char.mimic;
-			if (char.custom?.unmimic) {
-				char.stats = objClone(char.custom.unmimic[1].stats);
-				char.skills = char.custom.unmimic[1].skills;
-				char.name = char.custom.unmimic[1].name;
-				let sotrue = char.custom.unmimic[2];
-				delete char.custom.unmimic;
+			if (char.custom?.revert) {
+				char.stats = objClone(char.custom.revert[1].stats);
+				char.skills = char.custom.revert[1].skills;
+				char.name = char.custom.revert[1].name;
+				let sotrue = char.custom.revert[2];
+				delete char.custom.revert;
 
 				return sotrue;
 			} else {

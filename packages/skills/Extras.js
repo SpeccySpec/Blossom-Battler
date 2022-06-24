@@ -1351,5 +1351,26 @@ customVariables = {
 
 	affinitypoint: {
 		numeric: true
+	},
+
+	revert: {
+		onturn(btl, char, vars) {
+			if (char.custom?.revert) {
+				char.custom.revert[0]--;
+
+				if (char.custom.revert[0] <= 0) {
+					delete char.mimic;
+
+					char.stats = objClone(char.custom.revert[1].stats);
+					char.skills = char.custom.revert[1].skills;
+					char.name = char.custom.revert[1].name;
+
+					let sotrue = char.custom.revert[2];
+					delete char.custom.revert;
+
+					return sotrue;
+				}
+			}
+		}
 	}
 }
