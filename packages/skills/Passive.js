@@ -871,7 +871,7 @@ passiveList = {
 			if (!char.custom.affinitypoint) addCusVal(char, 'affinitypoint', 0);
 			char.custom.affinitypoint++;
 
-			return `${char.name} obtained a __${vars[0]}__`;
+			return `${char.name} obtained a __${vars[0]}__.`;
 		}
 	})
 }

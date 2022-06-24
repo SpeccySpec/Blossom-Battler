@@ -133,8 +133,29 @@ statusList = {
 			if (skillName && !skillFile[skillName]) return void message.channel.send("That's not a valid skill!");
 			if (skillName && skillFile[skillName] && (!skillFile[skillName].statusses || (skillFile[skillName].statusses && !skillFile[skillName].statusses.unmimic))) return void message.channel.send("That skill can't unmimic people!");
 
+			skill.target = 'one';
 			makeStatus(skill, "mimic", [turns, skillName ?? null]);
 			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			if (char.id === targ.id) return '...but you cannot transform into yourself!';
+			addCusVal(char, 'revert', [vars[0], {}, `__${char.name}__ stopped mimicking __${targ.name}__!`]);
+
+			if (char.custom?.unmimic) {
+				char.custom.unmimic[1].stats = objClone(char.stats);
+				char.custom.unmimic[1].skills = char.skills;
+				char.custom.unmimic[1].name = char.name;
+
+				char.mimic = true;
+				char.name = `${targ.name} (${char.name})`;
+				char.stats = objClone(targ.stats);
+				char.skills = targ.skills;
+				if (vars[1]) char.skills.push(vars[1]);
+
+				return `__${char.name}__ begun mimicking __${targ.name}__, copying _stats and skills_.`
+			} else {
+				return '...but something went wrong...';
+			}
 		}
 	}),
 
@@ -145,6 +166,20 @@ statusList = {
 		applyfunc: function(message, skill, args) {
 			makeStatus(skill, "unmimic", [true]);
 			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			delete char.mimic;
+			if (char.custom?.unmimic) {
+				char.stats = objClone(char.custom.unmimic[1].stats);
+				char.skills = char.custom.unmimic[1].skills;
+				char.name = char.custom.unmimic[1].name;
+				let sotrue = char.custom.unmimic[2];
+				delete char.custom.unmimic;
+
+				return sotrue;
+			} else {
+				return '...but it failed!';
+			}
 		}
 	}),
 

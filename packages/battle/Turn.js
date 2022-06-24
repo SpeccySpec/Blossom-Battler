@@ -91,6 +91,7 @@ MENU_BACKUP = 7;
 // Extra States (Misc. Shit like PVP)
 MENU_ENEMYINFO = 8;
 MENU_FORFEIT = 9;
+MENU_ANYSEL = 10;
 
 function CalcCompins(comps, i) {
 	const compins = Math.min(Math.floor(Math.max(i - 0.1, 0) / 4), 3)
@@ -318,6 +319,11 @@ const menuStates = {
 	[MENU_ENEMYINFO]: ({char, btl, comps}) => {
 		comps[0] = [makeButton('Finished Looking', '◀️', 'blue', true, 'back')]
 	},
+	[MENU_ANYSEL]: ({char, btl, comps}) => {
+		for (const i in btl.teams) {
+			comps[CalcCompins(comps, i)].push(makeButton(`Team ${btl.teams[i].name}`, '#️⃣', (char.team == i) ? 'green' : 'red', true, i.toString()))
+		}
+	}
 }
 
 setUpComponents = (char, btl, menustate) => {
@@ -651,7 +657,9 @@ sendCurTurnEmbed = (char, btl) => {
 						}
 					}
 
-					if (skill.target === "one" || skill.target === "spreadopposing") {
+					if (hasStatus(skill, 'mimic')) {
+						menustate = MENU_ANYSEL;
+					} else if (skill.target === "one" || skill.target === "spreadopposing") {
 						let alivecount = 0;
 						let alivenum = [0, 0];
 
@@ -735,24 +743,26 @@ sendCurTurnEmbed = (char, btl) => {
 							embeds: [DiscordEmbed],
 						});
 					}
-				} else if (menustate == MENU_TEAMSEL && btl.teams[i.customId]) {
+				} else if ((menustate == MENU_TEAMSEL || menustate == MENU_ANYSEL) && btl.teams[i.customId]) {
 					btl.action.target[0] = parseInt(i.customId);
 					menustate = MENU_TARGET;
 
-					teamDesc = '';
-					for (let i in btl.teams[btl.action.target[0]].members) {
-						let c = btl.teams[btl.action.target[0]].members[i];
-						let l = c.leader ? leaderEmoji : i;
+					if (parseInt(i.customId) != char.team) {
+						teamDesc = '';
+						for (let i in btl.teams[btl.action.target[0]].members) {
+							let c = btl.teams[btl.action.target[0]].members[i];
+							let l = c.leader ? leaderEmoji : i;
 
-						if (c.hp <= 0) {
-							teamDesc += `~~${l}: ${c.name} _(DOWN)_~~\n`;
-						} else {
-							let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
-							teamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+							if (c.hp <= 0) {
+								teamDesc += `~~${l}: ${c.name} _(DOWN)_~~\n`;
+							} else {
+								let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
+								teamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+							}
 						}
-					}
 
-					DiscordEmbed.fields = [{name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true}];
+						DiscordEmbed.fields = [{name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true}];
+					}
 				} else if (menustate == MENU_TARGET && btl.teams[btl.action.target[0]] && btl.teams[btl.action.target[0]].members[i.customId]) {
 					btl.action.target[1] = parseInt(i.customId);
 					let targ;
