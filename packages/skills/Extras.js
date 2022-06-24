@@ -964,6 +964,9 @@ extrasList = {
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "affinitypow", [args[0]]);
 			return true
+		},
+		statmod(char, skill, vars, btl) {
+			if (char.custom?.affinitypoint) skill.pow += vars[0]*char.custom.affinitypoint;
 		}
 	}),
 
@@ -992,7 +995,8 @@ extrasList = {
 			}
 			makeExtra(skill, "forcetech", statuses)
 			return true;
-		}
+		},
+		hardcoded: true
 	}),
 
 	forceformula: new Extra({
@@ -1320,5 +1324,9 @@ customVariables = {
 			if (text == '') return null;
 			return text;
 		}
+	},
+
+	affinitypoint: {
+		numeric: true
 	}
 }
