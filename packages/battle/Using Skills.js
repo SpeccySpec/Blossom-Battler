@@ -60,6 +60,38 @@ dodgeTxt = (char, targ) => {
 	}
 }
 
+canAfford = (char, skill) => {
+	let cost = parseInt(skill.cost);
+	let costtype = skill.costtype;
+
+	if (!costtype) costtype === 'mp';
+
+	switch(costtype.toLowerCase()) {
+		case 'hppercent':
+			if (isBoss(char)) return true;
+			if (char.hp <= Math.round((char.maxhp/100) * cost)) return false;
+			break;
+
+		case 'mppercent':
+			if (isBoss(char)) return true;
+			if (char.mp < Math.round((char.maxmp/100) * cost)) return false;
+			break;
+
+		case 'mp':
+			if (char.mp < cost) return false;
+			break;
+		
+		case 'lb':
+			if (char.lbp < cost) return false;
+			break;
+
+		default:
+			if (char.hp <= cost) return false;
+	}
+
+	return true
+}
+
 useCost = (char, cost, costtype) => {
 	if (!costtype) costtype === 'mp';
 
@@ -835,22 +867,30 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	}
 
 	// OnSelect
-	if (skill.extras) {
-		for (let i in skill.extras) {
-			if (!extrasList[i]) continue;
-			if (!extrasList[i].onselect) continue;
+	let selectcheck = {
+		extras: extrasList,
+		statusses: statusList,
+		heal: healList
+	}
 
-			if (extrasList[i].multiple) {
-				for (let k in skill.extras[i]) finalText += `\n${(extrasList[i].onselect(char, skill, btl, skill.extras[i][k]) ?? '')}`;
-			} else {
-				finalText += `\n${(extrasList[i].onselect(char, skill, btl, skill.extras[i]) ?? '')}`;
+	for (let j in selectcheck) {
+		if (skill[j]) {
+			for (let i in skill[j]) {
+				if (!selectcheck[j][i]) continue;
+				if (!selectcheck[j][i].onselect) continue;
+
+				if (selectcheck[j][i].multiple) {
+					for (let k in skill[j][i]) finalText += `\n${(selectcheck[j][i].onselect(char, skill, btl, skill[j][i][k]) ?? '')}`;
+				} else {
+					finalText += `\n${(selectcheck[j][i].onselect(char, skill, btl, skill[j][i]) ?? '')}`;
+				}
 			}
 		}
 	}
 
 	// Take away the cost
 	if (skillCost && !skill.forcefree) useCost(char, Math.round(skillCost), skill.costtype);
-	
+
 	// Do we have any final messages
 	if (btl.atkmsg) {
 		finalText += `\n${btl.atkmsg}`;
