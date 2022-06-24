@@ -446,7 +446,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 				// Techs
 				if (targ.status) {
-					if ((skill.extras?.forcetech && skill.extras.forcetech.includes(targ.status)) || (isTech(targ, skill.type)) {
+					if ((skill.extras?.forcetech && skill.extras.forcetech.includes(targ.status)) || isTech(targ, skill.type)) {
 						dmg *= settings.rates.tech ?? 1.2;
 						techs[i] = true;
 
