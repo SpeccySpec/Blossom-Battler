@@ -261,10 +261,21 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 				if (healList[i].multiple) {
 					for (let k in skill.heal[i]) {
-						result.txt += `\n${healList[i].onuse(char, targ, skill, btl, skill.heal[i][k])}`;
+						result.txt += `\n${healList[i].onuse(char, targ, skill, btl, skill.heal[i][k]) ?? ''}`;
 					}
 				} else {
-					result.txt += `\n${healList[i].onuse(char, targ, skill, btl, skill.heal[i])}`;
+					result.txt += `\n${healList[i].onuse(char, targ, skill, btl, skill.heal[i]) ?? ''}`;
+				}
+			}
+
+			for (let i in targ.skills) {
+				if (!skillFile[targ.skills[i]]) continue;
+				if (skillFile[targ.skills[i]].type != 'passive') continue;
+
+				for (let k in skillFile[targ.skills[i]].passive) {
+					if (passiveList[k] && passiveList[k].onheal) {
+						result.txt += `\n${passiveList[k].onheal(targ, char, skill, skill.pow, btl, skillFile[targ.skills[i]].passive[k]) ?? ''}`;
+					}
 				}
 			}
 		}
@@ -434,13 +445,15 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				}
 
 				// Techs
-				if (targ.status && isTech(targ, skill.type)) {
-					dmg *= settings.rates.tech ?? 1.2;
-					techs[i] = true;
+				if (targ.status) {
+					if ((skill.extras?.forcetech && skill.extras.forcetech.includes(targ.status)) || (isTech(targ, skill.type)) {
+						dmg *= settings.rates.tech ?? 1.2;
+						techs[i] = true;
 
-					if (randNum(1, 100) <= 50 && settings.mechanics.onemores) {
-						result.oneMore = true;
-						targ.down = true;
+						if (randNum(1, 100) <= 50 && settings.mechanics.onemores) {
+							result.oneMore = true;
+							targ.down = true;
+						}
 					}
 				}
 
