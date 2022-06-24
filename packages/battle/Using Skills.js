@@ -139,6 +139,11 @@ genDmg = (char, targ, btl, skill) => {
 
 	let atkStat = (skill.atktype === 'phys') ? statWithBuff(charStats.atk, char.buffs.atk) : statWithBuff(charStats.mag, char.buffs.mag);
 	let endStat = statWithBuff(targStats.end, targ.buffs.end);
+
+	if (skill.extras.statcalc) {
+		atkStat = statWithBuff(charStats[skill.extras.statcalc.toLowerCase()], char.buffs[skill.extras.statcalc.toLowerCase()] ?? 1);
+	}
+
 	let def = atkStat/endStat;
 	
 	let formulas = ['persona', 'pokemon', 'lamonka', 'beta'];

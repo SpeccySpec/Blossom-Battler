@@ -843,7 +843,28 @@ extrasList = {
 				return void message.channel.send("That's not a valid stat!");
 			makeExtra(skill, "statcalc", [stat]);
 			return true
-		}
+		},
+		hardcoded: true
+	}),
+
+	hitcalc: new Extra({
+		name: "Hit Calculation",
+		desc: "Uses the opponent's <Stat> for calculating damage.",
+		args: [
+			{
+				name: "Stat",
+				type: "Word",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			const stat = args[0].toLowerCase()
+			if (!utilityFuncs.validStat(stat))
+				return void message.channel.send("That's not a valid stat!");
+			makeExtra(skill, "hitcalc", [stat]);
+			return true
+		},
+		hardcoded: true
 	}),
 
 	hpcalc: new Extra({
