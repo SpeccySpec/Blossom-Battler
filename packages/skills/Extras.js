@@ -816,6 +816,14 @@ extrasList = {
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "heavenwrath", [args[0] ?? 1.5]);
 			return true
+		},
+		statmod(char, skill, vars, btl) {
+			let allies = 0;
+			for (let ally of btl.teams[char.team].members) {
+				if (ally.hp > 0) allies++;
+			}
+
+			if (allies >= btl.teams[char.team].members.length) skill.pow *= vars[0];
 		}
 	}),
 
