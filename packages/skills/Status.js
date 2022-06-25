@@ -139,6 +139,8 @@ statusList = {
 		},
 		onuse(char, targ, skill, btl, vars) {
 			if (char.id === targ.id) return '...but you cannot transform into yourself!';
+			if (char.mimic || char.custom?.revert) return 'But it failed!';
+
 			addCusVal(char, 'revert', [vars[0], {}, `__${char.name}__ stopped mimicking __${targ.name}__!`]);
 
 			if (char.custom?.revert) {
