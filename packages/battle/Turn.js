@@ -359,11 +359,11 @@ sendCurTurnEmbed = (char, btl) => {
 	let menustate = MENU_ACT;
 	let statDesc = `${getBar('hp', char.hp, char.maxhp)}\t${getBar('mp', char.mp, char.maxmp)}\n${char.hp}/${char.maxhp}HP, ${char.mp}/${char.maxmp}MP`;
 	
-	if (settings.mechanics.limitbreaks) statDesc += `, ${char.lbp}LB%`;
+	if (settings.mechanics.limitbreaks) statDesc += `, ${Math.round(char.lbp)}LB%`;
 
 	let weatherTxt = '';
-	if (btl.weather) weatherTxt += `\nCurrently, the weather is ${btl.weather.type}.`;
-	if (btl.terrain) weatherTxt += `\nCurrently, the terrain is ${btl.terrain.type}.`;
+	if (btl.weather) weatherTxt += `\n${btl.weather.type} Weather.`;
+	if (btl.terrain) weatherTxt += `\n${btl.terrain.type} Terrain.`;
 	statDesc += weatherTxt;
 
 	let teamDesc = '';
@@ -1262,6 +1262,9 @@ doTurn = async(btl, noTurnEmbed) => {
 				if (customVariables[i] && customVariables[i].onturn) {
 					statusTxt += (customVariables[i].onturn(btl, char, char.custom[i]) ?? '');
 					if (statusTxt != '') statusTxt += '\n';
+
+					// lol orgia mode
+					if (char.status === 'sleep') canMove = false;
 				}
 			}
 		}
