@@ -332,14 +332,22 @@ statusList = {
 			}
 		],
 		applyfunc(message, skill, args) {
-			let type = args[0].toLowerCase()
-			let chance = args[1]
+			let type = args[0].toLowerCase();
+			let chance = args[1];
 
-			if (!["shield", "tetra", "makara"].includes(type)) return void message.channel.send("That's not shield/tetra/makara!");
+			if (!["shield", "tetra", "makara", 'all'].includes(type)) return void message.channel.send("That's not shield/tetra/makara!");
 			if (chance < 1) return void message.channel.send("How would you break a shield with a less than 1% chance?");
 			
 			makeStatus(skill, "shieldbreak", [type, chance]);
 			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			if (!targ.custom?.shield) return 'But it failed!';
+
+			if (randNum(1, 100) <= vars[1]) {
+				delete targ.custom?.shield;
+				return `__${targ.name}__ had their shield broken!`;
+			}
 		}
 	}),
 
