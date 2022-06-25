@@ -1376,5 +1376,23 @@ customVariables = {
 				}
 			}
 		}
+	},
+
+	orgiamode: {
+		onturn(btl, char, vars) {
+			if (char.custom?.orgiamode) {
+				char.custom.orgiamode.turns-;
+
+				if (char.custom.orgiamode.turns <= 0) {
+					char.stats = objClone(char.custom.orgiamode.revert);
+					killVar(char, 'orgiamode');
+
+					char.status = 'sleep';
+					char.statusturns = 3;
+
+					return `__${char.name}__'s power boost wore off... and they fell asleep from exhaustion.`;
+				}
+			}
+		}
 	}
 }

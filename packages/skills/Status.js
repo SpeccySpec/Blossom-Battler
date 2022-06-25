@@ -469,6 +469,11 @@ statusList = {
 
 			makeStatus(skill, "weather", [args[0].toLowerCase()]);
 			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			btl.weather.type = vars[0];
+			btl.weather.turns = randNum(8, 16);
+			return `The weather has been changed to __${vars[0]}__!`;
 		}
 	}),
 
@@ -487,6 +492,11 @@ statusList = {
 
 			makeStatus(skill, "terrain", [args[0].toLowerCase()]);
 			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			btl.terrain.type = vars[0];
+			btl.terrain.turns = randNum(8, 16);
+			return `The weather has been changed to __${vars[0]}__!`;
 		}
 	}),
 
@@ -806,6 +816,18 @@ statusList = {
 
 			makeStatus(skill, "orgiamode", [args[0], args[1], args[2]]);
 			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			addCusVal(char, 'orgiamode', {
+				turns: vars[2],
+				revert: objClone(char.stats)
+			});
+
+			char.stats.atk = Math.round(char.stats.atk*vars[0]);
+			char.stats.mag = Math.round(char.stats.mag*vars[0]);
+			char.stats.end = Math.round(char.stats.end*vars[1]);
+
+			return `__${char.name}__'s attack and magic was multiplied by ${vars[0]}, however, their endurance was multiplied by ${vars[1]}.`;
 		}
 	})
 }

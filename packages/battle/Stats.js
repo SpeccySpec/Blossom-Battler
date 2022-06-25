@@ -98,4 +98,8 @@ getCharFromId = (id, btl) => {
 }
 
 resetEffects = (char) => {
+	if (char.custom?.orgiamode) {
+		char.stats = objClone(char.custom.orgiamode.revert);
+		killVar(char, 'orgiamode');
+	}
 }
