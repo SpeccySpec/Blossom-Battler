@@ -254,6 +254,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			else if (trustLevel(char, targ) >= trustLvl.healbuff)
 				skill.pow *= 1.1;
 
+			if (char.mimic) skill.pow *= 1/3;
+
 			for (let i in skill.heal) {
 				if (!healList[i]) continue;
 				if (!healList[i].onuse) continue;
