@@ -345,7 +345,7 @@ statusList = {
 			if (!targ.custom?.shield) return 'But it failed!';
 
 			if (randNum(1, 100) <= vars[1]) {
-				delete targ.custom?.shield;
+				delete targ.custom.shield;
 				return `__${targ.name}__ had their shield broken!`;
 			}
 		}
