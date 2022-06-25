@@ -254,7 +254,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			else if (trustLevel(char, targ) >= trustLvl.healbuff)
 				skill.pow *= 1.1;
 
-			if (char.mimic) skill.pow *= 1/3;
+			if (char.mimic || char.clone || char.reincarnate) skill.pow *= 1/3;
+
+			skill.pow = Math.round(skill.pow);
 
 			for (let i in skill.heal) {
 				if (!healList[i]) continue;
@@ -478,6 +480,24 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				if (char.guard && affinity != 'drain') {
 					dmg *= char.guard;
 					delete char.guard;
+				}
+
+				// Shields
+				if (char.custom?.shield) {
+					if (!char.custom.shield.type || char.custom.shield.type === 'reduce') {
+						dmg = Math.round(dmg*1/3);
+
+						if (char.custom.shield.hp) {
+							char.custom.shield.hp--;
+							if (char.custom.shield.hp <= 0) {
+								addAtkMsg(btl, `__${char.name}__'s __${char.custom.shield.name}__ has broken!`);
+								delete char.custom.shield.hp;
+							}
+						} else {
+							addAtkMsg(btl, `__${char.name}__'s __${char.custom.shield.name}__ has broken!`);
+							delete char.custom.shield.hp;
+						}
+					}
 				}
 
 				// This damage is done!

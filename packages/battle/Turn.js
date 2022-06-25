@@ -1368,6 +1368,11 @@ advanceTurn = (btl) => {
 			if (char.hp <= 0 || char.pacified) {
 				pLeft--;
 				resetEffects(char);
+
+				// If this character is a clone or reincarnate, remove them from the members.
+				if (char.clone || char.reincarnate) btl.teams[i].members.splice(k, 1);
+
+				// moving on...
 				continue;
 			}
 		}

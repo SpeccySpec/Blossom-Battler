@@ -1353,6 +1353,10 @@ customVariables = {
 		numeric: true
 	},
 
+	shield: {
+		hardcoded: true
+	},
+
 	revert: {
 		onturn(btl, char, vars) {
 			if (char.custom?.revert) {

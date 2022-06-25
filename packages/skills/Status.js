@@ -214,8 +214,25 @@ statusList = {
 			if (mpPercent < 10) return void message.channel.send("The clone wouldn't really be able to use skills if the one it cloned is a magic user!");
 			if (percent < 10) return void message.channel.send("With such low stats, the clone would be useless!");
 
+			skill.target = 'caster';
 			makeStatus(skill, "clone", [hpPercent, mpPercent, percent]);
 			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			let newchar = objClone(char);
+
+			newchar.clone = true;
+			newchar.maxhp *= hpPercent/100;
+			newchar.maxmp *= mpPercent/100;
+			for (let i in newchar.stats)
+				newchar.stats[i] *= percent/100;
+
+			newchar.maxhp = Math.round(newchar.maxhp);
+			newchar.maxmp = Math.round(newchar.maxmp);
+			newchar.hp = newchar.maxhp;
+			newchar.mp = newchar.maxmp;
+
+			return `__${char.name}__ created a clone of themselves.`;
 		}
 	}),
 
@@ -249,6 +266,19 @@ statusList = {
 			
 			makeStatus(skill, "shield", [shieldName, element, hits]);
 			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			addCusVal(targ, 'shield', {
+				name: vars[0],
+				element: vars[1],
+				hp: vars[2]
+			});
+
+			if (btl.pvp) {
+				return `__${char.name}__ protected __${targ.name}__ with something...`;
+			} else {
+				return `__${char.name}__ protected __${targ.name}__ with a __${vars[0]}__!`;
+			}
 		}
 	}),
 
@@ -271,6 +301,18 @@ statusList = {
 
 			makeStatus(skill, "karn", [phys]);
 			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			addCusVal(targ, 'shield', {
+				name: skill.name,
+				type: `repel${vars[0]}`
+			});
+
+			if (btl.pvp) {
+				return `__${char.name}__ protected __${targ.name}__ with something...`;
+			} else {
+				return `__${char.name}__ protected __${targ.name}__ with a __${vars[0]}__!`;
+			}
 		}
 	}),
 
