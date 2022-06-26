@@ -354,8 +354,9 @@ extrasList = {
 
 				if (chance <= vars[3]) {
 					buffStat(targ, vars[1].toLowerCase(), vars[2]);
+					let txt = `__${targ.name}__'s _${vars[1].toUpperCase()}_ was buffed **${vars[2]}** time(s)!`;
 
-					if (vars[4] && vars[4] != null) {
+					if (vars[4]) {
 						if (!targ?.custom?.buffTurns) 
 							addCusVal(targ, "buffTurns", []);
 
@@ -367,9 +368,11 @@ extrasList = {
 								])
 							}
 						}
+
+						txt += `\nHowever, only for __${vars[4]} turns__.`;
 					}
 
-					return `__${targ.name}__'s _${vars[1].toUpperCase()}_ was buffed **${vars[2]}** time(s)!`;
+					return txt;
 				} else {
 					if (skill.type == 'status')
 						return `But it missed __${targ.name}__!`;
