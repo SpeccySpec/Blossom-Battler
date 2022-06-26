@@ -20958,11 +20958,11 @@
     "Snow": {
         "name": "Snow",
         "owner": "621307633718132746",
-        "level": 58,
-        "hp": 382,
-        "mp": 310,
-        "maxhp": 382,
-        "maxmp": 310,
+        "level": 99,
+        "hp": 628,
+        "mp": 515,
+        "maxhp": 628,
+        "maxmp": 515,
         "basehp": 40,
         "basemp": 25,
         "mpMeter": [
@@ -20979,7 +20979,7 @@
         "weapon": {},
         "armor": {},
         "xp": 4930,
-        "maxxp": 1741237,
+        "maxxp": 615066353,
         "skills": [
             "LightningFist",
             "SnowGun",
@@ -20987,7 +20987,8 @@
             "DodgePhys",
             "MultiI",
             "SnowRifle",
-            "SnowRocket"
+            "SnowRocket",
+            "Debilitate"
         ],
         "critquote": [],
         "deathquote": [
@@ -21034,14 +21035,14 @@
         "curCharms": [],
         "nickname": "Snow Leader",
         "stats": {
-            "atk": 63,
-            "mag": 34,
-            "prc": 34,
-            "end": 23,
-            "chr": 23,
-            "int": 62,
-            "agl": 67,
-            "luk": 33
+            "atk": 104,
+            "mag": 54,
+            "prc": 54,
+            "end": 37,
+            "chr": 37,
+            "int": 103,
+            "agl": 108,
+            "luk": 53
         },
         "basestats": {
             "baseatk": 6,

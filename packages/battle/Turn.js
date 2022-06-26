@@ -679,7 +679,7 @@ sendCurTurnEmbed = (char, btl) => {
 
 					if (hasStatus(skill, 'mimic')) {
 						menustate = MENU_ANYSEL;
-					} else if (skill.target === "one" || skill.target === "spreadopposing") {
+					} else if ((skill.target === "one" || skill.target === "spreadopposing") && skill.type != 'status' && skill.type != 'heal') {
 						let alivecount = 0;
 						let alivenum = [0, 0];
 
