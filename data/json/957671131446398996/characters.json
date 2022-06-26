@@ -4,7 +4,7 @@
         "owner": "516359709779820544",
         "level": 77,
         "hp": 448,
-        "mp": 529,
+        "mp": 293,
         "maxhp": 448,
         "maxmp": 529,
         "basehp": 30,
@@ -16,7 +16,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 663809,
+        "xp": 863988,
         "maxxp": 26403897,
         "skills": [
             "Prakrti",
@@ -58,7 +58,8 @@
             "Sky": {
                 "value": 566,
                 "nextLevel": 990,
-                "level": 19
+                "level": 19,
+                "amount": null
             },
             "Euphorica": {
                 "value": 45,
@@ -81,7 +82,7 @@
                 "value": 5,
                 "nextLevel": 190,
                 "level": 4,
-                "amount": "[object Object]35353535"
+                "amount": "[object Object]3535353535"
             },
             "Ira": {
                 "value": 65,
@@ -196,7 +197,8 @@
             "Ayumi": {
                 "value": 90,
                 "nextLevel": 100,
-                "level": 1
+                "level": 1,
+                "amount": null
             },
             "Gura": {
                 "value": 80,
@@ -244,9 +246,9 @@
                 "level": 1
             },
             "Valoria": {
-                "amount": 20,
-                "maximum": 100,
-                "level": 1
+                "amount": 100,
+                "maximum": 115,
+                "level": 2
             }
         },
         "charms": [
@@ -18360,8 +18362,8 @@
         "name": "Ramia",
         "owner": "516359709779820544",
         "level": 65,
-        "hp": 426,
-        "mp": 310,
+        "hp": 341,
+        "mp": 202,
         "maxhp": 426,
         "maxmp": 310,
         "basehp": 36,
@@ -18373,7 +18375,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 65418,
+        "xp": 265597,
         "maxxp": 4741253,
         "skills": [
             "VileAssault",
@@ -18422,13 +18424,14 @@
             "Sky": {
                 "value": 65,
                 "nextLevel": 220,
-                "level": 3
+                "level": 3,
+                "amount": null
             },
             "Valoria": {
                 "value": 35,
                 "nextLevel": 190,
                 "level": 4,
-                "amount": "[object Object]3535352035"
+                "amount": "[object Object]35353520352020202035"
             },
             "Euphorica": {
                 "value": 105,
@@ -18525,7 +18528,8 @@
             "Ayumi": {
                 "value": 30,
                 "nextLevel": 100,
-                "level": 1
+                "level": 1,
+                "amount": null
             }
         },
         "weapon": {},
@@ -22516,7 +22520,7 @@
         "owner": "412328234198237189",
         "level": 62,
         "hp": 467,
-        "mp": 391,
+        "mp": 135,
         "maxhp": 467,
         "maxmp": 391,
         "basehp": 40,
@@ -22529,7 +22533,7 @@
             "crit": 15
         },
         "weapon": {},
-        "xp": 0,
+        "xp": 200179,
         "maxxp": 3086380,
         "skills": [
             "GiganticFist",
@@ -22579,7 +22583,8 @@
             "Sky": {
                 "value": 150,
                 "nextLevel": 340,
-                "level": 10
+                "level": 10,
+                "amount": null
             },
             "Firestorm": {
                 "value": 10,
@@ -22594,7 +22599,8 @@
             "Valoria": {
                 "value": 20,
                 "nextLevel": 120,
-                "level": 2
+                "level": 2,
+                "amount": 95
             },
             "Lena": {
                 "value": 10,
@@ -22614,7 +22620,8 @@
             "Ramia": {
                 "value": 50,
                 "nextLevel": 120,
-                "level": 2
+                "level": 2,
+                "amount": null
             },
             "Karma": {
                 "value": 15,
@@ -25419,7 +25426,7 @@
         "name": "Sky",
         "owner": "412328234198237189",
         "level": 75,
-        "hp": 521,
+        "hp": 438,
         "mp": 432,
         "maxhp": 521,
         "maxmp": 432,
@@ -25432,7 +25439,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 6933052,
+        "xp": 7133231,
         "maxxp": 19832260,
         "skills": [
             "TricksterStrike",
@@ -25519,7 +25526,8 @@
             "Valoria": {
                 "value": 566,
                 "nextLevel": 990,
-                "level": 19
+                "level": 19,
+                "amount": 95
             },
             "Lanagu": {
                 "value": -105,
@@ -25530,7 +25538,8 @@
             "Ramia": {
                 "value": 35,
                 "nextLevel": 220,
-                "level": 3
+                "level": 3,
+                "amount": null
             },
             "Lena": {
                 "value": 75,
@@ -25635,7 +25644,8 @@
             "Ayumi": {
                 "value": 90,
                 "nextLevel": 340,
-                "level": 10
+                "level": 10,
+                "amount": null
             },
             "Mumei": {
                 "value": -50,

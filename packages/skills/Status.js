@@ -950,7 +950,7 @@ statusEffectFuncs = {
 			let affinityTxt = '';
 
 			let dmg = Math.round(char.maxhp/10)
-			if (char.boss || char.miniboss) dmg = 5;
+			if (isBoss(char)) dmg = 5;
 
 			if (hasStatusAffinity(char, 'burn', 'weak')) {
 				dmg *= 2;
@@ -983,7 +983,7 @@ statusEffectFuncs = {
 			let affinityTxt = '';
 
 			let dmg = Math.round(char.maxhp/10)
-			if (char.boss || char.miniboss) dmg = 5;
+			if (isBoss(char)) dmg = 5;
 
 			if (hasStatusAffinity(char, 'poison', 'weak')) {
 				dmg *= 2;
@@ -1015,7 +1015,7 @@ statusEffectFuncs = {
 			let affinityTxt = '';
 
 			let dmg = Math.round(char.maxhp/8)
-			if (char.boss || char.miniboss) dmg = 10;
+			if (isBoss(char)) dmg = 10;
 
 			if (hasStatusAffinity(char, 'bleed', 'weak')) {
 				dmg *= 2;
@@ -1113,7 +1113,7 @@ statusEffectFuncs = {
 			let affinityTxt = '';
 
 			let dmg = Math.round(char.maxmp/10)
-			if (char.boss || char.miniboss) dmg = 10;
+			if (isBoss(char)) dmg = 10;
 
 			if (hasStatusAffinity(char, 'despair', 'weak')) {
 				dmg *= 2;
