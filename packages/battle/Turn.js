@@ -1161,6 +1161,14 @@ doAction = (char, btl, action) => {
 			}
 	}
 
+	// Custom Variable EndTurn
+	if (char.custom) {
+		for (let i in char.custom) {
+			if (customVariables[i] && customVariables[i].endturn) charStats = customVariables[i].endturn(btl, char, char.custom[i]);
+		}
+	}
+
+	// Save file data
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, '	', 4));
 
 	setTimeout(function() {
