@@ -707,7 +707,7 @@ statusList = {
 
 	chaosstir: new Extra({
 		name: "Chaos Stir",
-		desc: "Upon getting hit with a skill, the user strikes back with the skill with <Power Multiplier>x power and <Accuracy>% accuracy.",
+		desc: "Upon getting hit with a skill, the user strikes back with the same skill with <Power Multiplier>x power and <Accuracy>% accuracy.",
 		args: [
 			{
 				name: "Power Multiplier",
@@ -726,9 +726,19 @@ statusList = {
 
 			if (power < 1) return void message.channel.send("Power must be above 0!");
 			if (accuracy < 1) return void message.channel.send("Accuracy must be above 0!");
+			skill.target = 'caster';
 
 			makeStatus(skill, "chaosstir", [power, accuracy]);
 			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			addCusVal(targ, 'chaosstir', true);
+
+			if (btl.pvp) {
+				return `__${char.name}__ is preparing something...`;
+			} else {
+				return `__${char.name}__ assumes a defensive stance, ready to strike back.`;
+			}
 		}
 	}),
 

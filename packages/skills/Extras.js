@@ -1536,5 +1536,19 @@ customVariables = {
 		endturn(btl, char, vars) {
 			killVar(char, 'charge');
 		}
-	}
+	},
+
+	chaosstir: {
+		onturn(btl, char, vars) {
+			killVar(char, "chaosstir");
+		},
+		onhit(btl, char, inf, dmg, vars, s) {
+			let skill = objClone(s);
+			skill.pow *= vars[0];
+			skill.acc = vars[1];
+
+			let attack = attackWithSkill(char, inf, skill, btl, true);
+			return `__${char.name}__ struck back, with a stronger __${skill.name}__!\n${attack.txt}`;
+		}
+	},
 }

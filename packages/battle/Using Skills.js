@@ -606,7 +606,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				if (targ.hp > 0 && targ.custom) {
 					for (let i in targ.custom) {
 						if (customVariables[i] && customVariables[i].onhit) {
-							result.txt += '\n' + (customVariables[i].onhit(btl, targ, char, total, targ.custom[i]) ?? '');
+							result.txt += '\n' + (customVariables[i].onhit(btl, targ, char, total, targ.custom[i], skill) ?? '');
 						}
 					}
 				}
