@@ -1149,6 +1149,43 @@ extrasList = {
 				addAtkMsg(btl, `__${char.name}__'s __${skill.name}__ landed **${vars[1]}** extra time(s)!`);
 			}
 		}
+	}),
+
+	guts: new Extra({
+		name: "Guts",
+		desc: "When inflicted with <Status>, skills' power will be boosted by <Multiplier>x.",
+		args: [
+			{
+				name: "Multiplier",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Status",
+				type: "Word",
+				forced: true,
+				multiple: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let statusses;
+			try {
+				statuses = args.map(status => {
+					status = status.toLowerCase();
+					if (!statusEffects.includes(status)) throw void message.channel.send(`The status ${status} does not exist!`);
+					return status;
+				})
+			} catch {
+				return false;
+			}
+
+			makeExtra(skill, "guts", [args[0], ...statusses]);
+			return true;
+		},
+		statmod(char, skill, vars, btl) {
+			if (!char.status) return;
+			if (vars.inlcludes(char.status)) skill.pow *= vars[0];
+		}
 	})
 }
 
