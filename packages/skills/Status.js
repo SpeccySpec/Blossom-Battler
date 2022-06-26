@@ -689,6 +689,18 @@ statusList = {
 
 			makeStatus(skill, "futuresight", [definition]);
 			return true
+		},
+		onuse(char, targ, skill, btl, vars) {
+			let a = objClone(vars[0]);
+			a.user = char.id;
+
+			addCusVal(targ, 'futuresight', vars[0]);
+
+			if (btl.pvp) {
+				return `__${char.name}__ is preparing something...`;
+			} else {
+				return `__${char.name}__ is going to strike __${targ.name}__ in ${vars[0].turns} turns!`;
+			}
 		}
 	}),
 
