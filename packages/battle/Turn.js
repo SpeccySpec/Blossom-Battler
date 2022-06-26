@@ -361,7 +361,8 @@ function GetCharStatus(char) {
 		let amount = char.buffs[buff]
 		if (amount == 0)
 			continue
-		str += statusEmojis[buff + (amount > 0 ? "up" : "down")]
+		str += statusEmojis[buff + (amount > 0 ? "up" : "down")] + (amount == 2 ? "²" : (amount == 3 ? "³" : ""))
+
 	}
 	console.log(char.buffs)
 	if (char.status)
