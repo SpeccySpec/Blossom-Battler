@@ -288,6 +288,7 @@ statusEmojis = {
 	magup: "<:magup:990629404126355496>",
 	endup: "<:endup:990629401517506580>",
 	aglup: "<:aglup:990629392659120169>",
+	prcup: '<:prcup:990629408907870330>',
 	critup: "<:critup:990629398258540604>",
 
 	// Debuffs
@@ -295,6 +296,7 @@ statusEmojis = {
 	magdown: "<:magdown:990629402851299338>",
 	enddown: "<:enddown:990629399902695445>",
 	agldown: "<:agldown:990629391585411182>",
+	prcdown: '<:prcdown:990629407238529044>',
 	critdown: "<:critdown:990629396983476275>",
 }
 
