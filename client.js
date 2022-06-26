@@ -281,7 +281,21 @@ statusEmojis = {
 
 	// Positive Statusses
 	mirror: '<:mirror:963413990229311588>',
-	happy: '<:happy:973076333871644733>'
+	happy: '<:happy:973076333871644733>',
+
+	// Buffs
+	atkup: "<:atkup:990629395486089216>",
+	magup: "<:magup:990629404126355496>",
+	endup: "<:endup:990629401517506580>",
+	aglup: "<:aglup:990629392659120169>",
+	critup: "<:critup:990629398258540604>",
+
+	// Debuffs
+	atkdown: "<:atkdown:990629394236211230>",
+	magdown: "<:magdown:990629402851299338>",
+	enddown: "<:enddown:990629399902695445>",
+	agldown: "<:agldown:990629391585411182>",
+	critdown: "<:critdown:990629396983476275>",
 }
 
 elementTechs = {
