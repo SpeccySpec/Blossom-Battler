@@ -712,7 +712,7 @@ sendCurTurnEmbed = (char, btl) => {
 						btl.action.target[0] = char.team;
 						menustate = MENU_TARGET;
 					} else if (skill.target === "caster") {
-						btl.action.target = [char.team, char.id];
+						btl.action.target = [char.team, char.pos];
 						alreadyResponded = true;
 						doAction(char, btl, btl.action);
 						collector.stop();
