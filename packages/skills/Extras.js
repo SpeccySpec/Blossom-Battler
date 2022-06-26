@@ -1501,5 +1501,27 @@ customVariables = {
 					break;
 			}
 		}
+	},
+
+	futuresight: {
+		onturn(btl, char, vars) {
+			if (char.custom?.futuresight) {
+				char.custom.futuresight.turns--;
+
+				if (char.custom.futuresight.turns <= 0) {
+					let inf = getCharFromId(char.custom.futuresight.user, btl);
+
+					let act = {
+						move: 'skills',
+						index: '',
+						target: [char.team, char.pos],
+					};
+
+					useSkill(inf, btl, act, char.custom.futuresight, ally);
+					killVar(char, 'futuresight');
+					return '';
+				}
+			}
+		}
 	}
 }

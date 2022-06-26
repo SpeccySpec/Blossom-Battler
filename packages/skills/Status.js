@@ -693,6 +693,7 @@ statusList = {
 		onuse(char, targ, skill, btl, vars) {
 			let a = objClone(vars[0]);
 			a.user = char.id;
+			a.futuresight = true;
 
 			addCusVal(targ, 'futuresight', vars[0]);
 

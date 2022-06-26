@@ -1367,6 +1367,10 @@ advanceTurn = (btl) => {
 		for (let k in btl.teams[i].members) {
 			let char = btl.teams[i].members[k];
 
+			// Always update for Futuresight
+			char.team = i;
+			char.pos = k;
+
 			// This character is dead or pacified.
 			if (char.hp <= 0 || char.pacified) {
 				pLeft--;
