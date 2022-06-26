@@ -236,6 +236,9 @@ statusList = {
 		}
 	}),
 
+	// MAKARAKARN, TETRAKARN AND SHIELD CANNOT STACK
+	// beccause i dont know op i guess
+
 	shield: new Extra({
 		name: "Shield",
 		desc: "Protects the target with an <Element> shield called <Shield Name> that can take {Hits} hits.",
@@ -418,6 +421,15 @@ statusList = {
 				makeStatus(skill, "trap", [trapName, powerMult, type, power, accuracy, element]);
 			}
 			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			addCusVal(targ, 'trap', vars);
+
+			if (btl.pvp) {
+				return `__${char.name}__ protected __${targ.name}__ with something...`;
+			} else {
+				return `__${char.name}__ deployed a trap infront of __${targ.name}__: __${vars[0]}__!`;
+			}
 		}
 	}),
 

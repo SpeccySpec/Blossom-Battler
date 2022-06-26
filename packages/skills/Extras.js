@@ -1394,5 +1394,75 @@ customVariables = {
 				}
 			}
 		}
+	},
+
+	trap: {
+		dmgmod(btl, char, inf, dmg, skill, vars) {
+			dmg = Math.round(dmg*vars[1]);
+
+			switch(vars[2].toLowerCase()) {
+				case 'buff':
+					addAtkMsg(btl, `${inf.name} set off the ${vars[0]}!\n${extrasList.buff.onuse(char, inf, skill, btl, ['target', vars[3], vars[4], vars[5], null])}`);
+					break;
+
+				case 'status':
+					let txt = `${inf.name} set off the ${vars[0]}`;
+
+					if (randNum(1, 100) <= vars[4]) {
+						txt += `!\n${inflictStatus(inf, vars[3])}`;
+					} else {
+						txt += '... however, it did nothing.';
+					}
+
+					addAtkMsg(btl, txt);
+					break;
+
+				case 'damage':
+					let txt = `${inf.name} set off the ${vars[0]}!`;
+					let d = vars[3];
+
+					if (randNum(1, 100) <= vars[4]) {
+						let affinity = getAffinity(inf, vars[5]);
+						let affinityTxt = affinityEmoji[affinity] ?? '';
+
+						switch(affinity) {
+							case 'deadly':
+								d *= settings.rates.affinities?.deadly ?? 4.2;
+								break;
+							
+							case 'superweak':
+								d *= settings.rates.affinities?.superweak ?? 2.1;
+								break;
+							
+							case 'weak':
+								d *= settings.rates.affinities?.weak ?? 1.5;
+								break;
+							
+							case 'resist':
+								d *= settings.rates.affinities?.resist ?? 0.5;
+								break;
+							
+							case 'block':
+							case 'repel':
+								txt += `\nBut ${inf.name} blocked it.`;
+								return void addAtkMsg(btl, txt);
+							
+							case 'drain':
+								inf.hp = Math.min(inf.maxhp, inf.hp+d);
+
+								txt += `\nBut ${inf.name} drained it. Their HP was restored by ${d}${affinityTxt}!`;
+								return void addAtkMsg(btl, txt);
+						}
+
+						inf.hp = Math.max(0, inf.hp-d);
+						txt += `\n${inf.name} took ${d}${affinityTxt} damage from the trap!`;
+					} else {
+						txt += `\nBut ${inf.name} was able to evade the trap!\n${selectQuote(inf, 'dodge', null, "%ENEMY%", char.name)}`
+					}
+
+					addAtkMsg(btl, txt);
+					break;
+			}
+		}
 	}
 }

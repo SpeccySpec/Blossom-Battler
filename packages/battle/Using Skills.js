@@ -476,6 +476,14 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					}
 				}
 
+				if (targ.hp > 0 && targ.custom) {
+					for (let i in targ.custom) {
+						if (customVariables[i] && customVariables[i].dmgmod) {
+							result.txt += '\n' + (customVariables[i].dmgmod(btl, targ, char, dmg, skill, targ.custom[i]) ?? '');
+						}
+					}
+				}
+
 				// Guarding
 				if (char.guard && affinity != 'drain') {
 					dmg *= char.guard;
