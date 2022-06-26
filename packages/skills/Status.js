@@ -314,7 +314,7 @@ statusList = {
 			if (btl.pvp) {
 				return `__${char.name}__ protected __${targ.name}__ with something...`;
 			} else {
-				return `__${char.name}__ protected __${targ.name}__ with a __${vars[0]}__!`;
+				return `__${char.name}__ protected __${targ.name}__ with a __${skill.name}__!`;
 			}
 		}
 	}),

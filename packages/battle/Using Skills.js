@@ -960,7 +960,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	}
 
 	// Another thing... Trust shit.
-	if (!skill.noassistance && targets.length <= 1 && !skill.limitbreak && !skill.teamcombo) {
+	if (!skill.noassistance && (skill.target === 'one' || skill.target === 'allopposing') && targets.length <= 1 && !skill.limitbreak && !skill.teamcombo) {
 		for (let i in party.members) {
 			let char2 = party.members[i];
 			if (char.id === char2.id) continue;
@@ -982,8 +982,8 @@ useSkill = (char, btl, act, forceskill, ally) => {
 					let meleeAtk = {
 						name: char2.melee.name,
 						type: char2.melee.type,
-						pow: char2.melee.pow,
-						acc: Math.round(Math.min(100, char2.melee.acc)*2.5),
+						pow: char2.melee.pow*2.5,
+						acc: 100,
 						crit: char2.melee.crit,
 						atktype: atkType,
 						target: 'one',
