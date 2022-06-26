@@ -356,7 +356,7 @@ extrasList = {
 					buffStat(targ, vars[1].toLowerCase(), vars[2]);
 					let txt = `__${targ.name}__'s _${vars[1].toUpperCase()}_ was buffed **${vars[2]}** time(s)!`;
 
-					if (vars[4]) {
+					if (vars[4] && typeof(vars[4]) == 'number') {
 						if (!targ?.custom?.buffTurns) 
 							addCusVal(targ, "buffTurns", []);
 
