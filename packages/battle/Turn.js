@@ -353,6 +353,22 @@ setUpComponents = (char, btl, menustate) => {
 	return comps;
 }
 
+function GetCharStatus(char) {
+	if (char.pacified)
+		return itemTypeEmoji.pacify
+	let str = ""
+	for (const buff in char.buffs) {
+		let amount = char.buffs[buff]
+		if (amount == 0)
+			continue
+		str += statusEmojis[buff + (amount > 0 ? "up" : "down")]
+	}
+	console.log(char.buffs)
+	if (char.status)
+		str += statusEmojis[char.status]
+	return str
+}
+
 sendCurTurnEmbed = (char, btl) => {
 	let settings = setUpSettings(btl.guild.id);
 
@@ -390,9 +406,8 @@ sendCurTurnEmbed = (char, btl) => {
 			if (c.hp <= 0) {
 				teamDesc += `~~${l}: ${c.name} _(DOWN)_~~\n`;
 			} else {
-				let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
-				teamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
-			}
+				let s = GetCharStatus(c)
+				teamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;			}
 		}
 	}
 
@@ -404,7 +419,7 @@ sendCurTurnEmbed = (char, btl) => {
 		if (c.hp <= 0) {
 			myTeamDesc += `~~${l}: ${c.name} _(DOWN)_~~\n`;
 		} else {
-			let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
+			let s = GetCharStatus(c)
 			myTeamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
 		}
 	}
@@ -1022,7 +1037,7 @@ doAction = (char, btl, action) => {
 			DiscordEmbed = new Discord.MessageEmbed()
 				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 				.setTitle('Using Item...')
-				.setDescription(itemTxt)
+				.setDescription(itemTxt.replace(/\n{3,}/, () => "\n\n"))
 			btl.channel.send({embeds: [DiscordEmbed]});
 			break;
 
@@ -1096,7 +1111,7 @@ doAction = (char, btl, action) => {
 			DiscordEmbed = new Discord.MessageEmbed()
 				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 				.setTitle(`__${char.name}__ => __${char1.name}__, __${char2.name}__`)
-				.setDescription(`__${char.name}__ decided to swap __${char1.name}__ for __${char2.name}__.\n___${char2.name}__ will fight in __${char1.name}'s__ place._`)
+				.setDescription(`__${char.name}__ decided to swap __${char1.name}__ for __${char2.name}__.\n___${char2.name}__ will fight in __${char1.name}'s__ place._`.replace(/\n{3,}/, () => "\n\n"))
 			btl.channel.send({embeds: [DiscordEmbed]});
 			break;
 
@@ -1127,7 +1142,7 @@ doAction = (char, btl, action) => {
 				DiscordEmbed = new Discord.MessageEmbed()
 					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 					.setTitle(`__${char.name}__ => __${ally.name}__`)
-					.setDescription(`__${char.name}__ tried to attack with __${ally.name}__... but it failed...?`)
+					.setDescription(`__${char.name}__ tried to attack with __${ally.name}__... but it failed...?`.replace(/\n{3,}/, () => "\n\n"))
 				btl.channel.send({embeds: [DiscordEmbed]});
 			} else {
 				// Now...
@@ -1338,7 +1353,7 @@ doTurn = async(btl, noTurnEmbed) => {
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#ff1fa9')
 			.setTitle(`${char.name}'s turn!`)
-			.setDescription(statusTxt)
+			.setDescription(statusTxt.replace(/\n{3,}/, () => "\n\n"))
 
 		btl.channel.send({embeds: [DiscordEmbed]});
 	}
