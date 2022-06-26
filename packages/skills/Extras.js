@@ -1418,7 +1418,7 @@ customVariables = {
 	orgiamode: {
 		onturn(btl, char, vars) {
 			if (char.custom?.orgiamode) {
-				char.custom.orgiamode.turns-;
+				char.custom.orgiamode.turns--
 
 				if (char.custom.orgiamode.turns <= 0) {
 					char.stats = objClone(char.custom.orgiamode.revert);
@@ -1436,14 +1436,14 @@ customVariables = {
 	trap: {
 		dmgmod(btl, char, inf, dmg, skill, vars) {
 			dmg = Math.round(dmg*vars[1]);
-
+			let txt
 			switch(vars[2].toLowerCase()) {
 				case 'buff':
 					addAtkMsg(btl, `${inf.name} set off the ${vars[0]}!\n${extrasList.buff.onuse(char, inf, skill, btl, ['target', vars[3], vars[4], vars[5], null])}`);
 					break;
 
 				case 'status':
-					let txt = `${inf.name} set off the ${vars[0]}`;
+					txt = `${inf.name} set off the ${vars[0]}`;
 
 					if (randNum(1, 100) <= vars[4]) {
 						txt += `!\n${inflictStatus(inf, vars[3])}`;
@@ -1455,7 +1455,7 @@ customVariables = {
 					break;
 
 				case 'damage':
-					let txt = `${inf.name} set off the ${vars[0]}!`;
+					txt = `${inf.name} set off the ${vars[0]}!`;
 					let d = vars[3];
 
 					if (randNum(1, 100) <= vars[4]) {
