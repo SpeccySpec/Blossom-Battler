@@ -793,7 +793,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	}
 
 	// Insert IDs into the target.
-	switch(skill.target.toLowerCase()) {
+	switch(skill.target ? skill.target.toLowerCase() : 'one') {
 		case 'one':
 		case 'ally':
 			let targ = (btl.teams[act.target[0]] && btl.teams[act.target[0]].members[act.target[1]]) ? btl.teams[act.target[0]].members[act.target[1]] : btl.teams[0].members[0];

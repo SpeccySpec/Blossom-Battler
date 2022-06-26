@@ -1128,7 +1128,7 @@ doAction = (char, btl, action) => {
 			lbDefs.pow += Math.round((char.lbp-lbDefs.cost)/3);
 			lbDefs.cost = char.lbp;
 
-			lbDefs.target =  'one';
+			lbDefs.target = 'one';
 
 			useSkill(char, btl, action, lbDefs);
 			break;
