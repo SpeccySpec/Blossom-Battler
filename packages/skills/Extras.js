@@ -1523,5 +1523,15 @@ customVariables = {
 				}
 			}
 		}
+	},
+
+	charge: {
+		statmod(btl, char, stats, vars) {
+			if (stats[vars.stat]) stats[vars.stat] *= vars.mult;
+			return stats;
+		},
+		endturn(btl, char, vars) {
+			killVar(char, 'charge');
+		}
 	}
 }

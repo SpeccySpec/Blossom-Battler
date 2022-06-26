@@ -136,6 +136,18 @@ genDmg = (char, targ, btl, skill) => {
 		targStats = terrainFuncs[btl.terrain.type].statmod(targ, targStats, btl) ?? targStats;
 	}
 
+	// Custom Variable StatMod.
+	if (char.custom) {
+		for (let i in char.custom) {
+			if (customVariables[i] && customVariables[i].statmod) charStats = customVariables[i].statmod(btl, char, charStats, char.custom[i]);
+		}
+	}
+	if (targ.custom) {
+		for (let i in targ.custom) {
+			if (customVariables[i] && customVariables[i].statmod) targStats = customVariables[i].statmod(btl, targ, targStats, targ.custom[i]);
+		}
+	}
+
 	let atkStat = (skill.atktype === 'phys') ? statWithBuff(charStats.atk, char.buffs.atk) : statWithBuff(charStats.mag, char.buffs.mag);
 	let endStat = statWithBuff(targStats.end, targ.buffs.end);
 
