@@ -843,14 +843,35 @@ statusList = {
 				name: "ATK Stat Multiplier",
 				type: "Decimal",
 				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num",
+				forced: false
 			}
 		],
 		applyfunc(message, skill, args) {
-			let power = args[0];
-			let atk = args[1];
-
-			makeStatus(skill, "ragesoul", [power, atk]);
+			makeStatus(skill, "ragesoul", [args[0], args[1], args[2] ?? -1]);
 			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			addCusVal(targ, 'revert', [vars[2], {
+				stats: char.stats,
+				melee: char.melee
+			}]);
+			addCusVal(char, 'forcemove', [vars[2], {
+				move: 'melee',
+				target: [targ.team, targ.pos],
+			}]);
+
+			char.melee.pow *= vars[0];
+			char.stats.atk *= vars[1];
+
+			if (btl.pvp) {
+				return `__${char.name}__ is preparing something...`;
+			} else {
+				return `__${char.name}__'s attack and melee attack power is boosted... but they are locked into using them!`;
+			}
 		}
 	}),
 

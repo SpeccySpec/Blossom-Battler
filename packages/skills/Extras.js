@@ -1055,24 +1055,25 @@ extrasList = {
 			return true
 		},
 		onselect(char, skill, btl, vars) {
-			if (!char.forcemove) {
-				char.rollouts = 1;
-				char.forcemove = [vars[2], btl.action];
-			} else {
-				char.rollouts++;
+			if (!char.custom?.forcemove) {
+				addCusVal(char, 'rollouts', 1);
+				addCusVal(char, 'forcemove', [vars[2], btl.action]);
+			} else if (char.custom?.rollouts) {
+				char.custom.rollouts++;
 				if (char.rollouts >= vars[2]) {
-					delete char.rollouts
-					delete char.forcemove
+					killVar(char, 'rollouts');
+					killVar(char, 'forcemove');
 				}
 			}
 		},
 		statmod(char, skill, vars, btl) {
-			if (char.rollouts) {
-				let bst = (vars[0]-1)*char.rollouts;
+			if (char.custom?.rollouts) {
+				let bst = (vars[0]-1)*char.custom.rollouts;
+
 				skill.pow *= bst;
 				if (bst >= vars[1]) {
-					delete char.rollouts;
-					delete char.forcemove;
+					killVar(char, 'rollouts');
+					killVar(char, 'forcemove');
 				}
 			}
 		}
@@ -1263,6 +1264,17 @@ killVar = (char, name) => {
 }
 
 customVariables = {
+	forcemove: {
+		onturn(btl, char, vars) {
+			useSkill(char, btl, vars[1], skillDefs);
+
+			vars[0]--;
+			if (vars[0] == 0) killVar(char, "forcemove");
+
+			return false;
+		}
+	},
+
 	healverse: {
 		onturn(btl, char, vars) {
 			vars.turns--;
@@ -1402,7 +1414,7 @@ customVariables = {
 			if (char.custom?.revert) {
 				char.custom.revert[0]--;
 
-				if (char.custom.revert[0] <= 0) {
+				if (char.custom.revert[0] == 0) {
 					delete char.mimic;
 
 					char.stats = objClone(char.custom.revert[1].stats);
@@ -1550,5 +1562,5 @@ customVariables = {
 			let attack = attackWithSkill(char, inf, skill, btl, true);
 			return `__${char.name}__ struck back, with a stronger __${skill.name}__!\n${attack.txt}`;
 		}
-	},
+	}
 }

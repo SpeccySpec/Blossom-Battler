@@ -42,7 +42,6 @@ function isTech(char, element) {
 	return false;
 }
 
-
 // Is the status effect physical?
 isPhysicalStatus = (status) => {
 	if (!status) return false;
