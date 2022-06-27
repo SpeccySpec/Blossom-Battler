@@ -347,29 +347,43 @@ extrasList = {
 			return extrasList.buff.buffChange(targ, skill, btl, vars);
 		},
 		buffChange(targ, skill, btl, vars) {
-			if (targ.charms && targ.charms.includes("PureVision") && vars[1].toLowerCase() === 'prc') return `${targ.name}'s Pure Vision negated the change.`;
+			const stat = vars[1].toLowerCase()
+			const amount = vars[2]
+			const absamount = Math.abs(amount)
+			const chance = vars[3]
+			const turns = vars[4]
+			if (stat == "all") {
+				const buffChange = extrasList.buff.buffChange
+				const target = vars[0]
+				return buffChange(targ, skill, btl, [target, "atk", amount, chance, turns]) + "\n" +
+					buffChange(targ, skill, btl, [target, "mag", amount, chance, turns]) + "\n" +
+					buffChange(targ, skill, btl, [target, "end", amount, chance, turns]) + "\n" +
+					buffChange(targ, skill, btl, [target, "agl", amount, chance, turns]) + "\n" +
+					buffChange(targ, skill, btl, [target, "prc", amount, chance, turns])
+			}
+			if (targ.charms && targ.charms.includes("PureVision") && stat === 'prc') return `${targ.name}'s Pure Vision negated the change.`;
+			let txt = amount > 0
+				? `__${targ.name}__'s _${stat.toUpperCase()}_ was buffed **${amount}** time(s)!`
+				: `__${targ.name}__'s _${stat.toUpperCase()}_ was debuffed **${absamount}** time(s)!`
+			if (chance && chance < 100) {
+				const rchance = randNum(1, 100);
 
-			if (vars[3]) {
-				let chance = randNum(1, 100);
+				if (rchance <= chance) {
+					buffStat(targ, stat, amount);
 
-				if (chance <= vars[3]) {
-					buffStat(targ, vars[1].toLowerCase(), vars[2]);
-					let txt = `__${targ.name}__'s _${vars[1].toUpperCase()}_ was buffed **${vars[2]}** time(s)!`;
-
-					if (vars[4] && typeof(vars[4]) == 'number') {
+					if (turns && typeof(turns) == "number") {
 						if (!targ?.custom?.buffTurns) 
 							addCusVal(targ, "buffTurns", []);
 
-						for (let i = 0; i < Math.abs(vars[2]); i++) {
-							if (!((vars[2] < 0 && targ.custom.buffTurns.filter(x => x[0] == vars[1].toLowerCase() && x[1] < 0).length >= 3) || (vars[2] > 0 && targ.custom.buffTurns.filter(x => x[0] == vars[1].toLowerCase() && x[1] > 0).length >= 3))) {
+						for (let i = 0; i < absamount; i++) {
+							if (!((amount < 0&& targ.custom.buffTurns.filter(x => x[0] == stat && x[1] < 0).length >= 3) || (amount > 0 && targ.custom.buffTurns.filter(x => x[0] == stat && x[1] > 0).length >= 3))) {
 								targ.custom.buffTurns.push([
-									vars[1].toLowerCase(),
-									vars[4] * (vars[2] / Math.abs(vars[2]))
+									stat, turns * (amount / absamount)
 								])
 							}
 						}
 
-						txt += `\nHowever, only for __${vars[4]} turns__.`;
+						txt += `\nHowever, only for __${turns} turns__.`;
 					}
 
 					return txt;
@@ -380,23 +394,22 @@ extrasList = {
 						return '';
 				}
 			} else {
-				buffStat(targ, vars[1].toLowerCase(), vars[2]);
+				buffStat(targ, stat, amount);
 
-				if (vars[4] && vars[4] != null) {
+				if (turns && typeof(turns) == "number") {
 					if (!targ?.custom?.buffTurns) 
 						addCusVal(targ, "buffTurns", []);
 
-					for (let i = 0; i < Math.abs(vars[2]); i++) {
-						if (!((vars[2] < 0 && targ.custom.buffTurns.filter(x => x[0] == vars[1].toLowerCase() && x[1] < 0).length >= 3) || (vars[2] > 0 && targ.custom.buffTurns.filter(x => x[0] == vars[1].toLowerCase() && x[1] > 0).length >= 3))) {
+					for (let i = 0; i < absamount; i++) {
+						if (!((amount < 0 && targ.custom.buffTurns.filter(x => x[0] == stat && x[1] < 0).length >= 3) || (amount > 0 && targ.custom.buffTurns.filter(x => x[0] == stat && x[1] > 0).length >= 3))) {
 							targ.custom.buffTurns.push([
-								vars[1].toLowerCase(),
-								vars[4] * (vars[2] / Math.abs(vars[2]))
+								stat, turns * (amount / absamount)
 							])
 						}
 					}
 				}
 
-				return `__${targ.name}__'s _${vars[1].toUpperCase()}_ was buffed **${vars[2]}** time(s)!`;
+				return txt;
 			}
 		}
 	}),
