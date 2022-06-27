@@ -54,8 +54,12 @@ function buffText(buffArray) {
 		if (oldBuff == [] || curBuff[3] != oldBuff[3]) {
 			if (curBuff[3] != 100) finalText += `${i == 0 ? '' : 'Has'} a **${curBuff[3]}%** chance to buff `
 			else {
-				if (i == 0) finalText += `Buffs `
-				else finalText += ` buffs `
+				if (curBuff[2] > 0)
+					if (i == 0) finalText += `Buffs `
+					else finalText += ` buffs `
+				else
+					if (i == 0) finalText += `Debuffs `
+					else finalText += ` debuffs `
 			}
 		}
 
@@ -73,7 +77,7 @@ function buffText(buffArray) {
 		}
 
 		if (curBuff[2] != oldBuff[2] || oldBuff == []) {
-			finalText += ` by **${curBuff[2]}** stage${Math.abs(curBuff[2]) <= 1 ? '' : 's'}`
+			finalText += ` by **${Math.abs(curBuff[2])}** stage${Math.abs(curBuff[2]) <= 1 ? '' : 's'}`
 
 			if (i < buffArray.filter(x => x[3] == curBuff[3]).length - 2) {
 				finalText += `, `
