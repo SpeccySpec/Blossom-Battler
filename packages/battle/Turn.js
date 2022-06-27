@@ -361,8 +361,9 @@ function GetCharStatus(char) {
 		let amount = char.buffs[buff]
 		if (amount == 0)
 			continue
-		str += statusEmojis[buff + (amount > 0 ? "up" : "down")] + (amount == 2 ? "²" : (amount == 3 ? "³" : ""))
-
+		str += statusEmojis[buff + (amount > 0 ? "up" : "down")]
+		amount = Math.abs(amount)
+		str += (amount == 2 ? "²" : (amount == 3 ? "³" : ""))
 	}
 	if (char.status)
 		str += statusEmojis[char.status]
