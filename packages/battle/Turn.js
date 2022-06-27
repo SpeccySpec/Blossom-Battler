@@ -710,7 +710,18 @@ sendCurTurnEmbed = (char, btl) => {
 						}
 					} else if (skill.target === "ally" || skill.target === "spreadallies") {
 						btl.action.target[0] = char.team;
-						menustate = MENU_TARGET;
+						if (btl.teams[char.team].members.length == 1) {
+							alreadyResponded = true;
+
+							doAction(char, btl, btl.action);
+							collector.stop();
+
+							return i.update({
+								content: `<@${char.owner}>`,
+								embeds: [DiscordEmbed],
+							});
+						} else
+							menustate = MENU_TARGET;
 					} else if (skill.target === "caster") {
 						btl.action.target = [char.team, char.pos];
 						alreadyResponded = true;
