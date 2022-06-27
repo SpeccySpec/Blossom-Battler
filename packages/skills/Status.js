@@ -775,7 +775,11 @@ statusList = {
 		onuse(char, targ, skill, btl, vars) {
 			if (!targ.enemy) return 'But it failed!';
 
-			if ((vars[0] === 'all' && char.status) || (vars[0] === 'mental' && !isPhysicalStatus(char.status?)) || (vars[0] === 'physical' && isPhysicalStatus(char.status?)) || char.status? === vars[0]) {
+			if ((vars[0] === 'all' && char.status) || 
+				(char.status && vars[0] === 'mental' && !isPhysicalStatus(char.status)) ||
+				(char.status && vars[0] === 'physical' && isPhysicalStatus(char.status)) ||
+				(char.status && char.status === vars[0]))
+			{
 				let finaltxt = `${targ.name} was pacified by ${skill.name}, by ${vars[1]}%.`;
 				targ.pacify += vars[1];
 

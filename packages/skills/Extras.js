@@ -1190,7 +1190,27 @@ extrasList = {
 			if (!char.status) return;
 			if (vars.inlcludes(char.status)) skill.pow *= vars[0];
 		}
-	})
+	}),
+
+	metronome: new Extra({
+		name: "Metronome",
+		desc: "Uses a random skill... or chooses from a set of <Skills>.",
+		args: [
+			{
+				name: "Skills",
+				type: "Decimal",
+				forced: false,
+				multiple: true,
+			}
+		],
+		applyfunc(message, skill, args) {
+			let skills = args;
+
+			makeExtra(skill, "metronome", skills);
+			return true
+		},
+		hardcoded: true
+	}),
 }
 
 // Make an Extra for a skill. "func" should be an array of 1-5 values indicating what the extra does.

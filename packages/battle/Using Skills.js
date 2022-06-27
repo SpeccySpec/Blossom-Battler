@@ -670,6 +670,54 @@ let trustQuotes = [
 useSkill = (char, btl, act, forceskill, ally) => {
 	let skill = objClone(forceskill) ?? objClone(skillFile[act.index]);
 
+	// Hardcode some metronome and copyskill bs
+	if (skill.extras?.metronome) {
+		let possible = [];
+		if (skill.extras.metronome.length > 1)
+			possible = skill.extras.metronome;
+		else {
+			for (let i in skillFile) {
+				if (skillFile[i].type != 'passive') {
+					possible.push(i)
+				}
+			}
+		}
+
+		// Get the skill in question.
+		let skillname = possible[randNum(1, possible.length-1)];
+
+		// Get Metronome's cost.
+		let cost = [skill.cost, skill.costtype];
+		skill = objClone(skillFile[skillname]);
+		skill.cost = cost[0];
+		skill.costtype = cost[1];
+	}
+
+	if (skill.extras?.copyskill) {
+		let possible = [];
+
+		// We can only use ally skills.
+		let vars = ['members', 'backup'];
+		for (let k of vars) {
+			for (let char2 of btl.teams[char.team][k]) {
+				for (let i of char2.skills) {
+					if (skillFile[i].type != 'passive') {
+						possible.push(i);
+					}
+				}
+			}
+		}
+
+		// Get the skill in question.
+		let skillname = possible[randNum(1, possible.length-1)];
+
+		// Get CopySkill's cost.
+		let cost = [skill.cost, skill.costtype];
+		skill = objClone(skillFile[skillname]);
+		skill.cost = cost[0];
+		skill.costtype = cost[1];
+	}
+
 	// First, we modify stats via passives n shit. This isn't the actual character anyway so we don't care.
 
 	// Failsafe
