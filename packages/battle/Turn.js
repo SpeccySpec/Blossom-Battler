@@ -1287,8 +1287,9 @@ doTurn = async(btl, noTurnEmbed) => {
 					statusTxt += (customVariables[i].onturn(btl, char, char.custom[i]) ?? '');
 					if (statusTxt != '') statusTxt += '\n';
 
-					// lol orgia mode
+					// Some other things...
 					if (char.status === 'sleep') canMove = false;
+					if (char.custom.forcemove) canMove = false;
 				}
 			}
 		}
