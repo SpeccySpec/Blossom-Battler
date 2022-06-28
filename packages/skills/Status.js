@@ -660,11 +660,13 @@ statusList = {
 			//in case an enemy spawned a reincarnate
 			newchar.type = 'none';
 			newchar.enemy = true;
+			newchar.automove = true;
 			delete newchar.boss;
 			delete newchar.bigboss;
 			delete newchar.deity
 
 			btl.teams[char.team].members.push(newchar);
+			btl.turnorder = getTurnOrder(btl)
 			return replaceTxt(vars[4], '%PLAYER%', `__${char.name}__`, '%UNDEAD%', newchar.name);
 		}
 	}),
