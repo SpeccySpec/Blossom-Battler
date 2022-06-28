@@ -1489,11 +1489,9 @@ advanceTurn = (btl) => {
 
 		//clear reincarnates
 		for (let i in btl.teams) {
-			for (let k in btl.teams[i].members) {
-				while (btl.teams[i].members.some(m => m.reincarnate)) {
-					let char = btl.teams[i].members.find(m => m.reincarnate);
-					btl.teams[i].members.splice(btl.teams[i].members.indexOf(char), 1);
-				}
+			while (btl.teams[i].members.some(m => m.reincarnate)) {
+				let char = btl.teams[i].members.find(m => m.reincarnate);
+				btl.teams[i].members.splice(btl.teams[i].members.indexOf(char), 1);
 			}
 		}
 
