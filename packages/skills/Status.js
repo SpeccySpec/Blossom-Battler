@@ -581,6 +581,12 @@ statusList = {
 			makeStatus(skill, "reincarnate", [min, max, hp, mp, deploy, skills]);
 			return true;
 		},
+		canuse(char, skill, btl, vars) {
+			let members = btl.teams[0].members
+			
+			if (members.some(member => member.reincarnate)) return 'You cannot have more than one reincarnate at a time!'
+			return true;
+		},
 		onuse(char, targ, skill, btl, vars) {
 			let newchar = objClone(char);
 

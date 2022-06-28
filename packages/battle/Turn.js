@@ -677,6 +677,55 @@ sendCurTurnEmbed = (char, btl) => {
 						}
 					}
 
+					if (skill.statusses) {
+						for (let k in skill.statusses) {
+							if (!statusList[k]) continue;
+							if (!statusList[k].canuse) continue;
+
+							if (statusList[k].multiple) {
+								for (let l in skill.statusses[k]) {
+									let txt = statusList[k].canuse(char, skill, btl, skill.statusses[k][l]);
+									if (txt !== true) {
+										DiscordEmbed.title = txt;
+										alreadyResponded = true;
+
+										return i.update({
+											content: `<@${char.owner}>`,
+											embeds: [DiscordEmbed],
+										});
+									}
+								}
+							} else {
+								let txt = statusList[k].canuse(char, skill, btl, skill.statusses[k]);
+								if (txt !== true) {
+									DiscordEmbed.title = txt;
+									alreadyResponded = true;
+
+									return i.update({
+										content: `<@${char.owner}>`,
+										embeds: [DiscordEmbed],
+										components: setUpComponents(char, btl, menustate)
+									});
+								}
+							}
+						}
+
+						if (char.status && statusEffectFuncs[char.status.toLowerCase()] && statusEffectFuncs[char.status.toLowerCase()].canuse) {
+							let canUse = statusEffectFuncs[char.status.toLowerCase()].canuse(char, skill, btl)
+
+							if (canUse && canUse[1] != true) {
+								DiscordEmbed.title = canUse[0];
+								alreadyResponded = true;
+
+								await i.update({
+									content: `<@${char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: setUpComponents(char, btl, menustate)
+								});
+							}
+						}
+					}
+
 					if (hasStatus(skill, 'mimic')) {
 						menustate = MENU_ANYSEL;
 					} else if ((skill.target === "one" || skill.target === "spreadopposing")) {
