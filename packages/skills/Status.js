@@ -601,7 +601,15 @@ statusList = {
 			for (let i in newchar.stats) newchar.stats[i] = randNum(vars[0], vars[1]);
 
 			newchar.id = nextAvaliableId(btl);
-			if (newchar.leader) delete newchar.leader;
+			newchar.melee.name = 'Strike Attack'
+			if (newchar.mpMeter) newchar.mpMeter = ['Mana Points', 'MP']
+			if (newchar.nickname) newchar.nickname = ''
+			if (newchar.leader) delete newchar.leader
+			if (newchar.donetc) delete newchar.donetc
+			for (let i in newchar.buffs) newchar.buffs[i] = 0;
+
+			const varsToDelete = ['lb', 'quotes', 'armor', 'weapon', 'bio', 'trust', 'teamCombo', 'custom']
+			for (let i in varsToDelete) newchar[varsToDelete[i]] = {}
 
 			newchar.affinities = {};
 			const affinities = ["superweak", "weak", "weak", "weak", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "resist", "resist", "block", "repel", "drain"]
