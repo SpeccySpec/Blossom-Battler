@@ -608,16 +608,28 @@ statusList = {
 			if (newchar.donetc) delete newchar.donetc
 			for (let i in newchar.buffs) newchar.buffs[i] = 0;
 
-			const varsToDelete = ['lb', 'quotes', 'armor', 'weapon', 'bio', 'trust', 'teamCombo', 'custom']
+			const varsToDelete = ['lb', 'quotes', 'armor', 'weapon', 'bio', 'trust', 'teamCombo', 'custom', 'statusaffinities']
 			for (let i in varsToDelete) newchar[varsToDelete[i]] = {}
 
 			newchar.affinities = {};
 			const affinities = ["superweak", "weak", "weak", "weak", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "resist", "resist", "block", "repel", "drain"]
 			for (const k in Elements) {
-				if (Elements[k].type != "heal" && Elements[k].type != "status" && Elements[k].type != "passive" && Elements[k].type != "almighty"){
+				if (Elements[k] != "heal" && Elements[k] != "status" && Elements[k] != "passive" && Elements[k] != "almighty"){
 					let elementAffinity = Math.floor(Math.random() * (affinities.length-1))
 					if (!newchar.affinities[affinities[elementAffinity]]) newchar.affinities[affinities[elementAffinity]] = [];
 					if (affinities[elementAffinity] != "normal") {newchar.affinities[affinities[elementAffinity]].push(Elements[k])}
+				}
+			}
+
+			let settings = setUpSettings(btl.guild.id)
+			if (settings?.mechanics?.statusaffinities) {
+				const affinities = ["weak", "weak", "weak", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "resist", "resist", "block"]
+				for (const k in statusEffects) {
+					if (statusEffects[k] != "infatuation" && statusEffects[k] != "mirror" && statusEffects[k] != "happy"){
+						let elementAffinity = Math.floor(Math.random() * (affinities.length-1))
+						if (!newchar.statusaffinities[affinities[elementAffinity]]) newchar.statusaffinities[affinities[elementAffinity]] = [];
+						if (affinities[elementAffinity] != "normal") {newchar.statusaffinities[affinities[elementAffinity]].push(statusEffects[k])}
+					}
 				}
 			}
 
@@ -638,6 +650,12 @@ statusList = {
 				skillChance = Math.floor(Math.random() * 100 - (100 / (skills.length + 1)))
 				randomskill = skills[Math.floor(Math.random() * skills.length)]
 			}
+
+			//in case an enemy spawned a reincarnate
+			newchar.type = 'none';
+			delete newchar.boss;
+			delete newchar.bigboss;
+			delete newchar.deity
 
 			btl.teams[char.team].members.push(newchar);
 			return replaceTxt(vars[4], '%PLAYER%', `__${char.name}__`, '%UNDEAD%', newchar.name);
