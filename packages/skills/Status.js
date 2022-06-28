@@ -590,6 +590,8 @@ statusList = {
 
 			newchar.maxhp *= vars[2]/100;
 			newchar.maxmp *= vars[3]/100;
+			newchar.hp = newchar.maxhp;
+			newchar.mp = newchar.maxmp;
 			for (let i in newchar.stats) newchar.stats[i] = randNum(vars[0], vars[1]);
 
 			newchar.id = nextAvaliableId(btl);
@@ -605,7 +607,23 @@ statusList = {
 				}
 			}
 
-			newchar.skills = vars.slice(5)
+			let skills = vars.slice(5)
+			let skillChance = Math.floor(Math.random() * 100)
+			let randomskill = skills[Math.floor(Math.random() * skills.length)]
+
+			newchar.skills = []
+			if (newchar.skills.length < 1) {
+				skills.splice(skills.indexOf(randomskill), 1)
+				newchar.skills.push(randomskill)
+				randomskill = skills[Math.floor(Math.random() * skills.length)]
+			}
+			
+			while (skillChance > 50 - (50 / (skills.length + 1)) && skills.length > 0) {
+				skills.splice(skills.indexOf(randomskill), 1)
+				newchar.skills.push(randomskill)
+				skillChance = Math.floor(Math.random() * 100 - (100 / (skills.length + 1)))
+				randomskill = skills[Math.floor(Math.random() * skills.length)]
+			}
 
 			btl.teams[char.team].members.push(newchar);
 			return replaceTxt(vars[4], '%PLAYER%', `__${char.name}__`, '%UNDEAD%', newchar.name);
