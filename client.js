@@ -941,16 +941,20 @@ replaceTxt = (str, ...txt) => {
 	let a = []
 	for (let i in txt) {
 		if (i%2) {// Odd
-			a[0] = txt[i];
-		} else {
 			a[1] = txt[i];
+		} else {
+			a[0] = txt[i];
 		}
+		console.log(a)
 
 		if (a[0] && a[1]) {
-			while(str.includes(a[0])) str = str.replace(a[0], a[1]);
+			str = str.replace(a[0], a[1]);
 			a = [];
 		}
+		console.log(str)
 	}
+
+	return str;
 }
 
 // Global JSONs
