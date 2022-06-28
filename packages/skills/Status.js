@@ -607,8 +607,14 @@ statusList = {
 			if (newchar.leader) delete newchar.leader
 			if (newchar.donetc) delete newchar.donetc
 			for (let i in newchar.buffs) newchar.buffs[i] = 0;
+			if (newchar.lbp) newchar.lbp = 0;
+			if (newchar.pacify) newchar.pacify = 0;
 
-			const varsToDelete = ['lb', 'quotes', 'armor', 'weapon', 'bio', 'trust', 'teamCombo', 'custom', 'statusaffinities']
+			if (newchar.dreams) newchar.dreams = []
+			if (newchar.negotiate) newchar.negotiate = []
+			delete newchar.negotiateDefs
+
+			const varsToDelete = ['lb', 'quotes', 'armor', 'weapon', 'bio', 'trust', 'teamCombo', 'custom', 'statusaffinities', 'memory']
 			for (let i in varsToDelete) newchar[varsToDelete[i]] = {}
 
 			newchar.affinities = {};
@@ -633,7 +639,7 @@ statusList = {
 				}
 			}
 
-			let skills = vars.slice(5)
+			let skills = vars[5]
 			let skillChance = Math.floor(Math.random() * 100)
 			let randomskill = skills[Math.floor(Math.random() * skills.length)]
 
@@ -653,6 +659,7 @@ statusList = {
 
 			//in case an enemy spawned a reincarnate
 			newchar.type = 'none';
+			newchar.enemy = true;
 			delete newchar.boss;
 			delete newchar.bigboss;
 			delete newchar.deity
