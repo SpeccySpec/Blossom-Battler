@@ -588,6 +588,17 @@ statusList = {
 			newchar.maxhp *= vars[2]/100;
 			newchar.maxmp *= vars[3]/100;
 			for (let i in newchar.stats) newchar.stats[i] = vars[0] + randNum(vars[1]);
+			
+			newchar.affinities = {};
+			const affinities = ["superweak", "weak", "weak", "weak", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "resist", "resist", "block", "repel", "drain"]
+			for (const k in Elements) {
+				if (Elements[k].type != "heal" && Elements[k].type != "status" && Elements[k].type != "passive" && Elements[k].type != "almighty"){
+					let elementAffinity = Math.floor(Math.random() * (affinities.length-1))
+					if (!newchar.affinities[affinities[elementAffinity]]) newchar.affinities[affinities[elementAffinity]] = [];
+					if (affinities[elementAffinity] != "normal") {newchar.affinities[affinities[elementAffinity]].push(Elements[k])}
+				}
+			}
+
 			newchar.skills = vars[5];
 
 			btl.teams[char.name].members.push(newchar);
