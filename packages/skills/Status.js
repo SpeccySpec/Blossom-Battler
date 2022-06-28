@@ -231,6 +231,7 @@ statusList = {
 			newchar.maxmp = Math.round(newchar.maxmp);
 			newchar.hp = newchar.maxhp;
 			newchar.mp = newchar.maxmp;
+			newchar.id = nextAvaliableId(btl);
 
 			btl.teams[char.team].members.push(newchar);
 			return `__${char.name}__ created a clone of themselves.`;
@@ -584,10 +585,13 @@ statusList = {
 
 			newchar.reincarnate = true;
 			newchar.name = 'Reincarnate';
+			newchar.truename = 'Reincarnate';
 
 			newchar.maxhp *= vars[2]/100;
 			newchar.maxmp *= vars[3]/100;
 			for (let i in newchar.stats) newchar.stats[i] = randNum(vars[0], vars[1]);
+
+			newchar.id = nextAvaliableId(btl);
 			
 			newchar.affinities = {};
 			const affinities = ["superweak", "weak", "weak", "weak", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "resist", "resist", "block", "repel", "drain"]

@@ -97,6 +97,15 @@ getCharFromId = (id, btl) => {
 	return btl.teams[0].members[0];
 }
 
+nextAvaliableId = (btl) => {
+	let id = 0;
+	for (const i in btl.teams) {
+		id += btl.teams[i].members.length;
+	}
+
+	return id;
+}
+
 resetEffects = (char) => {
 	if (char.custom?.orgiamode) {
 		char.stats = objClone(char.custom.orgiamode.revert);
