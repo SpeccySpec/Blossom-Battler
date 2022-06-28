@@ -232,7 +232,7 @@ statusList = {
 			newchar.hp = newchar.maxhp;
 			newchar.mp = newchar.maxmp;
 
-			btl.teams[char.name].members.push(newchar);
+			btl.teams[char.team].members.push(newchar);
 			return `__${char.name}__ created a clone of themselves.`;
 		}
 	}),
@@ -590,7 +590,7 @@ statusList = {
 			for (let i in newchar.stats) newchar.stats[i] = vars[0] + randNum(vars[1]);
 			newchar.skills = vars[5];
 
-			btl.teams[char.name].members.push(newchar);
+			btl.teams[char.team].members.push(newchar);
 			return replaceTxt(vars[4], '%PLAYER%', `__${char.name}__`, '%UNDEAD%', newchar.name);
 		}
 	}),
