@@ -232,6 +232,7 @@ statusList = {
 			newchar.hp = newchar.maxhp;
 			newchar.mp = newchar.maxmp;
 			newchar.id = nextAvaliableId(btl);
+			if (newchar.leader) delete newchar.leader;
 
 			btl.teams[char.team].members.push(newchar);
 			return `__${char.name}__ created a clone of themselves.`;
@@ -592,7 +593,8 @@ statusList = {
 			for (let i in newchar.stats) newchar.stats[i] = randNum(vars[0], vars[1]);
 
 			newchar.id = nextAvaliableId(btl);
-			
+			if (newchar.leader) delete newchar.leader;
+
 			newchar.affinities = {};
 			const affinities = ["superweak", "weak", "weak", "weak", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "resist", "resist", "block", "repel", "drain"]
 			for (const k in Elements) {
