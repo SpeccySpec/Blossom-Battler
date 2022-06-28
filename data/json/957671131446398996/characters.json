@@ -3,8 +3,8 @@
         "name": "Valoria",
         "owner": "516359709779820544",
         "level": 77,
-        "hp": 448,
-        "mp": 8,
+        "hp": 267,
+        "mp": 479,
         "maxhp": 448,
         "maxmp": 529,
         "basehp": 30,
@@ -16,7 +16,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 1064123,
+        "xp": 1074227,
         "maxxp": 26403897,
         "skills": [
             "Prakrti",
@@ -65,7 +65,7 @@
                 "value": 45,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]3535353535"
+                "amount": "[object Object]353535353535"
             },
             "Lena": {
                 "value": 45,
@@ -76,13 +76,13 @@
                 "value": 125,
                 "nextLevel": 150,
                 "level": 2,
-                "amount": "[object Object]3535353535"
+                "amount": "[object Object]353535353535"
             },
             "Ramia": {
                 "value": 5,
                 "nextLevel": 190,
                 "level": 4,
-                "amount": "[object Object]353535353535"
+                "amount": "[object Object]35353535353535"
             },
             "Ira": {
                 "value": 65,
@@ -246,9 +246,9 @@
                 "level": 1
             },
             "Valoria": {
-                "amount": 200,
-                "maximum": 190,
-                "level": 7
+                "amount": 215,
+                "maximum": 205,
+                "level": 8
             }
         },
         "charms": [
@@ -1212,7 +1212,7 @@
         "name": "Dusk",
         "owner": "516359709779820544",
         "level": 65,
-        "hp": 690,
+        "hp": 323,
         "mp": 127,
         "maxhp": 690,
         "maxmp": 175,
@@ -1225,7 +1225,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 265553,
+        "xp": 275657,
         "maxxp": 4741253,
         "skills": [
             "BraveBlade",
@@ -1266,7 +1266,7 @@
                 "value": 125,
                 "nextLevel": 150,
                 "level": 2,
-                "amount": "[object Object]3535352035202020202035"
+                "amount": "[object Object]35353520352020202020351535"
             },
             "Sky": {
                 "value": 80,
@@ -1292,7 +1292,7 @@
                 "value": 65,
                 "nextLevel": 140,
                 "level": 3,
-                "amount": "[object Object]3535353535"
+                "amount": "[object Object]353535353535"
             },
             "Rainbow": {
                 "value": 5,
@@ -1308,7 +1308,7 @@
                 "value": 40,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]3535353535"
+                "amount": "[object Object]353535353535"
             },
             "Croato": {
                 "value": 60,
@@ -1516,8 +1516,8 @@
         "name": "Euphorica",
         "owner": "516359709779820544",
         "level": 65,
-        "hp": 347,
-        "mp": 27,
+        "hp": 374,
+        "mp": 246,
         "maxhp": 483,
         "maxmp": 350,
         "basehp": 35,
@@ -1529,7 +1529,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 2636179,
+        "xp": 2646283,
         "maxxp": 4741253,
         "skills": [
             "Bufudyne",
@@ -1568,13 +1568,13 @@
                 "value": 45,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]353535203520202020302035"
+                "amount": "[object Object]3535352035202020203020351535"
             },
             "Ramia": {
                 "value": 95,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]3535353535"
+                "amount": "[object Object]353535353535"
             },
             "Sky": {
                 "value": 65,
@@ -1585,7 +1585,7 @@
                 "value": 30,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]3535353535"
+                "amount": "[object Object]353535353535"
             },
             "Flara": {
                 "value": 20,
@@ -18362,8 +18362,8 @@
         "name": "Ramia",
         "owner": "516359709779820544",
         "level": 65,
-        "hp": 116,
-        "mp": 85,
+        "hp": 276,
+        "mp": 213,
         "maxhp": 426,
         "maxmp": 310,
         "basehp": 36,
@@ -18375,7 +18375,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 465732,
+        "xp": 475836,
         "maxxp": 4741253,
         "skills": [
             "VileAssault",
@@ -18431,13 +18431,13 @@
                 "value": 35,
                 "nextLevel": 190,
                 "level": 4,
-                "amount": "[object Object]3535352035202020203520232020202035"
+                "amount": "[object Object]35353520352020202035202320202020351535"
             },
             "Euphorica": {
                 "value": 105,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]3535353535"
+                "amount": "[object Object]353535353535"
             },
             "Ira": {
                 "value": 75,
@@ -18453,7 +18453,7 @@
                 "value": 35,
                 "nextLevel": 140,
                 "level": 3,
-                "amount": "[object Object]3535353535"
+                "amount": "[object Object]353535353535"
             },
             "Flara": {
                 "value": 45,
@@ -22521,7 +22521,7 @@
         "owner": "412328234198237189",
         "level": 62,
         "hp": 467,
-        "mp": 135,
+        "mp": 391,
         "maxhp": 467,
         "maxmp": 391,
         "basehp": 40,
@@ -25427,7 +25427,7 @@
         "name": "Sky",
         "owner": "412328234198237189",
         "level": 75,
-        "hp": 438,
+        "hp": 521,
         "mp": 432,
         "maxhp": 521,
         "maxmp": 432,

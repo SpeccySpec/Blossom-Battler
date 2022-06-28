@@ -232,6 +232,7 @@ statusList = {
 			newchar.hp = newchar.maxhp;
 			newchar.mp = newchar.maxmp;
 
+			btl.teams[char.name].members.push(newchar);
 			return `__${char.name}__ created a clone of themselves.`;
 		}
 	}),
@@ -577,6 +578,20 @@ statusList = {
 
 			makeStatus(skill, "reincarnate", [min, max, hp, mp, deploy, skills]);
 			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			let newchar = objClone(char);
+
+			newchar.reincarnate = true;
+			newchar.name = 'Reincarnate';
+
+			newchar.maxhp *= vars[2]/100;
+			newchar.maxmp *= vars[3]/100;
+			for (let i in newchar.stats) newchar.stats[i] = vars[0] + randNum(vars[1]);
+			newchar.skills = vars[5];
+
+			btl.teams[char.name].members.push(newchar);
+			return replaceTxt(vars[4], '%PLAYER%', `__${char.name}__`, '%UNDEAD%', newchar.name);
 		}
 	}),
 
