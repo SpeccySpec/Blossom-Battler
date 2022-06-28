@@ -254,7 +254,7 @@ winBattle = (btl, i) => {
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, '{}');
 }
 
-runFromBattle = (char, btl) => {
+runFromBattle = (char, btl, i) => {
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike)
 		.setTitle("__Battle Results__")

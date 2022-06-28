@@ -1140,7 +1140,7 @@ doAction = (char, btl, action) => {
 					.setDescription("You escaped from the enemies!")
 				btl.channel.send({embeds: [DiscordEmbed]});
 
-				runFromBattle(char, btl)
+				runFromBattle(char, btl, 0)
 				return;
 			} else {
 				DiscordEmbed = new Discord.MessageEmbed()
