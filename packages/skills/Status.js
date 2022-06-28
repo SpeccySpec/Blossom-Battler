@@ -594,8 +594,8 @@ statusList = {
 			newchar.name = 'Reincarnate';
 			newchar.truename = 'Reincarnate';
 
-			newchar.maxhp *= vars[2]/100;
-			newchar.maxmp *= vars[3]/100;
+			newchar.maxhp = Math.round(newchar.maxhp * vars[2]/100);
+			newchar.maxmp = Math.round(newchar.maxmp * vars[3]/100);
 			newchar.hp = newchar.maxhp;
 			newchar.mp = newchar.maxmp;
 			for (let i in newchar.stats) newchar.stats[i] = randNum(vars[0], vars[1]);
