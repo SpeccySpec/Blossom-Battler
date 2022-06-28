@@ -587,7 +587,7 @@ statusList = {
 
 			newchar.maxhp *= vars[2]/100;
 			newchar.maxmp *= vars[3]/100;
-			for (let i in newchar.stats) newchar.stats[i] = vars[0] + randNum(vars[1]);
+			for (let i in newchar.stats) newchar.stats[i] = randNum(vars[0], vars[1]);
 			
 			newchar.affinities = {};
 			const affinities = ["superweak", "weak", "weak", "weak", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "resist", "resist", "block", "repel", "drain"]
@@ -599,7 +599,7 @@ statusList = {
 				}
 			}
 
-			newchar.skills = vars[5];
+			newchar.skills = vars.slice(5)
 
 			btl.teams[char.team].members.push(newchar);
 			return replaceTxt(vars[4], '%PLAYER%', `__${char.name}__`, '%UNDEAD%', newchar.name);
