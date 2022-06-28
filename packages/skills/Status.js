@@ -710,7 +710,7 @@ statusList = {
 			a.user = char.id;
 			a.futuresight = true;
 
-			addCusVal(targ, 'futuresight', vars[0]);
+			addCusVal(targ, 'futuresight', a);
 
 			if (btl.pvp) {
 				return `__${char.name}__ is preparing something...`;
