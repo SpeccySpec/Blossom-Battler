@@ -60,12 +60,12 @@ passiveList = {
 		},
 		onturn(btl, char, vars) {
 			if (char.custom?.angry) {
-				char.custom?.angry--;
+				char.custom.angry--;
 
-				if (char.custom?.angry <= 0) {
+				if (char.custom.angry <= 0) {
 					killVar(char, 'angry');
 					return `__${char.name}__ calmed themselves down...`;
-				
+				}
 			} else {
 				if (!char.custom?.calmturns) addCusVal(char, 'calmturns', vars[1]);
 				char.custom.calmturns++;
@@ -271,13 +271,55 @@ passiveList = {
 			if (damage == 0) return void message.channel.send("What's the point if it's dealing no damage?");
 
 			if (!Elements.includes(element.toLowerCase())) return void message.channel.send("You entered an invalid value for <Element>!");
-			if (skill.type == 'status' || skill.type == 'heal' || skill.type == 'passive')
-				return void message.channel.send("You can't use this element!");
+			if (skill.type == 'status' || skill.type == 'heal' || skill.type == 'passive') return void message.channel.send("You can't use this element!");
 			
 			makePassive(skill, "damage", [physmag, damage, element]);
 			return true;
 		},
 		ondamage(char, inf, skill, dmg, passive, btl, vars) {
+			let affinity = getAffinity(inf, vars[2]);
+			let affinityTxt = affinityEmoji[affinity] ?? '';
+			let d = vars[1];
+
+			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic')) {
+				if (vars[1] < 0)
+					inf.hp -= vars[1];
+					return `__${inf.name}__ had their HP restored by ***${-vars[1]}*** thanks to __${char.name}__'s _${passive.name}_.`;
+				else {
+					switch(affinity) {
+						case 'deadly':
+							d *= settings.rates.affinities?.deadly ?? 4.2;
+							break;
+						
+						case 'superweak':
+							d *= settings.rates.affinities?.superweak ?? 2.1;
+							break;
+						
+						case 'weak':
+							d *= settings.rates.affinities?.weak ?? 1.5;
+							break;
+						
+						case 'resist':
+							d *= settings.rates.affinities?.resist ?? 0.5;
+							break;
+						
+						case 'block':
+						case 'repel':
+							return `__${inf.name}__ blocked __${char.name}__'s _${passive.name}_.`;
+
+						case 'drain':
+							inf.hp = Math.min(inf.maxhp, inf.hp+d);
+							return `__${inf.name}__ drained __${char.name}__'s _${passive.name}_. Their HP was restored by ***${d}***${affinityTxt}!`;
+					}
+
+					inf.hp -= d;
+					if (inf.hp <= 0) {
+						return `Having taken ***${d}***${affinityTxt} damage, __${inf.name}__ perished due to __${char.name}__'s _${passive.name}_!`;
+					} else {
+						return `__${inf.name}__ took ***${d}***${affinityTxt} damage due to __${char.name}__'s _${passive.name}_!`;
+					}
+				}
+			}
 		}
 	}),
 
