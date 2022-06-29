@@ -336,6 +336,36 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 		let affinity = getAffinity(targ, skill.type);
 		let shieldtype = targ.custom?.shield?.type;
 
+		// ForceDodge passive funcs
+		for (let i in targ.skills) {
+			if (!skillFile[targ.skills[i]]) continue;
+			if (skillFile[targ.skills[i]].type != 'passive') continue;
+
+			for (let k in skillFile[targ.skills[i]].passive) {
+				if (passiveList[k] && passiveList[k].forcedodge) {
+					const psv = passiveList[k];
+					const passive = skillFile[targ.skills[i]];
+					let dodge = false;
+					
+					if (psv.multiple) {
+						for (let j in passive.passive[k]) {
+							if (psv.forcedodge(targ, char, skill, passive, btl, passive.passive[k][j])) {
+								dodge = true;
+								break;
+							}
+						}
+					} else {
+						dodge = psv.forcedodge(targ, char, skill, passive, btl, passive.passive[k]);
+					}
+
+					if (dodge) {
+						result.txt += `__${targ.name}__'s _${passive.name}_ allowed them to dodge __${char.name}__'s _${skill.name}_!`;
+						return result
+					}
+				}
+			}
+		}
+
 		// noRepel used here to change repelled attacks into a block.
 		if (affinity == 'block' || (affinity == 'repel' && noRepel)) {
 			result.txt += `${targ.name} blocked it!\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}\n${selectQuote(targ, 'block', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;

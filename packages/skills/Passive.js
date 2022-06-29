@@ -351,6 +351,14 @@ passiveList = {
 
 			makePassive(skill, "dodge", [physmag, chance]);
 			return true;
+		},
+		forcedodge(char, inf, skill, passive, btl, vars) {
+			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic')) {
+				if (randNum(1, 100)) return true;
+				return false;
+			} else {
+				return false;
+			}
 		}
 	}),
 
@@ -416,6 +424,7 @@ passiveList = {
 				type: "Decimal",
 			}
 		],
+		hardcoded: true,
 		applyfunc(message, skill, args) {
 			let physmag = args[0]?.toLowerCase();
 			let chance = args[1];
