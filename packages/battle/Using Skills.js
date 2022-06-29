@@ -354,7 +354,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 		} else if (shieldtype && !noRepel && (
 			(shieldtype === 'repelmag' && skill.atktype === 'magic') ||
 			(shieldtype === 'repelphys' && (skill.atktype === 'physical' || skill.atktype === 'ranged'))
-		) {
+		)) {
 			if (skill.type === 'almighty') {
 				delete targ.custom.shield;
 				addAtkMsg(`${skill.name} broke through __${targ.name}__'s ${targ.custom.skill.name ?? 'Shield'}!`);
