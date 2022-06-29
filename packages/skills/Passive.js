@@ -57,6 +57,32 @@ passiveList = {
 
 			makePassive(skill, "moodswing", [percentage, turns]);
 			return true;
+		},
+		onturn(btl, char, vars) {
+			if (char.custom?.angry) {
+				char.custom?.angry--;
+
+				if (char.custom?.angry <= 0) {
+					killVar(char, 'angry');
+					return `__${char.name}__ calmed themselves down...`;
+				
+			} else {
+				if (!char.custom?.calmturns) addCusVal(char, 'calmturns', vars[1]);
+				char.custom.calmturns++;
+
+				if (!char.custom.calmturns >= vars[1]) {
+					killVar(char, 'calmturns');
+					addCusVal(char, 'angry', vars[1]);
+					return `__${char.name}__ becomes enraged, with burning fury!`;
+				}
+			}
+		},
+		statmod(btl, char, skill, vars) {
+			if (char.custom?.angry) {
+				skill.pow *= vars[0]/100;
+			} else {
+				skill.pow *= 1-(100-vars[0])/100);
+			}
 		}
 	}),
 
@@ -83,6 +109,20 @@ passiveList = {
 
 			makePassive(skill, "berserk", [percentage, hpPercent]);
 			return true;
+		},
+		statmod(btl, char, skill, vars) {
+			if (skill.atktype === 'physical' || skill.atktype === 'ranged') {
+				let hppercent = (char.hp/char.maxhp)*100;
+				let percent = (vars[0]-100)/100;
+				let hpcap = vars[1];
+
+				if (hppercent <= hpcap) {
+					skill.pow *= 1+percent;
+				} else {
+					let realPercent = percent*(100-hppercent);
+					skill.pow *= 1+realPercent;
+				}
+			}
 		}
 	}),
 
@@ -109,6 +149,20 @@ passiveList = {
 
 			makePassive(skill, "enraged", [percentage, hpPercent]);
 			return true;
+		},
+		statmod(btl, char, skill, vars) {
+			if (skill.atktype === 'magic') {
+				let hppercent = (char.hp/char.maxhp)*100;
+				let percent = (vars[0]-100)/100;
+				let hpcap = vars[1];
+
+				if (hppercent <= hpcap) {
+					skill.pow *= 1+percent;
+				} else {
+					let realPercent = percent*(100-hppercent);
+					skill.pow *= 1+realPercent;
+				}
+			}
 		}
 	}),
 
@@ -222,6 +276,8 @@ passiveList = {
 			
 			makePassive(skill, "damage", [physmag, damage, element]);
 			return true;
+		},
+		ondamage(char, inf, skill, dmg, passive, btl, vars) {
 		}
 	}),
 

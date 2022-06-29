@@ -625,6 +625,17 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					}
 				}
 
+				for (let i in targ.skills) {
+					if (!skillFile[targ.skills[i]]) continue;
+					if (skillFile[targ.skills[i]].type != 'passive') continue;
+
+					for (let k in skillFile[targ.skills[i]].passive) {
+						if (passiveList[k] && passiveList[k].ondamage) {
+							result.txt += passiveList[k].ondamage(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k]);
+						}
+					}
+				}
+
 				// Quotes
 				let quotetype = affinity;
 				if (affinity === 'normal') quotetype = 'hurt';
