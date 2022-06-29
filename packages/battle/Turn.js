@@ -677,6 +677,55 @@ sendCurTurnEmbed = (char, btl) => {
 						}
 					}
 
+					if (skill.statusses) {
+						for (let k in skill.statusses) {
+							if (!statusList[k]) continue;
+							if (!statusList[k].canuse) continue;
+
+							if (statusList[k].multiple) {
+								for (let l in skill.statusses[k]) {
+									let txt = statusList[k].canuse(char, skill, btl, skill.statusses[k][l]);
+									if (txt !== true) {
+										DiscordEmbed.title = txt;
+										alreadyResponded = true;
+
+										return i.update({
+											content: `<@${char.owner}>`,
+											embeds: [DiscordEmbed],
+										});
+									}
+								}
+							} else {
+								let txt = statusList[k].canuse(char, skill, btl, skill.statusses[k]);
+								if (txt !== true) {
+									DiscordEmbed.title = txt;
+									alreadyResponded = true;
+
+									return i.update({
+										content: `<@${char.owner}>`,
+										embeds: [DiscordEmbed],
+										components: setUpComponents(char, btl, menustate)
+									});
+								}
+							}
+						}
+
+						if (char.status && statusEffectFuncs[char.status.toLowerCase()] && statusEffectFuncs[char.status.toLowerCase()].canuse) {
+							let canUse = statusEffectFuncs[char.status.toLowerCase()].canuse(char, skill, btl)
+
+							if (canUse && canUse[1] != true) {
+								DiscordEmbed.title = canUse[0];
+								alreadyResponded = true;
+
+								await i.update({
+									content: `<@${char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: setUpComponents(char, btl, menustate)
+								});
+							}
+						}
+					}
+
 					if (hasStatus(skill, 'mimic')) {
 						menustate = MENU_ANYSEL;
 					} else if ((skill.target === "one" || skill.target === "spreadopposing")) {
@@ -1091,7 +1140,7 @@ doAction = (char, btl, action) => {
 					.setDescription("You escaped from the enemies!")
 				btl.channel.send({embeds: [DiscordEmbed]});
 
-				runFromBattle(char, btl)
+				runFromBattle(char, btl, 0)
 				return;
 			} else {
 				DiscordEmbed = new Discord.MessageEmbed()
@@ -1437,6 +1486,14 @@ advanceTurn = (btl) => {
 	// If there's only one team alive...
 	if (teamsAlive <= 1) {
 		let party = btl.teams[lastAlive] ?? btl.teams[0];
+
+		//clear reincarnates
+		for (let i in btl.teams) {
+			while (btl.teams[i].members.some(m => m.reincarnate)) {
+				let char = btl.teams[i].members.find(m => m.reincarnate);
+				btl.teams[i].members.splice(btl.teams[i].members.indexOf(char), 1);
+			}
+		}
 
 		if (btl.pvp) {
 			pvpWin(btl, lastAlive);
