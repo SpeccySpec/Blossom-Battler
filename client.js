@@ -287,7 +287,7 @@ statusEmojis = {
 	atkup: "<:atkup:990629395486089216>",
 	magup: "<:magup:990629404126355496>",
 	endup: "<:endup:990629401517506580>",
-	aglup: "<:aglup:990629392659120169>",
+	aglup: "<:aglup:991703686881480794>",
 	prcup: '<:prcup:990629408907870330>',
 	critup: "<:critup:990629398258540604>",
 
@@ -295,9 +295,14 @@ statusEmojis = {
 	atkdown: "<:atkdown:990629394236211230>",
 	magdown: "<:magdown:990629402851299338>",
 	enddown: "<:enddown:990629399902695445>",
-	agldown: "<:agldown:990629391585411182>",
+	agldown: "<:agldown:991703685098917908>",
 	prcdown: '<:prcdown:990629407238529044>',
 	critdown: "<:critdown:990629396983476275>",
+
+	// Shields
+	reduce: "<:shield:991704544847335546>",
+	repelphys: "<:tetrakarn:991704547791749200>",
+	repelmag: "<:makarakarn:991704552086716437>",
 }
 
 elementTechs = {

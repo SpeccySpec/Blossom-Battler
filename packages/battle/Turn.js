@@ -365,6 +365,9 @@ function GetCharStatus(char) {
 		amount = Math.abs(amount)
 		str += (amount == 2 ? "²" : (amount == 3 ? "³" : ""))
 	}
+	const shield = char.custom?.shield
+	if (shield)
+		str += statusEmojis[shield.type ?? "reduce"]
 	if (char.status)
 		str += statusEmojis[char.status]
 	return str
