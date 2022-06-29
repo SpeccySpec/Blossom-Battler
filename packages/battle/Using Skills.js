@@ -496,25 +496,25 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				}
 
 				// Guarding
-				if (char.guard && affinity != 'drain') {
-					dmg *= char.guard;
-					delete char.guard;
+				if (targ.guard && affinity != 'drain') {
+					dmg *= targ.guard;
+					delete targ.guard;
 				}
 
 				// Shields
-				if (char.custom?.shield) {
-					if (!char.custom.shield.type || char.custom.shield.type === 'reduce') {
+				if (targ.custom?.shield) {
+					if (!targ.custom.shield.type || targ.custom.shield.type === 'reduce') {
 						dmg = Math.round(dmg*1/3);
 
-						if (char.custom.shield.hp) {
-							char.custom.shield.hp--;
-							if (char.custom.shield.hp <= 0) {
-								addAtkMsg(btl, `__${char.name}__'s __${char.custom.shield.name}__ has broken!`);
-								delete char.custom.shield.hp;
+						if (targ.custom.shield.hp) {
+							targ.custom.shield.hp--;
+							if (targ.custom.shield.hp <= 0) {
+								addAtkMsg(btl, `__${targ.name}__'s __${targ.custom.shield.name}__ has broken!`);
+								delete targ.custom.shield.hp;
 							}
 						} else {
-							addAtkMsg(btl, `__${char.name}__'s __${char.custom.shield.name}__ has broken!`);
-							delete char.custom.shield.hp;
+							addAtkMsg(btl, `__${targ.name}__'s __${targ.custom.shield.name}__ has broken!`);
+							delete targ.custom.shield.hp;
 						}
 					}
 				}
