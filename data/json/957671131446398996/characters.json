@@ -20959,8 +20959,8 @@
         "name": "Snow",
         "owner": "621307633718132746",
         "level": 99,
-        "hp": 628,
-        "mp": 515,
+        "hp": 537,
+        "mp": 275,
         "maxhp": 628,
         "maxmp": 515,
         "basehp": 40,
@@ -20978,14 +20978,14 @@
         },
         "weapon": {},
         "armor": {},
-        "xp": 4930,
+        "xp": 6285,
         "maxxp": 615066353,
         "skills": [
-            "LightningFist",
-            "SnowGun",
+            "Tetrakarn",
+            "Makarakarn",
             "DodgeMag",
             "DodgePhys",
-            "MultiI",
+            "Shield",
             "Diarahan",
             "SnowRocket",
             "Debilitate"
@@ -21028,6 +21028,11 @@
                 "value": 20,
                 "nextLevel": 120,
                 "level": 2
+            },
+            "Snow": {
+                "amount": 138,
+                "maximum": 130,
+                "level": 3
             }
         },
         "mainElement": "ice",

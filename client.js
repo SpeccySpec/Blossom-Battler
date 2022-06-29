@@ -298,6 +298,11 @@ statusEmojis = {
 	agldown: "<:agldown:991703685098917908>",
 	prcdown: '<:prcdown:990629407238529044>',
 	critdown: "<:critdown:990629396983476275>",
+
+	// Shields
+	reduce: "<:shield:991704544847335546>",
+	repelphys: "<:tetrakarn:991704547791749200>",
+	repelmag: "<:makarakarn:991704552086716437>",
 }
 
 elementTechs = {
