@@ -20,7 +20,7 @@ healList = {
 
 			targ.hp = Math.min(targ.maxhp, targ.hp+vars[0]);
 
-			if (vars[0] > 0 && targ.team == char.team) {
+			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
 				settings = setUpSettings(btl.guild.id);
 				changeTrust(targ, char, Math.round(20*(settings.rates.trustrate ?? 1)), true, btl.channel);
 			}
@@ -48,7 +48,7 @@ healList = {
 
 			targ.mp = Math.min(targ.maxmp, targ.mp+vars[0]);
 
-			if (vars[0] > 0 && targ.team == char.team) {
+			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
 				settings = setUpSettings(btl.guild.id);
 				changeTrust(targ, char, Math.round(20*(settings.rates.trustrate ?? 1)), true, btl.channel);
 			}
@@ -88,7 +88,7 @@ healList = {
 				user: char.id
 			})
 
-			if (vars[0] > 0 && targ.team == char.team) {
+			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
 				settings = setUpSettings(btl.guild.id);
 				changeTrust(targ, char, Math.round(5*(settings.rates.trustrate ?? 1)), true, btl.channel);
 			}
@@ -128,7 +128,7 @@ healList = {
 				user: char.id
 			})
 
-			if (vars[0] > 0 && targ.team == char.team) {
+			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
 				settings = setUpSettings(btl.guild.id);
 				changeTrust(targ, char, Math.round(5*(settings.rates.trustrate ?? 1)), true, btl.channel);
 			}
