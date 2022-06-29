@@ -334,18 +334,45 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 		}
 		
 		let affinity = getAffinity(targ, skill.type);
+		let shieldtype = targ.custom?.shield?.type;
+
+		// noRepel used here to change repelled attacks into a block.
 		if (affinity == 'block' || (affinity == 'repel' && noRepel)) {
 			result.txt += `${targ.name} blocked it!\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}\n${selectQuote(targ, 'block', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 			return result;
 		} else if (affinity == 'repel' && !noRepel) {
 			skill.acc = 999; // Never miss a repel - just to be flashy :D
 
+			// Run this function again. Ban repelling to avoid infinite loops.
 			let newResults = attackWithSkill(char, char, skill, btl, true);
 			result.oneMore = newResults.oneMore;
 			result.teamCombo = newResults.teamCombo;
 
 			result.txt += `${selectQuote(targ, 'repel', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}\n${targ.name} repelled it!\n${newResults.txt}`;
 			return result;
+		// reminder that physical shields repel physical/ranged and magic ones repel magic.
+		} else if (shieldtype && !noRepel && (
+			(shieldtype === 'repelmag' && skill.atktype === 'magic') ||
+			(shieldtype === 'repelphys' && (skill.atktype === 'physical' || skill.atktype === 'ranged'))
+		) {
+			if (skill.type === 'almighty') {
+				delete targ.custom.shield;
+				addAtkMsg(`${skill.name} broke through __${targ.name}__'s ${targ.custom.skill.name ?? 'Shield'}!`);
+			} else if (!skill.extras?.feint) {
+				skill.acc = 999; // Never miss a repel - just to be flashy :D
+
+				// Let's get rid of this shield
+				delete targ.custom.shield;
+
+				// Run this function again. Ban repelling to avoid infinite loops.
+				let newResults = attackWithSkill(char, char, skill, btl, true);
+				result.oneMore = newResults.oneMore;
+				result.teamCombo = newResults.teamCombo;
+
+				// done.
+				result.txt += `${selectQuote(targ, 'repel', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}\n__${targ.name}__'s _${targ.custom.skill.name ?? 'Shield'}_ repelled the attack!\n${newResults.txt}\n_${targ.custom.skill.name ?? 'Shield'}_ has broken.`;
+				return result;
+			}
 		}
 
 		// Placeholder damage formula
