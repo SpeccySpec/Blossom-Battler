@@ -81,7 +81,7 @@ passiveList = {
 			if (char.custom?.angry) {
 				skill.pow *= vars[0]/100;
 			} else {
-				skill.pow *= 1-(100-vars[0])/100);
+				skill.pow *= 1-(100-vars[0])/100;
 			}
 		}
 	}),
@@ -282,10 +282,10 @@ passiveList = {
 			let d = vars[1];
 
 			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic')) {
-				if (vars[1] < 0)
+				if (vars[1] < 0) {
 					inf.hp -= vars[1];
 					return `__${inf.name}__ had their HP restored by ***${-vars[1]}*** thanks to __${char.name}__'s _${passive.name}_.`;
-				else {
+				} else {
 					switch(affinity) {
 						case 'deadly':
 							d *= settings.rates.affinities?.deadly ?? 4.2;
