@@ -81,7 +81,7 @@ passiveList = {
 			if (char.custom?.angry) {
 				skill.pow *= vars[0]/100;
 			} else {
-				skill.pow *= 1-((100-vars[0])/100);
+				skill.pow *= 1-(100-vars[0])/100;
 			}
 		}
 	}),
