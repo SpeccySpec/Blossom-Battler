@@ -336,7 +336,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 		let affinity = getAffinity(targ, skill.type);
 		let shieldtype = targ.custom?.shield?.type;
 
-		// ForceDodge passive funcs
+		// ForceDodge and OnAffinityCheck passive funcs
 		for (let i in targ.skills) {
 			if (!skillFile[targ.skills[i]]) continue;
 			if (skillFile[targ.skills[i]].type != 'passive') continue;
@@ -362,6 +362,31 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 						result.txt += `__${targ.name}__'s _${passive.name}_ allowed them to dodge __${char.name}__'s _${skill.name}_!`;
 						return result
 					}
+				} else if (passiveList[k] && passiveList[k].onaffinitycheck && !noRepel) {
+					const psv = passiveList[k];
+					const passive = skillFile[targ.skills[i]];
+					let endfunc = false;
+
+					if (psv.multiple) {
+						for (let j in passive.passive[k]) {
+							let str = psv.onaffinitycheck(targ, char, skill, passive, affinity, btl, passive.passive[k][j]);
+
+							if (str) {
+								endfunc = true;
+								result.txt += str;
+								break;
+							}
+						}
+					} else {
+						let str = psv.onaffinitycheck(targ, char, skill, passive, affinity, btl, passive.passive[k]);
+
+						if (str) {
+							endfunc = true;
+							result.txt += str;
+						}
+					}
+
+					if (endfunc) return result;
 				}
 			}
 		}
@@ -403,6 +428,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				result.txt += `${selectQuote(targ, 'repel', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}\n__${targ.name}__'s _${targ.custom.skill.name ?? 'Shield'}_ repelled the attack!\n${newResults.txt}\n_${targ.custom.skill.name ?? 'Shield'}_ has broken.`;
 				return result;
 			}
+		} else {
 		}
 
 		// Placeholder damage formula

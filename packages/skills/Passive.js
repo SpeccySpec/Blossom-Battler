@@ -354,7 +354,7 @@ passiveList = {
 		},
 		forcedodge(char, inf, skill, passive, btl, vars) {
 			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic')) {
-				if (randNum(1, 100)) return true;
+				if (randNum(1, 100) <= vars[1]) return true;
 				return false;
 			} else {
 				return false;
@@ -424,7 +424,6 @@ passiveList = {
 				type: "Decimal",
 			}
 		],
-		hardcoded: true,
 		applyfunc(message, skill, args) {
 			let physmag = args[0]?.toLowerCase();
 			let chance = args[1];
@@ -502,6 +501,19 @@ passiveList = {
 				}]);
 			}
 			return true;
+		},
+		onaffinitycheck(char, inf, skill, passive, affinity, btl, vars) {
+			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic')) {
+				if (randNum(1, 100) <= vars[2]) {
+					// Run this function again... but with the COUNTER. Ban repelling to avoid infinite loops, and avoid taking damage ourselves.
+					let newResults = attackWithSkill(char, inf, objClone(vars[3]), btl, true);
+					result.oneMore = newResults.oneMore;
+					result.teamCombo = newResults.teamCombo;
+
+					// Return this txt
+					return `${selectQuote(char, 'dodge', null, "%ENEMY%", inf.name, "%SKILL%", skill.name)}\n__${char.name}__'s _${passive.name}_ allowed them to dodge and counter!\n${newResults.txt}`;
+				}
+			}
 		}
 	}),
 
@@ -531,6 +543,11 @@ passiveList = {
 
 			makePassive(skill, "status", [status, chance]);
 			return true;
+		},
+		ondamage(char, inf, skill, dmg, passive, btl, vars) {
+			if (skill.atktype === 'physical') {
+				if (randNum(1, 100) <= vars[1]) return inflictStatus(inf, vars[0]);
+			}
 		}
 	}),
 
@@ -576,9 +593,16 @@ passiveList = {
 			}
 		],
 		applyfunc(message, skill, args) {
-			if (args[0] < 1) return void message.channel.send("What's the point if it never cures?");
+			if (args[0] < 1) return void message.channel.send("What's the point if it never cures any statusses?");
 			makePassive(skill, "curestatus", [args[0]]);
 			return true;
+		},
+		onturn(btl, char, vars) {
+			if (char.status && randNum(1, 100) <= vars[0]) {
+				delete char.status;
+				delete char.statuschance;
+				return `__${char.name}__ was able to cure themselves of their status effect.`;
+			}
 		}
 	}),
 
@@ -629,6 +653,24 @@ passiveList = {
 
 			makePassive(skill, "extrahit", [hits, chance, powerMult]);
 			return true;
+		},
+		statmod(btl, char, skill, vars) {
+			let txt = false;
+			for (let i = 0; i < skill.hits; i++) {
+				let c = vars[1]-((vars[1]/10)*i);
+
+				if (randNum(1, 100) <= c) {
+					if (!txt) {
+						addAtkMsg(btl, `__${char.name}__ was able to strike again!`);
+						txt = true;
+					}
+
+					if (!skill.hits) skill.hits = 1;
+					skill.hits++;
+				} else {
+					break;
+				}
+			}
 		}
 	}),
 
