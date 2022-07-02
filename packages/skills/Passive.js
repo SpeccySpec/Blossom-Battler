@@ -620,6 +620,11 @@ passiveList = {
 			if (args[0] == 0) return void message.channel.send("What's the point if it never changes?");
 			makePassive(skill, "perfectkeeper", [args[0]]);
 			return true;
+		},
+		statmod(btl, char, skill, vars) {
+			if (skill.atktype === 'physical') {
+				skill.pow *= 1+(userDefs.hp/userDefs.maxhp)/1.42857142-0.2;
+			}
 		}
 	}),
 
@@ -688,7 +693,8 @@ passiveList = {
 			if (args[0] == 0) return void message.channel.send("What's the point if it never changes?");
 			makePassive(skill, "kindheart", [args[0]]);
 			return true;
-		}
+		},
+		hardcoded: true
 	}),
 
 	affinitycutter: new Extra({
@@ -776,7 +782,8 @@ passiveList = {
 		applyfunc(message, skill, args) {
 			makePassive(skill, "magicmelee", [true]);
 			return true;
-		}
+		},
+		hardcoded: true
 	}),
 
 	attackall: new Extra({
@@ -786,7 +793,8 @@ passiveList = {
 		applyfunc(message, skill, args) {
 			makePassive(skill, "attackall", [true]);
 			return true;
-		}
+		},
+		hardcoded: true
 	}),
 
 	wonderguard: new Extra({
@@ -808,7 +816,7 @@ passiveList = {
 
 	repelmag: new Extra({
 		name: "Repel Magic",
-		desc: "<Chance>% chance to repel magic of specific types.",
+		desc: "<Chance>% chance to repel magic or ranged attacks of specific elements.",
 		args: [
 			{
 				name: "Chance",
@@ -834,6 +842,17 @@ passiveList = {
 			if (elements.length < 1) return void message.channel.send("You didn't supply any valid elements!");
 			makePassive(skill, "repelmag", [chance, elements]);
 			return true;
+		},
+		onaffinitycheck(char, inf, skill, passive, affinity, btl, vars, result) {
+			// Magic/Ranged, If type is an object then check for the first two, otherwise check for type itself as it should be a string.
+			if ((skill.atktype === 'magic' || skill.atktype === 'ranged') && ((typeof(skill.type) === 'object' && (vars[1].includes(skill.type[0]) || vars[1].includes(skill.type[1]))) || vars[1].includes(skill.type))) {
+				if (randNum(1, 100) <= vars[0]) {
+					affinity = 'repel';
+					result.txt += `\n__${char.name}__'s __${passive.name}__ repelled the attack!\n`;
+				}
+			}
+
+			return false;
 		}
 	}),
 

@@ -369,7 +369,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 					if (psv.multiple) {
 						for (let j in passive.passive[k]) {
-							let str = psv.onaffinitycheck(targ, char, skill, passive, affinity, btl, passive.passive[k][j]);
+							let str = psv.onaffinitycheck(targ, char, skill, passive, affinity, btl, passive.passive[k][j], result);
 
 							if (str) {
 								endfunc = true;
@@ -378,7 +378,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 							}
 						}
 					} else {
-						let str = psv.onaffinitycheck(targ, char, skill, passive, affinity, btl, passive.passive[k]);
+						let str = psv.onaffinitycheck(targ, char, skill, passive, affinity, btl, passive.passive[k], result);
 
 						if (str) {
 							endfunc = true;
