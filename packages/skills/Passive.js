@@ -1055,19 +1055,21 @@ passiveList = {
 		},
 		ondamage(char, inf, skill, dmg, passive, btl, vars) {
 			// Only activate for pure skills, no dual element skills.
-			if (char.hp > 0 && skill.type == vars[0] && randNum(1, 100) <= vars[2]) {
+			if (char.hp > 0 && skill.type == vars[0] && randNum(0, 100) <= vars[2]) {
 				// Set elementstore for later.
+				let storeValue = Math.round((dmg/100)*vars[1]);
 				if (!char.custom?.elementstore)
-					addCusVal(char, 'elementstore', Math.round((dmg/100)*vars[1]));
+					addCusVal(char, 'elementstore', storeValue);
 				else
-					char.custom.elementstore += Math.round((dmg/100)*vars[1]);
+					char.custom.elementstore += storeValue;
 
 				// Don't reveal this passive in PVP.
 				if (btl.pvp)
 					return '';
 				else
-					return `__${char.name}'s__ _${passive.name}_ was able to restore **${heal}MP** from the attack!`;
-			}
+					return `\n__${char.name}'s__ _${passive.name}_ was able to store **${storeValue} damage** from the attack!`;
+			} else 
+			return '';
 		},
 		statmod(btl, char, skill, vars) {
 			// Add things stored by the elementstore custom variable to the skill's power.
