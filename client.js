@@ -880,7 +880,7 @@ listArray = async(channel, theArray, author, forceIndex) => {
 		if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
 			if (interaction.customId === 'back') {
 				if (currentIndex - index < 0) {
-					currentIndex = theArray.length - (theArray.length % index)
+					currentIndex = theArray.length - ((theArray.length % index != 0) ? theArray.length % index : index)
 				} else {
 					currentIndex -= index
 				}

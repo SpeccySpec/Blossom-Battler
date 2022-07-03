@@ -115,7 +115,7 @@ async function sendHelp(message, commandsInCategories) {
 					category = Object.keys(commandsInCategories)[index]
 					description = categories[category]
 					categoryCommands = commandsInCategories[category]
-					categoryCommandsIndex = categoryCommands.length - (categoryCommands.length % 12)
+					categoryCommandsIndex = categoryCommands.length - (categoryCommands.length % 12 != 0 ? categoryCommands.length % 12 : 12)
 				}
 			}
 
