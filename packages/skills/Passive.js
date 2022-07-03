@@ -879,6 +879,17 @@ passiveList = {
 			
 			makePassive(skill, "endure", [amount, hp]);
 			return true;
+		},
+		ondamage(char, inf, skill, dmg, passive, btl, vars) {
+			if (!char.custom?.endure) addCusVal(char, 'endure', 0);
+
+			let endures = char.custom.endure;
+			if (char.hp <= 0 && endures < vars[0]) {
+				char.custom.endure++;
+				char.hp = 1;
+
+				return `...however, ${char.name} was able to endure the attack!`;
+			}
 		}
 	}),
 
