@@ -37,7 +37,10 @@ statusList = {
 			if (randChance <= chance) {
 				return `\n${inflictStatus(targ, status)}\n${selectQuote(char, 'landed')}\n${selectQuote(targ, 'hurt')}`;
 			} else {
-				return dodgeTxt(char, targ);
+				if (skill.type == 'status')
+					return dodgeTxt(char, targ);
+				else
+					return '';
 			}
 		}
 	}),
