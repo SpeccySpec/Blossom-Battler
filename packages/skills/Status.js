@@ -525,7 +525,7 @@ statusList = {
 					turns: randNum(8, 16)
 				}
 			}
-			return `The weather has been changed to __${vars[0]}__!`;
+			return `The terrain has been changed to __${vars[0]}__!`;
 		}
 	}),
 
