@@ -107,12 +107,12 @@ nextAvaliableId = (btl) => {
 }
 
 resetEffects = (char) => {
-	if (char.custom?.orgiamode) {
+	if (char?.custom?.orgiamode) {
 		char.stats = objClone(char.custom.orgiamode.revert);
 		killVar(char, 'orgiamode');
 	}
 
-	if (char.custom?.revert) {
+	if (char?.custom?.revert) {
 		if (char.mimic) delete char.mimic;
 
 		char.stats = objClone(char.custom.revert[1].stats);
