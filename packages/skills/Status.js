@@ -486,8 +486,15 @@ statusList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
-			btl.weather.type = vars[0];
-			btl.weather.turns = randNum(8, 16);
+			if (btl?.weather?.type) {
+				btl.weather.type = vars[0];
+				btl.weather.turns = randNum(8, 16);
+			} else {
+				btl.weather = {
+					type: vars[0],
+					turns: randNum(8, 16)
+				}
+			}
 			return `The weather has been changed to __${vars[0]}__!`;
 		}
 	}),
@@ -509,8 +516,15 @@ statusList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
-			btl.terrain.type = vars[0];
-			btl.terrain.turns = randNum(8, 16);
+			if (btl?.terrain?.type) {
+				btl.terrain.type = vars[0];
+				btl.terrain.turns = randNum(8, 16);
+			} else {
+				btl.terrain = {
+					type: vars[0],
+					turns: randNum(8, 16)
+				}
+			}
 			return `The weather has been changed to __${vars[0]}__!`;
 		}
 	}),
