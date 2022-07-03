@@ -551,6 +551,7 @@ passiveList = {
 		}
 	}),
 
+	/*
 	statusdodge: new Extra({
 		name: "Status Dodge",
 		desc: "Has a <Chance>% chance to avoid <Status Effect> from being inflicted. Accepts 'physical', 'mental' and 'all' as status effects.",
@@ -581,6 +582,7 @@ passiveList = {
 			return true;
 		}
 	}),
+	*/
 
 	curestatus: new Extra({
 		name: "Cure Status",
@@ -1050,6 +1052,30 @@ passiveList = {
 
 			makePassive(skill, "elementstore", [element, damage, chance]);
 			return true;
+		},
+		ondamage(char, inf, skill, dmg, passive, btl, vars) {
+			// Only activate for pure skills, no dual element skills.
+			if (char.hp > 0 && skill.type == vars[0] && randNum(1, 100) <= vars[2]) {
+				// Set elementstore for later.
+				if (!char.custom?.elementstore)
+					addCusVal(char, 'elementstore', Math.round((dmg/100)*vars[1]));
+				else
+					char.custom.elementstore += Math.round((dmg/100)*vars[1]);
+
+				// Don't reveal this passive in PVP.
+				if (btl.pvp)
+					return '';
+				else
+					return `__${char.name}'s__ _${passive.name}_ was able to restore **${heal}MP** from the attack!`;
+			}
+		},
+		statmod(btl, char, skill, vars) {
+			// Add things stored by the elementstore custom variable to the skill's power.
+			// Then, delete the elementstore custom variable.
+			if (skill.extras?.elementstore) {
+				skill.pow += skill.extras.elementstore;
+				killVar(char, 'elementstore');
+			}
 		}
 	}),
 
