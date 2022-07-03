@@ -2090,7 +2090,7 @@ selectQuote = (char, quote, neverEmpty, ...rep) => {
 	let randQuote = Math.round(Math.random() * (char.quotes[`${quote}quote`].length-1));
 
 	let q = char.quotes[`${quote}quote`][randQuote];
-	if (rep && rep.length > 1) replaceTxt(q, ...rep);
+	if (rep && rep.length > 1) q = replaceTxt(q, ...rep);
 
 	return `_${char.name}: "${q}"_`;
 }
