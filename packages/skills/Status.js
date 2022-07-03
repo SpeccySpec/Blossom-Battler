@@ -27,14 +27,15 @@ statusList = {
 			skill.statuschance = chance;
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
-			if (hasStatusAffinity(char, skill.status.toLowerCase(), 'block')) return `__${targ.name}__ blocked it!\n${selectQuote(char, 'badatk')}\n${selectQuote(targ, 'block')}`;
+		inflictStatus(char, targ, skill, status) {
+			if (hasStatusAffinity(char, status, 'block')) return `__${targ.name}__ blocked it!\n${selectQuote(char, 'badatk')}\n${selectQuote(targ, 'block')}`;
 
-			let chance = (skill.statusChance ?? skill.statuschance) + ((char.stats.chr-targ.stats.chr)/2);
-			if (isPhysicalStatus(skill.status.toLowerCase())) chance = (skill.statusChance ?? skill.statuschance) + ((char.stats.luk-targ.stats.luk)/2);
+			let chance = (skill.statuschance ?? 5) + ((char.stats.chr-targ.stats.chr)/2);
+			if (isPhysicalStatus(status)) chance = (skill.statusChance ?? skill.statuschance) + ((char.stats.luk-targ.stats.luk)/2);
+			let randChance = randNum(1, 100)
 
-			if (randNum(1, 100) <= chance) {
-				return `${inflictStatus(targ, skill.status.toLowerCase())}\n${selectQuote(char, 'landed')}\n${selectQuote(targ, 'hurt')}`;
+			if (randChance <= chance) {
+				return `\n${inflictStatus(targ, status)}\n${selectQuote(char, 'landed')}\n${selectQuote(targ, 'hurt')}`;
 			} else {
 				return dodgeTxt(char, targ);
 			}

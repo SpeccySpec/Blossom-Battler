@@ -309,6 +309,18 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				}
 			}
 		}
+
+		// Lastly, Status Effects
+		if (skill.status && !targ.status) {
+			var status;
+			if (typeof(skill.status) === 'object') {
+				status = skill.status[randNum(skill.status.length-1)];
+			} else {
+				status = skill.status;
+			}
+
+			result.txt += statusList.status.inflictStatus(char, targ, skill, status);
+		}
 	// Attacking Skills
 	} else {
 		// Override
@@ -758,12 +770,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 						status = skill.status;
 					}
 
-					let chance = (skill.statuschance ?? 5) + ((char.stats.chr-targ.stats.chr)/2);
-					if (isPhysicalStatus(status.toLowerCase())) chance = (skill.statuschance ?? 5) + ((char.stats.luk-targ.stats.luk)/2);
-
-					if (randNum(1, 100) <= chance) {
-						result.txt += `\n${inflictStatus(targ, status.toLowerCase())}\n${selectQuote(char, 'landed', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}\n${selectQuote(targ, 'hurt', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
-					}
+					result.txt += statusList.status.inflictStatus(char, targ, skill, status);
 				}
 			}
 		}
