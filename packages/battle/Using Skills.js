@@ -655,6 +655,17 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				targ.hp = Math.max(0, targ.hp-total);
 				if (targ.hp <= 0) {
 					result.txt += `${dmgTxt} damage and was defeated!_`;
+
+					for (let i in char.skills) {
+						if (!skillFile[char.skills[i]]) continue;
+						if (skillFile[char.skills[i]].type != 'passive') continue;
+
+						for (let k in skillFile[char.skills[i]].passive) {
+							if (passiveList[k] && passiveList[k].onkill) {
+								result.txt += passiveList[k].onkill(char, targ, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k]);
+							}
+						}
+					}
 				} else {
 					result.txt += `${dmgTxt} damage!_`;
 				}
