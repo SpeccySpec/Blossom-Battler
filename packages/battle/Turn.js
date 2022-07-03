@@ -452,7 +452,7 @@ sendCurTurnEmbed = (char, btl) => {
 		fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, '	', 4));
 	});
 
-	let collector = btl.channel.createMessageComponentCollector({
+	let collector = makeCollector(btl.channel, {
 		filter: ({user}) => (user.id == char.owner || utilityFuncs.RPGBotAdmin(char.owner))
 	})
 

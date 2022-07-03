@@ -1100,6 +1100,14 @@ for (const i in folders) {
 	}
 }
 
+// Collector Cache
+collectors = {}
+makeCollector = (channel, vars) => {
+	if (collectors[channel.id]) collectors[channel.id].stop();
+	collectors[channel.id] = channel.createMessageComponentCollector(vars);
+	return collectors[channel.id]
+}
+
 client.on("guildCreate", (guild) => {
 	makeDirectory(`${dataPath}/json/${guild.id}`);
 
