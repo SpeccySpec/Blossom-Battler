@@ -382,8 +382,8 @@ sendCurTurnEmbed = (char, btl) => {
 	if (settings.mechanics.limitbreaks) statDesc += `, ${Math.round(char.lbp)}LB%`;
 
 	let weatherTxt = '';
-	if (btl.weather) weatherTxt += `\n${btl.weather.type} Weather.`;
-	if (btl.terrain) weatherTxt += `\n${btl.terrain.type} Terrain.`;
+	if (btl.weather) weatherTxt += `\n${btl.weather.type.toUpperCase()} Weather.`;
+	if (btl.terrain) weatherTxt += `\n${btl.terrain.type.toUpperCase()} Terrain.`;
 	statDesc += weatherTxt;
 
 	let teamDesc = '';
