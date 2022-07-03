@@ -974,7 +974,7 @@ passiveList = {
 		},
 		ondamage(char, inf, skill, dmg, passive, btl, vars) {
 			if (char.hp > 0) {
-				let heal = (dmg/100)*vars[0];
+				let heal = Math.round((dmg/100)*vars[0]);
 				char.mp = Math.min(char.maxmp, char.mp+heal);
 				return `__${char.name}'s__ _${passive.name}_ was able to restore **${heal}MP** from the attack!`;
 			}
@@ -1006,11 +1006,13 @@ passiveList = {
 			return true
 		},
 		onkill(char, targ, skill, dmg, passive, btl, vars) {
-			if (char.hp > 0) {
-				let heal = (dmg/100)*vars[0];
-				char.mp = Math.min(char.maxmp, char.mp+heal);
-				return `__${char.name}'s__ _${passive.name}_ was able to restore **${heal}MP** from the attack!`;
-			}
+			let heal = Math.round((targ.level/100)*vars[0]);
+			let healmp = Math.round((targ.level/100)*vars[1]);
+
+			char.hp = Math.min(char.maxhp, char.hp+heal);
+			char.mp = Math.min(char.maxmp, char.mp+healmp);
+
+			return `__${char.name}'s__ _${passive.name}_ was able to restore **${heal}HP** and **${healmp}MP** from __${targ.name}__'s defeat!`;
 		}
 	}),
 
