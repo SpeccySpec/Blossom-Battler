@@ -725,7 +725,13 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 					for (let k in skillFile[targ.skills[i]].passive) {
 						if (passiveList[k] && passiveList[k].ondamage) {
-							result.txt += passiveList[k].ondamage(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k]);
+							if (passiveList[k].multiple) {
+								for (let l in skillFile[targ.skills[i]].passive[k]) {
+									result.txt += passiveList[k].ondamage(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k][l]);
+								}
+							} else {
+								result.txt += passiveList[k].ondamage(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k]);
+							}
 						}
 					}
 				}
