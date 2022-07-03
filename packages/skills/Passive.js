@@ -909,7 +909,8 @@ passiveList = {
 			if (percent == 0) return void message.channel.send("Why do this if it never changes anything?");
 			makePassive(skill, "guardboost", [percent]);
 			return true
-		}
+		},
+		hardcoded: true
 	}),
 
 	guarddodge: new Extra({
@@ -928,7 +929,8 @@ passiveList = {
 			if (percent == 0) return void message.channel.send("Why do this if it never changes anything?");
 			makePassive(skill, "guarddodge", [percent]);
 			return true
-		}
+		},
+		hardcoded: true
 	}),
 
 	sacrificial: new Extra({
@@ -947,6 +949,9 @@ passiveList = {
 			if (percent == 0) return void message.channel.send("Why do this if it never changes anything?");
 			makePassive(skill, "sacrificial", [percent]);
 			return true
+		},
+		statmod(btl, char, skill, vars) {
+			if (skill.extras?.sacrifice) skill.pow *= vars[0]/100;
 		}
 	}),
 
@@ -966,6 +971,13 @@ passiveList = {
 			if (percent == 0) return void message.channel.send("Why do this if it never changes anything?");
 			makePassive(skill, "alterpain", [percent]);
 			return true
+		},
+		ondamage(char, inf, skill, dmg, passive, btl, vars) {
+			if (char.hp > 0) {
+				let heal = (dmg/100)*vars[0];
+				char.mp = Math.min(char.maxmp, char.mp+heal);
+				return `__${char.name}'s__ _${passive.name}_ was able to restore **${heal}MP** from the attack!`;
+			}
 		}
 	}),
 
@@ -992,6 +1004,13 @@ passiveList = {
 
 			makePassive(skill, "sacrifice", [hp, mp]);
 			return true
+		},
+		onkill(char, targ, skill, dmg, passive, btl, vars) {
+			if (char.hp > 0) {
+				let heal = (dmg/100)*vars[0];
+				char.mp = Math.min(char.maxmp, char.mp+heal);
+				return `__${char.name}'s__ _${passive.name}_ was able to restore **${heal}MP** from the attack!`;
+			}
 		}
 	}),
 
