@@ -430,13 +430,13 @@ passiveList = {
 			let counterName = args[2];
 			let power = args[3];
 			let accuracy = args[4];
-			let critChance = math.max((args[5] ?? 0), 0);
+			let critChance = Math.max((args[5] ?? 0), 0);
 			let hits = args[6];
 			let element = args[7]?.toLowerCase();
 			let atype = args[8]?.toLowerCase();
 			let targets = args[9]?.toLowerCase();
 			let status = args[10] || "none";
-			let statusChance = math.min(math.max((args[11] ?? 0), 0), 100);
+			let statusChance = Math.min(Math.max((args[11] ?? 0), 0), 100);
 
 			if (physmag != 'phys' && physmag != 'mag')
 				return void message.channel.send("You entered an invalid value for <Phys/Mag>! It can be either PHYS or MAG.");
