@@ -630,13 +630,13 @@ commands.updateskills = new Command({
 					skillFile[skill].heal.recarmdra = [true]; //power, turns
 					delete skillFile[skill].recarmdra;
 				} else if (skillFile[skill].fullheal) {
-					skillFile[skill].heal.fullheal = [true]; //power, turns
+					skillFile[skill].heal.healstat = [100, 'hppercent']; //power, stat
 					delete skillFile[skill].fullheal;
 				} else if (skillFile[skill].statusheal) {
 					skillFile[skill].heal.statusheal = [['all']]; //status type
 					delete skillFile[skill].statusheal;
 				} else if (skillFile[skill].healmp) {
-					skillFile[skill].heal.healmp = [skillFile[skill].pow]; //power
+					skillFile[skill].heal.healstat = [skillFile[skill].pow, 'mp']; //power, stat
 					delete skillFile[skill].healmp;
 				} else if (skillFile[skill].sacrifice) {
 					skillFile[skill].heal.sacrifice = [0] //hp left
@@ -645,7 +645,7 @@ commands.updateskills = new Command({
 					skillFile[skill].heal.revive = [skillFile[skill].revive]; //1/amount of HP
 					delete skillFile[skill].revive;
 				} else {
-					if (!skillFile[skill].heal.default)	skillFile[skill].heal.default = [skillFile[skill].pow]; //power
+					if (!skillFile[skill].heal.healstat) skillFile[skill].heal.healstat = [skillFile[skill].pow, 'hp']; //power, stat
 				}
 
 				delete skillFile[skill].pow;
