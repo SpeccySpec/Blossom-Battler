@@ -2116,41 +2116,21 @@ commands.clearitemrecipe = new Command({
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
-        let itemDefs = null;
-        switch (args[0].toLowerCase()) {
-            case 'item':
-                if (!itemFile[args[1]]) return message.channel.send(`${args[1]} is not a valid item name.`);
-                if (itemFile[args[1]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to assign a recipe to it.")
-                if (!itemFile[args[1]].recipe) return message.channel.send(`${args[1]} does not have a recipe.`);
-                itemDefs = itemFile[args[1]]
-                break;
-            case 'weapon':
-                if (!weaponFile[args[1]]) return message.channel.send(`${args[1]} is not a valid weapon name.`);
-                if (weaponFile[args[1]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this weapon, therefore, you have insufficient permissions to assign a recipe to it.")
-                if (!weaponFile[args[1]].recipe) return message.channel.send(`${args[1]} does not have a recipe.`);
-                itemDefs = weaponFile[args[1]]
-                break;
-            case 'armor':
-                if (!armorFile[args[1]]) return message.channel.send(`${args[1]} is not a valid armor name.`);
-                if (armorFile[args[1]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this armor, therefore, you have insufficient permissions to assign a recipe to it.")
-                if (!armorFile[args[1]].recipe) return message.channel.send(`${args[1]} does not have a recipe.`);
-                itemDefs = armorFile[args[1]]
-                break;
+        let itemFiles = {
+            item: itemFile,
+            weapon: weaponFile,
+            armor: armorFile
         }
+
+        let itemDefs = null;
+        if (!itemFiles[args[0].toLowerCase()][args[1]]) return message.channel.send(`${args[1]} is not a valid ${args[0]} name.`);
+        if (itemFiles[args[0].toLowerCase()][args[1]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this item, therefore, you have insufficient permissions to remove a recipe from it.")
+        if (!itemFiles[args[0].toLowerCase()][args[1]].recipe) return message.channel.send(`${args[1]} does not have a recipe.`);
+        itemDefs = itemFiles[args[0].toLowerCase()][args[1]]
 
         delete itemDefs.recipe
 
-        switch (args[0].toLowerCase()) {
-            case 'item':
-                fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
-                break;
-            case 'weapon':
-                fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile, null, 4));
-                break;
-            case 'armor':
-                fs.writeFileSync(`${dataPath}/json/${message.guild.id}/armor.json`, JSON.stringify(armorFile, null, 4));
-                break;
-        }
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${args[0].toLowerCase()}s.json`, JSON.stringify(itemFiles[args[0]], null, 4));
 
         message.channel.send(`${itemDefs.name} has had its crafting recipe removed.`)
     }
