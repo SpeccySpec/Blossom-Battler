@@ -30,8 +30,12 @@ statusList = {
 		inflictStatus(char, targ, skill, status) {
 			if (hasStatusAffinity(char, status, 'block')) return `__${targ.name}__ blocked it!\n${selectQuote(char, 'badatk')}\n${selectQuote(targ, 'block')}`;
 
-			let chance = (skill.statuschance ?? 5) + ((char.stats.chr-targ.stats.chr)/2);
-			if (isPhysicalStatus(status)) chance = (skill.statusChance ?? skill.statuschance) + ((char.stats.luk-targ.stats.luk)/2);
+			let chance = 100
+			
+			if (skill.statuschance < 100) {
+				chance = (skill.statuschance ?? 5) + ((char.stats.chr-targ.stats.chr)/2);
+				if (isPhysicalStatus(status)) chance = (skill.statusChance ?? skill.statuschance) + ((char.stats.luk-targ.stats.luk)/2);
+			}
 			let randChance = randNum(1, 100)
 
 			if (randChance <= chance) {
