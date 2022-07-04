@@ -786,6 +786,7 @@ let trustQuotes = [
 ];
 
 useSkill = (char, btl, act, forceskill, ally) => {
+	let settings = setUpSettings(btl.guild.id);
 	let skill = objClone(forceskill) ?? objClone(skillFile[act.index]);
 
 	// Hardcode some metronome and copyskill bs
@@ -891,7 +892,10 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	// (easy access)
 	let party = btl.teams[char.team];
 	if (skillCost > 0 && !skill.forcefree) {
-		if (skill.cost && party.leaderskill && party.leaderskill.type === 'discount') {
+		if (settings?.mechanics?.leaderskills && skill?.cost && party?.leaderskill && party.leaderskill.type === 'discount') {
+			if (party.leaderskill.var1.toLowerCase() == 'all' || skill.atktype == party.leaderskill.var1.toLowerCase() || (skill.type == party.leaderskill.var1.toLowerCase() || skill.type.includes(party.leaderskill.var1.toLowerCase()))) {
+				skillCost -= Math.floor(skillCost * (party.leaderskill.var2 / 100));
+			}
 		}
 	}
 
