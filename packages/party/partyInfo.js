@@ -77,7 +77,7 @@ partyDesc = (party, message) => {
 
 	// Items
 	let items = '';
-	for (const i in party.items) items += `${itemTypeEmoji[itemFile[i].type]} ${itemRarityEmoji[itemFile[i].rarity]}${i}: ${party.items[i]}\n`;
+	for (const i in party.items) items += `${itemTypeEmoji[itemFile[i]?.type] ?? ''} ${itemRarityEmoji[itemFile[i]?.rarity] ?? ''}${i}: ${party.items[i]}\n`;
 
 	if (items != '') DiscordEmbed.fields.push({ name: 'Items', value: items, inline: true });
 
