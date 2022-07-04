@@ -1,58 +1,68 @@
 healList = {
-	default: new Extra({
-		name: "Default",
-		desc: "The default heal type. Restores HP by <HP>. _Negative values for <HP> will damage the target!_",
+	healstat: new Extra({
+		name: "Heal Stat",
+		desc: "The default heal type. Restores <Meter> by <Heal Amount>. _Negative values for <Heal Amount> will damage the target!_",
 		args: [
 			{
-				name: "HP",
+				name: "Heal Amount",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Meter",
 				type: "Num",
 				forced: true
 			}
 		],
 		applyfunc(message, skill, args) {
 			if (args[0] == 0) args[0] = 60;
-			
-			makeHeal(skill, "default", [args[0]]);
+			if (!['hp', 'mp', 'hppercent', 'mppercent', 'lb'].includes(args[1].toLowerCase())) return void message.channel.send(`${args[1]} is an invalid meter to heal! Enter either HP, MP, HPPercent, MPPercent or LB.`);
+
+			makeHeal(skill, "default", [args[0], args[1].toLowerCase()]);
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
 			if (!vars[0] || vars[0] == null || vars[0] == 0) return '';
 
-			targ.hp = Math.min(targ.maxhp, targ.hp+vars[0]);
-
 			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
 				settings = setUpSettings(btl.guild.id);
 				changeTrust(targ, char, Math.round(20*(settings.rates.trustrate ?? 1)), true, btl.channel);
 			}
-			return `__${targ.name}__'s HP was restored by **${vars[0]}**!`;
-		}
-	}),
 
-	healmp: new Extra({
-		name: "Heal MP",
-		desc: "Restores MP by <MP>. _Negative values for <MP> will drain the target!_",
-		args: [
-			{
-				name: "MP",
-				type: "Num",
-				forced: true
+			switch(vars[1]) {
+				case 'hp':
+				case 'mp':
+					targ[vars[1]] = Math.min(targ[`max${vars[1]}`], targ[vars[1]]+vars[0]);
+					return `__${targ.name}__'s ${vars[1].toUpperCase()} was restored by **${vars[0]}**!`;
+
+				case 'hppercent':
+					if (vars[0] >= 100) {
+						targ.hp = targ.maxhp;
+						return `__${targ.name}__'s HP was _fully restored_!`;
+					} else {
+						let amount = Math.round((targ.hp/targ.maxhp)*vars[0]);
+
+						targ.hp = Math.min(targ.maxhp, targ.hp+amount);
+						return `__${targ.name}__'s HP was restored by **${amount}**!`;
+					}
+
+				case 'mppercent':
+					if (vars[0] >= 100) {
+						targ.mp = targ.maxmp;
+						return `__${targ.name}__'s MP was _fully restored_!`;
+					} else {
+						let amountm = Math.round((targ.mp/targ.maxmp)*vars[0]);
+
+						targ.mp = Math.min(targ.maxmp, targ.mp+amountm);
+						return `__${targ.name}__'s MP was restored by **${amountm}**!`;
+					}
+
+				case 'lb':
+					targ.lbp += vars[0];
+					return `__${targ.name}__'s LB% was boosted by **${vars[0]}%**!`;
 			}
-		],
-		applyfunc(message, skill, args) {
-			if (args[0] == 0) args[0] = 30;
-			makeHeal(skill, "healmp", [args[0]]);
-			return true;
-		},
-		onuse(char, targ, skill, btl, vars) {
-			if (!vars[0] || vars[0] == null || vars[0] == 0) return '';
 
-			targ.mp = Math.min(targ.maxmp, targ.mp+vars[0]);
-
-			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
-				settings = setUpSettings(btl.guild.id);
-				changeTrust(targ, char, Math.round(20*(settings.rates.trustrate ?? 1)), true, btl.channel);
-			}
-			return `__${targ.name}__'s MP was restored by **${vars[0]}**!`;
+			return '';
 		}
 	}),
 
@@ -185,26 +195,6 @@ healList = {
 			}
 
 			return `The party's HP & MP was fully restored, but at the cost of __${char.name}__'s sacrifice!`;
-		}
-	}),
-
-	fullheal: new Extra({
-		name: "Full Heal",
-		desc: "Fully restores HP of the target.",
-		args: [],
-		applyfunc(message, skill, args) {
-			makeHeal(skill, "fullheal", [true]);
-			if (hasHealType(skill, "default")) delete skill.heal["default"];
-			return true;
-		},
-		onuse(char, targ, skill, btl, vars) {
-			targ.hp = targ.maxhp;
-
-			if (targ.team == char.team) {
-				settings = setUpSettings(btl.guild.id);
-				changeTrust(targ, char, Math.round(23*(settings.rates.trustrate ?? 1)), true, btl.channel);
-			}
-			return `__${targ.name}__'s HP was fully restored!`;
 		}
 	}),
 
