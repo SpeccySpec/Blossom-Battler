@@ -941,8 +941,6 @@ useSkill = (char, btl, act, forceskill, ally) => {
 		}
 	}
 
-	console.log(skill.pow);
-
 	// Final Text
 	let quotetype = 'phys';
 	if (skill.atktype === 'magic') quotetype = 'mag';
