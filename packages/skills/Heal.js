@@ -334,16 +334,13 @@ healList = {
 					break;
 				}
 			}
-			if (!hasHeal) makeHeal(skill, "default", [60]);
+			if (!hasHeal) makeHeal(skill, "default", [60, 'hp']);
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
-			let s = objClone(skill)
-			delete s.heal.wish;
-
 			addCusVal(targ, "wishheal", {
 				turns: vars[0],
-				skill: s
+				vars: vars
 			})
 
 			return `__${char.name}__ will experience a healing wish in **${vars[0]}** turns.`;

@@ -1615,4 +1615,18 @@ customVariables = {
 			}
 		}
 	},
+
+	wishheal: {
+		onturn(btl, char, vars) {
+			if (char.custom?.wishheal) {
+				char.custom.wishheal.turns--;
+				if (char.custom.wishheal.turns <= 0) {
+					let txt = healList.healstat.onuse(char, char, {}, btl, vars.vars);
+					killVar(char, 'wishheal');
+
+					return txt;
+				}
+			}
+		}
+	},
 }
