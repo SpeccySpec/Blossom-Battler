@@ -319,7 +319,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				status = skill.status;
 			}
 
-			result.txt += statusList.status.inflictStatus(char, targ, skill, status);
+			result.txt += statusList.status.inflictStatus(char, targ, skill, status, btl);
 		}
 	// Attacking Skills
 	} else {
@@ -780,7 +780,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 						status = skill.status;
 					}
 
-					result.txt += statusList.status.inflictStatus(char, targ, skill, status);
+					result.txt += statusList.status.inflictStatus(char, targ, skill, status, btl);
 				}
 			}
 		}
