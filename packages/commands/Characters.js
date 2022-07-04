@@ -1395,6 +1395,12 @@ commands.autolearn = new Command({
 	}
 })
 
+let disallowedLeaderSkillElelemts = {
+	boost: ['passive', 'status'],
+	discount: ['passive'],
+	crit: ['status', 'heal', 'passive'],
+	endure: ['status', 'heal', 'passive']
+}
 // Leader Skills
 commands.leaderskill = new Command({
 	desc: "A Leader Skill is a skill characters activate for the entire team when they are at the front of a party. This can have various effects on the characters reccomended to use, the skills reccomended to use, the playstyle of your party and more!",
@@ -1451,10 +1457,11 @@ commands.leaderskill = new Command({
 			case 'discount':
 			case 'crit':
 			case 'endure':
-				if (args[3].toLowerCase() === "magic" || args[3].toLowerCase() === "physical")
+				if (args[3].toLowerCase() === "magic" || args[3].toLowerCase() === "physical" || args[3].toLowerCase() === "ranged" || args[3].toLowerCase() === "all") {
 					if (args[4] > 10) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for a ${args[3]} affecting leader skill is 10%.`);
-				else {
+				} else {
 					if (!utilityFuncs.inArray(args[3].toLowerCase(), Elements)) return message.channel.send({content: `${args[3]} is an invalid element! Try one of these.`, embeds: [elementList()]});
+					if (disallowedLeaderSkillElelemts[args[2].toLowerCase()].includes(args[3].toLowerCase())) return message.channel.send(`You cannot use ${args[3]} for this leader skill!`);
 					if (args[4] > 30) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for this leader skill is 30%.`);
 				}
 
@@ -1486,6 +1493,7 @@ commands.leaderskill = new Command({
 				var1 = args[3].toLowerCase();
 				var2 = args[4];
 				break;
+
 			default:
 				return message.channel.send(`${args[2]} is an invalid leader skill type! Use either: Boost, Discount, Crit, Endure, Status, Money, Items, Pacify, Buff.`);	
 		}
