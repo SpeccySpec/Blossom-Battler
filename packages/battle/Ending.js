@@ -140,6 +140,11 @@ winBattle = (btl, i) => {
 		if (char.charms.includes("FragileGreed") || char.charms.includes("UnbreakableGreed")) moneyamount = Math.round(moneyamount*1.4);
 	}
 
+	// Money leader skills
+	if (settings?.mechanics?.leaderskills) {
+		if (btl.teams[i]?.leaderskill?.type.toLowerCase() == 'money') moneyamount += Math.floor(moneyamount/100*parseInt(btl.teams[i].leaderskill.var2));
+	}
+
 	// Award Money!
 	embedtxt += `\nThe team got ${moneyamount} ${settings.currency_emoji}${settings.currency}s from the enemies!\n`;
 	parties[btl.teams[i].name].currency += moneyamount;
