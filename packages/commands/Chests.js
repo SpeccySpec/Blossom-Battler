@@ -182,65 +182,64 @@ commands.registerchest = new Command({
         let description = args[5]
 
         args.splice(0, 6)
-        const validTypes = ['item', 'weapon', 'armor', 'loot', 'money']
-        let itemsDef = []
 
-        let type
+        let itemFiles = {
+            item: itemFile,
+            weapon: weaponFile,
+            armor: armorFile,
+            loot: lootFile
+        }
 
-        if (args.length % 3 != 0) return message.channel.send(`You didn't write the correct amount of fields.`)
+        let itemCollector = []
+        let itemErrors = []
+        let itemCollectorIndex = 0
 
-        for (i in args) {
-            if (i % 3 == 0) {
-                if (!validTypes.includes(args[i])) return message.channel.send(`${args[i]} is not a valid item type. Valid types are: \n- ${validTypes.join('\n- ')}`)
-                type = args[i].toLowerCase();
+        while (args.length > 0) {
+            itemCollector.push([args[0].toLowerCase(), args[1]])
+            args.splice(0, 2)
+            if (!isNaN(args[0]) && itemCollector[itemCollectorIndex][0] != 'money') {
+                itemCollector[itemCollectorIndex].push(parseInt(args[0]))
+                args.splice(0, 1)
             }
-            if (type != 'loot' && type != 'money') {
-                if (i % 3 == 1) {
-                    itemsDef[i-1] = args[i-1].toLowerCase()
+            itemCollectorIndex++
+        }
 
-                    if (args[i-1].toLowerCase() == "item") {
-                        if (!itemFile[args[i]]) return message.channel.send(`${args[i]} is not a valid item.`)
-                    }
-                    else if (args[i-1].toLowerCase() == "weapon") {
-                        if (!weaponFile[args[i]]) return message.channel.send(`${args[i]} is not a valid weapon.`)
-                    }
-                    else if (args[i-1].toLowerCase() == "armor") {
-                        if (!armorFile[args[i]]) return message.channel.send(`${args[i]} is not a valid armor.`)
-                    }
-                    itemsDef[i] = args[i]
-                }
-                if (i % 3 == 2) {
-                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
-                    itemsDef[i] = Math.max(1, parseInt(args[i]))
-                }
-            } else if (type == 'loot') {
-                if (i % 3 == 1)
-                    if (!lootFile[args[i]]) return message.channel.send(`${args[i]} is not a valid loot table.`)
-                if (i % 3 == 2) {
-                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
-                    args[i] = Math.max(1, parseInt(args[i]))
-                    if (args[i] > 10) return message.channel.send(`${args[i]} is too high.`)
-
-                    for (let j = 0; j < args[i]; j++) {
-                        if (lootFile[args[i-1]].items) {
-                            for (let k in lootFile[args[i-1]].items) {
-                                itemsDef.push(lootFile[args[i-1]].items[k].type)
-                                itemsDef.push(lootFile[args[i-1]].items[k].id)
-                                itemsDef.push(lootFile[args[i-1]].items[k].amount)
+        if (itemCollector.length > 0) {
+            for (i in itemCollector) {
+                switch (itemCollector[i][0]) {
+                    case 'item':
+                    case 'weapon':
+                    case 'armor':
+                    case 'loot':
+                        if (!itemCollector[i][1] || !itemFiles[itemCollector[i][0]][itemCollector[i][1]]) {
+                            itemErrors.push(`${itemCollector[i][1] ? `${itemCollector[i][1]} is not a valid ${itemCollector[i][0]} name.` : `You did not specify a name for the ${itemCollector[i][0]}.`}`);
+                            itemCollector[i] = '-'
+                        }
+                        if (itemCollector[i][2]) {
+                            if (!isNaN(itemCollector[i][2])) {
+                                itemCollector[i][2] = Math.max(1, parseInt(itemCollector[i][2]))
+                            } else {
+                                itemCollector[i][2] = 1
                             }
                         }
-                    }
-                }
-            } else if (type == 'money') {
-                if (i % 3 == 1) {
-                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
-                    itemsDef[i-1] = args[i-1].toLowerCase()
-                    itemsDef[i] = parseInt(args[i])
-                }
-                if (i % 3 == 2) {
-                    itemsDef[i] = '-'
+                        break;
+                    case 'money':
+                        if (!isNaN(itemCollector[i][1])) {
+                            itemCollector[i][1] = Math.max(1, parseInt(itemCollector[i][1]))
+                        } else {
+                            itemErrors.push(`You did not specify a valid amount of money.`)
+                            itemCollector[i] = '-'
+                        }
+                        break;
+                    default:
+                        itemErrors.push(`${itemCollector[i][0]} is not a valid type.`)
+                        itemCollector[i] = '-'
+                        break;
                 }
             }
+            itemCollector = itemCollector.filter(item => item != '-')
+
+            if (itemCollector.length == 0) return message.channel.send(`You did not specify anything to give to team ${team.name}. What went wrong:\n- ${itemErrors.join('\n- ')}`)
         }
     
         if (!chestFile[channel]) chestFile[channel] = {}
@@ -257,18 +256,32 @@ commands.registerchest = new Command({
 
         if (description && description.toLowerCase() != 'none') chestFile[channel][name].desc = description
 
-        if (itemsDef) {
-            for (i in itemsDef) {
-                if (i % 3 == 2) {
-                    if (itemsDef[i-2] != 'money') {
-                        if (!chestFile[channel][name].items[itemsDef[i-2]]) chestFile[channel][name].items[itemsDef[i-2]] = {}
-                        
-                        if (!chestFile[channel][name].items[itemsDef[i-2]][itemsDef[i-1]]) chestFile[channel][name].items[itemsDef[i-2]][itemsDef[i-1]] = 0
-                        chestFile[channel][name].items[itemsDef[i-2]][itemsDef[i-1]] += itemsDef[i]
-                    } else {
+        if (itemCollector.length > 0) {
+            for (i in itemCollector) {
+                switch (itemCollector[i][0]) {
+                    case 'item':
+                    case 'weapon':
+                    case 'armor':
+                        if (!chestFile[channel][name].items[itemCollector[i][0]]) chestFile[channel][name].items[itemCollector[i][0]] = {}
+                        if (!chestFile[channel][name].items[itemCollector[i][0]][itemCollector[i][1]]) chestFile[channel][name].items[itemCollector[i][0][itemCollector[i][1]]] = 0
+                        chestFile[channel][name].items[itemCollector[i][0]][itemCollector[i][1]] += (itemCollector[i][2] ?? 1)
+                        break;
+                    case 'loot':
+                        let loot = lootFile[itemCollector[i][1]].items
+                        for (j in loot) {
+                            if (!team.items) team.items = {}
+                            if (!team.items[loot[j].id]) team.items[loot[j].id] = 0
+                            team.items[loot[j].id] += loot[j].amount
+
+                            if (!chestFile[channel][name].items[loot[j].type]) chestFile[channel][name].items[loot[j].type] = {}
+                            if (!chestFile[channel][name].items[loot[j].type][loot[j].id]) chestFile[channel][name].items[loot[j].type[loot[j].id]] = 0
+                            chestFile[channel][name].items[loot[j].type][loot[j].id] += loot[j].amount
+                        }
+                        break;
+                    case 'money':
                         if (!chestFile[channel][name].items['money']) chestFile[channel][name].items['money'] = 0
-                        chestFile[channel][name].items['money'] += itemsDef[i-1]
-                    }
+                        chestFile[channel][name].items['money'] += itemCollector[i][1]
+                        break;
                 }
             }
         }
@@ -743,112 +756,108 @@ commands.chestitems = new Command({
 
         args.splice(0, 3)
 
-        let itemType = args[0].toLowerCase();
-        const validTypes = ['item', 'weapon', 'armor', 'money', 'all']
-        if (!validTypes.includes(itemType)) return message.channel.send(`${itemType} is not a valid item type. Valid item types are: \n- ${validTypes.join('\n- ')}`)
-        let itemName
-        let itemAmount
-
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
-        
-        if (itemType != 'all') {
-            itemType = []
-            itemName = []
-            itemAmount = []
 
-            if (args.length % 3 != 0) return message.channel.send(`You didn't write the correct amount of fields.`)
-
-            for (let i in args) {
-                if (i % 3 == 2) { 
-                    if (args[i-2].toLowerCase() != "item" && args[i-2].toLowerCase() != "weapon" && args[i-2].toLowerCase() != "armor" && args[i-2].toLowerCase() != "money") return message.channel.send(`${args[i-2]} is not a valid type.`)
-                    args[i-2] = args[i-2].toLowerCase();
-                    itemType.push(args[i-2])
-
-                    if (args[i-2].toLowerCase() != "money") {
-                        if (args[i-1].toLowerCase() != 'all') {
-                            if (args[i-2].toLowerCase() == "item") {
-                                if (!itemFile[args[i-1]]) return message.channel.send(`${args[i-1]} is not a valid item.`)
-                                itemName.push(args[i-1])
-                            }
-                            else if (args[i-2].toLowerCase() == "weapon") {
-                                if (!weaponFile[args[i-1]]) return message.channel.send(`${args[i-1]} is not a valid weapon.`)
-                                itemName.push(args[i-1])
-                            }
-                            else if (args[i-2].toLowerCase() == "armor") {
-                                if (!armorFile[args[i-1]]) return message.channel.send(`${args[i-1]} is not a valid armor.`)
-                                itemName.push(args[i-1])
-                            }
-                        } else itemName.push(args[i-1].toLowerCase())
-
-                        if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
-                        args[i] = Math.max(1, parseInt(args[i]))
-                        itemAmount.push(args[i])
-                    } else {
-                        if (isNaN(args[i-1])) return message.channel.send(`${args[i-1]} is not a valid number.`)
-                        args[i] = Math.max(0, parseInt(args[i-1]))
-                        itemAmount.push(parseInt(args[i-1]))
-                    }
-                }
-            }
+        let itemFiles = {
+            item: itemFile,
+            weapon: weaponFile,
+            armor: armorFile
         }
 
-        if (addRemove == 'remove') {
-            if (itemType == 'all') {
-                for (let item in chest.items) {
-                    const categories = ['weapon', 'armor', 'item', 'money']
-                    for (i in categories) {
-                        if (chest.items[categories[i]]) {
-                            delete chest.items[categories[i]]
-                        }
-                    }
+        let itemCollector = []
+        let itemErrors = []
+        let itemCollectorIndex = 0
+
+        while (args.length > 0) {
+            if (args[0].toLowerCase() != 'all') {
+                itemCollector.push([args[0].toLowerCase(), args[1]])
+                args.splice(0, 2)
+                if (!isNaN(args[0])) {
+                    itemCollector[itemCollectorIndex].push(parseInt(args[0]))
+                    args.splice(0, 1)
                 }
             } else {
-                for (let i in itemType) {
-                    if (itemType[i] != 'money') {
-                        if (!chest.items[itemType[i]]) return message.channel.send(`There are no ${itemType[i]} items in ${args[1]}.`);
-                        if (itemName[i] == 'all') {
-                            delete chest.items[itemType[i]]
+                itemCollector.push(['all'])
+                args.splice(0, 1)
+            }
+            itemCollectorIndex++
+        }
+
+        for (i in itemCollector) {
+            switch (itemCollector[i][0]) {
+                case 'item':
+                case 'weapon':
+                case 'armor':
+                    if (!itemCollector[i][1] || (((addremove == 'remove' && [itemCollector[i][1]].toLowerCase() != 'all') || addremove == 'add') && !itemFiles[itemCollector[i][0]][itemCollector[i][1]])) {
+                        itemErrors.push(`${itemCollector[i][1] ? `${itemCollector[i][1]} is not a valid ${itemCollector[i][0]} name.` : `You did not specify a name for the ${itemCollector[i][0]}.`}`);
+                        itemCollector[i] = '-'
+                    }
+                    if (itemCollector[i][2]) {
+                        if (!isNaN(itemCollector[i][2])) {
+                            itemCollector[i][2] = Math.max(1, parseInt(itemCollector[i][2]))
                         } else {
-                            if (!chest.items[itemType[i]][itemName[i]]) continue;
-                            
-                            itemAmount[i] = Math.min(chest.items[itemType[i]][itemName[i]], parseInt(itemAmount[i]));
-                            chest.items[itemType[i]][itemName[i]] -= itemAmount[i];
-
-                            if (chest.items[itemType[i]][itemName[i]] <= 0) {
-                                delete chest.items[itemType[i]][itemName[i]]
-                            }
-                        }
-                    } else {
-                        if (!chest.items['money']) return message.channel.send(`There are no ${getCurrency(message.guild.id)}s in ${args[1]}.`);
-                        itemAmount[i] = Math.min(chest.items['money'], parseInt(itemAmount[i]));
-                        chest.items['money'] -= itemAmount[i];
-
-                        if (chest.money <= 0) {
-                            delete chest['money']
+                            itemCollector[i][2] = 1
                         }
                     }
-                }
+                    break;
+                case 'money':
+                    if (!isNaN(itemCollector[i][1])) {
+                        itemCollector[i][1] = Math.max(1, parseInt(itemCollector[i][1]))
+                    } else {
+                        itemErrors.push(`You did not specify a valid amount of money.`)
+                        itemCollector[i] = '-'
+                    }
+                    break;
+                case 'all':
+                    if (addRemove == 'add') {
+                        message.channel.send(`You cannot add all items to a chest.`)
+                        itemCollector[i] = '-'
+                    }
+                    break;
+                default:
+                    itemErrors.push(`${itemCollector[i][0]} is not a valid type.`)
+                    itemCollector[i] = '-'
+                    break;
             }
-        } else {
-            if (itemType == 'all') return message.channel.send(`You cannot add all items to a chest.`);
-            if (itemName.includes('all')) return message.channel.send(`You cannot add all items to a chest.`);
+        }
+        itemCollector = itemCollector.filter(item => item != '-')
 
-            for (let i in itemType) {
-                if (itemType[i] != 'money') {
-                    thingFile = setUpFile(`${dataPath}/json/${message.guild.id}/${itemType[i]}s.json`)
-
-                    if (!thingFile[itemName[i]]) return message.channel.send(`${itemName[i]} is not a valid ${itemType[i]}.`);
-
-                    if (!chest.items[itemType[i]]) chest.items[itemType[i]] = {};
-                    if (!chest.items[itemType[i]][itemName[i]]) chest.items[itemType[i]][itemName[i]] = 0;
-
-                    chest.items[itemType[i]][itemName[i]] += itemAmount[i];
-                } else {
-                    if (!chest.items[itemType[i]]) chest.items[itemType[i]] = 0;
-                    chest.items[itemType[i]] += itemAmount[i];
-                }
+        if (itemCollector.length == 0) return message.channel.send(`You did not specify anything to give to team ${team.name}. What went wrong:\n- ${itemErrors.join('\n- ')}`)
+        
+        for (i in itemCollector) {
+            switch (itemCollector[i][0]) {
+                case 'money':
+                    if (addRemove == 'add') {
+                        if (!chest.items) chest.items = {}
+                        if (!chest.items.money) chest.items.money = 0
+                        chest.items.money += itemCollector[i][1]
+                    } else {
+                        chest.items.money -= itemCollector[i][1]
+                        if (chest.items.money < 0) delete chest.items.money
+                    }
+                    break;
+                case 'item':
+                case 'weapon':
+                case 'armor':
+                    if (addRemove == 'add') {
+                        if (!chest.items) chest.items = {}
+                        if (!chest.items[itemCollector[i][0]]) chest.items[itemCollector[i][0]] = {}
+                        if (!chest.items[itemCollector[i][0]][itemCollector[i][1]]) chest.items[itemCollector[i][0]][itemCollector[i][1]] = 0
+                        chest.items[itemCollector[i][0]][itemCollector[i][1]] += itemCollector[i][2]
+                    } else {
+                        if (itemCollector[i][1] == 'all') {
+                            delete chest.items[itemCollector[i][0]]
+                        } else {
+                            chest.items[itemCollector[i][0]][itemCollector[i][1]] -= itemCollector[i][2]
+                            if (chest.items[itemCollector[i][0]][itemCollector[i][1]] <= 0) delete chest.items[itemCollector[i][0]][itemCollector[i][1]]
+                        }
+                    }
+                    break;
+                case 'all':
+                    chest.items = {}
+                    break;
             }
         }
 
