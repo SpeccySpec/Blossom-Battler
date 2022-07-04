@@ -4236,6 +4236,7 @@ commands.fullheal = new Command({
 
 				charFile[args[1]].hp = charFile[args[1]].maxhp;
 				charFile[args[1]].mp = charFile[args[1]].maxmp;
+				break;
 
 			case 'party':
 			case 'team':
@@ -4249,6 +4250,7 @@ commands.fullheal = new Command({
 					charFile[i].hp = charFile[i].maxhp;
 					charFile[i].mp = charFile[i].maxmp;
 				}
+				break;
 
 			case 'all':
 			case 'everyone':
@@ -4256,8 +4258,13 @@ commands.fullheal = new Command({
 					charFile[i].hp = charFile[i].maxhp;
 					charFile[i].mp = charFile[i].maxmp;
 				}
+				break;
+
+			default:
+				return message.channel.send('Invalid type! Please enter a valid type.');
 		}
 
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		message.react('👍');
 	}
 })
