@@ -18,8 +18,8 @@ getTurnOrder = (btl) => {
 	if (btl?.terrain?.type === 'psychic') {
 		turnorder.sort(function(a, b) {
 			// Status Effects
-			if (a.status && statusEffectFuncs[a.status] && statusEffectFuncs[a.status].skillmod) statusEffectFuncs[char.status].skillmod(a, a.stats, btl);
-			if (b.status && statusEffectFuncs[b.status] && statusEffectFuncs[b.status].skillmod) statusEffectFuncs[char.status].skillmod(b, b.stats, btl);
+			if (a.status && statusEffectFuncs[a.status] && statusEffectFuncs[a.status].skillmod) statusEffectFuncs[a.status].skillmod(a, a.stats, btl);
+			if (b.status && statusEffectFuncs[b.status] && statusEffectFuncs[b.status].skillmod) statusEffectFuncs[b.status].skillmod(b, b.stats, btl);
 
 			// Buffs
 			let agl1 = statWithBuff(a.stats.agl, a.buffs.agl);
@@ -30,8 +30,8 @@ getTurnOrder = (btl) => {
 	} else {
 		turnorder.sort(function(a, b) {
 			// Status Effects
-			if (a.status && statusEffectFuncs[a.status] && statusEffectFuncs[a.status].skillmod) statusEffectFuncs[char.status].skillmod(a, a.stats, btl);
-			if (b.status && statusEffectFuncs[b.status] && statusEffectFuncs[b.status].skillmod) statusEffectFuncs[char.status].skillmod(b, b.stats, btl);
+			if (a.status && statusEffectFuncs[a.status] && statusEffectFuncs[a.status].skillmod) statusEffectFuncs[a.status].skillmod(a, a.stats, btl);
+			if (b.status && statusEffectFuncs[b.status] && statusEffectFuncs[b.status].skillmod) statusEffectFuncs[b.status].skillmod(b, b.stats, btl);
 
 			// Buffs
 			let agl1 = statWithBuff(a.stats.agl, a.buffs.agl);
