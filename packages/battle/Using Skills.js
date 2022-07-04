@@ -681,10 +681,11 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 					// Endure Leader Skills
 					let party = btl.teams[targ.team];
-					if (settings?.mechanics?.leaderskills && party?.leaderskill && party.leaderskill.type === 'endure' && !targ?.custom?.enduredByLeaderSkill) {
+					if (settings?.mechanics?.leaderskills && party?.leaderskill && party.leaderskill.type === 'endure' && !party.leaderskill.disabled) {
 						if (party.leaderskill.var1.toLowerCase() == 'all' || skill?.atktype == party.leaderskill.var1.toLowerCase() || (skill.type == party.leaderskill.var1.toLowerCase() || skill.type.includes(party.leaderskill.var1.toLowerCase()))) {
 							targ.hp = Math.round(targ.maxhp * party.leaderskill.var2/100)
-							addCusVal(targ, "enduredByLeaderSkill", true);
+							party.leaderskill.disabled = true;
+
 							result.txt += `\n...But they endured the attack!_`;
 						}
 					}

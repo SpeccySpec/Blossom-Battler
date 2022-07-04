@@ -141,7 +141,7 @@ let leaderSkillTxt = {
 	money: 'Increased money gain after battle.',
 	items: 'Increased items gain after battle.',
 	pacify: 'Pacify Enemies by the specified percentage at the start of battle.',
-	endure: 'Endure one fatal attack.',
+	endure: 'One character in your team can endure one fatal attack.',
 }
 
 let usesPercent = {

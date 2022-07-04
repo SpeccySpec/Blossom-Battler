@@ -4680,7 +4680,7 @@
         "name": "Patella",
         "owner": "441198920668938260",
         "level": 71,
-        "hp": 285,
+        "hp": 546,
         "mp": 324,
         "maxhp": 546,
         "maxmp": 324,
@@ -4772,6 +4772,11 @@
                 "value": 30,
                 "nextLevel": 280,
                 "level": 10
+            },
+            "Wish": {
+                "amount": 20,
+                "maximum": 100,
+                "level": 1
             }
         },
         "critquote": [
@@ -13525,7 +13530,13 @@
             "\"wish": "Wish is one of the only Wish Hyphens that ever existed, granting wishes to locals around in need. Able to fly with detached wings at relatively fast speed for them. Soft, energetic, very much eccentric, with a beautiful voice that is not to be left rotting. He'd be seen singing quite a lot through their life. But, he can be annoying to people. Usually when that happens, it is because they can't handle Wish's angelic voice.\n\n```Wish Hyphens belong to the same mythology as The Ascended's.```\n\n<Wish Specialty> Evasion and Prosperity\n<Wish Quality> Average\n<Wish Amount Allowed Per Day> 7",
             "custom": {}
         },
-        "trust": {},
+        "trust": {
+            "Patella": {
+                "amount": 20,
+                "maximum": 100,
+                "level": 1
+            }
+        },
         "mainElement": "bless",
         "transformations": {
             "GrandWish": {
