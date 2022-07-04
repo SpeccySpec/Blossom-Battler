@@ -134,9 +134,10 @@ briefDescription = (char) => {
 let leaderSkillTxt = {
 	boost: 'Boosts the specified type.',
 	discount: 'Takes away the amount of cost specified to the specified type.',
-	buff: 'Start the battle with the specified stat buff',
-	status: 'Increased chance to land the specified status effect',
-	crit: 'Increased crit chance to the specified element',
+	buff: 'Start the battle with the specified stat buff.',
+	debuff: 'Start the battle with the specified stat debuff to the enemy team.',
+	status: 'Increased chance to land the specified status effect.',
+	crit: 'Increased crit chance to the specified element.',
 	money: 'Increased money gain after battle.',
 	items: 'Increased items gain after battle.',
 	pacify: 'Pacify Enemies by the specified percentage at the start of battle.',
@@ -145,6 +146,7 @@ let leaderSkillTxt = {
 
 let usesPercent = {
 	buff: false,
+	debuff: false,
 	
 	boost: true,
 	crit: true,

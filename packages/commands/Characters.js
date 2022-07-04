@@ -1487,6 +1487,7 @@ commands.leaderskill = new Command({
 				break;
 
 			case 'buff':
+			case 'debuff':
 				if (!utilityFuncs.inArray(args[3].toLowerCase(), stats)) return message.channel.send({content: `${args[3]} is an invalid stat!`});
 				if (args[4] > 3) return message.channel.send(`${args[4]} is too powerful for a leader skill like this! The maximum for this leader skill is 3.`);
 				if (args[4] < 1) return message.channel.send(`${args[4]} is too low a boost :/`);
@@ -1495,7 +1496,7 @@ commands.leaderskill = new Command({
 				break;
 
 			default:
-				return message.channel.send(`${args[2]} is an invalid leader skill type! Use either: Boost, Discount, Crit, Endure, Status, Money, Items, Pacify, Buff.`);	
+				return message.channel.send(`${args[2]} is an invalid leader skill type! Use either: Boost, Discount, Crit, Endure, Status, Money, Items, Pacify, Buff, Debuff.`);	
 		}
 
 		if (var1)

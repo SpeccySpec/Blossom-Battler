@@ -48,14 +48,30 @@ getTurnOrder = (btl) => {
 	return order;
 }
 
-leaderSkillsAtBattleStart = (party) => {
-	if (!party.leaderskill)
-		return false;
+leaderSkillsAtBattleStart = (btl) => {
+	for (party of btl.teams) {
+		if (!party.leaderskill)
+			continue;
 
-	if (party.leaderskill.type.toLowerCase() == 'buff') {
-		for (const ally of party.members) buffStat(ally, party.leaderskill.var1.toLowerCase(), parseInt(party.leaderskill.var2));
-		return true;
+		if (party.leaderskill.type.toLowerCase() == 'buff') {
+			for (const ally of party.members) buffStat(ally, party.leaderskill.var1.toLowerCase(), parseInt(party.leaderskill.var2));
+		}
+
+		if (party.leaderskill.type.toLowerCase() == 'debuff') {
+			let oppositeParty = (party == btl.teams[0] ? btl.teams[1] : btl.teams[0]);
+			for (const enemy of oppositeParty.members) buffStat(enemy, party.leaderskill.var1.toLowerCase(), parseInt(party.leaderskill.var2)*-1);
+		}
+
+		if (party.leaderskill.type.toLowerCase() == 'pacify') {
+			let oppositePartyIndex = (party == btl.teams[0] ? 1 : 0);
+			for (const enemy of btl.teams[oppositePartyIndex].members) {
+				if (enemy?.negotiate?.length > 0) {
+					enemy.pacify = parseInt(party.leaderskill.var2);
+				}
+			}
+		}
 	}
+	return btl;
 }
 
 const btnType = {
@@ -854,7 +870,7 @@ sendCurTurnEmbed = (char, btl) => {
 						case 'pacify':
 							targ = btl.teams[btl.action.target[0]].members[i.customId];
 
-							if (targ.negotiate == [] || targ.negotiate.length <= 0) {
+							if (!targ.negotiate || targ?.negotiate == [] || targ?.negotiate?.length <= 0) {
 								DiscordEmbed.title = `${targ.name} seems adamant on attacking and will not listen to reason.`;
 								alreadyResponded = true;
 

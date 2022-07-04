@@ -571,7 +571,7 @@ commands.startbattle = new Command({
 			}
 		}
 
-		for (party of battle.teams) leaderSkillsAtBattleStart(party);
+		battle = leaderSkillsAtBattleStart(battle);
 
 		// turn order :)
 		battle.turnorder = getTurnOrder(battle);
@@ -791,7 +791,7 @@ commands.startpvp = new Command({
 			battle.teams[i-2].id = args[i];
 		}
 
-		for (party of battle.teams) leaderSkillsAtBattleStart(party);
+		battle = leaderSkillsAtBattleStart(battle);
 
 		// Now THIS is a battle!
 		battle.pvp = true
