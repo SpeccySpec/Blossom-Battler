@@ -2182,99 +2182,103 @@ commands.obtainitems = new Command({
         let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`);
         let lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`);
 
+        let itemFiles = {
+            item: itemFile,
+            weapon: weaponFile,
+            armor: armorFile,
+            loot: lootFile
+        }
+
         if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party!`);
+        let team = parties[args[0]];
 
         args.splice(0, 1)
-        const validTypes = ['item', 'weapon', 'armor', 'loot', 'money']
-        let itemsDef = []
+        let itemCollector = []
+        let itemErrors = []
+        let itemCollectorIndex = 0
 
-        let type
-
-        if (args.length % 3 != 0) return message.channel.send(`You didn't write the correct amount of fields.`)
-
-        for (i in args) {
-            if (i % 3 == 0) {
-                if (!validTypes.includes(args[i])) return message.channel.send(`${args[i]} is not a valid item type. Valid types are: \n- ${validTypes.join('\n- ')}`)
-                type = args[i].toLowerCase();
+        while (args.length > 0) {
+            itemCollector.push([args[0].toLowerCase(), args[1]])
+            args.splice(0, 2)
+            if (!isNaN(args[0]) && itemCollector[itemCollectorIndex][0] != 'money') {
+                itemCollector[itemCollectorIndex].push(parseInt(args[0]))
+                args.splice(0, 1)
             }
-            if (type != 'loot' && type != 'money') {
-                if (i % 3 == 1) {
-                    itemsDef[i-1] = args[i-1].toLowerCase()
+            itemCollectorIndex++
+        }
 
-                    if (args[i-1].toLowerCase() == "item") {
-                        if (!itemFile[args[i]]) return message.channel.send(`${args[i]} is not a valid item.`)
+        for (i in itemCollector) {
+            switch (itemCollector[i][0]) {
+                case 'item':
+                case 'weapon':
+                case 'armor':
+                case 'loot':
+                    if (!itemCollector[i][1] || !itemFiles[itemCollector[i][0]][itemCollector[i][1]]) {
+                        itemErrors.push(`${itemCollector[i][1] ? `${itemCollector[i][1]} is not a valid ${itemCollector[i][0]} name.` : `You did not specify a name for the ${itemCollector[i][0]}.`}`);
+                        itemCollector[i] = '-'
                     }
-                    else if (args[i-1].toLowerCase() == "weapon") {
-                        if (!weaponFile[args[i]]) return message.channel.send(`${args[i]} is not a valid weapon.`)
-                    }
-                    else if (args[i-1].toLowerCase() == "armor") {
-                        if (!armorFile[args[i]]) return message.channel.send(`${args[i]} is not a valid armor.`)
-                    }
-                    itemsDef[i] = args[i]
-                }
-                if (i % 3 == 2) {
-                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
-                    itemsDef[i] = Math.max(1, parseInt(args[i]))
-                }
-            } else if (type == 'loot') {
-                if (i % 3 == 1)
-                    if (!lootFile[args[i]]) return message.channel.send(`${args[i]} is not a valid loot table.`)
-                if (i % 3 == 2) {
-                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
-                    args[i] = Math.max(1, parseInt(args[i]))
-                    if (args[i] > 10) return message.channel.send(`${args[i]} is too high.`)
-
-                    for (let j = 0; j < args[i]; j++) {
-                        if (lootFile[args[i-1]].items) {
-                            for (let k in lootFile[args[i-1]].items) {
-                                itemsDef.push(lootFile[args[i-1]].items[k].type)
-                                itemsDef.push(lootFile[args[i-1]].items[k].id)
-                                itemsDef.push(lootFile[args[i-1]].items[k].amount)
-                            }
+                    if (itemCollector[i][2]) {
+                        if (!isNaN(itemCollector[i][2])) {
+                            itemCollector[i][2] = Math.max(1, parseInt(itemCollector[i][2]))
+                        } else {
+                            itemCollector[i][2] = 1
                         }
                     }
-                }
-            } else if (type == 'money') {
-                if (i % 3 == 1) {
-                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
-                    itemsDef[i-1] = args[i-1].toLowerCase()
-                    itemsDef[i] = parseInt(args[i])
-                }
-                if (i % 3 == 2) {
-                    itemsDef[i] = '-'
-                }
+                    break;
+                case 'money':
+                    if (!isNaN(itemCollector[i][1])) {
+                        itemCollector[i][1] = Math.max(1, parseInt(itemCollector[i][1]))
+                    } else {
+                        itemErrors.push(`You did not specify a valid amount of money.`)
+                        itemCollector[i] = '-'
+                    }
+                    break;
+                default:
+                    itemErrors.push(`${itemCollector[i][0]} is not a valid type.`)
+                    itemCollector[i] = '-'
+                    break;
+            }
+        }
+        itemCollector = itemCollector.filter(item => item != '-')
+
+        if (itemCollector.length == 0) return message.channel.send(`You did not specify anything to give to team ${team.name}. What went wrong:\n- ${itemErrors.join('\n- ')}`)
+
+        for (i in itemCollector) {
+            switch (itemCollector[i][0]) {
+                case 'item':
+                case 'weapon':
+                case 'armor':
+                    if (!team.items) team.items = {}
+                    if (!team.items[itemCollector[i][1]]) team.items[itemCollector[i][1]] = 0
+                    team.items[itemCollector[i][1]] += (itemCollector[i][2] ?? 1)
+
+                    if (itemCollector[i][0] != 'item') {
+                        if (!team[itemCollector[i][0]]+'s') team[itemCollector[i][0]+'s'] = {}
+                        if (!team[itemCollector[i][0]+'s'][itemCollector[i][1]]) team[itemCollector[i][0]+'s'][itemCollector[i][1]] = objClone(itemFiles[itemCollector[i][0]][itemCollector[i][1]])
+                    }
+                    break;
+                case 'loot':
+                    let loot = lootFile[itemCollector[i][1]].items
+                    for (j in loot) {
+                        if (!team.items) team.items = {}
+                        if (!team.items[loot[j].id]) team.items[loot[j].id] = 0
+                        team.items[loot[j].id] += loot[j].amount
+
+                        if (['weapon','armor'].includes(loot[j].type)) {
+                            if (!team[loot[j].type+'s']) team[loot[j].type+'s'] = {}
+                            if (!team[loot[j].type+'s'][loot[j].id]) team[loot[j].type+'s'][loot[j].id] = objClone(itemFiles[loot[j].type][loot[j].id])
+                        }
+                    }
+                    break;
+                case 'money':
+                    if (!team.currency) team.currency = 0
+                    team.currency += itemCollector[i][1]
+                    break;
             }
         }
 
-        for (i in itemsDef) {
-            if (i % 3 == 2) {
-                if (itemsDef[i-2] != 'money') {
-                    if (!parties[args[0]][itemsDef[i-2]+'s'][itemsDef[i-1]]) parties[args[0]][itemsDef[i-2]+'s'][itemsDef[i-1]] = 0
-                    parties[args[0]][itemsDef[i-2]+'s'][itemsDef[i-1]] += itemsDef[i]
-                } else {
-                    if (!parties[args[0]].currency) parties[args[0]].currency = 0
-                    parties[args[0]].currency += itemsDef[i-1]
-                }
-            }
-        }
-
-		//okay.
-		// what happened here
-		// im uh... just not going to touch it.
-		// i'm only here to change weapon and armor strings into objects o-o'
-		let aeaeaea = ['weapons', 'armors'];
-		for (let i of aeaeaea) {
-			if (parties[args[0]][i] && typeof(parties[args[0]][i]) === "string") {
-				if (i === 'weapons')
-					parties[args[0]][i] = objClone(weaponFile[parties[args[0]][i]]);
-				else
-					parties[args[0]][i] = objClone(armorFile[parties[args[0]][i]]);
-			}
-		}
-
-		// Save File
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, 4));
-        message.channel.send(`Team ${args[0]} has been given the items.`)
+        message.channel.send(`Team ${team.name} has been given the items.`)
     }
 })
 
