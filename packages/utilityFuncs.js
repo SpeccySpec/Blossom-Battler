@@ -180,7 +180,7 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 
 		let arraysToCheck = {
 			transformations: ['allydown', 'onlystanding', 'belowhalfhp', 'outofmp', 'leaderdown', 'trusteddown'],
-			leaderskills: ['boost', 'discount', 'crit', 'status', 'buff'],
+			leaderskills: ['boost', 'discount', 'crit', 'status', 'buff', 'money', 'pacify', 'items', 'endure'],
 			element: Elements,
 			status: statusEffects,
 			costtype: costTypes,
