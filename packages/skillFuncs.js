@@ -750,36 +750,38 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 		finalText += "\n";
 	}
 
-	switch(skillDefs.target) {
-		case "allopposing":
-			finalText += "Targets **all foes**.\n";
-			break;
-		case "allallies":
-			finalText += "Targets **all allies**.\n";
-			break;
-		case "ally":
-			finalText += "Targets **an ally**.\n";
-			break;
-		case "everyone":
-			finalText += "Targets **all fighters** in-battle.\n";
-			break;
-		case "caster":
-			finalText += "Targets **the user**.\n";
-			break;
-		case "random":
-			finalText += "Targets a **random fighter** in-battle.\n";
-			break;
-		case "randomopposing":
-			finalText += "Targets a **random opponent** in-battle.\n";
-			break;
-		case "spreadopposing":
-			finalText += "Targets **one opponent and spreads to two surrounding**.\n";
-			break;
-		case "spreadallies":
-			finalText += "Targets **an ally and spreads to two surrounding**.\n";
-			break;
-		default:
-			finalText += "Targets **one foe**.\n";
+	if (skillDefs?.target) {
+		switch(skillDefs.target) {
+			case "allopposing":
+				finalText += "Targets **all foes**.\n";
+				break;
+			case "allallies":
+				finalText += "Targets **all allies**.\n";
+				break;
+			case "ally":
+				finalText += "Targets **an ally**.\n";
+				break;
+			case "everyone":
+				finalText += "Targets **all fighters** in-battle.\n";
+				break;
+			case "caster":
+				finalText += "Targets **the user**.\n";
+				break;
+			case "random":
+				finalText += "Targets a **random fighter** in-battle.\n";
+				break;
+			case "randomopposing":
+				finalText += "Targets a **random opponent** in-battle.\n";
+				break;
+			case "spreadopposing":
+				finalText += "Targets **one opponent and spreads to two surrounding**.\n";
+				break;
+			case "spreadallies":
+				finalText += "Targets **an ally and spreads to two surrounding**.\n";
+				break;
+			default:
+				finalText += "Targets **one foe**.\n";
+		}
 	}
 
 	if (skillDefs.cost && skillDefs.costtype) {
