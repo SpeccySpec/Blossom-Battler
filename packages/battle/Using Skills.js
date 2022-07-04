@@ -938,7 +938,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 
 		if (trustLevel(char, char2) >= 6 && randNum(1, 100) <= 7) {
 			let a = trustQuotes[randNum(trustQuotes.length-1)];
-			replaceTxt(a, '%PLAYER1%', char.name, '%PLAYER2%', char2.name);
+			a = replaceTxt(a, '%PLAYER1%', char.name, '%PLAYER2%', char2.name);
 
 			finalText += `\n_${a}_\n`;
 
