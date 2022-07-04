@@ -4032,27 +4032,8 @@ commands.registertc = new Command({
 		{
 			name: "Variable #1",
 			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable #2",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable #3",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable #4",
-			type: "Any",
-			forced: false
-		},
-		{
-			name: "Variable #5",
-			type: "Any",
-			forced: false
+			forced: false,
+			multiple: true
 		}
 	],
 	func: async(message, args) => {
@@ -4082,7 +4063,7 @@ commands.registertc = new Command({
 		}
 
 		if (args[7])
-			applyExtra(message, teamcombo, args[7].toLowerCase(), args[8], args[9], args[10], args[11], args[12]);
+			applyExtra(message, teamcombo, args[7].toLowerCase(), args.splice(8));
 
 		if (!charFile[args[0]].teamcombos) charFile[args[0]].teamcombos = {};
 		charFile[args[0]].teamcombos[args[1]] = teamcombo;
@@ -4190,8 +4171,93 @@ commands.removetc = new Command({
 		if (!charFile[args[1]]) return message.channel.send(`${args[1]} is a nonexistant character!`);
 		if (!charFile[args[0]].teamcombos || !charFile[args[0]].teamcombos[args[1]]) return message.channel.send(`${args[0]} & ${args[1]} have no team combo!`);
 
+		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`You don't own ${args[0]}!`);
+
 		delete charFile[args[0]].teamcombos[args[1]];
 
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+commands.edittc = new Command({
+	desc: 'Edits a team combo with 2 characters.',
+	aliases: ['editteamcombo', 'changetc', 'changeteamcombo'],
+	section: "characters",
+	args: [
+		{
+			name: "Initiator Character",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Assistant Character",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Field",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "New Value",
+			type: "Any",
+			forced: true,
+			multiple: true,
+		}
+	],
+	func: (message, args) => {
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is a nonexistant character!`);
+		if (!charFile[args[1]]) return message.channel.send(`${args[1]} is a nonexistant character!`);
+		if (!charFile[args[0]].teamcombos || !charFile[args[0]].teamcombos[args[1]]) return message.channel.send(`${args[0]} & ${args[1]} have no team combo!`);
+
+		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`You don't own ${args[0]}!`);
+
+		let editField = args[2].toLowerCase();
+		let currentTeamCombo = charFile[args[0]].teamcombos[args[1]];
+
+		switch(editField) {
+			case 'name':
+			case 'truename':
+				if (args[3].length < 1) return message.channel.send('Description must be at least 1 character long!');
+				currentTeamCombo.name = args[3];
+				break;
+			case 'desc':
+			case 'description':
+				if (args[3] == 'none') delete currentTeamCombo.desc;
+				else {
+					if (args[3].length < 1) return message.channel.send('Description must be at least 1 character long!');
+					currentTeamCombo.desc = args[3];
+				}
+				break;
+			case 'status':
+				if (!utilityFuncs.inArray(args[3].toLowerCase(), statusEffects)) return message.channel.send(`${args[2].toLowerCase()} is an invalid status effect!`);
+				currentTeamCombo.status = args[3].toLowerCase();
+				break;
+			case 'statuschance':
+			case 'status chance':
+			case 'statchance':
+				if (isNaN(args[3])) return message.channel.send(`${args[3]} is not a number!`);
+				if (!currentTeamCombo.status) return message.channel.send(`You need a status effect to set the status chance!`);
+				currentTeamCombo.statuschance = parseFloat(args[3]);
+				break;
+			case 'hits':
+				if (isNaN(args[3])) return message.channel.send(`${args[3]} is not a number!`);
+				currentTeamCombo.hits = parseInt(args[3]);
+				break;
+			case 'extra':
+				if (extrasList[args[3]]) {
+					delete currentTeamCombo.extra;
+				}
+				applyExtra(message, currentTeamCombo, args[3].toLowerCase(), args.splice(4));
+				break;
+			default:
+				return message.channel.send(`${args[2].toLowerCase()} is an invalid field!`);
+		}
+
+		charFile[args[0]].teamcombos[args[1]] = currentTeamCombo;
 		message.react('👍');
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}

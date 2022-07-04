@@ -1146,16 +1146,26 @@ commands.editskill = new Command({
 				return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
 			}
 
+			let totalDmg = 0
 			let editField = args[1].toLowerCase();
 			switch(editField) {
 				case 'pow':
 				case 'power':
 				case 'strength':
-					let totalDmg = args[2]*skillFile[args[0]].hits;
+					if (isNaN(args[2])) return message.channel.send(`${args[2]} is not a number!`);
+					totalDmg = args[2]*skillFile[args[0]].hits;
 					if (totalDmg > 2000) return message.channel.send(`The Power cap for skills is 2000! A skill of ${skillFile[args[0]].hits} hits can have a maximum of ${2000/skillFile[args[0]].hits} power!`);
 					if (args[2] < 0) return message.channel.send('Skills cannot go below 0 power.');
 
 					skillFile[args[0]].pow = args[2];
+					break;
+				case 'hits':
+					if (isNaN(args[2])) return message.channel.send(`${args[2]} is not a number!`);
+					totalDmg = skillFile[args[0]].pow*args[2];
+					if (totalDmg > 2000) return message.channel.send(`The Power cap for skills is 2000! A skill of ${skillFile[args[0]].hits} hits can have a maximum of ${2000/skillFile[args[0]].hits} power!`);
+					if (args[2] < 0) return message.channel.send('Skills cannot go below 0 power.');
+
+					skillFile[args[0]].hits = args[2];
 					break;
 				case 'acc':
 				case 'crit':
@@ -1170,6 +1180,14 @@ commands.editskill = new Command({
 				case 'status':
 					if (!utilityFuncs.inArray(args[2].toLowerCase(), statusEffects)) return message.channel.send(`${args[2].toLowerCase()} is an invalid status effect!`);
 					skillFile[args[0]].status = args[2].toLowerCase();
+					break;
+
+				case 'statuschance':
+				case 'status chance':
+				case 'statchance':
+					if (isNaN(args[2])) return message.channel.send(`${args[2]} is not a number!`);
+					if (!skillFile[args[0]].status) return message.channel.send(`You need a status effectto set the status chance!`);
+					skillFile[args[0]].statuschance = parseFloat(args[2]);
 					break;
 
 				case 'type':
@@ -1358,8 +1376,7 @@ commands.editskill = new Command({
 					skillFile[args[0]].target = args[2].toLowerCase();
 					break;
 				default:
-					skillFile[args[0]][editField] = args[2];
-					break;
+					return message.channel.send(`${args[2].toLowerCase()} is an invalid field!`);
 			}
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
