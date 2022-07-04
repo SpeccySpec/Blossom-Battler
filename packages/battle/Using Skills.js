@@ -934,6 +934,15 @@ useSkill = (char, btl, act, forceskill, ally) => {
 		}
 	}
 
+	// Boost Rate Leader Skills
+	if (settings?.mechanics?.leaderskills && skill?.cost && party?.leaderskill && party.leaderskill.type === 'boost') {
+		if (party.leaderskill.var1.toLowerCase() == 'all' || skill?.atktype == party.leaderskill.var1.toLowerCase() || (skill.type == party.leaderskill.var1.toLowerCase() || skill.type.includes(party.leaderskill.var1.toLowerCase()))) {
+			skill.pow += skill.pow * (party.leaderskill.var2 / 100);
+		}
+	}
+
+	console.log(skill.pow);
+
 	// Final Text
 	let quotetype = 'phys';
 	if (skill.atktype === 'magic') quotetype = 'mag';
