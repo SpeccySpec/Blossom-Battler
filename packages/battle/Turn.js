@@ -70,6 +70,17 @@ leaderSkillsAtBattleStart = (btl) => {
 				}
 			}
 		}
+
+		if (party.leaderskill.type.toLowerCase() == 'items') {
+			let oppositePartyIndex = (party == btl.teams[0] ? 1 : 0);
+			for (const enemy of btl.teams[oppositePartyIndex].members) {
+				if (enemy?.loot?.length > 0) {
+					for (const item of enemy.loot) {
+						item.chance += parseInt(party.leaderskill.var2);
+					}
+				}
+			}
+		}
 	}
 	return btl;
 }
