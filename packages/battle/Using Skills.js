@@ -549,7 +549,17 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 						}
 
 						crits[i] = true;
-						dmg *= settings.rates.crit ?? 1.5;
+						let critRate = settings.rates.crit ?? 1.5;
+
+						// Critical Rate Leader Skills
+						let party = btl.teams[char.team];
+						if (settings?.mechanics?.leaderskills && skill?.cost && party?.leaderskill && party.leaderskill.type === 'crit') {
+							if (party.leaderskill.var1.toLowerCase() == 'all' || skill?.atktype == party.leaderskill.var1.toLowerCase() || (skill.type == party.leaderskill.var1.toLowerCase() || skill.type.includes(party.leaderskill.var1.toLowerCase()))) {
+								critRate += critRate * (party.leaderskill.var2 / 100);
+							}
+						}
+
+						dmg *= critRate;
 					}
 				}
 
@@ -893,7 +903,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	let party = btl.teams[char.team];
 	if (skillCost > 0 && !skill.forcefree) {
 		if (settings?.mechanics?.leaderskills && skill?.cost && party?.leaderskill && party.leaderskill.type === 'discount') {
-			if (party.leaderskill.var1.toLowerCase() == 'all' || skill.atktype == party.leaderskill.var1.toLowerCase() || (skill.type == party.leaderskill.var1.toLowerCase() || skill.type.includes(party.leaderskill.var1.toLowerCase()))) {
+			if (party.leaderskill.var1.toLowerCase() == 'all' || skill?.atktype == party.leaderskill.var1.toLowerCase() || (skill.type == party.leaderskill.var1.toLowerCase() || skill.type.includes(party.leaderskill.var1.toLowerCase()))) {
 				skillCost -= Math.floor(skillCost * (party.leaderskill.var2 / 100));
 			}
 		}
