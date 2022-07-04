@@ -2287,65 +2287,91 @@ commands.removepartyitems = new Command({
         let weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);
         let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`);
 
-        if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party!`);
-
-        args.splice(0, 1)
-        const validTypes = ['item', 'weapon', 'armor']
-        let itemsDef = []
-
-        let type
-
-        if (args.length % 3 != 0) return message.channel.send(`You didn't write the correct amount of fields.`)
-
-        if (args[0].toLowerCase() != 'all') {
-            for (i in args) {
-                if (i % 3 == 0) {
-                    if (!validTypes.includes(args[i])) return message.channel.send(`${args[i]} is not a valid item type. Valid types are: \n- ${validTypes.join('\n- ')}`)
-                    type = args[i].toLowerCase();
-                }
-                if (i % 3 == 1) {
-                    itemsDef[i-1] = args[i-1].toLowerCase()
-
-                    if (args[i].toLowerCase() != 'all') {
-                        if (args[i-1].toLowerCase() == "item") {
-                            if (!itemFile[args[i]]) return message.channel.send(`${args[i]} is not a valid item.`)
-                        }
-                        else if (args[i-1].toLowerCase() == "weapon") {
-                            if (!weaponFile[args[i]]) return message.channel.send(`${args[i]} is not a valid weapon.`)
-                        }
-                        else if (args[i-1].toLowerCase() == "armor") {
-                            if (!armorFile[args[i]]) return message.channel.send(`${args[i]} is not a valid armor.`)
-                        }
-                    }
-                    itemsDef[i] = args[i]
-                }
-                if (i % 3 == 2) {
-                    if (isNaN(args[i])) return message.channel.send(`${args[i]} is not a valid number.`)
-                    itemsDef[i] = Math.max(1, parseInt(args[i]))
-                }
-            }
+        let itemFiles = {
+            item: itemFile,
+            weapon: weaponFile,
+            armor: armorFile,
         }
 
-        for (i in itemsDef) {
-            if (itemsDef[0].toLowerCase() != 'all') {
-                if (i % 3 == 2) {
-                    if (itemsDef[i-1].toLowerCase() != 'all') {
-                        itemsDef[i] = Math.min(parties[args[0]][type+'s'][itemsDef[i-1]], itemsDef[i])
-                        if (parties[args[0]][type+'s'][itemsDef[i-1]]) {
-                            parties[args[0]][type+'s'][itemsDef[i-1]] -= itemsDef[i]
+        if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party!`);
+        let team = parties[args[0]];
 
-                            if (parties[args[0]][type+'s'][itemsDef[i-1]] <= 0) {
-                                delete parties[args[0]][type+'s'][itemsDef[i-1]]
-                            }
-                        }
-                    } else {
-                        parties[args[0]][itemsDef[i-2]+'s'] = {}
-                    }
+        args.splice(0, 1)
+        let itemCollector = []
+        let itemErrors = []
+        let itemCollectorIndex = 0
+
+        while (args.length > 0) {
+            if (args[0].toLowerCase() != 'all') {
+                itemCollector.push([args[0].toLowerCase(), args[1]])
+                args.splice(0, 2)
+                if (!isNaN(args[0])) {
+                    itemCollector[itemCollectorIndex].push(parseInt(args[0]))
+                    args.splice(0, 1)
                 }
             } else {
-                parties[args[0]].items = {}
-                parties[args[0]].weapons = {}
-                parties[args[0]].armors = {}
+                itemCollector.push(['all'])
+                args.splice(0, 1)
+            }
+            itemCollectorIndex++
+        }
+
+        for (i in itemCollector) {
+            switch (itemCollector[i][0]) {
+                case 'item':
+                case 'weapon':
+                case 'armor':
+                    if (!itemCollector[i][1] || (itemFiles[itemCollector[i][0]][itemCollector[i][1]].toLowerCase() != 'all' && !itemFiles[itemCollector[i][0]][itemCollector[i][1]])) {
+                        itemErrors.push(`${itemCollector[i][1] ? `${itemCollector[i][1]} is not a valid ${itemCollector[i][0]} name.` : `You did not specify a name for the ${itemCollector[i][0]}.`}`);
+                        itemCollector[i] = '-'
+                    }
+                    if (itemCollector[i][2]) {
+                        if (!isNaN(itemCollector[i][2])) {
+                            itemCollector[i][2] = Math.max(1, parseInt(itemCollector[i][2]))
+                        } else {
+                            itemCollector[i][2] = 1
+                        }
+                    }
+                    break;
+                case 'all':
+                    break;
+                default:
+                    itemErrors.push(`${itemCollector[i][0]} is not a valid type.`)
+                    itemCollector[i] = '-'
+                    break;
+            }
+        }
+        itemCollector = itemCollector.filter(item => item != '-')
+
+        if (itemCollector.length == 0) return message.channel.send(`You did not specify anything to remove from team ${team.name}. What went wrong:\n- ${itemErrors.join('\n- ')}`)
+
+        for (i in itemCollector) {
+            switch (itemCollector[i][0]) {
+                case 'item':
+                    if (itemCollector[i][1] == 'all') {
+                        team.items = {}
+                    } else {
+                        team.items[itemCollector[i][1]] -= (itemCollector[i][2] ?? 1)
+                    }
+                    if (team.items[itemCollector[i][1]] <= 0) delete team.items[itemCollector[i][1]]
+                    break;
+                case 'weapon':
+                case 'armor':
+                    for (j in team[itemCollector[i][0]+'s']) {
+                        if (team.items[j]) {
+                            team.items[j] -= (itemCollector[i][2] ?? 1)
+                            if (team.items[j] <= 0) { 
+                                delete team.items[j]
+                                delete team[itemCollector[i][0]+'s'][j]
+                            }
+                        }
+                    }
+                    break;
+                case 'all':
+                    team.items = {}
+                    team.weapons = {}
+                    team.armors = {}
+                    break;
             }
         }
 
