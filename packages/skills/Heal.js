@@ -92,6 +92,8 @@ healList = {
 		},
 		onuse(char, targ, skill, btl, vars) {
 			addCusVal(targ, "regenheal", {
+				name: skill.name,
+				username: char.name,
 				heal: vars[0],
 				turns: vars[1],
 				type: "hp",
@@ -132,6 +134,8 @@ healList = {
 		},
 		onuse: function(char, targ, skill, btl, vars) {
 			addCusVal(targ, "regenheal", {
+				name: skill.name,
+				username: char.name,
 				heal: vars[0],
 				turns: vars[1],
 				type: "mp",

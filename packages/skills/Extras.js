@@ -1595,5 +1595,24 @@ customVariables = {
 			let attack = attackWithSkill(char, inf, skill, btl, true);
 			return `__${char.name}__ struck back, with a stronger __${skill.name}__!\n${attack.txt}`;
 		}
-	}
+	},
+
+	regenheal: {
+		onturn(btl, char, vars) {
+			if (char.custom?.regenheal) {
+				let txt = '';
+				let rh = char.custom.regenheal;
+				char[rh.type] = Math.min(char[`max${rh.type}`], char[rh.type]+rh.heal);
+				txt += `__${char.name}__'s ${rh.type.toUpperCase()} was restored by **${rh.heal}**!`;
+
+				char.custom.regenheal.turns--;
+				if (char.custom.regenheal.turns <= 0) {
+					txt += `\n__${rh.username}__'s _${rh.name}_ wore off for __${char.name}__.`;
+					killVar(char, 'regenheal');
+				}
+
+				return txt;
+			}
+		}
+	},
 }
