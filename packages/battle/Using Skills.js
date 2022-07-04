@@ -675,16 +675,29 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				}
 
 				targ.hp = Math.max(0, targ.hp-total);
+
 				if (targ.hp <= 0) {
 					result.txt += `${dmgTxt} damage and was defeated!_`;
 
-					for (let i in char.skills) {
-						if (!skillFile[char.skills[i]]) continue;
-						if (skillFile[char.skills[i]].type != 'passive') continue;
+					// Endure Leader Skills
+					let party = btl.teams[targ.team];
+					if (settings?.mechanics?.leaderskills && party?.leaderskill && party.leaderskill.type === 'endure' && !targ?.custom?.enduredByLeaderSkill) {
+						if (party.leaderskill.var1.toLowerCase() == 'all' || skill?.atktype == party.leaderskill.var1.toLowerCase() || (skill.type == party.leaderskill.var1.toLowerCase() || skill.type.includes(party.leaderskill.var1.toLowerCase()))) {
+							targ.hp = Math.round(targ.maxhp * party.leaderskill.var2/100)
+							addCusVal(targ, "enduredByLeaderSkill", true);
+							result.txt += `\n...But they endured the attack!_`;
+						}
+					}
 
-						for (let k in skillFile[char.skills[i]].passive) {
-							if (passiveList[k] && passiveList[k].onkill) {
-								result.txt += passiveList[k].onkill(char, targ, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k]);
+					if (targ.hp <= 0) {
+						for (let i in char.skills) {
+							if (!skillFile[char.skills[i]]) continue;
+							if (skillFile[char.skills[i]].type != 'passive') continue;
+
+							for (let k in skillFile[char.skills[i]].passive) {
+								if (passiveList[k] && passiveList[k].onkill) {
+									result.txt += passiveList[k].onkill(char, targ, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k]);
+								}
 							}
 						}
 					}
@@ -935,7 +948,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	}
 
 	// Boost Rate Leader Skills
-	if (settings?.mechanics?.leaderskills && skill?.cost && party?.leaderskill && party.leaderskill.type === 'boost') {
+	if (settings?.mechanics?.leaderskills && party?.leaderskill && party.leaderskill.type === 'boost') {
 		if (party.leaderskill.var1.toLowerCase() == 'all' || skill?.atktype == party.leaderskill.var1.toLowerCase() || (skill.type == party.leaderskill.var1.toLowerCase() || skill.type.includes(party.leaderskill.var1.toLowerCase()))) {
 			skill.pow += skill.pow * (party.leaderskill.var2 / 100);
 		}
