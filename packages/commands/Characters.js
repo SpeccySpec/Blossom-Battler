@@ -1486,6 +1486,8 @@ commands.leaderskill = new Command({
 				var1 = args[3].toLowerCase();
 				var2 = args[4];
 				break;
+			default:
+				return message.channel.send(`${args[2]} is an invalid leader skill type! Use either: Boost, Discount, Crit, Endure, Status, Money, Items, Pacify, Buff.`);	
 		}
 
 		if (var1)
