@@ -1,3 +1,8 @@
+require("./skills/Extras")
+require("./skills/Heal")
+require("./skills/Passive")
+require("./skills/Status")
+
 buffText = (buffArray) => {
 	let finalText = '';
 
@@ -94,13 +99,7 @@ buffText = (buffArray) => {
 	return finalText
 }
 
-
-
-
 /*
-function statusDesc(skillDefs) {
-	var finalText = '';
-	
 	if (hasStatus(skillDefs, 'buff')) {
 		finalText += buffText(skillDefs.statusses.buff)
 	}
@@ -852,10 +851,8 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 		}
 	}
 
-	const [extrastype, extraslist] = extraTypes[skillDefs.type]
-	const extras = skillDefs[extrastype ?? "extras"]
-	if (!extraslist)
-		extraslist = extrasList
+	const [extrastype, extraslist] = extraTypes[skillDefs.type] ?? ["extras", extrasList]
+	const extras = skillDefs[extrastype]
 	for (const extra in extras) {
 		const getinfo = extraslist[extra]?.getinfo
 		if (getinfo)
