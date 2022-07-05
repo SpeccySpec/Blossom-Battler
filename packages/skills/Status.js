@@ -311,6 +311,9 @@ statusList = {
 			} else {
 				return `__${char.name}__ protected __${targ.name}__ with a __${vars[0]}__!`;
 			}
+		},
+		getinfo(vars) {
+			return `Surrounds the target with a **shield named ${elementEmoji[vars[1]]}${vars[0]}**`
 		}
 	}),
 
@@ -345,6 +348,9 @@ statusList = {
 			} else {
 				return `__${char.name}__ protected __${targ.name}__ with a __${skill.name}__!`;
 			}
+		},
+		getinfo(vars) {
+			return `Surrounds the target with a **${vars[0] == "phys" ? "Tetra" : "Makara"}karn**`
 		}
 	}),
 

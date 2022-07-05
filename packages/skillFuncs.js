@@ -99,25 +99,6 @@ buffText = (buffArray) => {
 	return finalText
 }
 /*
-	if (hasStatus(skillDefs, 'karn') || hasStatus(skillDefs, 'shield')) {
-		finalText += `Surrounds the target with`;
-
-		if (hasStatus(skillDefs, 'karn')) {
-			for (let i in skillDefs.statusses.karn) {
-				finalText += ` **${skillDefs.statusses.karn[i] == 'phys' ? 'Tetra' : 'Makara'}karn**`;
-
-				if (i < skillDefs.statusses.karn.length - 2) finalText += `, `;
-
-				if (i == skillDefs.statusses.karn.length - 2 && !hasStatus(skillDefs, 'shield')) finalText += ` and `;
-			}
-		}
-		if (hasStatus(skillDefs, 'shield')) {
-			if (hasStatus(skillDefs, 'karn')) finalText += ` and `;
-			finalText += ` a **shield named ${elementEmoji[skillDefs.statusses.shield[1]]}${skillDefs.statusses.shield[0]}**`;
-		}
-		finalText += `.\n`;
-	}
-
 	if (hasStatus(skillDefs, 'trap')) {
 		finalText += `Sets up a **trap**.\n`
 	}
