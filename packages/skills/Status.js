@@ -386,6 +386,10 @@ statusList = {
 				delete targ.custom.shield;
 				return `__${targ.name}__ had their shield broken!`;
 			}
+		},
+		getinfo(vars) {
+			const shield = vars[0]
+			`Breaks the target's **${shield.charAt(0).toUpperCase() + shield.slice(1)}${shield.includes('ra') ? 'karn' : ''}**`
 		}
 	}),
 

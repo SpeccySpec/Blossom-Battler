@@ -99,16 +99,6 @@ buffText = (buffArray) => {
 	return finalText
 }
 /*
-	if (hasStatus(skillDefs, 'analyze') || hasStatus(skillDefs, 'fullanalyse')) {
-		if (hasStatus(skillDefs, 'fullanalyze')) finalText += `Fully Analyzes`
-		else finalText += `Analyzes`
-		finalText += ` the target.\n`
-	}
-
-	if (hasStatus(skillDefs, 'shieldbreak')) {
-		finalText += `Breaks the target's **${skillDefs.statusses.shieldbreak[0].charAt(0).toUpperCase() + skillDefs.statusses.shieldbreak[0].slice(1)}${skillDefs.statusses.shieldbreak[0].includes('ra') ? 'karn' : ''}**.\n`
-	}
-
 	if (hasStatus(skillDefs, 'dekunda')) {
 		finalText += `Removes buffs of the target.\n`
 	}
