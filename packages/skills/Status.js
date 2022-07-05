@@ -90,6 +90,9 @@ statusList = {
 		},
 		onuse(char, targ, skill, btl, vars) {
 			return extrasList.buff.onuse(char, targ, skill, btl, vars);
+		},
+		getinfo(vars) {
+			return buffText(vars)
 		}
 	}),
 
