@@ -99,10 +99,6 @@ buffText = (buffArray) => {
 	return finalText
 }
 /*
-	if (hasStatus(skillDefs, 'trap')) {
-		finalText += `Sets up a **trap**.\n`
-	}
-
 	if (hasStatus(skillDefs, 'changeaffinity')) {
 		let targetAffinities = skillDefs.statusses.changeaffinity.filter(x => x.includes('target'))
 		let userAffinities = skillDefs.statusses.changeaffinity.filter(x => x.includes('user'))

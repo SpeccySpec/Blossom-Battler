@@ -465,6 +465,9 @@ statusList = {
 			} else {
 				return `__${char.name}__ deployed a trap infront of __${targ.name}__: __${vars[0]}__!`;
 			}
+		},
+		getinfo(vars) {
+			return "Sets up a **trap**"
 		}
 	}),
 
