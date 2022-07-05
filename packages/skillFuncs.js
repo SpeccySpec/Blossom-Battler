@@ -98,27 +98,7 @@ buffText = (buffArray) => {
 
 	return finalText
 }
-
 /*
-	if (hasStatus(skillDefs, 'buff')) {
-		finalText += buffText(skillDefs.statusses.buff)
-	}
-	
-	if (hasStatus(skillDefs, 'weather') || hasStatus(skillDefs, 'terrain')) {
-		finalText += `Changes`;
-
-		if (hasStatus(skillDefs, 'weather')) {
-			finalText += ` **Weather** to ${skillDefs.statusses.weather[0]}`;
-		}
-
-		if (hasStatus(skillDefs, 'terrain')) {
-			if (hasStatus(skillDefs, 'weather')) finalText += ` and`;
-			
-			finalText += ` **Terrain** to ${skillDefs.statusses.terrain[0]}`;
-		}
-		finalText += `.\n`;
-	}
-
 	if (hasStatus(skillDefs, 'reincarnate')) {
 		finalText += `Summons **an undead ally**.\n` 
 	}

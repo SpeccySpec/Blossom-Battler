@@ -516,6 +516,9 @@ statusList = {
 				}
 			}
 			return `The weather has been changed to __${vars[0]}__!`;
+		},
+		getinfo(vars) {
+			return `Changes **Weather** to **${vars[0]}**.`
 		}
 	}),
 
@@ -546,6 +549,9 @@ statusList = {
 				}
 			}
 			return `The terrain has been changed to __${vars[0]}__!`;
+		},
+		getinfo(vars) {
+			return `Changes **Terrain** to **${vars[0]}**.`
 		}
 	}),
 
