@@ -99,22 +99,6 @@ buffText = (buffArray) => {
 	return finalText
 }
 /*
-	if (hasStatus(skillDefs, 'pacifystatus')) {
-		finalText += `Pacifies the target with `
-
-		for (let i in skillDefs.statusses.pacifystatus) {
-			finalText += `${statusEmojis[skillDefs.statusses.pacifystatus[0]]}**${skillDefs.statusses.pacifystatus[0]}**${skillDefs.statusses.pacifystatus[1] >= 100 ? '' : ` by ${skillDefs.statusses.pacifystatus[1]}%`}`
-
-			if (i < skillDefs.statusses.pacifystatus.length - 2) {
-				finalText += `, `
-			} else if (i == skillDefs.statusses.pacifystatus.length - 2) {
-				finalText += ` and `
-			} else {
-				finalText += `.\n`
-			}
-		}
-	}
-
 	if (hasStatus(skillDefs, 'batonpass')) {
 		finalText += `Switch out user **with someone in backup**.\n`
 	}

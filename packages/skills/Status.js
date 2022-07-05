@@ -995,6 +995,20 @@ statusList = {
 			} else {
 				return 'But it failed!';
 			}
+		},
+		getinfo(vars) {
+			const status = vars[0]
+			const amount = vars[1]
+			let finalText = "Pacifies the target with "
+			for (let i in vars) {
+				finalText += `${statusEmojis[status]}**${status}**${amount >= 100 ? '' : ` by ${amount}%`}`
+				if (i < vars.length - 2) {
+					finalText += `, `
+				} else if (i == vars.length - 2) {
+					finalText += ` and `
+				}
+			}
+			return finalText
 		}
 	}),
 
