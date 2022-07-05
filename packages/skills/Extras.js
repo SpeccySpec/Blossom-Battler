@@ -1224,6 +1224,30 @@ extrasList = {
 		},
 		hardcoded: true
 	}),
+
+	brickbreak: new Extra({
+		name: "Brick Break",
+		desc: "Breaks any kind of shield the foe may have, but reduces damage when doing so.",
+		args: [
+			{
+				name: "Multiplier",
+				type: "Float"
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "brickbreak", [args[0] ?? 0.5])
+			return true
+		},
+		skillmod(char, targ, skill, btl, vars) {
+			const shield = targ.custom?.shield
+			if (shield) {
+				const name = shield.name
+				delete targ.custom.shield
+				skill.pow *= vars[0]
+				addAtkMsg(btl, `__${targ.name}__'s **${name}** was destroyed!`)
+			}
+		}
+	})
 }
 
 // Make an Extra for a skill. "func" should be an array of 1-5 values indicating what the extra does.
