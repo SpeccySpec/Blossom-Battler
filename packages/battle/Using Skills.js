@@ -471,10 +471,24 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			result.txt += dodgeTxt(targ);
 			return result;
 		} else {
+			// SkillMod
+			if (skill.extras) {
+				for (let i in skill.extras) {
+					if (extrasList[i] && extrasList[i].skillmod) {
+						if (extrasList[i].multiple) {
+							for (let k in skill.extras[i]) extrasList[i].skillmod(char, targ, skill, skill.extras[i][k], btl);
+						} else
+							extrasList[i].skillmod(char, targ, skill, skill.extras[i], btl);
+					}
+				}
+			}
+
+			// Store which hits are crits, techs and what affinity each hit is.
 			let crits = [];
 			let affinities = [];
 			let techs = [];
 
+			// Here we go...
 			for (let i = 0; i < totalHits; i++) {
 				let dmg = genDmg(char, targ, btl, skill);
 
