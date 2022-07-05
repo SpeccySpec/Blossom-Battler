@@ -99,10 +99,6 @@ buffText = (buffArray) => {
 	return finalText
 }
 /*
-	if (hasStatus(skillDefs, 'futuresight')) {
-		finalText += `Strieks with a **${skillDefs.statusses.futuresight[0].type}** attack in **${skillDefs.statusses.futuresight[0].turns}** turns.\n`
-	}
-
 	if (hasStatus(skillDefs, 'analyze') || hasStatus(skillDefs, 'fullanalyse')) {
 		if (hasStatus(skillDefs, 'fullanalyze')) finalText += `Fully Analyzes`
 		else finalText += `Analyzes`

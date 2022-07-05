@@ -852,6 +852,9 @@ statusList = {
 			} else {
 				return `__${char.name}__ is going to strike __${targ.name}__ in ${vars[0].turns} turns!`;
 			}
+		},
+		getinfo(vars) {
+			return `Strieks with a **${skillDefs.statusses.futuresight[0].type}** attack in **${skillDefs.statusses.futuresight[0].turns}** turns`
 		}
 	}),
 
