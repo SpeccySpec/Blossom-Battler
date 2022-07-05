@@ -997,10 +997,12 @@ statusList = {
 			}
 		},
 		getinfo(vars) {
-			const status = vars[0]
-			const amount = vars[1]
 			let finalText = "Pacifies the target with "
+			let status
+			let amount
 			for (let i in vars) {
+				status = vars[i][0]
+				amount = vars[i][1]
 				finalText += `${statusEmojis[status]}**${status}**${amount >= 100 ? '' : ` by ${amount}%`}`
 				if (i < vars.length - 2) {
 					finalText += `, `
