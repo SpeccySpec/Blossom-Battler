@@ -99,10 +99,6 @@ buffText = (buffArray) => {
 	return finalText
 }
 /*
-	if (hasStatus(skillDefs, 'reincarnate')) {
-		finalText += `Summons **an undead ally**.\n` 
-	}
-
 	if (hasStatus(skillDefs, 'mimic')) {
 		finalText += `Mimics **an ally or foe** for **${skillDefs.statusses.mimic[0]}** turns.\n`
 	}
@@ -836,7 +832,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 	for (const extra in extras) {
 		const getinfo = extraslist[extra]?.getinfo
 		if (getinfo)
-			finalText += getinfo(extras[extra]) + "\n"
+			finalText += getinfo(extras[extra]) + ".\n"
 	}
 
 	if (skillDefs.atktype) {

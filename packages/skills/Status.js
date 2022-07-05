@@ -518,7 +518,7 @@ statusList = {
 			return `The weather has been changed to __${vars[0]}__!`;
 		},
 		getinfo(vars) {
-			return `Changes **Weather** to **${vars[0]}**.`
+			return `Changes **Weather** to **${vars[0]}**`
 		}
 	}),
 
@@ -551,7 +551,7 @@ statusList = {
 			return `The terrain has been changed to __${vars[0]}__!`;
 		},
 		getinfo(vars) {
-			return `Changes **Terrain** to **${vars[0]}**.`
+			return `Changes **Terrain** to **${vars[0]}**`
 		}
 	}),
 
@@ -708,6 +708,9 @@ statusList = {
 			btl.teams[char.team].members.push(newchar);
 			btl.turnorder = getTurnOrder(btl)
 			return replaceTxt(vars[4], '%PLAYER%', `__${char.name}__`, '%UNDEAD%', newchar.name);
+		},
+		getinfo(vars) {
+			return "Summons **an undead ally**"
 		}
 	}),
 
