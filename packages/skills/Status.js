@@ -131,6 +131,9 @@ statusList = {
 			targ.buffs = objClone(charbuffs);
 
 			return `__${char.name}__'s buffs were switched with __${targ.name}__!`;
+		},
+		getinfo(vars) {
+			return "Swaps user's **stat chances** with the target's"
 		}
 	}),
 

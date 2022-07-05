@@ -99,10 +99,6 @@ buffText = (buffArray) => {
 	return finalText
 }
 /*
-	if (hasStatus(skillDefs, 'heartswap')) {
-		finalText += `Swaps user's **stat chances** with the target's.\n`
-	}
-
 	if (hasStatus(skillDefs, 'pacifystatus')) {
 		finalText += `Pacifies the target with `
 
