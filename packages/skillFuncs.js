@@ -99,10 +99,6 @@ buffText = (buffArray) => {
 	return finalText
 }
 /*
-	if (hasStatus(skillDefs, 'clone')) {
-		finalText += `Clones **the user**.\n`
-	}
-
 	if (hasStatus(skillDefs, 'karn') || hasStatus(skillDefs, 'shield')) {
 		finalText += `Surrounds the target with`;
 

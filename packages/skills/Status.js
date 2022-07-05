@@ -259,6 +259,9 @@ statusList = {
 
 			btl.teams[char.team].members.push(newchar);
 			return `__${char.name}__ created a clone of themselves.`;
+		},
+		getinfo(vars) {
+			return "Clones **the user**"
 		}
 	}),
 
