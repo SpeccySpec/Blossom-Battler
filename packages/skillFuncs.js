@@ -680,9 +680,9 @@ function atkDesc(skillDefs, settings) {
 }*/
 
 const extraTypes = {
-	status: "statusses",
-	passive: "passives",
-	heal: "heal"
+	status: ["statusses", statusList],
+	passive: ["passives", passiveList],
+	heal: ["heal", healList]
 }
 
 skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
@@ -852,14 +852,14 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 		}
 	}
 
-
-
-	const extras = skillDefs[extraTypes[skillDefs.type] ?? "extras"]
+	const [extrastype, extraslist] = extraTypes[skillDefs.type]
+	const extras = skillDefs[extrastype ?? "extras"]
+	if (!extraslist)
+		extraslist = extrasList
 	for (const extra in extras) {
-		const getinfo = extrasList[extra]?.getinfo
-		if (getinfo) {
+		const getinfo = extraslist[extra]?.getinfo
+		if (getinfo)
 			finalText += getinfo(extras[extra]) + "\n"
-		}
 	}
 
 	if (skillDefs.atktype) {
