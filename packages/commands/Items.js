@@ -2242,7 +2242,7 @@ commands.obtainitems = new Command({
                     for (j in loot) {
                         if (!team.items) team.items = {}
                         if (!team.items[loot[j].id]) team.items[loot[j].id] = 0
-                        team.items[loot[j].id] += loot[j].amount
+                        team.items[loot[j].id] += loot[j].amount * (itemCollector[i][2] ?? 1)
 
                         if (['weapon','armor'].includes(loot[j].type)) {
                             if (!team[loot[j].type+'s']) team[loot[j].type+'s'] = {}
@@ -2321,7 +2321,7 @@ commands.removepartyitems = new Command({
                 case 'item':
                 case 'weapon':
                 case 'armor':
-                    if (!itemCollector[i][1] || (itemFiles[itemCollector[i][0]][itemCollector[i][1]].toLowerCase() != 'all' && !itemFiles[itemCollector[i][0]][itemCollector[i][1]])) {
+                    if (!itemCollector[i][1] || ([itemCollector[i][1]].toLowerCase() != 'all' && !itemFiles[itemCollector[i][0]][itemCollector[i][1]])) {
                         itemErrors.push(`${itemCollector[i][1] ? `${itemCollector[i][1]} is not a valid ${itemCollector[i][0]} name.` : `You did not specify a name for the ${itemCollector[i][0]}.`}`);
                         itemCollector[i] = '-'
                     }
