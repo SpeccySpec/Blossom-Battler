@@ -178,6 +178,9 @@ statusList = {
 			} else {
 				return '...but something went wrong...';
 			}
+		},
+		getinfo(vars) {
+			return `Mimics **an ally or foe** for **${vars[0]}** turns`
 		}
 	}),
 

@@ -99,10 +99,6 @@ buffText = (buffArray) => {
 	return finalText
 }
 /*
-	if (hasStatus(skillDefs, 'mimic')) {
-		finalText += `Mimics **an ally or foe** for **${skillDefs.statusses.mimic[0]}** turns.\n`
-	}
-
 	if (hasStatus(skillDefs, 'clone')) {
 		finalText += `Clones **the user**.\n`
 	}
