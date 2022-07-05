@@ -854,7 +854,8 @@ statusList = {
 			}
 		},
 		getinfo(vars) {
-			return `Strieks with a **${skillDefs.statusses.futuresight[0].type}** attack in **${skillDefs.statusses.futuresight[0].turns}** turns`
+			const attackInfo = vars[0]
+			return `Strieks with a **${attackInfo.type}** attack in **${attackInfo.turns}** turns`
 		}
 	}),
 
