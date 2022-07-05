@@ -476,9 +476,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				for (let i in skill.extras) {
 					if (extrasList[i] && extrasList[i].skillmod) {
 						if (extrasList[i].multiple) {
-							for (let k in skill.extras[i]) extrasList[i].skillmod(char, targ, skill, skill.extras[i][k], btl);
+							for (let k in skill.extras[i]) extrasList[i].skillmod(char, targ, skill, btl, skill.extras[i][k]);
 						} else
-							extrasList[i].skillmod(char, targ, skill, skill.extras[i], btl);
+							extrasList[i].skillmod(char, targ, skill, btl, skill.extras[i]);
 					}
 				}
 			}
