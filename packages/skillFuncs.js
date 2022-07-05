@@ -1,4 +1,4 @@
-function buffText(buffArray) {
+buffText = (buffArray) => {
 	let finalText = '';
 
 	buffArray.sort((a, b) => {
@@ -679,6 +679,12 @@ function atkDesc(skillDefs, settings) {
 	return finalText;
 }*/
 
+const extraTypes = {
+	status: "statusses",
+	passive: "passives",
+	heal: "heal"
+}
+
 skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 	let userTxt = ''
 	if (skillDefs.originalAuthor) {
@@ -846,9 +852,11 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 		}
 	}
 
-	const extras = skillDefs.extras
+
+
+	const extras = skillDefs[extraTypes[skillDefs.type] ?? "extras"]
 	for (const extra in extras) {
-		const getinfo = extrasList[extra].getinfo
+		const getinfo = extrasList[extra]?.getinfo
 		if (getinfo) {
 			finalText += getinfo(extras[extra]) + "\n"
 		}
