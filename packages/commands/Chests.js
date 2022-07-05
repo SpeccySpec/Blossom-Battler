@@ -271,7 +271,7 @@ commands.registerchest = new Command({
                         for (j in loot) {
                             if (!team.items) team.items = {}
                             if (!team.items[loot[j].id]) team.items[loot[j].id] = 0
-                            team.items[loot[j].id] += loot[j].amount
+                            team.items[loot[j].id] += loot[j].amount * (itemCollector[i][2] ?? 1)
 
                             if (!chestFile[channel][name].items[loot[j].type]) chestFile[channel][name].items[loot[j].type] = {}
                             if (!chestFile[channel][name].items[loot[j].type][loot[j].id]) chestFile[channel][name].items[loot[j].type[loot[j].id]] = 0
