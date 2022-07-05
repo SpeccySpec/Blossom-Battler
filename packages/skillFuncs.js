@@ -97,7 +97,7 @@ function buffText(buffArray) {
 
 
 
-
+/*
 function statusDesc(skillDefs) {
 	var finalText = '';
 	
@@ -677,7 +677,7 @@ function atkDesc(skillDefs, settings) {
 	}
 	
 	return finalText;
-}
+}*/
 
 skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 	let userTxt = ''
@@ -846,12 +846,12 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 		}
 	}
 
-	if (skillDefs.type === 'status') {
-		finalText += statusDesc(skillDefs)
-	} else if (skillDefs.type === 'passive') {
-		finalText += passiveDesc(skillDefs)
-	} else if (skillDefs.type != 'passive') {
-		finalText += atkDesc(skillDefs, settings)
+	const extras = skillDefs.extras
+	for (const extra in extras) {
+		const getinfo = extrasList[extra].getinfo
+		if (getinfo) {
+			finalText += getinfo(extras[extra]) + "\n"
+		}
 	}
 
 	if (skillDefs.atktype) {

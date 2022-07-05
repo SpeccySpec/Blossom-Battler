@@ -817,6 +817,9 @@ extrasList = {
 			}
 
 			if (allies <= 1) skill.pow *= vars[0];
+		},
+		getinfo() {
+			return "THIS IS A TEST"
 		}
 	}),
 
