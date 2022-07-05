@@ -110,6 +110,9 @@ statusList = {
 			}
 
 			return `__${targ.name}__'s positive buffs were nullified!`;
+		},
+		getinfo(vars) {
+			return "Removes the target's buffs"
 		}
 	}),
 

@@ -99,10 +99,6 @@ buffText = (buffArray) => {
 	return finalText
 }
 /*
-	if (hasStatus(skillDefs, 'dekunda')) {
-		finalText += `Removes buffs of the target.\n`
-	}
-
 	if (hasStatus(skillDefs, 'heartswap')) {
 		finalText += `Swaps user's **stat chances** with the target's.\n`
 	}
