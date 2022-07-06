@@ -211,6 +211,9 @@ statusList = {
 			} else {
 				return '...but it failed!';
 			}
+		},
+		getinfo(vars) {
+			return "Cancels the effect of a **mimic** skill used **beforehand**"
 		}
 	}),
 
