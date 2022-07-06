@@ -64,6 +64,11 @@ extrasList = {
 			} else {
 				return dodgeTxt(targ);
 			}
+		},
+		getinfo(vars) {
+			let txt = `**${vars[0]}%** chance to **instantly K.O the foe**`;
+			if (vars[1]) txt += ` if they are inflicted with **${vars[1]}%**`;
+			return txt;
 		}
 	}),
 
@@ -84,6 +89,9 @@ extrasList = {
 			char.hp = vars[0];
 
 			return `__${char.name}__ sacrificed themselves! Their HP dropped to **${vars[0]}**!`;
+		},
+		getinfo(vars) {
+			return `Drops _user_ HP to **${vars[0]}**`;
 		}
 	}),
 
@@ -153,6 +161,9 @@ extrasList = {
 			}
 
 			return true;
+		},
+		getinfo(vars) {
+			return `Requires **${vars[0]} than ${vars[1] ? 'or equal to' : ''} ${vars[2]}${vars[3].toUpperCase()}** to use.`;
 		}
 	}),
 
@@ -354,6 +365,9 @@ extrasList = {
 				}
 			}
 			return finalText
+		},
+		getinfo(vars) {
+			return `Changes the _${vars[0]}_'s ${vars[1]} ${vars[3]} affinity to **${vars[2]}** for **${vars[4]}** turns.`;
 		}
 	}),
 
@@ -367,6 +381,9 @@ extrasList = {
 		onselect(char, skill, btl, vars) {
 			char.rest = true;
 			return `__${char.name}__ must rest to regain their energy!`;
+		},
+		getinfo(vars) {
+			return 'User must rest for one turn.';
 		}
 	}),
 
@@ -900,8 +917,8 @@ extrasList = {
 
 			if (allies <= 1) skill.pow *= vars[0];
 		},
-		getinfo() {
-			return "THIS IS A TEST"
+		getinfo(vars) {
+			return `When alone, this skill's power is multiplied by **${vars[0]}x**.`;
 		}
 	}),
 
@@ -925,6 +942,9 @@ extrasList = {
 			}
 
 			if (allies >= btl.teams[char.team].members.length) skill.pow *= vars[0];
+		},
+		getinfo(vars) {
+			return `When not alone, this skill's power is multiplied by **${vars[0]}x**.`;
 		}
 	}),
 
@@ -945,7 +965,10 @@ extrasList = {
 			makeExtra(skill, "statcalc", [stat]);
 			return true
 		},
-		hardcoded: true
+		hardcoded: true,
+		getinfo(vars) {
+			return `Uses _user's_ **${vars[0].toUpperCase()}** to calculate damage.`;
+		}
 	}),
 
 	hitcalc: new Extra({
@@ -965,7 +988,10 @@ extrasList = {
 			makeExtra(skill, "hitcalc", [stat]);
 			return true
 		},
-		hardcoded: true
+		hardcoded: true,
+		getinfo(vars) {
+			return `Uses _target's_ **${vars[0].toUpperCase()}** to calculate damage.`;
+		}
 	}),
 
 	hpcalc: new Extra({
@@ -980,6 +1006,9 @@ extrasList = {
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "hpcalc", [args[0] ?? 50]);
 			return true
+		},
+		getinfo(vars) {
+			return `Current user's HP can modify damage by **${vars[0]}%**.`;
 		}
 	}),
 
@@ -995,6 +1024,9 @@ extrasList = {
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "mpcalc", [args[0] ?? 50]);
 			return true
+		},
+		getinfo(vars) {
+			return `Current user's MP can modify damage by **${vars[0]}%**.`;
 		}
 	}),
 
@@ -1028,7 +1060,8 @@ extrasList = {
 			if (!skill.statuschance) skill.statuschance = 100;
 			return true;
 		},
-		hardcoded: true
+		hardcoded: true,
+		hardcodedinfo: true,
 	}),
 
 	dualelement: new Extra({
@@ -1049,7 +1082,8 @@ extrasList = {
 				return void message.channel.send("That's not a valid element!");	
 			return true;
 		},
-		hardcoded: true
+		hardcoded: true,
+		hardcodedinfo: true
 	}),
 
 	affinitypow: new Extra({
@@ -1068,6 +1102,9 @@ extrasList = {
 		},
 		statmod(char, skill, vars, btl) {
 			if (char.custom?.affinitypoint) skill.pow += vars[0]*char.custom.affinitypoint;
+		},
+		getinfo(vars) {
+			return `Skill's power boosted by **${vars[0]}** per <:passive:963413845253193758>**Affinity Point**.`;
 		}
 	}),
 
@@ -1097,7 +1134,21 @@ extrasList = {
 			makeExtra(skill, "forcetech", statuses)
 			return true;
 		},
-		hardcoded: true
+		hardcoded: true,
+		getinfo(vars) {
+			let txt = `Techs off of `;
+			for (const i in vars) {
+				txt += `**${statusEmojis[vars[i]]}${vars[i]}**`
+				if (i == vars.length-2)
+					txt += ' and ';
+				else if (i >= vars.length-1)
+					txt += ' instead of the defaults.';
+				else
+					txt += ', ';
+			}
+
+			return txt;
+		}
 	}),
 
 	forceformula: new Extra({
@@ -1117,7 +1168,10 @@ extrasList = {
 			makeExtra(skill, "forceformula", [formula]);
 			return true;
 		},
-		hardcoded: true
+		hardcoded: true,
+		getinfo(vars) {
+			return `Uses the **${vars[0]}** damage formula.`;
+		}
 	}),
 
 	rollout: new Extra({
@@ -1174,6 +1228,9 @@ extrasList = {
 					killVar(char, 'forcemove');
 				}
 			}
+		},
+		getinfo(vars) {
+			return `Boost power by **${vars[0]}x** every consecutive use, until **${vars[1]}x** or used **${vars[2]} times**`;
 		}
 	}),
 
@@ -1184,6 +1241,13 @@ extrasList = {
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "sustain", [true]);
 			return true;
+		},
+		hardcoded: true,
+		getinfo(vars) {
+			if (skill.hits && skill.hits > 1)
+				return 'Constant power throughout the multi-hit.';
+			else
+				return 'The `SUSTAIN` extra has no effect on single-hits...';
 		}
 	}),
 
@@ -1194,6 +1258,13 @@ extrasList = {
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "reverse", [true]);
 			return true;
+		},
+		hardcoded: true,
+		getinfo(vars) {
+			if (skill.hits && skill.hits > 1)
+				return 'Power increases throughout the multi-hit instead of decreasing.';
+			else
+				return 'The `REVERSE` extra has no effect on single-hits...';
 		}
 	}),
 
@@ -1213,6 +1284,24 @@ extrasList = {
 
 			makeExtra(skill, "powhit", [args]);
 			return true;
+		},
+		getinfo(vars) {
+			if (skill.hits && skill.hits > 1) {
+				let txt = 'Hits ';
+
+				for (const i in vars) {
+					txt += `**#${vars[i]}**`
+					if (i == vars.length-2)
+						txt += ' and ';
+					else if (i >= vars.length-1)
+						txt += ' will deal extra damage.';
+					else
+						txt += ', ';
+				}
+
+				return txt;
+			} else
+				return 'The `POWHIT` extra has no effect on single-hits...';
 		}
 	}),
 
@@ -1250,6 +1339,9 @@ extrasList = {
 				skill.hits += vars[1];
 				addAtkMsg(btl, `__${char.name}__'s __${skill.name}__ landed **${vars[1]}** extra time(s)!`);
 			}
+		},
+		getinfo(vars) {
+			return `**${vars[0]}%** chance to add up to **${vars[1]}** extra hit(s) to the skill.`;
 		}
 	}),
 
@@ -1287,6 +1379,20 @@ extrasList = {
 		statmod(char, skill, vars, btl) {
 			if (!char.status) return;
 			if (vars.inlcludes(char.status)) skill.pow *= vars[0];
+		},
+		getinfo(vars) {
+			let txt = `**${vars[0]}x** power boost when inflicted with `;
+			for (const i in vars) {
+				txt += `**${statusEmojis[vars[i]]}${vars[i]}**`
+				if (i == vars.length-2)
+					txt += ' or ';
+				else if (i >= vars.length-1)
+					txt += '.';
+				else
+					txt += ', ';
+			}
+
+			return txt;
 		}
 	}),
 
@@ -1307,7 +1413,10 @@ extrasList = {
 			makeExtra(skill, "metronome", skills);
 			return true
 		},
-		hardcoded: true
+		hardcoded: true,
+		getinfo(vars) {
+			return 'Use a completely random skill...';
+		}
 	}),
 
 	brickbreak: new Extra({
@@ -1316,7 +1425,7 @@ extrasList = {
 		args: [
 			{
 				name: "Multiplier",
-				type: "Float"
+				type: "Decimal"
 			}
 		],
 		applyfunc(message, skill, args) {
@@ -1331,6 +1440,9 @@ extrasList = {
 				skill.pow *= vars[0]
 				addAtkMsg(btl, `__${targ.name}__'s **${name}** was destroyed!`)
 			}
+		},
+		getinfo(vars) {
+			return `**Breaks the foe's shield**, with attack multiplied by **${vars[0]}x**`;
 		}
 	})
 }
