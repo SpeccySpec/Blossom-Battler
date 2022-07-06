@@ -15,7 +15,7 @@ canUseLb = (char, btl) => {
 	return char.lb[possible[0]];
 }
 
-// lol i broke something
+// Add this message to the end of an array.
 addAtkMsg = (btl, str) => {
 	if (!btl.atkmsg) {
 		btl.atkmsg = str;
@@ -59,6 +59,7 @@ dodgeTxt = (char, targ) => {
 	}
 }
 
+// Can char afford to use skill? If so, return true.
 canAfford = (char, skill) => {
 	let cost = parseInt(skill.cost);
 	let costtype = skill.costtype;
@@ -90,6 +91,7 @@ canAfford = (char, skill) => {
 	return true
 }
 
+// Use cost costtype with char.
 useCost = (char, cost, costtype) => {
 	if (!costtype) costtype === 'mp';
 
@@ -115,7 +117,7 @@ useCost = (char, cost, costtype) => {
 	}
 }
 
-// Placeholder
+// Generate Damage dealt to targ with skill using char's stats.
 genDmg = (char, targ, btl, skill) => {
 	let settings = setUpSettings(btl.guild.id);
 
@@ -181,7 +183,7 @@ genDmg = (char, targ, btl, skill) => {
 	}
 }
 
-// Also Placeholder
+// Get the affinity of an attack based on skill or status.
 getAffinity = (char, skillType) => {
 	let affinity = 'normal';
 
@@ -248,6 +250,17 @@ getAffinity = (char, skillType) => {
 	return affinity
 }
 
+// Divide val by nominator/denominator times times.
+function divideBy(val, nominator, denominator, times) {
+	if (times <= 0) return val;
+
+	let newval = val;
+	for (let i = 0; i < times; i++) newval *= nominator/denominator;
+
+	return newval;
+}
+
+// Attack targ with skill using char's stats. noRepel disables repel affinities.
 attackWithSkill = (char, targ, skill, btl, noRepel) => {
 	let settings = setUpSettings(btl.guild.id);
 
@@ -489,8 +502,19 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			let techs = [];
 
 			// Here we go...
-			for (let i = 0; i < totalHits; i++) {
+			for (let i = 1; i <= totalHits; i++) {
 				let dmg = genDmg(char, targ, btl, skill);
+				
+				if (i > 1 && !skill.extras?.sustain) {
+					if (skill.extras?.reverse) {
+						let lowestpow = divideBy(dmg, 9, 10, totalHits-1);
+						let diff = dmg-lowestpow;
+
+						dmg -= (diff/i);
+					} else {
+						dmg = divideBy(dmg, 9, 10, i-1);
+					}
+				}
 
 				// Handle Final Affinities
 				let curAffinity = affinity
