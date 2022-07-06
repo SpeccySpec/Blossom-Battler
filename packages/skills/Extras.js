@@ -163,7 +163,7 @@ extrasList = {
 			return true;
 		},
 		getinfo(vars) {
-			return `Requires **${vars[0]} than ${vars[1] ? 'or equal to' : ''} ${vars[2]}${vars[3].toUpperCase()}** to use.`;
+			return `Requires **${vars[0]} than ${vars[1] ? 'or equal to' : ''} ${vars[2]}${vars[3].toUpperCase()}** to use`;
 		}
 	}),
 
@@ -365,9 +365,6 @@ extrasList = {
 				}
 			}
 			return finalText
-		},
-		getinfo(vars) {
-			return `Changes the _${vars[0]}_'s ${vars[1]} ${vars[3]} affinity to **${vars[2]}** for **${vars[4]}** turns.`;
 		}
 	}),
 
@@ -383,7 +380,7 @@ extrasList = {
 			return `__${char.name}__ must rest to regain their energy!`;
 		},
 		getinfo(vars) {
-			return 'User must rest for one turn.';
+			return 'User must rest for one turn';
 		}
 	}),
 
@@ -511,14 +508,7 @@ extrasList = {
 				return txt;
 			}
 		},
-		getinfo(vars) {
-			let txt = `Buff _${vars[0]}'s_ **${vars[1].toUpperCase()}**`;
-
-			if (vars[2] && vars[2] <= -1) txt += `De-${txt}`;
-			if (vars[2] && vars[2] != 1 && vars[2] != -1) txt += ` _${(vars[2] < -1) ? -vars[2] : vars[2]} times_`;
-
-			return txt;
-		}
+		getinfo: buffText
 	}),
 
 	powerbuff: new Extra({
@@ -749,7 +739,7 @@ extrasList = {
 			return `__${char.name}__ drained **${vars[0]}** HP from ${targ.name}!`;
 		},
 		getinfo(vars) {
-			return `Drains 1/${vars[0]} of the damage dealt.`;
+			return `Drains 1/${vars[0]} of the damage dealt`;
 		}
 	}),
 
@@ -929,7 +919,7 @@ extrasList = {
 			if (allies <= 1) skill.pow *= vars[0];
 		},
 		getinfo(vars) {
-			return `When alone, this skill's power is multiplied by **${vars[0]}x**.`;
+			return `When alone, this skill's power is multiplied by **${vars[0]}x**`;
 		}
 	}),
 
@@ -955,7 +945,7 @@ extrasList = {
 			if (allies >= btl.teams[char.team].members.length) skill.pow *= vars[0];
 		},
 		getinfo(vars) {
-			return `When not alone, this skill's power is multiplied by **${vars[0]}x**.`;
+			return `When not alone, this skill's power is multiplied by **${vars[0]}x**`;
 		}
 	}),
 
@@ -978,7 +968,7 @@ extrasList = {
 		},
 		hardcoded: true,
 		getinfo(vars) {
-			return `Uses _user's_ **${vars[0].toUpperCase()}** to calculate damage.`;
+			return `Uses _user's_ **${vars[0].toUpperCase()}** to calculate damage`;
 		}
 	}),
 
@@ -1001,7 +991,7 @@ extrasList = {
 		},
 		hardcoded: true,
 		getinfo(vars) {
-			return `Uses _target's_ **${vars[0].toUpperCase()}** to calculate damage.`;
+			return `Uses _target's_ **${vars[0].toUpperCase()}** to calculate damage`;
 		}
 	}),
 
@@ -1019,7 +1009,7 @@ extrasList = {
 			return true
 		},
 		getinfo(vars) {
-			return `Current user's HP can modify damage by **${vars[0]}%**.`;
+			return `Current user's HP can modify damage by **${vars[0]}%**`;
 		}
 	}),
 
@@ -1037,7 +1027,7 @@ extrasList = {
 			return true
 		},
 		getinfo(vars) {
-			return `Current user's MP can modify damage by **${vars[0]}%**.`;
+			return `Current user's MP can modify damage by **${vars[0]}%**`;
 		}
 	}),
 
@@ -1115,7 +1105,7 @@ extrasList = {
 			if (char.custom?.affinitypoint) skill.pow += vars[0]*char.custom.affinitypoint;
 		},
 		getinfo(vars) {
-			return `Skill's power boosted by **${vars[0]}** per <:passive:963413845253193758>**Affinity Point**.`;
+			return `Skill's power boosted by **${vars[0]}** per <:passive:963413845253193758>**Affinity Point**`;
 		}
 	}),
 
@@ -1153,7 +1143,7 @@ extrasList = {
 				if (i == vars.length-2)
 					txt += ' and ';
 				else if (i >= vars.length-1)
-					txt += ' instead of the defaults.';
+					txt += ' instead of the defaults';
 				else
 					txt += ', ';
 			}
@@ -1181,7 +1171,7 @@ extrasList = {
 		},
 		hardcoded: true,
 		getinfo(vars) {
-			return `Uses the **${vars[0]}** damage formula.`;
+			return `Uses the **${vars[0]}** damage formula`;
 		}
 	}),
 
@@ -1256,9 +1246,9 @@ extrasList = {
 		hardcoded: true,
 		getinfo(vars) {
 			if (skill.hits && skill.hits > 1)
-				return 'Constant power throughout the multi-hit.';
+				return 'Constant power throughout the multi-hit';
 			else
-				return 'The `SUSTAIN` extra has no effect on single-hits...';
+				return 'The `SUSTAIN` extra has no effect on single-hits..';
 		}
 	}),
 
@@ -1273,9 +1263,9 @@ extrasList = {
 		hardcoded: true,
 		getinfo(vars) {
 			if (skill.hits && skill.hits > 1)
-				return 'Power increases throughout the multi-hit instead of decreasing.';
+				return 'Power increases throughout the multi-hit instead of decreasing';
 			else
-				return 'The `REVERSE` extra has no effect on single-hits...';
+				return 'The `REVERSE` extra has no effect on single-hits..';
 		}
 	}),
 
@@ -1305,14 +1295,14 @@ extrasList = {
 					if (i == vars.length-2)
 						txt += ' and ';
 					else if (i >= vars.length-1)
-						txt += ' will deal extra damage.';
+						txt += ' will deal extra damage';
 					else
 						txt += ', ';
 				}
 
 				return txt;
 			} else
-				return 'The `POWHIT` extra has no effect on single-hits...';
+				return 'The `POWHIT` extra has no effect on single-hits..';
 		}
 	}),
 
@@ -1352,7 +1342,7 @@ extrasList = {
 			}
 		},
 		getinfo(vars) {
-			return `**${vars[0]}%** chance to add up to **${vars[1]}** extra hit(s) to the skill.`;
+			return `**${vars[0]}%** chance to add up to **${vars[1]}** extra hit(s) to the skill`;
 		}
 	}),
 
@@ -1391,15 +1381,13 @@ extrasList = {
 			if (!char.status) return;
 			if (vars.inlcludes(char.status)) skill.pow *= vars[0];
 		},
-		getinfo(vars) {
+		getinfo(vars) { //SOMEONE HAS TO TEST IF THIS WORKS PROPERLY
 			let txt = `**${vars[0]}x** power boost when inflicted with `;
 			for (const i in vars) {
 				txt += `**${statusEmojis[vars[i]]}${vars[i]}**`
 				if (i == vars.length-2)
 					txt += ' or ';
-				else if (i >= vars.length-1)
-					txt += '.';
-				else
+				else if (i < vars.length-1)
 					txt += ', ';
 			}
 
@@ -1426,7 +1414,7 @@ extrasList = {
 		},
 		hardcoded: true,
 		getinfo(vars) {
-			return 'Use a completely random skill...';
+			return 'Use a completely random skill..';
 		}
 	}),
 
