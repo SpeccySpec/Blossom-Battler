@@ -510,6 +510,14 @@ extrasList = {
 
 				return txt;
 			}
+		},
+		getinfo(vars) {
+			let txt = `Buff _${vars[0]}'s_ **${vars[1].toUpperCase()}**`;
+
+			if (vars[2] && vars[2] <= -1) txt += `De-${txt}`;
+			if (vars[2] && vars[2] != 1 && vars[2] != -1) txt += ` _${(vars[2] < -1) ? -vars[2] : vars[2]} times_`;
+
+			return txt;
 		}
 	}),
 
