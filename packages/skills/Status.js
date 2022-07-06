@@ -903,6 +903,9 @@ statusList = {
 			} else {
 				return `__${char.name}__ assumes a defensive stance, ready to strike back.`;
 			}
+		},
+		getinfo(vars) {
+			return `Attack back when hit, with a **${vars[1]}%** accuracy attack with **${vars[0]}x** power`
 		}
 	}),
 

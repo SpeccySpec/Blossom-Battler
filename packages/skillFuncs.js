@@ -99,12 +99,6 @@ buffText = (buffArray) => {
 	return finalText
 }
 /*
-	if (hasStatus(skillDefs, 'chaosstir')) {
-		finalText += `Attack back when hit, with a **${skillDefs.statusses.chaosstir[1]}%** accuracy attack with **${skillDefs.statusses.chaosstir[0]}x** power.\n`
-	}
-	return finalText;
-}
-
 function passiveDesc(skillDefs) {
 	var finalText = `Passive Type: **${Object.keys(skillDefs.passive).join(', ')}**\n`;
 	return finalText;
