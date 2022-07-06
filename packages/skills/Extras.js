@@ -1112,7 +1112,7 @@ extrasList = {
 		],
 		applyfunc(message, skill, args) {
 			const formula = args[0].toLowerCase()
-			if (damageFormulas.includes(formula))
+			if (!damageFormulas.includes(formula))
 				return void message.channel.send('Invalid damage formula!\nValid formulas are: Persona, Pokemon, Lamonka, Beta')
 			makeExtra(skill, "forceformula", [formula]);
 			return true;
