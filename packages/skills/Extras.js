@@ -1295,15 +1295,15 @@ extrasList = {
 		desc: "Uses a random skill... or chooses from a set of <Skills>.",
 		args: [
 			{
-				name: "Skills",
-				type: "Decimal",
+				name: "Skill #1",
+				type: "Word",
 				forced: false,
 				multiple: true,
 			}
 		],
 		applyfunc(message, skill, args) {
 			let skills = args;
-			skills = skills.filter(skill => !skillFiles[skill] || skillFiles?.[skill]?.type === "passive");
+			skills = skills.filter(skill => !skillFile[skill] || skillFile?.[skill]?.type === "passive");
 			makeExtra(skill, "metronome", skills);
 			return true
 		},
