@@ -443,7 +443,7 @@ passiveList = {
 
 			if (chance < 1) return void message.channel.send("What's the point if it never happens?");
 
-			if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return void message.channel.send("Don't even try it.");
+			if (message.mentions.users.size > 0) return void message.channel.send("You're mean for trying to mention someone!");
 			if (counterName.length > 50) return void message.channel.send(`${counterName} is too long of a counter name.`);
 
 			if (power < 1) return void message.channel.send('Counters with 0 power or less will not function!');
@@ -636,7 +636,7 @@ passiveList = {
 		args: [
 			{
 				name: "Hits",
-				type: "Number",
+				type: "Num",
 				forced: true
 			},
 			{
@@ -1087,7 +1087,7 @@ passiveList = {
 		args: [
 			{
 				name: "Max Points",
-				type: "Number",
+				type: "Num",
 				forced: true
 			},
 			{
@@ -1097,7 +1097,13 @@ passiveList = {
 			}
 		],
 		applyfunc(message, skill, args) {
-			makePassive(skill, "affinitypoint", [args[0]]);
+			let max = args[0];
+			let name = args[1];
+
+			if (message.mentions.users.size > 0) return void message.channel.send("You're mean for trying to mention someone!");
+			if (max < 1) return void message.channel.send("You need to have at least one point!");
+
+			makePassive(skill, "affinitypoint", [max, name]);
 			return true;
 		},
 		onheal(char, ally, skill, heal, btl, vars) {
