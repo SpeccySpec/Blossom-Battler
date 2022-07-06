@@ -683,7 +683,7 @@ passiveList = {
 
 	kindheart: new Extra({
 		name: "Kind Heart",
-		desc: "_<Percent>_\nBoosts pacify rate by <Percent>%.",
+		desc: "Boosts pacify rate by <Percent>%.",
 		args: [
 			{
 				name: "Percent",
