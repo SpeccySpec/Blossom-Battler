@@ -99,24 +99,6 @@ buffText = (buffArray) => {
 	return finalText
 }
 /*
-	if (hasStatus(skillDefs, 'batonpass')) {
-		finalText += `Switch out user **with someone in backup**.\n`
-	}
-
-	if (hasStatus(skillDefs, 'charge')) {
-		finalText += 'Boosts'
-		
-		for (let i in skillDefs.statusses.charge) {
-			finalText += ` **${skillDefs.statusses.charge[i][0]}** damage by ${skillDefs.statusses.charge[i][1]}x`
-
-			if (i < skillDefs.statusses.charge.length - 1) {
-				finalText += ` and `
-			} else {
-				finalText += ` for one turn.\n`
-			}
-		}
-	}
-
 	if (hasStatus(skillDefs, 'orgiamode')) {
 		finalText += `Modifies user's ATK and MAG by **${skillDefs.statusses.orgiamode[0]}**x and END by **${skillDefs.statusses.orgiamode[1]}**x for **${skillDefs.statusses.orgiamode[2]}** turns. Falls asleep afterwards.\n`
 	}

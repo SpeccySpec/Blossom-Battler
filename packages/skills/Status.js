@@ -1092,6 +1092,18 @@ statusList = {
 			});
 
 			return `__${char.name}__'s ${(vars[0] == 'phys') ? 'atk' : 'mag'} was boosted for one turn!`;
+		},
+		getinfo(vars) {
+			let finalText = "Boosts"
+			for (let i in vars) {
+				finalText += ` **${vars[i][0]}** damage by ${vars[i][1]}x`
+				if (i < vars.length - 1) {
+					finalText += ` and `
+				} else {
+					finalText += ` for one turn.\n`
+				}
+			}
+			return finalText
 		}
 	}),
 
