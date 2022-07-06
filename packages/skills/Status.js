@@ -1100,7 +1100,7 @@ statusList = {
 				if (i < vars.length - 1) {
 					finalText += ` and `
 				} else {
-					finalText += ` for one turn.\n`
+					finalText += ` for one turn`
 				}
 			}
 			return finalText
