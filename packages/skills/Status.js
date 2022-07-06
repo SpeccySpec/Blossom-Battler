@@ -1144,6 +1144,9 @@ statusList = {
 			char.stats.end = Math.round(char.stats.end*vars[1]);
 
 			return `__${char.name}__'s attack and magic was multiplied by ${vars[0]}, however, their endurance was multiplied by ${vars[1]}.`;
+		},
+		getinfo(vars) {
+			return `Modifies user's ATK and MAG by **${vars[0]}**x and END by **${vars[1]}**x for **${vars[2]}** turns. Falls asleep afterwards`
 		}
 	})
 }

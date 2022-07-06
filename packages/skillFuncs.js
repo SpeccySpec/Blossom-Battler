@@ -99,10 +99,6 @@ buffText = (buffArray) => {
 	return finalText
 }
 /*
-	if (hasStatus(skillDefs, 'orgiamode')) {
-		finalText += `Modifies user's ATK and MAG by **${skillDefs.statusses.orgiamode[0]}**x and END by **${skillDefs.statusses.orgiamode[1]}**x for **${skillDefs.statusses.orgiamode[2]}** turns. Falls asleep afterwards.\n`
-	}
-
 	if (hasStatus(skillDefs, 'chaosstir')) {
 		finalText += `Attack back when hit, with a **${skillDefs.statusses.chaosstir[1]}%** accuracy attack with **${skillDefs.statusses.chaosstir[0]}x** power.\n`
 	}
