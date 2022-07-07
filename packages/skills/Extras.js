@@ -1467,10 +1467,15 @@ extrasList = {
 		},
 		onuseoverride(char, targ, skill, btl, vars) {
 			if (targ.hp <= char.hp) return 'But it failed!';
-			let dmg = targ.hp-char.hp;
-			targ.hp = char.hp;
 
-			return `__${char.name}__'s _${skill.name}_ dealt **${dmg}** damage to __${targ.name}__, cutting their health to theirs!`;
+			let c = randNum(1, 100);
+			if (c <= skill.acc+((char.stats.prc-targ.stats.agl)/2)) {
+				let dmg = targ.hp-char.hp;
+				targ.hp = char.hp;
+				return `__${char.name}__'s _${skill.name}_ dealt **${dmg}** damage to __${targ.name}__, cutting their health to theirs!`;
+			} else {
+				return dodgeTxt(targ);
+			}
 		},
 		getinfo(vars) {
 			return 'Brings the target to the _user\'s_ HP.';
@@ -1487,8 +1492,12 @@ extrasList = {
 		},
 		onuseoverride(char, targ, skill, btl, vars) {
 			let c = randNum(1, 100);
-
 			if (c <= skill.acc+((char.stats.prc-targ.stats.agl)/2)) {
+				let dmg = Math.round(targ.hp/2);
+				targ.hp -= dmg;
+				return `__${targ.name}__ had their HP halved, taking **${dmg}** damage!`;
+			} else {
+				return dodgeTxt(targ);
 			}
 		},
 		getinfo(vars) {
