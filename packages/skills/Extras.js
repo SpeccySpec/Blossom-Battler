@@ -1455,7 +1455,46 @@ extrasList = {
 		getinfo(vars) {
 			return `**Breaks the foe's shield**, with attack multiplied by **${vars[0]}x**`;
 		}
-	})
+	}),
+
+	endeavor: new Extra({
+		name: "Endeavor",
+		desc: 'Brings the target to your HP. Fails if you have equal to or more HP than the target.',
+		args: [],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "endeavor", [true]);
+			return true
+		},
+		onuseoverride(char, targ, skill, btl, vars) {
+			if (targ.hp <= char.hp) return 'But it failed!';
+			let dmg = targ.hp-char.hp;
+			targ.hp = char.hp;
+
+			return `__${char.name}__'s _${skill.name}_ dealt **${dmg}** damage to __${targ.name}__, cutting their health to theirs!`;
+		},
+		getinfo(vars) {
+			return 'Brings the target to the _user\'s_ HP.';
+		}
+	}),
+
+	superfang: new Extra({
+		name: "Super Fang",
+		desc: "Halves the target's current HP.",
+		args: [],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "superfang", [true]);
+			return true
+		},
+		onuseoverride(char, targ, skill, btl, vars) {
+			let c = randNum(1, 100);
+
+			if (c <= skill.acc+((char.stats.prc-targ.stats.agl)/2)) {
+			}
+		},
+		getinfo(vars) {
+			return "Halves the target's current HP.";
+		}
+	}),
 }
 
 // Make an Extra for a skill. "func" should be an array of 1-5 values indicating what the extra does.
