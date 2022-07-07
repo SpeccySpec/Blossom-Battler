@@ -507,8 +507,7 @@ extrasList = {
 
 				return txt;
 			}
-		},
-		getinfo: buffText
+		}
 	}),
 
 	powerbuff: new Extra({
