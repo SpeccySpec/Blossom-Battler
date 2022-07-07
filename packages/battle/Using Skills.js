@@ -463,7 +463,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 		// How many total hits
 		let totalHits = 0;
 		for (let i = 0; i < skill.hits; i++) {
-			let c = randNum(100);
+			let c = randNum(1, 100);
 
 			if (skill.nomod && skill.nomod.acc) {
 				if (c <= skill.acc) {
