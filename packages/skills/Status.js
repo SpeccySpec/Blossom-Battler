@@ -90,8 +90,7 @@ statusList = {
 		},
 		onuse(char, targ, skill, btl, vars) {
 			return extrasList.buff.onuse(char, targ, skill, btl, vars);
-		},
-		getinfo: buffText(vars)
+		}
 	}),
 
 	dekunda: new Extra({
