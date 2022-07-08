@@ -320,6 +320,8 @@ passiveList = {
 					}
 				}
 			}
+
+			return '';
 		}
 	}),
 
