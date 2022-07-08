@@ -1060,6 +1060,9 @@ statusList = {
 			} else {
 				return `__${char.name}__'s attack and melee attack power is boosted... but they are locked into using them!`;
 			}
+		},
+		getinfo(vars) {
+			return `Locks the user into using Melee Attacks with **${vars[0]}x Melee Power** and **x${vars[1]} ATK Stat Multiplier** ${vars[2] < 0 ? '**indefinitely**' : `for **${vars[2]}** turns`}`
 		}
 	}),
 
