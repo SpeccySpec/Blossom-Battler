@@ -1137,6 +1137,8 @@ statusList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
+			if (char.custom?.orgiamode) return 'But it failed!';
+
 			addCusVal(char, 'orgiamode', {
 				turns: vars[2],
 				revert: objClone(char.stats)

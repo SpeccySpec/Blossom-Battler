@@ -1132,7 +1132,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 
 	if (skill.heal) {
 		for (let i in skill.heal) {
-			if (healList[i].override) {
+			if (healList[i] && healList[i].override) {
 				if (healList[i].multiple) {
 					for (let k in skill.heal[i]) {
 						finalText += healList[i].override(char, skill, btl, skill.heal[i][k]);

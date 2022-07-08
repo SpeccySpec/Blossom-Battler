@@ -22601,7 +22601,7 @@
                 "value": 150,
                 "nextLevel": 340,
                 "level": 10,
-                "amount": null
+                "amount": {}
             },
             "Firestorm": {
                 "value": 10,
@@ -22638,7 +22638,7 @@
                 "value": 50,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": null
+                "amount": {}
             },
             "Karma": {
                 "value": 15,
@@ -25556,7 +25556,7 @@
                 "value": 35,
                 "nextLevel": 220,
                 "level": 3,
-                "amount": null
+                "amount": {}
             },
             "Lena": {
                 "value": 75,
@@ -25662,7 +25662,7 @@
                 "value": 90,
                 "nextLevel": 340,
                 "level": 10,
-                "amount": null
+                "amount": {}
             },
             "Mumei": {
                 "value": -50,
