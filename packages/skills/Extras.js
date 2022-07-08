@@ -796,7 +796,10 @@ extrasList = {
 			makeExtra(skill, "feint", [true]);
 			return true;
 		},
-		hardcoded: true
+		hardcoded: true,
+		getinfo(vars) {
+			return `**Bypasses shielding skills**`;
+		}
 	}),
 
 	healverse: new Extra({
@@ -845,6 +848,9 @@ extrasList = {
 					return `A green aura is deployed around __${targ.name}__!`;
 				}
 			}
+		},
+		getinfo(vars) {
+			return `Surrounds the target with a **healing aura** for **${vars[1]}** turns`;
 		}
 	}),
 
@@ -893,6 +899,9 @@ extrasList = {
 					return `A red aura is deployed around __${targ.name}__!`;
 				}
 			}
+		},
+		getinfo(vars) {
+			return `Surrounds the target with an **empowering aura** for **${vars[1]}** turns`;
 		}
 	}),
 
@@ -940,6 +949,9 @@ extrasList = {
 					return `A yellow aura is deployed around __${targ.name}__!`;
 				}
 			}
+		},
+		getinfo(vars) {
+			return `Surrounds the target with a **scattering aura** for **${vars[1]}** turns`;
 		}
 	}),
 

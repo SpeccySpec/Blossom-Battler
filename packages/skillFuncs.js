@@ -114,52 +114,11 @@ function atkDesc(skillDefs, settings) {
 		if (hasExtra(skillDefs, 'affinitypow'))
 			finalText += `Affected by **<:passive:906874477210648576>SpiritCharge** or **<:passive:906874477210648576>Teamwork**, by **${skillDefs.extras.affinitypow[0]} power**.\n`;
 
-		if (hasExtra(skillDefs, 'steal')) {
-			finalText += `Has a ` 
-
-			for (i in skillDefs.extras.steal) {
-				finalText += `**${skillDefs.extras.steal[i][0]}%** chance of stealing **${skillDefs.extras.steal[i][1]}**`
-
-				if (i < skillDefs.extras.steal.length - 2) {
-					finalText += `, `
-				} else if (i == skillDefs.extras.steal.length - 2) {
-					finalText += ` and `
-				}
-			}
-
-			finalText +=`of the target team's items.\n`
-		}
-
-		if (hasExtra(skillDefs, 'healverse') || hasExtra(skillDefs, 'powerverse') || hasExtra(skillDefs, 'spreadverse')) {
-			finalText += `Surrounds the target with a `;
-			if (hasExtra(skillDefs, 'healverse')) {
-				finalText += `**healing aura** for **${skillDefs.extras.healverse[1]}** turns`;
-			}
-			if (hasExtra(skillDefs, 'powerverse')) {
-				if (hasExtra(skillDefs, 'healverse') && !hasExtra(skillDefs, 'powerverse')) finalText += ` and a`;
-				else if (hasExtra(skillDefs, 'healverse') && hasExtra(skillDefs, 'powerverse')) finalText += `, a`;
-
-				finalText += ` **power aura** for **${skillDefs.extras.powerverse[1]}** turns`;
-			}
-			if (hasExtra(skillDefs, 'spreadverse')) {
-				if (hasExtra(skillDefs, 'healverse') || hasExtra(skillDefs, 'powerverse')) finalText += ` and a`;
-
-				finalText += ` **spread aura** for **${skillDefs.extras.spreadverse[1]}** turns`;
-			}
-			finalText += `.\n`;
-		}
-
 		if (hasExtra(skillDefs, 'lonewolf'))
 			finalText += `Power is multiplied by ${skillDefs.extras.lonewolf[0]}x if **the user is alone or the last one standing**.\n`;
 
 		if (hasExtra(skillDefs, 'heavenwrath'))
 			finalText += `Power is multiplied by ${skillDefs.extras.heavenwrath[0]}x if **not alone, and all allies are not down**.\n`;
-
-		if (hasExtra(skillDefs, 'rest'))
-			finalText += `User **must recharge for a turn**.\n`;
-
-		if (hasExtra(skillDefs, 'feint'))
-			finalText += `**Bypasses shielding skills**.\n`;
 
 		if (hasExtra(skillDefs, 'statcalc'))
 			finalText += `Uses user's **${skillDefs.extras.statcalc[0].toString().toUpperCase()}** for measuring damage.\n`;
