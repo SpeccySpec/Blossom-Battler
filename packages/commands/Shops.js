@@ -12,8 +12,12 @@ commands.openshop = new Command({
 		},
 		{
 			name: "Channel",
-			type: "Channel",
+			type: "RealChannel",
 			forced: true
+		},
+		{
+			name: "Can Sell?",
+			type: "YesNo"
 		},
 		{
 			name: "Items",
@@ -26,16 +30,12 @@ commands.openshop = new Command({
 	checkban: true,
 	admin: "You lack sufficient permissions, I'm so sorry!",
 	func: (message, args) => {
-		let shopData = setUpFile(`${dataPath}/json/${message.guild.id}/shops.json`);
+		let shopData = setUpFile(`${dataPath}/json/${message.guild.id}/${args[1].id}/shops.json`);
 
-        if (!args[1]) {
-            const DiscordEmbed = new Discord.MessageEmbed()
-                .setColor('#0099ff')
-                .setTitle(`${prefix}openshop`)
-				.setDescription(commands.openshop.desc)
-            return message.channel.send({embeds: [DiscordEmbed]})
-        }
-		
-		message.channel.send("I just realised... I can't do this without any defined items!")
+		let shop = {
+			name: args[0],
+			cansell: args[2] ?? false,
+			items: []
+		}
 	}
 })

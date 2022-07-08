@@ -1005,6 +1005,7 @@ setTimeout(function() {
 typeParsers = {
 	Num: ({arg}) => {return isNaN(arg) ? undefined : parseInt(arg)},
 	Decimal: ({arg}) => {return isNaN(arg) ? undefined : parseFloat(arg)},
+	YesNo: ({arg}) => {return (arg.toLowerCase() === 'yes' || arg.toLowerCase() === 'true' || arg.toLowerCase() === 'ok') ?? undefined},
 	Ping: ({message}) => {return message.mentions.users.first()},
 	Channel: ({message, arg}) => {return message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')) ? message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')).id : undefined},
 	RealChannel: ({message, arg}) => {return message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')) ?? undefined},
