@@ -417,7 +417,7 @@ commands.listitems = new Command({
                             }
                             break;
                     }
-                    if (isConditionMet == false || isConditionMet == undefined) continue;
+                    if (isConditionMet == false || isConditionMet == undefined) break;
                 }
             }
             if (isConditionMet == false || isConditionMet == undefined) continue;
@@ -1070,7 +1070,7 @@ commands.listweapons = new Command({
                             }
                             break;
                     }
-                    if (isConditionMet == false || isConditionMet == undefined) continue;
+                    if (isConditionMet == false || isConditionMet == undefined) break;
                 }
             }
             if (isConditionMet == false || isConditionMet == undefined) continue;
@@ -1591,7 +1591,7 @@ commands.listarmors = new Command({
                             }
                             break;
                     }
-                    if (isConditionMet == false || isConditionMet == undefined) continue;
+                    if (isConditionMet == false || isConditionMet == undefined) break;
                 }
             }
             if (isConditionMet == false || isConditionMet == undefined) continue;

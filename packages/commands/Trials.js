@@ -295,7 +295,7 @@ commands.listtrials = new Command({
                     if (isConditionMet == false || isConditionMet == undefined) break;
                 }
             }
-            if (isConditionMet == false || isConditionMet == undefined) break;
+            if (isConditionMet == false || isConditionMet == undefined) continue;
 
             array.push({title: trials[i].name, desc: `${trials[i].waves.length} Waves`});
         }

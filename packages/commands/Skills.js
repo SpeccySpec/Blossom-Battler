@@ -1783,7 +1783,7 @@ commands.listskills = new Command({
 							}
 							break;
 					}
-					if (isConditionMet == false || isConditionMet == undefined) continue;
+					if (isConditionMet == false || isConditionMet == undefined) break;
 				}
 			}
 			if (isConditionMet == false || isConditionMet == undefined) continue;

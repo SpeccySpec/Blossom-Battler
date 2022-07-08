@@ -635,7 +635,7 @@ commands.listparty = new Command({
 					if (isConditionMet == false || isConditionMet == undefined) break;
 				}
 			}
-			if (isConditionMet == false || isConditionMet == undefined) break;
+			if (isConditionMet == false || isConditionMet == undefined) continue;
 
 			let members = '';
 			
