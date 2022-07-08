@@ -507,7 +507,10 @@ extrasList = {
 
 				return txt;
 			}
-		}
+		},
+		getinfo: buffText
+		//for consistency, this must use the same function as the support buff extra
+		//buffText was made to generate text info about buffs even begore getinfo was added, don't change it
 	}),
 
 	powerbuff: new Extra({
