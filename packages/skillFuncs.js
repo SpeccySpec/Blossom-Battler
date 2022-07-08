@@ -141,7 +141,10 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 		if (hasExtra(skillDefs, 'ohko'))
 			finalText += `Defeats the target ${skillDefs.extras.ohko[1] && skillDefs.extras.ohko[1] != null ? `inflicted with ${statusEmojis[skillDefs.extras.ohko[1]]}${skillDefs.extras.ohko[1]}` : ''} in **one shot**!`;
 		else {
-			finalText += `Has **${skillDefs.pow}** Power`;
+			if (skillDefs.type != "heal")
+				finalText += `Has **${skillDefs.pow}** Power.`;
+			else 
+				finalText += skillDefs.heal.default ? `Heals around **${skillDefs.heal.default[0]} ${skillDefs.heal.default[1].toUpperCase()}**.` : ''
 		}
 
 		if (skillDefs.hits && skillDefs.hits > 1 && skillDefs.type != "heal" && !hasExtra(skillDefs, 'ohko')) 
