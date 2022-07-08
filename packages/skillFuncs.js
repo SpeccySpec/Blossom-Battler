@@ -114,81 +114,8 @@ function atkDesc(skillDefs, settings) {
 		if (hasExtra(skillDefs, 'affinitypow'))
 			finalText += `Affected by **<:passive:906874477210648576>SpiritCharge** or **<:passive:906874477210648576>Teamwork**, by **${skillDefs.extras.affinitypow[0]} power**.\n`;
 
-		if (hasExtra(skillDefs, 'need')) {
-			let extraSom = ''
-			finalText += `Needs`
-
-			let needThing = skillDefs.extras.need.sort((a, b) => {
-				return ((a[0] == 'less' ? 10 : 20) + (a[1] == true ? 2 : 1)) - ((b[0] == 'less' ? 10 : 20) + (b[1] == true ? 2 : 1))
-			})
-
-			let curTxt = ''
-			let oldTxt = ''
-			let lastIndex = 0
-
-			for (i in needThing) {
-				curTxt = ` **${needThing[i][0]} ${needThing[i][1] ? 'or equal to' : 'than'}** `
-
-				if (curTxt != oldTxt) {
-					finalText += curTxt
-					lastIndex = i
-				}
-
-				switch (needThing[i][3]) {
-					case 'mp':
-						extraSom = ' MP';
-						break;
-					case 'lb':
-						if (settings.mechanics.limitbreaks) extraSom = '% LB';
-						else extraSom = '% of the user\'s Max MP';
-						break;
-					case 'money':
-						extraSom = ` of Team's Money`;
-						break;
-					case 'hppercent':
-						extraSom = '% of the user\'s Max HP';
-						break;
-					case 'mppercent':
-						extraSom = '% of the user\'s Max MP';
-						break;
-					case 'moneypercent':
-						extraSom = '% of the user Team\'s Money';
-						break;
-					default:
-						extraSom = ' HP';
-						break;
-				}
-
-				finalText += `**${needThing[i][2]}${extraSom}**`;
-
-				oldTxt = curTxt
-
-				if (needThing.length > 1) {
-					if ((i - lastIndex) < needThing.filter(x => x[0] == needThing[i][0]).length - 2) {
-						finalText += `, `
-					} else if ((i - lastIndex) == needThing.filter(x => x[0] == needThing[i][0]).length - 2) {
-						finalText += ` and `
-					} else {
-						if (i < needThing.length - 2) {
-							finalText += `, `
-						} else if (i == needThing.length - 2) {
-							finalText += ` and `
-						}
-					}
-				}
-			}
-			
-			finalText += ` to use.\n`;
-		}
-
 		if (hasExtra(skillDefs, 'sacrifice'))
 			finalText += `${skillDefs.extras.sacrifice[0] <= 0 ? `**Sacrifices the user**` : `Leaves the user's health at **${skillDefs.extras.sacrifice[0]}**`}.\n`;
-
-		if (hasExtra(skillDefs, 'stealmp'))
-			finalText += `Steals MP from the target instead of dealing damage.\n`;
-
-		if (hasExtra(skillDefs, 'takemp'))
-			finalText += `Takes **${skillDefs.extras.takemp[0]} MP** from the target.\n`;
 
 		if (hasExtra(skillDefs, 'drain'))
 			finalText += `Drains **1/${skillDefs.extras.drain[0]} of damage dealt**.\n`;
@@ -207,36 +134,6 @@ function atkDesc(skillDefs, settings) {
 			}
 
 			finalText +=`of the target team's items.\n`
-		}
-
-		if (hasExtra(skillDefs, 'buff')) {
-			finalText += buffText(skillDefs.extras.buff)
-		}
-
-		if (hasExtra(skillDefs, 'powerbuff')) {
-			let powerbuffs = skillDefs.extras.powerbuff
-
-			powerbuffs.sort((a, b) => {
-				return (stats.indexOf(a[0])*10000 + a[1]*10 + a[2] ? 0 : 1) - (stats.indexOf(b[0])*10000 + b[1]*10 + b[2] ? 0 : 1)
-			})
-
-			let curPB = []
-
-			finalText += `Increases in power with`
-			for (let i in powerbuffs) {
-				finalText += ` **${powerbuffs[i][0].toUpperCase()}** buffs`;
-
-				curPB = powerbuffs[i]
-
-				finalText += ` by **${curPB[2] ? 'up to' : ''} ${curPB[1] + (curPB[2] ? 100 : 0) }${curPB[3] ? '% of' : ''} power**`
-
-				if (i < powerbuffs.length - 2) {
-					finalText += `, `
-				} else if (i == powerbuffs.length - 2) {
-					finalText += ` and `
-				}
-			}
-			finalText += `\n`;
 		}
 
 		if (hasExtra(skillDefs, 'healverse') || hasExtra(skillDefs, 'powerverse') || hasExtra(skillDefs, 'spreadverse')) {

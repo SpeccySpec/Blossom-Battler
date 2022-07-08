@@ -609,6 +609,9 @@ extrasList = {
 			if (targ.mp < 0) targ.mp = 0;
 
 			return `__${char.name}__ took **${MPtaken} MP** from __${targ.name}__!`;
+		},
+		getinfo(vars) {
+			return `Takes **${vars[0]} MP** from the target`
 		}
 	}),
 
@@ -628,6 +631,9 @@ extrasList = {
 			char.mp = Math.min(char.maxmp, char.mp+mpStolen)
 			
 			return `__${char.name}__ managed to steal **${mpStolen}** MP!`;
+		},
+		getinfo(vars) {
+			return `Steals MP from the target instead of dealing damage`
 		}
 	}),
 
