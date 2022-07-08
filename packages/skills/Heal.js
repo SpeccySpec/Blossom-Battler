@@ -1,6 +1,6 @@
 healList = {
-	healstat: new Extra({
-		name: "Heal Stat",
+	default: new Extra({
+		name: "Default",
 		desc: "The default heal type. Restores <Meter> by <Heal Amount>. _Negative values for <Heal Amount> will damage the target!_",
 		args: [
 			{
@@ -63,7 +63,8 @@ healList = {
 			}
 
 			return '';
-		}
+		},
+		hardcodedinfo: true
 	}),
 
 	regenerate: new Extra({
@@ -105,6 +106,9 @@ healList = {
 				changeTrust(targ, char, Math.round(5*(settings.rates.trustrate ?? 1)), true, btl.channel);
 			}
 			return `__${targ.name}__ is surrounded in a lime coloured aura!`;
+		},
+		getinfo(vars) {
+			return `Regenerates **around ${vars[0]} HP** for **${vars[1]} turns**`
 		}
 	}),
 
@@ -147,6 +151,9 @@ healList = {
 				changeTrust(targ, char, Math.round(5*(settings.rates.trustrate ?? 1)), true, btl.channel);
 			}
 			return `__${targ.name}__ is surrounded in a violet coloured aura!`;
+		},
+		getinfo(vars) {
+			return `Regenerates **around ${vars[0]} MP** for **${vars[1]} turns**`
 		}
 	}),
 
@@ -175,6 +182,9 @@ healList = {
 				changeTrust(targ, char, Math.round(30*(settings.rates.trustrate ?? 1)), true, btl.channel);
 			}
 			return `__${targ.name}__ was revived!`;
+		},
+		getinfo(vars) {
+			return `**Revives** the target to 1/${vars[0]} of their max HP`
 		}
 	}),
 
@@ -199,6 +209,9 @@ healList = {
 			}
 
 			return `The party's HP & MP was fully restored, but at the cost of __${char.name}__'s sacrifice!`;
+		},
+		getinfo(vars) {
+			return `**Fully** restores party HP and MP, but **downs the user**`
 		}
 	}),
 
@@ -276,6 +289,19 @@ healList = {
 			}
 
 			return '...';
+		},
+		getinfo(vars) {
+			let txt = `Cures **`
+
+			for (let i in vars) {
+				txt += `${statusEmojis[vars[i]] ?? ''}${vars[i]}`
+				if (i < vars.length - 2)
+				txt += `, `
+				else if (i === vars.length - 2)
+				txt += ` and `
+			}
+
+			return txt + ` ailments**`;
 		}
 	}),
 
@@ -309,6 +335,9 @@ healList = {
 				char.hp = vars[0];
 
 			return `__${char.name}__ sacrificed themselves, lowering their HP to __${vars[0]}__!`;
+		},
+		getinfo(vars) {
+			return extraslist.sacrifice.getinfo(vars);
 		}
 	}),
 
@@ -344,6 +373,9 @@ healList = {
 			})
 
 			return `__${char.name}__ will experience a healing wish in **${vars[0]}** turns.`;
+		},
+		getinfo(vars) {
+			return `Heals after **${vars[0]} turns**`;
 		}
 	})
 }

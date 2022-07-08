@@ -138,40 +138,10 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 	let settings = setUpSettings(message.guild.id);
 	var finalText = ``;
 	if (skillDefs.type != "status" && skillDefs.type != "passive") {
-		if (hasExtra(skillDefs, 'ohko') && skillDefs.type != "heal")
+		if (hasExtra(skillDefs, 'ohko'))
 			finalText += `Defeats the target ${skillDefs.extras.ohko[1] && skillDefs.extras.ohko[1] != null ? `inflicted with ${statusEmojis[skillDefs.extras.ohko[1]]}${skillDefs.extras.ohko[1]}` : ''} in **one shot**!`;
 		else {
-			if (skillDefs.type === 'heal') {
-				if (hasHealType(skillDefs, 'fullheal')) finalText += '**Fully heals**\n';
-
-				if (hasHealType(skillDefs, 'default')) finalText += `Heals **around ${skillDefs.heal.default[0]} HP**\n`;
-				if (hasHealType(skillDefs, 'healmp')) finalText += `Heals **around ${skillDefs.heal.healmp[0]} MP**\n`;
-
-				if (hasHealType(skillDefs, 'regenerate')) finalText += `Regenerates **around ${skillDefs.heal.regenerate[0]} HP** for **${skillDefs.heal.regenerate[1]} turns**\n`;
-				if (hasHealType(skillDefs, 'invigorate')) finalText += `Regenerates **around ${skillDefs.heal.invigorate[0]} MP** for **${skillDefs.heal.invigorate[1]} turns**\n`;
-
-				if (hasHealType(skillDefs, 'revive')) finalText += `**Revives** the target to 1/${skillDefs.heal.revive[0]} of their max HP\n`;
-
-				if (hasHealType(skillDefs, 'statusheal')) {
-					finalText += `Cures **`
-
-					for (let i in skillDefs.heal.statusheal) {
-						finalText += `${statusEmojis[skillDefs.heal.statusheal[i]] ?? ''}${skillDefs.heal.statusheal[i]}`
-
-						if (i < skillDefs.heal.statusheal.length - 1)
-							finalText += `, `
-					}
-
-					finalText += ` ailments**.\n`;
-				}
-				
-				if (hasHealType(skillDefs, 'sacrifice')) finalText += `${skillDefs.heal.sacrifice[0] > 0 ? `**Leaves the user's health at ${skillDefs.heal.sacrifice[0]}**` : '**Sacrifices the user**'}\n`;
-				
-				if (hasHealType(skillDefs, 'wish')) finalText += `Heals after **${skillDefs.heal.wish[0]} turns**\n`;
-
-				finalText = finalText.slice(0, -1);
-			} else
-				finalText += `Has **${skillDefs.pow}** Power`;
+			finalText += `Has **${skillDefs.pow}** Power`;
 		}
 
 		if (skillDefs.hits && skillDefs.hits > 1 && skillDefs.type != "heal" && !hasExtra(skillDefs, 'ohko')) 

@@ -66,11 +66,7 @@ extrasList = {
 				return dodgeTxt(targ);
 			}
 		},
-		getinfo(vars) {
-			let txt = `**${vars[0]}%** chance to **instantly K.O the foe**`;
-			if (vars[1]) txt += ` if they are inflicted with **${vars[1]}%**`;
-			return txt;
-		}
+		hardcodedinfo: true
 	}),
 
 	sacrifice: new Extra({
