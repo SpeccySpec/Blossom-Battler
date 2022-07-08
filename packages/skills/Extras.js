@@ -747,6 +747,21 @@ extrasList = {
 				}
 			}
 			return `__${char.name}__ failed to steal anything.`
+		},
+		getinfo(vars) {
+			let txt = `Has a ` 
+
+			for (i in vars) {
+				txt += `**${vars[i][0]}%** chance of stealing **${vars[i][1]}**`
+
+				if (i < vars.length - 2) {
+					txt += `, `
+				} else if (i == vars.length - 2) {
+					txt += ` and `
+				}
+			}
+
+			return txt + ` of the target team's items`
 		}
 	}),
 

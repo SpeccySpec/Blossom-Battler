@@ -114,12 +114,6 @@ function atkDesc(skillDefs, settings) {
 		if (hasExtra(skillDefs, 'affinitypow'))
 			finalText += `Affected by **<:passive:906874477210648576>SpiritCharge** or **<:passive:906874477210648576>Teamwork**, by **${skillDefs.extras.affinitypow[0]} power**.\n`;
 
-		if (hasExtra(skillDefs, 'sacrifice'))
-			finalText += `${skillDefs.extras.sacrifice[0] <= 0 ? `**Sacrifices the user**` : `Leaves the user's health at **${skillDefs.extras.sacrifice[0]}**`}.\n`;
-
-		if (hasExtra(skillDefs, 'drain'))
-			finalText += `Drains **1/${skillDefs.extras.drain[0]} of damage dealt**.\n`;
-
 		if (hasExtra(skillDefs, 'steal')) {
 			finalText += `Has a ` 
 
