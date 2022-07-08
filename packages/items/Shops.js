@@ -3,7 +3,7 @@ getShopData = (shopname) => {
 	let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`, true);
 	let weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`, true);
 	let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`, true);
-
+	
 	let shop = shopData[shopname];
 
 	let DiscordEmbed = new Discord.MessageEmbed()
