@@ -557,6 +557,29 @@ extrasList = {
 			}
 
 			if (!vars[2]) skill.pow += lmao * 3
+		},
+		getinfo(vars) {
+			let powBuffs = vars.sort((a, b) => {
+				return (stats.indexOf(a[0])*10000 + a[1]*10 + a[2] ? 0 : 1) - (stats.indexOf(b[0])*10000 + b[1]*10 + b[2] ? 0 : 1)
+			})
+
+			let txt = `Increases in power with`
+
+			let curPB = []
+			for (let i in powBuffs) {
+				txt += ` **${powBuffs[i][0].toUpperCase()}** buffs`;
+
+				curPB = powBuffs[i]
+
+				txt += ` by **${curPB[2] ? 'up to' : ''} ${curPB[1] + (curPB[2] ? 100 : 0) }${curPB[3] ? '% of' : ''} power**`
+
+				if (i < powBuffs.length - 2) {
+					txt += `, `
+				} else if (i == powBuffs.length - 2) {
+					txt += ` and `
+				}
+			}
+			return txt
 		}
 	}),
 
