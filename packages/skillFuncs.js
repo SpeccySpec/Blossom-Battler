@@ -97,15 +97,9 @@ require("./skills/Heal")
 require("./skills/Passive")
 require("./skills/Status")
 
-/* ADD ALL THE MISSING GETINFO HOOKS FOR THE EXTRAS USING THE BELOW COMMENT AS REFERENCE
-function passiveDesc(skillDefs) {
-	var finalText = `Passive Type: **${Object.keys(skillDefs.passive).join(', ')}**\n`;
-	return finalText;
-}*/
-
 extraTypes = {
 	status: ["statusses", statusList],
-	passive: ["passives", passiveList],
+	passive: ["passive", passiveList],
 	heal: ["heal", healList]
 }
 

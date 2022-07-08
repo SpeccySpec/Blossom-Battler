@@ -30,6 +30,18 @@ passiveList = {
 			if ((typeof(skill.type) === 'object' && skill.type.includes(vars[0])) || (typeof(skill.type) === 'string' && skill.type == vars[0])) {
 				skill.pow *= vars[1]/100;
 			}
+		},
+		getinfo(vars) {
+			let txt = `Boosts `
+
+			for (i in vars) {
+				txt += `${elementEmoji[vars[i][0]] ?? ''}**${vars[i][0].charAt(0).toUpperCase() + vars[i][0].slice(1)}** attacks by ${vars[i][1]}%`
+
+				if (i < vars.length - 2) txt += `, `
+				else if (i == vars.length - 2) txt += ` and `
+			}
+
+			return txt;
 		}
 	}),
 
