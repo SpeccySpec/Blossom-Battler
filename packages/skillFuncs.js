@@ -1,8 +1,3 @@
-require("./skills/Extras")
-require("./skills/Heal")
-require("./skills/Passive")
-require("./skills/Status")
-
 buffText = (buffArray) => {
 	let finalText = '';
 
@@ -88,8 +83,6 @@ buffText = (buffArray) => {
 				finalText += `, `
 			} else if (i == buffArray.filter(x => x[3] == curBuff[3]).length - 2) {
 				finalText += ` and `
-			} else {
-				finalText += `.\n`
 			}
 		}
 
@@ -98,7 +91,13 @@ buffText = (buffArray) => {
 
 	return finalText
 }
-/*
+
+require("./skills/Extras")
+require("./skills/Heal")
+require("./skills/Passive")
+require("./skills/Status")
+
+/* ADD ALL THE MISSING GETINFO HOOKS FOR THE EXTRAS USING THE BELOW COMMENT AS REFERENCE
 function passiveDesc(skillDefs) {
 	var finalText = `Passive Type: **${Object.keys(skillDefs.passive).join(', ')}**\n`;
 	return finalText;
