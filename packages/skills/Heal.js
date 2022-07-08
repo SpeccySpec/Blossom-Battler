@@ -397,6 +397,11 @@ buildHeal = (message, extra, args) => {
 		originalAuthor: message.author.id
 	}
 
+	if (healList?.[extra]?.unregsiterable && !utilityFuncs.RPGBotAdmin(message.author.id)) {
+		message.channel.send(`You lack permissions to apply ${healList[extra].name} for this skill.`)
+		return false;
+	}
+
 	applyHeal(message, skill, extra, args.slice(6))
 	
 	if (skill.done) {

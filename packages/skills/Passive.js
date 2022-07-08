@@ -1166,6 +1166,11 @@ buildPassive = (message, extra, args) => {
 		originalAuthor: message.author.id
 	}
 
+	if (passiveList?.[extra]?.unregsiterable && !utilityFuncs.RPGBotAdmin(message.author.id)) {
+		message.channel.send(`You lack permissions to apply ${passiveList[extra].name} for this skill.`)
+		return false;
+	}
+
 	applyPassive(message, skill, extra, args.slice(3))
 	
 	if (skill.done) {

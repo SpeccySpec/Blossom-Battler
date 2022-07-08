@@ -941,7 +941,7 @@ commands.listatkextras = new Command({
 
 		let extras = []
 		for (let i in extrasList) {
-			extras.push({name: `${extrasList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${extrasList[i].getFullDesc()}`, inline: true});
+			if (!extrasList[i]?.unregsiterable) extras.push({name: `${extrasList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${extrasList[i].getFullDesc()}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['fire'])
@@ -959,7 +959,7 @@ commands.liststatusextras = new Command({
 
 		let extras = []
 		for (let i in statusList) {
-			extras.push({name: `${statusList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${statusList[i].getFullDesc()}`, inline: true});
+			if (!extrasList[i]?.unregsiterable) extras.push({name: `${statusList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${statusList[i].getFullDesc()}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['status'])
@@ -977,7 +977,7 @@ commands.listhealextras = new Command({
 
 		let extras = []
 		for (let i in healList) {
-			extras.push({name: `${healList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${healList[i].getFullDesc()}`, inline: true});
+			if (!extrasList[i]?.unregsiterable) extras.push({name: `${healList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${healList[i].getFullDesc()}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['heal'])
@@ -995,7 +995,7 @@ commands.listpassiveextras = new Command({
 
 		let extras = []
 		for (let i in passiveList) {
-			extras.push({name: `${passiveList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${passiveList[i].getFullDesc()}`, inline: true});
+			if (!extrasList[i]?.unregsiterable) extras.push({name: `${passiveList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${passiveList[i].getFullDesc()}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['passive'])
@@ -1034,6 +1034,10 @@ commands.applyextra = new Command({
 			}
 			
 			let type = typeof skilldata.type == 'object' ? skilldata.type[0] : skilldata.type
+
+			let extraList = skilldata.type == 'status' ? statusList : skilldata.type == 'heal' ? healList : skilldata.type == 'passive' ? passiveList : extrasList
+			if (extraList?.[extra]?.unregsiterable && !utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send(`You lack permissions to apply ${extraList[extra].name} for this skill.`)
+
 			switch (type) {
 				case 'passive':
 					applyPassive(message, skilldata, extra, args);
@@ -1080,6 +1084,7 @@ commands.clearextras = new Command({
 			}
 
 			let type = typeof skilldata.type == 'object' ? skilldata.type[0] : skilldata.type
+
 			switch (type) {
 				case 'passive':
 					if (!skilldata.passive) return message.channel.send(`${skilldata.name} has no extras!`);

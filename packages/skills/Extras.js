@@ -9,6 +9,7 @@ Extra = class extends ArgList {
 		this.name = object.name
 		this.multiple = object.multiple
 		this.diffflag = object.diffflag
+		this.unregsiterable = object.unregsiterable
 		for (const i in object) {
 			const func = object[i]
 			if (typeof func != "function")
@@ -1473,6 +1474,19 @@ extrasList = {
 		hardcoded: true,
 		getinfo(vars) {
 			return 'Use a completely random skill..';
+		}
+	}),
+
+	copyskill: new Extra({
+		name: "Copy Skill",
+		unregsiterable: true,
+		hardcoded: true,
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "copyskill", [true]);
+			return true
+		},
+		getinfo(vars) {
+			return 'Copies a **random skill of user\'s team**';
 		}
 	}),
 

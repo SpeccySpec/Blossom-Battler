@@ -1221,6 +1221,11 @@ buildStatus = (message, extra, args) => {
 		originalAuthor: message.author.id
 	}
 
+	if (statusList?.[extra]?.unregsiterable && !utilityFuncs.RPGBotAdmin(message.author.id)) {
+		message.channel.send(`You lack permissions to apply ${statusList[extra].name} for this skill.`)
+		return false;
+	}
+
 	applyStatus(message, skill, extra, args.slice(6))
 	
 	if (skill.done) {
