@@ -888,7 +888,10 @@ passiveList = {
 			makePassive(skill, "magicmelee", [true]);
 			return true;
 		},
-		hardcoded: true
+		hardcoded: true,
+		getinfo(vars) {
+			return `Turns user's melee attack into a magic attack`
+		}
 	}),
 
 	attackall: new Extra({
@@ -899,7 +902,10 @@ passiveList = {
 			makePassive(skill, "attackall", [true]);
 			return true;
 		},
-		hardcoded: true
+		hardcoded: true,
+		getinfo(vars) {
+			return `Melee Attack targets all foes`
+		}
 	}),
 
 	wonderguard: new Extra({
@@ -916,6 +922,9 @@ passiveList = {
 			}
 
 			return ['block', `__${char.name}__'s __${passive.name}__ made the skill have no affect!`];
+		},
+		getinfo(vars) {
+			return `Nullifies damage from attacks that the user is not weak to`
 		}
 	}),
 
