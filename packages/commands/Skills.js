@@ -648,7 +648,6 @@ commands.updateskills = new Command({
 					if (!skillFile[skill].heal.healstat) skillFile[skill].heal.healstat = [skillFile[skill].pow, 'hp']; //power, stat
 				}
 
-				delete skillFile[skill].pow;
 				delete skillFile[skill].acc;
 				delete skillFile[skill].crit;
 				delete skillFile[skill].status;
