@@ -77,6 +77,8 @@ buffStat = (f, stat, amount) => {
 }
 
 inflictStatus = (char, status) => {
+	if (status === 'paralysis' || status === 'paralyse') status = 'paralyze';
+
 	if (hasStatusAffinity(char, status.toLowerCase(), 'block')) return `${char.name} blocked the ${statusNames[char.status]}!`;
 
 	char.status = status.toLowerCase();
