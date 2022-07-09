@@ -555,7 +555,7 @@ sendCurTurnEmbed = (char, btl) => {
 				btl.action.move = 'run';
 				btl.action.index = 'run';
 				btl.action.target = [char.team, char.id];
-				
+
 				if (btl.trial) {
 					btl.action.move = 'save';
 					btl.action.index = btl.trial.name;
