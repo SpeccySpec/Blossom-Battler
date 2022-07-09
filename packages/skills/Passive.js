@@ -108,7 +108,7 @@ passiveList = {
 
 	berserk: new Extra({
 		name: "Berserk",
-		desc: "With more HP, the user is more willing to fight. <Percentage Multiplier> should be over 100%... or you might get the opposite!",
+		desc: "The higher the HP, up to <Highest HP Percent>%, the stronger physical and ranged attacks will be by <Percentage Multiplier>%. <Percentage Multiplier> should be more than 100%.",
 		args: [
 			{
 				name: "Percentage Multiplier",
@@ -136,19 +136,22 @@ passiveList = {
 				let percent = (vars[0]-100)/100;
 				let hpcap = vars[1];
 
-				if (hppercent <= hpcap) {
+				if (hppercent >= hpcap) {
 					skill.pow *= 1+percent;
 				} else {
-					let realPercent = percent*(100-hppercent);
+					let realPercent = percent*(100-hppercent)/100;
 					skill.pow *= 1+realPercent;
 				}
 			}
+		},
+		getinfo(vars) {
+			return `Boosts physical and ranged attacks by up to **${vars[0]}%** with more HP up to **${vars[1]}% of user's max HP**`;
 		}
 	}),
 
 	enraged: new Extra({
 		name: "Enraged",
-		desc: "With less HP, the user is more angered. <Percentage Multiplier> should be over 100%... or you might get the opposite!",
+		desc: "The less the HP, up to <Highest HP Percent>%, the stronger magical attacks will be by <Percentage Multiplier>%. <Percentage Multiplier> should be more than 100%.",
 		args: [
 			{
 				name: "Percentage Multiplier",
@@ -179,10 +182,13 @@ passiveList = {
 				if (hppercent <= hpcap) {
 					skill.pow *= 1+percent;
 				} else {
-					let realPercent = percent*(100-hppercent);
+					let realPercent = percent*(100-hppercent)/100;
 					skill.pow *= 1+realPercent;
 				}
 			}
+		},
+		getinfo(vars) {
+			return `Boosts magic attacks by up to **${vars[0]}%** with less HP down to **${vars[1]}% of user's max HP**`;
 		}
 	}),
 
