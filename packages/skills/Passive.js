@@ -1269,6 +1269,9 @@ passiveList = {
 				char.custom.affinitypoint++;
 				return `${char.name} obtained a __${vars[1]}__. _(${char.custom.affinitypoint}/${vars[0]})_`;
 			}
+		},
+		getinfo(vars) {
+			return `Nets a **__${vars[1]}__** for every heal the user obrains until it reaches **${vars[0]}**`
 		}
 	})
 }
