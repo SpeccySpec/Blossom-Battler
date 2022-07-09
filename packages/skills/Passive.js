@@ -695,7 +695,7 @@ passiveList = {
 
 	perfectkeeper: new Extra({
 		name: "Perfect Keeper",
-		desc: "Power of Physical Attacks is boosted at higher HP, and decreased at lower HP up to <Percent>%.",
+		desc: "Power of Physical Attacks is boosted at higher HP, and decreased at lower HP by up to <Percent>%.",
 		args: [
 			{
 				name: "Percent",
@@ -712,6 +712,9 @@ passiveList = {
 			if (skill.atktype === 'physical') {
 				skill.pow *= 1+(userDefs.hp/userDefs.maxhp)/1.42857142-0.2;
 			}
+		},
+		getinfo(vars) {
+			return `Changes power of **physical attacks** at higher HP, and decreases at lower HP by up to **${vars[0]}%**`
 		}
 	}),
 
