@@ -967,6 +967,18 @@ passiveList = {
 			}
 
 			return false;
+		},
+		getinfo(vars) {
+			let txt = `Has a **${vars[0]}%** chance to repel **magic or ranged attacks** of **`
+
+			for (let i in vars[1]) {
+				txt += `${elementEmoji[vars[1][i]]}${vars[1][i].charAt(0).toUpperCase() + vars[1][i].slice(1)}`
+
+				if (i < vars[1].length - 2) txt += ', '
+				else if (i < vars[1].length - 1) txt += ' and '
+			}
+
+			return txt + '**';
 		}
 	}),
 
