@@ -411,6 +411,21 @@ passiveList = {
 			} else {
 				return false;
 			}
+		},
+		getinfo(vars) {
+			let txt = 'Has'
+
+			for (i in vars) {
+				txt += ` a **${vars[i][1]}%** chance to dodge **${vars[i][0] == 'phys' ? 'physical' : 'magic'}** attacks`;
+
+				if (i < vars.length - 2) {
+					txt += ', ';
+				} else if (i == vars.length - 2) {
+					txt += ' and ';
+				}
+			}
+
+			return txt;
 		}
 	}),
 
