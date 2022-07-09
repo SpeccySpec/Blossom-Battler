@@ -1,6 +1,6 @@
 healList = {
-	default: new Extra({
-		name: "Default",
+	healstat: new Extra({
+		name: "Heal Stat",
 		desc: "The default heal type. Restores <Meter> by <Heal Amount>. _Negative values for <Heal Amount> will damage the target!_",
 		args: [
 			{
@@ -18,7 +18,7 @@ healList = {
 			if (args[0] == 0) args[0] = 60;
 			if (!['hp', 'mp', 'hppercent', 'mppercent', 'lb'].includes(args[1].toLowerCase())) return void message.channel.send(`${args[1]} is an invalid meter to heal! Enter either HP, MP, HPPercent, MPPercent or LB.`);
 
-			makeHeal(skill, "default", [args[0], args[1].toLowerCase()]);
+			makeHeal(skill, "healstat", [args[0], args[1].toLowerCase()]);
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {

@@ -49,9 +49,14 @@ loseBattle = (btl, i) => {
 }
 
 winBattle = (btl, i) => {
+	// Handle colosseum differently...
+	if (btl.trial) return nextWave(btl);
+
+	// Setting and Party files
 	let settings = setUpSettings(btl.guild.id);
 	let parties = setUpFile(`${dataPath}/json/${btl.guild.id}/parties.json`, true);
 
+	// Text to be on the embed.
 	let embedtxt = "**[BATTLE COMPLETE!]**\n";
 
 	// How did we win this battle. Were we murderers or friends :)

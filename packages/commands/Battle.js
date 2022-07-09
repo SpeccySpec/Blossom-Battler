@@ -1056,9 +1056,6 @@ commands.starttrial = new Command({
 
 			// Pacifying
 			enemy.pacify = 0;
-			
-			// Does this battle pass as a boss
-			if (enemy.type.includes('boss') || enemy.type.includes('deity')) battle.bossbattle = true;
 
 			setupBattleStats(enemy);
 
