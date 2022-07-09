@@ -1,3 +1,11 @@
+let costTypeNames = {
+	hp: " HP",
+	mp: " MP",
+	lb: " LB",
+	hppercent: "% of user's Max HP",
+	mppercent: "% of user's Max MP"
+}
+
 passiveList = {
 	// On Attack.
 	boost: new Extra({
@@ -247,6 +255,21 @@ passiveList = {
 			char.hp = Math.min(char.maxhp, char.hp);
 			char.mp = Math.min(char.maxmp, char.mp);
 			return finalTxt;
+		},
+		getinfo(vars) {
+			let txt = 'Heals **'
+
+			for (i in vars) {
+				txt += `${vars[i][0]}${costTypeNames[vars[i][1]]}`;
+
+				if (i < vars.length - 2) {
+					txt += ', ';
+				} else if (i == vars.length - 2) {
+					txt += ' and ';
+				}
+			}
+
+			return txt + '** every turn';
 		}
 	}),
 
@@ -271,7 +294,7 @@ passiveList = {
 			}
 		],
 		multiple: true,
-		diffflag: 0,
+		diffflag: [0, 2],
 		applyfunc(message, skill, args) {
 			let physmag = args[0]?.toLowerCase();
 			let damage = args[1];
@@ -334,6 +357,21 @@ passiveList = {
 			}
 
 			return '';
+		},
+		getinfo(vars) {
+			let txt = 'Inflicts '
+
+			for (i in vars) {
+				txt += `**${vars[i][1]} ${elementEmoji[vars[i][2]]}${vars[i][2].charAt(0).toUpperCase() + vars[i][2].slice(1)} damage** when struck with a **${vars[i][0] == 'phys' ? 'physical' : 'magic'}** skill`;
+
+				if (i < vars.length - 2) {
+					txt += ', ';
+				} else if (i == vars.length - 2) {
+					txt += ' and ';
+				}
+			}
+
+			return txt;
 		}
 	}),
 
@@ -373,6 +411,21 @@ passiveList = {
 			} else {
 				return false;
 			}
+		},
+		getinfo(vars) {
+			let txt = 'Has'
+
+			for (i in vars) {
+				txt += ` a **${vars[i][1]}%** chance to dodge **${vars[i][0] == 'phys' ? 'physical' : 'magic'}** attacks`;
+
+				if (i < vars.length - 2) {
+					txt += ', ';
+				} else if (i == vars.length - 2) {
+					txt += ' and ';
+				}
+			}
+
+			return txt;
 		}
 	}),
 
@@ -528,6 +581,9 @@ passiveList = {
 					return `${selectQuote(char, 'dodge', null, "%ENEMY%", inf.name, "%SKILL%", skill.name)}\n__${char.name}__'s _${passive.name}_ allowed them to dodge and counter!\n${newResults.txt}`;
 				}
 			}
+		},
+		getinfo(vars) {
+			return `Has a **${vars[1]}**% chance to counter with a **${vars[0] == 'phys' ? 'physical' : 'magic'} attack** named __${vars[2].name}__`
 		}
 	}),
 
@@ -562,6 +618,18 @@ passiveList = {
 			if (skill.atktype === 'physical') {
 				if (randNum(1, 100) <= vars[1]) return inflictStatus(inf, vars[0]);
 			}
+		},
+		getinfo(vars) {
+			let txt = 'Has'
+
+			for (let i in vars) {
+				txt += ` a **${vars[i][1]}%** chance of inflicting **${statusEmojis[vars[i][0]]}${vars[i][0].charAt(0).toUpperCase() + vars[i][0].slice(1)}**`
+
+				if (i < vars.length - 2) txt += ','
+				else if (i == vars.length - 2) txt += ' and'
+			}
+
+			return txt + ' when struck with a physical skill'
 		}
 	}),
 
@@ -619,12 +687,15 @@ passiveList = {
 				delete char.statuschance;
 				return `__${char.name}__ was able to cure themselves of their status effect.`;
 			}
+		},
+		getinfo(vars) {
+			return `Has a **${vars[0]}%** chance to **cure a negative status effect** every turn`
 		}
 	}),
 
 	perfectkeeper: new Extra({
 		name: "Perfect Keeper",
-		desc: "Power of Physical Attacks is boosted at higher HP, and decreased at lower HP up to <Percent>%.",
+		desc: "Power of Physical Attacks is boosted at higher HP, and decreased at lower HP by up to <Percent>%.",
 		args: [
 			{
 				name: "Percent",
@@ -641,6 +712,9 @@ passiveList = {
 			if (skill.atktype === 'physical') {
 				skill.pow *= 1+(userDefs.hp/userDefs.maxhp)/1.42857142-0.2;
 			}
+		},
+		getinfo(vars) {
+			return `Changes power of **physical attacks** at higher HP, and decreases at lower HP by up to **${vars[0]}%**`
 		}
 	}),
 
@@ -692,6 +766,9 @@ passiveList = {
 					break;
 				}
 			}
+		},
+		getinfo(vars) {
+			return `Has a **${vars[1]}%** chance to **hit ${vars[0]} more times** from a single hit skill with **${vars[2]}x** as much power`
 		}
 	}),
 

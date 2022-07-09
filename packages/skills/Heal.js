@@ -324,7 +324,7 @@ healList = {
 				}
 			}
 			if (!hasHeal) {
-				makeHeal(skill, "default", [60]);
+				makeHeal(skill, "healstat", [60, 'hp']);
 			}
 			return true;
 		},
@@ -363,7 +363,7 @@ healList = {
 					break;
 				}
 			}
-			if (!hasHeal) makeHeal(skill, "default", [60, 'hp']);
+			if (!hasHeal) makeHeal(skill, "healstat", [60, 'hp']);
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {

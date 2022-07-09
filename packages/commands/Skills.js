@@ -1807,6 +1807,8 @@ commands.listskills = new Command({
 			array.push({title: `${elementEmoji[skillFile[i].type]}${skillFile[i].name} (${i})`, desc: descTxt});
 		}
 
+		if (array.length < 1) return message.channel.send('No skills found!');
+
 		listArray(message.channel, array, message.author.id);
 	}
 })
