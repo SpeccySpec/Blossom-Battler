@@ -787,7 +787,10 @@ passiveList = {
 			makePassive(skill, "kindheart", [args[0]]);
 			return true;
 		},
-		hardcoded: true
+		hardcoded: true,
+		getinfo(vars) {
+			return `Increases **pacify rate** by **${vars[0]}%**`
+		}
 	}),
 
 	affinitycutter: new Extra({
@@ -813,6 +816,9 @@ passiveList = {
 			}
 
 			return null;
+		},
+		getinfo(vars) {
+			return `Has a **${vars[0]}%** chance to bypass resist affinities`
 		}
 	}),
 
@@ -834,11 +840,14 @@ passiveList = {
 		affinitymod(inf, char, skill, affinity, btl, vars) {
 			if (affinity === 'resist' || affinity === 'block' || affinity === 'repel' || affinity === 'drain') {
 				if (randNum(1, 100) <= vars[0]) {
-					return ['normal', `__${inf.name}__ cuts through __${char.name}__'s ${affinityEmoji[affinity]}**${affinity}** affinity!`];
+					return [['drain', 'block', 'repel'].includes(affinity) ? 'resist' : 'normal', `__${inf.name}__ cuts through __${char.name}__'s ${affinityEmoji[affinity]}**${affinity}** affinity!`];
 				}
 			}
 
 			return null;
+		},
+		getinfo(vars) {
+			return `Has a **${vars[0]}%** chance to bypass all affinities, turning them into a resist or better`
 		}
 	}),
 
