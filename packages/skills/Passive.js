@@ -1016,6 +1016,9 @@ passiveList = {
 
 				return `...however, ${char.name} was able to endure the attack!`;
 			}
+		},
+		getinfo(vars) {
+			return `Upon defeat, **revives the user** until **${vars[0]} times** with **${vars[1]} HP**`
 		}
 	}),
 
@@ -1036,7 +1039,10 @@ passiveList = {
 			makePassive(skill, "guardboost", [percent]);
 			return true
 		},
-		hardcoded: true
+		hardcoded: true,
+		getinfo(vars) {
+			return `Reduces damage taken when guarding by **${vars[0]}%**`
+		}
 	}),
 
 	guarddodge: new Extra({
@@ -1056,7 +1062,10 @@ passiveList = {
 			makePassive(skill, "guarddodge", [percent]);
 			return true
 		},
-		hardcoded: true
+		hardcoded: true,
+		getinfo(vars) {
+			return `Boosts dodging attacks when guarding by **${vars[0]}%**`
+		}
 	}),
 
 	sacrificial: new Extra({
@@ -1078,6 +1087,9 @@ passiveList = {
 		},
 		statmod(btl, char, skill, vars) {
 			if (skill.extras?.sacrifice) skill.pow *= vars[0]/100;
+		},
+		getinfo(vars) {
+			return `Boosts the power of sacrifice skills by **${vars[0]}%**`
 		}
 	}),
 
@@ -1104,6 +1116,9 @@ passiveList = {
 				char.mp = Math.min(char.maxmp, char.mp+heal);
 				return `__${char.name}'s__ _${passive.name}_ was able to restore **${heal}MP** from the attack!`;
 			}
+		},
+		getinfo(vars) {
+			return `Gain **${vars[0]}%** of damage taken as MP`
 		}
 	}),
 
@@ -1139,6 +1154,9 @@ passiveList = {
 			char.mp = Math.min(char.maxmp, char.mp+healmp);
 
 			return `__${char.name}'s__ _${passive.name}_ was able to restore **${heal}HP** and **${healmp}MP** from __${targ.name}__'s defeat!`;
+		},
+		getinfo(vars) {
+			return `Upon foe defeat, restores **${vars[0]}%** of the foe's level as HP and **${vars[1]}%** of the foe's level as MP to the user`
 		}
 	}),
 
@@ -1202,6 +1220,20 @@ passiveList = {
 				skill.pow += skill.extras.elementstore;
 				killVar(char, 'elementstore');
 			}
+		},
+		getinfo(vars) {
+			let txt = 'Has'
+
+			for (i in vars) {
+				txt += `a **${vars[i][2]}%** chance to store **${vars[i][1]}%** of damage taken from **${elementEmoji[vars[i][0]]}${vars[i][0].charAt(0).toUpperCase() + vars[i][0].slice(1)} attacks**`
+
+				if (i < vars.length-2)
+					txt += ', '
+				else if (i == vars.length-2)
+					txt += ' and '
+			}
+
+			return txt + ' to add up for the next attack'
 		}
 	}),
 
