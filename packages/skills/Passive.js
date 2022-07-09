@@ -853,7 +853,7 @@ passiveList = {
 
 	swordbreaker: new Extra({
 		name: "Sword Breaker",
-		desc: "<Chance>% chance to physical attacks that hit the user to a resist.",
+		desc: "<Chance>% chance for effective and normal attacks that hit the user to turn into a resist.",
 		args: [
 			{
 				name: "Chance",
@@ -874,6 +874,9 @@ passiveList = {
 			}
 
 			return null;
+		},
+		getinfo(vars) {
+			return `Has a **${vars[0]}%** chance for effective and normal attacks that hit the user to turn into a resist`
 		}
 	}),
 
