@@ -145,7 +145,7 @@ passiveList = {
 			}
 		},
 		getinfo(vars) {
-			return `Boosts physical and ranged attacks by up to **${vars[0]}%** with more HP up to **${vars[1]}% of user's max HP**`;
+			return `Boosts physical and ranged attacks by up to **${vars[0]-100}%** with more HP up to **${vars[1]}% of user's max HP**`;
 		}
 	}),
 
@@ -188,7 +188,7 @@ passiveList = {
 			}
 		},
 		getinfo(vars) {
-			return `Boosts magic attacks by up to **${vars[0]}%** with less HP down to **${vars[1]}% of user's max HP**`;
+			return `Boosts magic attacks by up to **${vars[0]-100}%** with less HP down to **${vars[1]}% of user's max HP**`;
 		}
 	}),
 
