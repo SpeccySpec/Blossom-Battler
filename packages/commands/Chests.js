@@ -263,7 +263,7 @@ commands.registerchest = new Command({
                     case 'weapon':
                     case 'armor':
                         if (!chestFile[channel][name].items[itemCollector[i][0]]) chestFile[channel][name].items[itemCollector[i][0]] = {}
-                        if (!chestFile[channel][name].items[itemCollector[i][0]][itemCollector[i][1]]) chestFile[channel][name].items[itemCollector[i][0][itemCollector[i][1]]] = 0
+                        if (!chestFile[channel][name].items[itemCollector[i][0]][itemCollector[i][1]]) chestFile[channel][name].items[itemCollector[i][0]][itemCollector[i][1]] = 0
                         chestFile[channel][name].items[itemCollector[i][0]][itemCollector[i][1]] += (itemCollector[i][2] ?? 1)
                         break;
                     case 'loot':

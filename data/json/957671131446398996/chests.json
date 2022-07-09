@@ -143,9 +143,8 @@
             "hidden": false,
             "items": {
                 "item": {
-                    "Sky": null
-                },
-                "undefined": 0
+                    "Sky": 999999
+                }
             },
             "desc": "Sky's package for Spectra"
         }
