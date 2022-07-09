@@ -236,7 +236,7 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
-			if (targ.team == char.team) {
+			if (targ.team == char.team && targ.id != char.id) {
 				settings = setUpSettings(btl.guild.id);
 				changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl.channel);
 			}

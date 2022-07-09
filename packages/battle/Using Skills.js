@@ -890,10 +890,11 @@ useSkill = (char, btl, act, forceskill, ally) => {
 		}
 
 		// Get the skill in question.
-		let skillname = possible[randNum(1, possible.length-1)];
+		let skillname = possible[randNum(possible.length-1)];
 
 		// Get CopySkill's cost.
 		let cost = [skill.cost, skill.costtype];
+
 		skill = objClone(skillFile[skillname]);
 		skill.cost = cost[0];
 		skill.costtype = cost[1];
