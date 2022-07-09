@@ -818,13 +818,13 @@ passiveList = {
 			return null;
 		},
 		getinfo(vars) {
-			return `Has a **${vars[0]}%** chance to bypass resist affinities`
+			return `Has a **${vars[0]}%** chance to bypass **resist affinities**`
 		}
 	}),
 
 	affinityslicer: new Extra({
 		name: "Affinity Slicer",
-		desc: "<Chance>% chance to bypass all affinities, turning them into a resist or better.\n```diff\n+ Drain, Repel, Block ---> Resist\n+ Resist ---> Normal\n```",
+		desc: "<Chance>% chance to bypass all resisting affinities, turning them into a resist or better.\n```diff\n+ Drain, Repel, Block ---> Resist\n+ Resist ---> Normal\n```",
 		args: [
 			{
 				name: "Chance",
@@ -847,7 +847,7 @@ passiveList = {
 			return null;
 		},
 		getinfo(vars) {
-			return `Has a **${vars[0]}%** chance to bypass all affinities, turning them into a resist or better`
+			return `Has a **${vars[0]}%** chance to bypass **all resisting affinities**, turning them into **a resist or better**`
 		}
 	}),
 
@@ -876,7 +876,7 @@ passiveList = {
 			return null;
 		},
 		getinfo(vars) {
-			return `Has a **${vars[0]}%** chance for effective and normal attacks that hit the user to turn into a resist`
+			return `Has a **${vars[0]}%** chance for **effective and normal attacks** that hit the user to turn **into a resist**`
 		}
 	}),
 
@@ -890,7 +890,7 @@ passiveList = {
 		},
 		hardcoded: true,
 		getinfo(vars) {
-			return `Turns user's melee attack into a magic attack`
+			return `Turns user's melee attack into **a magic attack**`
 		}
 	}),
 
@@ -904,7 +904,7 @@ passiveList = {
 		},
 		hardcoded: true,
 		getinfo(vars) {
-			return `Melee Attack targets all foes`
+			return `Melee Attack **targets all foes**`
 		}
 	}),
 
@@ -924,7 +924,7 @@ passiveList = {
 			return ['block', `__${char.name}__'s __${passive.name}__ made the skill have no affect!`];
 		},
 		getinfo(vars) {
-			return `Nullifies damage from attacks that the user is not weak to`
+			return `**Nullifies damage from attacks that the user is not weak to**`
 		}
 	}),
 
