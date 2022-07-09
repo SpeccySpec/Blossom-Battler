@@ -766,6 +766,9 @@ passiveList = {
 					break;
 				}
 			}
+		},
+		getinfo(vars) {
+			return `Has a **${vars[1]}%** chance to **hit ${vars[0]} more times** from a single hit skill with **${vars[2]}x** as much power`
 		}
 	}),
 
