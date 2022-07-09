@@ -9,7 +9,7 @@ canUseLb = (char, btl) => {
 		if (char.lbp >= char.lb[i].cost) possible.push(i);
 	}
 	if (possible.length <= 0) return false;
-	if (possible.length == 1) return possible[0];
+	if (possible.length == 1) return char.lb[possible[0]];
 
 	possible.sort(function(a, b) {return char.lb[b].cost - char.lb[a].cost});
 	return char.lb[possible[0]];
