@@ -1,3 +1,11 @@
+let costTypeNames = {
+	hp: " HP",
+	mp: " MP",
+	lb: " LB",
+	hppercent: "% of user's Max HP",
+	mppercent: "% of user's Max MP"
+}
+
 passiveList = {
 	// On Attack.
 	boost: new Extra({
@@ -247,6 +255,21 @@ passiveList = {
 			char.hp = Math.min(char.maxhp, char.hp);
 			char.mp = Math.min(char.maxmp, char.mp);
 			return finalTxt;
+		},
+		getinfo(vars) {
+			let txt = 'Heals **'
+
+			for (i in vars) {
+				txt += `${vars[i][0]}${costTypeNames[vars[i][1]]}`;
+
+				if (i < vars.length - 2) {
+					txt += ', ';
+				} else if (i == vars.length - 2) {
+					txt += ' and ';
+				}
+			}
+
+			return txt + '** every turn';
 		}
 	}),
 
