@@ -855,6 +855,7 @@ listArray = async(channel, theArray, author, forceIndex) => {
 				current.map(async arrayDefs => ({
 					name: arrayDefs.title,
 					value: arrayDefs.desc,
+					inline: arrayDefs.inline ?? false
 				}))
 			)
 		})

@@ -32,5 +32,14 @@
         "originalAuthor": "441198920668938260",
         "image": "https://cdn.discordapp.com/emojis/963788061731348510.webp",
         "healmp": 20
+    },
+    "Sky": {
+        "name": "Sky",
+        "rarity": "artifact",
+        "cost": 10000,
+        "type": "healmp",
+        "originalAuthor": "441198920668938260",
+        "desc": "Sky we love your energy",
+        "healmp": 99999
     }
 }

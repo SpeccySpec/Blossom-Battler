@@ -130,6 +130,24 @@
             "items": {
                 "money": 99999
             }
+        },
+        "PackageForSpectra": {
+            "originalAuthor": "441198920668938260",
+            "name": "PackageForSpectra",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "none",
+                "-"
+            ],
+            "hidden": false,
+            "items": {
+                "item": {
+                    "Sky": null
+                },
+                "undefined": 0
+            },
+            "desc": "Sky's package for Spectra"
         }
     },
     "967822532017274980": {
