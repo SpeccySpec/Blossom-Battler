@@ -294,7 +294,7 @@ passiveList = {
 			}
 		],
 		multiple: true,
-		diffflag: 0,
+		diffflag: [0, 2],
 		applyfunc(message, skill, args) {
 			let physmag = args[0]?.toLowerCase();
 			let damage = args[1];
@@ -357,6 +357,21 @@ passiveList = {
 			}
 
 			return '';
+		},
+		getinfo(vars) {
+			let txt = 'Inflicts '
+
+			for (i in vars) {
+				txt += `**${vars[i][1]} ${elementEmoji[vars[i][2]]}${vars[i][2].charAt(0).toUpperCase() + vars[i][2].slice(1)} damage** when struck with a **${vars[i][0] == 'phys' ? 'physical' : 'magic'}** skill`;
+
+				if (i < vars.length - 2) {
+					txt += ', ';
+				} else if (i == vars.length - 2) {
+					txt += ' and ';
+				}
+			}
+
+			return txt;
 		}
 	}),
 
