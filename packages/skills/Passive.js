@@ -618,6 +618,18 @@ passiveList = {
 			if (skill.atktype === 'physical') {
 				if (randNum(1, 100) <= vars[1]) return inflictStatus(inf, vars[0]);
 			}
+		},
+		getinfo(vars) {
+			let txt = 'Has'
+
+			for (let i in vars) {
+				txt += ` a **${vars[i][1]}%** chance of inflicting **${statusEmojis[vars[i][0]]}${vars[i][0].charAt(0).toUpperCase() + vars[i][0].slice(1)}**`
+
+				if (i < vars.length - 2) txt += ','
+				else if (i == vars.length - 2) txt += ' and'
+			}
+
+			return txt + ' when struck with a physical skill'
 		}
 	}),
 
