@@ -687,6 +687,9 @@ passiveList = {
 				delete char.statuschance;
 				return `__${char.name}__ was able to cure themselves of their status effect.`;
 			}
+		},
+		getinfo(vars) {
+			return `Has a **${vars[0]}%** chance to **cure a negative status effect** every turn`
 		}
 	}),
 
