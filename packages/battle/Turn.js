@@ -224,12 +224,19 @@ const menuStates = {
 
 		if (btl.pvp) {
 			comps[0] = [
-				makeButton('Forfeit', elementEmoji.wind, 'grey', true, 'run'),
+				makeButton('Forfeit', '<:boot:995268449154629699>', 'grey', true, 'run'),
 				makeButton('Backup', '<:mental:973077052053921792>', 'blue')
+			]
+		} else if (btl.trial) {
+			comps[0] = [
+				makeButton('Save Trial', '📖', 'green', true, 'run'),
+				makeButton('Backup', '<:mental:973077052053921792>', 'blue'),
+				makeButton('Pacify', itemTypeEmoji.pacify, 'green', null, null, true), // No Pacifying
+				makeButton('Enemy Info', statusEmojis.silence, 'red', true, 'enemyinfo', true) // No Enemy Info
 			]
 		} else {
 			comps[0] = [
-				makeButton('Run!', elementEmoji.wind, 'grey', true, 'run'),
+				makeButton('Run!', '<:boot:995268449154629699>', 'grey', true, 'run'),
 				makeButton('Backup', '<:mental:973077052053921792>', 'blue'),
 				makeButton('Pacify', itemTypeEmoji.pacify, 'green'),
 				makeButton('Enemy Info', statusEmojis.silence, 'red', true, 'enemyinfo')
@@ -548,8 +555,13 @@ sendCurTurnEmbed = (char, btl) => {
 				btl.action.move = 'run';
 				btl.action.index = 'run';
 				btl.action.target = [char.team, char.id];
-
-				if (btl.bossbattle)
+				
+				if (btl.trial) {
+					btl.action.move = 'save';
+					btl.action.index = btl.trial.name;
+					doAction(char, btl, btl.action);
+					collector.stop();
+				} else if (btl.bossbattle)
 					DiscordEmbed.title = "You cannot run away from boss battles!";
 				else if (btl.pvp) {
 					if (char.leader) {
@@ -558,14 +570,12 @@ sendCurTurnEmbed = (char, btl) => {
 					} else {
 						DiscordEmbed.title = "Only the leader can forfeit!";
 					}
-				} else if (!char.leader) {
-					DiscordEmbed.title = "Only the leader can flee from battles!";
 				} else {
 					doAction(char, btl, btl.action);
 					collector.stop();
 				}
-				alreadyResponded = true;
 
+				alreadyResponded = true;
 				return i.update({
 					content: `<@${char.owner}>`,
 					embeds: [DiscordEmbed],
@@ -1265,6 +1275,17 @@ doAction = (char, btl, action) => {
 
 				char.donetc = true;
 			}
+			break;
+
+		case 'save':
+			DiscordEmbed = new Discord.MessageEmbed()
+				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+				.setTitle('Saving trial...')
+				.setDescription('You can resume this trial by using the "resumetrial" command.')
+			btl.channel.send({embeds: [DiscordEmbed]});
+
+			saveTrial(btl);
+			return;
 	}
 
 	// Custom Variable EndTurn

@@ -326,9 +326,7 @@ commands.channeldata = new Command({
 																			 */
 
 // Todo:
-// Weapons and Armors in battle.
-// Charms in battle.
-// Finish all Extras, Status Skills and Passives.
+// Colosseum
 
 commands.endbattle = new Command({
 	desc: "Manually ends a battle happening in this channel. No stat changes, xp or money is saved.",
@@ -345,7 +343,7 @@ commands.endbattle = new Command({
 
 		// Clear the file
 		message.react('👍');
-		
+
 		btl = {};
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, '{}');
 	}
@@ -649,7 +647,7 @@ commands.resendembed = new Command({
 })
 
 commands.startpvp = new Command({
-	desc: "Start a PVP battle in this channel. The best fighter(s) win, strike down your foes in a classic 1v1, free for all, or a team battle!\nAlso comes with gamemode DLC (free lol)```diff\n=== NORMAL ===\nYour generic PVP battle. Show them who's boss without any quirky business!\n\n=== SKILLSCRAMBLE ===\nFight with a set of 8 random skills! You'll never know what you get, so adapt to win!\n\n=== STATSCRAMBLE ===\nFight with random stats, HP and MP! You could be turned into the tankiest fighter, or the frailest one - maybe you go from a physical main to a magical one! Try your best to defeat your foe in the fray!\n\n=== METRONOME ===\nAll fighters only have the skill Metronome! It's an Almighty Type skill that allows you to use ANY defined move! If ya like RNG, you'll love this!\n\n=== CHARACTERSCRAMBLE ===\nScramble your characters' stats, skills, affinities, and more for a jolly good session of Rage Quit!```",
+	desc: "Start a PVP battle in this channel. The best fighter(s) win, strike down your foes in a classic 1v1, free for all, or a team battle! No Leader Skills or items allowed here! Good luck!\nAlso comes with gamemode DLC (free lol)```diff\n=== NORMAL ===\nYour generic PVP battle. Show them who's boss without any quirky business!\n\n=== SKILLSCRAMBLE ===\nFight with a set of 8 random skills! You'll never know what you get, so adapt to win!\n\n=== STATSCRAMBLE ===\nFight with random stats, HP and MP! You could be turned into the tankiest fighter, or the frailest one - maybe you go from a physical main to a magical one! Try your best to defeat your foe in the fray!\n\n=== METRONOME ===\nAll fighters only have the skill Metronome! It's an Almighty Type skill that allows you to use ANY defined move! If ya like RNG, you'll love this!\n\n=== CHARACTERSCRAMBLE ===\nScramble your characters' stats, skills, affinities, and more for a jolly good session of Rage Quit!```",
 	section: "battle",
 	aliases: ["pvp", "playerversusplayer"],
 	args: [
@@ -791,8 +789,6 @@ commands.startpvp = new Command({
 			battle.teams[i-2].id = args[i];
 		}
 
-		if (settings?.mechanics?.leaderskills) battle = leaderSkillsAtBattleStart(battle);
-
 		// Now THIS is a battle!
 		battle.pvp = true
 
@@ -909,5 +905,227 @@ commands.startpvp = new Command({
 		setTimeout(function() {
 			advanceTurn(battle)
         }, 500)
+	}
+})
+
+commands.starttrial = new Command({
+	desc: "Start a trial in this channel. Challenge yourself against the endless onslaught of enemies of the trial until you reign victorious!\n\nNO ITEMS ARE ALLOWED! You must do this with your own intuition!",
+	section: "battle",
+	aliases: ["challengetrial", "startcolosseum"],
+	args: [
+		{
+			name: "Party",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Trial",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true);
+		let settings = setUpSettings(message.guild.id);
+
+		// Set up Battle Field
+		let battle = {
+			battling: true,
+			channel: message.channel, // so i dont have to do it later
+			guild: message.guild, // so i dont have to do it later
+
+			turn: 0,
+//			curturn: -1,
+			turnorder: [],
+
+			trialwave: 0,
+
+//			weather: 'none',
+//			terrain: 'none',
+			effects: {},
+
+			teams: [
+				{
+					name: "",
+					id: "",
+					members: [],
+					backup: [],
+					items: {},
+					pets: {},
+				},
+				{
+					name: "Enemies",
+					id: 'enemies',
+					enemyteam: true,
+					forcehorde: true, // more than 4 enemies mean some will be put into backup and automatically switched in, either by the team leader, or once an enemy dies.
+					members: [],
+					backup: [],
+					items: {},
+					pets: {},
+				}
+			]
+		}
+
+		// Validity Check for Parties
+		if (!parties[args[0]]) return message.channel.send(`${args[0]} is an invalid party!`);
+
+		// Battle File!
+		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
+
+		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
+		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
+		enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`, true);
+		trials = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`, true);
+
+		// Can't battle while another party is!
+		if (btl.battling) return message.channel.send("You can't battle in this channel while another battle is happening!");
+		if (!trials[args[1]]) return message.channel.send(`${args[1]} is an invalid trial!`);
+
+		// Save this for errors!
+		if (!battleFiles) battleFiles = [];
+		if (!battleFiles.includes(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`)) battleFiles.push(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`);
+
+		// Set up Ally Side.
+		let battleid = 0;
+		let party = parties[args[0]];
+		
+		if (!party.discoveries) party.discoveries = {};
+
+		for (const i in party.members) {
+			if (!charFile[party.members[i]]) continue;
+
+			let char = objClone(charFile[party.members[i]]);
+
+			char.truename = party.members[i];
+			if (!char.name) char.name = party.members[i];
+
+			char.id = battleid;
+			battleid++;
+
+			setupBattleStats(char);
+
+			if (i <= 0) {
+				char.leader = true;
+				battle.teams[0].leaderskill = char.leaderskill;
+			}
+
+			char.team = 0;
+			battle.teams[0].members.push(char);
+		}
+
+		for (const i in party.backup) {
+			if (!charFile[party.backup[i]]) continue;
+
+			let char = objClone(charFile[party.backup[i]]);
+			if (!char.name) char.name = party.backup[i];
+
+			char.id = battleid;
+			battleid++;
+
+			setupBattleStats(char);
+
+			char.team = 0;
+			battle.teams[0].backup.push(char);
+		}
+
+		battle.teams[0].name = args[0];
+		battle.teams[0].pets = objClone(party.negotiateAllies);
+		battle.teams[0].id = args[0];
+
+		// Set up Enemy Side, This will be the first wave of the colosseum.
+		// == this time, no encounters set until the enemy is killed or pacified == //
+		let trial = trials[args[1]];
+		let encounter = trial.waves[0];
+
+		battle.trial = trial;
+
+		let enmDesc = '';
+		for (let i in encounter) {
+			let enemy = objClone(enmFile[encounter[i]]);
+			enemy.enemy = true;
+
+			enemy.truename = encounter[i];
+			if (!enemy.name) enemy.name = encounter[i];
+			enemy.maxhp = enemy.hp;
+			enemy.maxmp = enemy.mp;
+			enemy.id = battleid;
+			battleid++;
+
+			// For enemy ai
+			enemy.memory = {};
+
+			// Pacifying
+			enemy.pacify = 0;
+			
+			// Does this battle pass as a boss
+			if (enemy.type.includes('boss') || enemy.type.includes('deity')) battle.bossbattle = true;
+
+			setupBattleStats(enemy);
+
+			enmDesc += `${enemy.name} (LV${enemy.level})\n`;
+
+			enemy.team = 1;
+			if (battle.teams[1].members.length < 4) {
+				if (i <= 0 && enemy.leaderskill) {
+					enemy.leader = true;
+					battle.teams[1].leaderskill = enemy.leaderskill;
+				}
+
+				battle.teams[1].members.push(enemy);
+			} else
+				battle.teams[1].backup.push(enemy);
+		}
+
+		if (settings?.mechanics?.leaderskills) battle = leaderSkillsAtBattleStart(battle);
+
+		// turn order :)
+		battle.turnorder = getTurnOrder(battle);
+
+		// Save all this data to a file.
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, JSON.stringify(battle, null, '    '));
+
+		message.channel.send(`Team ${args[0]} have challenged the **${args[1]}** Trial! Good Luck!`);
+		setTimeout(function() {
+			advanceTurn(battle)
+        }, 1000)
+	}
+})
+
+commands.resumetrial = new Command({
+	desc: "Resume a saved trial in this channel. Only the leader can continue it.",
+	section: "battle",
+	aliases: ["continuetrial", "resumecolosseum"],
+	args: [
+		{
+			name: "Party",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Trial",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let trials = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`, true);
+		if (!trials[args[1]]) return message.channel.send(`${args[0]} is a nonexistant trial!`);
+
+		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}/${args[1]}`);
+		let save = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/${args[1]}/save-${args[0].toLowerCase()}.json`, true);
+
+		if (!save || !save.teams || !save.trial) return message.channel.send("This save doesn't exist!");
+		if (message.author.id != save.teams[0].members[0].owner) return message.channel.send("Only the leader can resume a battle!");
+
+		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
+		if (btl.battling) return message.channel.send("You can't battle in this channel while another battle is happening!");
+		message.react('👍');
+
+		btl = objClone(save);
+		btl.channel = message.channel;
+		if (btl.action) delete btl.action;
+
+		// Resend the Embed.
+		sendCurTurnEmbed(getCharFromTurn(btl), btl);
 	}
 })
