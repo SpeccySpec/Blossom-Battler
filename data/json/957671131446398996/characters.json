@@ -19,15 +19,14 @@
         "xp": 1133969,
         "maxxp": 26403897,
         "skills": [
-            "Prakrti",
-            "EncasedPsyche",
-            "CopySkill",
             "HealSymphony",
             "CuringWall",
             "Samarecarm",
             "Diarahan",
+            "EncasedPsyche",
+            "Prakrti",
             "InvigII",
-            "Flamethrower"
+            "CopySkill"
         ],
         "deathquote": [],
         "weapon": {},
@@ -542,14 +541,14 @@
         "xp": 1387431,
         "maxxp": 7283446,
         "skills": [
-            "SteelyStrike",
-            "Majino",
+            "Eigaon",
             "Maeigaon",
             "ShadowStrike",
             "TormentedSwipes",
-            "Marakunda",
+            "Majino",
+            "SteelyStrike",
             "Mavisunda",
-            "Eigaon"
+            "Marakunda"
         ],
         "critquote": [
             "Cash Money!",
@@ -857,14 +856,14 @@
         "xp": 812578,
         "maxxp": 12910067,
         "skills": [
-            "GiganticFist",
-            "MegaKick",
             "Agidyne",
             "FireFang",
             "FlarePunch",
             "Maragion",
-            "Mamakakaja",
-            "Matarukaja"
+            "MegaKick",
+            "GiganticFist",
+            "Matarukaja",
+            "Mamakakaja"
         ],
         "deathquote": [
             "No...",
@@ -1532,12 +1531,12 @@
         "xp": 2706025,
         "maxxp": 4741253,
         "skills": [
-            "Bufudyne",
-            "FrostBurn",
-            "Mabufula",
             "Freidyne",
             "Mafreidyne",
             "RadiationBurn",
+            "Mabufula",
+            "FrostBurn",
+            "Bufudyne",
             "Mamakakaja",
             "NukeAmp"
         ],
@@ -1829,12 +1828,12 @@
         "skills": [
             "Aquadyne",
             "Malaquadyne",
-            "Bufudyne",
             "Mabufula",
-            "Mavisukaja",
+            "Bufudyne",
             "Marakukaja",
-            "WaterBoost",
-            "InvigII"
+            "Mavisukaja",
+            "InvigII",
+            "WaterBoost"
         ],
         "deathquote": [],
         "bio": {
@@ -2088,8 +2087,8 @@
             "Mamagnara",
             "Magnara",
             "Masukunda",
-            "InvigI",
-            "DragonicRage"
+            "DragonicRage",
+            "InvigI"
         ],
         "deathquote": [
             "No....not like this....",
@@ -2446,12 +2445,12 @@
         "xp": 0,
         "maxxp": 270978,
         "skills": [
-            "SpiritHorns",
-            "BurningSpirit",
-            "Maeiga",
             "PhantomShip",
-            "Makanda",
-            "Masukukaja"
+            "Maeiga",
+            "BurningSpirit",
+            "SpiritHorns",
+            "Masukukaja",
+            "Makanda"
         ],
         "deathquote": [
             "https://media.discordapp.net/attachments/868140063102500954/877983843884335104/image0.jpg",
@@ -2587,8 +2586,8 @@
             "ThunderFang",
             "Mazionga",
             "Zioverse",
-            "Masukukaja",
             "ThunderWave",
+            "Masukukaja",
             "ElectroAmp"
         ],
         "deathquote": [
@@ -2901,11 +2900,11 @@
         "skills": [
             "IcicleCrash",
             "FrozenShards",
-            "CoolBreeze",
-            "IcyShield",
-            "IcyGuard",
-            "ElectricTrap",
             "FlareTrap",
+            "ElectricTrap",
+            "IcyGuard",
+            "IcyShield",
+            "CoolBreeze",
             "InvigI"
         ],
         "deathquote": [
@@ -3200,8 +3199,8 @@
             "Andablast",
             "SoulBeam",
             "EtherealMirror",
-            "Hexburst",
             "DespairsFood",
+            "Hexburst",
             "TriAttack",
             "KindSoul"
         ],
@@ -3791,10 +3790,10 @@
             "Hanamadyne",
             "Mahanama",
             "Magnara",
-            "HealSymphony",
-            "CuringAura",
-            "Mamakakaja",
             "Makarakarn",
+            "Mamakakaja",
+            "CuringAura",
+            "HealSymphony",
             "PoisonPunish"
         ],
         "deathquote": [],
@@ -4036,12 +4035,12 @@
         "xp": 0,
         "maxxp": 6312320,
         "skills": [
-            "GiganticFist",
-            "ShadowChop",
-            "WindmillKick",
             "FlamingCyclone",
             "Fireburst",
             "Flamethrower",
+            "WindmillKick",
+            "ShadowChop",
+            "GiganticFist",
             "BurningTemps",
             "FireBoost"
         ],
@@ -4545,10 +4544,10 @@
         "xp": 0,
         "maxxp": 40561289,
         "skills": [
-            "Mamakanda",
-            "Marakukaja",
-            "Masukukaja",
             "StarshineAura",
+            "Masukukaja",
+            "Marakukaja",
+            "Mamakanda",
             "BearHug",
             "KindSoul"
         ],
@@ -4696,13 +4695,13 @@
         "xp": 2205410,
         "maxxp": 11188725,
         "skills": [
-            "RottenSlash",
             "UnseenSlashes",
+            "RottenSlash",
             "3CutShock",
             "Dokusei",
-            "Undead-Like(T)",
+            "Glare",
             "Undead-Like(N)",
-            "Glare"
+            "Undead-Like(T)"
         ],
         "deathquote": [
             "Why you do this to me?",
@@ -5173,12 +5172,12 @@
         "skills": [
             "MarrowMash",
             "BoneToss",
-            "FlamesOfWickedness",
             "FlamesOfTheDamned",
-            "BurningCurse",
-            "Will-O-Wisp",
+            "FlamesOfWickedness",
+            "BoneShield",
             "Matarukaja",
-            "BoneShield"
+            "Will-O-Wisp",
+            "BurningCurse"
         ],
         "critquote": [],
         "deathquote": [],
@@ -5356,10 +5355,9 @@
             "BlazingHell",
             "IceAge",
             "WildThunder",
-            "VaccuumWave",
+            "MechaRays",
             "ShadowDrown",
             "WarriorCry",
-            "MechaRays",
             "Dustify"
         ],
         "critquote": [],
@@ -5583,9 +5581,9 @@
             "GiganticFist",
             "DedicationStrike",
             "Psiodyne",
-            "Sukukaja",
+            "BladeBlast",
             "Pun",
-            "BladeBlast"
+            "Sukukaja"
         ],
         "critquote": [
             "HAH HAH HAH! NOW THAT WAS A GOOD ONE!",
@@ -6020,11 +6018,11 @@
         "xp": 509108,
         "maxxp": 4741253,
         "skills": [
-            "Garudyne",
             "SharpChomp-II",
             "DoubleCrunch",
             "Flavengos",
             "Hydragidyne",
+            "Garudyne",
             "Matarunda"
         ],
         "critquote": [],
@@ -6261,13 +6259,13 @@
         "xp": 623088,
         "maxxp": 7283446,
         "skills": [
-            "Psiodyne",
-            "Bapsio",
             "Mediarama",
             "RegenAria",
             "MePatra",
             "Diarahan",
             "Recarm",
+            "Bapsio",
+            "Psiodyne",
             "KindSoul"
         ],
         "critquote": [
@@ -6618,11 +6616,10 @@
         "xp": 0,
         "maxxp": 554210,
         "skills": [
-            "Fire-Tornado",
-            "FlamingCyclone",
             "ExplosiveMist",
-            "YowlingSpirits",
+            "FlamingCyclone",
             "ShadowSpirit",
+            "YowlingSpirits",
             "DapMeUp"
         ],
         "critquote": [],
@@ -6731,12 +6728,12 @@
         "xp": 0,
         "maxxp": 17187959,
         "skills": [
-            "Kougaon",
-            "HolyHandGrenade",
             "Mediarama",
             "Revitaharian",
             "Diarahan",
             "CuringWall",
+            "Kougaon",
+            "HolyHandGrenade",
             "Mavisukaja",
             "HolyBarrier"
         ],
@@ -7288,14 +7285,14 @@
         "xp": 894812,
         "maxxp": 7283446,
         "skills": [
-            "MiraclePunch",
-            "Toxilone",
-            "Corosine",
             "FalsePraise",
             "Poisma",
             "DapMeUp",
             "Pulinpa",
-            "PoisonMist"
+            "PoisonMist",
+            "MiraclePunch",
+            "Corosine",
+            "Toxilone"
         ],
         "critquote": [
             "As usual.",
@@ -7509,14 +7506,14 @@
         "xp": 0,
         "maxxp": 19832260,
         "skills": [
-            "Last-Resort",
             "OriginPulse",
             "WaterPulse",
+            "Last-Resort",
             "IceBeam",
-            "LeafBlade",
             "GigaDrain",
-            "SwordsDance",
-            "ChaosStir"
+            "LeafBlade",
+            "ChaosStir",
+            "SwordsDance"
         ],
         "critquote": [
             "Eon~"
@@ -7781,14 +7778,14 @@
         "xp": 0,
         "maxxp": 3561208,
         "skills": [
-            "DragonAscent",
-            "EarthPower",
             "MagicalLeaf",
             "BulletSeed",
-            "PoisonPowder",
-            "SleepPowder",
+            "DragonAscent",
+            "EarthPower",
+            "ChaosStir",
             "GrassyTerrain",
-            "ChaosStir"
+            "SleepPowder",
+            "PoisonPowder"
         ],
         "critquote": [],
         "deathquote": [],
@@ -7898,13 +7895,13 @@
         "xp": 116937,
         "maxxp": 17187959,
         "skills": [
-            "Aques",
             "Hanamadyne",
             "Mahanama",
-            "Marakukaja",
-            "Mavisukaja",
+            "Aques",
+            "LeafShield",
             "Mamakakaja",
-            "LeafShield"
+            "Mavisukaja",
+            "Marakukaja"
         ],
         "critquote": [],
         "deathquote": [
@@ -8064,11 +8061,11 @@
             "ElectricLaser",
             "Discharge",
             "Psy-Strike",
-            "HealSymphony",
-            "Mamakakaja",
-            "ElectricalShield",
+            "ElectricTrap",
             "ThunderWave",
-            "ElectricTrap"
+            "ElectricalShield",
+            "Mamakakaja",
+            "HealSymphony"
         ],
         "critquote": [
             "My Luck Has Been: Boosted.",
@@ -8327,8 +8324,8 @@
             "SwipesOfMany",
             "Ziodyne",
             "Psiodyne",
-            "Matarukaja",
             "Visukaja",
+            "Matarukaja",
             "SharpParry"
         ],
         "critquote": [
@@ -8553,13 +8550,13 @@
         "xp": 0,
         "maxxp": 2318215,
         "skills": [
-            "Shuriken",
-            "WindPunch",
-            "AirSlash",
             "LeafCyclone",
             "LeafyKunai",
-            "EvasiveLeaf",
+            "Shuriken",
+            "AirSlash",
+            "WindPunch",
             "ShieldOfLeaves",
+            "EvasiveLeaf",
             "DodgePhys"
         ],
         "critquote": [],
@@ -8850,13 +8847,13 @@
         "xp": 1137296,
         "maxxp": 11188725,
         "skills": [
-            "TungstenTear",
             "FissionStrike",
             "Mafreila",
-            "Matarukaja",
+            "TungstenTear",
             "Marakukaja",
-            "RegenII",
-            "MentalSwitch"
+            "Matarukaja",
+            "MentalSwitch",
+            "RegenII"
         ],
         "critquote": [
             "*You're done for!*"
@@ -9098,13 +9095,13 @@
         "xp": 861357,
         "maxxp": 9696895,
         "skills": [
-            "MagicalBlast",
             "Starfall",
             "Grydyne",
             "Starshower",
-            "Mamakakaja",
-            "SoothingVoice",
+            "MagicalBlast",
             "WhirlwindShield",
+            "SoothingVoice",
+            "Mamakakaja",
             "KindSoul"
         ],
         "critquote": [],
@@ -9262,14 +9259,14 @@
         "xp": 407242,
         "maxxp": 2318215,
         "skills": [
-            "ArmCannon",
-            "Jinodyne",
-            "Majino",
             "Mediarama",
             "CuringAura",
             "Diarahan",
-            "Makarakarn",
-            "Matarukaja"
+            "ArmCannon",
+            "Majino",
+            "Jinodyne",
+            "Matarukaja",
+            "Makarakarn"
         ],
         "critquote": [],
         "deathquote": [
@@ -9549,13 +9546,13 @@
         "xp": 455056,
         "maxxp": 5470677,
         "skills": [
-            "MegatonRaid",
             "Bufudyne",
             "Mabufudyne",
+            "MegatonRaid",
             "Magnadyne",
             "Hanamadyne",
-            "Makarakarn",
-            "Tetrakarn"
+            "Tetrakarn",
+            "Makarakarn"
         ],
         "critquote": [],
         "deathquote": [],
@@ -9700,12 +9697,12 @@
         "xp": 184021,
         "maxxp": 982349,
         "skills": [
-            "GiganticFist",
             "MegaPunch",
+            "GiganticFist",
             "BodySlam",
-            "FlamingFist",
+            "AllOutShove",
             "Agidyne",
-            "AllOutShove"
+            "FlamingFist"
         ],
         "critquote": [
             "Did I do it? DID I DO WELL? WOOOOO!"
@@ -10345,8 +10342,8 @@
         "maxxp": 615066353,
         "skills": [
             "God'sHand",
-            "ElementalBeam",
             "Maragidyne",
+            "ElementalBeam",
             "Malaquadyne",
             "Mabufudyne",
             "Maziodyne",
@@ -10355,19 +10352,19 @@
             "Mahanamadyne",
             "Mapsiodyne",
             "Majinodyne",
-            "Maeigaon",
             "DieForMe",
-            "Makougaon",
+            "Maeigaon",
             "Samsara",
-            "Mavocadyne",
-            "Magrydyne",
+            "Makougaon",
             "Malatmadyne",
+            "Magrydyne",
+            "Mavocadyne",
+            "MyriadTruths",
+            "Metronome",
             "MorningStar",
             "BlackViper",
-            "Metronome",
-            "MyriadTruths",
-            "MindCharge",
-            "PowerCharge"
+            "PowerCharge",
+            "MindCharge"
         ],
         "critquote": [
             "I **will** seal your fate."
@@ -10502,13 +10499,13 @@
         "xp": 594,
         "maxxp": 615066353,
         "skills": [
+            "TacticalNuke",
             "OneShotKill",
             "Inferno",
             "CosmicRectangle",
-            "TacticalNuke",
             "Mudoon",
-            "MorningStar",
             "J-ola",
+            "MorningStar",
             "Teleport"
         ],
         "critquote": [],
@@ -10740,9 +10737,9 @@
         "xp": 0,
         "maxxp": 639473,
         "skills": [
-            "ExplodingKnee",
             "RockPunch",
             "CollapsingKicks",
+            "ExplodingKnee",
             "WindKick",
             "IronFist",
             "Satarukaja"
@@ -10898,13 +10895,13 @@
         "xp": 0,
         "maxxp": 19832260,
         "skills": [
+            "GrandCross",
             "Abyss",
             "Chaos",
             "Thunder",
-            "GrandCross",
             "MagicMissile",
-            "Labyrinth",
             "Eclipse",
+            "Labyrinth",
             "MultiII"
         ],
         "critquote": [],
@@ -11098,12 +11095,12 @@
         "maxxp": 851369,
         "skills": [
             "Fastclaws",
-            "Hoarfrostknives",
+            "Icespear",
             "Moondowner",
             "HoarfrostBreath",
-            "Icespear",
-            "Forestofthorns",
+            "Hoarfrostknives",
             "GrassOfThorns",
+            "Forestofthorns",
             "Leshenarmor"
         ],
         "critquote": [],
@@ -11314,14 +11311,14 @@
         "xp": 0,
         "maxxp": 19832260,
         "skills": [
+            "Sharknado",
+            "AquaticImpalement",
             "TempestSlash",
             "Pralayam",
-            "AquaticImpalement",
-            "FreezingAir",
             "BubbleShield",
-            "EvadePhys",
-            "Sharknado",
-            "REFLECT"
+            "FreezingAir",
+            "REFLECT",
+            "EvadePhys"
         ],
         "critquote": [
             "Oops! Did that hurt?"
@@ -11597,8 +11594,8 @@
             "Psio",
             "RocketStorm",
             "ShadowyBlast",
-            "Sukukaja",
-            "BloodBlind"
+            "BloodBlind",
+            "Sukukaja"
         ],
         "critquote": [],
         "deathquote": [],
@@ -11709,8 +11706,8 @@
         "skills": [
             "HyperCrunch",
             "BrainBite",
-            "DoubleCrunch",
             "MiracleBite",
+            "DoubleCrunch",
             "Teradyne",
             "MeteorCrunch",
             "Matarukaja",
@@ -12181,11 +12178,11 @@
         "xp": 313004,
         "maxxp": 169664433,
         "skills": [
-            "HomingAttack",
             "BlueTornado",
             "SpinDash",
-            "SuperSonic",
+            "HomingAttack",
             "RingToss",
+            "SuperSonic",
             "PowerCharge",
             "WindAura"
         ],
@@ -12298,10 +12295,10 @@
             "SilkStrike",
             "StarThrust",
             "ShamansCurse",
-            "Masukukaja",
-            "Mavisukaja",
-            "Tarukaja",
             "Tarunda",
+            "Tarukaja",
+            "Mavisukaja",
+            "Masukukaja",
             "ShadowCounter"
         ],
         "critquote": [],
@@ -12447,11 +12444,11 @@
         "xp": 157668,
         "maxxp": 8403976,
         "skills": [
-            "CrystalPierce",
             "PillarSquish",
             "Materazi",
-            "Astonish",
+            "CrystalPierce",
             "PhantomShip",
+            "Astonish",
             "Crystalize"
         ],
         "critquote": [],
@@ -12728,14 +12725,14 @@
             "TidalWave",
             "Aquadyne",
             "AquaBeam",
-            "Garudyne",
+            "Blizzard",
+            "Blizzard",
+            "Blizzard",
             "Magarula",
-            "SexyDance",
-            "Poisma",
+            "Garudyne",
             "Mamakakaja",
-            "Blizzard",
-            "Blizzard",
-            "Blizzard"
+            "Poisma",
+            "SexyDance"
         ],
         "critquote": [
             "Next time, you'll think twice about facing a deity!"
@@ -12922,14 +12919,14 @@
         "xp": 26409,
         "maxxp": 2318215,
         "skills": [
-            "FatalEnd",
-            "DragoCut",
-            "Malaquadyne",
             "Garudyne",
             "Magarudyne",
-            "ThunderWings",
+            "DragoCut",
+            "FatalEnd",
+            "Malaquadyne",
+            "Mamakakaja",
             "Roar",
-            "Mamakakaja"
+            "ThunderWings"
         ],
         "critquote": [],
         "deathquote": [],
@@ -13037,14 +13034,14 @@
         "xp": 26409,
         "maxxp": 2318215,
         "skills": [
-            "RootStab",
-            "Magnadyne",
             "Hanamadyne",
             "Mahanamadyne",
+            "RootStab",
+            "Magnadyne",
             "Eigaon",
             "Megido",
-            "Debilitate",
-            "ForestCurse"
+            "ForestCurse",
+            "Debilitate"
         ],
         "critquote": [],
         "deathquote": [],
@@ -13162,9 +13159,9 @@
             "Shockwave",
             "Earthquake",
             "EyeCannon",
-            "Matarukaja",
+            "Tetrakarn",
             "Marakukaja",
-            "Tetrakarn"
+            "Matarukaja"
         ],
         "critquote": [],
         "deathquote": [],
@@ -13492,11 +13489,11 @@
         "maxxp": 40561289,
         "skills": [
             "Kouga",
-            "Vocadyne",
             "Accordion",
-            "SoothingVoice",
-            "Ear-PiercingScream",
+            "Vocadyne",
             "Roar",
+            "Ear-PiercingScream",
+            "SoothingVoice",
             "KindSoul"
         ],
         "critquote": [
@@ -13760,12 +13757,12 @@
         "xp": 736825,
         "maxxp": 11188725,
         "skills": [
-            "Kougaon",
             "HealSymphony",
             "CuringWall",
-            "Mamakakaja",
-            "Mavisukaja",
+            "Kougaon",
             "Marakukaja",
+            "Mavisukaja",
+            "Mamakakaja",
             "DodgePhys"
         ],
         "critquote": [],
@@ -13989,9 +13986,9 @@
         "xp": 122599343,
         "maxxp": 615066353,
         "skills": [
-            "AtomicRain",
+            "Hug",
             "Atom",
-            "Hug"
+            "AtomicRain"
         ],
         "critquote": [
             "You aren't a worthy enough opponent to face against **me.**"
@@ -14118,12 +14115,12 @@
         "xp": 0,
         "maxxp": 8403976,
         "skills": [
+            "KiBlast[2]",
+            "BuiltDifferent",
             "God'sHand",
             "Maragidyne",
-            "KiBlast[2]",
-            "InvigIII",
             "ReturnToSender",
-            "BuiltDifferent",
+            "InvigIII",
             "ȶɦɛʝ"
         ],
         "critquote": [],
@@ -14250,12 +14247,12 @@
         "xp": 923899,
         "maxxp": 6312320,
         "skills": [
-            "XSlash",
-            "SliceAway",
-            "TripleDown",
+            "DeepStab",
             "RunNGun",
-            "DarkBeam",
-            "DeepStab"
+            "TripleDown",
+            "SliceAway",
+            "XSlash",
+            "DarkBeam"
         ],
         "critquote": [],
         "deathquote": [],
@@ -14443,13 +14440,13 @@
         "xp": 370051,
         "maxxp": 4741253,
         "skills": [
-            "DiffusiveSlice",
             "PKBeam-Alpha",
-            "Wormhole-Alpha",
-            "OffenseUp-Omega",
             "PKBeam-Beta",
-            "NukeAmp",
-            "PKLove-Alpha"
+            "DiffusiveSlice",
+            "PKLove-Alpha",
+            "OffenseUp-Omega",
+            "Wormhole-Alpha",
+            "NukeAmp"
         ],
         "critquote": [
             "You're not gonna last much longer.",
@@ -14660,10 +14657,10 @@
         "skills": [
             "GiganticFist",
             "LonelyCrash",
-            "DemonicBlast",
             "NetherianFire",
-            "AmazingAgility",
-            "Endure"
+            "DemonicBlast",
+            "Endure",
+            "AmazingAgility"
         ],
         "critquote": [
             "Bet that hurt, huh?"
@@ -14886,10 +14883,10 @@
         "xp": 0,
         "maxxp": 169664433,
         "skills": [
-            "RapidTornado",
             "CorkShot",
             "EmptyGun",
             "StarThrust",
+            "RapidTornado",
             "RingToss",
             "FlareTrap",
             "PogoDodge"
@@ -15133,8 +15130,8 @@
             "Berserk",
             "SonicPunch",
             "FarmerPunch",
-            "ShadowySteal",
             "CruelIntent",
+            "ShadowySteal",
             "ShadowCounter"
         ],
         "critquote": [],
@@ -15242,14 +15239,14 @@
         "xp": 436645,
         "maxxp": 2318215,
         "skills": [
-            "DeathSlice",
-            "BraveBlade",
             "FearBuster",
             "DespairScatter",
-            "Rhabdophobia",
-            "CurseAmp",
+            "DeathSlice",
+            "BraveBlade",
             "Omniphobia",
-            "AuraofFear"
+            "Rhabdophobia",
+            "AuraofFear",
+            "CurseAmp"
         ],
         "critquote": [
             "That's gonna leave you a mark~",
@@ -15420,14 +15417,14 @@
         "xp": 19114,
         "maxxp": 4741253,
         "skills": [
-            "SteelyStrike",
-            "Majino",
             "Eigaon",
             "Maeigaon",
             "ShadowStrike",
             "TormentedSwipes",
-            "Marakunda",
-            "Mavisunda"
+            "Majino",
+            "SteelyStrike",
+            "Mavisunda",
+            "Marakunda"
         ],
         "critquote": [],
         "deathquote": [],
@@ -15740,12 +15737,10 @@
         "xp": 0,
         "maxxp": 9696895,
         "skills": [
-            "Nihil",
-            "Phobia",
             "ShadowPunch",
+            "SHIT",
             "ShadowSpirit",
-            "ShadowCounter",
-            "SHIT"
+            "ShadowCounter"
         ],
         "critquote": [],
         "deathquote": [],
@@ -15857,10 +15852,10 @@
             "PhantomBlades",
             "SpectralLatch",
             "PlasmaCannon",
+            "BowBelt",
             "HyperBeam",
             "ChaosBombs",
-            "PsyTurboX",
-            "BowBelt"
+            "PsyTurboX"
         ],
         "critquote": [],
         "deathquote": [
@@ -16126,10 +16121,10 @@
         "skills": [
             "Flowen",
             "HydroWave",
-            "AerialDice",
             "Cyclodeus",
-            "AtmosCharge",
-            "Focus"
+            "AerialDice",
+            "Focus",
+            "AtmosCharge"
         ],
         "critquote": [
             "That hurt you a bit more than I anticipated...",
@@ -16272,9 +16267,9 @@
         "xp": 0,
         "maxxp": 2318215,
         "skills": [
-            "HopeOfDeath",
             "HopeBeam!",
             "RaysOfHope!",
+            "HopeOfDeath",
             "LovelyKiss!"
         ],
         "critquote": [],
@@ -16377,9 +16372,9 @@
         "xp": 0,
         "maxxp": 4741253,
         "skills": [
-            "TwinSlash",
             "FlameSlash",
             "ScorchingSun",
+            "TwinSlash",
             "PhantomBlades"
         ],
         "critquote": [],
@@ -16597,8 +16592,8 @@
             "MegaPunch",
             "MegaKick",
             "TornadoSpin",
-            "SpamChart",
-            "BeQuiet"
+            "BeQuiet",
+            "SpamChart"
         ],
         "critquote": [],
         "deathquote": [],
@@ -16703,9 +16698,9 @@
         "xp": 0,
         "maxxp": 2318215,
         "skills": [
-            "RocketStorm",
             "YellowLaser",
             "RedLaser",
+            "RocketStorm",
             "SlowRepair"
         ],
         "critquote": [],
@@ -16895,14 +16890,14 @@
         "xp": -43797463476587,
         "maxxp": 615066353,
         "skills": [
-            "Lifeup-Sigma",
-            "Counter-Omega",
-            "PSICounter-Omega",
+            "PKSoul-Sigma",
+            "PKSoul-Beta",
             "NegaBlast",
             "NegaBeam",
+            "PSICounter-Omega",
+            "Counter-Omega",
             "Lifeup-Omega",
-            "PKSoul-Sigma",
-            "PKSoul-Beta"
+            "Lifeup-Sigma"
         ],
         "critquote": [],
         "deathquote": [
@@ -17103,12 +17098,11 @@
         "xp": 0,
         "maxxp": 3561208,
         "skills": [
-            "BodySlam",
             "UnseenSlashes",
             "SwipesOfMany",
-            "TerraCrunch",
-            "FiendishThinking",
+            "BodySlam",
             "Taunt",
+            "FiendishThinking",
             "Endure"
         ],
         "critquote": [],
@@ -17316,9 +17310,9 @@
         "xp": 122599343,
         "maxxp": 615066353,
         "skills": [
-            "BoneRush",
-            "BoneToss",
             "GasterBlaster",
+            "BoneToss",
+            "BoneRush",
             "BoneShield",
             "SansDodge"
         ],
@@ -17425,14 +17419,14 @@
         "xp": 0,
         "maxxp": 19832260,
         "skills": [
-            "ZaGan",
+            "MetalCurrentBash",
             "Flowadan",
             "Waveles",
-            "TungstenDrop",
-            "MetalCurrentBash",
+            "ZaGan",
             "MakeshiftMissile",
-            "ElectricTrap",
-            "FlashTrap"
+            "TungstenDrop",
+            "FlashTrap",
+            "ElectricTrap"
         ],
         "critquote": [
             "See how amazing my wares are now?",
@@ -17702,12 +17696,12 @@
         "xp": 19114,
         "maxxp": 4741253,
         "skills": [
-            "Kougaon",
             "HealSymphony",
             "CuringWall",
-            "Mamakakaja",
-            "Mavisukaja",
+            "Kougaon",
             "Marakukaja",
+            "Mavisukaja",
+            "Mamakakaja",
             "DodgePhys"
         ],
         "critquote": [],
@@ -17847,11 +17841,11 @@
         "maxxp": 4741253,
         "skills": [
             "MegatoneRad",
-            "JeanO'Dine",
             "FilletDine",
+            "JeanO'Dine",
             "Shelf-Disstrack",
-            "MacaroniCheeseSaladWithTarAndCake",
-            "MetalBar"
+            "MetalBar",
+            "MacaroniCheeseSaladWithTarAndCake"
         ],
         "critquote": [],
         "deathquote": [],
@@ -18092,11 +18086,11 @@
         "xp": 19114,
         "maxxp": 4741253,
         "skills": [
-            "ChromiumCrash",
             "FissionStrike",
             "Mafreila",
-            "Matarukaja",
+            "ChromiumCrash",
             "Marakukaja",
+            "Matarukaja",
             "RegenII"
         ],
         "critquote": [],
@@ -18244,11 +18238,11 @@
         "maxxp": 4741253,
         "skills": [
             "MegatoneRad",
-            "JeanO'Dine",
             "FilletDine",
+            "JeanO'Dine",
             "Shelf-Disstrack",
-            "MacaroniCheeseSaladWithTarAndCake",
-            "MetalBar"
+            "MetalBar",
+            "MacaroniCheeseSaladWithTarAndCake"
         ],
         "critquote": [],
         "deathquote": [],
@@ -18389,13 +18383,13 @@
         "xp": 535578,
         "maxxp": 4741253,
         "skills": [
-            "VileAssault",
-            "BrainBite",
-            "Trickery",
             "Dokudyne",
-            "UrticatingEnd",
             "Madokusei",
+            "BrainBite",
+            "VileAssault",
+            "Trickery",
             "SpiritLeech",
+            "UrticatingEnd",
             "WebTrap"
         ],
         "deathquote": [
@@ -18756,12 +18750,12 @@
         "xp": 0,
         "maxxp": 2318215,
         "skills": [
-            "Pun",
-            "Belt",
+            "Blizzard",
             "IceBeam",
-            "FreezerBurn",
             "IcicleShower",
-            "Blizzard"
+            "FreezerBurn",
+            "Belt",
+            "Pun"
         ],
         "critquote": [],
         "deathquote": [],
@@ -18874,11 +18868,11 @@
         "maxxp": 4741253,
         "skills": [
             "MegatonRaid",
-            "Jinodyne",
             "Freidyne",
+            "Jinodyne",
             "Self-Destruct",
-            "Matarukaja",
-            "Tetrakarn"
+            "Tetrakarn",
+            "Matarukaja"
         ],
         "critquote": [
             "[hell yea](https://www.youtube.com/watch?v=-T-F-sYy5VE)"
@@ -19436,11 +19430,11 @@
         "maxxp": 4741253,
         "skills": [
             "MegatoneRad",
-            "JeanO'Dine",
             "FilletDine",
+            "JeanO'Dine",
             "Shelf-Disstrack",
-            "MacaroniCheeseSaladWithTarAndCake",
-            "MetalBar"
+            "MetalBar",
+            "MacaroniCheeseSaladWithTarAndCake"
         ],
         "critquote": [
             "[hell yea](https://www.youtube.com/watch?v=-T-F-sYy5VE)"
@@ -20145,14 +20139,14 @@
         "xp": 2588258,
         "maxxp": 14896231,
         "skills": [
-            "StarCrash",
             "HyperSlide",
-            "NeedForSpeed",
             "WornDagger",
-            "ElectroCurrent",
             "FlameBurst",
             "HydroFlurry",
-            "TornadoShower"
+            "ElectroCurrent",
+            "TornadoShower",
+            "StarCrash",
+            "NeedForSpeed"
         ],
         "critquote": [],
         "deathquote": [],
@@ -20309,12 +20303,12 @@
         "maxxp": 5470677,
         "skills": [
             "Kougaon",
-            "Makouga",
-            "Hanamadyne",
-            "Mahanama",
-            "VineLash",
             "Holyen",
-            "MegatonRaid"
+            "Makouga",
+            "MegatonRaid",
+            "Mahanama",
+            "Hanamadyne",
+            "VineLash"
         ],
         "critquote": [],
         "deathquote": [],
@@ -20459,14 +20453,14 @@
         "xp": 455056,
         "maxxp": 5470677,
         "skills": [
+            "VineLash",
             "Hanamadyne",
             "MagicalLeaf",
             "LeafStorm",
-            "VineLash",
-            "Magnara",
             "MegatonRaid",
-            "Marakukaja",
-            "Tetrakarn"
+            "Magnara",
+            "Tetrakarn",
+            "Marakukaja"
         ],
         "critquote": [],
         "deathquote": [],
@@ -20602,12 +20596,12 @@
         "maxxp": 4741253,
         "skills": [
             "MegatoneRad",
-            "JeanO'Dine",
             "FilletDine",
+            "JeanO'Dine",
             "Shelf-Disstrack",
-            "MacaroniCheeseSaladWithTarAndCake",
+            "MarinKarin",
             "MetalBar",
-            "MarinKarin"
+            "MacaroniCheeseSaladWithTarAndCake"
         ],
         "critquote": [],
         "deathquote": [],
@@ -20727,9 +20721,9 @@
         "skills": [
             "ShadedWave",
             "ShadedWater",
-            "Pulinpa",
-            "DarkRise",
             "Aquadyne",
+            "DarkRise",
+            "Pulinpa",
             "SmallFrame"
         ],
         "critquote": [
@@ -20992,14 +20986,14 @@
         "xp": 6285,
         "maxxp": 615066353,
         "skills": [
-            "Tetrakarn",
-            "Makarakarn",
-            "DodgeMag",
-            "DodgePhys",
-            "Shield",
-            "Test",
             "SnowRocket",
-            "Debilitate"
+            "Debilitate",
+            "Test",
+            "Shield",
+            "Makarakarn",
+            "Tetrakarn",
+            "DodgePhys",
+            "DodgeMag"
         ],
         "critquote": [],
         "deathquote": [
@@ -21173,14 +21167,14 @@
         "xp": 0,
         "maxxp": 4741253,
         "skills": [
-            "GiganticFist",
-            "Marakukaja",
-            "Matarukaja",
-            "RegenIII",
-            "FireballVolley",
             "ViciousStrike",
+            "GiganticFist",
+            "GuardBreak",
+            "FireballVolley",
+            "Matarukaja",
+            "Marakukaja",
             "HighCounter",
-            "GuardBreak"
+            "RegenIII"
         ],
         "critquote": [],
         "deathquote": [],
@@ -21297,12 +21291,12 @@
         "skills": [
             "BraveBlade",
             "TorrentialSlash",
-            "RunicBlast",
             "DexterousSkewer",
             "RunicAura",
+            "RunicBlast",
+            "IRember",
             "RunicTonic",
-            "VagabondEdge",
-            "IRember"
+            "VagabondEdge"
         ],
         "critquote": [
             "Huh? Did I do something different?"
@@ -21548,9 +21542,9 @@
             "HeavySuperSlash",
             "PinpointPuncture",
             "Annoy",
-            "AffinityCutter",
+            "Float",
             "RudeHeart",
-            "Float"
+            "AffinityCutter"
         ],
         "critquote": [
             "Ha! Survive that, bitch!"
@@ -21801,11 +21795,11 @@
         "xp": 0,
         "maxxp": 64782,
         "skills": [
-            "InvigI",
-            "FlameFistSeven",
-            "FireShoot",
             "WoundBurn",
-            "Mini-Bomb"
+            "FireShoot",
+            "FlameFistSeven",
+            "Mini-Bomb",
+            "InvigI"
         ],
         "critquote": [
             "WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO",
@@ -22164,13 +22158,13 @@
         "xp": 0,
         "maxxp": 4741253,
         "skills": [
-            "SlashBoost",
-            "ShadowySteal",
-            "Thunder",
+            "ABitterEnd",
             "Deathbound",
             "UnseenSlashes",
-            "ABitterEnd",
-            "ElectricalShield"
+            "Thunder",
+            "ShadowySteal",
+            "ElectricalShield",
+            "SlashBoost"
         ],
         "critquote": [],
         "deathquote": [
@@ -22303,13 +22297,13 @@
         "maxxp": 615066353,
         "skills": [
             "DemonicDecree",
-            "LunaticRedEyes",
             "Hug",
-            "TrueAnimeInstinct(B)",
+            "LunaticRedEyes",
             "FinalEvisceration",
-            "CurseTurbo",
+            "AnimeComeback",
             "TrueAnimeInstinct",
-            "AnimeComeback"
+            "CurseTurbo",
+            "TrueAnimeInstinct(B)"
         ],
         "critquote": [
             "Sorry, but I've no patience for you right now."
@@ -22553,13 +22547,13 @@
         "xp": 200179,
         "maxxp": 3086380,
         "skills": [
-            "GiganticFist",
-            "HeavyShot",
             "LightningFist",
             "Ziodyne",
             "Anti-MaterialZap",
-            "OrgiaMode",
+            "GiganticFist",
+            "HeavyShot",
             "Matarukaja",
+            "OrgiaMode",
             "ProximitySurge"
         ],
         "critquote": [
@@ -22915,14 +22909,14 @@
         "xp": 123610,
         "maxxp": 11188725,
         "skills": [
-            "PKFire-Pi",
             "FireCrack",
-            "PKFreeze-Gamma",
+            "PKFire-Pi",
             "SnowGrave",
-            "Ice+",
+            "PKFreeze-Gamma",
             "Wormhole-Beta",
+            "RudeHeart",
             "InvigII",
-            "RudeHeart"
+            "Ice+"
         ],
         "critquote": [],
         "deathquote": [
@@ -23211,13 +23205,13 @@
         "xp": 122599343,
         "maxxp": 615066353,
         "skills": [
-            "Explosion",
             "EAgi",
             "EAqua",
             "BufEA",
             "ZiEA",
             "GEAru",
-            "TerEA"
+            "TerEA",
+            "Explosion"
         ],
         "critquote": [],
         "deathquote": [],
@@ -23323,12 +23317,12 @@
         "skills": [
             "Flowalo",
             "Wavetu",
-            "Garudyne",
             "Magarudyne",
-            "Marakukaja",
+            "Garudyne",
             "Mavisukaja",
-            "WaterBoost",
-            "InvigII"
+            "Marakukaja",
+            "InvigII",
+            "WaterBoost"
         ],
         "critquote": [],
         "deathquote": [],
@@ -23494,14 +23488,14 @@
         "xp": 217154,
         "maxxp": 1741237,
         "skills": [
-            "WolfBite",
-            "RevengeBite",
-            "SharpChomp-III",
             "AuraBarrage",
             "AuraSphere",
             "AuraScythe",
-            "Makakaja",
-            "Makanda"
+            "SharpChomp-III",
+            "RevengeBite",
+            "WolfBite",
+            "Makanda",
+            "Makakaja"
         ],
         "critquote": [
             "Huh, must've put more power into that one.",
@@ -24032,11 +24026,11 @@
         "maxxp": 615066353,
         "skills": [
             "God'sHand",
-            "UltimateSmash",
-            "PKCurse-Sigma",
-            "PKCurse-Omega",
-            "DarkRay",
             "XObliterate",
+            "UltimateSmash",
+            "DarkRay",
+            "PKCurse-Omega",
+            "PKCurse-Sigma",
             "CalmDown"
         ],
         "critquote": [],
@@ -24133,14 +24127,14 @@
         "xp": 181866,
         "maxxp": 11188725,
         "skills": [
-            "Eigaon",
+            "FortunateSpirit",
             "ImmoralMagnetism",
             "Maeigaon",
-            "Kougaon",
+            "Eigaon",
             "IlluminatedLuckiness",
             "Makougaon",
-            "Angel-DevilFury",
-            "FortunateSpirit"
+            "Kougaon",
+            "Angel-DevilFury"
         ],
         "critquote": [
             "Oooo! Luckiness!",
@@ -24392,14 +24386,14 @@
         "xp": 0,
         "maxxp": 169664433,
         "skills": [
-            "HomingAttack",
-            "ChaosControl",
-            "ChaosSpear",
             "ChaosBlast",
+            "ChaosSpear",
             "ChaosNightmare",
             "ChaosMagic",
-            "NukeAura",
-            "Gun"
+            "HomingAttack",
+            "Gun",
+            "ChaosControl",
+            "NukeAura"
         ],
         "critquote": [],
         "deathquote": [],
@@ -24510,14 +24504,14 @@
         "xp": 0,
         "maxxp": 169664433,
         "skills": [
-            "Makarakarn",
-            "PsychicCounterA",
-            "PsychicCounterB",
-            "PsychicCut",
-            "MeteorSmash",
             "PsycheShockwave",
+            "PsychicCut",
             "PsychoForce",
-            "PsyAuraX"
+            "MeteorSmash",
+            "Makarakarn",
+            "PsyAuraX",
+            "PsychicCounterB",
+            "PsychicCounterA"
         ],
         "critquote": [],
         "deathquote": [],
@@ -24625,8 +24619,8 @@
             "ShadowStrike",
             "UnseenSnatch",
             "BurningSpirit",
-            "Kiss",
-            "Taunt"
+            "Taunt",
+            "Kiss"
         ],
         "critquote": [],
         "deathquote": [],
@@ -24739,13 +24733,13 @@
         "maxxp": 19832260,
         "skills": [
             "TricksterStrike",
-            "Tanukimation",
-            "Swordbreaker",
-            "SpiritCharge",
-            "IllusoryParry(B)",
             "Sundrop",
+            "Sunfall",
             "SwiftStrike",
-            "Sunfall"
+            "Tanukimation",
+            "IllusoryParry(B)",
+            "SpiritCharge",
+            "Swordbreaker"
         ],
         "deathquote": [
             "Not... Here....",
@@ -25464,9 +25458,9 @@
             "StormBlade",
             "QuadProd",
             "Tanukimation",
-            "IllusoryParry",
+            "SpiritCharge",
             "Swordbreaker",
-            "SpiritCharge"
+            "IllusoryParry"
         ],
         "deathquote": [
             "Not... Here....",
@@ -26186,12 +26180,12 @@
         "xp": 0,
         "maxxp": 40561289,
         "skills": [
-            "KillerDoll",
-            "TimeStill",
-            "TimeFreeze",
             "JackRipper",
+            "KillerDoll",
             "EternalMeek",
-            "Agility"
+            "Agility",
+            "TimeFreeze",
+            "TimeStill"
         ],
         "critquote": [],
         "deathquote": [
@@ -26443,11 +26437,11 @@
         "xp": 0,
         "maxxp": 1133480,
         "skills": [
+            "SnowRocket",
             "Bufudyne",
             "Mabufula",
-            "CirnoFreeze",
             "PerfectFreeze",
-            "SnowRocket"
+            "CirnoFreeze"
         ],
         "critquote": [],
         "deathquote": [],
@@ -26863,11 +26857,11 @@
         "xp": 2,
         "maxxp": 615066353,
         "skills": [
-            "God'sHand",
             "Lunge",
+            "MegatonRaid",
+            "God'sHand",
             "Agi",
-            "Agidyne",
-            "MegatonRaid"
+            "Agidyne"
         ],
         "critquote": [],
         "deathquote": [],
@@ -26963,12 +26957,12 @@
         "xp": 122599343,
         "maxxp": 615066353,
         "skills": [
-            "HellThrust",
+            "ThunderGodDance",
             "3CutShock",
+            "HellThrust",
             "RocketStorm",
-            "HyperSonic",
             "SuperSonic",
-            "ThunderGodDance"
+            "HyperSonic"
         ],
         "critquote": [],
         "deathquote": [],
@@ -27095,11 +27089,11 @@
         "xp": 0,
         "maxxp": 11188725,
         "skills": [
-            "Pun",
             "IronFist",
-            "BladeBlast",
             "PKGear-Gamma",
-            "SteelyStrike"
+            "SteelyStrike",
+            "BladeBlast",
+            "Pun"
         ],
         "critquote": [
             "It appears that I did more damage then I originally calculated. Nice."
@@ -27280,12 +27274,12 @@
         "xp": 0,
         "maxxp": 46801487,
         "skills": [
-            "SHIT",
+            "Moan",
             "Sex",
             "Penetration",
             "Constipation",
             "Shit",
-            "Moan"
+            "SHIT"
         ],
         "critquote": [
             "[moan]"
@@ -27439,13 +27433,13 @@
         "xp": 748775,
         "maxxp": 8403976,
         "skills": [
-            "Garula",
             "Kougaon",
             "Makougaon",
-            "HealSymphony",
-            "EnergyWave",
+            "Garula",
+            "Mamakakaja",
             "Diarahan",
-            "Mamakakaja"
+            "EnergyWave",
+            "HealSymphony"
         ],
         "critquote": [],
         "deathquote": [
@@ -27712,11 +27706,11 @@
         "maxxp": 40561289,
         "skills": [
             "Holyize",
-            "Glowmax",
             "MegaRave",
-            "Tinlok",
-            "Stellion",
+            "Glowmax",
             "Mindo",
+            "Stellion",
+            "Tinlok",
             "Mamakanda"
         ],
         "critquote": [],
@@ -27871,11 +27865,11 @@
         "maxxp": 40561289,
         "skills": [
             "Kouga",
-            "Hanama",
             "Ziemia",
-            "Mamakakaja",
-            "Mavisukaja",
+            "Hanama",
             "Marakukaja",
+            "Mavisukaja",
+            "Mamakakaja",
             "Dia"
         ],
         "critquote": [],

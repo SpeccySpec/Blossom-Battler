@@ -1344,7 +1344,7 @@ commands.forgetskill = new Command({
 
 		// Let's kill it!
 		let num = knowsSkill(thingDefs[args[0]], args[1])
-		thingDefs[args[0]].skills.splice(num, i)
+		thingDefs[args[0]].skills.splice(num, 1)
 
 		message.react('👍');
 		if (thingDefs[args[0]].type) {
@@ -4262,6 +4262,79 @@ commands.edittc = new Command({
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
+
+/*
+commands.registertransformation = new Command({
+	desc: `Register a transformation for a character to use in-battle! This can buff stats, change skills and more.`,
+	aliases: ['maketransformation', 'newtransformation', 'registertransform'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Main Element",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Base HP",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base MP",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Strength",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Magic",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Perception",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Endurance",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Charisma",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Intelligence",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Agility",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Luck",
+			type: "Num",
+			forced: true
+		},
+	],
+	checkban: true,
+	func: (message, args) => {
+	}
+})
+*/
 
 /*
 	UTILITY COMMANDS
