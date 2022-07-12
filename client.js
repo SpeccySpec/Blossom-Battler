@@ -207,11 +207,11 @@ itemRarityEmoji = {
 
 // Status Effects
 statusEffects = [
-    "burn",
-	"bleed",
-    "freeze",
-    "paralyze",
-	"dizzy",
+    "burn", // 1/10th HP lost. [WEAK] 1/5th HP lost. [RESIST] 1/20th HP lost.
+	"bleed", // 1/10th HP lost. [WEAK] 1/5th HP lost. [RESIST] 1/20th HP lost.
+    "freeze", // One turn lost. [WEAK] Two turns lost. [RESIST] Chance to have turn lost.
+    "paralyze", // Turns can be lost. Chance for this to happen lowers over time. [WEAK] Doubled Length. [RESIST] Halved Length.
+	"dizzy", // 50% accuracy on moves [WEAK] 33% accuracy on moves [RESIST] 80% accuracy on moves
 	"sleep",
 	"despair",
     "poison",
@@ -342,6 +342,15 @@ enmHabitats = [
 	"icy",
 	"unknown"
 ]
+
+// Enemy AI
+aiTypes = {
+	easy: "Select random options. Only change if the target is dead. Never consider bad outcomes. Never watch out for affinities. Never watch out for shields, traps, ect.",
+	medium: "Little consideration for bad outcomes, aware of affinities but must discover them first. Aware of traps and shields when deployed.",
+	hard: "Actively try to avoid bad outcomes, but may slip up sometimes. Take advantage of affinities, but must discover them first. Avoid traps and shields when deployed. Aware that Almighty, Feint and BrickBreak moves can bypass shields.",
+	perfect: "Perfect play. Avoid bad outcomes. Abuses affinities, without needing to discover them. Avoid or break traps and shields when deployed.",
+	legacy: "The way we used to do it..."
+}
 
 // weather and terrain
 weathers = [

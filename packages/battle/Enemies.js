@@ -7,14 +7,34 @@ isBoss = (f) => {
 // Enemy thinker!
 enemyThinker = (char, btl) => {
 	// Ah shit. Enemy AI. AH FUCk.
-	// Placeholder AI uses random skill on random target.
-	let action = {
-		move: 'skills',
-		index: char.skills[randNum(char.skills.length-1)],
-		target: [0, randNum(btl.teams[0].members.length-1)],
+	let ai = [];
+
+	// Difficulty levels should be handled
+	switch(char.difficulty ?? 'easy') {
+		default: // Easy mode AI:
+			// Select random options. Only change if the target is dead.
+			// Never consider bad outcomes.
+			// Never watch out for affinities.
+			// Never watch out for shields, traps, ect.
+			for (let i in btl.teams) {
+				if (i == char.team) continue;
+
+				for (let targ of btl.teams[i].members) {
+					if (targ.hp <= 0) continue;
+
+					ai.push({
+						move: 'skills',
+						index: char.skills[randNum(char.skills.length-1)],
+						target: [i, targ.pos],
+						points: 0
+					})
+				}
+			}
 	}
 
-	return action;
+	// Sort the AI's possible options. Choose the one with the most points.
+	ai.sort(function(a, b) {return a.points-b.points});
+	return ai[0];
 }
 
 doEnemyTurn = (char, btl) => {
