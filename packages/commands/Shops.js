@@ -57,15 +57,13 @@ commands.openshop = new Command({
 					return void message.channel.send(`${itemtype} is not a valid item type! Use either ''Item'', ''Weapon'' or ''Armor''.`);
 				itembuild.type = itemtype
 			} else {
-				const item = args[i]
-				const info = files[itembuild.type][item]
-				if (!info)
-					return void message.channel.send(`${item} is an invalid ${itembuild.type}!`)
-				itembuild.item = item
-				if (info.desc)
-					itembuild.desc = `${(info.desc.length > 100)
-						? `${info.desc.slice(0, 100)}_..._`
-						: info.desc}`
+				const item = args[i];
+				const info = files[itembuild.type][item];
+				if (!info) return void message.channel.send(`${item} is an invalid ${itembuild.type}!`);
+
+				itembuild.item = item;
+				if (info.desc) itembuild.desc = `${(info.desc.length > 100) ? `${info.desc.slice(0, 100)}_..._` : info.desc}`;
+				itembuild.cost = info.cost ?? 5000;
 				shop.items.push(itembuild);
 				itembuild = {};
 			}
