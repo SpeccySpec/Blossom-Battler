@@ -149,8 +149,8 @@ class Shop {
 			title: `What will you buy?`,
 			description: `Choose using the list below.\nYou have **${this.party.currency}${setUpSettings(this.channel.guild.id).currency_emoji ?? '<:token:981579648993460355>'}** at the moment.`
 		}, [
-			makeList(this.shop.items.map(({type, item, desc}) => ({
-				label: item,
+			makeList(this.shop.items.map(({cost, item, desc}) => ({
+				label: `${item} (Costs ${cost})`,
 				description: desc?.slice(0, 100) ?? "No description provided.",
 				value: item
 			})), "buy2", "Choose the items to buy")
