@@ -152,7 +152,7 @@ class Shop {
 			makeList(this.shop.items.map(({cost, item, desc}) => ({
 				label: `${item} (Costs ${cost})`,
 				description: desc?.slice(0, 100) ?? "No description provided.",
-				value: item
+				value: `${item}-${cost}`
 			})), "buy2", "Choose the items to buy")
 		], [
 			makeButton('Back', '◀️', 'grey', null, "main")
@@ -160,7 +160,11 @@ class Shop {
 	}
 
 	buy2(i) {
-		
+		let cost = 0
+		for (const rawitemdata of i.values) {
+			const itemdata = rawitemdata.split("-")
+		}
+
 	}
 
 	exit() {
