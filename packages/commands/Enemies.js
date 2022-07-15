@@ -935,6 +935,76 @@ commands.setimage = new Command({
 	}
 })
 
+commands.setweight = new Command({
+    desc: "Sets the enemy's weight __in kg__.",
+    section: 'enemies',
+    args: [
+        {
+            name: "Enemy",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Weight",
+            type: "Num",
+            forced: true
+        }
+    ],
+	checkban: true,
+	admin: 'You do not have permission to assign loot to an enemy.',
+    func: (message, args) => {
+        let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		
+		if (enemyFile[args[0]]) {
+			let settings = setUpSettings(message.guild.id);
+
+			if (args[1] <= 0)
+				return message.channel.send(`...Can something have ${args[1]}kg weight on your planet?`);
+			else {
+				enemyFile[args[0]].weight = args[1];
+				message.channel.send(`${args[0]}'s weight is now ${args[1]}kg.`);
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, 4));
+			}
+        } else
+            return message.channel.send(`${args[0]} is not a valid enemy.`)
+    }
+})
+
+commands.setheight = new Command({
+    desc: "Sets the enemy's height __in m__.",
+    section: 'enemies',
+    args: [
+        {
+            name: "Enemy",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Height",
+            type: "Num",
+            forced: true
+        }
+    ],
+	checkban: true,
+	admin: 'You do not have permission to assign loot to an enemy.',
+    func: (message, args) => {
+        let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+
+		if (enemyFile[args[0]]) {
+			let settings = setUpSettings(message.guild.id);
+
+			if (args[1] <= 0)
+				return message.channel.send(`...Can something have ${args[1]}m height... ever?`);
+			else {
+				enemyFile[args[0]].height = args[1];
+				message.channel.send(`${args[0]}'s height is now ${args[1]}m.`);
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, 4));
+			}
+        } else
+            return message.channel.send(`${args[0]} is not a valid enemy.`)
+    }
+})
+
 commands.randenemyquote = new Command({
 	desc: "Get a random quote from any enemy.",
 	aliases: ['randenemyquote', 'randomenemyquote'],
