@@ -2240,7 +2240,7 @@ commands.startcrafting = new Command({
                     for (i in recipeItems) {
                         console.log(recipeItems[i], party.items[i])
                         if (!party.items[i] || party.items[i] < recipeItems[i]) {
-                            message.channel.send(`You don't have enough ${i}s to craft this __(${party.items[i] ?? 0}/${recipeItems[i]})__.`);
+                            message.channel.send(`You don't have enough ${i}s to use for this __(${party.items[i] ?? 0}/${recipeItems[i]})__.`);
                             messageCollector.stop()
                             return;
                         }
