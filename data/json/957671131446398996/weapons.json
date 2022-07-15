@@ -12,12 +12,11 @@
         "recipe": {
             "amount": 1,
             "shapeless": false,
-            "recipe": [
-                1,
-                "Sweet",
-                2,
-                "S"
-            ]
+            "recipe": {
+                "0": "Sweet",
+                "4": "Sweet",
+                "8": "Sweet"
+            }
         }
     },
     "RoyalRapier": {

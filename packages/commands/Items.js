@@ -5,7 +5,7 @@ function getRecipe(itemDefs) {
         finalText += `Can be ${itemDefs.recipe.shapeless ? `**shapelessly**` : ``} crafted from:\n`;
         let itemTxt = {}
         for (const i in itemDefs.recipe.recipe) {
-            const item = Object.values(itemDefs.recipe.recipe[i])[0];
+            const item = itemDefs.recipe.recipe[i];
             if (!itemTxt[item]) itemTxt[item] = 0;
             itemTxt[item] += 1;
         }
@@ -1996,7 +1996,7 @@ commands.makecraftingrecipe = new Command({
                             message.channel.send(`${margs[i]} is not a valid number.`);
                             givenResponce = true
 				            collector.stop()
-                            break;
+                            return;
                         } else {
                             margs[i] = Math.max(0, Math.min(8, parseInt(margs[i])))
                             nums.push(margs[i])
@@ -2006,13 +2006,13 @@ commands.makecraftingrecipe = new Command({
                             message.channel.send(`${margs[i]} is not a valid item name.`);
                             givenResponce = true
                             collector.stop()
-                            break;
+                            return;
                         }
                         if (margs[i] == args[1]) {
                             message.channel.send(`You cannot craft ${margs[i]} into itself.`);
                             givenResponce = true
                             collector.stop()
-                            break;
+                            return;
                         }
                     }
                 }
@@ -2020,11 +2020,13 @@ commands.makecraftingrecipe = new Command({
                     message.channel.send(`You need to have an even number of arguments.`);
                     givenResponce = true
                     collector.stop()
+                    return;
                 }
                 if (nums.length != new Set(nums).size) {
                     message.channel.send(`You cannot place multiple items on the same grid.`);
                     givenResponce = true
                     collector.stop()
+                    return;
                 }
 
                 let newRecipe = {}
@@ -2040,7 +2042,7 @@ commands.makecraftingrecipe = new Command({
                             message.channel.send(`This crafting recipe is already in use by ${itemFile[i].name}.`);
                             givenResponce = true
                             collector.stop()
-                            break;
+                            return;
                         }
                     }
                 }
@@ -2050,7 +2052,7 @@ commands.makecraftingrecipe = new Command({
                             message.channel.send(`This crafting recipe is already in use by ${weaponFile[i].name}.`);
                             givenResponce = true
                             collector.stop()
-                            break;
+                            return;
                         }
                     }
                 }
@@ -2060,7 +2062,7 @@ commands.makecraftingrecipe = new Command({
                             message.channel.send(`This crafting recipe is already in use by ${armorFile[i].name}.`);
                             givenResponce = true
                             collector.stop()
-                            break;
+                            return;
                         }
                     }
                 }
@@ -2133,6 +2135,174 @@ commands.clearitemrecipe = new Command({
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${args[0].toLowerCase()}s.json`, JSON.stringify(itemFiles[args[0]], null, 4));
 
         message.channel.send(`${itemDefs.name} has had its crafting recipe removed.`)
+    }
+})
+
+let isCrafting = {}
+commands.startcrafting = new Command({
+    desc: `Lets a party start crafting an item.`,
+    section: 'items',
+    aliases: ['startcraft', 'craft'],
+    args: [
+        {
+            name: 'Party',
+            type: 'Word',
+            forced: true
+        }
+    ],
+    checkban: true,
+    func: (message, args) => {
+        let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
+
+        let party = parties[args[0]]
+        if (!party) return message.channel.send(`${args[0]} is not a valid party name.`);
+        if (!isPartyLeader(message.author, party, message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send(`You're not the leader of team ${party.name}, therefore, you have insufficient permissions to start crafting.`)
+
+        if (!isCrafting[message.guild.id]) isCrafting[message.guild.id] = []
+
+        if (isCrafting[message.guild.id].includes(args[0])) return message.channel.send(`Team ${party.name} is already crafting an item.`);
+        isCrafting[message.guild.id].push(args[0])
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, 4));
+
+        const file = new Discord.MessageAttachment(`${dataPath}/images/Crafting_Grid.png`);
+        const embed = new Discord.MessageEmbed()
+            .setTitle(`Team ${party.name} is crafting an item.`)
+            .setColor(0x00AE86)
+            .setDescription(`I'll give you a minute to craft the item. In the meantime, here are the rules:`)
+            .addField("Placement", 'Top left grid is of ID 0, and it goes from left to right, top to bottom.', true)
+            .addField("Quantity", `For each grid you can place only one item at a time.`, true)
+            .addField("What to write", `*<Num: Placement #1> <Word: Item #1> {...}*\nFor each item, you need a placement number before it.`, true)
+            .setThumbnail('attachment://Crafting_Grid.png')
+
+        message.channel.send({embeds: [embed], files: [file]})
+
+        let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+        let weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
+        let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
+
+        let messageCollector = message.channel.createMessageCollector(m => (m.author.id == message.author.id && !m.author.bot) || utilityFuncs.isAdmin(message), { time: 60000 });
+        messageCollector.on('collect', m => {
+            if (!m.content.startsWith(getPrefix(m.guild.id)) && !m.author.bot) {
+                if (m.content.toLowerCase() == 'cancel') {
+                    message.channel.send(`Team ${party.name} has stopped crafting.`)
+                    messageCollector.stop()
+                } else {
+                    let margs = [...m.content.matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
+                    let nums = []
+                    for (i in margs) {
+                        if (i % 2 == 0) {
+                            if (isNaN(margs[i])) { 
+                                message.channel.send(`${margs[i]} is not a valid number.`);
+                                messageCollector.stop()
+                                break;
+                            } else {
+                                margs[i] = Math.max(0, Math.min(8, parseInt(margs[i])))
+                                nums.push(margs[i])
+                            }
+                        } else {
+                            if (!itemFile[margs[i]]) {
+                                message.channel.send(`${margs[i]} is not a valid item name.`);
+                                messageCollector.stop()
+                                break;
+                            }
+                            if (margs[i] == args[1]) {
+                                message.channel.send(`You cannot craft ${margs[i]} into itself.`);
+                                messageCollector.stop()
+                                break;
+                            }
+                        }
+                    }
+                    if (margs.length % 2 == 1) {
+                        message.channel.send(`You need to have an even number of arguments.`);
+                        messageCollector.stop()
+                    }
+                    if (nums.length != new Set(nums).size) {
+                        message.channel.send(`You cannot place multiple items on the same grid.`);
+                        messageCollector.stop()
+                    }
+
+                    let newRecipe = {}
+                    for (i in margs) {
+                        if (i % 2 == 1) {
+                            newRecipe[margs[i-1]] = margs[i]
+                        }
+                    }
+
+                    let recipeFound = false
+
+                    let ItemRecipe = []
+                    let InputRecipe = []
+                    let order = [itemFile, weaponFile, armorFile]
+                    let categorial = ['item', 'weapon', 'armor']
+
+                    for (category in order) {
+                        let cat = order[category]
+
+                        for (item in cat) {
+                            if (cat[item].recipe) {
+                                //check if the recipe is shapeless or not
+                                if (cat[item].recipe.shapeless) {
+                                    //the order doesn't matter, merge the values of recipe keys into arrays
+                                    for (key in cat[item].recipe.recipe) {
+                                        ItemRecipe.push(cat[item].recipe.recipe[key])
+                                    }
+                                    for (key in newRecipe) {
+                                        InputRecipe.push(newRecipe[key])
+                                    }
+                                    //sort them both
+                                    ItemRecipe.sort()
+                                    InputRecipe.sort()
+                                    //compare them
+                                    if (ItemRecipe.join('') == InputRecipe.join('')) {
+                                        recipeFound = [categorial[order.indexOf(cat)], item, objClone(cat[item])]
+                                        break
+                                    }
+                                } else {
+                                    //check if they are the same
+                                    if (JSON.stringify(cat[item].recipe.recipe) == JSON.stringify(newRecipe)) {
+                                        recipeFound = [categorial[order.indexOf(cat)], item, objClone(cat[item])]
+                                        break
+                                    }
+                                }
+                            }
+                        }
+                        if (recipeFound) {
+                            break
+                        }
+                    }
+
+                    if (!recipeFound) {
+                        message.channel.send(`No recipe found for the given inputs.`);
+                        messageCollector.stop()
+                    } else {
+                        let desc = recipeFound[0] == 'item' ? itemDesc(recipeFound[2], recipeFound[1], message) : recipeFound[0] == 'weapon' ? weaponDesc(recipeFound[2], recipeFound[1], message) : armorDesc(recipeFound[2], recipeFound[1], message)
+                        message.channel.send({content: `Congratulations! Team ${party.name} has crafted ${recipeFound[2].recipe.amount} **${recipeFound[1]}** ${recipeFound[0]}${recipeFound[2].recipe.amount > 1 ? 's' : ''}!`, embeds: [desc]})
+                        
+                        if (!party.items[recipeFound[1]]) party.items[recipeFound[1]] = 0
+                        party.items[recipeFound[1]] += recipeFound[2].recipe.amount
+
+                        if (recipeFound[0] == 'weapon') {
+                            if (!party.weapons[recipeFound[1]]) party.weapons[recipeFound[1]] = recipeFound[2]
+                            delete party.weapons[recipeFound[1]].recipe
+                        } else if (recipeFound[0] == 'armor') {
+                            if (!party.armors[recipeFound[1]]) party.armors[recipeFound[1]] = recipeFound[2]
+                            delete party.armors[recipeFound[1]].recipe
+                        }
+
+                        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/party.json`, JSON.stringify(party, null, 2))
+                        
+                        messageCollector.stop()
+                    }
+                }
+            }
+        })
+        messageCollector.on('end', c => {
+            isCrafting[message.guild.id].splice(isCrafting[message.guild.id].indexOf(args[0]), 1)
+            if (c.size == 0) {
+                message.channel.send(`Team ${party.name} has stopped crafting.`)
+            }
+        })
     }
 })
 
