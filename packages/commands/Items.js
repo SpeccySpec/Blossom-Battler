@@ -2237,13 +2237,17 @@ commands.startcrafting = new Command({
                         recipeItems[newRecipe[i]]++
                     }
 
+                    let noText = ''
                     for (i in recipeItems) {
-                        console.log(recipeItems[i], party.items[i])
                         if (!party.items[i] || party.items[i] < recipeItems[i]) {
-                            message.channel.send(`You don't have enough ${i}s to use for this __(${party.items[i] ?? 0}/${recipeItems[i]})__.`);
-                            messageCollector.stop()
-                            return;
+                            if (noText.length > 1) noText += ', '
+                            noText += `${i}s __(${party.items[i] ?? 0}/${recipeItems[i]})__`
                         }
+                    }
+                    if (noText.length > 1) {
+                        message.channel.send(`You don't have enough ${noText} to use for this.`);
+                        messageCollector.stop()
+                        return;
                     }
 
                     let recipeFound = false
