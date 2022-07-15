@@ -2195,7 +2195,7 @@ commands.startcrafting = new Command({
                             if (isNaN(margs[i])) { 
                                 message.channel.send(`${margs[i]} is not a valid number.`);
                                 messageCollector.stop()
-                                break;
+                                return;
                             } else {
                                 margs[i] = Math.max(0, Math.min(8, parseInt(margs[i])))
                                 nums.push(margs[i])
@@ -2204,28 +2204,45 @@ commands.startcrafting = new Command({
                             if (!itemFile[margs[i]]) {
                                 message.channel.send(`${margs[i]} is not a valid item name.`);
                                 messageCollector.stop()
-                                break;
+                                return;
                             }
                             if (margs[i] == args[1]) {
                                 message.channel.send(`You cannot craft ${margs[i]} into itself.`);
                                 messageCollector.stop()
-                                break;
+                                return;
                             }
                         }
                     }
                     if (margs.length % 2 == 1) {
                         message.channel.send(`You need to have an even number of arguments.`);
                         messageCollector.stop()
+                        return;
                     }
                     if (nums.length != new Set(nums).size) {
                         message.channel.send(`You cannot place multiple items on the same grid.`);
                         messageCollector.stop()
+                        return;
                     }
 
                     let newRecipe = {}
                     for (i in margs) {
                         if (i % 2 == 1) {
                             newRecipe[margs[i-1]] = margs[i]
+                        }
+                    }
+
+                    let recipeItems = {}
+                    for (i in newRecipe) {
+                        if (!recipeItems[newRecipe[i]]) recipeItems[newRecipe[i]] = 0
+                        recipeItems[newRecipe[i]]++
+                    }
+
+                    for (i in recipeItems) {
+                        console.log(recipeItems[i], party.items[i])
+                        if (!party.items[i] || party.items[i] < recipeItems[i]) {
+                            message.channel.send(`You don't have enough ${i}s to craft this __(${party.items[i] ?? 0}/${recipeItems[i]})__.`);
+                            messageCollector.stop()
+                            return;
                         }
                     }
 
@@ -2290,7 +2307,15 @@ commands.startcrafting = new Command({
                             delete party.armors[recipeFound[1]].recipe
                         }
 
-                        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/party.json`, JSON.stringify(party, null, 2))
+                        for (i in recipeItems) {
+                            if (party.items[i]) party.items[i] -= recipeItems[i]
+
+                            if (party.items[i] < 0) {
+                                delete party.items[i]
+                            }
+                        }
+
+                        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, 2))
                         
                         messageCollector.stop()
                     }
