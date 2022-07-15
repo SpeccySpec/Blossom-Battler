@@ -147,7 +147,7 @@ class Shop {
 	buy() {
 		return this.setupEmbed({
 			title: `What will you buy?`,
-			description: `Choose using the list below.\nYou have ${this.currency}.`
+			description: `Choose using the list below.\nYou have **${this.currency}${setUpSettings(this.channel.guild).currency_emoji ?? '<:token:981579648993460355>'}** at the moment.`
 		}, [
 			makeList(this.shop.items.map(({type, item, desc}) => ({
 				label: item,
