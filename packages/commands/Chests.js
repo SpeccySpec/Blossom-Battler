@@ -47,29 +47,26 @@ function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFil
         channelText = `${chestDefs.channel}`
     }
 
-    let itemText = ''
-    if (chestDefs.items != {}) {
-        const categories = ['item', 'weapon', 'armor']
-        for (let category in categories) {
-            if (chestDefs.items[categories[category]]) {
-                itemText += `*${categories[category].charAt(0).toUpperCase() + categories[category].slice(1)}s:*\n`
-                for (let item in chestDefs.items[categories[category]]) {
-                    switch (categories[category]) {
-                        case 'item':
-                            itemText += `- ${itemTypeEmoji[itemFile[item].type]}${itemRarityEmoji[itemFile[item].rarity]} ${itemFile[item].name} (${chestDefs.items[categories[category]][item]}x)\n`
-                            break;
-                        case 'weapon':
-                            itemText += `- ${elementEmoji[weaponFile[item].element]} ${weaponFile[item].name} (${chestDefs.items[categories[category]][item]}x)\n`
-                            break;
-                        case 'armor':
-                            itemText += `- ${elementEmoji[armorFile[item].element]} ${armorFile[item].name} (${chestDefs.items[categories[category]][item]}x)\n`
-                            break;
-                    }
+    let itemText = ['', '', '', '']
+    const categories = ['items', 'weapons', 'armors']
+    for (let category in categories) {
+        if (chestDefs[categories[category]] && Object.keys(chestDefs[categories[category]]).length > 0) {
+            for (let item in chestDefs[categories[category]]) {
+                switch (categories[category]) {
+                    case 'items':
+                        itemText[0] += `${itemTypeEmoji[itemFile[item].type]}${itemRarityEmoji[itemFile[item].rarity]} ${itemFile[item].name} (${chestDefs[categories[category]][item]}x)\n`
+                        break;
+                    case 'weapons':
+                        itemText[1] += `${elementEmoji[chestDefs[categories[category]][item].element]} ${chestDefs[categories[category]][item].name} - **${chestDefs[categories[category]][item].atk ?? '0'}ATK**, **${chestDefs[categories[category]][item].mag ?? '0'}MAG**\n`;
+                        break;
+                    case 'armors':
+                        itemText[2] += `${elementEmoji[chestDefs[categories[category]][item].element]} ${chestDefs[categories[category]][item].name} - **${chestDefs[categories[category]][item].def ?? '0'}DEF**\n`;
+                        break;
                 }
             }
         }
-        if (chestDefs.items['money']) {
-            itemText += `*Money:*\n ${chestDefs.items['money']} ${getCurrency(message.guild.id)}s`
+        if (chestDefs?.money) {
+            itemText[3] = `**${chestDefs.money}** ${getCurrency(message.guild.id)}s`
         }
     }
 
@@ -83,7 +80,10 @@ function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFil
             { name: 'Hidden', value: chestDefs.hidden ? 'Yes' : 'No', inline: true },
         )
         if (lockTxt) DiscordEmbed.addField('Lock', lockTxt, true)
-        if (itemText != '') DiscordEmbed.addField('Items', itemText, true)
+        if (itemText[0] != '') DiscordEmbed.addField('Items', itemText[0], true)
+        if (itemText[1] != '') DiscordEmbed.addField('Weapons', itemText[1], true)
+        if (itemText[2] != '') DiscordEmbed.addField('Armors', itemText[2], true)
+        if (itemText[3] != '') DiscordEmbed.addField('Money', itemText[3], true)
 	return DiscordEmbed;
 }
 
@@ -197,7 +197,7 @@ commands.registerchest = new Command({
         while (args.length > 0) {
             itemCollector.push([args[0].toLowerCase(), args[1]])
             args.splice(0, 2)
-            if (!isNaN(args[0]) && itemCollector[itemCollectorIndex][0] != 'money') {
+            if (!isNaN(args[0]) && (itemCollector[itemCollectorIndex][0] == 'item' || itemCollector[itemCollectorIndex][0] == 'loot')) {
                 itemCollector[itemCollectorIndex].push(parseInt(args[0]))
                 args.splice(0, 1)
             }
@@ -239,7 +239,7 @@ commands.registerchest = new Command({
             }
             itemCollector = itemCollector.filter(item => item != '-')
 
-            if (itemCollector.length == 0) return message.channel.send(`You did not specify anything to give to team ${team.name}. What went wrong:\n- ${itemErrors.join('\n- ')}`)
+            if (itemCollector.length == 0) return message.channel.send(`You did not specify anything to give to chest ${chestFile[channel][name].name}. What went wrong:\n- ${itemErrors.join('\n- ')}`)
         }
     
         if (!chestFile[channel]) chestFile[channel] = {}
@@ -262,25 +262,37 @@ commands.registerchest = new Command({
                     case 'item':
                     case 'weapon':
                     case 'armor':
-                        if (!chestFile[channel][name].items[itemCollector[i][0]]) chestFile[channel][name].items[itemCollector[i][0]] = {}
-                        if (!chestFile[channel][name].items[itemCollector[i][0]][itemCollector[i][1]]) chestFile[channel][name].items[itemCollector[i][0]][itemCollector[i][1]] = 0
-                        chestFile[channel][name].items[itemCollector[i][0]][itemCollector[i][1]] += (itemCollector[i][2] ?? 1)
+                        if (!chestFile[channel][name][itemCollector[i][0]+'s']) chestFile[channel][name][itemCollector[i][0]+'s'] = {}
+                        if (itemCollector[i][0] == 'item') {
+                            if (!chestFile[channel][name][itemCollector[i][0]+'s'][itemCollector[i][1]]) chestFile[channel][name][itemCollector[i][0]+'s'][itemCollector[i][1]] = 0
+                            chestFile[channel][name][itemCollector[i][0]+'s'][itemCollector[i][1]] += (itemCollector[i][2] ?? 1)
+                        } else {
+                            if (!chestFile[channel][name][itemCollector[i][0]+'s'][itemCollector[i][1]]) {
+                                if (itemCollector[i][0] == 'weapon') {
+                                    chestFile[channel][name][itemCollector[i][0]+'s'][itemCollector[i][1]] = objClone(weaponFile[itemCollector[i][1]])
+                                } else if (itemCollector[i][0] == 'armor') {
+                                    chestFile[channel][name][itemCollector[i][0]+'s'][itemCollector[i][1]] = objClone(armorFile[itemCollector[i][1]])
+                                }
+                            }
+                        }
                         break;
                     case 'loot':
                         let loot = lootFile[itemCollector[i][1]].items
                         for (j in loot) {
-                            if (!team.items) team.items = {}
-                            if (!team.items[loot[j].id]) team.items[loot[j].id] = 0
-                            team.items[loot[j].id] += loot[j].amount * (itemCollector[i][2] ?? 1)
-
-                            if (!chestFile[channel][name].items[loot[j].type]) chestFile[channel][name].items[loot[j].type] = {}
-                            if (!chestFile[channel][name].items[loot[j].type][loot[j].id]) chestFile[channel][name].items[loot[j].type[loot[j].id]] = 0
-                            chestFile[channel][name].items[loot[j].type][loot[j].id] += loot[j].amount
+                            if (!chestFile[channel][name][loot[j].type]) chestFile[channel][name][loot[j].type] = {}
+                            if (loot[j].type == 'armor') {
+                                if (!chestFile[channel][name][loot[j].type][loot[j].name]) chestFile[channel][name][loot[j].type][loot[j].name] = objClone(armorFile[loot[j].id])
+                            } else if (loot[j].type == 'weapon') {
+                                if (!chestFile[channel][name][loot[j].type][loot[j].name]) chestFile[channel][name][loot[j].type][loot[j].name] = objClone(weaponFile[loot[j].id])
+                            } else {
+                                if (!chestFile[channel][name][loot[j].type][loot[j].id]) chestFile[channel][name].items[loot[j].type[loot[j].id]] = 0
+                                chestFile[channel][name].items[loot[j].type][loot[j].id] += loot[j].amount * (itemCollector[i][2] ?? 1)
+                            }
                         }
                         break;
                     case 'money':
-                        if (!chestFile[channel][name].items['money']) chestFile[channel][name].items['money'] = 0
-                        chestFile[channel][name].items['money'] += itemCollector[i][1]
+                        if (!chestFile[channel][name]['money']) chestFile[channel][name]['money'] = 0
+                        chestFile[channel][name]['money'] += itemCollector[i][1]
                         break;
                 }
             }
@@ -292,10 +304,11 @@ commands.registerchest = new Command({
 
         if (!hidden) 
 			message.channel.send({content: `Chest ${name} has been created.`, embeds: [chestDesc(chestFile[channel][name], name, message, itemFile, weaponFile, armorFile)]})
+            if (itemErrors.length > 0) message.channel.send(`However there were some errors:\n- ${itemErrors.join('\n- ')}`)
         else {
             message.delete()
-            message.channel.send(`Chest ${name} has been created.`)
             message.author.send({content: `Chest ${name} has been created.`, embeds: [chestDesc(chestFile[channel][name], name, message, itemFile, weaponFile, armorFile)]})
+            if (itemErrors.length > 0) message.author.send(`However there were some errors:\n- ${itemErrors.join('\n- ')}`)
         }
     }
 })
@@ -774,7 +787,7 @@ commands.chestitems = new Command({
             if (args[0].toLowerCase() != 'all') {
                 itemCollector.push([args[0].toLowerCase(), args[1]])
                 args.splice(0, 2)
-                if (!isNaN(args[0])) {
+                if (!isNaN(args[0]) && (itemCollector[itemCollectorIndex][0] == 'item' || itemCollector[itemCollectorIndex][0] == 'loot')) {
                     itemCollector[itemCollectorIndex].push(parseInt(args[0]))
                     args.splice(0, 1)
                 }
@@ -793,6 +806,17 @@ commands.chestitems = new Command({
                     if (!itemCollector[i][1] || (((addremove == 'remove' && [itemCollector[i][1]].toLowerCase() != 'all') || addremove == 'add') && !itemFiles[itemCollector[i][0]][itemCollector[i][1]])) {
                         itemErrors.push(`${itemCollector[i][1] ? `${itemCollector[i][1]} is not a valid ${itemCollector[i][0]} name.` : `You did not specify a name for the ${itemCollector[i][0]}.`}`);
                         itemCollector[i] = '-'
+                    }
+                    if (addremove == 'remove') {
+                        if (!chest?.[itemCollector[i][0]]?.[itemCollector[i][1]]) {
+                            itemErrors.push(`Chest ${chestName} does not have ${itemCollector[i][1]} in its ${itemCollector[i][0]}s.`)
+                            itemCollector[i] = '-'
+                        }
+                    } else {
+                        if (chest?.[itemCollector[i][0]]?.[itemCollector[i][1]]) {
+                            itemErrors.push(`Chest ${chestName} already has ${itemCollector[i][1]} in its ${itemCollector[i][0]}s.`)
+                            itemCollector[i] = '-'
+                        }
                     }
                     if (itemCollector[i][2]) {
                         if (!isNaN(itemCollector[i][2])) {
@@ -830,33 +854,42 @@ commands.chestitems = new Command({
             switch (itemCollector[i][0]) {
                 case 'money':
                     if (addRemove == 'add') {
-                        if (!chest.items) chest.items = {}
-                        if (!chest.items.money) chest.items.money = 0
-                        chest.items.money += itemCollector[i][1]
+                        if (!chest.money) chest.money = 0
+                        chest.money += itemCollector[i][1]
                     } else {
-                        chest.items.money -= itemCollector[i][1]
-                        if (chest.items.money < 0) delete chest.items.money
+                        chest.money -= itemCollector[i][1]
+                        if (chest.money < 0) delete chest.items.money
                     }
                     break;
                 case 'item':
                 case 'weapon':
                 case 'armor':
                     if (addRemove == 'add') {
-                        if (!chest.items) chest.items = {}
-                        if (!chest.items[itemCollector[i][0]]) chest.items[itemCollector[i][0]] = {}
-                        if (!chest.items[itemCollector[i][0]][itemCollector[i][1]]) chest.items[itemCollector[i][0]][itemCollector[i][1]] = 0
-                        chest.items[itemCollector[i][0]][itemCollector[i][1]] += itemCollector[i][2]
+                        if (!chest[itemCollector[i][0]+'s']) chest[itemCollector[i][0]+'s'] = {}
+                        if (itemCollector[i][0] == 'item') {
+                            if (!chest[itemCollector[i][0]+'s'][itemCollector[i][1]]) chest[itemCollector[i][0]+'s'][itemCollector[i][1]] = 0
+                            chest[itemCollector[i][0]+'s'][itemCollector[i][1]] += (itemCollector[i][2] ?? 1)
+                        } else {
+                            if (!chest[itemCollector[i][0]+'s'][itemCollector[i][1]]) {
+                                if (itemCollector[i][0] == 'weapon') {
+                                    chest[itemCollector[i][0]+'s'][itemCollector[i][1]] = objClone(weaponFile[itemCollector[i][1]])
+                                } else if (itemCollector[i][0] == 'armor') {
+                                    chest[itemCollector[i][0]+'s'][itemCollector[i][1]] = objClone(armorFile[itemCollector[i][1]])
+                                }
+                            }
+                        }
                     } else {
                         if (itemCollector[i][1] == 'all') {
-                            delete chest.items[itemCollector[i][0]]
+                            delete chest[itemCollector[i][0]+'s']
                         } else {
-                            chest.items[itemCollector[i][0]][itemCollector[i][1]] -= itemCollector[i][2]
-                            if (chest.items[itemCollector[i][0]][itemCollector[i][1]] <= 0) delete chest.items[itemCollector[i][0]][itemCollector[i][1]]
+                            delete chest[itemCollector[i][0]+'s'][itemCollector[i][1]]
                         }
                     }
                     break;
                 case 'all':
                     chest.items = {}
+                    chest.weapons = {}
+                    chest.armors = {}
                     break;
             }
         }
