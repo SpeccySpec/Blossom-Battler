@@ -359,7 +359,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 		}
 		
 		let affinity = getAffinity(targ, skill.type);
-		let shieldtype = targ.custom?.shield?.type;
+		let shieldtype = targ.custom?.shield?.type ?? undefined;
 
 		// ForceDodge and OnAffinityCheck passive funcs
 		for (let i in targ.skills) {
@@ -431,29 +431,35 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			result.txt += `${selectQuote(targ, 'repel', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}\n${targ.name} repelled it!\n${newResults.txt}`;
 			return result;
 		// reminder that physical shields repel physical/ranged and magic ones repel magic.
-		} else if (shieldtype && !noRepel && (
-			(shieldtype === 'repelmag' && skill.atktype === 'magic') ||
-			(shieldtype === 'repelphys' && (skill.atktype === 'physical' || skill.atktype === 'ranged'))
-		)) {
-			if (skill.type === 'almighty') {
-				delete targ.custom.shield;
-				addAtkMsg(`${skill.name} broke through __${targ.name}__'s ${targ.custom.skill.name ?? 'Shield'}!`);
-			} else if (!skill.extras?.feint) {
-				skill.acc = 999; // Never miss a repel - just to be flashy :D
+		} else if (shieldtype && !noRepel) {
+			let repel = false;
+			if (shieldtype === 'repelmag' && skill.atktype === 'magic')
+				repel = true;
+			else if (shieldtype === 'repelphys' && (skill.atktype === 'physical' || skill.atktype === 'ranged'))
+				repel = true;
 
-				// Let's get rid of this shield
-				delete targ.custom.shield;
+			if (repel) {
+				if (skill.type === 'almighty') {
+					delete targ.custom.shield;
+					addAtkMsg(`${skill.name} broke through __${targ.name}__'s ${targ.custom.skill.name ?? 'Shield'}!`);
+				} else if (!skill.extras?.feint) {
+					skill.acc = 999; // Never miss a repel - just to be flashy :D
 
-				// Run this function again. Ban repelling to avoid infinite loops.
-				let newResults = attackWithSkill(char, char, skill, btl, true);
-				result.oneMore = newResults.oneMore;
-				result.teamCombo = newResults.teamCombo;
+					// Run this function again. Ban repelling to avoid infinite loops.
+					let newResults = attackWithSkill(char, char, skill, btl, true);
+					result.oneMore = newResults.oneMore;
+					result.teamCombo = newResults.teamCombo;
 
-				// done.
-				result.txt += `${selectQuote(targ, 'repel', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}\n__${targ.name}__'s _${targ.custom.skill.name ?? 'Shield'}_ repelled the attack!\n${newResults.txt}\n_${targ.custom.skill.name ?? 'Shield'}_ has broken.`;
-				return result;
+					// done.
+					result.txt += `${selectQuote(targ, 'repel', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}\n__${targ.name}__'s _${targ.custom.shield.name ?? 'Shield'}_ repelled the attack!\n${newResults.txt}\n_${targ.custom.shield.name ?? 'Shield'}_ has broken.`;
+
+					// Let's get rid of this shield
+					delete targ.custom.shield;
+
+					// Return this text.
+					return result;
+				}
 			}
-		} else {
 		}
 
 		// Placeholder damage formula
@@ -745,7 +751,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				}
 
 				// Limit Breaks
-				if (settings.mechanics.limitbreaks) {
+				if (settings.mechanics.limitbreaks && !skill.limitbreak && !skill.teamcombo) {
 					if (!char.lbp) char.lbp = 0;
 					char.lbp += truncNum(total/(skill.hits*((skill.target === 'one' || skill.target === 'ally') ? 2 : 8)), 2)
 				}
@@ -1160,7 +1166,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 		let skillDefs = objClone(skill);
 		skillDefs.pow *= targets[i][1];
 
-		let result = attackWithSkill(char, targ, skillDefs, btl, act);
+		let result = attackWithSkill(char, targ, skillDefs, btl);
 		finalText += `${result.txt}\n`;
 
 		if (result.oneMore) btl.doonemore = true;
@@ -1230,7 +1236,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 					}
 
 					finalText += `\n${char2.name} wants to assist in attacking!\n`;
-					let result = attackWithSkill(char2, targ, meleeAtk, btl, act);
+					let result = attackWithSkill(char2, targ, meleeAtk, btl);
 					finalText += `${result.txt}\n`;
 					if (result.teamCombo) btl.canteamcombo = true;
 				}
