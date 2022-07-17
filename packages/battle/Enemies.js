@@ -89,6 +89,8 @@ doPacify = (char, btl, action) => {
 								mp: Math.round(targ.mp/2),
 								maxhp: Math.round(targ.maxhp/2),
 								maxmp: Math.round(targ.maxmp/2),
+
+								melee: targ.melee,
 								stats: targ.stats,
 
 								skill: targ.negotiateDefs.qualities.skill,

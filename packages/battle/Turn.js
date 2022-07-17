@@ -129,31 +129,42 @@ function CalcCompins(comps, i) {
 
 const menuStates = {
 	[MENU_ACT]: ({char, btl, comps}) => {
-		if (btl.action && btl.action.ally) delete btl.action.ally;
+		if (char.pet) {
+			const skillinfo = skillFile[char.pet.skill];
 
-		comps[0] = [
-			makeButton('Melee', elementEmoji.strike, 'red'),
-			makeButton('Skills', elementEmoji.bless, 'blue'),
-			makeButton('Items', itemTypeEmoji.healhpmp, 'green'),
-			makeButton('Tactics', critEmoji, 'grey'),
-			makeButton('Guard', affinityEmoji.block, 'grey')
-		]
+			comps[0] = [
+				makeButton('Melee', elementEmoji.strike, 'red'),
+				makeButton(skillinfo ? skillinfo.name : '...?', elementEmoji[skillinfo.type] ?? itemTypeEmoji.skill, 'blue', true, 'skills', !skillinfo),
+				makeButton('Pacify', itemTypeEmoji.pacify, 'green'),
+				makeButton('Enemy Info', statusEmojis.silence, 'red', true, 'enemyinfo')
+			]
+		} else {
+			if (btl.action && btl.action.ally) delete btl.action.ally;
 
-		// Team Combo checks
-		if (btl.canteamcombo && !char.donetc) {
-			for (let i in btl.teams[char.team].members) {
-				if (hasTeamCombo(char, btl.teams[char.team].members[i])) {
-					if (!comps[1]) comps[1] = [];
-					comps[1].push(makeButton('Team Combo', elementEmoji.slash, 'blue', true, 'tc'));
-					break;
+			comps[0] = [
+				makeButton('Melee', elementEmoji.strike, 'red'),
+				makeButton('Skills', elementEmoji.bless, 'blue'),
+				makeButton('Items', itemTypeEmoji.healhpmp, 'green'),
+				makeButton('Tactics', critEmoji, 'grey'),
+				makeButton('Guard', affinityEmoji.block, 'grey')
+			]
+
+			// Team Combo checks
+			if (btl.canteamcombo && !char.donetc) {
+				for (let i in btl.teams[char.team].members) {
+					if (hasTeamCombo(char, btl.teams[char.team].members[i])) {
+						if (!comps[1]) comps[1] = [];
+						comps[1].push(makeButton('Team Combo', elementEmoji.slash, 'blue', true, 'tc'));
+						break;
+					}
 				}
 			}
-		}
 
-		// Limit Breaks
-		if (canUseLb(char, btl)) {
-			if (!comps[1]) comps[1] = [];
-			comps[1].push(makeButton('Limit Break', elementEmoji.almighty, 'blue', true, 'lb'));
+			// Limit Breaks
+			if (canUseLb(char, btl)) {
+				if (!comps[1]) comps[1] = [];
+				comps[1].push(makeButton('Limit Break', elementEmoji.almighty, 'blue', true, 'lb'));
+			}
 		}
 	},
 	[MENU_SKILL]: ({char, comps}) => {
@@ -411,9 +422,10 @@ sendCurTurnEmbed = (char, btl) => {
 	let settings = setUpSettings(btl.guild.id);
 
 	let menustate = MENU_ACT;
+
 	let statDesc = `${getBar('hp', char.hp, char.maxhp)}\t${getBar('mp', char.mp, char.maxmp)}\n${char.hp}/${char.maxhp}HP, ${char.mp}/${char.maxmp}MP`;
-	
 	if (settings.mechanics.limitbreaks) statDesc += `, ${Math.round(char.lbp)}LB%`;
+	if (char.pet) statDesc = `${char.name} wants to assist the team in battle! Tell it to do something!\n`;
 
 	let weatherTxt = '';
 	if (btl.weather) weatherTxt += `\n${btl.weather.type.toUpperCase()} Weather.`;
@@ -523,8 +535,15 @@ sendCurTurnEmbed = (char, btl) => {
 				break;
 
 			case 'skills':
+			case 'skill':
 				btl.action.move = 'skills';
-				menustate = MENU_SKILL;
+
+				if (char.pet) {
+					btl.action.index = char.pet.skill;
+					menustate = MENU_TEAMSEL;
+				} else
+					menustate = MENU_SKILL;
+
 				break;
 
 			case 'items':
@@ -1118,7 +1137,12 @@ doAction = (char, btl, action) => {
 
 		case 'skill':
 		case 'skills':
-			useSkill(char, btl, action);
+			if (char.pet) {
+				useSkill(char, btl, action, skillFile[char.pet.skill] ?? skillFile.Agi);
+			} else {
+				useSkill(char, btl, action);
+			}
+
 			break;
 
 		case 'item':
@@ -1299,7 +1323,26 @@ doAction = (char, btl, action) => {
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, '	', 4));
 
 	setTimeout(function() {
-		advanceTurn(btl);
+		let party = btl.teams[char.team];
+		if (char.leader && party.curpet && party.pets && party.pets[party.curpet] && !btl.petturn) {
+			btl.petturn = true;
+
+			let petchar = objClone(char);
+			delete petchar.leader;
+
+			let pet = party.pets[party.curpet];
+			petchar.pet = pet;
+
+			petchar.stats = pet.stats;
+			petchar.name = pet.nickname;
+			petchar.melee = pet.melee ?? {name: "Strike Attack", type: "strike", pow: 30, acc: 95, crit: 15};
+			petchar.quotes = {};
+
+			sendCurTurnEmbed(petchar, btl);
+		} else {
+			delete btl.petturn;
+			advanceTurn(btl);
+		}
 	}, 2000)
 }
 
