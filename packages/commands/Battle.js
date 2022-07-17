@@ -508,10 +508,14 @@ commands.startbattle = new Command({
 			battle.teams[0].backup.push(char);
 		}
 
+		// Save other shit
 		battle.teams[0].name = args[0];
 		battle.teams[0].items = objClone(party.items);
 		battle.teams[0].pets = objClone(party.negotiateAllies);
 		battle.teams[0].id = args[0];
+
+		// Current pet
+		if (party.curpet) battle.teams[0].curpet = party.curpet;
 
 		// Set up Enemy Side.
 		// == this time, no encounters set until the enemy is killed or pacified == //
@@ -564,9 +568,7 @@ commands.startbattle = new Command({
 			} else
 				battle.teams[1].backup.push(enemy);
 
-			if (enemy.loot) {
-				enemy.loot = objClone(lootFile?.[enemy.loot]?.items) ?? [];
-			}
+			if (enemy.loot) enemy.loot = objClone(lootFile?.[enemy.loot]?.items) ?? [];
 		}
 
 		if (settings?.mechanics?.leaderskills) battle = leaderSkillsAtBattleStart(battle);
