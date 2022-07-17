@@ -790,6 +790,7 @@ commands.useweapon = new Command({
     desc: "Staches a weapon from the party into the Character's weapon inventory.",
 	aliases: ['claimweapon', 'takeweapon', 'grabweapon', 'stealweapon'],
     section: 'items',
+	checkban: true,
     args: [
         {
             name: "Party",
@@ -837,6 +838,7 @@ commands.usearmor = new Command({
     desc: "Staches an armor from the party into the Character's armor inventory.",
 	aliases: ['claimarmor', 'takearmor', 'grabarmor', 'stealarmor'],
     section: 'items',
+	checkban: true,
     args: [
         {
             name: "Party",
@@ -878,4 +880,79 @@ commands.usearmor = new Command({
 			return message.channel.send(`${args[1]} is not in Team ${parties[args[0]].name}`);
 		}
     }
+})
+
+commands.setpet = new Command({
+	desc: "Sets this party's pet. Pets can help with extra damage output, defense of even healing. Essentially, they're lesser characters.",
+	aliases: ['usepet'],
+	section: "parties",
+	checkban: true,
+	args: [
+		{
+			name: "Party Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Pet Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		let party = parties[args[0]];
+		if (!party) return message.channel.send(`${args[0]} is an invalid party!`);
+		if (!isPartyLeader(message.author, party, message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this party, therefore, you have insufficient permissions to change it.");
+		if (!party.negotiateAllies || party.negotiateAllies == {}) return message.channel.send(`Team ${party.name} has no pets!\n\n**[NOTICE]**\nTo obtain a pet, try pacifying the enemy in battle. If they can be pacified, enough of them being pacified will cause them to be recruited as pets.`);
+		if (!party.negotiateAllies[args[1]]) return message.channel.send(`${args[1]} is not a pet that Team ${party.name} has recruited.`);
+
+		party.curpet = args[1];
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
+		message.channel.send(`${party.negotiateAllies[args[1]].nickname} is now the pet to be used by Team ${args[0]}!`);
+	}
+})
+
+commands.petnickname = new Command({
+	desc: "Changes this pet's nickname to something you'd prefer.",
+	aliases: ['nickpet', 'petnick'],
+	section: "parties",
+	checkban: true,
+	args: [
+		{
+			name: "Party Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Pet Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Nickname",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		let party = parties[args[0]];
+		if (!party) return message.channel.send(`${args[0]} is an invalid party!`);
+		if (!isPartyLeader(message.author, party, message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this party, therefore, you have insufficient permissions to change it.");
+		if (!party.negotiateAllies || party.negotiateAllies == {}) return message.channel.send(`Team ${party.name} has no pets!\n\n**[NOTICE]**\nTo obtain a pet, try pacifying the enemy in battle. If they can be pacified, enough of them being pacified will cause them to be recruited as pets.`);
+		if (!party.negotiateAllies[args[1]]) return message.channel.send(`${args[1]} is not a pet that Team ${party.name} has recruited.`);
+
+		party.negotiateAllies[args[1]].nickname = args[2];
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
+		message.channel.send(`${args[1]}'s nickname is now "${args[2]}"!`);
+	}
 })
