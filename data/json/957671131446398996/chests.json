@@ -167,5 +167,54 @@
             },
             "desc": "Team Spacies lost a battle on 04/06/2022. This is what happened to their items."
         }
+    },
+    "958747864970981376": {
+        "Buff": {
+            "originalAuthor": "441198920668938260",
+            "name": "Buff",
+            "channel": "958747864970981376",
+            "party": "",
+            "lock": [
+                "none",
+                "0"
+            ],
+            "hidden": false,
+            "items": {
+                "Sweet": 50,
+                "S": 5
+            },
+            "weapons": {
+                "Buff": {
+                    "name": "Buff",
+                    "cost": "50",
+                    "element": "fire",
+                    "desc": "lmao no",
+                    "originalAuthor": "441198920668938260",
+                    "skill": "Agi",
+                    "melee": "12",
+                    "atk": "12",
+                    "mag": "12",
+                    "recipe": {
+                        "amount": 1,
+                        "shapeless": false,
+                        "recipe": {
+                            "0": "Sweet",
+                            "4": "Sweet",
+                            "8": "Sweet"
+                        }
+                    }
+                }
+            },
+            "money": 80,
+            "armors": {
+                "Bluff": {
+                    "name": "Bluff",
+                    "cost": 1220,
+                    "element": "water",
+                    "originalAuthor": "441198920668938260",
+                    "end": "20"
+                }
+            }
+        }
     }
 }

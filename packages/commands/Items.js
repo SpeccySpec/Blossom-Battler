@@ -2195,7 +2195,7 @@ commands.startcrafting = new Command({
                             if (isNaN(margs[i])) { 
                                 message.channel.send(`${margs[i]} is not a valid number.`);
                                 messageCollector.stop()
-                                break;
+                                return;
                             } else {
                                 margs[i] = Math.max(0, Math.min(8, parseInt(margs[i])))
                                 nums.push(margs[i])
@@ -2204,22 +2204,24 @@ commands.startcrafting = new Command({
                             if (!itemFile[margs[i]]) {
                                 message.channel.send(`${margs[i]} is not a valid item name.`);
                                 messageCollector.stop()
-                                break;
+                                return;
                             }
                             if (margs[i] == args[1]) {
                                 message.channel.send(`You cannot craft ${margs[i]} into itself.`);
                                 messageCollector.stop()
-                                break;
+                                return;
                             }
                         }
                     }
                     if (margs.length % 2 == 1) {
                         message.channel.send(`You need to have an even number of arguments.`);
                         messageCollector.stop()
+                        return;
                     }
                     if (nums.length != new Set(nums).size) {
                         message.channel.send(`You cannot place multiple items on the same grid.`);
                         messageCollector.stop()
+                        return;
                     }
 
                     let newRecipe = {}
@@ -2227,6 +2229,25 @@ commands.startcrafting = new Command({
                         if (i % 2 == 1) {
                             newRecipe[margs[i-1]] = margs[i]
                         }
+                    }
+
+                    let recipeItems = {}
+                    for (i in newRecipe) {
+                        if (!recipeItems[newRecipe[i]]) recipeItems[newRecipe[i]] = 0
+                        recipeItems[newRecipe[i]]++
+                    }
+
+                    let noText = ''
+                    for (i in recipeItems) {
+                        if (!party.items[i] || party.items[i] < recipeItems[i]) {
+                            if (noText.length > 1) noText += ', '
+                            noText += `${i}s __(${party.items[i] ?? 0}/${recipeItems[i]})__`
+                        }
+                    }
+                    if (noText.length > 1) {
+                        message.channel.send(`You don't have enough ${noText} to use for this.`);
+                        messageCollector.stop()
+                        return;
                     }
 
                     let recipeFound = false
@@ -2288,9 +2309,17 @@ commands.startcrafting = new Command({
                         } else if (recipeFound[0] == 'armor') {
                             if (!party.armors[recipeFound[1]]) party.armors[recipeFound[1]] = recipeFound[2]
                             delete party.armors[recipeFound[1]].recipe
+                        } else {
+                            for (i in recipeItems) {
+                                if (party.items[i]) party.items[i] -= recipeItems[i]
+    
+                                if (party.items[i] < 0) {
+                                    delete party.items[i]
+                                }
+                            }
                         }
 
-                        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/party.json`, JSON.stringify(party, null, 2))
+                        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, 2))
                         
                         messageCollector.stop()
                     }
@@ -2350,7 +2379,7 @@ commands.obtainitems = new Command({
         while (args.length > 0) {
             itemCollector.push([args[0].toLowerCase(), args[1]])
             args.splice(0, 2)
-            if (!isNaN(args[0]) && itemCollector[itemCollectorIndex][0] != 'money') {
+            if (!isNaN(args[0]) && (itemCollector[itemCollectorIndex][0] == 'item' || itemCollector[itemCollectorIndex][0] == 'loot')) {
                 itemCollector[itemCollectorIndex].push(parseInt(args[0]))
                 args.splice(0, 1)
             }
@@ -2367,8 +2396,14 @@ commands.obtainitems = new Command({
                         itemErrors.push(`${itemCollector[i][1] ? `${itemCollector[i][1]} is not a valid ${itemCollector[i][0]} name.` : `You did not specify a name for the ${itemCollector[i][0]}.`}`);
                         itemCollector[i] = '-'
                     }
+                    if (itemCollector[i][0] == 'weapon' || itemCollector[i][0] == 'armor') {
+                        if (team[itemCollector[i][0]+'s'][itemCollector[i][1]]) {
+                            itemErrors.push(`${itemCollector[i][1]} is already in the party.`)
+                            itemCollector[i] = '-'
+                        }
+                    }
                     if (itemCollector[i][2]) {
-                        if (!isNaN(itemCollector[i][2])) {
+                        if (!isNaN(itemCollector[i][2]) || (itemCollector[i][0] != 'weapon' && itemCollector[i][0] != 'armor')) {
                             itemCollector[i][2] = Math.max(1, parseInt(itemCollector[i][2]))
                         } else {
                             itemCollector[i][2] = 1
@@ -2398,25 +2433,26 @@ commands.obtainitems = new Command({
                 case 'item':
                 case 'weapon':
                 case 'armor':
-                    if (!team.items) team.items = {}
-                    if (!team.items[itemCollector[i][1]]) team.items[itemCollector[i][1]] = 0
-                    team.items[itemCollector[i][1]] += (itemCollector[i][2] ?? 1)
-
                     if (itemCollector[i][0] != 'item') {
                         if (!team[itemCollector[i][0]]+'s') team[itemCollector[i][0]+'s'] = {}
+
                         if (!team[itemCollector[i][0]+'s'][itemCollector[i][1]]) team[itemCollector[i][0]+'s'][itemCollector[i][1]] = objClone(itemFiles[itemCollector[i][0]][itemCollector[i][1]])
+                    } else {
+                        if (!team.items) team.items = {}
+                        if (!team.items[itemCollector[i][1]]) team.items[itemCollector[i][1]] = 0
+                        team.items[itemCollector[i][1]] += (itemCollector[i][2] ?? 1)
                     }
                     break;
                 case 'loot':
                     let loot = lootFile[itemCollector[i][1]].items
                     for (j in loot) {
-                        if (!team.items) team.items = {}
-                        if (!team.items[loot[j].id]) team.items[loot[j].id] = 0
-                        team.items[loot[j].id] += loot[j].amount * (itemCollector[i][2] ?? 1)
-
                         if (['weapon','armor'].includes(loot[j].type)) {
                             if (!team[loot[j].type+'s']) team[loot[j].type+'s'] = {}
                             if (!team[loot[j].type+'s'][loot[j].id]) team[loot[j].type+'s'][loot[j].id] = objClone(itemFiles[loot[j].type][loot[j].id])
+                        } else {
+                            if (!team.items) team.items = {}
+                            if (!team.items[loot[j].id]) team.items[loot[j].id] = 0
+                            team.items[loot[j].id] += loot[j].amount * (itemCollector[i][2] ?? 1)
                         }
                     }
                     break;
@@ -2429,6 +2465,7 @@ commands.obtainitems = new Command({
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, 4));
         message.channel.send(`Team ${team.name} has been given the items.`)
+        if (itemErrors.length > 0) message.channel.send(`However there were some errors:\n- ${itemErrors.join('\n- ')}`)
     }
 })
 
@@ -2475,7 +2512,7 @@ commands.removepartyitems = new Command({
             if (args[0].toLowerCase() != 'all') {
                 itemCollector.push([args[0].toLowerCase(), args[1]])
                 args.splice(0, 2)
-                if (!isNaN(args[0])) {
+                if (!isNaN(args[0]) && (itemCollector[itemCollectorIndex][0] == 'item' || itemCollector[itemCollectorIndex][0] == 'loot')) {
                     itemCollector[itemCollectorIndex].push(parseInt(args[0]))
                     args.splice(0, 1)
                 }
@@ -2495,8 +2532,12 @@ commands.removepartyitems = new Command({
                         itemErrors.push(`${itemCollector[i][1] ? `${itemCollector[i][1]} is not a valid ${itemCollector[i][0]} name.` : `You did not specify a name for the ${itemCollector[i][0]}.`}`);
                         itemCollector[i] = '-'
                     }
+                    if (!team?.[itemCollector[i][0]+'s']?.[itemCollector[i][1]]) {
+                        itemErrors.push(`Team ${team.name} does not have ${itemCollector[i][1]} ${itemCollector[i][0]}s.`)
+                        itemCollector[i] = '-'
+                    }
                     if (itemCollector[i][2]) {
-                        if (!isNaN(itemCollector[i][2])) {
+                        if (!isNaN(itemCollector[i][2]) || (itemCollector[i][0] != 'weapon' && itemCollector[i][0] != 'armor')) {
                             itemCollector[i][2] = Math.max(1, parseInt(itemCollector[i][2]))
                         } else {
                             itemCollector[i][2] = 1
@@ -2527,14 +2568,12 @@ commands.removepartyitems = new Command({
                     break;
                 case 'weapon':
                 case 'armor':
-                    for (j in team[itemCollector[i][0]+'s']) {
-                        if (team.items[j]) {
-                            team.items[j] -= (itemCollector[i][2] ?? 1)
-                            if (team.items[j] <= 0) { 
-                                delete team.items[j]
-                                delete team[itemCollector[i][0]+'s'][j]
-                            }
+                    if (itemCollector[i][1] == 'all') {
+                        for (j in team[itemCollector[i][0]+'s']) {
+                            delete team[itemCollector[i][0]+'s'][j]
                         }
+                    } else {
+                        delete team[itemCollector[i][0]+'s'][itemCollector[i][1]]
                     }
                     break;
                 case 'all':
@@ -2547,6 +2586,7 @@ commands.removepartyitems = new Command({
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, 4));
         message.channel.send(`${args[0]} has the items specified removed.`)
+        if (itemErrors.length > 0) message.channel.send(`However there were some errors:\n- ${itemErrors.join('\n- ')}`)
     }
 })
 
