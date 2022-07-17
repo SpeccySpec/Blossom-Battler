@@ -1337,6 +1337,7 @@ doAction = (char, btl, action) => {
 			petchar.name = pet.nickname;
 			petchar.melee = pet.melee ?? {name: "Strike Attack", type: "strike", pow: 30, acc: 95, crit: 15};
 			petchar.quotes = {};
+			fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, '	', 4));
 
 			sendCurTurnEmbed(petchar, btl);
 		} else {

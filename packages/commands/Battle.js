@@ -1125,6 +1125,22 @@ commands.resumetrial = new Command({
 		if (btl.action) delete btl.action;
 
 		// Resend the Embed.
-		sendCurTurnEmbed(getCharFromTurn(btl), btl);
+		let char = getCharFromTurn(btl);
+		if (btl.petturn) {
+			let party = btl.teams[char.team];
+			let petchar = objClone(char);
+			delete petchar.leader;
+
+			let pet = party.pets[party.curpet];
+			petchar.pet = pet;
+
+			petchar.stats = pet.stats;
+			petchar.name = pet.nickname;
+			petchar.melee = pet.melee ?? {name: "Strike Attack", type: "strike", pow: 30, acc: 95, crit: 15};
+			petchar.quotes = {};
+			sendCurTurnEmbed(petchar, btl);
+		} else {
+			sendCurTurnEmbed(char, btl);
+		}
 	}
 })
