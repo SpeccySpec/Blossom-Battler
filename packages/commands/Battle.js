@@ -624,30 +624,6 @@ commands.forcebattle = new Command({
 	}
 })
 
-commands.resendembed = new Command({
-	desc: "Resends the Battle Embed. Maybe it broke or something, I suck.",
-	section: "battle",
-	aliases: ["makeembed", "replacembed"],
-	func: (message, args) => {
-		// Battle File!
-		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
-		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
-
-		// Sadly, no battle.
-		if (!btl.battling) return message.channel.send("No battle is happening!");
-
-		// Set channel again
-		btl.channel = message.channel;
-		message.react('👍');
-
-		// bruh
-		if (btl.action) delete btl.action;
-
-		// Resend the Embed
-		sendCurTurnEmbed(getCharFromTurn(btl), btl)
-	}
-})
-
 commands.startpvp = new Command({
 	desc: "Start a PVP battle in this channel. The best fighter(s) win, strike down your foes in a classic 1v1, free for all, or a team battle! No Leader Skills or items allowed here! Good luck!\nAlso comes with gamemode DLC (free lol)```diff\n=== NORMAL ===\nYour generic PVP battle. Show them who's boss without any quirky business!\n\n=== SKILLSCRAMBLE ===\nFight with a set of 8 random skills! You'll never know what you get, so adapt to win!\n\n=== STATSCRAMBLE ===\nFight with random stats, HP and MP! You could be turned into the tankiest fighter, or the frailest one - maybe you go from a physical main to a magical one! Try your best to defeat your foe in the fray!\n\n=== METRONOME ===\nAll fighters only have the skill Metronome! It's an Almighty Type skill that allows you to use ANY defined move! If ya like RNG, you'll love this!\n\n=== CHARACTERSCRAMBLE ===\nScramble your characters' stats, skills, affinities, and more for a jolly good session of Rage Quit!```",
 	section: "battle",
@@ -1087,6 +1063,46 @@ commands.starttrial = new Command({
 		setTimeout(function() {
 			advanceTurn(battle)
         }, 1000)
+	}
+})
+
+commands.resendembed = new Command({
+	desc: "Resends the Battle Embed. Maybe it broke or something, I suck.",
+	section: "battle",
+	aliases: ["makeembed", "replacembed"],
+	func: (message, args) => {
+		// Battle File!
+		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
+		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
+
+		// Sadly, no battle.
+		if (!btl.battling) return message.channel.send("No battle is happening!");
+
+		// Set channel again
+		btl.channel = message.channel;
+		message.react('👍');
+
+		// bruh
+		if (btl.action) delete btl.action;
+
+		// Resend the Embed.
+		let char = getCharFromTurn(btl);
+		if (btl.petturn) {
+			let party = btl.teams[char.team];
+			let petchar = objClone(char);
+			delete petchar.leader;
+
+			let pet = party.pets[party.curpet];
+			petchar.pet = pet;
+
+			petchar.stats = pet.stats;
+			petchar.name = pet.nickname;
+			petchar.melee = pet.melee ?? {name: "Strike Attack", type: "strike", pow: 30, acc: 95, crit: 15};
+			petchar.quotes = {};
+			sendCurTurnEmbed(petchar, btl);
+		} else {
+			sendCurTurnEmbed(char, btl);
+		}
 	}
 })
 
