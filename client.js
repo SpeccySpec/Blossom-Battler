@@ -646,8 +646,8 @@ randNum = (minNum, maxNum) => {
 }
 
 truncNum = (x, n) => {
-    let zeros = 10 ** n;
-    return Math.floor(x * zeros) / zeros;
+    let z = n*10;
+    return Math.floor(x*z)/z;
 }
 
 // setUpFile
