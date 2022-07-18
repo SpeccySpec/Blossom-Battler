@@ -108,7 +108,7 @@ passiveList = {
 
 	berserk: new Extra({
 		name: "Berserk",
-		desc: "The higher the HP, up to <Highest HP Percent>%, the stronger physical and ranged attacks will be by <Percentage Multiplier>%. <Percentage Multiplier> should be more than 100%.",
+		desc: "The higher the HP, up to <Highest HP Percent>%, the stronger physical and ranged attacks will be by up to <Percentage Multiplier>%. <Percentage Multiplier> should be more than 100%.",
 		args: [
 			{
 				name: "Percentage Multiplier",
@@ -151,7 +151,7 @@ passiveList = {
 
 	enraged: new Extra({
 		name: "Enraged",
-		desc: "The less the HP, up to <Highest HP Percent>%, the stronger magical attacks will be by <Percentage Multiplier>%. <Percentage Multiplier> should be more than 100%.",
+		desc: "The less the HP, up to <Highest HP Percent>%, the stronger magical attacks will be by up to <Percentage Multiplier>%. <Percentage Multiplier> should be more than 100%.",
 		args: [
 			{
 				name: "Percentage Multiplier",

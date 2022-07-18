@@ -55,12 +55,14 @@ doPacify = (char, btl, action) => {
 	let specialType = targ.negotiate[i].special ?? 'none';
 
 	for (let s of char.skills) {
-		if (s.type != 'passive') continue;
+		let skill = skillFile[s]
+		if (skill.type != 'passive') continue;
 
-		if (s.passive.kindheart) {
-			convince += Math.trunc(((convince/100)*s.passive.kindheart)*100)/100; // trunc to 2 decimal places
+		if (skill.passive.kindheart) {
+			convince += Math.trunc(((convince/100)*skill.passive.kindheart)*100)/100; // trunc to 2 decimal places
 		}
 	}
+	convince = Math.min(convince, 100);
 
 	switch(specialType) {
 		default:
