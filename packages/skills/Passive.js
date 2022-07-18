@@ -234,7 +234,7 @@ passiveList = {
 				case 'lb':
 					if (settings.mechanics.limitbreaks) {
 						char.lbpercent += parseInt(vars[0]);
-						finalTxt = `__${char.name}__'s LB% was restored by **${vars[0]}**!`;
+						finalTxt = `__${char.name}__'s LB% was increased by **${vars[0]}%**!`;
 					} else {
 						char.mp += (char.maxmp/100)*parseInt(vars[0]);
 						finalTxt = `__${char.name}__'s MP was restored by **${(char.maxmp/100)*parseInt(vars[0])}**!`;
@@ -244,12 +244,12 @@ passiveList = {
 
 				case 'hppercent':
 					char.hp += (char.maxhp/100)*parseInt(vars[0]);
-					finalTxt = `__${char.name}__'s HP was restored by **${(char.maxhp/100)*parseInt(vars[0])}**!`;
+					finalTxt = `__${char.name}__'s HP was restored by **${(char.maxhp/100)*parseInt(vars[0])}%**!`;
 					break;
 
 				case 'mppercent':
 					char.mp += (char.maxmp/100)*parseInt(vars[0]);
-					finalTxt = `__${char.name}__'s MP was restored by **${(char.maxmp/100)*parseInt(vars[0])}**!`;
+					finalTxt = `__${char.name}__'s MP was restored by **${(char.maxmp/100)*parseInt(vars[0])}%**!`;
 					break;
 
 				default:
