@@ -1358,7 +1358,8 @@ doTurn = async(btl, noTurnEmbed) => {
 	let statusTxt = '';
 
 	// Start Of Turn passives.
-	for (let skill of char.skills) {
+	for (let s of char.skills) {
+		let skill = skillFile[s]
 		if (skill.type == 'passive') {
 			for (let i in skill.passive) {
 				if (passiveList[i] && passiveList[i].onturn) {
