@@ -1414,6 +1414,11 @@ commands.registerarmor = new Command({
             forced: true
         },
         {
+            name: "Class",
+            type: "Word",
+            forced: true
+        },
+        {
             name: "Element",
             type: "Word",
             forced: true
@@ -1441,25 +1446,30 @@ commands.registerarmor = new Command({
         if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
         if (args[0].length > 50) return message.channel.send(`${args[0]} is too long of an armor name.`);
 
-        if (!Elements.includes(args[2].toLowerCase())) return message.channel.send(`${args[2]} is not a valid element.`);
+		// Class
+        if (!Object.keys(armorClasses).includes(args[2].toLowerCase())) return message.channel.send(`${args[2]} is not a valid class.`);
 
-        let skill
-        if (args[4]) {
-            if (!skillFile[args[4]]) message.channel.send(`${args[4]} is not a valid skill. I'll still make this armor regardless`);
-            else skill = args[4];
+		// Element
+        if (!Elements.includes(args[3].toLowerCase())) return message.channel.send(`${args[3]} is not a valid element.`);
+
+		// Skill
+		let skill
+        if (args[5]) {
+            if (!skillFile[args[5]]) message.channel.send(`${args[5]} is not a valid skill. I'll still make this armor regardless`);
+            else skill = args[5];
         }
 
         armorFile[args[0]] = {
             name: args[0],
+            class: args[2].toLowerCase(),
             cost: Math.max(args[1], 0),
-            element: args[2].toLowerCase(),
-            desc: args[5],
+            element: args[3].toLowerCase(),
+            desc: args[6],
             originalAuthor: message.author.id
         }
 
         if (skill) armorFile[args[0]].skill = skill;
-
-        if (args[3] > 0) armorFile[args[0]].end = args[3];
+        if (args[4] > 0) armorFile[args[0]].end = args[4];
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/armors.json`, JSON.stringify(armorFile, null, 4));
 
