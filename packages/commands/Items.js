@@ -151,7 +151,7 @@ function armorDesc(armorDefs, armorName, message) {
 	let classTxt = armorDefs.class ? `[${armorDefs.class.toUpperCase()}]` : '';
     const DiscordEmbed = new Discord.MessageEmbed()
         .setColor(color)
-        .setTitle(`${elementEmoji[armorDefs.element]} ${armorDefs.name ? armorDefs.name : armorDefs} *(${userTxt})*`)
+        .setTitle(`${classTxt} ${elementEmoji[armorDefs.element]} ${armorDefs.name ? armorDefs.name : armorDefs} *(${userTxt})*`)
         .setDescription(finalText)
 
     if (armorDefs.image) DiscordEmbed.setThumbnail(armorDefs.image);

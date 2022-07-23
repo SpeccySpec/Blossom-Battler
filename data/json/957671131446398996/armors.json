@@ -5,5 +5,14 @@
         "element": "water",
         "originalAuthor": "441198920668938260",
         "end": "20"
+    },
+    "Wooden Shield": {
+        "name": "Wooden Shield",
+        "class": "light",
+        "cost": 1500,
+        "element": "strike",
+        "desc": "A basic shield made out of wood. Not too effective but still useful.",
+        "originalAuthor": "516359709779820544",
+        "end": "5"
     }
 }
