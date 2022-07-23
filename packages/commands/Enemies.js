@@ -346,6 +346,44 @@ commands.setmoney = new Command({
     }
 })
 
+commands.ailevel = new Command({
+    desc: "Sets how good the AI for this enemy is. The better the AI, the more accurate the enemy will be to selecting the most optimal move.",
+    section: 'enemies',
+    args: [
+        {
+            name: "Enemy",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "AI Level",
+            type: "Word",
+            forced: true
+        }
+    ],
+	checkban: true,
+	admin: 'You do not have permission to change the AI level of this enemy.',
+    func: (message, args) => {
+        enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`, true);
+
+        if (enemyFile[args[0]]) {
+			if (aiTypes[args[1].toLowerCase()]) {
+				enemyFile[args[0]].difficulty = args[1].toLowerCase();
+			} else {
+				let aiTxt = '';
+				for (let i in aiTypes) {
+					aiTxt += `\n=== ${i.toUpperCase()} ===\n- ${aiTypes[i]}`;
+				}
+
+				return message.channel.send(`${args[1]} is an invalid difficulty. Try one of these:` + "```diff" + aiTxt + "```");
+			}
+		} else
+            return message.channel.send(`${args[0]} is not a valid enemy.`)
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, 4));
+    }
+})
+
 commands.assignloot = new Command({
     desc: `Assigns a loot table to an enemy.`,
     section: 'enemies',
