@@ -883,6 +883,11 @@ commands.registerweapon = new Command({
             forced: true
         },
         {
+            name: "Class",
+            type: "Word",
+            forced: true
+        },
+        {
             name: "Element",
             type: "Word",
             forced: true
@@ -917,34 +922,43 @@ commands.registerweapon = new Command({
 
         if (weaponFile[args[0]] && weaponFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("This weapon exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
 
+		// Name
         if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
 		if (args[0].length > 50) return message.channel.send(`${args[0]} is too long of a weapon name.`);
 
-        if (!Elements.includes(args[2].toLowerCase())) return message.channel.send(`${args[2]} is not a valid element.`);
-        if (args[2].toLowerCase() == 'passive') return message.channel.send(`Passive weapons are not allowed.`);
+		// Element
+        if (!Elements.includes(args[3].toLowerCase())) return message.channel.send(`${args[3]} is not a valid element.`);
+        if (args[3].toLowerCase() == 'passive') return message.channel.send(`Passive weapons are not allowed.`);
 
+		// Class
+        if (!Object.keys(weaponClasses).includes(args[2].toLowerCase())) return message.channel.send(`${args[2]} is not a valid class.`);
+
+		// Skill
         let skill
-        if (args[6]) {
-            if (!skillFile[args[6]]) message.channel.send(`${args[6]} is not a valid skill. I'll still make this weapon regardless`);
-            else skill = args[6];
+        if (args[7]) {
+            if (!skillFile[args[7]]) 
+				message.channel.send(`${args[7]} is not a valid skill. I'll still make this weapon regardless`);
+            else
+				skill = args[7];
         }
         
         weaponFile[args[0]] = {
             name: args[0],
+            class: args[2].toLowerCase(),
             cost: Math.max(args[1], 0),
-            element: args[2].toLowerCase(),
-            desc: args[7],
+            element: args[3].toLowerCase(),
+            desc: args[8],
             originalAuthor: message.author.id
         }
 
         if (skill) weaponFile[args[0]].skill = skill;
 
-        if (args[3] > 0) weaponFile[args[0]].melee = args[3];
-        if (args[4] > 0) weaponFile[args[0]].atk = args[4];
-        if (args[5] > 0) weaponFile[args[0]].mag = args[5];
+        if (args[4] > 0) weaponFile[args[0]].melee = args[4];
+        if (args[5] > 0) weaponFile[args[0]].atk = args[5];
+        if (args[6] > 0) weaponFile[args[0]].mag = args[6];
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile, null, 4));
-        
+
         message.channel.send({content: `${args[0]} has been registered:`, embeds: [weaponDesc(weaponFile[args[0]], args[0], message)]});
     }
 })
