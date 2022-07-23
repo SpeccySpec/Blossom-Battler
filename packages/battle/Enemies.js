@@ -34,7 +34,7 @@ enemyThinker = (char, btl) => {
 							pow: char.melee.pow,
 							acc: Math.min(100, char.melee.acc),
 							crit: char.melee.crit,
-							atktype: atkType,
+							atktype: char.melee.type,
 							target: 'one',
 							melee: true
 						}

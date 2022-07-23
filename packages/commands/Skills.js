@@ -298,6 +298,8 @@ commands.updateskills = new Command({
 			return false
 		}
 
+		skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+
 		for (skill in skillFile) {
 			if (!skillFile[skill].originalAuthor) skillFile[skill].originalAuthor = '776480348757557308';
 

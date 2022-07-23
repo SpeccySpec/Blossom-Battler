@@ -499,7 +499,7 @@ sendCurTurnEmbed = (char, btl) => {
 	});
 
 	let collector = makeCollector(btl.channel, {
-		filter: ({user}) => (user.id == char.owner || utilityFuncs.RPGBotAdmin(char.owner))
+		filter: ({user}) => (user.id == char.owner || utilityFuncs.RPGBotAdmin(user.id))
 	})
 
 	let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`, true);

@@ -444,7 +444,7 @@
             ]
         },
         "leaderskill": {
-            "name": "Perseverance",
+            "name": "Perseverence",
             "type": "buff",
             "var1": "mag",
             "var2": 1
