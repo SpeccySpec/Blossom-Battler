@@ -28,5 +28,15 @@
         "skill": "Pralaya",
         "melee": "300",
         "atk": "12"
+    },
+    "Wooden Sword": {
+        "name": "Wooden Sword",
+        "class": "bladed",
+        "cost": 1500,
+        "element": "slash",
+        "desc": "A basic sword made out of wood. Not too effective but still useful.",
+        "originalAuthor": "516359709779820544",
+        "melee": "80",
+        "atk": "5"
     }
 }

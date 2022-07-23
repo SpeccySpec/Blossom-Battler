@@ -82,21 +82,10 @@ function itemDesc(itemDefs, itemName, message) {
 function weaponDesc(weaponDefs, weaponName, message) {
     let finalText = "";
 
-    if (weaponDefs.cost && weaponDefs.cost != 0) {
-        finalText += `Costs **${weaponDefs.cost}** ${getCurrency(message.guild.id)}s\n`;
-    }
-
-    if (weaponDefs.melee) {
-        finalText += `**Melee** Buff: **${weaponDefs.melee}**\n`;
-    }
-
-    if (weaponDefs.atk) {
-        finalText += `**ATK** Buff: **${weaponDefs.atk}**\n`;
-    }
-
-    if (weaponDefs.mag) {
-        finalText += `**MAG** Buff: **${weaponDefs.mag}**\n`;
-    }
+    if (weaponDefs.cost && weaponDefs.cost != 0) finalText += `Costs **${weaponDefs.cost}** ${getCurrency(message.guild.id)}s\n`;
+    if (weaponDefs.melee) finalText += `**Melee** Buff: **${weaponDefs.melee}**\n`;
+    if (weaponDefs.atk) finalText += `**ATK** Buff: **${weaponDefs.atk}**\n`;
+    if (weaponDefs.mag) finalText += `**MAG** Buff: **${weaponDefs.mag}**\n`;
 
     if (weaponDefs.skill && weaponDefs.skill != '') {
         let type = ''
@@ -112,23 +101,20 @@ function weaponDesc(weaponDefs, weaponName, message) {
     }
 
     finalText += getRecipe(weaponDefs)
-
     finalText += '\n'
 
-    if (weaponDefs.desc)
-        finalText += `\n*${weaponDefs.desc}*`;
+    if (weaponDefs.desc) finalText += `\n*${weaponDefs.desc}*`;
 
     let userTxt = getServerUser(weaponDefs.originalAuthor, message);
-
     let color = elementColors[weaponDefs.element];
 
+	let classTxt = weaponDefs.class ? `[${weaponDefs.class.toUpperCase()}]` : '';
     const DiscordEmbed = new Discord.MessageEmbed()
         .setColor(color)
-        .setTitle(`${elementEmoji[weaponDefs.element]} ${weaponDefs.name ? weaponDefs.name : weaponDefs} *(${userTxt})*`)
+        .setTitle(`${classTxt}${elementEmoji[weaponDefs.element]} ${weaponDefs.name ? weaponDefs.name : weaponDefs} *(${userTxt})*`)
         .setDescription(finalText)
 
-        if (weaponDefs.image)
-            DiscordEmbed.setThumbnail(weaponDefs.image);
+    if (weaponDefs.image) DiscordEmbed.setThumbnail(weaponDefs.image);
     return DiscordEmbed;
 }
 

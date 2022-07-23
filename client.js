@@ -1145,7 +1145,11 @@ client.on("messageCreate", (message) => {
 //last ditch things
 makeDirectory(`${dataPath}/userdata`)
 
+// Token Check
+console.log(`${process.env.TOKEN} is the token!`);
 client.login(process.env.TOKEN);
+
+// Aight
 console.log(`The bot is now in session! Enjoy!`)
 
 // Lastly... resend all embeds if a battle errored out!
