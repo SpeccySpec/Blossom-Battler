@@ -111,7 +111,7 @@ function weaponDesc(weaponDefs, weaponName, message) {
 	let classTxt = weaponDefs.class ? `[${weaponDefs.class.toUpperCase()}]` : '';
     const DiscordEmbed = new Discord.MessageEmbed()
         .setColor(color)
-        .setTitle(`${classTxt}${elementEmoji[weaponDefs.element]} ${weaponDefs.name ? weaponDefs.name : weaponDefs} *(${userTxt})*`)
+        .setTitle(`${classTxt} ${elementEmoji[weaponDefs.element]} ${weaponDefs.name ? weaponDefs.name : weaponDefs} *(${userTxt})*`)
         .setDescription(finalText)
 
     if (weaponDefs.image) DiscordEmbed.setThumbnail(weaponDefs.image);
