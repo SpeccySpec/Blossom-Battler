@@ -64,7 +64,7 @@ enemyThinker = (char, btl) => {
 					// Additionally, Medium Mode must discover affinities first.
 					char.affinitycheck = {};
 
-					let powcheck = Object.Keys(skillcheck);
+					let powcheck = Object.keys(skillcheck);
 					powcheck.sort(function(a, b) {return skillcheck[b].pow - skillcheck[a].pow});
 
 					for (let j in skillcheck) {
@@ -122,11 +122,12 @@ enemyThinker = (char, btl) => {
 
 						if (targ.custom?.trap) act.points--;
 
-						console.log(`${act}\n`);
+						console.log(act);
 						ai.push(act);
 					}
 				}
 			}
+			break;
 
 		default: // Easy mode AI:
 			// Select random options. Only change if the target is dead.
