@@ -4,7 +4,7 @@ isBoss = (f) => {
 	return (f.type.includes('boss') || f.type.includes('deity'));
 }
 
-function learnAffinity(char, targ, skill) {
+learnAffinity = (char, targ, skill) => {
 	let a = getAffinity(targ, skill.type)
 	if (char.affinitycheck[`${targ.team}-${targ.pos}`][a]) {
 		char.affinitycheck[`${targ.team}-${targ.pos}`][a](skill.type)

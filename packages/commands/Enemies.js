@@ -369,6 +369,7 @@ commands.ailevel = new Command({
         if (enemyFile[args[0]]) {
 			if (aiTypes[args[1].toLowerCase()]) {
 				enemyFile[args[0]].difficulty = args[1].toLowerCase();
+				message.channel.send(`${args[0]}'s AI level was set to ${args[1]}!`);
 			} else {
 				let aiTxt = '';
 				for (let i in aiTypes) {

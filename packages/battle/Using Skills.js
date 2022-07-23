@@ -484,6 +484,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			}
 		}
 
+		// Enemies should learn affinities.
+		if (char.affinitycheck && affinity != 'normal') learnAffinity(char, targ, skill);
+
 		// Placeholder damage formula
 		let damages = [];
 		let total = 0;
