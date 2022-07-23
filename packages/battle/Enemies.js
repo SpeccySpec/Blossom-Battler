@@ -4,6 +4,15 @@ isBoss = (f) => {
 	return (f.type.includes('boss') || f.type.includes('deity'));
 }
 
+function learnAffinity(char, targ, skill) {
+	let a = getAffinity(targ, skill.type)
+	if (char.affinitycheck[`${targ.team}-${targ.pos}`][a]) {
+		char.affinitycheck[`${targ.team}-${targ.pos}`][a](skill.type)
+	}
+
+	return char.affinitycheck[`${targ.team}-${targ.pos}`] ?? undefined;
+}
+
 // Enemy thinker!
 enemyThinker = (char, btl) => {
 	// Ah shit. Enemy AI. AH FUCk.
@@ -11,6 +20,114 @@ enemyThinker = (char, btl) => {
 
 	// Difficulty levels should be handled
 	switch(char.difficulty ?? 'easy') {
+		case 'medium': // Medium mode AI:
+			for (let i in btl.teams) {
+				if (i == char.team) continue;
+
+				for (let targ of btl.teams[i].members) {
+					if (targ.hp <= 0) continue;
+
+					let skillcheck = {
+						melee: {
+							name: char.melee.name,
+							type: char.melee.type,
+							pow: char.melee.pow,
+							acc: Math.min(100, char.melee.acc),
+							crit: char.melee.crit,
+							atktype: atkType,
+							target: 'one',
+							melee: true
+						}
+					}
+
+					for (let k in char.skills) {
+						if (!skillFile[char.skills[k]]) continue;
+						skillcheck[char.skills[k]] = skillFile[char.skills[k]];
+					}
+
+					// Iterate over all my skills, AND my melee attack. Which one is the most optimal?
+					// Highest Power: 1 point
+
+					// Weakness affinity: 2 points
+					// SuperWeakness affinity: 4 points
+					// Deadly affinity: 6 points
+					// Resisting affinity: -3 points.
+					// Block/Repel/Drain affinity: -5 points
+
+					// Shield: -1 point
+					// Karn: -2 points
+					// Trap: -1 point
+					
+					// Medium Mode is not aware of certain other status skills like Chaos Stir. It also
+					// only remembers affinites 50% of the time.
+
+					// Additionally, Medium Mode must discover affinities first.
+					char.affinitycheck = {};
+
+					let powcheck = Object.Keys(skillcheck);
+					powcheck.sort(function(a, b) {return skillcheck[b].pow - skillcheck[a].pow});
+
+					for (let j in skillcheck) {
+						let skill = skillcheck[j];
+
+						// If we can't use this skill, don't bother check for it.
+						if (!skill.melee) {
+							if (!canUseSkill(char, skill)) continue;
+						}
+
+						// This is the action we're going to use.
+						let act = {
+							move: skill.melee ? 'melee' : 'skills',
+							index: j,
+							target: [i, targ.pos],
+							points: 0
+						}
+
+						// Strongest move
+						if (j == powcheck[0]) act.points++;
+
+						// Affinities
+						let pts = {
+							deadly: 6,
+							superweak: 4,
+							weak: 2,
+							resist: -3,
+							block: -5,
+							repel: -5,
+							drain: -5,
+						}
+
+						if (char.affinitycheck[`${i}-${targ.pos}`] && randNum(1, 100) <= 50) {
+							for (let aff in char.affinitycheck[`${i}-${targ.pos}`]) {
+								for (let type of char.affinitycheck[`${i}-${targ.pos}`][aff]) {
+									if (skill.type == type) act.points += pts[aff];
+								}
+							}
+						} else {
+							char.affinitycheck[`${i}-${targ.pos}`] = {
+								superweak: [],
+								weak: [],
+								resist: [],
+								block: [],
+								repel: [],
+								drain: []
+							}
+						}
+
+						// Shields, Karns, ect
+						if (targ.custom?.shield) {
+							act.points--;
+							if (targ.custom.shield.type && (targ.custom.shield.type == 'repelphys' || targ.custom.shield.type == 'repelmag')) act.points--;
+						}
+
+						if (targ.custom?.trap) act.points--;
+
+						console.log(`${act}\n`);
+						ai.push(act);
+					}
+				}
+			}
+
 		default: // Easy mode AI:
 			// Select random options. Only change if the target is dead.
 			// Never consider bad outcomes.

@@ -91,6 +91,28 @@ canAfford = (char, skill) => {
 	return true
 }
 
+// Can we use this skill?
+canUseSkill = (char, skill) => {
+	// Statusses
+	if (char.status) {
+		switch(char.status) {
+			case 'silence':
+				if (skill.atktype === "magic") return false;
+				break;
+
+			case 'dazed':
+				if (skill.atktype === "physical" || skill.atktype === "ranged") return false;
+				break;
+
+			case 'ego':
+				if (skill.type === "heal") return false;
+				break;
+		}
+	}
+
+	return canAfford(char, skill);
+}
+
 // Use cost costtype with char.
 useCost = (char, cost, costtype) => {
 	if (!costtype) costtype === 'mp';

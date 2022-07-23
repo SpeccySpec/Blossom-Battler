@@ -219,8 +219,8 @@ statusEffects = [
 	"fear",
 	"rage",
 	"ego",
-	"silence",
-	"dazed",
+	"silence", // Cannot use magic skills.
+	"dazed", // Cannot use physical skills.
 	"hunger",
 	"infatuation",
 	"blind",
