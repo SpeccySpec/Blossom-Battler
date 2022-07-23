@@ -121,13 +121,8 @@ function weaponDesc(weaponDefs, weaponName, message) {
 function armorDesc(armorDefs, armorName, message) {
     let finalText = "";
 
-    if (armorDefs.cost && armorDefs.cost != 0) {
-        finalText += `Costs **${armorDefs.cost}** ${getCurrency(message.guild.id)}s\n`;
-    }
-
-    if (armorDefs.end) {
-        finalText += `**END** Buff: **${armorDefs.end}**\n`;
-    }
+    if (armorDefs.cost && armorDefs.cost != 0) finalText += `Costs **${armorDefs.cost}** ${getCurrency(message.guild.id)}s\n`;
+    if (armorDefs.end) finalText += `**END** Buff: **${armorDefs.end}**\n`;
 
     if (armorDefs.skill && armorDefs.skill != '') {
         let type = ''
@@ -153,13 +148,13 @@ function armorDesc(armorDefs, armorName, message) {
 
     let color = elementColors[armorDefs.element];
 
+	let classTxt = armorDefs.class ? `[${armorDefs.class.toUpperCase()}]` : '';
     const DiscordEmbed = new Discord.MessageEmbed()
         .setColor(color)
         .setTitle(`${elementEmoji[armorDefs.element]} ${armorDefs.name ? armorDefs.name : armorDefs} *(${userTxt})*`)
         .setDescription(finalText)
 
-        if (armorDefs.image)
-            DiscordEmbed.setThumbnail(armorDefs.image);
+    if (armorDefs.image) DiscordEmbed.setThumbnail(armorDefs.image);
     return DiscordEmbed;
 }
 
