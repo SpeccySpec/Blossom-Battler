@@ -97,32 +97,87 @@ enemyThinker = (char, btl) => {
 							drain: -5,
 						}
 
-						if (char.affinitycheck[`${i}-${targ.pos}`] && randNum(1, 100) <= 50) {
-							for (let aff in char.affinitycheck[`${i}-${targ.pos}`]) {
-								for (let type of char.affinitycheck[`${i}-${targ.pos}`][aff]) {
-									if (skill.type == type) act.points += pts[aff];
+						// Element.
+						switch(skill.type) {
+							case 'heal':
+								break;
+
+							case 'status':
+								break;
+
+							case 'passive':
+								act.points = -9999;
+								break;
+
+							default:
+								// Judge differently based on target types.
+								let targets = [];
+								switch(skill.target) {
+									case 'allopposing':
+										for (let eye in btl.teams) {
+											if (char.team == eye) continue;
+											
+											for (let kay in btl.teams[eye].members)
+												if (btl.teams[eye].members[kay].hp > 0) targets.push([btl.teams[eye].members[kay].id, 1]);
+										}
+										break;
+									case 'allallies':
+										for (let kay in btl.teams[char.team].members)
+											if (btl.teams[char.team].members[kay].hp > 0) targets.push([btl.teams[char.team].members[kay].id, 1]);
+										break;
+									case 'everyone':
+										for (let eye in btl.teams) {
+											for (let kay in btl.teams[eye].members)
+												if (btl.teams[eye].members[kay].hp > 0) targets.push([btl.teams[eye].members[kay].id, 1]);
+										}
+										break;
+									case 'caster':
+										targets = [char];
+										break;
+									default:
+										targets = [targ];
 								}
-							}
-						} else {
-							char.affinitycheck[`${i}-${targ.pos}`] = {
-								superweak: [],
-								weak: [],
-								resist: [],
-								block: [],
-								repel: [],
-								drain: []
-							}
+
+								// Judge for all targets of skill.
+								for (let targ of targets) {
+									// Judge based on target affinity. Only do this 50% of the time on medium.
+									if (skill.type != 'almighty') {
+										if (char.affinitycheck[`${i}-${targ.pos}`] && randNum(1, 100) <= 50) {
+											for (let aff in char.affinitycheck[`${i}-${targ.pos}`]) {
+												for (let type of char.affinitycheck[`${i}-${targ.pos}`][aff]) {
+													if (skill.type == type) act.points += pts[aff];
+												}
+											}
+										} else {
+											char.affinitycheck[`${i}-${targ.pos}`] = {
+												superweak: [],
+												weak: [],
+												resist: [],
+												block: [],
+												repel: [],
+												drain: []
+											}
+										}
+									}
+
+									// Shields, Karns, ect. Brick break skills are acknowledged.
+									if (targ.custom?.shield && !skill.extras?.feint) {
+										if (skill.extras?.brickbreak) {
+											act.points += 2;
+										} else {
+											act.points--;
+											if (targ.custom.shield.type && ((targ.custom.shield.type == 'repelphys' && (skill.atktype === "physical" || skill.atktype === "ranged")) || (targ.custom.shield.type == 'repelmag' && skill.atktype === "magic"))) act.points--;
+										}
+									}
+
+									if (targ.custom?.trap && !skill.extras?.brickbreak && !skill.extras?.feint) act.points--;
+								}
 						}
 
-						// Shields, Karns, ect
-						if (targ.custom?.shield) {
-							act.points--;
-							if (targ.custom.shield.type && (targ.custom.shield.type == 'repelphys' || targ.custom.shield.type == 'repelmag')) act.points--;
-						}
+						// Randomness modifier
+						act.points += (-1+randNum(2));
 
-						if (targ.custom?.trap) act.points--;
-
-						console.log(act);
+						// Push this action.
 						ai.push(act);
 					}
 				}
@@ -151,7 +206,8 @@ enemyThinker = (char, btl) => {
 	}
 
 	// Sort the AI's possible options. Choose the one with the most points.
-	ai.sort(function(a, b) {return a.points-b.points});
+	ai.sort(function(a, b) {return b.points-a.points});
+	console.log(ai[0]);
 	return ai[0];
 }
 
