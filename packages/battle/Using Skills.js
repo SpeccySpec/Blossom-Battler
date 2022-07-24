@@ -27,7 +27,7 @@ addAtkMsg = (btl, str) => {
 }
 
 // Is this a tech
-function isTech(char, element) {
+isTech = (char, element) => {
 	if (!char.status) return false;
 	if (char.status === 'sleep' || char.status === 'blind') return true;
 

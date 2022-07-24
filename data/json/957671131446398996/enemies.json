@@ -5062,7 +5062,7 @@
         "negotiateDefs": {
             "required": 5
         },
-        "mainElement": "strike",
+        "mainElement": "status",
         "owner": "516359709779820544",
         "xp": 7943,
         "stats": {
@@ -5084,7 +5084,8 @@
         },
         "quotes": {},
         "lb": {},
-        "type": "none"
+        "type": "none",
+        "difficulty": "hard"
     },
     "SizeableBasher": {
         "name": "SizeableBasher",

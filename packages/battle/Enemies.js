@@ -14,6 +14,30 @@ learnAffinity = (char, targ, skill) => {
 	return char.affinitycheck[targ.id];
 }
 
+// Status effects points.
+let st = {
+	burn: 1,
+	bleed: 1,
+	freeze: 3,
+	paralyze: 2,
+	dizzy: 2,
+	sleep: 2,
+	despair: 1,
+	poison: 1,
+	brainwash: 4,
+	fear: 2,
+	rage: 1,
+	ego: 4,
+	silence: 3,
+	dazed: 3,
+	hunger: 2,
+	mirror: 1,
+	blind: 1,
+	irradiation: 2,
+	sensitive: 3,
+	happy: 1
+}
+
 // Enemy thinker!
 enemyThinker = (char, btl) => {
 	// Ah shit. Enemy AI. AH FUCk.
@@ -21,6 +45,189 @@ enemyThinker = (char, btl) => {
 
 	// Difficulty levels should be handled
 	switch(char.difficulty ?? 'easy') {
+		case 'hard': // Hard mode AI:
+			for (let i in btl.teams) {
+				if (i == char.team) continue;
+
+				for (let targ of btl.teams[i].members) {
+					if (targ.hp <= 0) continue;
+
+					let skillcheck = {
+						melee: {
+							name: char.melee.name,
+							type: char.melee.type,
+							pow: char.melee.pow,
+							acc: Math.min(100, char.melee.acc),
+							crit: char.melee.crit,
+							atktype: char.melee.type,
+							target: 'one',
+							melee: true
+						}
+					}
+
+					for (let k in char.skills) {
+						if (!skillFile[char.skills[k]]) continue;
+						skillcheck[char.skills[k]] = skillFile[char.skills[k]];
+					}
+
+					// Iterate over all my skills, AND my melee attack. Which one is the most optimal?
+					// Highest Power: 1 point
+
+					// Weakness affinity: 2 points
+					// SuperWeakness affinity: 4 points
+					// Deadly affinity: 6 points
+					// Resisting affinity: -4 points.
+					// Block/Repel/Drain affinity: -6 points
+
+					// Tech: 2 points
+
+					// Shield: -2 point
+					// Karn: -2 points
+					// Trap: -2 point
+
+					// Chaos Stir: -2 points
+
+					// Hard Mode must discover affinities first.
+					char.affinitycheck = {};
+
+					let powcheck = Object.keys(skillcheck);
+					powcheck.sort(function(a, b) {return (skillcheck[b].pow ?? 0) - (skillcheck[a].pow ?? 0)});
+
+					for (let j in skillcheck) {
+						let skill = skillcheck[j];
+
+						// If we can't use this skill, don't bother check for it.
+						if (!skill.melee) {
+							if (!canUseSkill(char, skill)) continue;
+						}
+
+						// This is the action we're going to use.
+						let act = {
+							move: skill.melee ? 'melee' : 'skills',
+							index: j,
+							target: [i, targ.pos],
+							points: skill.melee ? -2 : 0
+						}
+
+						// Strongest move
+						if (j == powcheck[0]) act.points++;
+
+						// Affinities
+						let pts = {
+							deadly: 6,
+							superweak: 4,
+							weak: 2,
+							resist: -4,
+							block: -6,
+							repel: -6,
+							drain: -6,
+						}
+
+						// Element.
+						switch(skill.type) {
+							case 'heal':
+								break;
+
+							case 'status':
+								// Abuse good statusses to do shit.
+								if (skill.status && !targ.status) {
+									let statusses = skill.status;
+									if (typeof(statusses) === "string") statusses = [statusses];
+
+									for (let status of statusses) {
+										act.points += 5+Math.round(st[status]/statusses.length);
+									}
+								}
+								
+								console.log(act);
+								break;
+
+							case 'passive':
+								act.points = -9999;
+								break;
+
+							default:
+								// Judge differently based on target types.
+								let targets = [];
+								switch(skill.target) {
+									case 'allopposing':
+										for (let eye in btl.teams) {
+											if (char.team == eye) continue;
+											
+											for (let kay in btl.teams[eye].members)
+												if (btl.teams[eye].members[kay].hp > 0) targets.push([btl.teams[eye].members[kay].id, 1]);
+										}
+										break;
+									case 'allallies':
+										for (let kay in btl.teams[char.team].members)
+											if (btl.teams[char.team].members[kay].hp > 0) targets.push([btl.teams[char.team].members[kay].id, 1]);
+										break;
+									case 'everyone':
+										for (let eye in btl.teams) {
+											for (let kay in btl.teams[eye].members)
+												if (btl.teams[eye].members[kay].hp > 0) targets.push([btl.teams[eye].members[kay].id, 1]);
+										}
+										break;
+									case 'caster':
+										targets = [char];
+										break;
+									default:
+										targets = [targ];
+								}
+
+								// Judge for all targets of skill.
+								for (let t of targets) {
+									// Judge based on target affinity. Only do this 85% of the time on hard.
+									if (skill.type != 'almighty') {
+										if (char.affinitycheck[t.id]) {
+											for (let aff in char.affinitycheck[t.id]) {
+												for (let type of char.affinitycheck[t.id][aff]) {
+													if (skill.type == type && randNum(1, 100) <= 85) act.points += pts[aff];
+												}
+											}
+										} else {
+											char.affinitycheck[t.id] = {
+												superweak: [],
+												weak: [],
+												resist: [],
+												block: [],
+												repel: [],
+												drain: []
+											}
+										}
+									}
+
+									// Guarding
+									if (t.guard) act.points -= 3.5;
+
+									// Techs
+									if (t.status && !t.guard && isTech(t, skill.type)) act.points += 2;
+
+									// Shields, Karns, ect. Brick break skills are acknowledged.
+									if (t.custom?.shield && !skill.extras?.feint) {
+										if (skill.extras?.brickbreak) {
+											act.points += 3;
+										} else {
+											act.points -= 2;
+											if (t.custom.shield.type && ((t.custom.shield.type == 'repelphys' && (skill.atktype === "physical" || skill.atktype === "ranged")) || (t.custom.shield.type == 'repelmag' && skill.atktype === "magic"))) act.points--;
+										}
+									}
+
+									if (t.custom?.trap && !skill.extras?.brickbreak && !skill.extras?.feint) act.points--;
+									if (t.custom?.chaosstir) act.points -= 2;
+								}
+						}
+
+						// Randomness modifier
+						act.points += (-0.5 + Math.random());
+
+						// Push this action.
+						ai.push(act);
+					}
+				}
+			}
+			break;
+
 		case 'medium': // Medium mode AI:
 			for (let i in btl.teams) {
 				if (i == char.team) continue;
@@ -81,7 +288,7 @@ enemyThinker = (char, btl) => {
 							move: skill.melee ? 'melee' : 'skills',
 							index: j,
 							target: [i, targ.pos],
-							points: 0
+							points: skill.melee ? -2 : 0
 						}
 
 						// Strongest move
@@ -143,10 +350,10 @@ enemyThinker = (char, btl) => {
 								for (let targ of targets) {
 									// Judge based on target affinity. Only do this 50% of the time on medium.
 									if (skill.type != 'almighty') {
-										if (char.affinitycheck[targ.id] && randNum(1, 100) <= 50) {
+										if (char.affinitycheck[targ.id]) {
 											for (let aff in char.affinitycheck[targ.id]) {
 												for (let type of char.affinitycheck[targ.id][aff]) {
-													if (skill.type == type) act.points += pts[aff];
+													if (skill.type == type && randNum(1, 100) <= 50) act.points += pts[aff];
 												}
 											}
 										} else {
@@ -160,6 +367,9 @@ enemyThinker = (char, btl) => {
 											}
 										}
 									}
+
+									// Guarding
+									if (targ.guard) act.points -= 3.5;
 
 									// Shields, Karns, ect. Brick break skills are acknowledged.
 									if (targ.custom?.shield && !skill.extras?.feint) {
