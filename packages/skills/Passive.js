@@ -243,13 +243,13 @@ passiveList = {
 					break;
 
 				case 'hppercent':
-					char.hp += (char.maxhp/100)*parseInt(vars[0]);
-					finalTxt = `__${char.name}__'s HP was restored by **${(char.maxhp/100)*parseInt(vars[0])}%**!`;
+					char.hp += Math.round((char.maxhp/100)*parseInt(vars[0]));
+					finalTxt = `__${char.name}__'s HP was restored by **${Math.round((char.maxhp/100)*parseInt(vars[0]))}**!`;
 					break;
 
 				case 'mppercent':
-					char.mp += (char.maxmp/100)*parseInt(vars[0]);
-					finalTxt = `__${char.name}__'s MP was restored by **${(char.maxmp/100)*parseInt(vars[0])}%**!`;
+					char.mp += Math.round((char.maxmp/100)*parseInt(vars[0]));
+					finalTxt = `__${char.name}__'s MP was restored by **${Math.round((char.maxmp/100)*parseInt(vars[0]))}**!`;
 					break;
 
 				default:
