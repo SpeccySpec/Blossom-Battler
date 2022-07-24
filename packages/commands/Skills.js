@@ -623,8 +623,10 @@ commands.updateskills = new Command({
 				if (skillFile[skill].heal) {
 					if (skillFile[skill].heal.default) {
 						skillFile[skill].heal.healstat = [skillFile[skill].heal.default[0], "hp"];
+						delete skillFile[skill].heal.default;
 					} else if (skillFile[skill].heal.healmp) {
 						skillFile[skill].heal.healstat = [skillFile[skill].heal.healmp[0], "mp"];
+						delete skillFile[skill].heal.healmp;
 					}
 				} else {
 					skillFile[skill].heal = {};

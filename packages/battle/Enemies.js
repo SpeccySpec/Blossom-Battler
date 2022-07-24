@@ -5,12 +5,13 @@ isBoss = (f) => {
 }
 
 learnAffinity = (char, targ, skill) => {
-	let a = getAffinity(targ, skill.type)
-	if (char.affinitycheck[`${targ.team}-${targ.pos}`][a]) {
-		char.affinitycheck[`${targ.team}-${targ.pos}`][a](skill.type)
-	}
+	let a = getAffinity(targ, skill.type);
+	
+	if (!char.affinitycheck[targ.id]) char.affinitycheck[targ.id] = {};
+	if (!char.affinitycheck[targ.id][a]) char.affinitycheck[targ.id][a] = [];
+	char.affinitycheck[targ.id][a].push(skill.type)
 
-	return char.affinitycheck[`${targ.team}-${targ.pos}`] ?? undefined;
+	return char.affinitycheck[targ.id];
 }
 
 // Enemy thinker!
@@ -142,14 +143,14 @@ enemyThinker = (char, btl) => {
 								for (let targ of targets) {
 									// Judge based on target affinity. Only do this 50% of the time on medium.
 									if (skill.type != 'almighty') {
-										if (char.affinitycheck[`${i}-${targ.pos}`] && randNum(1, 100) <= 50) {
-											for (let aff in char.affinitycheck[`${i}-${targ.pos}`]) {
-												for (let type of char.affinitycheck[`${i}-${targ.pos}`][aff]) {
+										if (char.affinitycheck[targ.id] && randNum(1, 100) <= 50) {
+											for (let aff in char.affinitycheck[targ.id]) {
+												for (let type of char.affinitycheck[targ.id][aff]) {
 													if (skill.type == type) act.points += pts[aff];
 												}
 											}
 										} else {
-											char.affinitycheck[`${i}-${targ.pos}`] = {
+											char.affinitycheck[targ.id] = {
 												superweak: [],
 												weak: [],
 												resist: [],
@@ -204,6 +205,9 @@ enemyThinker = (char, btl) => {
 				}
 			}
 	}
+
+	// Save this shit
+	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, '	', 4));
 
 	// Sort the AI's possible options. Choose the one with the most points.
 	ai.sort(function(a, b) {return b.points-a.points});

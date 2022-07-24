@@ -1162,7 +1162,8 @@
         },
         "quotes": {},
         "lb": {},
-        "type": "miniboss"
+        "type": "miniboss",
+        "difficulty": "medium"
     },
     "MassiveMossimp": {
         "level": 50,
