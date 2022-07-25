@@ -126,6 +126,44 @@ enemyThinker = (char, btl) => {
 						// Element.
 						switch(skill.type) {
 							case 'heal':
+								switch(skill.target) {
+									case 'allallies':
+										for (let char2 of btl.teams[char.team].members) {
+											if (skill.heal?.healstat) {
+												if (!skill.heal.healstat[1] || skill.heal.healstat[1] == "hp") {
+													if (char2.hp <= (isBoss(char2) ? char2.maxhp/10 : char2.maxhp/3)) {
+														act.points += 5;
+													}
+												}
+											}
+										}
+
+										ai.push(act);
+										break;
+
+									case 'ally':
+									case 'spreadallies':
+										for (let ally of btl.teams[char.team].members) {
+											if (skill.heal?.healstat) {
+												if (!skill.heal.healstat[1] || skill.heal.healstat[1] == "hp") {
+													if (ally.hp <= (isBoss(ally) ? ally.maxhp/10 : ally.maxhp/3)) {
+														act = {
+															move: 'skills',
+															index: j,
+															target: [char.team, ally.pos],
+															points: 5
+														};
+
+														// Care a little less if I can't heal this ONE ally the damage they just took back completely.
+														if (ally.lastdmg && skill.heal.healstat[0] <= (ally.lastdmg[0]-10)) {
+															act.points /= 3;
+														}
+													}
+												}
+											}
+										}
+										break;
+								}
 								break;
 
 							case 'status':
@@ -138,8 +176,7 @@ enemyThinker = (char, btl) => {
 										act.points += 5+Math.round(st[status]/statusses.length);
 									}
 								}
-								
-								console.log(act);
+
 								break;
 
 							case 'passive':

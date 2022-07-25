@@ -7416,7 +7416,8 @@
         },
         "quotes": {},
         "lb": {},
-        "type": "none"
+        "type": "none",
+        "difficulty": "hard"
     },
     "AngryNyamo": {
         "name": "AngryNyamo",
