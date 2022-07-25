@@ -1130,13 +1130,12 @@ client.on("messageCreate", (message) => {
 
 	// Register commands
 	prefix = getPrefix(message.guild.id)
-	const content = message.content.toLowerCase()
-	if (!content.startsWith(prefix)) return;
+	if (!message.content.toLowerCase().startsWith(prefix)) return;
 
-	let args = [...content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
+	let args = [...message.content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
 	if (args.length == 0) return;
 
-	let command = commands[args[0]];
+	let command = commands[args[0].toLowerCase()];
 	if (!command) return;
 
 	args.shift();
