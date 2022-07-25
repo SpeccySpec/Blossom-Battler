@@ -87,15 +87,15 @@ partyDesc = (party, message) => {
 
 	if (party.weapons) {
 		for (const i in party.weapons) {
-			let weaponDefs = party.weapons[i]
-			weapons += `${elementEmoji[weaponFile[i].element]} ${i} - **${weaponDefs.atk ? weaponDefs.atk : '0'}ATK**, **${weaponDefs.mag ? weaponDefs.mag : '0'}MAG**\n`;
+			let weaponDefs = party.weapons[i];
+			weapons += `${elementEmoji[weaponDefs.element]} ${i} - **${weaponDefs.atk ? weaponDefs.atk : '0'}ATK**, **${weaponDefs.mag ? weaponDefs.mag : '0'}MAG**\n`;
 		}
 	}
 
 	if (party.armors) {
 		for (const i in party.armors) {
-			let armorDefs = party.armors[i]
-			armor += `${elementEmoji[weaponFile[i].element]} ${i} - **${armorDefs.def ? armorDefs.def : '0'}DEF**\n`;
+			let armorDefs = party.armors[i];
+			armor += `${elementEmoji[armorDefs.element]} ${i} - **${armorDefs.def ? armorDefs.def : '0'}DEF**\n`;
 		}
 	}
 
