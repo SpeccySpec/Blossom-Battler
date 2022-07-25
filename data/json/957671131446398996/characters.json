@@ -3,8 +3,8 @@
         "name": "Valoria",
         "owner": "516359709779820544",
         "level": 77,
-        "hp": 448,
-        "mp": 493,
+        "hp": 347,
+        "mp": 525,
         "maxhp": 448,
         "maxmp": 529,
         "basehp": 30,
@@ -16,7 +16,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 1233314,
+        "xp": 1273706,
         "maxxp": 26403897,
         "skills": [
             "HealSymphony",
@@ -64,7 +64,7 @@
                 "value": 45,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]353535353535353535"
+                "amount": "[object Object]35353535353535353535"
             },
             "Lena": {
                 "value": 45,
@@ -75,13 +75,13 @@
                 "value": 125,
                 "nextLevel": 150,
                 "level": 2,
-                "amount": "[object Object]353535353535353535"
+                "amount": "[object Object]35353535353535353535"
             },
             "Ramia": {
                 "value": 5,
                 "nextLevel": 190,
                 "level": 4,
-                "amount": "[object Object]35353535353535353535"
+                "amount": "[object Object]3535353535353535353535"
             },
             "Ira": {
                 "value": 65,
@@ -1211,8 +1211,8 @@
         "name": "Dusk",
         "owner": "516359709779820544",
         "level": 65,
-        "hp": 551,
-        "mp": 136,
+        "hp": 433,
+        "mp": 106,
         "maxhp": 690,
         "maxmp": 175,
         "basehp": 50,
@@ -1224,7 +1224,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 434744,
+        "xp": 475136,
         "maxxp": 4741253,
         "skills": [
             "BraveBlade",
@@ -1265,7 +1265,7 @@
                 "value": 125,
                 "nextLevel": 150,
                 "level": 2,
-                "amount": "[object Object]35353520352020202020351535352035201535"
+                "amount": "[object Object]3535352035202020202035153535203520153535"
             },
             "Sky": {
                 "value": 80,
@@ -1291,7 +1291,7 @@
                 "value": 65,
                 "nextLevel": 140,
                 "level": 3,
-                "amount": "[object Object]353535353535353535"
+                "amount": "[object Object]35353535353535353535"
             },
             "Rainbow": {
                 "value": 5,
@@ -1307,7 +1307,7 @@
                 "value": 40,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]353535353535353535"
+                "amount": "[object Object]35353535353535353535"
             },
             "Croato": {
                 "value": 60,
@@ -1515,8 +1515,8 @@
         "name": "Euphorica",
         "owner": "516359709779820544",
         "level": 65,
-        "hp": 438,
-        "mp": 316,
+        "hp": 317,
+        "mp": 284,
         "maxhp": 483,
         "maxmp": 350,
         "basehp": 35,
@@ -1528,7 +1528,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 2805370,
+        "xp": 2845762,
         "maxxp": 4741253,
         "skills": [
             "Freidyne",
@@ -1567,13 +1567,13 @@
                 "value": 45,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]3535352035202020203020351535352035201535"
+                "amount": "[object Object]353535203520202020302035153535203520153535"
             },
             "Ramia": {
                 "value": 95,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]353535353535353535"
+                "amount": "[object Object]35353535353535353535"
             },
             "Sky": {
                 "value": 65,
@@ -1584,7 +1584,7 @@
                 "value": 30,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]353535353535353535"
+                "amount": "[object Object]35353535353535353535"
             },
             "Flara": {
                 "value": 20,
@@ -18367,7 +18367,7 @@
         "name": "Ramia",
         "owner": "516359709779820544",
         "level": 65,
-        "hp": 426,
+        "hp": 231,
         "mp": 274,
         "maxhp": 426,
         "maxmp": 310,
@@ -18380,7 +18380,7 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 634923,
+        "xp": 675315,
         "maxxp": 4741253,
         "skills": [
             "Dokudyne",
@@ -18436,13 +18436,13 @@
                 "value": 35,
                 "nextLevel": 190,
                 "level": 4,
-                "amount": "[object Object]35353520352020202035202320202020351535352035201535"
+                "amount": "[object Object]3535352035202020203520232020202035153535203520153535"
             },
             "Euphorica": {
                 "value": 105,
                 "nextLevel": 120,
                 "level": 2,
-                "amount": "[object Object]353535353535353535"
+                "amount": "[object Object]35353535353535353535"
             },
             "Ira": {
                 "value": 75,
@@ -18458,7 +18458,7 @@
                 "value": 35,
                 "nextLevel": 140,
                 "level": 3,
-                "amount": "[object Object]353535353535353535"
+                "amount": "[object Object]35353535353535353535"
             },
             "Flara": {
                 "value": 45,

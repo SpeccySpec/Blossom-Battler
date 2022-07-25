@@ -2402,6 +2402,8 @@ commands.obtainitems = new Command({
                         itemCollector[i] = '-'
                     }
                     if (itemCollector[i][0] == 'weapon' || itemCollector[i][0] == 'armor') {
+						if (!team[itemCollector[i][0]+'s']) team[itemCollector[i][0]+'s'] = {};
+
                         if (team[itemCollector[i][0]+'s'][itemCollector[i][1]]) {
                             itemErrors.push(`${itemCollector[i][1]} is already in the party.`)
                             itemCollector[i] = '-'
