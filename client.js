@@ -25,17 +25,17 @@ client = new Discord.Client({
 dataPath = './data'
 
 // Path to 'packages' folder
-packPath = './Packages'
+packPath = './packages'
 
 // Bot Stuff
-utilityFuncs = require(packPath + '/utilityFuncs.js');
-charFuncs = require(packPath + '/charFuncs.js');
-enemyFuncs = require(packPath + '/enemyFuncs.js');
-attackFuncs = require(packPath + '/attackFuncs.js');
-turnFuncs = require(packPath + '/turnFuncs.js');
-skillFuncs = require(packPath + '/skillFuncs.js');
+utilityFuncs = require(packPath + '/utilityFuncs');
+charFuncs = require(packPath + '/charFuncs');
+enemyFuncs = require(packPath + '/enemyFuncs');
+attackFuncs = require(packPath + '/attackFuncs');
+turnFuncs = require(packPath + '/turnFuncs');
+skillFuncs = require(packPath + '/skillFuncs');
 
-RF = require(packPath + '/relicFuncs.js');
+RF = require(packPath + '/relicFuncs');
 
 //Canvas, for making custom pictures.
 Canvas = require('canvas');
