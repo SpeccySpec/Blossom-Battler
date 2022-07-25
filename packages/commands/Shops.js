@@ -103,6 +103,11 @@ class Shop {
 		this.shop = shop
 		this.party = party
 		openshops[this.id] = this
+		this.shopList = makeList(this.shop.items.map(({type, cost, item, desc}) => ({
+			label: `${item} (Costs ${cost})`,
+			description: desc?.slice(0, 100) ?? "No description provided.",
+			value: `${item}-${type}s-${cost}`
+		})), "buy2", "Choose the items to buy")
 	}
 
 	startup(message) {
@@ -149,11 +154,7 @@ class Shop {
 			title: `What will you buy?`,
 			description: `Choose using the list below.\nYou have **${this.party.currency}${setUpSettings(this.channel.guild.id).currency_emoji ?? '<:token:981579648993460355>'}** at the moment.`
 		}, [
-			makeList(this.shop.items.map(({cost, item, desc}) => ({
-				label: `${item} (Costs ${cost})`,
-				description: desc?.slice(0, 100) ?? "No description provided.",
-				value: `${item}-${cost}`
-			})), "buy2", "Choose the items to buy")
+			this.shopList
 		], [
 			makeButton('Back', '◀️', 'grey', null, "main")
 		])
@@ -161,10 +162,43 @@ class Shop {
 
 	buy2(i) {
 		let cost = 0
-		for (const rawitemdata of i.values) {
-			const itemdata = rawitemdata.split("-")
+		const stuff = {
+			items: [],
+			armors: [],
+			weapons: []
 		}
-
+		for (const rawitemdata of i.values) {
+			const item = rawitemdata.split("-")
+			cost += parseInt(item.pop())
+			stuff[item.pop()].push(item.join("-"))
+		}
+		if (cost > this.party.currency)
+			return this.setupEmbed({
+				title: "You can't afford that!",
+				description: `The selected items costed **${cost}** while you have **${this.party.currency}${setUpSettings(this.channel.guild.id).currency_emoji ?? '<:token:981579648993460355>'}** at the moment.`
+			}, [
+				this.shopList
+			], [
+				makeButton('Back', '◀️', 'grey', null, "main")
+			])
+		this.party.currency -= cost
+		const partyitems = this.party.items
+		for (const item of stuff.items) {
+			if (!partyitems[item])
+				partyitems[item] = 1
+			else
+				partyitems[item] += 1
+		}
+		let parties = setUpFile(`${dataPath}/json/${i.message.guild.id}/parties.json`)
+		fs.writeFileSync(`${dataPath}/json/${i.message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
+		return this.setupEmbed({
+			title: "Items bought!",
+			description: `The selected items costed **${cost}**, so now you have **${this.party.currency}${setUpSettings(this.channel.guild.id).currency_emoji ?? '<:token:981579648993460355>'}** at the moment.`
+		}, [
+			this.shopList
+		], [
+			makeButton('Back', '◀️', 'grey', null, "main")
+		])
 	}
 
 	exit() {

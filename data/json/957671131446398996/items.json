@@ -41,5 +41,13 @@
         "originalAuthor": "441198920668938260",
         "desc": "Sky we love your energy",
         "healmp": 99999
+    },
+    "Test-boi": {
+        "name": "Test-boi",
+        "rarity": "common",
+        "cost": 99999,
+        "type": "heal",
+        "originalAuthor": "621307633718132746",
+        "heal": 1
     }
 }
