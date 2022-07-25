@@ -860,7 +860,7 @@ commands.registerweapon = new Command({
         },
         {
             name: "Currency Cost",
-            type: "Number",
+            type: "Num",
             forced: true
         },
         {
@@ -875,17 +875,17 @@ commands.registerweapon = new Command({
         },
         {
             name: "Melee Power",
-            type: "Number",
+            type: "Num",
             forced: true
         },
         {
             name: "ATK Buff",
-            type: "Number",
+            type: "Num",
             forced: true
         },
         {
             name: "MAG Buff",
-            type: "Number",
+            type: "Num",
             forced: true
         },
         {
@@ -1410,7 +1410,7 @@ commands.registerarmor = new Command({
         },
         {
             name: "Currency Cost",
-            type: "Number",
+            type: "Num",
             forced: true
         },
         {
@@ -1425,7 +1425,7 @@ commands.registerarmor = new Command({
         },
         {
             name: "END Buff",
-            type: "Number",
+            type: "Num",
             forced: true
         },
         {
