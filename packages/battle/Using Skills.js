@@ -745,6 +745,11 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 				targ.hp = Math.max(0, targ.hp-total);
 
+				// Keep the last damage i took.
+				if (!targ.lastdmg) targ.lastdmg = [];
+				targ.lastdmg.unshift(total);
+
+				// Death.
 				if (targ.hp <= 0) {
 					result.txt += `${dmgTxt} damage and was defeated!_`;
 
