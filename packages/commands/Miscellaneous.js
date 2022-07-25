@@ -18,7 +18,9 @@ const categories = {
 }
 
 const aliases = {
-	miscellaneous: "misc"	
+	miscellaneous: "misc",
+	mod: "moderation",
+	chars: "characters"
 }
 
 async function sendHelp(message, commandsInCategories) {

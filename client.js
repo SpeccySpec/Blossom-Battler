@@ -1117,7 +1117,7 @@ client.on("guildCreate", (guild) => {
 	if (!channel) return console.log('Where should I post?');
 		
 	//send an image, and then the embed
-	channel.send({files: [`${dataPath}/images/welcome.png`]})
+	channel.send({files: [`${dataPath}/images/Welcome.png`]})
 		.then(() => channel.send({embeds: [DiscordEmbed]}))
 })
 
@@ -1130,9 +1130,10 @@ client.on("messageCreate", (message) => {
 
 	// Register commands
 	prefix = getPrefix(message.guild.id)
-	if (!message.content.startsWith(prefix)) return;
+	const content = message.content.toLowerCase()
+	if (!content.startsWith(prefix)) return;
 
-	let args = [...message.content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
+	let args = [...content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
 	if (args.length == 0) return;
 
 	let command = commands[args[0]];
