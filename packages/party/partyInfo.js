@@ -95,7 +95,7 @@ partyDesc = (party, message) => {
 	if (party.armors) {
 		for (const i in party.armors) {
 			let armorDefs = party.armors[i];
-			armor += `${elementEmoji[armorDefs.element]} ${i} - **${armorDefs.def ? armorDefs.def : '0'}DEF**\n`;
+			armor += `${elementEmoji[armorDefs.element]} ${i} - **${armorDefs.end ? armorDefs.end : '0'}DEF**\n`;
 		}
 	}
 
