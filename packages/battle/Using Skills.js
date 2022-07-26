@@ -887,6 +887,13 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	let settings = setUpSettings(btl.guild.id);
 	let skill = objClone(forceskill) ?? objClone(skillFile[act.index]);
 
+	// Enemies should learn the skills we use.
+	for (let i in btl.teams) {
+		for (let k in btl.teams[i].members) {
+			if (char.id != btl.teams[i].members[k].id) recogniseSkill(btl.teams[i].members[k], char, skill);
+		}
+	}
+
 	// Hardcode some metronome and copyskill bs
 	if (skill.extras?.metronome) {
 		let possible = [];

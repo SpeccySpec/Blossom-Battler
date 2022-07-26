@@ -4,6 +4,7 @@ isBoss = (f) => {
 	return (f.type.includes('boss') || f.type.includes('deity'));
 }
 
+// Learn the affinities of using this skill.
 learnAffinity = (char, targ, skill) => {
 	let a = getAffinity(targ, skill.type);
 	
@@ -12,6 +13,10 @@ learnAffinity = (char, targ, skill) => {
 	char.affinitycheck[targ.id][a].push(skill.type)
 
 	return char.affinitycheck[targ.id];
+}
+
+// Recognise skill.
+recogniseSkill = (char, targ, skill) => {
 }
 
 // Status effects points.
@@ -86,6 +91,7 @@ enemyThinker = (char, btl) => {
 					// Trap: -2 point
 
 					// Chaos Stir: -2 points
+					// Mirror Status: -4 points if magic, +4 points if physical or ranged
 
 					// Hard Mode must discover affinities first.
 					char.affinitycheck = {};
@@ -252,6 +258,9 @@ enemyThinker = (char, btl) => {
 
 									if (t.custom?.trap && !skill.extras?.brickbreak && !skill.extras?.feint) act.points--;
 									if (t.custom?.chaosstir) act.points -= 2;
+
+									// Mirror status
+									if (t.status && t.status == 'mirror') act.points += (skill.atktype === "magic" ? -4 : 4);
 								}
 						}
 
