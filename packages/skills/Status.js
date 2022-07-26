@@ -130,7 +130,7 @@ statusList = {
 					if (vars[2] < 0) 
 						act.points -= btl.teams[char.team].length*2;
 					else {
-						for (let ally of btl.teams[char.team]) {
+						for (let ally of btl.teams[char.team].members) {
 							if (ally.buffs[vars[1]]+vars[2] >= 3) {
 								act.points -= 3;
 							} else {
@@ -142,7 +142,7 @@ statusList = {
 					if (vars[2] > 0) 
 						act.points -= 4;
 					else {
-						for (let ally of btl.teams[char.team]) {
+						for (let ally of btl.teams[char.team].members) {
 							if (ally.buffs[vars[1]]+vars[2] >= 3) {
 								act.points -= 3;
 							} else {
