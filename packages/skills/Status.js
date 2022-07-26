@@ -1,3 +1,16 @@
+let st = {
+	allallies: 'ally',
+	allopposing: 'one',
+	everyone: 'one',
+	spreadopposing: 'one',
+	spreadallies: 'ally'
+}
+
+forceSingleTarget = (skill) => {
+	if (st[skill.target]) skill.target = st[skill.target];
+	return skill;
+}
+
 statusList = {
 	status: new Extra({
 		name: 'Status',
@@ -189,8 +202,7 @@ statusList = {
 		desc: "Swaps the target's stat changes with the user's.",
 		args: [],
 		applyfunc(message, skill, args) {
-			if (skill.target === 'allallies' || skill.target === 'allopposing') skill.target = 'one';
-
+			forceSingleTarget(skill);
 			makeStatus(skill, "heartswap", [true]);
 			return true;
 		},
