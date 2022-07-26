@@ -183,81 +183,18 @@ enemyThinker = (char, btl) => {
 									}
 								}
 								
-								// Alright time for other shit
+								// AIThinker Hook
 								if (skill.statusses) {
-									// Buffs
-									if (skill.statusses.buff && char.hp >= 2*char.maxhp/3) {
-										for (let vars of skill.statusses.buff) {
-											if (vars[0] === 'user') {
-												if (vars[2] < 0) 
-													act.points--;
-												else {
-													if (char.buffs[vars[1]]+vars[2] >= 3) {
-														act.points -= 3;
-													} else {
-														act.points += 3-char.buffs[vars[1]];
-													}
-												}
-											} else {
-												if (skill.target === 'ally' || skill.target === 'spreadallies') {
-													if (vars[2] < 0) 
-														act.points -= 2;
-													else {
-														if (targ.buffs[vars[1]]+vars[2] >= 3) {
-															act.points -= 3;
-														} else {
-															act.points += 3-targ.buffs[vars[1]];
-														}
-													}
-												} else if (skill.target === 'allallies') {
-													if (vars[2] < 0) 
-														act.points -= btl.teams[char.team].length*2;
-													else {
-														for (let ally of btl.teams[char.team]) {
-															if (ally.buffs[vars[1]]+vars[2] >= 3) {
-																act.points -= 3;
-															} else {
-																act.points += 3-ally.buffs[vars[1]];
-															}
-														}
-													}
-												} else {
-													if (vars[2] > 0) 
-														act.points -= 4;
-													else {
-														for (let ally of btl.teams[char.team]) {
-															if (ally.buffs[vars[1]]+vars[2] >= 3) {
-																act.points -= 3;
-															} else {
-																act.points += 3-ally.buffs[vars[1]];
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-									
-									// Dekunda
-									if (skill.statusses.dekunda) {
-										switch(skill.target) {
-											case 'allopposing':
-												for (let team of btl.teams) {
-													if (team === char.team) continue;
-													
-													for (let opp of team.members) {
-														for (let i in opp.buffs) {
-															if (opp.buffs[i] > 0) act.points += opp.buffs[i];
-														}
-													}
-												}
-												break;
+									for (let i in skill.statusses) {
+										if (!statusList[i]) continue;
+										if (!statusList[i].aithinker) continue;
 
-											case 'one':
-												for (let i in targ.buffs) {
-													if (targ.buffs[i] > 0) act.points += targ.buffs[i];
-												}
-												break;
+										if (statusList[i].multiple) {
+											for (let k in skill.statusses[i]) {
+												statusList[i].aithinker(char, targ, act, skill, btl, skill.statusses[i][k]);
+											}
+										} else {
+											statusList[i].aithinker(char, targ, act, skill, btl, skill.statusses[i]);
 										}
 									}
 								}
