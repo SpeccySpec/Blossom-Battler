@@ -1354,6 +1354,7 @@ statusEffectFuncs = {
 			return `${char.name} took ${dmg}${affinityTxt} damage from their burns!`
 		},
 		statmod: function(char, stats) {
+			if (isBoss(char)) return stats;
 			if (hasStatusAffinity(char, 'burn', 'weak')) {
 				stats.atk /= 4;
 			} else if (hasStatusAffinity(char, 'burn', 'resist')) {
@@ -1386,6 +1387,8 @@ statusEffectFuncs = {
 			return `${char.name} took ${dmg}${affinityTxt} damage from their poison!`;
 		},
 		statmod: function(char, stats) {
+			if (isBoss(char)) return stats;
+
 			if (hasStatusAffinity(char, 'poison', 'weak')) {
 				stats.mag /= 4;
 			} else if (hasStatusAffinity(char, 'poison', 'resist')) {
@@ -1429,13 +1432,22 @@ statusEffectFuncs = {
 				char.statusturns = 1;
 		},
 		onturn: function(btl, char) {
+			if (isBoss(char)) {
+				delete char.status;
+				delete char.statuschance;
+				return `${char.name} thaws out!`;
+			}
+
 			let chance = 100;
 			if (hasStatusAffinity(char, 'freeze', 'resist')) chance = 50;
 
 			if (randNum(1, 100) <= chance)
 				return [`${char.name} is frozen, losing their turn!`, false];
-			else 
+			else {
+				delete char.status;
+				delete char.statuschance;
 				return `${char.name} thaws out!`;
+			}
 		}
 	},
 
@@ -1456,6 +1468,12 @@ statusEffectFuncs = {
 			delete char.parachance
 		},
 		onturn: function(btl, char) {
+			if (isBoss(char)) {
+				delete char.status;
+				delete char.statuschance;
+				return `${char.name} shook off the paralysis.`;
+			}
+
 			if (randNum(1, 100) <= char.parachance) {
 				char.parachance /= 2;
 				return [`${char.name} is stopped in their tracks by paralysis, losing their turn!`, false];
@@ -1467,6 +1485,12 @@ statusEffectFuncs = {
 
 	sleep: {
 		onturn: function(btl, char) {
+			if (isBoss(char)) {
+				delete char.status;
+				delete char.statuschance;
+				return `${char.name} woke up!`;
+			}
+
 			let hp = Math.round(char.maxhp/20);
 			let mp = Math.round(char.maxmp/20);
 			if (hasStatusAffinity(char, 'sleep', 'resist')) {
