@@ -440,11 +440,11 @@ extrasList = {
 			return extrasList.buff.buffChange(targ, skill, btl, vars);
 		},
 		buffChange(targ, skill, btl, vars) {
-			const stat = vars[1].toLowerCase()
-			const amount = vars[2]
-			const absamount = Math.abs(amount)
-			const chance = vars[3]
-			const turns = vars[4]
+			const stat = vars[1];
+			const amount = vars[2];
+			const absamount = Math.abs(amount);
+			const chance = vars[3];
+			const turns = vars[4];
 			if (stat == "all") {
 				const buffChange = extrasList.buff.buffChange
 				const target = vars[0]
