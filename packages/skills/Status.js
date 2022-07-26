@@ -189,6 +189,8 @@ statusList = {
 		desc: "Swaps the target's stat changes with the user's.",
 		args: [],
 		applyfunc(message, skill, args) {
+			if (skill.target === 'allallies' || skill.target === 'allopposing') skill.target = 'one';
+
 			makeStatus(skill, "heartswap", [true]);
 			return true;
 		},
@@ -199,6 +201,11 @@ statusList = {
 			targ.buffs = objClone(charbuffs);
 
 			return `__${char.name}__'s buffs were switched with __${targ.name}__!`;
+		},
+		aithinker(char, targ, act, skill, btl) {
+			for (let i in targ.buffs) {
+				if (targ.buffs[i] > char.buffs[i]) act.points += targ.buffs[i]-char.buffs[i];
+			}
 		},
 		getinfo(vars) {
 			return "Swaps user's **stat chances** with the target's"
