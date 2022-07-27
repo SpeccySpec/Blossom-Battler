@@ -204,13 +204,40 @@ class Shop {
 			])
 		this.party.currency -= cost
 		const partyitems = this.party.items
-		for (const item of stuff.items) {
+		for (const item of stuff.items)
 			if (!partyitems[item])
 				partyitems[item] = 1
 			else
 				partyitems[item] += 1
-		}
-		let parties = setUpFile(`${dataPath}/json/${i.message.guild.id}/parties.json`)
+		const armors = setUpFile(`${dataPath}/json/${i.message.guild.id}/armors.json`)
+		const partyarmors = this.party.armors
+		for (const armor of stuff.armors)
+			if (!partyarmors[armor])
+				partyarmors[armor] = armors[armor]
+			else
+				return this.setupEmbed({
+					title: `You already have ${armor}!`,
+					description: `You cannot have 2 identical armors.\nYou have **${this.party.currency}${setUpSettings(this.channel.guild.id).currency_emoji ?? '<:token:981579648993460355>'}** at the moment.`
+				}, [
+					this.shopList
+				], [
+					makeButton('Back', '◀️', 'grey', null, "main")
+				])
+		const weapons = setUpFile(`${dataPath}/json/${i.message.guild.id}/weapons.json`)
+		const partyweapons = this.party.weapons
+		for (const weapon of stuff.weapons)
+			if (!partyweapons[weapon])
+				partyweapons[weapon] = weapons[weapon]
+			else
+				return this.setupEmbed({
+					title: `You already have ${weapon}!`,
+					description: `You cannot have 2 identical weapons.\nYou have **${this.party.currency}${setUpSettings(this.channel.guild.id).currency_emoji ?? '<:token:981579648993460355>'}** at the moment.`
+				}, [
+					this.shopList
+				], [
+					makeButton('Back', '◀️', 'grey', null, "main")
+				])
+		const parties = setUpFile(`${dataPath}/json/${i.message.guild.id}/parties.json`)
 		fs.writeFileSync(`${dataPath}/json/${i.message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
 		return this.setupEmbed({
 			title: "Items bought!",
