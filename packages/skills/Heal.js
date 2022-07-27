@@ -65,7 +65,13 @@ healList = {
 			return '';
 		},
 		getinfo(vars) {
-			return `Heals around **${vars[0]} ${vars[1].toUpperCase()}**`
+			let healType = vars[1];
+
+			if (healType.includes('percent')) healType = '% of target\'s ' + healType.replace('percent', '').toUpperCase();
+			else if (healType.includes('lb')) healType = '% LB';
+			else healType = ` ${healType.toUpperCase()}`;
+			
+			return `Restores around **${vars[0]}${healType}**`
 		}
 	}),
 
