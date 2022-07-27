@@ -627,6 +627,9 @@ commands.updateskills = new Command({
 					} else if (skillFile[skill].heal.healmp) {
 						skillFile[skill].heal.healstat = [skillFile[skill].heal.healmp[0], "mp"];
 						delete skillFile[skill].heal.healmp;
+					} else if (skillFile[skill].heal.fullheal) {
+						skillFile[skill].heal.healstat = [100, "hppercent"];
+						delete skillFile[skill].heal.fullheal;
 					}
 				} else {
 					skillFile[skill].heal = {};
