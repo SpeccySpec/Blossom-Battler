@@ -265,6 +265,49 @@ class Shop {
 		}, true)
 	}
 
+	talk(_, title = "What will you talk about?", description = "Choose one of the 5 options below") {
+		const dialogues = this.shop.dialogues
+		const title1 = dialogues[0]?.title ?? "This message should never appear, lol"
+		const title2 = dialogues[1]?.title ?? "None"
+		const title3 = dialogues[2]?.title ?? "None"
+		const title4 = dialogues[3]?.title ?? "None"
+		const title5 = dialogues[4]?.title ?? "None"
+		return this.setupEmbed({title, description}, [
+			makeButton(title1, statusEmojis.silence, "blue", null, "talk1", !dialogues[0]),
+			makeButton(title2, statusEmojis.silence, "blue", null, "talk2", !dialogues[1]),
+			makeButton(title3, statusEmojis.silence, "blue", null, "talk3", !dialogues[2]),
+			makeButton(title4, statusEmojis.silence, "blue", null, "talk4", !dialogues[3]),
+			makeButton(title5, statusEmojis.silence, "blue", null, "talk5", !dialogues[4])
+		], [
+			makeButton('Back', '◀️', 'grey', null, "main")
+		])
+	}
+
+	talk1() {
+		const dialogue = this.shop.dialogues[0]
+		return this.talk(null, dialogue.title, dialogue.text)
+	}
+
+	talk2() {
+		const dialogue = this.shop.dialogues[1]
+		return this.talk(null, dialogue.title, dialogue.text)
+	}
+
+	talk3() {
+		const dialogue = this.shop.dialogues[2]
+		return this.talk(null, dialogue.title, dialogue.text)
+	}
+
+	talk4() {
+		const dialogue = this.shop.dialogues[3]
+		return this.talk(null, dialogue.title, dialogue.text)
+	}
+
+	talk5() {
+		const dialogue = this.shop.dialogues[4]
+		return this.talk(null, dialogue.title, dialogue.text)
+	}
+
 	exit() {
 		openshops[this.id] = undefined
 		return this.setupEmbed({
@@ -313,8 +356,53 @@ commands.getshop = new Command({
 	}
 })
 
+commands.addshopdialogue = new Command({
+	desc: "Adds a dialogue in the given shop, the title must be at most 80 chars long while the text must be at most 4096 chars long.",
+	args: [
+		{
+			name: "Shop name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Channel",
+			type: "RealChannel",
+			forced: true
+		},
+		{
+			name: "Dialogue title",
+			type: "Word",
+			forced: true,
+		},
+		{
+			name: "Dialogue text",
+			type: "Word",
+			forced: true,
+		}
+	],
+	section: "shops",
+	checkban: true,
+	admin: "Only admins can add dialogue to shops!",
+	func(message, args) {
+		const trueName = args[0].toLowerCase()
+		const shopid = args[1].id
+		const shopPath = `${dataPath}/json/${message.guild.id}/${shopid}/shops.json`
+		const shopData = setUpFile(shopPath)
+		const shop = shopData[trueName]
+		if (!shop)
+			return void message.channel.send(`A shop with the ID of ${trueName} does not exist!`)
+		if (!shop.dialogues)
+			shop.dialogues = []
+		if (shop.dialogues.length >= 5)
+			return void message.channel.send("A shop can't have more than 5 dialogues!")
+		shop.dialogues.push({title: args[2].slice(0, 80), text: args[3].slice(0, 4096)})
+		fs.writeFileSync(shopPath, JSON.stringify(shopData, '	', 4))
+		message.react('👍')
+	}
+})
+
 commands.setshopcolor = new Command({
-	desc: "Sets the color of the shop, supports either #RRGGBB or element names.",
+	desc: "Sets the color of the given shop, supports either #RRGGBB or element names.",
 	args: [
 		{
 			name: "Shop name",
