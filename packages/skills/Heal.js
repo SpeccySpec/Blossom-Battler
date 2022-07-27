@@ -64,7 +64,9 @@ healList = {
 
 			return '';
 		},
-		hardcodedinfo: true
+		getinfo(vars) {
+			return `Heals around **${vars[0]} ${vars[1].toUpperCase()}**`
+		}
 	}),
 
 	regenerate: new Extra({

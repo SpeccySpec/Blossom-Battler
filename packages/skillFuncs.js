@@ -137,8 +137,6 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 		else {
 			if (skillDefs.type != "heal")
 				finalText += `Has **${skillDefs.pow}** Power.`;
-			else 
-				finalText += skillDefs.heal.default ? `Heals around **${skillDefs.heal.default[0]} ${skillDefs.heal.default[1].toUpperCase()}**.` : ''
 		}
 
 		if (skillDefs.hits && skillDefs.hits > 1 && skillDefs.type != "heal" && !hasExtra(skillDefs, 'ohko')) 
