@@ -1,3 +1,16 @@
+let st = {
+	allallies: 'ally',
+	allopposing: 'one',
+	everyone: 'one',
+	spreadopposing: 'one',
+	spreadallies: 'ally'
+}
+
+forceSingleTarget = (skill) => {
+	if (st[skill.target]) skill.target = st[skill.target];
+	return skill;
+}
+
 statusList = {
 	status: new Extra({
 		name: 'Status',
@@ -91,6 +104,55 @@ statusList = {
 		onuse(char, targ, skill, btl, vars) {
 			return extrasList.buff.onuse(char, targ, skill, btl, vars);
 		},
+		aithinker(char, targ, act, skill, btl, vars) {
+			if (vars[0] === 'user') {
+				if (vars[2] < 0) 
+					act.points--;
+				else {
+					if (char.buffs[vars[1]]+vars[2] >= 3) {
+						act.points -= 3;
+					} else {
+						act.points += 3-char.buffs[vars[1]];
+					}
+				}
+			} else {
+				if (skill.target === 'ally' || skill.target === 'spreadallies') {
+					if (vars[2] < 0) 
+						act.points -= 2;
+					else {
+						if (targ.buffs[vars[1]]+vars[2] >= 3) {
+							act.points -= 3;
+						} else {
+							act.points += 3-targ.buffs[vars[1]];
+						}
+					}
+				} else if (skill.target === 'allallies') {
+					if (vars[2] < 0) 
+						act.points -= btl.teams[char.team].length*2;
+					else {
+						for (let ally of btl.teams[char.team].members) {
+							if (ally.buffs[vars[1]]+vars[2] >= 3) {
+								act.points -= 3;
+							} else {
+								act.points += 3-ally.buffs[vars[1]];
+							}
+						}
+					}
+				} else {
+					if (vars[2] > 0) 
+						act.points -= 4;
+					else {
+						for (let ally of btl.teams[char.team].members) {
+							if (ally.buffs[vars[1]]+vars[2] >= 3) {
+								act.points -= 3;
+							} else {
+								act.points += 3-ally.buffs[vars[1]];
+							}
+						}
+					}
+				}
+			}
+		},
 		getinfo: buffText
 	}),
 
@@ -109,6 +171,27 @@ statusList = {
 
 			return `__${targ.name}__'s positive buffs were nullified!`;
 		},
+		aithinker(char, targ, act, skill, btl) {
+			switch(skill.target) {
+				case 'allopposing':
+					for (let team of btl.teams) {
+						if (team === char.team) continue;
+						
+						for (let opp of team.members) {
+							for (let i in opp.buffs) {
+								if (opp.buffs[i] > 0) act.points += opp.buffs[i];
+							}
+						}
+					}
+					break;
+
+				case 'one':
+					for (let i in targ.buffs) {
+						if (targ.buffs[i] > 0) act.points += targ.buffs[i];
+					}
+					break;
+			}
+		},
 		getinfo(vars) {
 			return "Removes the target's buffs"
 		}
@@ -119,6 +202,7 @@ statusList = {
 		desc: "Swaps the target's stat changes with the user's.",
 		args: [],
 		applyfunc(message, skill, args) {
+			forceSingleTarget(skill);
 			makeStatus(skill, "heartswap", [true]);
 			return true;
 		},
@@ -129,6 +213,11 @@ statusList = {
 			targ.buffs = objClone(charbuffs);
 
 			return `__${char.name}__'s buffs were switched with __${targ.name}__!`;
+		},
+		aithinker(char, targ, act, skill, btl) {
+			for (let i in targ.buffs) {
+				if (targ.buffs[i] > char.buffs[i]) act.points += targ.buffs[i]-char.buffs[i];
+			}
 		},
 		getinfo(vars) {
 			return "Swaps user's **stat chances** with the target's"
@@ -1265,6 +1354,7 @@ statusEffectFuncs = {
 			return `${char.name} took ${dmg}${affinityTxt} damage from their burns!`
 		},
 		statmod: function(char, stats) {
+			if (isBoss(char)) return stats;
 			if (hasStatusAffinity(char, 'burn', 'weak')) {
 				stats.atk /= 4;
 			} else if (hasStatusAffinity(char, 'burn', 'resist')) {
@@ -1297,6 +1387,8 @@ statusEffectFuncs = {
 			return `${char.name} took ${dmg}${affinityTxt} damage from their poison!`;
 		},
 		statmod: function(char, stats) {
+			if (isBoss(char)) return stats;
+
 			if (hasStatusAffinity(char, 'poison', 'weak')) {
 				stats.mag /= 4;
 			} else if (hasStatusAffinity(char, 'poison', 'resist')) {
@@ -1340,13 +1432,22 @@ statusEffectFuncs = {
 				char.statusturns = 1;
 		},
 		onturn: function(btl, char) {
+			if (isBoss(char)) {
+				delete char.status;
+				delete char.statuschance;
+				return `${char.name} thaws out!`;
+			}
+
 			let chance = 100;
 			if (hasStatusAffinity(char, 'freeze', 'resist')) chance = 50;
 
 			if (randNum(1, 100) <= chance)
 				return [`${char.name} is frozen, losing their turn!`, false];
-			else 
+			else {
+				delete char.status;
+				delete char.statuschance;
 				return `${char.name} thaws out!`;
+			}
 		}
 	},
 
@@ -1367,6 +1468,12 @@ statusEffectFuncs = {
 			delete char.parachance
 		},
 		onturn: function(btl, char) {
+			if (isBoss(char)) {
+				delete char.status;
+				delete char.statuschance;
+				return `${char.name} shook off the paralysis.`;
+			}
+
 			if (randNum(1, 100) <= char.parachance) {
 				char.parachance /= 2;
 				return [`${char.name} is stopped in their tracks by paralysis, losing their turn!`, false];
@@ -1378,6 +1485,12 @@ statusEffectFuncs = {
 
 	sleep: {
 		onturn: function(btl, char) {
+			if (isBoss(char)) {
+				delete char.status;
+				delete char.statuschance;
+				return `${char.name} woke up!`;
+			}
+
 			let hp = Math.round(char.maxhp/20);
 			let mp = Math.round(char.maxmp/20);
 			if (hasStatusAffinity(char, 'sleep', 'resist')) {

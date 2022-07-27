@@ -144,8 +144,8 @@ genDmg = (char, targ, btl, skill) => {
 	let settings = setUpSettings(btl.guild.id);
 
 	// Status Effect StatMod.
-	let charStats = (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].statmod) ? statusEffectFuncs[char.status].statmod(char, char.stats) : objClone(char.stats);
-	let targStats = (targ.status && statusEffectFuncs[targ.status] && statusEffectFuncs[targ.status].statmod) ? statusEffectFuncs[targ.status].statmod(targ, targ.stats) : objClone(targ.stats);
+	let charStats = (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].statmod) ? statusEffectFuncs[char.status].statmod(char, objClone(char.stats)) : objClone(char.stats);
+	let targStats = (targ.status && statusEffectFuncs[targ.status] && statusEffectFuncs[targ.status].statmod) ? statusEffectFuncs[targ.status].statmod(targ, objClone(targ.stats)) : objClone(targ.stats);
 
 	// Weather StatMod.
 	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].statmod) {
@@ -216,6 +216,8 @@ getAffinity = (char, skillType) => {
 			return 'repel';
 	}
 
+	if (!char.affinities) return 'normal';
+
 	if (typeof skillType === 'object') {
 		skillType = skillType.filter((_, index) => _ != "almighty");
 		console.log(skillType)
@@ -228,6 +230,8 @@ getAffinity = (char, skillType) => {
 
 		if (typeof skillType === 'string') {
 			for (const i in affinities) {
+				if (!char.affinities[affinities[i]]) continue;
+
 				for (const k in char.affinities[affinities[i]]) {
 					if (char.affinities[affinities[i]][k] == skillType)
 						affinity = affinities[i];
@@ -886,6 +890,13 @@ let trustQuotes = [
 useSkill = (char, btl, act, forceskill, ally) => {
 	let settings = setUpSettings(btl.guild.id);
 	let skill = objClone(forceskill) ?? objClone(skillFile[act.index]);
+
+	// Enemies should learn the skills we use.
+	for (let i in btl.teams) {
+		for (let k in btl.teams[i].members) {
+			if (char.id != btl.teams[i].members[k].id) recogniseSkill(btl.teams[i].members[k], char, skill);
+		}
+	}
 
 	// Hardcode some metronome and copyskill bs
 	if (skill.extras?.metronome) {
