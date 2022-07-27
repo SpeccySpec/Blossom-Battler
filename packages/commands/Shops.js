@@ -138,12 +138,16 @@ class Shop {
 	}
 
 	main() {
+		const cansell = (!this.shop.cansell)
+			|| (Object.keys(this.party.items).length == 0
+			&& Object.keys(this.party.armors).length == 0
+			&& Object.keys(this.party.weapons).length == 0)
 		return this.setupEmbed({
 			title: `Welcome to ${this.shop.name}!`,
 			description: "What will you do here?"
 		}, [
 			makeButton("Buy", "👜", "green", null, null, this.shop.items.length == 0),
-			makeButton("Sell", "<:token:981579648993460355>", "gray", null, null, this.party.items != 0),
+			makeButton("Sell", "<:token:981579648993460355>", "gray", null, null, cansell),
 			makeButton("Talk", statusEmojis.silence, "blue", null, null, !this.shop.dialogues?.length > 0),
 			makeButton("Exit", "<:boot:995268449154629699>", "red")
 		])
