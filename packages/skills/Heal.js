@@ -10,7 +10,7 @@ healList = {
 			},
 			{
 				name: "Meter",
-				type: "Num",
+				type: "Word",
 				forced: true
 			}
 		],
