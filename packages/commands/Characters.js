@@ -2103,7 +2103,7 @@ selectQuote = (char, quote, neverEmpty, ...rep) => {
 	let q = char.quotes[`${quote}quote`][randQuote];
 	if (rep && rep.length > 1) q = replaceTxt(q, ...rep);
 
-	return `_${char.name}: "${q}"_`;
+	return `_${char.name}: "${q}"_\n`;
 }
 
 commands.setquote = new Command({

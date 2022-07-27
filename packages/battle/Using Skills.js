@@ -53,7 +53,7 @@ isPhysicalStatus = (status) => {
 // im lazy
 dodgeTxt = (char, targ) => {
 	if (targ) {
-		return `${targ.name} dodged it!\n${selectQuote(targ, 'dodge', null, "%ENEMY%", char.name)}\n${selectQuote(char, 'miss', null, "%ENEMY%", char.name)}`;
+		return `${targ.name} dodged it!\n${selectQuote(targ, 'dodge', null, "%ENEMY%", char.name)}${selectQuote(char, 'miss', null, "%ENEMY%", char.name)}`;
 	} else {
 		return `${char.name} dodged it!\n${selectQuote(char, 'dodge', null, "%ENEMY%", "them")}`;
 	}
@@ -444,7 +444,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 		// noRepel used here to change repelled attacks into a block.
 		if (affinity == 'block' || (affinity == 'repel' && noRepel)) {
-			result.txt += `${targ.name} blocked it!\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}\n${selectQuote(targ, 'block', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
+			result.txt += `${targ.name} blocked it!\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'block', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 			return result;
 		} else if (affinity == 'repel' && !noRepel) {
 			skill.acc = 999; // Never miss a repel - just to be flashy :D
@@ -454,7 +454,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			result.oneMore = newResults.oneMore;
 			result.teamCombo = newResults.teamCombo;
 
-			result.txt += `${selectQuote(targ, 'repel', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}\n${targ.name} repelled it!\n${newResults.txt}`;
+			result.txt += `${selectQuote(targ, 'repel', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}${targ.name} repelled it!\n${newResults.txt}`;
 			return result;
 		// reminder that physical shields repel physical/ranged and magic ones repel magic.
 		} else if (shieldtype && !noRepel) {
@@ -477,7 +477,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					result.teamCombo = newResults.teamCombo;
 
 					// done.
-					result.txt += `${selectQuote(targ, 'repel', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}\n__${targ.name}__'s _${targ.custom.shield.name ?? 'Shield'}_ repelled the attack!\n${newResults.txt}\n_${targ.custom.shield.name ?? 'Shield'}_ has broken.`;
+					result.txt += `${selectQuote(targ, 'repel', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}__${targ.name}__'s _${targ.custom.shield.name ?? 'Shield'}_ repelled the attack!\n${newResults.txt}\n_${targ.custom.shield.name ?? 'Shield'}_ has broken.`;
 
 					// Let's get rid of this shield
 					delete targ.custom.shield;
@@ -726,7 +726,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				if (damages.length > 1) result.txt += ` **(${totalHits} hits, ${total} Total)**`;
 				targ.hp = Math.min(targ.maxhp, targ.hp+total);
 
-				result.txt += `\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}\n${selectQuote(targ, 'drain', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
+				result.txt += `\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'drain', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 			} else {
 				result.txt += `__${targ.name}__ took _`
 				for (let i in damages) {
@@ -1047,9 +1047,9 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	if (skill.type === 'heal') quotetype = 'heal';
 	if (skill.limitbreak) quotetype = 'lb';
 	if (skill.teamcombo) quotetype = 'tc';
-	let finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}\n`;
+	let finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}`;
 	if (ally && ally.quotes) {
-		finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}\n${selectQuote(ally, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}\n`;
+		finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}${selectQuote(ally, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}`;
 	}
 
 	// Trust
@@ -1196,7 +1196,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 				let DiscordEmbed = new Discord.MessageEmbed()
 					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 					.setTitle(targTxt)
-					.setDescription(finalText)
+					.setDescription(finalText.replace(/\n{3,}/, () => "\n\n"))
 				return btl.channel.send({embeds: [DiscordEmbed]});
 			}
 		}
@@ -1208,7 +1208,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 		skillDefs.pow *= targets[i][1];
 
 		let result = attackWithSkill(char, targ, skillDefs, btl);
-		finalText += `${result.txt}\n`;
+		finalText += `${result.txt}`;
 
 		if (result.oneMore) btl.doonemore = true;
 		if (result.teamCombo) btl.canteamcombo = true;
@@ -1286,10 +1286,11 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	}
 
 	// Now, send the embed!
+
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 		.setTitle(targTxt)
-		.setDescription(finalText.replace(/\n{3,}/, () => "\n\n"))
+		.setDescription(finalText.replace(/\n{2,}/, () => "\n\n"))
 	btl.channel.send({embeds: [DiscordEmbed]});
 
 	// return true or something
