@@ -89,10 +89,10 @@ commands.openshop = new Command({
 
 openshops = {}
 
-makeList = (options, customId, placeholder) => {
+makeList = (options, customId, placeholder, maxvalues) => {
 	return new Discord.MessageSelectMenu({
 		customId, placeholder, options,
-		maxValues: Math.min(options.length, 25)
+		maxValues: maxvalues ?? Math.min(options.length, 25)
 	})
 }
 
@@ -151,7 +151,7 @@ class Shop {
 
 	buy() {
 		return this.setupEmbed({
-			title: `What will you buy?`,
+			title: "What will you buy?",
 			description: `Choose using the list below.\nYou have **${this.party.currency}${setUpSettings(this.channel.guild.id).currency_emoji ?? '<:token:981579648993460355>'}** at the moment.`
 		}, [
 			this.shopList
@@ -160,7 +160,7 @@ class Shop {
 		])
 	}
 
-	buy2(i) {
+	buy2(i, force) {
 		let cost = 0
 		const stuff = {
 			items: [],
@@ -171,6 +171,27 @@ class Shop {
 			const item = rawitemdata.split("-")
 			cost += parseInt(item.pop())
 			stuff[item.pop()].push(item.join("-"))
+		}
+		if (stuff.armors.length == 0 && stuff.weapons.length == 0 && !force) {
+			const items = JSON.stringify(stuff.items)
+			return this.setupEmbed({
+				title: "How many of these items do you want to buy?",
+				description: `Choose the amount using the list below.\nYou have **${this.party.currency}${setUpSettings(this.channel.guild.id).currency_emoji ?? '<:token:981579648993460355>'}** at the moment.`
+			}, [
+				makeList([
+					{label: "1", value: `{"items":${items},"cost":${cost},"amount":1}`},
+					{label: "2", value: `{"items":${items},"cost":${cost},"amount":2}`},
+					{label: "3", value: `{"items":${items},"cost":${cost},"amount":3}`},
+					{label: "4", value: `{"items":${items},"cost":${cost},"amount":4}`},
+					{label: "5", value: `{"items":${items},"cost":${cost},"amount":5}`},
+					{label: "10", value: `{"items":${items},"cost":${cost},"amount":10}`},
+					{label: "25", value: `{"items":${items},"cost":${cost},"amount":25}`},
+					{label: "50", value: `{"items":${items},"cost":${cost},"amount":50}`},
+					{label: "100", value: `{"items":${items},"cost":${cost},"amount":100}`},
+				], "buy3", "Choose the amount of items you want to buy", 1)
+			], [
+				makeButton('Back', '◀️', 'grey', null, "buy")
+			])
 		}
 		if (cost > this.party.currency)
 			return this.setupEmbed({
@@ -199,6 +220,18 @@ class Shop {
 		], [
 			makeButton('Back', '◀️', 'grey', null, "main")
 		])
+	}
+
+	buy3(i) {
+		const {items, cost, amount} = JSON.parse(i.values[0])
+		let allitems = []
+		for (let i = 0; i < amount; i++)
+			allitems = [...allitems, ...items]
+		const newcost = (cost * (allitems.length / items.length)) / allitems.length
+		return this.buy2({
+			values: allitems.map(item => `${item}-items-${newcost}`),
+			message: i.message
+		}, true)
 	}
 
 	exit() {
