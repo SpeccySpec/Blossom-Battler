@@ -19,6 +19,17 @@ learnAffinity = (char, targ, skill) => {
 recogniseSkill = (char, targ, skill) => {
 }
 
+// All Opposing
+allOpposing = (char, btl) => {
+	let o = [];
+	for (let i in btl.teams) {
+		if (i == char.team) continue;
+		for (let targ of btl.teams[i].members) o.push(targ);
+	}
+
+	return o;
+}
+
 // Status effects points.
 let st = {
 	burn: 1,
@@ -43,6 +54,110 @@ let st = {
 	happy: 1
 }
 
+// Legacy AI
+// === REFACTORED CODE FROM OLD BB... well less refactored and more improved. ===
+function legacyAi(char, btl) {
+	let possibleSkills = [];
+	for (let skill of char.skills) {
+		let skillDefs = skillFile[skill]
+		if (canUseSkill(char, skillFile[skill])) possibleSkills.push(char.skills[i]);
+	}
+
+	let allySide = btl.teams[char.team].members;
+	let oppSide = allOpposing(char, btl);
+	
+	// Heal if under 1/5 hp
+	if (!isBoss(char) && Math.random() < 0.5) {
+		let healSkills = objClone(possibleSkills).filter(s => (!skillFile[s] || skillFile[s].type != "heal"));
+
+		if (healSkills.length > 0 && char.hp < Math.round(char.maxhp/3)) {
+			let healSkill = healSkills[randNum(healSkills.length-1)];
+			for (const i in allySide) {
+				if (allySide[i].id == char.id) {
+					return {
+						move: 'skills',
+						index: healSkill,
+						target: [char.team, char.pos],
+						points: 69
+					};
+				}
+			}
+			
+			let i = randNum(allySide.length-1);
+			if (allySide[i]) {
+				while (allySide[i].hp <= 0) i = randNum(allySide.length-1);
+			}
+
+			return {
+				move: 'skills',
+				index: healSkill,
+				target: [i, targ.pos],
+				points: 69
+			};
+		}
+	}
+	
+	// Shield at low health
+	if (char.hp < char.maxhp/2 && !isBoss(char) && !char.custom?.shield) {
+		let shieldSkills = objClone(possibleSkills).filter(s => (!skillFile[s] || !skillFile[s].statusses?.karn || !skillFile[s].statusses?.trap || !skillFile[s].statusses?.shield));
+		if (shieldSkills.length > 0) {
+			return {
+				move: 'skills',
+				index: shieldSkills[randNum(shieldSkills.length-1)],
+				target: [char.team,  char.pos],
+				points: 69
+			};
+		}
+	}
+
+	// Finally, attack. Target weaknesses.
+	if (!char.affinitycheck) char.affinitycheck = {};
+
+	if (char.affinitycheck && Object.keys(char.affinitycheck).length > 0 && Math.random() <= 0.3) {
+		for (let t of oppSide) {
+			if (t.hp <= 0) continue;
+
+			for (let aff in char.affinitycheck[t.id]) {
+				for (let type of char.affinitycheck[t.id][aff]) {
+					for (let s of char.skills) {
+						let skill = skillFile[s];
+
+						if (skill.type == type) {
+							return {
+								move: 'skills',
+								index: s,
+								target: [t.team, t.pos],
+								points: 69
+							};
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Since we know nothing else... might as well experiment
+	let t = oppSide[randNum(oppSide.length-1)];
+
+	if (!char.affinitycheck[t.id]) {
+		char.affinitycheck[t.id] = {
+			superweak: [],
+			weak: [],
+			resist: [],
+			block: [],
+			repel: [],
+			drain: []
+		}
+	}
+
+	return {
+		move: 'skills',
+		index: possibleSkills[randNum(possibleSkills.length-1)],
+		target: [t.team, t.pos],
+		points: 69
+	};
+}
+
 // Enemy thinker!
 enemyThinker = (char, btl) => {
 	// Ah shit. Enemy AI. AH FUCk.
@@ -50,6 +165,11 @@ enemyThinker = (char, btl) => {
 
 	// Difficulty levels should be handled
 	switch(char.difficulty ?? 'easy') {
+		case 'legacy': // Legacy AI.
+			// Doesn't use the whole AI thing.
+			ai.push(legacyAi(char, btl));
+			break;
+
 		case 'perfect': // Perfect mode AI:
 			for (let i in btl.teams) {
 				if (i == char.team) continue;
@@ -79,6 +199,7 @@ enemyThinker = (char, btl) => {
 					// Highest Power: 1 point
 					// 700+ Power: 2 points
 					// Multi-Target: 1 point
+					// Target is leader: 2 points
 
 					// Weakness affinity: 2 points
 					// SuperWeakness affinity: 4 points
