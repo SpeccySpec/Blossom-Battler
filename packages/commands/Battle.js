@@ -343,10 +343,10 @@ commands.endbattle = new Command({
 
 		// Clear the file
 		message.react('👍');
+		forceEndBattles[`${message.guild.id}-${message.channel.id}`] = true;
 
 		btl = {};
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, '{}');
-		forceEndBattles[`${message.guild.id}-${message.channel.id}`] = true;
 	}
 })
 

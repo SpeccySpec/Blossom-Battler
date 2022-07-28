@@ -1535,9 +1535,11 @@ doTurn = async(btl, noTurnEmbed) => {
 
 advanceTurn = (btl, firstturn) => {
 	// Force End Battle
+	console.log(forceEndBattles);
 	if (forceEndBattles[`${btl.guild.id}-${btl.channel.id}`]) {
 		fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, '{}');
 		forceEndBattles[`${btl.guild.id}-${btl.channel.id}`] = false;
+		return;
 	}
 
 	// End the battle in a test battle.
