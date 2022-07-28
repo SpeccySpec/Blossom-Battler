@@ -973,13 +973,17 @@ commands.starttrial = new Command({
 		// Set up Ally Side.
 		let battleid = 0;
 		let party = parties[args[0]];
-		
+
+		let trial = trials[args[1]];
+		let levellock = trial.levellock ?? 0;
+
 		if (!party.discoveries) party.discoveries = {};
 
 		for (const i in party.members) {
 			if (!charFile[party.members[i]]) continue;
 
 			let char = objClone(charFile[party.members[i]]);
+			if (char.level < levellock) return message.channel.send(`${char.name} is not strong enough to attmept this trial! They must be level ${levellock} to do this trial.`);
 
 			char.truename = party.members[i];
 			if (!char.name) char.name = party.members[i];
@@ -1004,6 +1008,8 @@ commands.starttrial = new Command({
 			let char = objClone(charFile[party.backup[i]]);
 			if (!char.name) char.name = party.backup[i];
 
+			if (char.level < levellock) return message.channel.send(`${char.name} (who is in backup) is not strong enough to attmept this trial! They must be level ${levellock} to do this trial.`);
+
 			char.id = battleid;
 			battleid++;
 
@@ -1019,7 +1025,6 @@ commands.starttrial = new Command({
 
 		// Set up Enemy Side, This will be the first wave of the colosseum.
 		// == this time, no encounters set until the enemy is killed or pacified == //
-		let trial = trials[args[1]];
 		let encounter = trial.waves[0];
 
 		battle.trial = trial;
