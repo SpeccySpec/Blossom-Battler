@@ -1636,7 +1636,10 @@ killVar = (char, name) => {
 customVariables = {
 	forcemove: {
 		onturn(btl, char, vars) {
-			useSkill(char, btl, vars[1], skillDefs);
+			if (vars[2]) 
+				useSkill(char, btl, vars[1], vars[2]);
+			else
+				useSkill(char, btl, vars[1]);
 
 			vars[0]--;
 			if (vars[0] == 0) killVar(char, "forcemove");
