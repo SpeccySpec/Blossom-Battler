@@ -42,6 +42,7 @@ statusList = {
 		},
 		inflictStatus(char, targ, skill, status, btl) {
 			if (hasStatusAffinity(char, status, 'block')) return `__${targ.name}__ blocked it!\n${selectQuote(char, 'badatk')}\n${selectQuote(targ, 'block')}`;
+			if (char.status && skill.type === 'status') return "...But it failed!";
 
 			let chance = 100
 			if (skill.statuschance < 100) {
@@ -447,6 +448,24 @@ statusList = {
 				return `__${char.name}__ protected __${targ.name}__ with something...`;
 			} else {
 				return `__${char.name}__ protected __${targ.name}__ with a __${skill.name}__!`;
+			}
+		},
+		aithinker(char, targ, act, skill, btl) {
+			switch(skill.target) {
+				case 'allopposing':
+				case 'one':
+					act.points -= 5;
+					break;
+
+				case 'ally':
+				case 'allallies':
+					act.target[0] = char.team;
+
+					if (btl.teams[char.team].members[act.target[1]]) {
+						let a = btl.teams[char.team].members[act.target[1]];
+						if (!a.custom?.shield && a.hp <= a.maxhp/3) act.points += 3;
+					}
+					break;
 			}
 		},
 		getinfo(vars) {
@@ -1585,7 +1604,17 @@ statusEffectFuncs = {
 
 	fear: {
 		onturn: function(btl, char) {
-			if (randNum(1, 100) <= 50) return [`${char.name} is stopped in their tracks by fear, losing their turn!`, false];
+			if (isBoss(char)) {
+				return `${char.name} shook off the fear!`;
+				delete char.status;
+				delete char.statuschance;
+			}
+
+			if (randNum(1, 100) <= 50) {
+				return [`${char.name} is stopped in their tracks by fear, losing their turn!`, false];
+				delete char.status;
+				delete char.statuschance;
+			}
 		}
 	},
 
