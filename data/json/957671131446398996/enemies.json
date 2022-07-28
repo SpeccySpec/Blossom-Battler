@@ -2080,7 +2080,8 @@
         },
         "quotes": {},
         "lb": {},
-        "type": "deity"
+        "type": "deity",
+        "difficulty": "hard"
     },
     "AwakenedMonum": {
         "name": "AwakenedMonum",
@@ -2948,7 +2949,8 @@
         },
         "quotes": {},
         "lb": {},
-        "type": "deity"
+        "type": "deity",
+        "difficulty": "hard"
     },
     "InfectedNyamem": {
         "level": 32,
@@ -3073,7 +3075,8 @@
         },
         "quotes": {},
         "lb": {},
-        "type": "deity"
+        "type": "deity",
+        "difficulty": "hard"
     },
     "Mawler": {
         "level": 35,
@@ -3194,7 +3197,8 @@
         },
         "quotes": {},
         "lb": {},
-        "type": "deity"
+        "type": "deity",
+        "difficulty": "hard"
     },
     "InfectedVessel": {
         "level": 45,

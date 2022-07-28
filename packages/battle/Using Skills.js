@@ -175,10 +175,10 @@ genDmg = (char, targ, btl, skill) => {
 	let endStat = statWithBuff(targStats.end, targ.buffs.end);
 
 	if (skill.extras?.statcalc) {
-		atkStat = statWithBuff(charStats[skill.extras.statcalc.toLowerCase()], char.buffs[skill.extras.statcalc.toLowerCase()] ?? 1);
+		atkStat = statWithBuff(charStats[skill.extras.statcalc[0].toLowerCase()], char.buffs[skill.extras.statcalc[0].toLowerCase()] ?? 1);
 	}
 	if (skill.extras?.hitcalc) {
-		endStat = statWithBuff(targStats[skill.extras.hitcalc.toLowerCase()], targ.buffs[skill.extras.hitcalc.toLowerCase()] ?? 1);
+		endStat = statWithBuff(targStats[skill.extras.hitcalc[0].toLowerCase()], targ.buffs[skill.extras.hitcalc[0].toLowerCase()] ?? 1);
 	}
 
 	let def = atkStat/endStat;
