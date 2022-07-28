@@ -945,6 +945,9 @@ useSkill = (char, btl, act, forceskill, ally) => {
 		skill = objClone(skillFile[skillname]);
 		skill.cost = cost[0];
 		skill.costtype = cost[1];
+
+		// Make sure CopySkill doesn't cuck us over
+		if (skill.type === 'heal' && (skill.target === 'ally' || skill.target === 'one') && act.target[0] != char.team) skill.target = 'caster';
 	}
 
 	// First, we modify stats via passives n shit. This isn't the actual character anyway so we don't care.
