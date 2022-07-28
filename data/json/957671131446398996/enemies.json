@@ -6149,7 +6149,8 @@
         },
         "quotes": {},
         "lb": {},
-        "type": "boss"
+        "type": "boss",
+        "difficulty": "hard"
     },
     "RagedNyamem": {
         "name": "RagedNyamem",
@@ -9848,7 +9849,8 @@
         },
         "quotes": {},
         "lb": {},
-        "type": "boss"
+        "type": "boss",
+        "difficulty": "hard"
     },
     "PhantomMeran": {
         "name": "PhantomMeran",

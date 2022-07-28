@@ -54,6 +54,17 @@ let st = {
 	happy: 1
 }
 
+// Affinities
+let pts = {
+	deadly: 6,
+	superweak: 4,
+	weak: 2,
+	resist: -3,
+	block: -4,
+	repel: -5,
+	drain: -5,
+}
+
 // Legacy AI
 // === REFACTORED CODE FROM OLD BB... well less refactored and more improved. ===
 function legacyAi(char, btl) {
@@ -216,7 +227,7 @@ enemyThinker = (char, btl) => {
 
 					// Chaos Stir: -2 points
 					// Mirror Status: -4 points if magic, +4 points if physical or ranged.
-					char.affinitycheck = {};
+					if (!char.affinitycheck) char.affinitycheck = {};
 
 					let powcheck = Object.keys(skillcheck);
 					powcheck.sort(function(a, b) {return (skillcheck[b].pow ?? 0) - (skillcheck[a].pow ?? 0)});
@@ -240,19 +251,8 @@ enemyThinker = (char, btl) => {
 						// Strongest move, 700+ Power, Multi-Target
 						if (j == powcheck[0]) act.points++;
 						if (skill.pow >= 700) act.points += 2;
-						if (skill.target === 'allopposing' || skill.target === 'spreadopposing') act.points++;
+						if (allOpposing(char, btl).length > 1 && (skill.target === 'allopposing' || skill.target === 'spreadopposing')) act.points++;
 						if (targ.leader) act.points += 2;
-
-						// Affinities
-						let pts = {
-							deadly: 6,
-							superweak: 4,
-							weak: 2,
-							resist: -4,
-							block: -6,
-							repel: -6,
-							drain: -6,
-						}
 
 						// Element.
 						switch(skill.type) {
@@ -335,21 +335,24 @@ enemyThinker = (char, btl) => {
 								let targets = [];
 								switch(skill.target) {
 									case 'allopposing':
-										for (let eye in btl.teams) {
-											if (char.team == eye) continue;
-											
-											for (let kay in btl.teams[eye].members)
-												if (btl.teams[eye].members[kay].hp > 0) targets.push([btl.teams[eye].members[kay].id, 1]);
+										for (let a in btl.teams) {
+											if (char.team == a) continue;
+
+											for (let character of btl.teams[a].members) {
+												if (character.hp > 0) targets.push(character);
+											}
 										}
 										break;
 									case 'allallies':
-										for (let kay in btl.teams[char.team].members)
-											if (btl.teams[char.team].members[kay].hp > 0) targets.push([btl.teams[char.team].members[kay].id, 1]);
+										for (let kay in btl.teams[char.team].members) {
+											if (btl.teams[char.team].members[kay].hp > 0) targets.push(btl.teams[char.team].members[kay]);
+										}
 										break;
 									case 'everyone':
 										for (let eye in btl.teams) {
-											for (let kay in btl.teams[eye].members)
-												if (btl.teams[eye].members[kay].hp > 0) targets.push([btl.teams[eye].members[kay].id, 1]);
+											for (let kay in btl.teams[eye].members) {
+												if (btl.teams[eye].members[kay].hp > 0) targets.push(btl.teams[eye].members[kay]);
+											}
 										}
 										break;
 									case 'caster':
@@ -451,7 +454,7 @@ enemyThinker = (char, btl) => {
 					// Mirror Status: -4 points if magic, +4 points if physical or ranged
 
 					// Hard Mode must discover affinities first.
-					char.affinitycheck = {};
+					if (!char.affinitycheck) char.affinitycheck = {};
 
 					let powcheck = Object.keys(skillcheck);
 					powcheck.sort(function(a, b) {return (skillcheck[b].pow ?? 0) - (skillcheck[a].pow ?? 0)});
@@ -475,18 +478,7 @@ enemyThinker = (char, btl) => {
 						// Strongest move, 700+ Power, Multi-Target
 						if (j == powcheck[0]) act.points++;
 						if (skill.pow >= 700) act.points += 2;
-						if (skill.target === 'allopposing' || skill.target === 'spreadopposing') act.points++;
-
-						// Affinities
-						let pts = {
-							deadly: 6,
-							superweak: 4,
-							weak: 2,
-							resist: -4,
-							block: -6,
-							repel: -6,
-							drain: -6,
-						}
+						if (allOpposing(char, btl).length > 1 && (skill.target === 'allopposing' || skill.target === 'spreadopposing')) act.points++;
 
 						// Element.
 						switch(skill.type) {
@@ -569,21 +561,24 @@ enemyThinker = (char, btl) => {
 								let targets = [];
 								switch(skill.target) {
 									case 'allopposing':
-										for (let eye in btl.teams) {
-											if (char.team == eye) continue;
-											
-											for (let kay in btl.teams[eye].members)
-												if (btl.teams[eye].members[kay].hp > 0) targets.push([btl.teams[eye].members[kay].id, 1]);
+										for (let a in btl.teams) {
+											if (char.team == a) continue;
+
+											for (let character of btl.teams[a].members) {
+												if (character.hp > 0) targets.push(character);
+											}
 										}
 										break;
 									case 'allallies':
-										for (let kay in btl.teams[char.team].members)
-											if (btl.teams[char.team].members[kay].hp > 0) targets.push([btl.teams[char.team].members[kay].id, 1]);
+										for (let kay in btl.teams[char.team].members) {
+											if (btl.teams[char.team].members[kay].hp > 0) targets.push(btl.teams[char.team].members[kay]);
+										}
 										break;
 									case 'everyone':
 										for (let eye in btl.teams) {
-											for (let kay in btl.teams[eye].members)
-												if (btl.teams[eye].members[kay].hp > 0) targets.push([btl.teams[eye].members[kay].id, 1]);
+											for (let kay in btl.teams[eye].members) {
+												if (btl.teams[eye].members[kay].hp > 0) targets.push(btl.teams[eye].members[kay]);
+											}
 										}
 										break;
 									case 'caster':
@@ -599,6 +594,7 @@ enemyThinker = (char, btl) => {
 									if (skill.type != 'almighty' && !skill.extras?.ohko && !skill.extras?.stealmp) {
 										if (char.affinitycheck[t.id]) {
 											for (let aff in char.affinitycheck[t.id]) {
+												if (!char.affinitycheck[t.id][aff]) continue;
 												for (let type of char.affinitycheck[t.id][aff]) {
 													if (skill.type == type && randNum(1, 100) <= 85) act.points += pts[aff];
 												}
@@ -691,7 +687,7 @@ enemyThinker = (char, btl) => {
 					// only remembers affinites 50% of the time.
 
 					// Additionally, Medium Mode must discover affinities first.
-					char.affinitycheck = {};
+					if (!char.affinitycheck) char.affinitycheck = {};
 
 					let powcheck = Object.keys(skillcheck);
 					powcheck.sort(function(a, b) {return skillcheck[b].pow - skillcheck[a].pow});
@@ -714,17 +710,6 @@ enemyThinker = (char, btl) => {
 
 						// Strongest move
 						if (j == powcheck[0]) act.points++;
-
-						// Affinities
-						let pts = {
-							deadly: 6,
-							superweak: 4,
-							weak: 2,
-							resist: -3,
-							block: -5,
-							repel: -5,
-							drain: -5,
-						}
 
 						// Element.
 						switch(skill.type) {
@@ -781,21 +766,24 @@ enemyThinker = (char, btl) => {
 								let targets = [];
 								switch(skill.target) {
 									case 'allopposing':
-										for (let eye in btl.teams) {
-											if (char.team == eye) continue;
-											
-											for (let kay in btl.teams[eye].members)
-												if (btl.teams[eye].members[kay].hp > 0) targets.push([btl.teams[eye].members[kay].id, 1]);
+										for (let a in btl.teams) {
+											if (char.team == a) continue;
+
+											for (let character of btl.teams[a].members) {
+												if (character.hp > 0) targets.push(character);
+											}
 										}
 										break;
 									case 'allallies':
-										for (let kay in btl.teams[char.team].members)
-											if (btl.teams[char.team].members[kay].hp > 0) targets.push([btl.teams[char.team].members[kay].id, 1]);
+										for (let kay in btl.teams[char.team].members) {
+											if (btl.teams[char.team].members[kay].hp > 0) targets.push(btl.teams[char.team].members[kay]);
+										}
 										break;
 									case 'everyone':
 										for (let eye in btl.teams) {
-											for (let kay in btl.teams[eye].members)
-												if (btl.teams[eye].members[kay].hp > 0) targets.push([btl.teams[eye].members[kay].id, 1]);
+											for (let kay in btl.teams[eye].members) {
+												if (btl.teams[eye].members[kay].hp > 0) targets.push(btl.teams[eye].members[kay]);
+											}
 										}
 										break;
 									case 'caster':
