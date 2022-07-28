@@ -364,6 +364,8 @@ enemyThinker = (char, btl) => {
 
 								// Judge for all targets of skill.
 								for (let t of targets) {
+									if (t.hp <= 0) continue;
+
 									if (skill.type != 'almighty' && !skill.extras?.ohko && !skill.extras?.stealmp) {
 										if (!char.affinitycheck[t.id]) char.affinitycheck[t.id] = objClone(t.affinities);
 
@@ -486,6 +488,8 @@ enemyThinker = (char, btl) => {
 								switch(skill.target) {
 									case 'allallies':
 										for (let char2 of btl.teams[char.team].members) {
+											if (char2.hp <= 0) continue;
+
 											if (skill.heal?.healstat) {
 												if (!skill.heal.healstat[1] || skill.heal.healstat[1] == "hp") {
 													if (char2.hp <= (isBoss(char2) ? char2.maxhp/10 : char2.maxhp/3)) {
@@ -590,6 +594,8 @@ enemyThinker = (char, btl) => {
 
 								// Judge for all targets of skill.
 								for (let t of targets) {
+									if (t.hp <= 0) continue;
+
 									// Judge based on target affinity. Only do this 85% of the time on hard.
 									if (skill.type != 'almighty' && !skill.extras?.ohko && !skill.extras?.stealmp) {
 										if (char.affinitycheck[t.id]) {
@@ -795,6 +801,8 @@ enemyThinker = (char, btl) => {
 
 								// Judge for all targets of skill.
 								for (let targ of targets) {
+									if (targ.hp <= 0) continue;
+
 									// Judge based on target affinity. Only do this 50% of the time on medium.
 									if (skill.type != 'almighty' && !skill.extras?.ohko && !skill.extras?.stealmp) {
 										if (char.affinitycheck[targ.id]) {

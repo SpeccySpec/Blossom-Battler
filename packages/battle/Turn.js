@@ -1,3 +1,5 @@
+forceEndBattles = {};
+
 getCharFromTurn = (btl) => {
 	let id = btl.turnorder[btl.curturn];
 	return getCharFromId(id, btl);
@@ -1532,6 +1534,12 @@ doTurn = async(btl, noTurnEmbed) => {
 }
 
 advanceTurn = (btl, firstturn) => {
+	// Force End Battle
+	if (forceEndBattles[`${btl.guild.id}-${btl.channel.id}`]) {
+		fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, '{}');
+		forceEndBattles[`${btl.guild.id}-${btl.channel.id}`] = false;
+	}
+
 	// End the battle in a test battle.
 	if (btl.testing && !firstturn) {
 		btl.testing--;

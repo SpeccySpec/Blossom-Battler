@@ -346,6 +346,7 @@ commands.endbattle = new Command({
 
 		btl = {};
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, '{}');
+		forceEndBattles[`${message.guild.id}-${message.channel.id}`] = true;
 	}
 })
 
@@ -382,6 +383,8 @@ commands.startbattle = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (forceEndBattles[`${message.guild.id}-${message.channel.id}`]) forceEndBattles[`${message.guild.id}-${message.channel.id}`] = false;
+
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true);
 		let settings = setUpSettings(message.guild.id);
 
@@ -647,6 +650,8 @@ commands.startpvp = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (forceEndBattles[`${message.guild.id}-${message.channel.id}`]) forceEndBattles[`${message.guild.id}-${message.channel.id}`] = false;
+
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true);
 		let settings = setUpSettings(message.guild.id);
 
@@ -903,6 +908,8 @@ commands.starttrial = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (forceEndBattles[`${message.guild.id}-${message.channel.id}`]) forceEndBattles[`${message.guild.id}-${message.channel.id}`] = false;
+
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true);
 		let settings = setUpSettings(message.guild.id);
 
@@ -1099,6 +1106,8 @@ commands.testbattle = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (forceEndBattles[`${message.guild.id}-${message.channel.id}`]) forceEndBattles[`${message.guild.id}-${message.channel.id}`] = false;
+
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true);
 		let settings = setUpSettings(message.guild.id);
 
@@ -1347,6 +1356,8 @@ commands.aibattle = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (forceEndBattles[`${message.guild.id}-${message.channel.id}`]) forceEndBattles[`${message.guild.id}-${message.channel.id}`] = false;
+
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true);
 		let settings = setUpSettings(message.guild.id);
 
@@ -1515,6 +1526,8 @@ commands.resumetrial = new Command({
 		}
 	],
 	func: (message, args) => {
+		if (forceEndBattles[`${message.guild.id}-${message.channel.id}`]) forceEndBattles[`${message.guild.id}-${message.channel.id}`] = false;
+
 		let trials = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`, true);
 		if (!trials[args[1]]) return message.channel.send(`${args[0]} is a nonexistant trial!`);
 
