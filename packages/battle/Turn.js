@@ -473,10 +473,13 @@ sendCurTurnEmbed = (char, btl) => {
 			myTeamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
 		}
 	}
+	
+	let testtxt = '';
+	if (btl.testing) testtxt = ` (__${btl.testing} test turns left__)`;
 
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(elementColors[char.mainElement] ?? elementColors.strike)
-		.setTitle(`Turn #${btl.turn} - ${char.name}'s turn`)
+		.setTitle(`Turn #${btl.turn} - ${char.name}'s turn${testtxt}`)
 		.setDescription(statDesc)
 		.addFields({name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true})
 
@@ -1528,9 +1531,9 @@ doTurn = async(btl, noTurnEmbed) => {
 	}, 150)
 }
 
-advanceTurn = (btl) => {
+advanceTurn = (btl, firstturn) => {
 	// End the battle in a test battle.
-	if (btl.testing) {
+	if (btl.testing && !firstturn) {
 		btl.testing--;
 		if (btl.testing <= 0) {
 			btl.channel.send("The test battle is now over!");
@@ -1582,6 +1585,12 @@ advanceTurn = (btl) => {
 	// If there's only one team alive...
 	if (teamsAlive <= 1) {
 		let party = btl.teams[lastAlive] ?? btl.teams[0];
+
+		if (btl.testing) {
+			btl.channel.send(`Team ${party.name} have won! Therefore, the test battle is now over.`);
+			fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, '{}');
+			return;
+		}
 
 		//clear reincarnates
 		for (let i in btl.teams) {

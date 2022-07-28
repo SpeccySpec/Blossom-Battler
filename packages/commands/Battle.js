@@ -1066,6 +1066,264 @@ commands.starttrial = new Command({
 	}
 })
 
+commands.testbattle = new Command({
+	desc: "Start a battle with a specified amount of moves to test your character/characters against a set enemy. Without any enemies, use the set encounters for this channel. This battle lasts for the set number of turns.",
+	section: "battle",
+	aliases: ["starttestbattle", "testbegin", "testfight"],
+	args: [
+		{
+			name: "Character or Party",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Turns",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Weather",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Terrain",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Enemies",
+			type: "Word",
+			forced: false,
+			multiple: true
+		}
+	],
+	func: (message, args) => {
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true);
+		let settings = setUpSettings(message.guild.id);
+
+		if (args[1] <= 0) return message.channel.send(`"Turns" cannot be below 0! ${args[1]} is not a possible value.`);
+
+		// Set up Battle Field
+		let battle = {
+			battling: true,
+			channel: message.channel, // so i dont have to do it later
+			guild: message.guild, // so i dont have to do it later
+
+			turn: 0,
+//			curturn: -1,
+			turnorder: [],
+			
+			testing: args[1],
+
+//			weather: 'none',
+//			terrain: 'none',
+			effects: {},
+
+			teams: [
+				{
+					name: "",
+					id: "",
+					members: [],
+					backup: [],
+					items: {},
+					pets: {},
+				},
+				{
+					name: "Enemies",
+					id: 'enemies',
+					enemyteam: true,
+					forcehorde: true, // more than 4 enemies mean some will be put into backup and automatically switched in, either by the team leader, or once an enemy dies.
+					members: [],
+					backup: [],
+					items: {},
+					pets: {},
+				}
+			]
+		}
+
+		// Validity Check for Parties
+		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
+
+		if (!parties[args[0]]) 
+			return message.channel.send(`${args[0]} is an invalid party!`);
+		else {
+			if (!charFile[args[0]]) return message.channel.send(`${args[0]} is an invalid character!"`);
+
+			parties[args[0]] = {
+				name: args[0],
+				currency: 0,
+				members: [args[0]],
+				backup: [],
+				items: {},
+				weapons: {},
+				armors: {},
+				negotiates: {},
+				negotiateAllies: {}
+			}
+		}
+
+		// Battle File!
+		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
+		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
+		let locale = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/location.json`, true);
+		enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`, true);
+
+		let weather = locale.weather ?? 'none'
+		let terrain = locale.terrain ?? 'none';
+		if (args[2].toLowerCase() != 'none') weather = args[2].toLowerCase();
+		if (args[3].toLowerCase() != 'none') terrain = args[3].toLowerCase();
+
+		// Weather and stuff
+		if (weather != 'none') {
+			if (!weathers.includes(weather)) return message.channel.send(`${args[2].toLowerCase()} is an invalid weather type!`);
+
+			battle.weather = {
+				type: weather,
+				turns: -1,
+				force: weather,
+			}
+		}
+
+		// Terrains and stuff
+		if (terrain != 'none') {
+			if (!terrains.includes(terrain)) return message.channel.send(`${args[3].toLowerCase()} is an invalid terrain type!`);
+
+			battle.terrain = {
+				type: terrain,
+				turns: -1,
+				force: terrain,
+			}
+		}
+
+		// Can't battle while another party is!
+		if (btl.battling) return message.channel.send("You can't battle in this channel while another battle is happening!");
+
+		// Save this for errors!
+		if (!battleFiles) battleFiles = [];
+		if (!battleFiles.includes(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`)) battleFiles.push(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`);
+
+		// Set up Ally Side.
+		let battleid = 0;
+		let party = parties[args[0]];
+
+		if (!party.discoveries) party.discoveries = {};
+
+		for (const i in party.members) {
+			if (!charFile[party.members[i]]) continue;
+
+			let char = objClone(charFile[party.members[i]]);
+
+			char.truename = party.members[i];
+			if (!char.name) char.name = party.members[i];
+
+			char.id = battleid;
+			battleid++;
+
+			setupBattleStats(char);
+
+			if (i <= 0) {
+				char.leader = true;
+				battle.teams[0].leaderskill = char.leaderskill;
+			}
+
+			char.team = 0;
+			battle.teams[0].members.push(char);
+		}
+
+		for (const i in party.backup) {
+			if (!charFile[party.backup[i]]) continue;
+
+			let char = objClone(charFile[party.backup[i]]);
+			if (!char.name) char.name = party.backup[i];
+
+			char.id = battleid;
+			battleid++;
+
+			setupBattleStats(char);
+
+			char.team = 0;
+			battle.teams[0].backup.push(char);
+		}
+
+		// Save other shit
+		battle.teams[0].name = args[0];
+		battle.teams[0].items = objClone(party.items);
+		battle.teams[0].pets = objClone(party.negotiateAllies);
+		battle.teams[0].id = args[0];
+
+		// Current pet
+		if (party.curpet) battle.teams[0].curpet = party.curpet;
+
+		// Set up Enemy Side.
+		// == this time, no encounters set until the enemy is killed or pacified == //
+		let encounter = [];
+		if (args.length < 5) {
+			if (!locale.encounters || locale.encounters.length <= 0) return message.channel.send("You've not set any enemies, and there are no encounters assigned to this channel!");
+			encounter = locale.encounters[randNum(0, locale.encounters.length-1)] ?? locale.encounters[0];
+		} else {
+			for (let i = 4; i < args.length; i++) {
+				if (!enmFile[args[i]]) return message.channel.send(`${args[i]} is an invalid enemy!`);
+				encounter.push(args[i]);
+			}
+		}
+
+		let lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`, true);
+
+		let enmDesc = '';
+		for (let i in encounter) {
+			let enemy = objClone(enmFile[encounter[i]]);
+			enemy.enemy = true;
+
+			enemy.truename = encounter[i];
+			if (!enemy.name) enemy.name = encounter[i];
+			enemy.maxhp = enemy.hp;
+			enemy.maxmp = enemy.mp;
+			enemy.id = battleid;
+			battleid++;
+
+			// For enemy ai
+			enemy.memory = {};
+
+			// Pacifying
+			enemy.pacify = 0;
+			
+			// Does this battle pass as a boss
+			if (enemy.type.includes('boss') || enemy.type.includes('deity')) battle.bossbattle = true;
+
+			setupBattleStats(enemy);
+
+			enmDesc += `${enemy.name} (LV${enemy.level})\n`;
+
+			enemy.team = 1;
+			if (battle.teams[1].members.length < 4) {
+				if (i <= 0 && enemy.leaderskill) {
+					enemy.leader = true;
+					battle.teams[1].leaderskill = enemy.leaderskill;
+				}
+
+				battle.teams[1].members.push(enemy);
+			} else
+				battle.teams[1].backup.push(enemy);
+
+			if (enemy.loot) enemy.loot = objClone(lootFile?.[enemy.loot]?.items) ?? [];
+		}
+
+		if (settings?.mechanics?.leaderskills) battle = leaderSkillsAtBattleStart(battle);
+
+		// turn order :)
+		battle.turnorder = getTurnOrder(battle);
+
+		// Save all this data to a file.
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, JSON.stringify(battle, null, '    '));
+
+		message.channel.send(`Beginning a test battle!`);
+		setTimeout(function() {
+			advanceTurn(battle, true)
+        }, 500)
+	}
+})
+
 commands.resendembed = new Command({
 	desc: "Resends the Battle Embed. Maybe it broke or something, I suck.",
 	section: "battle",
