@@ -1495,6 +1495,7 @@ doTurn = async(btl, noTurnEmbed) => {
 
 	// Rest
 	if (char.rest) {
+		canMove = false;
 		statusTxt += `\n${char.name} must rest to regain their energy.`;
 		delete char.rest;
 	}
