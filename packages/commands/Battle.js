@@ -1324,6 +1324,140 @@ commands.testbattle = new Command({
 	}
 })
 
+commands.aibattle = new Command({
+	desc: "Make enemies fight to the death in a 1v1 or FFA battle!",
+	section: "battle",
+	aliases: ["startaibattle"],
+	args: [
+		{
+			name: "Weather",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Terrain",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Enemies",
+			type: "Word",
+			forced: false,
+			multiple: true
+		}
+	],
+	func: (message, args) => {
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true);
+		let settings = setUpSettings(message.guild.id);
+
+		// Set up Battle Field
+		let battle = {
+			battling: true,
+			channel: message.channel, // so i dont have to do it later
+			guild: message.guild, // so i dont have to do it later
+
+			turn: 0,
+//			curturn: -1,
+			turnorder: [],
+
+//			weather: 'none',
+//			terrain: 'none',
+			effects: {},
+
+			pvp: true,
+
+			teams: []
+		}
+
+		// Battle File!
+		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
+		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
+		let locale = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/location.json`, true);
+		enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`, true);
+
+		let weather = locale.weather ?? 'none'
+		let terrain = locale.terrain ?? 'none';
+		if (args[0].toLowerCase() != 'none') weather = args[0].toLowerCase();
+		if (args[1].toLowerCase() != 'none') terrain = args[1].toLowerCase();
+
+		// Weather and stuff
+		if (weather != 'none') {
+			if (!weathers.includes(weather)) return message.channel.send(`${args[0].toLowerCase()} is an invalid weather type!`);
+
+			battle.weather = {
+				type: weather,
+				turns: -1,
+				force: weather,
+			}
+		}
+
+		// Terrains and stuff
+		if (terrain != 'none') {
+			if (!terrains.includes(terrain)) return message.channel.send(`${args[1].toLowerCase()} is an invalid terrain type!`);
+
+			battle.terrain = {
+				type: terrain,
+				turns: -1,
+				force: terrain,
+			}
+		}
+
+		// Can't battle while another party is!
+		if (btl.battling) return message.channel.send("You can't battle in this channel while another battle is happening!");
+
+		// Save this for errors!
+		if (!battleFiles) battleFiles = [];
+		if (!battleFiles.includes(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`)) battleFiles.push(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`);
+
+		let battleid = 0;
+		for (let i in args) {
+			if (i <= 1 || i >= 6) continue;
+
+			let enemy = objClone(enmFile[args[i]]);
+			enemy.enemy = true;
+
+			enemy.truename = args[i];
+			if (!enemy.name) enemy.name = args[i];
+			enemy.maxhp = enemy.hp;
+			enemy.maxmp = enemy.mp;
+			enemy.id = battleid;
+			battleid++;
+
+			// For enemy ai
+			enemy.memory = {};
+
+			// Pacifying
+			enemy.pacify = 0;
+
+			setupBattleStats(enemy);
+			enemy.team = i-2;
+
+			battle.teams.push({
+				name: i-1,
+				id: 'enemies',
+				enemyteam: true,
+				members: [enemy],
+				backup: [],
+				items: {},
+				pets: {},
+			});
+		}
+
+		if (settings?.mechanics?.leaderskills) battle = leaderSkillsAtBattleStart(battle);
+
+		// turn order :)
+		battle.turnorder = getTurnOrder(battle);
+
+		// Save all this data to a file.
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, JSON.stringify(battle, null, '    '));
+
+		message.channel.send(`A ${(battle.teams.length > 2) ? "Free-For-All" : "1v1"} battle has broken out amongst enemies!`);
+		setTimeout(function() {
+			advanceTurn(battle)
+        }, 500)
+	}
+})
+
 commands.resendembed = new Command({
 	desc: "Resends the Battle Embed. Maybe it broke or something, I suck.",
 	section: "battle",
