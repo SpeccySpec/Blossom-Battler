@@ -1,5 +1,6 @@
 // Are you a boss
 isBoss = (f) => {
+	if (!f) return false;
 	if (!f.type) return false;
 	return (f.type.includes('boss') || f.type.includes('deity'));
 }
@@ -7,7 +8,7 @@ isBoss = (f) => {
 // Learn the affinities of using this skill.
 learnAffinity = (char, targ, skill) => {
 	let a = getAffinity(targ, skill.type);
-	
+
 	if (!char.affinitycheck[targ.id]) char.affinitycheck[targ.id] = {};
 	if (!char.affinitycheck[targ.id][a]) char.affinitycheck[targ.id][a] = [];
 	char.affinitycheck[targ.id][a].push(skill.type)

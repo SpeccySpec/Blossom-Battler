@@ -19,26 +19,20 @@ async function longtrialdesc(trial, name, message){
 
         for (let i = 0; i < current.length; i++) {
             for (let j = 0; j < current[i].length; j++) {
-                if (current[i][j].startsWith('<:warning:878094052208296007>')) {
-                    current[i][j] = current[i][j].replace('<:warning:878094052208296007>', '')
-                }
-                if (current[i][j].startsWith('||') && current[i][j].endsWith('||')) {
-                    current[i][j] = current[i][j].slice(2, current[i][j].length - 2)
-                }
-                if (!foundEnemy(current[i][j], message.guild.id)) {
-                    current[i][j] = `||${current[i][j]}||`
-                }
-                if (enemyFile[current[i][j]].type == 'miniboss' || enemyFile[current[i][j]].type == 'boss' || enemyFile[current[i][j]].type == 'bigboss' || enemyFile[current[i][j]].type == 'deity') {
-                    current[i][j] = `<:warning:878094052208296007>${current[i][j]}`
-                }
+                if (current[i][j].startsWith('<:warning:878094052208296007>')) current[i][j] = current[i][j].replace('<:warning:878094052208296007>', '');
+                if (current[i][j].startsWith('||') && current[i][j].endsWith('||')) current[i][j] = current[i][j].slice(2, current[i][j].length - 2);
+                if (!foundEnemy(current[i][j], message.guild.id)) current[i][j] = `||${current[i][j]}||`;
+                if (isBoss(enemyFile[current[i][j]])) current[i][j] = `<:warning:878094052208296007>${current[i][j]}`;
             }
         }
+
+		let restriction = trial.levellock ? `\n🔒 Trial locked behind **Level ${trial.levellock}**` : '';
 
         if (current.length > 0) {
             return new Discord.MessageEmbed({
                 color: '#0099ff',
                 title: `${name}`,
-                description: `${trial.desc ?  `${trial.desc}` : 'No Description'}`,
+                description: `${trial.desc ?  `${trial.desc}` : '_No Description_'}${restriction}`,
                 fields: await Promise.all(
                     current.map(async arrayDefs => ({
                         name: `Wave ${newtrial.indexOf(arrayDefs) + 1}`,
@@ -51,10 +45,10 @@ async function longtrialdesc(trial, name, message){
             return new Discord.MessageEmbed({
                 color: '#0099ff',
                 title: `${name}`,
-                description: `${trial.desc ?  `${trial.desc}` : 'No Description'}`,
+                description: `${trial.desc ?  `${trial.desc}` : '_No Description_'}${restriction}`,
                 fields: [{
-                    name: 'No Waves',
-                    value: 'None'
+                    name: '__No Waves!__',
+                    value: `_Maybe you should set some waves... use ${getPrefix(message.guild.id)}trialwave to add some!_`
                 }]
             })
         }
@@ -362,20 +356,23 @@ commands.trialwave = new Command({
         enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
 
         if (!trialFile[args[0]]) return message.channel.send(`No trial with the name ${args[0]} was found.`)
-
-        if (args[1] <= 0) return message.channel.send('Wave must be greater than 0.')
-        if (args[1] > trialFile[args[0]].waves.length + 1) return message.channel.send(`The trial ${args[0]} only has ${trialFile[args[0]].waves.length} waves.`)
+		let trial = trialFile[args[0]];
 
         for (i in args) {
-            if (i > 1) {
-                if (!enemyFile[args[i]]) return message.channel.send(`No enemy with the name ${args[i]} was found.`)
-            }
+            if (i <= 1) continue;
+			if (!enemyFile[args[i]]) return message.channel.send(`No enemy with the name ${args[i]} was found.`)
         }
 
-        trialFile[args[0]].waves.push(args.slice(1));
+        if ((args[1]-1) > trial.waves.length) {
+			message.channel.send("This trial does not have that many waves! Therefore, I'll insert this wave at the very end of this trial.");
+			trialFile[args[0]].waves.push(args.slice(2));
+		} else {
+			message.channel.send(`I will overwrite wave #${args[1]}!`);
+			trialFile[args[0]].waves[args[1]-1] = (args.slice(2));
+		}
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trialFile, null, 4))
-        message.channel.send(`Added wave ${args[1]} to ${args[0]}. Here's the trial so far:`)
+        message.channel.send(`Here's the trial so far:`)
         longtrialdesc(trialFile[args[0]], trialFile[args[0]].name, message)
     }
 })
@@ -478,5 +475,44 @@ commands.renametrial = new Command({
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trialFile, null, 4))
         message.channel.send(`Changed the name of ${args[0]} to ${args[1]}.`)
+    }
+})
+
+commands.triallevel = new Command({
+    desc: "Sets the trial's level restriction. Set to 0 to remove the level restriction.",
+    section: 'trials',
+    aliases: ['triallevelrestriction', 'trialstrength', 'addwaves'],
+    args: [
+        {
+            name: "Name",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Level",
+            type: "Num",
+            forced: true
+        }
+    ],
+    admin: 'You don\'t have permission to add waves to a trial.',
+    checkban: true,
+    func: async(message, args) => {
+        trialFile = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`)
+
+        if (!trialFile[args[0]]) return message.channel.send(`No trial with the name ${args[0]} was found.`)
+		let trial = trialFile[args[0]];
+
+        if (args[1] <= 0 && trial.levellock)
+			delete trial.levellock;
+		else {
+			let settings = setUpSettings(message.guild.id);
+			if (args[1] > settings.caps.levelcap) return message.channel.send(`You can't lock a trial above the level cap of ${settings.caps.levelcap}!`);
+
+			trial.levellock = args[1];
+		}
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trialFile, null, 4))
+        message.channel.send(`The level restriction has been set! Here's the trial so far:`)
+        longtrialdesc(trialFile[args[0]], trialFile[args[0]].name, message)
     }
 })
