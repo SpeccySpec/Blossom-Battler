@@ -59,8 +59,8 @@ let st = {
 function legacyAi(char, btl) {
 	let possibleSkills = [];
 	for (let skill of char.skills) {
-		let skillDefs = skillFile[skill]
-		if (canUseSkill(char, skillFile[skill])) possibleSkills.push(char.skills[i]);
+		let skillDefs = skillFile[skill];
+		if (canUseSkill(char, skillFile[skill])) possibleSkills.push(skill);
 	}
 
 	let allySide = btl.teams[char.team].members;
@@ -150,6 +150,7 @@ function legacyAi(char, btl) {
 		}
 	}
 
+	console.log(possibleSkills);
 	return {
 		move: 'skills',
 		index: possibleSkills[randNum(possibleSkills.length-1)],
