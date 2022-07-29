@@ -1276,7 +1276,7 @@ extrasList = {
 		},
 		statmod(char, skill, vars, btl) {
 			if (char.custom?.rollouts) {
-				let bst = (vars[0]-1)*char.custom.rollouts;
+				let bst = (vars[0]/100)*char.custom.rollouts;
 
 				skill.pow *= bst;
 				if (bst >= vars[1]) {
@@ -1286,7 +1286,7 @@ extrasList = {
 			}
 		},
 		getinfo(vars) {
-			return `Boost power by **${vars[0]}x** every consecutive use, until **${vars[1]}x** or used **${vars[2]} times**`;
+			return `Boost power by **${vars[0]}%** every consecutive use, until **${vars[1]}x** or used **${vars[2]} times**`;
 		}
 	}),
 
@@ -1643,7 +1643,7 @@ customVariables = {
 			vars[0]--;
 			if (vars[0] == 0) killVar(char, "forcemove");
 
-			return false;
+			return null;
 		}
 	},
 
