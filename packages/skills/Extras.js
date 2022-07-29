@@ -779,7 +779,7 @@ extrasList = {
 			let heal = dmg/vars[0];
 			char.hp = Math.min(char.maxhp, char.hp+heal);
 
-			return `__${char.name}__ drained **${vars[0]}** HP from ${targ.name}!`;
+			return `__${char.name}__ drained **${heal}HP** from ${targ.name}!`;
 		},
 		getinfo(vars) {
 			return `Drains 1/${vars[0]} of the damage dealt`;
