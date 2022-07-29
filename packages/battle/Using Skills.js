@@ -93,6 +93,9 @@ canAfford = (char, skill) => {
 
 // Can we use this skill?
 canUseSkill = (char, skill) => {
+	// Can't use passives.
+	if (skill.type === "passive") return false;
+
 	// Statusses
 	if (char.status) {
 		switch(char.status) {

@@ -862,12 +862,31 @@ enemyThinker = (char, btl) => {
 				for (let targ of btl.teams[i].members) {
 					if (targ.hp <= 0) continue;
 
-					ai.push({
-						move: 'skills',
-						index: char.skills[randNum(char.skills.length-1)],
-						target: [i, targ.pos],
-						points: 0
-					})
+					// Select random skill.
+					let skill = char.skills[randNum(char.skills.length-1)];
+
+					// Can we actually use this skill?
+					let loops = 0;
+					while (!canUseSkill(char, skillFile[skill]) && loops < 10) {
+						skill = char.skills[randNum(char.skills.length-1)];
+						loops++;
+					}
+
+					// Melee as failsafe
+					if (loops >= 10) {
+						ai.push({
+							move: 'melee',
+							target: [i, targ.pos],
+							points: 0
+						})
+					} else {
+						ai.push({
+							move: 'skills',
+							index: skill,
+							target: [i, targ.pos],
+							points: 0
+						})
+					}
 				}
 			}
 	}
