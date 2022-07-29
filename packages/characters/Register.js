@@ -27,9 +27,9 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
 
 		mpMeter: ['Magic Points', 'MP'],
 
-        // Status Effect
-        status: "none",
-        statusturns: 0,
+        // Status Effect - Left out due to new format.
+//      status: "none",
+//      statusturns: 0,
 
         // Melee Attack
         melee: {

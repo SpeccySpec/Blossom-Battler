@@ -1565,6 +1565,12 @@ advanceTurn = (btl, firstturn) => {
 			// Always update for Futuresight
 			char.team = i;
 			char.pos = k;
+			
+			// Bugfix
+			if (char.status && char.status === "none") {
+				delete char.status;
+				delete char.statusturns;
+			}
 
 			// This character is dead or pacified.
 			if (char.hp <= 0 || char.pacified) {
