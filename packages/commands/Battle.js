@@ -1159,10 +1159,8 @@ commands.testbattle = new Command({
 		// Validity Check for Parties
 		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
 
-		if (!parties[args[0]]) 
-			return message.channel.send(`${args[0]} is an invalid party!`);
-		else {
-			if (!charFile[args[0]]) return message.channel.send(`${args[0]} is an invalid character!"`);
+		if (!parties[args[0]]) {
+			if (!charFile[args[0]]) return message.channel.send(`${args[0]} is an invalid party or character!"`);
 
 			parties[args[0]] = {
 				name: args[0],
