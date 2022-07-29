@@ -21565,11 +21565,12 @@
             "theme": "[Interstellar Stomper - Terraria Calamity Mod](https://www.youtube.com/watch?v=-NKaXqLhN3c)",
             "gender": "female",
             "height": [
-                4,
-                0
+                5,
+                7
             ],
             "weight": 0,
-            "custom": {}
+            "custom": {},
+            "fullname": "Pank Leader"
         },
         "trust": {
             "Negagen": {
@@ -22935,12 +22936,13 @@
             "voice": "",
             "theme": "",
             "height": [
-                4,
-                0
+                1,
+                4
             ],
             "gender": "female",
             "weight": 0,
-            "custom": {}
+            "custom": {},
+            "fullname": "Rosy Natsuki"
         },
         "trust": {
             "Negagen": {

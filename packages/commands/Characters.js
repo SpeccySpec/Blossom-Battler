@@ -532,9 +532,15 @@ commands.nickname = new Command({
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 
-		charFile[args[0]].nickname = args[1]
-		message.channel.send(`👍 ${charFile[args[0]].name}'s nickname was changed to ${args[1]}.`)
-		fs.writeFileSync(`${dataPath}/json/${guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		if (args[1].toLowerCase() === 'none' || args[1] === '-') {
+			delete charFile[args[0]].nickname;
+			message.channel.send(`👍 ${charFile[args[0]].name}'s nickname was removed.`)
+		} else {
+			charFile[args[0]].nickname = args[1];
+			message.channel.send(`👍 ${charFile[args[0]].name}'s nickname was changed to "${args[1]}".`)
+		}
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
 
@@ -2509,7 +2515,7 @@ commands.setbioinfo = new Command({
 				charFile[args[0]].bio.age = parseInt(args[2]);
 				break;
 			case "gender":
-				charFile[args[0]].bio.age = args[2].toLowerCase() != "male" && args[2].toLowerCase() != "female" ? 'other' : args[2].toLowerCase()
+				charFile[args[0]].bio.gender = args[2].toLowerCase() != "male" && args[2].toLowerCase() != "female" ? 'other' : args[2].toLowerCase()
 			case "appearance":
 				if (args[2].toLowerCase() != 'none') {
 					if (!checkImage(message, args[2], message.attachments.first())) return message.channel.send(`${args[2]} is not a valid image.`);
@@ -2525,6 +2531,69 @@ commands.setbioinfo = new Command({
 				if (charFile[args[0]].bio.custom[args[1]] == '') delete charFile[args[0]].bio.custom[args[1]];
 				break;
 		}
+		message.react('👍');
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+	}
+})
+
+commands.clearbioinfo = new Command({
+	desc: "Clears a character's bio information, such as backstory, age, ect",
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Section",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.isAdmin(message) && !charFile[args[0]].owner == message.author.id) return message.channel.send('You are not the owner of this character!');
+
+		switch (args[1].toLowerCase()) {
+			case "nickname":
+				return message.channel.send(`Please use the ${getPrefix(message.guild.id)}nickname command to clear your nickname!`);
+
+			case "fullname":
+			case "species":
+			case "info":
+			case "backstory":
+			case "likes":
+			case "dislikes":
+			case "fears":
+			case "voice":
+			case "theme":
+			case "weight":
+			case "height":
+			case "age":
+			case "appearance":
+				delete charFile[args[0]].bio[args[1].toLowerCase()];
+				break;
+
+			case "gender":
+				charFile[args[0]].bio.gender = 'other';
+				break;
+
+			default:
+				if (!charFile[args[0]].bio.custom) charFile[args[0]].bio.custom = {};
+				
+				if (charFile[args[0]].bio.custom[args[1]])
+					delete charFile[args[0]].bio.custom[args[1]];
+				else
+					return message.channel.send("That value doesn't exist!");
+
+				break;
+		}
+
 		message.react('👍');
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
