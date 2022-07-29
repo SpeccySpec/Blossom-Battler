@@ -2515,14 +2515,16 @@ commands.setbioinfo = new Command({
 				charFile[args[0]].bio.age = parseInt(args[2]);
 				break;
 			case "gender":
-				charFile[args[0]].bio.gender = args[2].toLowerCase() != "male" && args[2].toLowerCase() != "female" ? 'other' : args[2].toLowerCase()
+				if (!args[2]) return message.channel.send("Please enter either Male, Female or Other.");
+
+				charFile[args[0]].bio.gender = args[2].toLowerCase();
 				break;
 			case "appearance":
-				if (args[2] && args[2].toLowerCase() != 'none') {
+				if (args[2] && args[2].toLowerCase() == 'none') {
+					charFile[args[0]].bio.appearance = '';
+				} else {
 					if (!checkImage(message, args[2], message.attachments.first())) return message.channel.send(`${args[2]} is not a valid image.`);
 					charFile[args[0]].bio.appearance = checkImage(message, args[2], message.attachments.first());
-				} else {
-					charFile[args[0]].bio.appearance = '';
 				}
 				break;
 			default:
