@@ -39,7 +39,7 @@ passiveList = {
 				skill.pow *= vars[1]/100;
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			let txt = `Boosts `
 
 			for (i in vars) {
@@ -144,7 +144,7 @@ passiveList = {
 				}
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Boosts physical and ranged attacks by up to **${vars[0]-100}%** with more HP up to **${vars[1]}% of user's max HP**`;
 		}
 	}),
@@ -187,7 +187,7 @@ passiveList = {
 				}
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Boosts magic attacks by up to **${vars[0]-100}%** with less HP down to **${vars[1]}% of user's max HP**`;
 		}
 	}),
@@ -262,7 +262,7 @@ passiveList = {
 			char.mp = Math.min(char.maxmp, char.mp);
 			return finalTxt;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			let txt = 'Heals **'
 
 			for (i in vars) {
@@ -364,7 +364,7 @@ passiveList = {
 
 			return '';
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			let txt = 'Inflicts '
 
 			for (i in vars) {
@@ -418,7 +418,7 @@ passiveList = {
 				return false;
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			let txt = 'Has'
 
 			for (i in vars) {
@@ -588,7 +588,7 @@ passiveList = {
 				}
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Has a **${vars[1]}**% chance to counter with a **${vars[0] == 'phys' ? 'physical' : 'magic'} attack** named __${vars[2].name}__`
 		}
 	}),
@@ -625,7 +625,7 @@ passiveList = {
 				if (randNum(1, 100) <= vars[1]) return inflictStatus(inf, vars[0]);
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			let txt = 'Has'
 
 			for (let i in vars) {
@@ -694,7 +694,7 @@ passiveList = {
 				return `__${char.name}__ was able to cure themselves of their status effect.`;
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Has a **${vars[0]}%** chance to **cure a negative status effect** every turn`
 		}
 	}),
@@ -719,7 +719,7 @@ passiveList = {
 				skill.pow *= 1+(userDefs.hp/userDefs.maxhp)/1.42857142-0.2;
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Changes power of **physical attacks** at higher HP, and decreases at lower HP by up to **${vars[0]}%**`
 		}
 	}),
@@ -773,7 +773,7 @@ passiveList = {
 				}
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Has a **${vars[1]}%** chance to **hit ${vars[0]} more time${vars[0] > 1 ? 's' : ''}** from a single hit skill with **${vars[2]}x** as much power`
 		}
 	}),
@@ -794,7 +794,7 @@ passiveList = {
 			return true;
 		},
 		hardcoded: true,
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Increases **pacify rate** by **${vars[0]}%**`
 		}
 	}),
@@ -823,7 +823,7 @@ passiveList = {
 
 			return null;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Has a **${vars[0]}%** chance to bypass **resist affinities**`
 		}
 	}),
@@ -852,7 +852,7 @@ passiveList = {
 
 			return null;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Has a **${vars[0]}%** chance to bypass **all resisting affinities**, turning them into **a resist or better**`
 		}
 	}),
@@ -881,7 +881,7 @@ passiveList = {
 
 			return null;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Has a **${vars[0]}%** chance for **effective and normal attacks** that hit the user to turn **into a resist**`
 		}
 	}),
@@ -895,7 +895,7 @@ passiveList = {
 			return true;
 		},
 		hardcoded: true,
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Turns user's melee attack into **a magic attack**`
 		}
 	}),
@@ -909,7 +909,7 @@ passiveList = {
 			return true;
 		},
 		hardcoded: true,
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Melee Attack **targets all foes**`
 		}
 	}),
@@ -929,7 +929,7 @@ passiveList = {
 
 			return ['block', `__${char.name}__'s __${passive.name}__ made the skill have no affect!`];
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `**Nullifies damage from attacks that the user is not weak to**`
 		}
 	}),
@@ -974,7 +974,7 @@ passiveList = {
 
 			return false;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			let txt = `Has a **${vars[0]}%** chance to repel **magic or ranged attacks** of **`
 
 			for (let i in vars[1]) {
@@ -1023,7 +1023,7 @@ passiveList = {
 				return `...however, ${char.name} was able to endure the attack!`;
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Upon defeat, **revives the user** until **${vars[0]} times** with **${vars[1]} HP**`
 		}
 	}),
@@ -1046,7 +1046,7 @@ passiveList = {
 			return true
 		},
 		hardcoded: true,
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Reduces damage taken when guarding by **${vars[0]}%**`
 		}
 	}),
@@ -1069,7 +1069,7 @@ passiveList = {
 			return true
 		},
 		hardcoded: true,
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Boosts dodging attacks when guarding by **${vars[0]}%**`
 		}
 	}),
@@ -1094,7 +1094,7 @@ passiveList = {
 		statmod(btl, char, skill, vars) {
 			if (skill.extras?.sacrifice) skill.pow *= vars[0]/100;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Boosts the power of sacrifice skills by **${vars[0]}%**`
 		}
 	}),
@@ -1123,7 +1123,7 @@ passiveList = {
 				return `__${char.name}'s__ _${passive.name}_ was able to restore **${heal}MP** from the attack!`;
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Gain **${vars[0]}%** of damage taken as MP`
 		}
 	}),
@@ -1161,7 +1161,7 @@ passiveList = {
 
 			return `__${char.name}'s__ _${passive.name}_ was able to restore **${heal}HP** and **${healmp}MP** from __${targ.name}__'s defeat!`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Upon foe defeat, restores **${vars[0]}%** of the foe's level as HP and **${vars[1]}%** of the foe's level as MP to the user`
 		}
 	}),
@@ -1227,7 +1227,7 @@ passiveList = {
 				killVar(char, 'elementstore');
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			let txt = 'Has'
 
 			for (i in vars) {
@@ -1276,7 +1276,7 @@ passiveList = {
 				return `${char.name} obtained a __${vars[1]}__. _(${char.custom.affinitypoint}/${vars[0]})_`;
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Nets a **__${vars[1]}__** for every heal the user obrains until it reaches **${vars[0]}**`
 		}
 	})

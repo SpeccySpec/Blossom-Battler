@@ -88,7 +88,7 @@ extrasList = {
 
 			return `__${char.name}__ sacrificed themselves! Their HP dropped to **${vars[0]}**!`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Drops _user_ HP to **${vars[0]}**`;
 		}
 	}),
@@ -160,7 +160,7 @@ extrasList = {
 
 			return true;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Requires **${vars[0]} than ${vars[1] ? 'or equal to' : ''} ${vars[2]}${vars[3].toUpperCase()}** to use`;
 		}
 	}),
@@ -282,7 +282,7 @@ extrasList = {
 
 			return `__${target.name}__'s affinity for ${elementEmoji[vars[1]]}**${vars[1]}** was changed to ${affinityEmoji[vars[2]]}**${vars[2]}**!`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			let finalText = ""
 			let targetAffinities = vars.filter(x => x.includes('target'))
 			let userAffinities = vars.filter(x => x.includes('user'))
@@ -376,7 +376,7 @@ extrasList = {
 			char.rest = true;
 			return `__${char.name}__ must rest to regain their energy!`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return 'User must rest for one turn';
 		}
 	}),
@@ -555,7 +555,7 @@ extrasList = {
 
 			if (!vars[2]) skill.pow += lmao * 3
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			let powBuffs = vars.sort((a, b) => {
 				return (stats.indexOf(a[0])*10000 + a[1]*10 + a[2] ? 0 : 1) - (stats.indexOf(b[0])*10000 + b[1]*10 + b[2] ? 0 : 1)
 			})
@@ -607,7 +607,7 @@ extrasList = {
 
 			return `__${char.name}__ took **${MPtaken} MP** from __${targ.name}__!`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Takes **${vars[0]} MP** from the target`
 		}
 	}),
@@ -629,7 +629,7 @@ extrasList = {
 			
 			return `__${char.name}__ managed to steal **${mpStolen}** MP!`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Steals MP from the target instead of dealing damage`
 		}
 	}),
@@ -745,7 +745,7 @@ extrasList = {
 			}
 			return `__${char.name}__ failed to steal anything.`
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			let txt = `Has a ` 
 
 			for (i in vars) {
@@ -781,7 +781,7 @@ extrasList = {
 
 			return `__${char.name}__ drained **${heal}HP** from ${targ.name}!`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Drains 1/${vars[0]} of the damage dealt`;
 		}
 	}),
@@ -794,7 +794,7 @@ extrasList = {
 			return true;
 		},
 		hardcoded: true,
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `**Bypasses shielding skills**`;
 		}
 	}),
@@ -846,7 +846,7 @@ extrasList = {
 				}
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Surrounds the target with a **healing aura** for **${vars[1]}** turns`;
 		}
 	}),
@@ -897,7 +897,7 @@ extrasList = {
 				}
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Surrounds the target with an **empowering aura** for **${vars[1]}** turns`;
 		}
 	}),
@@ -947,7 +947,7 @@ extrasList = {
 				}
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Surrounds the target with a **scattering aura** for **${vars[1]}** turns`;
 		}
 	}),
@@ -973,7 +973,7 @@ extrasList = {
 
 			if (allies <= 1) skill.pow *= vars[0];
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `When alone, this skill's power is multiplied by **${vars[0]}x**`;
 		}
 	}),
@@ -999,7 +999,7 @@ extrasList = {
 
 			if (allies >= btl.teams[char.team].members.length) skill.pow *= vars[0];
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `When not alone, this skill's power is multiplied by **${vars[0]}x**`;
 		}
 	}),
@@ -1022,7 +1022,7 @@ extrasList = {
 			return true
 		},
 		hardcoded: true,
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Uses _user's_ **${vars[0].toUpperCase()}** to calculate damage`;
 		}
 	}),
@@ -1045,7 +1045,7 @@ extrasList = {
 			return true
 		},
 		hardcoded: true,
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Uses _target's_ **${vars[0].toUpperCase()}** to calculate damage`;
 		}
 	}),
@@ -1063,7 +1063,7 @@ extrasList = {
 			makeExtra(skill, "hpcalc", [args[0] ?? 50]);
 			return true
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Current user's HP can modify damage by **${vars[0]}%**`;
 		}
 	}),
@@ -1081,7 +1081,7 @@ extrasList = {
 			makeExtra(skill, "mpcalc", [args[0] ?? 50]);
 			return true
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Current user's MP can modify damage by **${vars[0]}%**`;
 		}
 	}),
@@ -1159,7 +1159,7 @@ extrasList = {
 		statmod(char, skill, vars, btl) {
 			if (char.custom?.affinitypoint) skill.pow += vars[0]*char.custom.affinitypoint;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Skill's power boosted by **${vars[0]}** per <:passive:963413845253193758>**Affinity Point**`;
 		}
 	}),
@@ -1191,7 +1191,7 @@ extrasList = {
 			return true;
 		},
 		hardcoded: true,
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			let txt = `Techs off of `;
 			for (const i in vars) {
 				txt += `**${statusEmojis[vars[i]]}${vars[i]}**`
@@ -1225,7 +1225,7 @@ extrasList = {
 			return true;
 		},
 		hardcoded: true,
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Uses the **${vars[0]}** damage formula`;
 		}
 	}),
@@ -1285,7 +1285,7 @@ extrasList = {
 				}
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Boost power by **${vars[0]}%** every consecutive use, until **${vars[1]}x** or used **${vars[2]} times**`;
 		}
 	}),
@@ -1299,7 +1299,7 @@ extrasList = {
 			return true;
 		},
 		hardcoded: true,
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			if (skill.hits && skill.hits > 1)
 				return 'Constant power throughout the multi-hit';
 			else
@@ -1316,7 +1316,7 @@ extrasList = {
 			return true;
 		},
 		hardcoded: true,
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			if (skill.hits && skill.hits > 1)
 				return 'Power increases throughout the multi-hit instead of decreasing';
 			else
@@ -1341,7 +1341,7 @@ extrasList = {
 			makeExtra(skill, "powhit", [args]);
 			return true;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			if (skill.hits && skill.hits > 1) {
 				let txt = 'Hits ';
 
@@ -1396,7 +1396,7 @@ extrasList = {
 				addAtkMsg(btl, `__${char.name}__'s __${skill.name}__ landed **${vars[1]}** extra time(s)!`);
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `**${vars[0]}%** chance to add up to **${vars[1]}** extra hit(s) to the skill`;
 		}
 	}),
@@ -1436,7 +1436,7 @@ extrasList = {
 			if (!char.status) return;
 			if (vars.inlcludes(char.status)) skill.pow *= vars[0];
 		},
-		getinfo(vars) { //SOMEONE HAS TO TEST IF THIS WORKS PROPERLY
+		getinfo(vars, skill) { //SOMEONE HAS TO TEST IF THIS WORKS PROPERLY
 			let txt = `**${vars[0]}x** power boost when inflicted with `;
 			for (const i in vars) {
 				txt += `**${statusEmojis[vars[i]]}${vars[i]}**`
@@ -1468,7 +1468,7 @@ extrasList = {
 			return true
 		},
 		hardcoded: true,
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return 'Use a completely random skill..';
 		}
 	}),
@@ -1481,7 +1481,7 @@ extrasList = {
 			makeExtra(skill, "copyskill", [true]);
 			return true
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return 'Copies a **random skill of user\'s team**';
 		}
 	}),
@@ -1508,7 +1508,7 @@ extrasList = {
 				addAtkMsg(btl, `__${targ.name}__'s **${name}** was destroyed!`)
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `**Breaks the foe's shield**, with attack multiplied by **${vars[0]}x**`;
 		}
 	}),
@@ -1533,7 +1533,7 @@ extrasList = {
 				return dodgeTxt(targ);
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return 'Brings the target to the _user\'s_ HP.';
 		}
 	}),
@@ -1556,7 +1556,7 @@ extrasList = {
 				return dodgeTxt(targ);
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return "Halves the target's current HP.";
 		}
 	}),

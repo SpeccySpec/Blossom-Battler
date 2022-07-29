@@ -64,7 +64,7 @@ healList = {
 
 			return '';
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			let healType = vars[1];
 
 			if (healType.includes('percent')) healType = '% of target\'s ' + healType.replace('percent', '').toUpperCase();
@@ -115,7 +115,7 @@ healList = {
 			}
 			return `__${targ.name}__ is surrounded in a lime coloured aura!`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Regenerates **around ${vars[0]} HP** for **${vars[1]} turns**`
 		}
 	}),
@@ -160,7 +160,7 @@ healList = {
 			}
 			return `__${targ.name}__ is surrounded in a violet coloured aura!`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Regenerates **around ${vars[0]} MP** for **${vars[1]} turns**`
 		}
 	}),
@@ -191,7 +191,7 @@ healList = {
 			}
 			return `__${targ.name}__ was revived!`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `**Revives** the target to 1/${vars[0]} of their max HP`
 		}
 	}),
@@ -218,7 +218,7 @@ healList = {
 
 			return `The party's HP & MP was fully restored, but at the cost of __${char.name}__'s sacrifice!`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `**Fully** restores party HP and MP, but **downs the user**`
 		}
 	}),
@@ -298,7 +298,7 @@ healList = {
 
 			return '...';
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			let txt = `Cures **`
 
 			for (let i in vars) {
@@ -344,8 +344,8 @@ healList = {
 
 			return `__${char.name}__ sacrificed themselves, lowering their HP to __${vars[0]}__!`;
 		},
-		getinfo(vars) {
-			return extraslist.sacrifice.getinfo(vars);
+		getinfo(vars, skill) {
+			return extraslist.sacrifice.getinfo(vars, skill);
 		}
 	}),
 
@@ -382,7 +382,7 @@ healList = {
 
 			return `__${char.name}__ will experience a healing wish in **${vars[0]}** turns.`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Heals after **${vars[0]} turns**`;
 		}
 	})

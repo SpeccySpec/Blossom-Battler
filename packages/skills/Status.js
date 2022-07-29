@@ -197,7 +197,7 @@ statusList = {
 					break;
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return "Removes the target's buffs"
 		}
 	}),
@@ -224,7 +224,7 @@ statusList = {
 				if (targ.buffs[i] > char.buffs[i]) act.points += targ.buffs[i]-char.buffs[i];
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return "Swaps user's **stat chances** with the target's"
 		}
 	}),
@@ -277,7 +277,7 @@ statusList = {
 				return '...but something went wrong...';
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Mimics **an ally or foe** for **${vars[0]}** turns`
 		}
 	}),
@@ -304,7 +304,7 @@ statusList = {
 				return '...but it failed!';
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return "Cancels the effect of a **mimic** skill used **beforehand**"
 		}
 	}),
@@ -361,7 +361,7 @@ statusList = {
 			btl.teams[char.team].members.push(newchar);
 			return `__${char.name}__ created a clone of themselves.`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return "Clones **the user**"
 		}
 	}),
@@ -413,7 +413,7 @@ statusList = {
 				return `__${char.name}__ protected __${targ.name}__ with a __${vars[0]}__!`;
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Surrounds the target with a **shield named ${elementEmoji[vars[1]]}${vars[0]}**`
 		}
 	}),
@@ -468,7 +468,7 @@ statusList = {
 					break;
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Surrounds the target with a **${vars[0] == "phys" ? "Tetra" : "Makara"}karn**`
 		}
 	}),
@@ -506,7 +506,7 @@ statusList = {
 				return `__${targ.name}__ had their shield broken!`;
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			const shield = vars[0]
 			`Breaks the target's **${shield.charAt(0).toUpperCase() + shield.slice(1)}${shield.includes('ra') ? 'karn' : ''}**`
 		}
@@ -589,7 +589,7 @@ statusList = {
 				return `__${char.name}__ deployed a trap infront of __${targ.name}__: __${vars[0]}__!`;
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return "Sets up a **trap**"
 		}
 	}),
@@ -656,7 +656,7 @@ statusList = {
 			}
 			return `The weather has been changed to __${vars[0]}__!`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Changes **Weather** to **${vars[0]}**`
 		}
 	}),
@@ -689,7 +689,7 @@ statusList = {
 			}
 			return `The terrain has been changed to __${vars[0]}__!`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Changes **Terrain** to **${vars[0]}**`
 		}
 	}),
@@ -848,7 +848,7 @@ statusList = {
 			btl.turnorder = getTurnOrder(btl)
 			return replaceTxt(vars[4], '%PLAYER%', `__${char.name}__`, '%UNDEAD%', newchar.name);
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return "Summons **an undead ally**"
 		}
 	}),
@@ -976,7 +976,7 @@ statusList = {
 				return `__${char.name}__ is going to strike __${targ.name}__ in ${vars[0].turns} turns!`;
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			const attackInfo = vars[0]
 			return `Strieks with a **${attackInfo.type}** attack in **${attackInfo.turns}** turns`
 		}
@@ -1017,7 +1017,7 @@ statusList = {
 				return `__${char.name}__ assumes a defensive stance, ready to strike back.`;
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Attack back when hit, with a **${vars[1]}%** accuracy attack with **${vars[0]}x** power`
 		}
 	}),
@@ -1112,7 +1112,7 @@ statusList = {
 				return 'But it failed!';
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			let finalText = "Pacifies the target with "
 			let status
 			let amount
@@ -1173,7 +1173,7 @@ statusList = {
 				return `__${char.name}__'s attack and melee attack power is boosted... but they are locked into using them!`;
 			}
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Locks the user into using Melee Attacks with **${vars[0]}x Melee Power** and **x${vars[1]} ATK Stat Multiplier** ${vars[2] < 0 ? '**indefinitely**' : `for **${vars[2]}** turns`}`
 		}
 	}),
@@ -1212,7 +1212,7 @@ statusList = {
 
 			return `__${char.name}__'s ${(vars[0] == 'phys') ? 'atk' : 'mag'} was boosted for one turn!`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			let finalText = "Boosts"
 			for (let i in vars) {
 				finalText += ` **${vars[i][0]}** damage by ${vars[i][1]}x`
@@ -1266,7 +1266,7 @@ statusList = {
 
 			return `__${char.name}__'s attack and magic was multiplied by ${vars[0]}, however, their endurance was multiplied by ${vars[1]}.`;
 		},
-		getinfo(vars) {
+		getinfo(vars, skill) {
 			return `Modifies user's ATK and MAG by **${vars[0]}**x and END by **${vars[1]}**x for **${vars[2]}** turns. Falls asleep afterwards`
 		}
 	})
@@ -1644,6 +1644,7 @@ statusEffectFuncs = {
 	},
 
 	dazed: {
+		forceturns: 2,
 		hardcoded: true
 	},
 

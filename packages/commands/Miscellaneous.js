@@ -249,7 +249,7 @@ commands.help = new Command({
 	}
 })
 
-let inviteLink = 'https://discord.com/oauth2/authorize?client_id=957671901197647912&scope=bot&permissions=319441726528'
+let inviteLink = 'https://discord.com/oauth2/authorize?client_id=776480348757557308&scope=bot&permissions=319441726528'
 
 commands.invite = new Command({
 	desc: "Invite Blossom Battler to another server!",

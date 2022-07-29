@@ -246,7 +246,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 	for (const extra in extras) {
 		const getinfo = extraslist[extra]?.getinfo
 		if (getinfo)
-			finalText += getinfo(extras[extra]) + ".\n"
+			finalText += getinfo(extras[extra], skillDefs) + ".\n"
 	}
 
 	if (skillDefs.atktype) {
