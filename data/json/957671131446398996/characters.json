@@ -28148,10 +28148,10 @@
         "affinities": {
             "superweak": [],
             "weak": [],
-            "resist": [],
-            "block": [
+            "resist": [
                 "fire"
             ],
+            "block": [],
             "repel": [],
             "drain": []
         },

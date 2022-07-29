@@ -228,8 +228,7 @@ extrasList = {
 		targetchange(target, vars, skill) {
 			if (!target.affinities) target.affinities = [];
 
-			let setAffinities = []
-
+			let setAffinities = [];
 			let wasChanged = false;
 
 			if (vars[3] != 'normal') {
