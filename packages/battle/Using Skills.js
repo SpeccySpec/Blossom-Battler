@@ -828,10 +828,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) {
-								extrasList[i].ondamage(char, targ, total, skill, btl, skill.extras[i][k]);
+								result.txt += '\n' + (extrasList[i].ondamage(char, targ, total, skill, btl, skill.extras[i][k]) ?? '');
 							}
 						} else {
-							extrasList[i].ondamage(char, targ, total, skill, btl, skill.extras[i]);
+							result.txt += '\n' + (extrasList[i].ondamage(char, targ, total, skill, btl, skill.extras[i]) ?? '');
 						}
 					}
 				}
@@ -844,10 +844,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 						if (passiveList[k] && passiveList[k].ondamage) {
 							if (passiveList[k].multiple) {
 								for (let l in skillFile[targ.skills[i]].passive[k]) {
-									result.txt += passiveList[k].ondamage(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k][l]) ?? '';
+									result.txt += '\n' + (passiveList[k].ondamage(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k][l]) ?? '');
 								}
 							} else {
-								result.txt += passiveList[k].ondamage(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k]) ?? '';
+								result.txt += '\n' + (passiveList[k].ondamage(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k]) ?? '');
 							}
 						}
 					}

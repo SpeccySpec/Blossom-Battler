@@ -325,7 +325,7 @@ passiveList = {
 			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic')) {
 				if (vars[1] < 0) {
 					inf.hp -= vars[1];
-					return `__${inf.name}__ had their HP restored by ***${-vars[1]}*** thanks to __${char.name}__'s _${passive.name}_.`;
+					return ` __${inf.name}__ had their HP restored by ***${-vars[1]}*** thanks to __${char.name}__'s _${passive.name}_.`;
 				} else {
 					switch(affinity) {
 						case 'deadly':
@@ -346,18 +346,18 @@ passiveList = {
 						
 						case 'block':
 						case 'repel':
-							return `__${inf.name}__ blocked __${char.name}__'s _${passive.name}_.`;
+							return ` __${inf.name}__ blocked __${char.name}__'s _${passive.name}_.`;
 
 						case 'drain':
 							inf.hp = Math.min(inf.maxhp, inf.hp+d);
-							return `__${inf.name}__ drained __${char.name}__'s _${passive.name}_. Their HP was restored by ***${d}***${affinityTxt}!`;
+							return ` __${inf.name}__ drained __${char.name}__'s _${passive.name}_. Their HP was restored by ***${d}***${affinityTxt}!`;
 					}
 
 					inf.hp -= d;
 					if (inf.hp <= 0) {
-						return `Having taken ***${d}***${affinityTxt} damage, __${inf.name}__ perished due to __${char.name}__'s _${passive.name}_!`;
+						return ` Having taken ***${d}***${affinityTxt} damage, __${inf.name}__ perished due to __${char.name}__'s _${passive.name}_!`;
 					} else {
-						return `__${inf.name}__ took ***${d}***${affinityTxt} damage due to __${char.name}__'s _${passive.name}_!`;
+						return ` __${inf.name}__ took ***${d}***${affinityTxt} damage due to __${char.name}__'s _${passive.name}_!`;
 					}
 				}
 			}

@@ -28102,11 +28102,11 @@
         "curweapon": {},
         "curarmor": {},
         "owner": "516359709779820544",
-        "level": 1,
-        "hp": 27,
-        "mp": 38,
-        "maxhp": 27,
-        "maxmp": 38,
+        "level": 99,
+        "hp": 536,
+        "mp": 655,
+        "maxhp": 536,
+        "maxmp": 655,
         "basehp": 27,
         "basemp": 38,
         "mpMeter": [
@@ -28123,14 +28123,14 @@
             "crit": 15
         },
         "stats": {
-            "atk": 3,
-            "mag": 9,
-            "prc": 4,
-            "end": 5,
-            "chr": 8,
-            "int": 5,
-            "agl": 2,
-            "luk": 3
+            "atk": 36,
+            "mag": 99,
+            "prc": 53,
+            "end": 54,
+            "chr": 99,
+            "int": 99,
+            "agl": 35,
+            "luk": 52
         },
         "basestats": {
             "baseatk": 3,
@@ -28144,7 +28144,7 @@
         },
         "lb": 0,
         "xp": 0,
-        "maxxp": 500,
+        "maxxp": 615066353,
         "affinities": {
             "superweak": [],
             "weak": [],
@@ -28156,7 +28156,8 @@
             "drain": []
         },
         "skills": [
-            "BurnUp"
+            "BurnUp",
+            "SpiderFang"
         ],
         "autolearn": [],
         "quotes": {
