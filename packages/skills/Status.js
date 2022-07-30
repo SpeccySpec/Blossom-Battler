@@ -475,7 +475,7 @@ statusList = {
 
 	shieldbreak: new Extra({
 		name: "Shield Break",
-		desc: "_<Shield/Tetra/Makara> <Chance>_\nHas a <Chance>% chance to break the target's <Shield/Tetra/Makara>.",
+		desc: "Has a <Chance>% chance to break the target's <Shield/Tetra/Makara>.",
 		args: [
 			{
 				name: "Shield/Tetra/Makara",
