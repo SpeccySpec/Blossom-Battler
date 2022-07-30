@@ -1533,7 +1533,7 @@ commands.preskill = new Command({
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
 		} else {
-			return message.channel.send(`${args[0]} is an invalid Skill Name!`)
+			return message.channel.send(`${skillFile[args[0]] ? args[1] : args[0]} is an invalid Skill Name!`);
 		}
 	}
 })
@@ -1626,7 +1626,7 @@ commands.evoskill = new Command({
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
 		} else {
-			return message.channel.send(`${args[0]} is an invalid Skill Name!`)
+			return message.channel.send(`${skillFile[args[0]] ? args[1] : args[0]} is an invalid Skill Name!`);
 		}
 	}
 })
