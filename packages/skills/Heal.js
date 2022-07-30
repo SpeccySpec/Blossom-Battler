@@ -91,11 +91,11 @@ healList = {
 			}
 		],
 		applyfunc(message, skill, args) {
-			const hp = args[0];
-			const turns = args[1];
+			let hp = args[0];
+			let turns = args[1];
 
 			if (hp == 0) hp = 20;
-			if (turns) turns = 3;
+			if (turns <= 0) return void message.channel.send(`${turns} is an invalid number of turns! Enter a number greater than 0.`);
 			makeHeal(skill, "regenerate", [hp, turns]);
 			return true;
 		},
@@ -136,11 +136,11 @@ healList = {
 			}
 		],
 		applyfunc(message, skill, args) {
-			const mp = args[0];
-			const turns = args[1];
+			let mp = args[0];
+			let turns = args[1];
 
-			if (mp == 0) hp = 20;
-			if (turns) turns = 3;
+			if (mp == 0) mp = 20;
+			if (turns <= 0) return void message.channel.send(`${turns} is an invalid number of turns! Enter a number greater than 0.`);
 			makeHeal(skill, "invigorate", [mp, turns]);
 			return true;
 		},
