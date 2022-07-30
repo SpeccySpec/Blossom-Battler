@@ -827,24 +827,25 @@ commands.openchest = new Command({
                 break;
             case 'password':
                 message.channel.send(`${chest.name} has a password. What is it? You got 30 seconds to respond.`)
-                let authorID = partyLeader(parties[args[0]], message.guild.id)
-                let collector = new Discord.MessageCollector(message.channel, m => m.author.id === authorID, {time: 30000});
+                
+                var givenResponce = false
+                var collector = message.channel.createMessageCollector({ time: 30000 });
                 collector.on('collect', m => {
-                    if (!m.author.bot) {
+                    if (m.author.id == message.author.id) {
                         if (m.content == chest.lock[1]) {
                             openChest(message, args, chestFile, chest, parties[args[0]])
                         } else {
                             wrongLock(message, args, chestFile, chest, parties)
                         }
-                        collector.stop();
-                        return;
+
+                        givenResponce = true
+                        collector.stop()
                     }
-                })
-                collector.on('end', collected => {
-                    if (collected.size == 0) {
-                        return message.channel.send(`You didn't respond in time.`);
-                    }
-                })
+                });
+                collector.on('end', c => {
+                    if (givenResponce == false)
+                        message.channel.send(`No response given.`);
+                });
                 break;
         }
 
