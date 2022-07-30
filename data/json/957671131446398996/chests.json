@@ -4,13 +4,14 @@
             "originalAuthor": "441198920668938260",
             "name": "Yucky",
             "channel": "957671132457234556",
-            "party": "",
+            "party": "Pank",
             "lock": [
                 "password",
                 "balls"
             ],
             "items": {
-                "Sky": 50
+                "Sky": 90,
+                "Sweet": 1
             },
             "incorrectTries": {
                 "Trinity": 4
