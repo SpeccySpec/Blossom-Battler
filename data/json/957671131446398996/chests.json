@@ -22,7 +22,8 @@
                     "Bluff": 11
                 }
             },
-            "desc": "Fuck off"
+            "desc": "Fuck off",
+            "hint": "Ew that's gross..."
         },
         "LootTest": {
             "originalAuthor": "441198920668938260",

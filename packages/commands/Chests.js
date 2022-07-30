@@ -717,12 +717,67 @@ commands.editchest = new Command({
 
                 chestFile[args[0]][args[1]].lock = [lockType, lockKey]
                 break;
+            case 'hint':
+                if (args[3] == 'none') {
+                    delete chestFile[args[0]][args[1]].hint
+                } else {
+                    chestFile[args[0]][args[1]].hint = args[3];
+                }
+                break;
             default:
                 return message.channel.send(`${args[2]} is not a valid field.`);
         }
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
         message.react('👍');
+    }
+})
+
+commands.lockhint = new Command({
+    desc: `Put a hint to a chest to help people with finding the right key. To preview the hint instead, don't put a new one.`,
+    section: `chests`,
+    args: [
+        {
+            name: "Channel",
+            type: "Channel",
+            forced: true
+        },
+        {
+            name: "Chest",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Hint",
+            type: "Word",
+            forced: false
+        }
+    ],
+    checkban: true,
+    func: (message, args) => {
+        chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+
+        if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);
+        if (!chestFile[args[0]][args[1]]) return message.channel.send(`${args[1]} is not a valid chest.`);
+        if (chestFile[args[0]][args[1]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send(`You cannot edit ${args[1]}.`);
+
+        if (args[2]) {
+            if (args[2] == 'none') {
+                delete chestFile[args[0]][args[1]].hint;
+            } else {
+                chestFile[args[0]][args[1]].hint = args[2];
+            }
+
+            fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+            message.react('👍');
+        } else {
+            let discordEmbed = new Discord.MessageEmbed()
+                .setColor(0x00AE86)
+                .setTitle(`Hint for ${chestFile[args[0]][args[1]].name}`)
+                .setDescription(`*${chestFile[args[0]][args[1]].hint ?? "No hint."}*`)
+
+            message.channel.send({embeds: [discordEmbed]})
+        }
     }
 })
 
