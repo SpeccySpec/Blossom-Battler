@@ -1297,12 +1297,235 @@ commands.putitems = new Command({
                             delete party.armor[item]
                         }
                     }
+                    if (party.currency > 0) {
+                        if (!chest.money) chest.money = 0
+                        chest.money += party.currency
+                        party.currency = 0
+                    }
                     break;
             }
         }
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
         message.channel.send({content: 'Items have been successfully put inside. Here\'s what it looks like inside:', embeds: [chestDesc(chest, chest.name, message, true)]})
+        if (itemErrors.length > 0) message.channel.send(`However there were some errors:\n- ${itemErrors.join('\n- ')}`)
+    }
+})
+
+//now we need to make a command to get items from chests into a party's inventory
+commands.takeitems = new Command({
+    desc: 'Take items/weapons/armor/money from a chest to the inventory of a team using it.',
+    section: 'chests',
+    checkban: true,
+    args: [
+        {
+            name: "Channel",
+            type: "Channel",
+            forced: true
+        },
+        {
+            name: "Chest",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Item (Type, Name, Amount) #1",
+            type: "Word",
+            forced: true,
+            multiple: true
+        }
+    ],
+    func: (message, args) => {
+        chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+        parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
+
+        if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);
+        if (!chestFile[args[0]][args[1]]) return message.channel.send(`${args[1]} is not a valid chest.`);
+
+        let chest = chestFile[args[0]][args[1]]
+        let chestName = chest.name
+
+        if (chest.party == '') return message.channel.send(`${args[1]} is not open`);
+        if (!parties[chest.party]) return message.channel.send(`That's weird... The party using the chest doesn't seem to exist, that being team ${chest.party}. Opening the chest again should fix this.`);
+        if (!isPartyLeader(message.author, parties[chest.party], message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send(`You're not the leader of the team that's using this chest, that being team ${parties[chest.party]?.name ?? chest.party}, so you cannot put anything in it.`);
+        let party = parties[chest.party]
+
+        args.splice(0, 2)
+
+        itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+        weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
+        armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
+
+        let itemFiles = {
+            item: itemFile,
+            weapon: weaponFile,
+            armor: armorFile
+        }
+
+        let itemCollector = []
+        let itemErrors = []
+        let itemCollectorIndex = 0
+
+        while (args.length > 0) {
+            if (args[0].toLowerCase() != 'all') {
+                itemCollector.push([args[0].toLowerCase(), args[1]])
+                args.splice(0, 2)
+                if (!isNaN(args[0]) && (itemCollector[itemCollectorIndex][0] == 'item')) {
+                    itemCollector[itemCollectorIndex].push(parseInt(args[0]))
+                    args.splice(0, 1)
+                }
+            } else {
+                itemCollector.push(['all'])
+                args.splice(0, 1)
+            }
+            itemCollectorIndex++
+        }
+
+        for (i in itemCollector) {
+            switch (itemCollector[i][0]) {
+                case 'item':
+                case 'weapon':
+                case 'armor':
+                    if (!itemCollector[i][1] || (itemCollector[i][1].toLowerCase() != 'all' && !itemFiles[itemCollector[i][0]][itemCollector[i][1]])) {
+                        itemErrors.push(`${itemCollector[i][1] ? `${itemCollector[i][1]} is not a valid ${itemCollector[i][0]} name.` : `You did not specify a name for the ${itemCollector[i][0]}.`}`);
+                        itemCollector[i] = '-'
+                    }
+                    if (itemCollector[i] != '-' && !chest?.[itemCollector[i][0]+'s']?.[itemCollector[i][1]]) {
+                        itemErrors.push(`Chest ${chestName} doesn't have any ${itemCollector[i][0]}s named ${itemCollector[i][1]}.`)
+                        itemCollector[i] = '-'
+                    }
+                    if (itemCollector[i] != '-' && itemCollector[i][0] != 'item' && party?.[itemCollector[i][0]+'s']?.[itemCollector[i][1]]) {
+                        itemErrors.push(`Your party already has ${itemCollector[i][1]} in its ${itemCollector[i][0]}s.`)
+                        itemCollector[i] = '-'
+                    }
+                    if (itemCollector[i][2]) {
+                        if (!isNaN(itemCollector[i][2])) {
+                            itemCollector[i][2] = Math.max(1, parseInt(itemCollector[i][2]))
+                        } else {
+                            itemCollector[i][2] = 1
+                        }
+
+                        if (itemCollector[i][2] > chest[itemCollector[i][0]+'s'][itemCollector[i][1]]) {
+                            itemCollector[i][2] = chest[itemCollector[i][0]+'s'][itemCollector[i][1]]
+                            
+                            if (itemCollector[i][2] == 0) {
+                                itemErrors.push(`Chest ${chestName} doesn't have any ${itemCollector[i][0]}s named ${itemCollector[i][1]}.`)
+                                itemCollector[i] = '-'
+                            }
+                        }
+                    }
+                    break;
+                case 'money':
+                    if (!isNaN(itemCollector[i][1])) {
+                        itemCollector[i][1] = Math.max(1, parseInt(itemCollector[i][1]))
+                    } else {
+                        itemErrors.push(`You did not specify a valid amount of money.`)
+                        itemCollector[i] = '-'
+                    }
+                    if (itemCollector[i][1] > chest.money) {
+                        itemCollector[i][1] = chest.money
+
+                        if (itemCollector[i][1] == 0) {
+                            itemErrors.push(`Chest ${chestName} doesn't have any ${getCurrency(message.guild.id)}s.`)
+                            itemCollector[i] = '-'
+                        }
+                    }
+                    break;
+                case 'all':
+                    break;
+                default:
+                    itemErrors.push(`${itemCollector[i][0]} is not a valid type.`)
+                    itemCollector[i] = '-'
+                    break;
+            }
+        }
+    
+        itemCollector = itemCollector.filter(item => item != '-')
+    
+        if (itemCollector.length == 0) return message.channel.send(`You did not specify anything to give to ${chest.name}. What went wrong:\n- ${itemErrors.join('\n- ')}`)
+
+        for (i in itemCollector) {
+            switch (itemCollector[i][0]) {
+                case 'money':
+                    if (!party.currency) party.currency = 0
+                    if (itemCollector[i][1] > chest.money) {
+                        itemCollector[i][1] = chest.money
+                    }
+                    party.currency += itemCollector[i][1]
+                    chest.money -= itemCollector[i][1]
+                    break;
+                case 'item':
+                case 'weapon':
+                case 'armor':
+                    if (!party[itemCollector[i][0]+'s']) party[itemCollector[i][0]+'s'] = {}
+
+                    if (itemCollector[i][1] != 'all') {
+                        if (itemCollector[i][0] == 'item') {
+                            if (chest[itemCollector[i][0]+'s'][itemCollector[i][1]]) {
+                                if (itemCollector[i][2] && itemCollector[i][2] > chest[itemCollector[i][0]+'s'][itemCollector[i][1]]) {
+                                    itemCollector[i][2] = chest[itemCollector[i][0]+'s'][itemCollector[i][1]]
+                                }
+                                
+                                if (!party[itemCollector[i][0]+'s'][itemCollector[i][1]]) party[itemCollector[i][0]+'s'][itemCollector[i][1]] = 0
+                                party[itemCollector[i][0]+'s'][itemCollector[i][1]] += (itemCollector[i][2] ?? 1)
+                                chest[itemCollector[i][0]+'s'][itemCollector[i][1]] -= (itemCollector[i][2] ?? 1)
+
+                                if (chest[itemCollector[i][0]+'s'][itemCollector[i][1]] <= 0) {
+                                    delete chest[itemCollector[i][0]+'s'][itemCollector[i][1]]
+                                }
+                            }
+                        } else {
+                            if (!party[itemCollector[i][0]+'s'][itemCollector[i][1]]) {
+                                party[itemCollector[i][0]+'s'][itemCollector[i][1]] = objClone(chest[itemCollector[i][0]+'s'][itemCollector[i][1]])
+                                delete chest[itemCollector[i][0]+'s'][itemCollector[i][1]]
+                            }
+                        }
+                    } else {
+                        if (itemCollector[i][0] == 'item') {
+                            for (item in chest[itemCollector[i][0]+'s']) {
+                                if (!party[itemCollector[i][0]+'s'][item]) party[itemCollector[i][0]+'s'][item] = 0
+                                party[itemCollector[i][0]+'s'][item] += chest[itemCollector[i][0]+'s'][item]
+                                delete chest[itemCollector[i][0]+'s'][item]
+                            }
+                        } else {
+                            for (item in chest[itemCollector[i][0]+'s']) {
+                                if (!party[itemCollector[i][0]+'s'][item]) { 
+                                    party[itemCollector[i][0]+'s'][item] = objClone(chest[itemCollector[i][0]+'s'][item])
+                                    delete chest[itemCollector[i][0]+'s'][item]
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 'all':
+                    for (item in chest.items) {
+                        if (!party.items[item]) party.items[item] = 0
+                        party.items[item] += chest.items[item]
+                        delete chest.items[item]
+                    }
+                    for (item in chest.weapons) {
+                        if (!party.weapons[item]) {
+                            party.weapons[item] = objClone(chest.weapons[item])
+                            delete chest.weapons[item]
+                        }
+                    }
+                    for (item in chest.armor) {
+                        if (!party.armor[item]) {
+                            party.armor[item] = objClone(chest.armor[item])
+                            delete chest.armor[item]
+                        }
+                    }
+                    if (chest.money > 0) {
+                        if (!party.currency) party.currency = 0
+                        party.currency += chest.money
+                        chest.money = 0
+                    }
+                    break;
+            }
+        }
+
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+        message.channel.send({content: 'Items have been successfully taken out. Here\'s what it looks like inside:', embeds: [chestDesc(chest, chest.name, message, true)]})
         if (itemErrors.length > 0) message.channel.send(`However there were some errors:\n- ${itemErrors.join('\n- ')}`)
     }
 })
