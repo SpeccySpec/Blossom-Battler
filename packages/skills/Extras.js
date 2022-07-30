@@ -210,7 +210,7 @@ extrasList = {
 				return void message.channel.send("You entered an invalid value for <Element>!");
 			if (side != 'weak' && side != 'resist' && side != 'both')
 				return void message.channel.send("You entered an invalid value for <Weak/Resist/Both>! It can be either Weak, Resist, or Both.");
-			if (turns && turns < 5)
+			if (turns && turns < 1)
 				return void message.channel.send("You can't have a turn count less than 1!");
 			makeExtra(skill, "changeaffinity", [target, element, affinity, side, turns]);
 			return true
