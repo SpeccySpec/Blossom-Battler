@@ -6,24 +6,13 @@
             "channel": "957671132457234556",
             "party": "",
             "lock": [
-                "weapon",
-                "Buff"
+                "none",
+                "0"
             ],
             "hidden": false,
             "items": {
-                "item": {
-                    "Sweet": 6,
-                    "S": 20
-                },
-                "weapon": {
-                    "Buff": 3
-                },
-                "armor": {
-                    "Bluff": 11
-                }
-            },
-            "desc": "Fuck off",
-            "hint": "Ew that's gross..."
+                "Sky": 50
+            }
         },
         "LootTest": {
             "originalAuthor": "441198920668938260",

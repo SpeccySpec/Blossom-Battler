@@ -1,4 +1,4 @@
-function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFile, charFile, enemyFile, partyFile) {
+function chestDesc(chestDefs, chestName, message, partyMode, itemFile, weaponFile, armorFile, charFile, enemyFile, partyFile) {
     if (!itemFile) itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
     if (!weaponFile) weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
     if (!armorFile) armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
@@ -42,7 +42,7 @@ function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFil
 
     let channelText = ''
     try {
-        channelText = `${message.guild.channels.cache.get(chestDefs.channel).name} (${chestDefs.channel})`
+        channelText = `${message.guild.channels.cache.get(chestDefs.channel) ? message.guild.channels.cache.get(chestDefs.channel).toString() : `${chestDefs.channel}`}`
     } catch (e) {
         channelText = `${chestDefs.channel}`
     }
@@ -75,11 +75,13 @@ function chestDesc(chestDefs, chestName, message, itemFile, weaponFile, armorFil
     const DiscordEmbed = new Discord.MessageEmbed()
         .setColor('#AB5200')
 		.setTitle(`${chestDefs.name ? chestDefs.name : chestDefs} *(${userTxt})*`)
-        .addFields(
-            { name: 'Channel', value: `${channelText}`, inline: true },
-            { name: 'Hidden', value: chestDefs.hidden ? 'Yes' : 'No', inline: true },
-        )
-        if (lockTxt) DiscordEmbed.addField('Lock', lockTxt, true)
+        
+        if (!partyMode) {
+            DiscordEmbed.addField('Channel', channelText, true)
+            DiscordEmbed.addField('Hidden', chestDefs.hidden ? 'Yes' : 'No', true)
+
+            if (lockTxt) DiscordEmbed.addField('Lock', lockTxt, true)
+        }
         if (itemText[0] != '') DiscordEmbed.addField('Items', itemText[0], true)
         if (itemText[1] != '') DiscordEmbed.addField('Weapons', itemText[1], true)
         if (itemText[2] != '') DiscordEmbed.addField('Armors', itemText[2], true)
@@ -302,12 +304,12 @@ commands.registerchest = new Command({
 
 		if (message.author.bot) return;
 
-        if (!hidden) 
-			message.channel.send({content: `Chest ${name} has been created.`, embeds: [chestDesc(chestFile[channel][name], name, message, itemFile, weaponFile, armorFile)]})
+        if (!hidden) {
+			message.channel.send({content: `Chest ${name} has been created.`, embeds: [chestDesc(chestFile[channel][name], name, message, false, itemFile, weaponFile, armorFile)]})
             if (itemErrors.length > 0) message.channel.send(`However there were some errors:\n- ${itemErrors.join('\n- ')}`)
-        else {
+        } else {
             message.delete()
-            message.author.send({content: `Chest ${name} has been created.`, embeds: [chestDesc(chestFile[channel][name], name, message, itemFile, weaponFile, armorFile)]})
+            message.author.send({content: `Chest ${name} has been created.`, embeds: [chestDesc(chestFile[channel][name], name, message, false, itemFile, weaponFile, armorFile)]})
             if (itemErrors.length > 0) message.author.send(`However there were some errors:\n- ${itemErrors.join('\n- ')}`)
         }
     }
@@ -349,11 +351,11 @@ commands.getchest = new Command({
                 message.channel.send({embeds: [discordEmbed]})
             }
             else {
-                message.author.send({content: `Here's info on ${chest.name}:`, embeds: [chestDesc(chest, name, message)]})
+                message.author.send({content: `Here's info on ${chest.name}:`, embeds: [chestDesc(chest, name, message, false)]})
             }
         }
         else {
-            message.channel.send({content: `Here's info on ${chest.name}:`, embeds: [chestDesc(chest, name, message)]})
+            message.channel.send({content: `Here's info on ${chest.name}:`, embeds: [chestDesc(chest, name, message, false)]})
         }
     }
 })
@@ -778,6 +780,53 @@ commands.lockhint = new Command({
 
             message.channel.send({embeds: [discordEmbed]})
         }
+    }
+})
+
+commands.openchest = new Command({
+    desc: `Open a chest with a party.`,
+    section: `chests`,
+    args: [
+        {
+            name: "Party",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Channel",
+            type: "Channel",
+            forced: true
+        },
+        {
+            name: "Chest",
+            type: "Word",
+            forced: true
+        }
+    ],
+    checkban: true,
+    func: (message, args) => {
+        let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+        chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+
+		if (!parties[args[0]]) return message.channel.send(`${args[0]} is an invalid party!`);
+		if (!isPartyLeader(message.author, parties[args[0]], message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send("You cannot use this party for opening, as you're not the leader of it.")
+
+        if (!chestFile[args[1]]) return message.channel.send(`There are no chests in this channel.`);
+        if (!chestFile[args[1]][args[2]]) return message.channel.send(`${args[2]} is not a valid chest.`);
+        let chest = chestFile[args[1]][args[2]];
+
+        if (chest.party != '') {
+            if (chest.party == args[0]) return message.channel.send(`${chest.name} is already open.`);
+            else return message.channel.send(`${chest.name} is already open by team ${parties[chest.party]?.name ?? chest.party}.`);
+        }
+
+        //if it was hidden, it's no more
+        delete chest.hidden;
+
+        chest.party = args[0];
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+
+        message.channel.send({content: `${chest.name} is now successfully open by team! Here's what's inside.`, embeds: [chestDesc(chest, chest.name, message, true)]});
     }
 })
 
