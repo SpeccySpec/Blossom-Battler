@@ -802,19 +802,85 @@ commands.openchest = new Command({
         let chest = chestFile[args[1]][args[2]];
 
         if (chest.party != '') {
-            if (chest.party == args[0]) return message.channel.send(`${chest.name} is already open.`);
-            else return message.channel.send(`${chest.name} is already open by team ${parties[chest.party]?.name ?? chest.party}.`);
+            if (parties[chest.party]) {
+                if (chest.party == args[0]) return message.channel.send(`${chest.name} is already open.`);
+                else return message.channel.send(`${chest.name} is already open by team ${parties[chest.party]?.name ?? chest.party}.`);
+            }
         }
 
-        //if it was hidden, it's no more
-        delete chest.hidden;
+        let lockKey = chest.lock[1];
+        switch (chest.lock[0].toLowerCase()) {
+            case 'party':
+                if (args[0] != lockKey) return wrongLock(message, args, chestFile, chest, parties)
+                break;
+            case 'character':
+                if (!parties[args[0]].members.some(x => x == lockKey) && !parties[args[0]].backup.some(x => x == lockKey)) return wrongLock(message, args, chestFile, chest, parties)
+                break;
+            case 'money':
+                if (parties[args[0]]?.currency < lockKey) return wrongLock(message, args, chestFile, chest, parties)
+                break;
+            case 'item':
+            case 'weapon':
+            case 'armor':
+                console.log(parties[args[0]]?.[`${chest.lock[0]}s`])
+                if (!parties[args[0]]?.[`${chest.lock[0]}s`]?.[lockKey]) return wrongLock(message, args, chestFile, chest, parties)
+                break;
+            case 'password':
+                message.channel.send(`${chest.name} has a password. What is it? You got 30 seconds to respond.`)
+                let authorID = partyLeader(parties[args[0]], message.guild.id)
+                let collector = new Discord.MessageCollector(message.channel, m => m.author.id === authorID, {time: 30000});
+                collector.on('collect', m => {
+                    if (!m.author.bot) {
+                        if (m.content == chest.lock[1]) {
+                            openChest(message, args, chestFile, chest, parties[args[0]])
+                        } else {
+                            wrongLock(message, args, chestFile, chest, parties)
+                        }
+                        collector.stop();
+                        return;
+                    }
+                })
+                collector.on('end', collected => {
+                    if (collected.size == 0) {
+                        return message.channel.send(`You didn't respond in time.`);
+                    }
+                })
+                break;
+        }
 
-        chest.party = args[0];
-        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
-
-        message.channel.send({content: `${chest.name} is now successfully open by team! Here's what's inside.`, embeds: [chestDesc(chest, chest.name, message, true)]});
+        if (chest.lock[0] != 'password') {
+            openChest(message, args, chestFile, chest, parties[args[0]])
+        }
     }
 })
+
+openChest = (message, args, chestFile, chest, party) => {
+    if (chest.hidden) delete chest.hidden;
+    if (chest?.incorrectTries?.[args[0]]) delete chest.incorrectTries[args[0]];
+
+    chest.party = args[0];
+    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+
+    message.channel.send({content: `${chest.name} is now successfully open by team ${party.name}! Here's what's inside.`, embeds: [chestDesc(chest, chest.name, message, true)]});
+}
+
+wrongLock = (message, args, chestFile, chest, party) => {
+    let text = 'It seems that the lock didn\'t match the requirements. Try again!';
+    
+    if (chest.lock[0] == 'password') text = 'It seems that the password you entered was wrong. Try again!';
+
+    if (!chest.incorrectTries) chest.incorrectTries = {}
+    if (!chest.incorrectTries[args[0]]) chest.incorrectTries[args[0]] = 0;
+    chest.incorrectTries[args[0]]++;
+
+    fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+
+    if (chest.incorrectTries[args[0]] >= 3) {
+        text += `\n\n\`\`It seems like you may need a hint. Type \`${getPrefix(message.guild.id)}lockhint ${args[1]} ${chest.name}\` to get the hint.\`\``
+    }
+    
+    message.channel.send(text);
+}
 
 commands.closechest = new Command({
     desc: `Closes a chest that's open by a party.`,
@@ -842,9 +908,10 @@ commands.closechest = new Command({
 
         if (chest.party == '') return message.channel.send(`${chest.name} is already closed.`);
 
-        if (!parties[chest.party] && !utilityFuncs.isAdmin(message)) return message.channel.send(`${chest.name} is open by team ${chest.party}, but that party doesn't exist anymore.`);
-        if (!isPartyLeader(message.author, parties[chest.party], message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send(`You're not the leader of the team that's using this chest, that being team ${parties[chest.party]?.name ?? chest.party}, so you cannot close it.`);
-
+        if (parties[chest.party]) {
+            if (!isPartyLeader(message.author, parties[chest.party], message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send(`You're not the leader of the team that's using this chest, that being team ${parties[chest.party]?.name ?? chest.party}, so you cannot close it.`);
+        }
+        
         chest.party = '';
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
 

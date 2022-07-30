@@ -6,11 +6,14 @@
             "channel": "957671132457234556",
             "party": "",
             "lock": [
-                "none",
-                "0"
+                "password",
+                "balls"
             ],
             "items": {
                 "Sky": 50
+            },
+            "incorrectTries": {
+                "Trinity": 4
             }
         },
         "LootTest": {
