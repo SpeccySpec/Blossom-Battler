@@ -963,7 +963,7 @@ commands.listatkextras = new Command({
 
 		let extras = []
 		for (let i in extrasList) {
-			if (!extrasList[i]?.unregsiterable) extras.push({name: `${extrasList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${extrasList[i].getFullDesc()}`, inline: true});
+			if (!extrasList[i]?.unregsiterable) extras.push({name: `${extrasList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${extrasList[i].getFullDesc()}${extrasList[i].multiple ? '\n\n**CAN BE APPLIED MULTIPLE TIMES!**' : ''}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['fire'])
@@ -981,7 +981,7 @@ commands.liststatusextras = new Command({
 
 		let extras = []
 		for (let i in statusList) {
-			if (!extrasList[i]?.unregsiterable) extras.push({name: `${statusList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${statusList[i].getFullDesc()}`, inline: true});
+			if (!extrasList[i]?.unregsiterable) extras.push({name: `${statusList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${statusList[i].getFullDesc()}${statusList[i].multiple ? '\n\n**CAN BE APPLIED MULTIPLE TIMES!**' : ''}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['status'])
@@ -999,7 +999,7 @@ commands.listhealextras = new Command({
 
 		let extras = []
 		for (let i in healList) {
-			if (!extrasList[i]?.unregsiterable) extras.push({name: `${healList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${healList[i].getFullDesc()}`, inline: true});
+			if (!extrasList[i]?.unregsiterable) extras.push({name: `${healList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${healList[i].getFullDesc()}${healList[i].multiple ? '\n\n**CAN BE APPLIED MULTIPLE TIMES!**' : ''}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['heal'])
@@ -1017,7 +1017,7 @@ commands.listpassiveextras = new Command({
 
 		let extras = []
 		for (let i in passiveList) {
-			if (!extrasList[i]?.unregsiterable) extras.push({name: `${passiveList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${passiveList[i].getFullDesc()}`, inline: true});
+			if (!extrasList[i]?.unregsiterable) extras.push({name: `${passiveList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${passiveList[i].getFullDesc()}${passiveList[i].multiple ? '\n\n**CAN BE APPLIED MULTIPLE TIMES!**' : ''}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['passive'])
@@ -1480,7 +1480,7 @@ commands.levellock = new Command({
 commands.preskill = new Command({
 	desc: "Assign an Pre-Skill. This is a skill that characters will use at lower levels.",
 	section: "skills",
-	aliases: ['lockskill', 'lvllock', 'skillock', 'lock'],
+	aliases: ['previousskill'],
 	args: [
 		{
 			name: "Skill Name",
@@ -1541,7 +1541,7 @@ commands.preskill = new Command({
 commands.evoskill = new Command({
 	desc: "Assign an Evo-Skill. This is a skill that characters can learn when they level up! They are usually stronger versions of previous skills.",
 	section: "skills",
-	aliases: ['lockskill', 'lvllock', 'skillock', 'lock'],
+	aliases: ['evolutionskill'],
 	args: [
 		{
 			name: "Skill Name",

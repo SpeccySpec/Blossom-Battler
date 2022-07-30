@@ -1024,7 +1024,7 @@ passiveList = {
 			}
 		},
 		getinfo(vars, skill) {
-			return `Upon defeat, **revives the user** ${vars[0] > 1 ? `until **${vars[0]} times**` : `**1 time**`} with **${vars[1]} HP**`
+			return `Upon defeat, **revives the user** with **${vars[1]} HP** until struck for the **${vars[0]}${vars[0] === 1 ? 'st' : vars[0] === 2 ? 'nd' : vars[0] === 3 ? 'rd' : 'th'} time**`
 		}
 	}),
 

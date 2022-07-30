@@ -612,6 +612,8 @@ statusList = {
 				return void message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: " + Affinities.join(', ') + " or Normal.");
 			if (!Elements.includes(element))
 				return void message.channel.send("You entered an invalid value for <Element>!");
+			if (['status', 'heal', 'passive', 'almighty'].includes(element))
+				return void message.channel.send("This element cannot have an affinity!");
 			if (side != 'weak' && side != 'resist' && side != 'both')
 				return void message.channel.send("You entered an invalid value for <Weak/Resist/Both>! It can be either Weak, Resist, or Both.");
 			if (turns && turns < 1)
