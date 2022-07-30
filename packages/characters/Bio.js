@@ -3,7 +3,7 @@ longBio = (char, server) => {
 	if (char.nickname) finalTxt += `**<Nickname>** ${char.nickname}\n`;
 	if (char.bio.fullname) finalTxt += `**<Full Name>** ${char.bio.fullname}\n`;
 	if (char.bio.species) finalTxt += `**<Species>** ${char.bio.species}\n`;
-	if (char.bio.gender) finalTxt += `**<Gender>** ${char.bio.gender == 'male' ? '<:male:973077052079083570>' : char.bio.gender == 'male' ? '<:female:973077052049719306>' : 'Other'}\n`
+	if (char.bio.gender) finalTxt += `**<Gender>** ${char.bio.gender == 'male' ? '<:male:973077052079083570>' : char.bio.gender == 'female' ? '<:female:973077052049719306>' : 'Other'}\n`
 	if (char.bio.height) finalTxt += `**<Height>** ${typeof char.bio.height == 'object' ? `${char.bio.height[0]}'${char.bio.height[1]}"`: `${char.bio.height}m`}\n`;
 	if (char.bio.weight) finalTxt += `**<Weight>** ${char.bio.weight}lb\n`;
 	if (char.bio.age) finalTxt += `**<Age>** ${char.bio.age} Years Old\n`;
