@@ -1215,7 +1215,7 @@ statusList = {
 		getinfo(vars, skill) {
 			let finalText = "Boosts"
 			for (let i in vars) {
-				finalText += ` **${vars[i][0]}** damage by ${vars[i][1]}x`
+				finalText += ` **${vars[i][0] == 'phys' ? 'physical' : 'magic'}** damage by ${vars[i][1]}x`
 				if (i < vars.length - 1) {
 					finalText += ` and `
 				} else {
