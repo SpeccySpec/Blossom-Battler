@@ -317,7 +317,7 @@ longDescription = (charDefs, level, server, message) => {
 	if (charAffs != '') DiscordEmbed.fields.push({ name: 'Affinities', value: charAffs, inline: true });
 
 	if (settings.mechanics.charms && char.curCharms && char.curCharms.length > 0) {
-		let charmFile = setUpFile(`${dataPath}/charms.json`);
+		let charmFile = setUpFile(`${dataPath}/json/charms.json`);
 			
 		let notches = 0
 		if (charDefs.charms) {
