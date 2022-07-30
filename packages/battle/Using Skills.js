@@ -1158,6 +1158,10 @@ useSkill = (char, btl, act, forceskill, ally) => {
 			if (btl.teams[act.target[0]].members[act.target[1]-1] && btl.teams[act.target[0]].members[act.target[1]-1].hp > 0) targets.push([btl.teams[act.target[0]].members[act.target[1]-1].id, 0.6666666666666666]);
 			if (btl.teams[act.target[0]].members[act.target[1]+1] && btl.teams[act.target[0]].members[act.target[1]+1].hp > 0) targets.push([btl.teams[act.target[0]].members[act.target[1]+1].id, 0.6666666666666666]);
 			break;
+
+		// Target ourselves as a failsafe.
+		default:
+			targets.push([char.id, 1]);
 	}
 
 	let targTxt = `__${char.name}__ => `;

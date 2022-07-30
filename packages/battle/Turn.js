@@ -425,7 +425,7 @@ sendCurTurnEmbed = (char, btl) => {
 
 	let menustate = MENU_ACT;
 
-	let statDesc = `${getBar('hp', char.hp, char.maxhp)}\t${getBar('mp', char.mp, char.maxmp)}\n${char.hp}/${char.maxhp}HP, ${char.mp}/${char.maxmp}MP`;
+	let statDesc = `${getBar('hp', char.hp, char.maxhp)} ${char.hp}/${char.maxhp}HP\n${getBar('mp', char.mp, char.maxmp)} ${char.mp}/${char.maxmp}MP`;
 	if (settings.mechanics.limitbreaks) statDesc += `, ${Math.round(char.lbp)}LB%`;
 	if (char.pet) statDesc = `${char.name} wants to assist the team in battle! Tell it to do something!\n`;
 
@@ -1400,7 +1400,7 @@ doTurn = async(btl, noTurnEmbed) => {
 				delete char.statusturns;
 			} else {
 				char.statusturns--;
-				if (char.statusturns == 0) {
+				if (char.statusturns <= 0) {
 					if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(char);
 					delete char.status;
 					delete char.statusturns;

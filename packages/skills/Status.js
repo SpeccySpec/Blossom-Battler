@@ -1508,9 +1508,15 @@ statusEffectFuncs = {
 
 	sleep: {
 		onturn: function(btl, char) {
+			if (char.statusturns <= 0) {
+				delete char.status;
+				delete char.statusturns;
+				return `${char.name} woke up!`;
+			}
+
 			if (isBoss(char)) {
 				delete char.status;
-				delete char.statuschance;
+				delete char.statusturns;
 				return `${char.name} woke up!`;
 			}
 
