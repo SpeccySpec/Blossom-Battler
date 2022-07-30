@@ -1504,21 +1504,21 @@ commands.preskill = new Command({
 		}
 	],
 	func: (message, args) => {
-		if (skillFile[args[0]] && skillFile[args[1]]) {
+		if (skillFile[args[0]] && (skillFile[args[1]] || args[1].toLowerCase() === "remove")) {
 			if (hasPreSkill(skillFile[args[0]], args[1])) {
 				return message.channel.send(`${skillFile[args[0]].name} already has a pre-skill for ${args[1]}!`)
 			}
 
 			if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
-				if (skillFile[args[0]].originalAuthor != message.author.id && skillFile[args[1]].originalAuthor != message.author.id) {
+				if (skillFile[args[0]].originalAuthor != message.author.id && (!skillFile[args[1]] || skillFile[args[1]].originalAuthor != message.author.id)) {
 					return message.channel.send(`You don't own ${skillFile[args[0]].name} or ${skillFile[args[1]].name}.`);
 				}
 
-				if (skillFile[args[0]].originalAuthor != message.author.id) {
+				if (skillFile[args[0]].originalAuthor != message.author.id && skillFile[args[1]]) {
 					return preSkillRequest(message, args, skillFile[args[0]], skillFile[args[1]], skillFile[args[0]].originalAuthor);
 				}
 
-				if (skillFile[args[1]].originalAuthor != message.author.id) {
+				if (skillFile[args[1]].originalAuthor != message.author.id && skillFile[args[1]]) {
 					return preSkillRequest(message, args, skillFile[args[0]], skillFile[args[1]], skillFile[args[1]].originalAuthor);
 				}
 			}
