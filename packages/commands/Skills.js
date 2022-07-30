@@ -1480,7 +1480,7 @@ commands.levellock = new Command({
 commands.preskill = new Command({
 	desc: "Assign an Pre-Skill. This is a skill that characters will use at lower levels.",
 	section: "skills",
-	aliases: ['lockskill', 'lvllock', 'skillock', 'lock'],
+	aliases: ['previousskill'],
 	args: [
 		{
 			name: "Skill Name",
@@ -1541,7 +1541,7 @@ commands.preskill = new Command({
 commands.evoskill = new Command({
 	desc: "Assign an Evo-Skill. This is a skill that characters can learn when they level up! They are usually stronger versions of previous skills.",
 	section: "skills",
-	aliases: ['lockskill', 'lvllock', 'skillock', 'lock'],
+	aliases: ['evolutionskill'],
 	args: [
 		{
 			name: "Skill Name",
