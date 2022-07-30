@@ -302,7 +302,7 @@ longDescription = (charDefs, level, server, message) => {
 			let statusaffinityscore = 0
 			let statAffs = '';
 			for (const affinity in char.statusaffinities) {
-				if (char.affinities[affinity].length > 0) statAffs += `\n${affinityEmoji[affinity]}: `
+				if (char.statusaffinities[affinity].length > 0) statAffs += `\n${affinityEmoji[affinity]}: `
 				for (const i in char.statusaffinities[affinity]) {
 					statusaffinityscore += affinityScores[affinity]
 					statAffs += `${statusEmojis[char.statusaffinities[affinity][i]]}`;
