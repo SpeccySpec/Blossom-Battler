@@ -1228,7 +1228,7 @@ passiveList = {
 			}
 		},
 		getinfo(vars, skill) {
-			let txt = 'Has'
+			let txt = 'Has '
 
 			for (i in vars) {
 				txt += `a **${vars[i][2]}%** chance to store **${vars[i][1]}%** of damage taken from **${elementEmoji[vars[i][0]]}${vars[i][0].charAt(0).toUpperCase() + vars[i][0].slice(1)} attacks**`
