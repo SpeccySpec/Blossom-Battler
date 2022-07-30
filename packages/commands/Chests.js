@@ -816,6 +816,43 @@ commands.openchest = new Command({
     }
 })
 
+commands.closechest = new Command({
+    desc: `Closes a chest that's open by a party.`,
+    section: `chests`,
+    args: [
+        {
+            name: "Channel",
+            type: "Channel",
+            forced: true
+        },
+        {
+            name: "Chest",
+            type: "Word",
+            forced: true
+        }
+    ],
+    checkban: true,
+    func: (message, args) => {
+        chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
+        let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+
+        if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);
+        if (!chestFile[args[0]][args[1]]) return message.channel.send(`${args[1]} is not a valid chest.`);
+        let chest = chestFile[args[0]][args[1]];
+
+        if (chest.party == '') return message.channel.send(`${chest.name} is already closed.`);
+
+        if (!parties[chest.party] && !utilityFuncs.isAdmin(message)) return message.channel.send(`${chest.name} is open by team ${chest.party}, but that party doesn't exist anymore.`);
+        if (!isPartyLeader(message.author, parties[chest.party], message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send(`You're not the leader of the team that's using this chest, that being team ${parties[chest.party]?.name ?? chest.party}, so you cannot close it.`);
+
+        chest.party = '';
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/chests.json`, JSON.stringify(chestFile, null, 4));
+
+        message.channel.send(`${chest.name} is now successfully closed.`);
+    }
+})
+
+
 commands.chestitems = new Command({
     desc: `Put or remove items into a chest.\nTo remove all items from a category, use *'all'* in *item name*. If all in general, use *'all'* in *item type*. *Item* should be written in the order as shown`,
     section: 'chests',
