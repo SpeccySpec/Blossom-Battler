@@ -2516,9 +2516,8 @@ commands.setbioinfo = new Command({
 				break;
 			case "gender":
 				if (!args[2]) return message.channel.send("Please enter either Male, Female or Other.");
-
-				charFile[args[0]].bio.gender = args[2].toLowerCase();
-				break;
+				charFile[args[0]].bio.gender = args[2].toLowerCase() != "male" && args[2].toLowerCase() != "female" ? 'other' : args[2].toLowerCase()
+				break
 			case "appearance":
 				if (args[2] && args[2].toLowerCase() == 'none') {
 					charFile[args[0]].bio.appearance = '';
