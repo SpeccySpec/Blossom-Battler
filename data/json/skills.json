@@ -27635,20 +27635,20 @@
     },
     "CuriosityKilledTheBloomBattler": {
         "name": "CuriosityKilledTheBloomBattler",
-        "type": "heal",
-        "cost": 10,
-        "costtype": "MP",
-        "target": "ally",
+        "type": "status",
+        "cost": 0,
+        "costtype": "-",
+        "target": "one",
         "originalAuthor": "363363984390356993",
-        "heal": {
-            "healstat": [
+        "statusses": {
+            "charge": [
                 [
-                    10,
-                    "lb"
+                    "phys",
+                    2.5
                 ]
             ]
         },
-        "desc": "Curiosity killer the Bloom Battler. Now it's time for Blossom Battler"
+        "desc": "Curiosity killed the Bloom Battler. Now it's time for Blossom Battler"
     },
     "MadTeaParty": {
         "name": "Mad Tea Party",

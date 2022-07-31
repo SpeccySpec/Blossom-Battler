@@ -29,8 +29,7 @@
         "name": "TanukiProwess",
         "currency": 0,
         "members": [
-            "Valoria",
-            "Sky"
+            "Valoria"
         ],
         "backup": [],
         "items": {},
@@ -56,8 +55,6 @@
         "name": "kek",
         "currency": 0,
         "members": [
-            "Sky",
-            "Ayumi",
             "Mumei",
             "Gura"
         ],
@@ -381,8 +378,6 @@
         "name": "Sky'sExtrasLmao",
         "currency": 0,
         "members": [
-            "Sky",
-            "Ayumi",
             "Valoria"
         ],
         "backup": [],
@@ -423,8 +418,6 @@
         "name": "Valoria",
         "currency": 0,
         "members": [
-            "Sky",
-            "Ayumi",
             "Ramia",
             "Euphorica"
         ],
@@ -442,8 +435,6 @@
         "currency": 0,
         "members": [
             "Valoria",
-            "Sky",
-            "Ayumi",
             "Ramia"
         ],
         "backup": [
@@ -474,10 +465,7 @@
     "it be like that": {
         "name": "it be like that",
         "currency": 0,
-        "members": [
-            "Sky",
-            "Ayumi"
-        ],
+        "members": [],
         "backup": [],
         "items": {},
         "weapons": {},
