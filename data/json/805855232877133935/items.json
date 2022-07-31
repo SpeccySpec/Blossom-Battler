@@ -16,5 +16,23 @@
         "originalAuthor": "547427816468381717",
         "desc": "Potassium",
         "heal": 800
+    },
+    "Half-Sandwich": {
+        "name": "Half-Sandwich",
+        "rarity": "common",
+        "cost": 300,
+        "type": "heal",
+        "originalAuthor": "547427816468381717",
+        "desc": "Literally just half of a sandwich.\nHeals 45 HP.",
+        "heal": 45
+    },
+    "Quarter Sandwich": {
+        "name": "Quarter Sandwich",
+        "rarity": "common",
+        "cost": 600,
+        "type": "heal",
+        "originalAuthor": "547427816468381717",
+        "desc": "...It's just a quarter of a sandwich...\nYou have the feeling you've been scammed.",
+        "heal": 23
     }
 }

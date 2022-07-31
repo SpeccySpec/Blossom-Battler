@@ -2,9 +2,7 @@
     "1": {
         "name": "1",
         "currency": 0,
-        "members": [
-            "Lanagu"
-        ],
+        "members": [],
         "backup": [],
         "items": {},
         "weapons": {},
@@ -508,7 +506,6 @@
         "currency": 0,
         "members": [
             "Valoria",
-            "Lanagu",
             "Lophari"
         ],
         "backup": [],

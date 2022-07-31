@@ -397,8 +397,16 @@
             "repel": [],
             "drain": []
         },
-        "skills": [],
-        "autolearn": [],
+        "skills": [
+            "NoSlot",
+            "LightChomp",
+            "AuraSphereZero"
+        ],
+        "autolearn": [
+            null,
+            true,
+            true
+        ],
         "quotes": {
             "meleequote": [],
             "physquote": [],
@@ -432,13 +440,13 @@
             "fullname": "",
             "nickname": "",
             "species": "",
-            "gender": "other",
+            "gender": "male",
             "height": [
-                4,
-                0
+                3,
+                5
             ],
             "weight": 0,
-            "age": 10,
+            "age": 1,
             "info": "",
             "backstory": "",
             "likes": "",

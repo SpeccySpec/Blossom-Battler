@@ -2,11 +2,25 @@
     "Icecrystal Null": {
         "name": "Icecrystal Null",
         "mainElement": "ice",
-        "weaponclass": "none",
+        "weaponclass": [
+            "staff",
+            "books"
+        ],
         "armorclass": "none",
         "weapons": {},
         "armors": {},
-        "curweapon": {},
+        "curweapon": {
+            "name": "Showstarter",
+            "class": "staff",
+            "cost": 3000,
+            "element": "fire",
+            "desc": "Cyan and yellow glasses.\nWearing those gives a strange sense of dread and comfort combined.",
+            "originalAuthor": "547427816468381717",
+            "skill": "SnapFingers",
+            "melee": 20,
+            "atk": 12,
+            "mag": 16
+        },
         "curarmor": {},
         "owner": "547427816468381717",
         "level": 1,

@@ -522,328 +522,6 @@
             ]
         }
     },
-    "Lanagu": {
-        "name": "Lanagu",
-        "owner": "532291526634635285",
-        "level": 7,
-        "hp": 55,
-        "mp": 74,
-        "maxhp": 55,
-        "maxmp": 74,
-        "basehp": 25,
-        "basemp": 35,
-        "melee": {
-            "name": "Dive Press",
-            "type": "strike",
-            "pow": 30,
-            "acc": 95,
-            "crit": 15
-        },
-        "xp": 1387431,
-        "maxxp": 1179,
-        "skills": [
-            "Eiha",
-            "Jin",
-            "Rakunda"
-        ],
-        "critquote": [
-            "Cash Money!",
-            "**Critical shit** is here"
-        ],
-        "deathquote": [
-            "https://youtu.be/-G-AuLXhTN4",
-            "https://youtu.be/zJ3qtWOz9tE"
-        ],
-        "bio": {
-            "species": "Hedgefox",
-            "age": 10,
-            "info": "A literal lab experiment of fox and hedgehog genes, and the fusion of a shadowy being. He typically will be cold to those he doesn't trust, but it takes a bit for him to get comfy with others. He wishes that one day he could have a small family without the worries of the world pressing down into it.\n\n<Advantages> Enhanced reflexes, darkness melding, no need for sleep\n\n<Disadvantages> Weakened by fires, Bright lights (manmade), disorient him, Very low reproduction rate (0.001 out of 100, or known as 0.1%)",
-            "backstory": "[Looks like there's a campfire with mutton and tea here, nothing else](<https://www.youtube.com/watch?v=-wKiNZ-u-HA>)\n\n",
-            "likes": "Darkness, Friends, The feeling of  serenity, Simple puzzles",
-            "dislikes": "Blinding lights, Being soaked by water, Fires",
-            "fears": "Death of a Trusted ally, being forcibly cut off, Claustrophobia (Minor), Being forced out by those trusted, Scientists in Biological Sciences",
-            "voice": "Pavel (Metro: Last Light) + Goro Akechi",
-            "theme": "[Intense Fight](<https://youtu.be/Kbw6hF7tHns>)\n[PvP Fights](<https://youtu.be/GiJmy9UtJKg>)\n[Difficult Fights](<https://youtu.be/acP7YhN8r1s>)\n[Ordinary Fight](<https://www.youtube.com/watch?v=01skyPMeeoc>)",
-            "appearance": "https://cdn.discordapp.com/attachments/820036937791438859/883755899464863835/Lanagu-1.png",
-            "height": [
-                4,
-                0
-            ],
-            "weight": 0,
-            "gender": "male",
-            "custom": {}
-        },
-        "trust": {
-            "Sky": {
-                "value": -105,
-                "nextLevel": 220,
-                "level": 4,
-                "dislike": 100
-            },
-            "Flara": {
-                "value": 65,
-                "nextLevel": 600,
-                "level": 14
-            },
-            "Karma": {
-                "value": 0,
-                "nextLevel": 200,
-                "level": 3
-            },
-            "Sun": {
-                "value": 65,
-                "nextLevel": 320,
-                "level": 9
-            },
-            "Sutela": {
-                "value": 110,
-                "nextLevel": 150,
-                "level": 2
-            },
-            "Ira": {
-                "value": 155,
-                "nextLevel": 210,
-                "level": 5
-            },
-            "Euphorica": {
-                "value": 10,
-                "nextLevel": 120,
-                "level": 2
-            },
-            "Hurricane": {
-                "value": 25,
-                "nextLevel": 100,
-                "level": 1
-            },
-            "Valoria": {
-                "value": 195,
-                "nextLevel": 490,
-                "level": 10
-            },
-            "Sparky": {
-                "value": 5,
-                "nextLevel": 120,
-                "level": 2
-            },
-            "XCyan": {
-                "value": 25,
-                "nextLevel": 100,
-                "level": 1
-            },
-            "Harcvuk": {
-                "value": 25,
-                "nextLevel": 100,
-                "level": 1
-            },
-            "Rainbow": {
-                "value": 60,
-                "nextLevel": 100,
-                "level": 1
-            },
-            "Ramia": {
-                "value": 40,
-                "nextLevel": 100,
-                "level": 1
-            },
-            "Croato": {
-                "value": 10,
-                "nextLevel": 160,
-                "level": 4
-            },
-            "Melarue": {
-                "value": 40,
-                "nextLevel": 100,
-                "level": 1
-            },
-            "Axel": {
-                "value": 30,
-                "nextLevel": 100,
-                "level": 1
-            },
-            "Lena": {
-                "value": 30,
-                "nextLevel": 100,
-                "level": 1
-            },
-            "Bow": {
-                "value": 30,
-                "nextLevel": 100,
-                "level": 1
-            },
-            "Permic": {
-                "value": 30,
-                "nextLevel": 100,
-                "level": 1
-            },
-            "Dusk": {
-                "value": 30,
-                "nextLevel": 100,
-                "level": 1
-            },
-            "Monum": {
-                "value": 20,
-                "nextLevel": 180,
-                "level": 5
-            },
-            "Foresa": {
-                "value": 130,
-                "nextLevel": 180,
-                "level": 5
-            }
-        },
-        "weapon": {},
-        "charms": [],
-        "curCharms": [],
-        "mainElement": "curse",
-        "nickname": "Lan",
-        "mpMeter": [
-            "Magic Points",
-            "MP"
-        ],
-        "transformations": {
-            "AwakenedDark": {
-                "name": "AwakenedDark",
-                "requirement": "trusteddown",
-                "desc": "",
-                "hp": 10,
-                "atk": 3,
-                "mag": 3,
-                "prc": 3,
-                "end": -3,
-                "chr": -3,
-                "int": -2,
-                "agl": 2,
-                "luk": 3,
-                "tp": 0,
-                "tpmax": 10,
-                "level": 1
-            }
-        },
-        "armor": {},
-        "teamCombo": {
-            "Foresa": "DarkenedPast",
-            "Flara": "CursedBlizzard",
-            "Ira": "PsychoticDark"
-        },
-        "stats": {
-            "atk": 4,
-            "mag": 15,
-            "prc": 7,
-            "end": 8,
-            "chr": 4,
-            "int": 12,
-            "agl": 13,
-            "luk": 6
-        },
-        "basestats": {
-            "baseatk": 2,
-            "basemag": 9,
-            "baseprc": 4,
-            "baseend": 5,
-            "basechr": 2,
-            "baseint": 6,
-            "baseagl": 7,
-            "baseluk": 3
-        },
-        "affinities": {
-            "weak": [
-                "earth",
-                "fire",
-                "bless"
-            ],
-            "resist": [
-                "grass"
-            ],
-            "block": [
-                "curse"
-            ],
-            "repel": [],
-            "drain": []
-        },
-        "autolearn": {},
-        "quotes": {
-            "meleequote": [],
-            "physquote": [
-                "I ABSOLUTELY MUST FUCK AROUND, AND ADDITIONALLY FIND OUT!"
-            ],
-            "magquote": [
-                "*Best prepare your mind now for this!*",
-                "Time to make your worst nightmare come to life!",
-                "Time to make your mind fuck you over",
-                "Time for a change in pace!"
-            ],
-            "lbquote": [],
-            "strongquote": [
-                "*Join in the shadows, or you shall suffer more!*",
-                "**FOR THE MOTHERLAND!!!**"
-            ],
-            "missquote": [
-                "Chert voz'mi, ya propustil"
-            ],
-            "weakquote": [
-                "***AAAAAA MY EYES***"
-            ],
-            "hurtquote": [
-                "Tch, that won't help",
-                "Ow, that really hurts",
-                "It's your funeral"
-            ],
-            "resistquote": [
-                "Thanks for the free body rinse"
-            ],
-            "blockquote": [
-                "Ok?"
-            ],
-            "repelquote": [
-                "Didn't you realize *I* am the dark"
-            ],
-            "drainquote": [
-                "Yum, thanks for the meal"
-            ],
-            "dodgequote": [
-                "https://youtu.be/lhckuhUxcgA",
-                "....did you even aim?",
-                "Oh hohoho, you thought that would work?",
-                "What? Did you expect another result?"
-            ],
-            "killquote": [
-                "Look whom is begging for mercy, folks",
-                "We're not done yet, bois. Those were the eaaaasy ones!",
-                "What a really good plan, your defeat"
-            ],
-            "allydeathquote": [
-                "%ENEMY%, This marks your end of the free trial of being alive.",
-                "You're in for a bad time!"
-            ],
-            "healquote": [],
-            "helpedquote": [
-                "👍"
-            ],
-            "lvlquote": [
-                "Finally, a step forward",
-                "Power courses through me"
-            ]
-        },
-        "leaderskill": {
-            "name": "ShadowEyes",
-            "type": "buff",
-            "var1": "prc",
-            "var2": 1
-        },
-        "lb": {},
-        "statusaffinities": {
-            "block": [
-                "blind"
-            ],
-            "resist": [
-                "sensitive"
-            ],
-            "weak": [
-                "burn",
-                "happy"
-            ]
-        }
-    },
     "Dusk": {
         "name": "Dusk",
         "owner": "516359709779820544",
@@ -12150,9 +11828,10 @@
         "melee": {
             "name": "BIBLE",
             "type": "strike",
-            "pow": 30,
-            "acc": 95,
-            "crit": 15
+            "pow": 80,
+            "acc": 100,
+            "crit": 15,
+            "status": "confusion"
         },
         "weapon": {},
         "armor": {},
@@ -12162,10 +11841,10 @@
             "KiBlast[2]",
             "BuiltDifferent",
             "God'sHand",
-            "Maragidyne",
             "ReturnToSender",
             "LifeMooch",
-            "InvigIII"
+            "InvigIII",
+            "Eight Trigrams Sixty-Four Belts"
         ],
         "critquote": [],
         "deathquote": [],
@@ -12268,13 +11947,13 @@
     "Carlo": {
         "name": "Carlo",
         "owner": "621307633718132746",
-        "level": 67,
-        "hp": 710,
-        "mp": 246,
-        "maxhp": 710,
-        "maxmp": 246,
-        "basehp": 50,
-        "basemp": 15,
+        "level": 20,
+        "hp": 197,
+        "mp": 105,
+        "maxhp": 197,
+        "maxmp": 105,
+        "basehp": 45,
+        "basemp": 20,
         "mpMeter": [
             "Magic Points",
             "MP"
@@ -12282,17 +11961,18 @@
         "melee": {
             "name": "LightStab",
             "type": "pierce",
-            "pow": 30,
-            "acc": 95,
-            "crit": 15
+            "pow": 37,
+            "acc": 90,
+            "crit": 10,
+            "status": "bleed",
+            "statuschance": 5
         },
         "weapon": {},
         "armor": {},
         "xp": 923899,
-        "maxxp": 6312320,
+        "maxxp": 7572,
         "skills": [
             "DeepStab",
-            "RunNGun",
             "TripleDown",
             "SliceAway",
             "XSlash",
@@ -12376,24 +12056,24 @@
             }
         },
         "stats": {
-            "atk": 73,
-            "mag": 25,
-            "prc": 76,
-            "end": 76,
-            "chr": 36,
-            "int": 37,
-            "agl": 39,
-            "luk": 23
+            "atk": 9,
+            "mag": 9,
+            "prc": 29,
+            "end": 26,
+            "chr": 14,
+            "int": 15,
+            "agl": 26,
+            "luk": 16
         },
         "basestats": {
-            "baseatk": 7,
+            "baseatk": 3,
             "basemag": 3,
             "baseprc": 10,
-            "baseend": 10,
-            "basechr": 3,
-            "baseint": 4,
-            "baseagl": 6,
-            "baseluk": 1
+            "baseend": 7,
+            "basechr": 4,
+            "baseint": 5,
+            "baseagl": 7,
+            "baseluk": 6
         },
         "affinities": {
             "superweak": [
@@ -12451,10 +12131,10 @@
             "lvlquote": []
         },
         "leaderskill": {
-            "name": "DarkCurse",
-            "type": "boost",
-            "var1": "curse",
-            "var2": 20
+            "name": "Quick Intel",
+            "type": "buff",
+            "var1": "prc",
+            "var2": 1
         },
         "lb": {},
         "weaponclass": [
@@ -18201,7 +17881,7 @@
         "deathquote": [],
         "bio": {
             "species": "Human",
-            "age": 10,
+            "age": 14,
             "info": "A young hero from another planet, they have a worn dagger to defend themself and the power to mimic elemental magic if they are used against him.",
             "backstory": "",
             "likes": "",
@@ -24690,8 +24370,8 @@
         "basehp": 40,
         "basemp": 25,
         "mpMeter": [
-            "Magic Points",
-            "MP"
+            "Psychic Points",
+            "PP"
         ],
         "melee": {
             "name": "StickStrike",
@@ -24794,12 +24474,12 @@
             "weight": 0,
             "age": 9,
             "info": "Violet is a cute sweet child that enjoys staying with friends and exploring places with them, she can get confused easily and may sometimes ask 'why?' too many times...\nViolet is blind, but her PSI powers allow her to temporarily see for a short range and not for a long time without consequences, she also easily starts crying when hurt, but not for long.\nViolet wants to be just like her mommy, Pank.",
-            "backstory": "",
-            "likes": "",
-            "dislikes": "",
-            "fears": "",
+            "backstory": "???",
+            "likes": "undefined",
+            "dislikes": "undefined",
+            "fears": "undefined",
             "voice": "",
-            "theme": "",
+            "theme": "[Infestation (Remix) - Terraria Calamity Mod](https://www.youtube.com/watch?v=Bk6CJ-hUTfE)",
             "custom": {}
         },
         "trust": {},
@@ -26323,7 +26003,8 @@
             "UltimateStickStrikeX",
             "FireRay",
             "PKFire-Sigma",
-            "PSIVision-Omega"
+            "PSIVision-Omega",
+            "PSIAbsorption-Omega"
         ],
         "autolearn": [],
         "quotes": {
@@ -26387,11 +26068,11 @@
         "curweapon": {},
         "curarmor": {},
         "owner": "313972298992451585",
-        "level": 1,
-        "hp": 40,
-        "mp": 25,
-        "maxhp": 40,
-        "maxmp": 25,
+        "level": 81,
+        "hp": 760,
+        "mp": 425,
+        "maxhp": 760,
+        "maxmp": 425,
         "basehp": 40,
         "basemp": 25,
         "mpMeter": [
@@ -26399,21 +26080,21 @@
             "MP"
         ],
         "melee": {
-            "name": "Strike Attack",
+            "name": "Jab",
             "type": "strike",
-            "pow": 30,
-            "acc": 95,
-            "crit": 15
+            "pow": 50,
+            "acc": 75,
+            "crit": 13
         },
         "stats": {
-            "atk": 9,
-            "mag": 3,
-            "prc": 7,
-            "end": 10,
-            "chr": 1,
-            "int": 5,
-            "agl": 4,
-            "luk": 6
+            "atk": 89,
+            "mag": 30,
+            "prc": 87,
+            "end": 90,
+            "chr": 28,
+            "int": 45,
+            "agl": 44,
+            "luk": 46
         },
         "basestats": {
             "baseatk": 9,
@@ -26426,17 +26107,29 @@
             "baseluk": 6
         },
         "lb": 0,
-        "xp": 0,
-        "maxxp": 500,
+        "xp": -304206405,
+        "maxxp": 46801487,
         "affinities": {
             "superweak": [],
-            "weak": [],
-            "resist": [],
+            "weak": [
+                "wind"
+            ],
+            "resist": [
+                "earth"
+            ],
             "block": [],
             "repel": [],
             "drain": []
         },
-        "skills": [],
+        "skills": [
+            "DefenseBall",
+            "RockHurl",
+            "Rockquake",
+            "Dropkick",
+            "HornBash",
+            "Taunt",
+            "StoneArmor"
+        ],
         "autolearn": [],
         "quotes": {
             "meleequote": [],
@@ -26488,5 +26181,391 @@
             "custom": {}
         },
         "trust": {}
+    },
+    "Sonic (Darkoedit)": {
+        "name": "Sonic",
+        "mainElement": "wind",
+        "weaponclass": "none",
+        "armorclass": "none",
+        "weapons": {},
+        "armors": {},
+        "curweapon": {},
+        "curarmor": {},
+        "owner": "313972298992451585",
+        "level": 90,
+        "hp": 574,
+        "mp": 470,
+        "maxhp": 574,
+        "maxmp": 470,
+        "basehp": 40,
+        "basemp": 25,
+        "mpMeter": [
+            "Magic Points",
+            "MP"
+        ],
+        "melee": {
+            "name": "Dropdash",
+            "type": "strike",
+            "pow": 45,
+            "acc": 80,
+            "crit": 15
+        },
+        "stats": {
+            "atk": 96,
+            "mag": 50,
+            "prc": 96,
+            "end": 34,
+            "chr": 32,
+            "int": 50,
+            "agl": 99,
+            "luk": 50
+        },
+        "basestats": {
+            "baseatk": 7,
+            "basemag": 5,
+            "baseprc": 7,
+            "baseend": 4,
+            "basechr": 2,
+            "baseint": 5,
+            "baseagl": 10,
+            "baseluk": 5
+        },
+        "lb": 0,
+        "xp": -1102815557,
+        "maxxp": 169664433,
+        "affinities": {
+            "superweak": [
+                "water"
+            ],
+            "weak": [],
+            "resist": [
+                "wind"
+            ],
+            "block": [],
+            "repel": [],
+            "drain": []
+        },
+        "skills": [
+            "LightSpeedAttack",
+            "Windmill",
+            "Eagle Kick",
+            "Sonic Wind",
+            "WindAura",
+            "Ring Gather"
+        ],
+        "autolearn": [],
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "allyatkquote": [],
+            "lbquote": [],
+            "tcquote": [],
+            "strongquote": [],
+            "badatkquote": [],
+            "landedquote": [],
+            "missquote": [],
+            "superweakquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "dodgequote": [],
+            "deathquote": [],
+            "killquote": [],
+            "pacifyquote": [],
+            "allydeathquote": [],
+            "healquote": [],
+            "helpedquote": [],
+            "consolequote": [],
+            "imfinequote": [],
+            "lvlquote": []
+        },
+        "bio": {
+            "fullname": "",
+            "nickname": "",
+            "species": "",
+            "gender": "other",
+            "height": [
+                4,
+                0
+            ],
+            "weight": 0,
+            "age": 10,
+            "info": "",
+            "backstory": "",
+            "likes": "",
+            "dislikes": "",
+            "fears": "",
+            "voice": "",
+            "theme": "",
+            "custom": {}
+        },
+        "trust": {},
+        "leaderskill": {
+            "name": "Fastest Thing Alive",
+            "type": "buff",
+            "var1": "agl",
+            "var2": 2
+        }
+    },
+    "Zetterburn": {
+        "name": "Zetterburn",
+        "mainElement": "fire",
+        "weaponclass": "none",
+        "armorclass": "none",
+        "weapons": {},
+        "armors": {},
+        "curweapon": {},
+        "curarmor": {},
+        "owner": "313972298992451585",
+        "level": 81,
+        "hp": 497,
+        "mp": 408,
+        "maxhp": 497,
+        "maxmp": 408,
+        "basehp": 33,
+        "basemp": 32,
+        "mpMeter": [
+            "Magic Points",
+            "MP"
+        ],
+        "melee": {
+            "name": "Jab",
+            "type": "slash",
+            "pow": 40,
+            "acc": 80,
+            "crit": 10,
+            "status": "bleed",
+            "statuschance": 8
+        },
+        "stats": {
+            "atk": 46,
+            "mag": 87,
+            "prc": 87,
+            "end": 45,
+            "chr": 88,
+            "int": 30,
+            "agl": 46,
+            "luk": 30
+        },
+        "basestats": {
+            "baseatk": 6,
+            "basemag": 7,
+            "baseprc": 7,
+            "baseend": 5,
+            "basechr": 8,
+            "baseint": 3,
+            "baseagl": 6,
+            "baseluk": 3
+        },
+        "lb": 0,
+        "xp": -304206405,
+        "maxxp": 46801487,
+        "affinities": {
+            "superweak": [],
+            "weak": [
+                "water"
+            ],
+            "resist": [
+                "fire"
+            ],
+            "block": [],
+            "repel": [],
+            "drain": []
+        },
+        "skills": [
+            "Blazing Shine",
+            "Wild Fire",
+            "Claw Rush",
+            "Brisk Uppercut",
+            "Dual Sweep",
+            "Taunt",
+            "MultiII",
+            "Fireball"
+        ],
+        "autolearn": [],
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "allyatkquote": [],
+            "lbquote": [],
+            "tcquote": [],
+            "strongquote": [],
+            "badatkquote": [],
+            "landedquote": [],
+            "missquote": [],
+            "superweakquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "dodgequote": [],
+            "deathquote": [],
+            "killquote": [],
+            "pacifyquote": [],
+            "allydeathquote": [],
+            "healquote": [],
+            "helpedquote": [],
+            "consolequote": [],
+            "imfinequote": [],
+            "lvlquote": []
+        },
+        "bio": {
+            "fullname": "",
+            "nickname": "",
+            "species": "",
+            "gender": "other",
+            "height": [
+                4,
+                0
+            ],
+            "weight": 0,
+            "age": 10,
+            "info": "",
+            "backstory": "",
+            "likes": "",
+            "dislikes": "",
+            "fears": "",
+            "voice": "",
+            "theme": "",
+            "custom": {}
+        },
+        "trust": {}
+    },
+    "Lanagu": {
+        "name": "Lanagu",
+        "mainElement": "curse",
+        "weaponclass": "none",
+        "armorclass": "none",
+        "weapons": {},
+        "armors": {},
+        "curweapon": {},
+        "curarmor": {},
+        "owner": "532291526634635285",
+        "level": 7,
+        "hp": 61,
+        "mp": 83,
+        "maxhp": 61,
+        "maxmp": 83,
+        "basehp": 25,
+        "basemp": 35,
+        "mpMeter": [
+            "Mana Points",
+            "MP"
+        ],
+        "melee": {
+            "name": "Strike Attack",
+            "type": "strike",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "stats": {
+            "atk": 3,
+            "mag": 15,
+            "prc": 7,
+            "end": 10,
+            "chr": 4,
+            "int": 15,
+            "agl": 14,
+            "luk": 6
+        },
+        "basestats": {
+            "baseatk": 1,
+            "basemag": 9,
+            "baseprc": 4,
+            "baseend": 7,
+            "basechr": 2,
+            "baseint": 9,
+            "baseagl": 8,
+            "baseluk": 3
+        },
+        "lb": 0,
+        "xp": -4419,
+        "maxxp": 1179,
+        "affinities": {
+            "superweak": [
+                "fire"
+            ],
+            "weak": [
+                "earth"
+            ],
+            "resist": [
+                "psychic",
+                "strike"
+            ],
+            "block": [],
+            "repel": [],
+            "drain": []
+        },
+        "skills": [
+            "Detil",
+            "Rakunda"
+        ],
+        "autolearn": [],
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "allyatkquote": [],
+            "lbquote": [],
+            "tcquote": [],
+            "strongquote": [],
+            "badatkquote": [],
+            "landedquote": [],
+            "missquote": [],
+            "superweakquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "dodgequote": [],
+            "deathquote": [],
+            "killquote": [],
+            "pacifyquote": [],
+            "allydeathquote": [],
+            "healquote": [],
+            "helpedquote": [],
+            "consolequote": [],
+            "imfinequote": [],
+            "lvlquote": []
+        },
+        "bio": {
+            "fullname": "",
+            "nickname": "Lan",
+            "species": "Fox/Hedgehog Hybrid",
+            "gender": "male",
+            "height": [
+                3,
+                6
+            ],
+            "weight": 0,
+            "age": 25,
+            "info": "Literally a hybrid created in a laboratory under a hidden, dark secret, what more shall I say?",
+            "backstory": "**Seems nothing is here other than a book, maybe sit by the campfire and hear an old tale?**",
+            "likes": "Memories Hazy, check in later",
+            "dislikes": "Memories Hazy, check in later.",
+            "fears": "Memories Hazy, check in later.",
+            "voice": "Pavel (Metro: Last Light)",
+            "theme": "",
+            "custom": {}
+        },
+        "trust": {},
+        "statusaffinities": {
+            "block": [
+                "blind"
+            ],
+            "weak": [
+                "happy"
+            ]
+        }
     }
 }

@@ -59,7 +59,9 @@
             "drain": []
         },
         "skills": [
-            "ElementalCycle"
+            "Agidyne",
+            "FinalStrike(DS)",
+            "ElementalMagic"
         ],
         "autolearn": [],
         "quotes": {

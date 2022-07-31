@@ -12482,7 +12482,9 @@
             "buff": [
                 [
                     "user",
-                    "mag",
+                    [
+                        "mag"
+                    ],
                     -1,
                     100,
                     null
@@ -27636,20 +27638,25 @@
     },
     "CuriosityKilledTheBloomBattler": {
         "name": "CuriosityKilledTheBloomBattler",
-        "type": "status",
+        "type": "heal",
         "cost": 0,
         "costtype": "-",
-        "target": "one",
+        "target": "caster",
         "originalAuthor": "363363984390356993",
-        "statusses": {
-            "charge": [
+        "heal": {
+            "healstat": [
                 [
-                    "phys",
-                    2.5
+                    100,
+                    "hppercent"
+                ],
+                [
+                    100,
+                    "mppercent"
                 ]
             ]
         },
-        "desc": "Curiosity killed the Bloom Battler. Now it's time for Blossom Battler"
+        "desc": "???",
+        "done": true
     },
     "MadTeaParty": {
         "name": "Mad Tea Party",
@@ -29517,7 +29524,6 @@
     "FireSeal": {
         "name": "FireSeal",
         "type": "passive",
-        "desc": "The user's Fire skills deal minimal damage",
         "originalAuthor": "363363984390356993",
         "passive": {
             "boost": [
@@ -29527,8 +29533,7 @@
                 ]
             ]
         },
-        "powlamk": -55,
-        "powpkmn": -100
+        "desc": "The user's Fire skills deal minimal damage"
     },
     "PierceSeal": {
         "name": "Pierce Seal",
@@ -34491,16 +34496,14 @@
         "passive": {
             "affinitypoint": [
                 10,
-                1,
-                [
-                    "heal"
-                ]
+                "Spirit Point"
             ]
         },
         "desc": "When an ally assists Sky by healing him, his spirit power increments by 1 and maxes at 10. When the battle ends, Sky's spirit power resets to 0.",
         "powlamk": {},
         "powpkmn": {},
-        "originalAuthor": "776480348757557308"
+        "originalAuthor": "776480348757557308",
+        "done": true
     },
     "ShadowCounter": {
         "name": "Shadow Counter",
@@ -41835,7 +41838,7 @@
         "name": "Visp",
         "cost": 4,
         "costtype": "hppercent",
-        "pow": 90,
+        "pow": "80",
         "acc": 90,
         "type": "explode",
         "status": "blind",
@@ -41968,7 +41971,9 @@
             "buff": [
                 [
                     "user",
-                    "end",
+                    [
+                        "end"
+                    ],
                     -1,
                     20,
                     null
@@ -46914,22 +46919,6 @@
         ],
         "levellock": 17
     },
-    "BlueScreen": {
-        "name": "BlueScreen",
-        "cost": 50,
-        "costtype": "mppercent",
-        "acc": 70,
-        "type": "electric",
-        "atktype": "magic",
-        "target": "allopposing",
-        "desc": "The foes get damaged by a literal blue screen",
-        "originalAuthor": "547427816468381717",
-        "pow": 100,
-        "powlamk": 491,
-        "powpkmn": 900,
-        "hits": 1,
-        "levellock": 30
-    },
     "ElecDance": {
         "name": "Elec Dance",
         "cost": 20,
@@ -50841,7 +50830,7 @@
         "target": "allopposing",
         "desc": "The user channels energy around them, creating energy balls that are then sent at all foes, two each; when the second energy ball hits, an otherwise harmless spire of energy is briefly formed. The energy balls have explosive properties and are easy to make, but not all that powerful.",
         "originalAuthor": "642841151484985365",
-        "pow": "30",
+        "pow": "35",
         "powlamk": 16,
         "powpkmn": 30,
         "extras": {
@@ -50900,7 +50889,7 @@
         "target": "one",
         "desc": "The user channels energy into their hands, creating two energy balls that are then thrown at a foe, one after the other; when the second energy ball hits, an otherwise harmless spire of energy is briefly formed. The energy balls have explosive properties and are easy to make, but not all that powerful.",
         "originalAuthor": "642841151484985365",
-        "pow": 30,
+        "pow": "35",
         "powlamk": 16,
         "powpkmn": 30,
         "extras": {
@@ -54786,17 +54775,18 @@
     },
     "StringPuppet": {
         "name": "StringPuppet",
-        "cost": 40,
-        "costtype": "mp",
-        "acc": 100,
         "type": "curse",
         "atktype": "magic",
-        "target": "one",
-        "desc": "Attach strings to a foe",
-        "originalAuthor": "547427816468381717",
-        "pow": 85,
+        "pow": 145,
         "hits": 1,
-        "levellock": 10
+        "acc": 80,
+        "cost": 16,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "547427816468381717",
+        "status": "paralyze",
+        "statuschance": 30,
+        "desc": "The user attacks by attaching strings to the target.\nThis may paralyze the foe."
     },
     "Acursen": {
         "name": "Acursen",
@@ -66487,11 +66477,14 @@
         "originalAuthor": "363363984390356993",
         "heal": {
             "healstat": [
-                60,
-                "hp"
+                [
+                    60,
+                    "hp"
+                ]
             ]
         },
-        "desc": "The user calls for a short commercial break"
+        "desc": "The user calls for a short commercial break",
+        "done": true
     },
     "Loisg": {
         "name": "Loisg",
@@ -67460,15 +67453,23 @@
     },
     "DefenseBall": {
         "name": "DefenseBall",
-        "type": "earth",
+        "type": [
+            "earth",
+            "pierce"
+        ],
         "atktype": "physical",
         "pow": 110,
         "hits": 3,
         "acc": 80,
         "cost": 16,
-        "costtype": "mp",
+        "costtype": "hppercent",
         "target": "one",
-        "originalAuthor": "313972298992451585"
+        "originalAuthor": "313972298992451585",
+        "extras": {
+            "sustain": [
+                true
+            ]
+        }
     },
     "Strike Break": {
         "name": "Strike Break",
@@ -67495,7 +67496,7 @@
         "type": "heal",
         "cost": 1,
         "costtype": "hp",
-        "target": "ally",
+        "target": "one",
         "originalAuthor": "363363984390356993",
         "heal": {
             "healstat": [
@@ -67503,6 +67504,9 @@
                     -999,
                     "hp"
                 ]
+            ],
+            "sacrifice": [
+                1
             ]
         },
         "desc": "The user deals extreme Miracle damage to one enemy but their own HP drops to 1",
@@ -67599,11 +67603,19 @@
         "originalAuthor": "363363984390356993",
         "desc": "The user randomly selects between <:fire:962465467845464214><:water:962465470533996586><:ice:962465468042575922><:electric:962465467400851518><:wind:962465470466883705><:earth:962465467455373443><:grass:962465467799310366> elements and casts a tier-2 elemental spell on all enemies",
         "extras": {
-            "metronome": []
+            "metronome": [
+                "Maragion",
+                "Malaques",
+                "Mabufula",
+                "Mazionga",
+                "Magarula",
+                "Materazi",
+                "Mahanama"
+            ]
         }
     },
     "Metrofuckingnome": {
-        "name": "Metrofuckingnome",
+        "name": "Метроном",
         "type": "almighty",
         "atktype": "magic",
         "pow": 96,
@@ -67615,7 +67627,10 @@
         "originalAuthor": "363363984390356993",
         "desc": "This is a test skill to see the limits of Metronome extra",
         "extras": {
-            "metronome": []
+            "metronome": [
+                "Agi",
+                "Last-Resort"
+            ]
         }
     },
     "Choma": {
@@ -67844,7 +67859,9 @@
             "buff": [
                 [
                     "target",
-                    "agl",
+                    [
+                        "agl"
+                    ],
                     -1,
                     10,
                     2
@@ -68166,5 +68183,550 @@
         },
         "desc": "The user can endure one fatal hit and their Sound Type Skills have their power boosted by 15%",
         "done": true
+    },
+    "SpiritSurvivor": {
+        "name": "Spirit Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "spirit",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Spirit Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "ExplodeSurvivor": {
+        "name": "Explode Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "explode",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Explode Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "StrikeSurvivor": {
+        "name": "Strike Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "strike",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Strike Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "SlashSurvivor": {
+        "name": "Slash Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "slash",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Slash Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "PierceSurvivor": {
+        "name": "Pierce Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "pierce",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Pierce Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "RallyingSurvivor": {
+        "name": "Rallying Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "curestatus": [
+                25
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and has a 25% chance to recover from status effects at the start of their turn",
+        "done": true
+    },
+    "Ledus": {
+        "name": "Ledus",
+        "type": "ice",
+        "atktype": "magic",
+        "pow": 80,
+        "hits": 1,
+        "acc": 85,
+        "cost": 14,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "532291526634635285",
+        "status": "freeze",
+        "statuschance": 1,
+        "desc": "A stronger form of Chilo, with very little freezing and no agility debuffs."
+    },
+    "Chilo": {
+        "name": "Chilo",
+        "type": "ice",
+        "atktype": "magic",
+        "pow": 60,
+        "hits": 1,
+        "acc": 90,
+        "cost": 10,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "532291526634635285",
+        "status": "freeze",
+        "statuschance": 5,
+        "desc": "An alternative to Mabufu that can freeze and/or slow down your opponents temporarily for 2 turns.",
+        "extras": {
+            "buff": [
+                [
+                    "target",
+                    "agl",
+                    -1,
+                    5,
+                    2
+                ]
+            ]
+        }
+    },
+    "Invariance": {
+        "name": "Invariance",
+        "type": "heal",
+        "cost": 0,
+        "costtype": "-",
+        "target": "allallies",
+        "originalAuthor": "363363984390356993",
+        "heal": {
+            "healstat": [
+                [
+                    1,
+                    "hp"
+                ],
+                [
+                    -1,
+                    "hp"
+                ],
+                [
+                    1,
+                    "hp"
+                ],
+                [
+                    -1,
+                    "hp"
+                ],
+                [
+                    1,
+                    "hp"
+                ],
+                [
+                    -1,
+                    "hp"
+                ],
+                [
+                    1,
+                    "hp"
+                ],
+                [
+                    -1,
+                    "hp"
+                ],
+                [
+                    1,
+                    "hp"
+                ],
+                [
+                    -1,
+                    "hp"
+                ]
+            ]
+        },
+        "desc": "The caster conjures ten small bursts of life energy that may harm of heal. The total healing can range from -80 to 80 HP. Are you feeling lucky?",
+        "done": true
+    },
+    "BlueScreen": {
+        "name": "BlueScreen",
+        "type": "electric",
+        "atktype": "magic",
+        "pow": 900,
+        "hits": 1,
+        "acc": 80,
+        "cost": 100,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "547427816468381717",
+        "status": "freeze",
+        "desc": "The user causes the battle to blue screen, damaging all foes.\nFatal"
+    },
+    "RockHurl": {
+        "name": "RockHurl",
+        "type": "earth",
+        "atktype": "physical",
+        "pow": 300,
+        "hits": 1,
+        "acc": 95,
+        "cost": 16,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "313972298992451585",
+        "crit": 5,
+        "status": "dizzy",
+        "statuschance": 10
+    },
+    "Rockquake": {
+        "name": "Rockquake",
+        "type": [
+            "earth",
+            "pierce"
+        ],
+        "atktype": "physical",
+        "pow": "150",
+        "hits": "3",
+        "acc": 75,
+        "cost": 19,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "313972298992451585",
+        "crit": 4,
+        "status": "dizzy",
+        "statuschance": 2,
+        "extras": {}
+    },
+    "Dropkick": {
+        "name": "Dropkick",
+        "type": "strike",
+        "atktype": "physical",
+        "pow": 450,
+        "hits": 1,
+        "acc": 95,
+        "cost": 25,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "313972298992451585",
+        "crit": 15
+    },
+    "HornBash": {
+        "name": "HornBash",
+        "type": [
+            "earth",
+            "strike"
+        ],
+        "atktype": "physical",
+        "pow": 650,
+        "hits": 1,
+        "acc": 90,
+        "cost": 35,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "313972298992451585",
+        "crit": 20,
+        "status": "dizzy",
+        "statuschance": 10,
+        "extras": {
+            "rest": [
+                true
+            ]
+        }
+    },
+    "Sonic Wind": {
+        "name": "Sonic Wind",
+        "type": "wind",
+        "atktype": "magic",
+        "pow": 290,
+        "hits": 1,
+        "acc": 100,
+        "cost": 7,
+        "costtype": "mppercent",
+        "target": "one",
+        "originalAuthor": "313972298992451585",
+        "status": "dizzy",
+        "statuschance": 20
+    },
+    "Eagle Kick": {
+        "name": "Eagle Kick",
+        "type": "strike",
+        "atktype": "physical",
+        "pow": 380,
+        "hits": 1,
+        "acc": 85,
+        "cost": 19,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "313972298992451585",
+        "crit": 25
+    },
+    "Windmill": {
+        "name": "Windmill",
+        "type": "strike",
+        "atktype": "physical",
+        "pow": 117,
+        "hits": 3,
+        "acc": 80,
+        "cost": 11,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "313972298992451585",
+        "crit": 5
+    },
+    "Ring Gather": {
+        "name": "Ring Gather",
+        "type": "heal",
+        "atktype": "magic",
+        "pow": 287,
+        "hits": 1,
+        "acc": 100,
+        "cost": 15,
+        "costtype": "mppercent",
+        "target": "caster",
+        "originalAuthor": "313972298992451585"
+    },
+    "VengefulSoul": {
+        "name": "VengefulSoul",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "perfectkeeper": [
+                -50
+            ]
+        },
+        "desc": "The user's physical attacks are 50% less powerful at full HP but gradually gain power as the user takes damage"
+    },
+    "Blazing Shine": {
+        "name": "BlazingShine",
+        "type": "fire",
+        "atktype": "magic",
+        "pow": 75,
+        "hits": 1,
+        "acc": 90,
+        "cost": 25,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "313972298992451585",
+        "status": "burn"
+    },
+    "Wild Fire": {
+        "name": "Wild Fire",
+        "type": "fire",
+        "atktype": "magic",
+        "pow": 300,
+        "hits": 1,
+        "acc": 75,
+        "cost": 30,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "313972298992451585",
+        "status": "burn",
+        "statuschance": 75
+    },
+    "Claw Rush": {
+        "name": "Claw Rush",
+        "type": "pierce",
+        "atktype": "physical",
+        "pow": 185,
+        "hits": 2,
+        "acc": 80,
+        "cost": 16,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "313972298992451585",
+        "crit": 1,
+        "status": "bleed",
+        "statuschance": 3
+    },
+    "Brisk Uppercut": {
+        "name": "Brisk Uppercut",
+        "type": "strike",
+        "atktype": "physical",
+        "pow": 400,
+        "hits": 1,
+        "acc": 95,
+        "cost": 18,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "313972298992451585",
+        "crit": 5,
+        "extras": {}
+    },
+    "Dual Sweep": {
+        "name": "Dual Sweep",
+        "type": "strike",
+        "atktype": "physical",
+        "pow": 200,
+        "hits": 2,
+        "acc": 55,
+        "cost": 20,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "313972298992451585",
+        "crit": 7,
+        "extras": {
+            "buff": [
+                [
+                    "target",
+                    "prc",
+                    -1,
+                    100,
+                    null
+                ]
+            ],
+            "forcetech": [
+                "burn"
+            ]
+        }
+    },
+    "Detil": {
+        "name": "Detil",
+        "type": "curse",
+        "atktype": "magic",
+        "pow": 60,
+        "hits": 1,
+        "acc": 95,
+        "cost": 5,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "532291526634635285",
+        "status": [
+            "fear",
+            "blind"
+        ],
+        "statuschance": 5,
+        "desc": "An alternative to Eiha that can cause a foe to be either blinded or left in fear.",
+        "extras": {}
+    },
+    "Shockun": {
+        "name": "Shockun",
+        "type": "status",
+        "cost": 15,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "621307633718132746",
+        "statusses": {},
+        "status": "paralyze",
+        "statuschance": "40",
+        "desc": "The user fires electricity from their gun to stun and paralyze the foe."
+    },
+    "BitWars": {
+        "name": "Bit-Wars",
+        "type": "passive",
+        "originalAuthor": "642841151484985365",
+        "passive": {
+            "extrahit": [
+                8,
+                100,
+                100
+            ]
+        },
+        "desc": "Pssh, bit wars... 64 bits! 32 bits. 16bits. 8 bits. 4 BITS, 2 BITS, ONE BIT, HALF BIT, Q U A R T E R B I T \n\n**T H E   W R I S T   G A A A A A A A A M E S ! !**"
+    },
+    "Eight Trigrams Sixty-Four Belts": {
+        "name": "Eight Trigrams Sixty-Four Belts",
+        "type": "passive",
+        "originalAuthor": "313972298992451585",
+        "passive": {
+            "extrahit": [
+                64,
+                100,
+                100
+            ]
+        },
+        "desc": "None"
+    },
+    "HauntedDream": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "This skill is not yet complete, so I won't explain how it's supposed to work"
+    },
+    "StoneArmor": {
+        "name": "StoneArmor",
+        "type": "passive",
+        "originalAuthor": "313972298992451585",
+        "passive": {
+            "guardboost": [
+                35
+            ]
+        },
+        "desc": "Damage reduction when the user is guarding is increased by 35%"
+    },
+    "QuickReflexes": {
+        "name": "QuickReflexes",
+        "type": "passive",
+        "originalAuthor": "313972298992451585",
+        "passive": {
+            "guarddodge": [
+                35
+            ]
+        },
+        "desc": "Increases evasion rate against attacks when guarding."
+    },
+    "Dere": {
+        "name": "Dere",
+        "type": "curse",
+        "atktype": "magic",
+        "pow": 80,
+        "hits": 1,
+        "acc": 90,
+        "cost": 6,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "532291526634635285",
+        "status": "blind",
+        "statuschance": 1,
+        "desc": "A stronger form of <:curse:962465467283415040> Detil, but very little chance for statuses."
     }
 }
