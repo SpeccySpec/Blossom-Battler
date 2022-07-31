@@ -275,31 +275,45 @@ longDescription = (charDefs, level, server, message) => {
 
 	// Affinities
 	let affinityscore = 0
+	let totaffinities = 0
 	let charAffs = '';
 	for (const affinity in char.affinities) {
 		if (char.affinities[affinity].length > 0) charAffs += `\n${affinityEmoji[affinity]}: `
 		for (const i in char.affinities[affinity]) {
+			totaffinities++
 			affinityscore += affinityScores[affinity]
 			charAffs += `${elementEmoji[char.affinities[affinity][i]]}`;
 		}
 	}
-	const scorecomment = affinityScores[(affinityscore > 0 ? Math.ceil : Math.floor)(affinityscore)]
+	let scorecomment = affinityScores[(affinityscore > 0 ? Math.ceil : Math.floor)(affinityscore)]
+	if (scorecomment && affinityscore <= 3 && affinityscore >= -3 && totaffinities >= 9)
+		scorecomment += "\nOr at least that would be the case if you didn't have so many affinities."
+	if (totaffinities == 0)
+		scorecomment = `Your character has no affinities yet, add one with \`${getPrefix(message.guild.id)}setaffinity\`!`
+	if (totaffinities == 1)
+		scorecomment += "\nThey...probably should have more than 1 affinity though."
 	charAffs += `\n\nScore: **${affinityscore}**\n*${scorecomment ?? "..."}*`
 
 	// Status Affinities
 	if (settings.mechanics.stataffinities) {
 		if (char.statusaffinities) {
 			let statusaffinityscore = 0
+			let statustotaffinities = 0
 			let statAffs = '';
 			for (const affinity in char.statusaffinities) {
 				if (char.statusaffinities[affinity].length > 0) statAffs += `\n${affinityEmoji[affinity]}: `
 				for (const i in char.statusaffinities[affinity]) {
+					statustotaffinities++
 					statusaffinityscore += affinityScores[affinity]
 					statAffs += `${statusEmojis[char.statusaffinities[affinity][i]]}`;
 				}
 			}
 			if (statAffs != '') {
-				const scorecomment = affinityScores[(statusaffinityscore > 0 ? Math.ceil : Math.floor)(statusaffinityscore)]
+				let scorecomment = affinityScores[(statusaffinityscore > 0 ? Math.ceil : Math.floor)(statusaffinityscore)]
+				if (scorecomment && statusaffinityscoree <= 3 && statusaffinityscore >= -3 && statustotaffinities >= 9)
+					scorecomment += "\nOr at least that would be the case if you didn't have so many affinities."
+				if (statustotaffinities == 1)
+					scorecomment += "\nThey...probably should have more than 1 affinity though."
 				charAffs += `\n${statAffs}\n\nScore: **${statusaffinityscore}**\n*${scorecomment ?? "..."}*`
 			};
 		}
