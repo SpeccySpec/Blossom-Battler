@@ -146,7 +146,7 @@ let usesPercent = {
 }
 
 const affinityScores = {
-	deadly: -4,
+	deadly: -999,
 	superweak: -2,
 	weak: -1,
 	resist: 1,
@@ -154,6 +154,7 @@ const affinityScores = {
 	repel: 1.5,
 	drain: 1.5,
 
+	[-999]: "Your local hacker.",
 	[-10]: "Please stop.",
 	[-9]: "A bunch of useless atoms.",
 	[-8]: "A corpse.",
