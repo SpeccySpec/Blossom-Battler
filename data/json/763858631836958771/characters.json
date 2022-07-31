@@ -1,1 +1,2170 @@
-{"Sutela":{"name":"Sutela","owner":"441198920668938260","level":70,"hp":401,"mp":358,"maxhp":401,"maxmp":525,"basehp":29,"basemp":36,"melee":{"name":"WaveFist","type":"strike","pow":30,"acc":95,"crit":15},"xp":525602,"maxxp":9696895,"skills":["SpiralBreak","Andablast","SoulBeam","EtherealMirror","DespairsFood","Hexburst","TriAttack","KindSoul"],"deathquote":["**S:** Well, it was a good run.","**S:** ...I see...","**S:** Maybe this was... Not the best idea...","**S:** Goodbye, world...","**L:** I REFUUUUUSE!","**L:** GH- Ack... No...","**L:** We will be back to life eventually, right?","**T:** AAAAAAAAAAAAA- [plops on the floor]","**T:** AVENGE USSSSSSS!!","**S, L & T:** [long session of sobbing on the ground]"],"weapon":{},"bio":{"info":"A man with three spirits of separate identity, mind, and control. Likes to explore places. Preferred to be alone, but now is willing to be with people. Still guilty for things out of control, but no longer as worried. He's like a magnet for people.\n<Name Meaning> Sutela is comprised of three people's names' parts: **Su**nburn, **Te**mpus and **La**ut. However as a word it translates to __trick__, like a __cover up__, which he used to hide his secrets earlier.\n\n<Clothing> Western hat, fluffy adventurer jacket with logos of Yaretzan mountains, white performance split-toe socks, black leather combat boots","backstory":"He was born with multi-spirituality, from weakness. __The Ascended__, finally born. It was a secret kept to his parents. He was __forced to__ not reveal it. Yet he gathered friends with it. But at 16, it was revealed, from __rumors__.\n\n```The Ascended, from Mythology of Ventrah: someone on an ͢i͢l͢l͢e͢g͢a͢l͢ state of ascension, growing in spiritual force. ͢N͢e͢v͢e͢r͢ ͢m͢e͢a͢n͢t͢ ͢t͢o͢ ͢e͢x͢i͢s͢t͢, met with hatred.\nMaturity, harmony, and confidence, grants them infinitude.``` \n\nVentrah locals were ready for a hunt, by greed, and is still active. He had to __run away__. (Yaretza - dimensional travel).","voice":"\n__Neutral (Sunburn)__: Pheonix Wright (Ace Attorney)\n__Laut__: Commander Shepard (Mass Effect)\n__Tempus__: Cuphead (The Cuphead Show!)","theme":"[TBA]\n\n<Debunking a Myth>  Despite having an axolotl's parts, and their species being able to regenerate limbs, Sutela can not achieve that feat, as the other 2 species are the majority of his genetic mess.","species":"Red Panda? [Jack of Multiple Species]","age":19,"likes":"Peace and quiet (unless used to chaos), tea, solitude (sometimes), friends (when solitude inapplicable)","dislikes":"The feeling of weakness, disruptions of his normal lives, overly bad jokes, seeing people being in pain","fears":"__To be found again__ by ones with a specific intent, horror-like situations\n\n<Passive Abilities>\n__From a Red Panda__: Incredible Jump Height, Dexterity and Balance\n__From an Axolotl__: Water Breathing, Incredible Swimming Ability\n__From a Panda__: Slow Metabolism, Sturdiness","appearance":"https://cdn.discordapp.com/attachments/937053847661187103/965372177396428850/Sutela.png","height":[3,9],"weight":0,"\"a":"A man of three identities, with the ability of changing between them, on accident. Tho they're pretty subtle right now, they can strengthen in a way or another. 3'9 in height, a guy that likes to explore on his own, or not try and spend time with the group. He prefers to be alone because of identity issues and how he believes it can hurt other people. A man of regrets, feeling guilty for a lot of things, but with great ways to cover that up, as a trick, hence 'Sutela'. A stoic, distant person with trust issues, hence why he likes to leave groups whenever he feels like it.\n\nEDIT: As of now he is getting a lot better with himself. He still hides stuff but he is going to be a lot more open about it.","gender":"male","custom":{},"fullname":"Sunburn 'Sutela' Trephron"},"strikequote":[],"critquote":["**S:** Lucky me.","**S:** Woohoo!","**S:** This couldn't get any better.","**L:** Ooooooh! WEAK SPOT!","**L:** HOW DO YOU LIKE THAT, %ENEMY%?","**L:** Bet this is gonna happen again right after.\n**T:** Bet.","**T:** MMMM, Nice.","**T:** Sweet.","**T:** Haha yes.","**S & L:** Yes! A critical!"],"trust":{"Flara":{"value":0,"nextLevel":200,"level":6},"Sun":{"value":160,"nextLevel":340,"level":7},"Valoria":{"value":0,"nextLevel":140,"level":3},"Sky":{"value":80,"nextLevel":100,"level":1},"Ira":{"value":-25,"nextLevel":150,"level":2,"dislike":160},"Lanagu":{"value":110,"nextLevel":150,"level":2},"Euphorica":{"value":-5,"nextLevel":150,"level":2,"dislike":90},"Hurricane":{"value":25,"nextLevel":100,"level":1},"Karma":{"value":0,"nextLevel":260,"level":9},"Permic":{"value":20,"nextLevel":100,"level":1},"John":{"value":0,"nextLevel":100,"level":1},"Miles":{"value":0,"nextLevel":100,"level":1},"Harcvuk":{"value":20,"nextLevel":100,"level":1},"Patella":{"value":30,"nextLevel":280,"level":10,"amount":null},"Sparky":{"value":85,"nextLevel":100,"level":1},"XCyan":{"value":0,"nextLevel":100,"level":1},"Firestorm":{"value":0,"nextLevel":100,"level":1},"Rainbow":{"value":80,"nextLevel":140,"level":3},"Lacrimal":{"value":-100,"nextLevel":100,"level":1,"dislike":100,"amount":null},"Croato":{"value":80,"nextLevel":100,"level":1},"Terrly":{"value":50,"nextLevel":280,"level":10},"Dawn":{"value":30,"nextLevel":100,"level":1},"Nighthug":{"value":330,"nextLevel":580,"level":25,"amount":null},"SuteIa":{"value":0,"nextLevel":100,"level":1}},"charms":["GrubberflysElegy"],"curCharms":["GrubberflysElegy"],"mainElement":"spirit","mpMeter":["SpiritTechLife","STL"],"transformations":{"SyncedUp":{"name":"SyncedUp","requirement":"trusteddown","desc":"","hp":20,"atk":0,"mag":6,"prc":2,"end":8,"chr":-6,"int":0,"agl":4,"luk":1,"tp":0,"tpmax":10,"level":1}},"nickname":"TriTan","armor":{},"teamCombo":{"Sutela":"SoulLinkRemoval"},"stats":{"atk":26,"mag":77,"prc":41,"end":40,"chr":77,"int":76,"agl":41,"luk":25},"basestats":{"baseatk":3,"basemag":8,"baseprc":6,"baseend":5,"basechr":8,"baseint":7,"baseagl":6,"baseluk":2},"affinities":{"superweak":["poison"],"weak":["nuclear","pierce"],"resist":["psychic"],"block":[],"repel":[],"drain":["spirit"]},"autolearn":{"0":true,"1":true,"2":true,"3":true,"4":true,"5":true,"6":true,"7":true,"true":true},"quotes":{"meleequote":["**S:** Sorry, I am only doing this for the safety of my own energy.","**S:** Don't worry, I will do better.","**S:** A strike can always do something.","**S:** Get ready in the future, okay?","**L:** ...If only I could.","**L:** Please shut up.","**L:** I will get you, for sure.","**T:** ...I'm sorry.","**T:** Heeey, check out this new strike!"],"physquote":["**S:** Time to show what we three are made of.","**S:** My %SKILL% should do something.","**S:** Get ready, %ENEMY%","**S:** This should do it.","**L:** Lemme handle this one.","**L:** I WILL POUND YOU UP LIKE A FILET OF FISH!","**L:** Ey, %ENEMY%. Eat some of %SKILL%!","**L:** HERE WE GO!","**L:** LEMME AT EM!\n**S:** Okay.\n**L:** WOOO!","**L:** EAT THIS!","**L:** Heheh, you won't see this coming.","**T:** I'm sorry, %ENEMY%.","**T:** Oh, fists. The weapon.","**T:** Mmm, lovely knuckle sandwich **that you will receive by the wrath of the __three, ascended, ``brothers.``__**","**S & L:** Get ready!"],"magquote":["**S:** The real magic show starts here!","**S:** I will show you the way of the %SKILL%.\n**L:** Cliche-\n**S:**~~Shut up.~~","**S:** The two believe in me so... Get ready, %ENEMY%!","**S:** ..How would you like my attack?","**S:** This probably works.","**L:** I will take control for now.","**L:** RIGHT IN THE KISSER!\n**T:** Go off, slay!","**L:** GET OVER HERE AND LEMME %SKILL% YOU!","**L:** ...Proceed to unlive, please.","**L:** I WILL FLIP YOU OVER, STAY STILL!","**T:** Oooh, now this is the real magic.","**T:** My my, looks like I gotta use %SKILL%.","**T:** I will slay.\n**L:** You won't but you can always try.","**S & L:** Get ready!"],"allyatkquote":["**S:** Here, let us help, okay, %ALLY%?","**S:** Hey you can't do this on your own, %ALLY%.","**S:** Here, have some help.","**L:** ...No time to question, I will help out.","**L:** As if you're going to do this on your own.","**L:** Don't you dare to think I'm not going to help with this one, %ALLY%.","**T:** Eyy, you clearly need us for this one, %ALLY%.","**T:** Panda boy to the rescueee!","**T:** Hehe, you have us for your needs, %ALLY%.","**T:** I seee, you need us for this one.","**S & L:** Don't worry about us, we'll handle this one, %ALLY%.","**S & T:** Here we go!"],"lbquote":["**S, T & L:** Let this teach you a lesson.","**S, T & L:** Get ready!","**S, T & L:** Here we go!","**S, T & L:** Understand, we need to do this.","**S, T & L:** You know you are a threat when we have to use a limit break.","**S, T & L:** This should help the team."],"strongquote":["**S:** Guess your weakness got figured out, huh?","**S:** Hey, not too shabby.","**S:** ..Interesting.","**S:** Laut I swear, if you will abuse-\n**L:** TOO LATE! LET'S GOOOOO- Just kidding.\n**S:** [💢]","**S:** Well I won't forget that now.","**L:** WOOO! WE GOT THEM!\n**S:** Just please, don't abuse without my approval.","**L:** Now prepare for the worst! Everyone, if you can, targe-\n**S:** EYEYEY NO!","**L:** Psssh, what are the chances of this?\n**S:** Big.\n**T:** Mhm, probs big.","**L:** Now that I know your weakness, WE WILL KICK YOUR ASS FOR SURE!\n**S:** I'm not gonna do it with that attitude.","**L:** Heh.","**T:** Ohhh, that'll be fun to abuse.\n**S & L:** WAIT NO.","**T:** The silver platter will now feature a new menu item called %ENEMY%.\n**S:** ..What?","**T:** Oh sweetie, you don't know what is waiting for you now.","**T:** [blep] Aweeesome.","**S & L:** Oh hey. Nice."],"missquote":["**S:** Tempus, please. Don't cry about this.\n**T:** ...","**S:** Ey was this planned guys?\n**L:** No???","**S:** Oops, I didn't concentrate hard enough.","**S:** I'm sorry, I didn't do it right.","**S:** Maybe we need glasses...\n**T & L:** Ey this is not your fault.","**L:** EY THIS DID NOT COUNT!\n**S:** It does, sorry.","**L:** I must hit you next time, %ENEMY%...","**L:** Don't try next time, please.","**L:** You're making me desperate.","**L:** I will get you, mark my word!","**T:** WHWHWHWAAAAAAA__A__AAAAAAA???\n__**L:**__ Good grief..","**T:** I WILL GO FERAL!","**S & L:** Ohh why now?","**S & L:** This is not the outcome we were expecting.","**S, T & L:** ...Oh no..."],"weakquote":["**S:** ACK- [throws up black stuff]","**S:** Ohhh no....","**S:** Why must you hit in the weak spot, %ENEMY%?","**S:** One more hit and we might be done for...\n**L:** Believable.","**S:** Please, stop.","**L:** Oh no, I feel the weakness now. NO!","**L:** NO! NOT THE SPOT!","**L:** CHEATING!","**T:** EYEYEYEYEY THIS IS A WEAK SPOT!","**T:** STOOOOOP!\n**L:** YEAH THIS IS CHEATING!","**S & L:** I refuse to believe this!","**S & L:** Nnngh, that was a dirty move.","**L & T:** Stop it!!!","**S, L & T: We will no longer allow this to happen any further.**"],"hurtquote":["**S:** Oh no, not now.","**S:** Oh god oh god. Please we are not the most durable.\n**L:** You do realize %ENEMY%'s not going to care, right?","**S:** Okay okay, don't worry you two. This is not the end of the world.","**S:** Let's not worry too much about it, okay?\n**T:** ..I don't know...","**T:** EYEYEY AAAA!","**T:** NOOOO ONE HIT AND WE'RE DONE FOR.\n**L:** ..Stop overexaggerating.","**T:** AY CAN'T YOU SPARE ONE IN NEED?","**T:** STOP IT, PLEEEEEASE!","**L:** Yike- Ohhh now I am feeling this.","**L:** Ey ey watch it.","**L:** I refuse to acknowledge this.\n**T:** Good luck trying.","**T & L:** This is not getting comfortable for our tastes."],"resistquote":["**S:** This... Could've been way worse.","**S:** I see you hit one of my resist spots.","**S:** Hey you just hit a spot, try again.","**S:** No way this didn't deal this much.","**S:** Wanna uhhh, try something else, %ENEMY%?","**L:** Ayo a tickle would do more than that, come on.\n**S:** Overexaggeration.","**L:** Hah, try again.","**L:** NO WAY YOU CAN'T HIT THIS MUCH!","**T:** WOW, what a noob.\n**L:** I agree!\n**S:** Guys, don't be so toxic!","**T:** This is great, couuuuld be better.","**T:** Oooooh, getting rough, oooooo-\n**L:** STOP MAKING EVERYTHING A FLIRTY SITUATION! YOU'RE MAKING US UNCOMFORTABLE!","**T:** Not the worst thing I survived today.","**T:** Weak.","**L & T:** Haha, you suck.\n**S:** ..You two should stop."],"blockquote":["**S:** Well- This was not too bad.","**S:** Oh hey, that did not do anything.","**S:** Now it'll be my turn soon.","**S:** Well that did nothing.","**L:** AHAAAA, NO DAMAGE FROM YOU, SUCKER!\n**S:** Okay maybe don't be this egotistical about well, this?","**L:** Why don't you just, DO, BETTER?!","**L:** Not this time!","**T:** My my, looks like you hit the wrong SPOT!","**T:** Sweet sense of nothingness, don't you think?\n**L:** ...\n**S:** Please don't be creepy about this.","**T:** Boooooo, do better!","**S & L:** Eeeey, you don't get anything.","**S & L:** Haha, no.","**S & L:** I knew something about us would be useful."],"repelquote":["**S:** I'm sorry, but this will become a rejection.","**S:** I will now proceed to repel this at you.\n**T:** Sorry for any inconvenience.\n**L:** What in the?","**S:** How about you get this instead?","**S:** I'm sorry, was this yours?","**L:** RETURN TO SENDER!","**L:** NAH NAH, THIS IS FOR YOU!","**L:** Not my problem. This is yours.","**L:** Lovely, just lovely.","**T:** Pfff, we refuse to get hit.\n**L:** Yeah we refuse!","**T:** Love you too, but this is friendzone territory.\n**L:** No wonder we call you... What was it again?","**S & L:** Whose is this? Surely not ours.","**S & L:** You didn't see that coming, huh?","**S, L & T:** Denied!","**S, L & T:** Not the spot you expected, huh?"],"drainquote":["**S:** Thank you for the help, despite it being unintentional.","**S:** Appreciated.","**S:** Thaank you.","**S:** Aww, you didn't have to.","**L:** Do it again, I dare you, %ENEMY%. Nay, double dare you.\n**S:** Nay, triple dog dare you.","**L:** Okay that was very useful to us.","**L:** ...\n**T:** Sooo, can I date-\n**L** NO!","**T:** OHHHH that is what I NEEDED!\n**L:** That sounded super ho-\n**S:** Shut up.","**T:** Flattered.","**T:** Oooooo, delicious!\n**L:** AYO CAN YOU PLEASE STOP BEING WEIRD?","**S & T:** We'll take that as a thank you.","**S & T:** Best gift you could give this battle.","**S & L:** Please, do this again.","**S & L:** Awesome."],"dodgequote":["**S:** Woah, that was close.","**S:** Not fast enough, it seems. That's alright.","**S:** Ey don't worry. You can do this next time.\n**L:** ...You can't be serious ARE YOU ENCOURAGING THEM?","**S:** Ohhh no, we better watch out next time.","**S:** Hey can you please, don't?","**L:** HAH. NOT THIS TIME.","**L:** Can you don't?","**L:** The axolotl speed is within me!\n**T:** Oh riiiight. I forgot you are one.","**T:** EAAAAAAAAAA, I'M GONNA DIE!\n**L:** ...Come on, T... You're not going to die.","**T:** NONONONO PLEEEASE!","**S & T:** Phew...","**S & T:** Woah, hey. Please. Don't."],"killquote":["**S:** Unfortunate.","**S:** There goes it for you.","**S:** Well that was unfortunate, but maybe this will teach you a lesson.","**L:** AND STAY DOWN!\n**T:** YEAH!","**T:** Ohh yes, free monnnney.\n**S:** Pff, okay then???","**T:** Ah yes, the death.","**S, L & T: Death goes upon, for whoever rivals the ones in ascension, shall be slain in cold blood.**"],"allydeathquote":["**S:** Nononono this can't be happening.","**S:** %ALLY%, please.. You can't give up like this.","**T:** NOOOOO, YOU CAN'T DIE ON US, PLEEEEASE!","**T:** %ALLY%!\n**L:**: ...","**L:** **...There will be vengance.**","**L:** EY! YOU! DO YOU NOT KNOW WHAT YOU HAVE DONE!?","**S & T:** NONONO PLEEEEASE!","**L & T:** WHAT WAS THAT FOR?","**S & T:** **We hope both sides of your pillow are warm.**","**S, L & T:** You do not just hurt anyone here. **Mess with who we trust, mess with us. Make sure you remember that.**"],"healquote":["**S:** Don't worry. I will help you.","**S:** There is nothing to worry about, you're doing good out there.","**L:** ...Just don't die next time, okay?","**L:** Hey. Stop being weak.","**T:** Oooh, I can help this time.","**T:** Don't worry, bestie. You're in good hands.","**S, L & T:** Please, let us help."],"helpedquote":["**S:** Thank you.","**S:** Appreciated.","**S:** Don't worry, we will try better.","**L:** I can't let myself be this weak.","**L:** Don't do it next time, I got this.","**T:** Ayooo, this is nice.","**T:** Love ya.","**S & L:** No need for help, but thanks.","**S & L:** I will cherish that moment.","**S, L & T:** Thank you so much."],"consolequote":["**S:** Hey... You alright, %ALLY%?","**S:** Onononono you okay, %ALLY%?","**S:** Hey if you can't do it, just say it, okay, %ALLY%?","**S:** ...Do you need anything, %ALLY%?","**S:** Hey don't push on yourself too hard if you can't handle it, okay, %ALLY%?","**L:** ...You sure you're doing okay, %ALLY%?","**L:** Please don't tell me you're not going to die. You're doing okay, right, %ALLY%?","**L:** Ey, you okay, %ALLY%?","**T:** EEEK ARE YOU DOING OKAY, %ALLY%?","**T:** AAAAA PROMISE ME YOU'RE GOING TO BE OKAY, %ALLY%!","**T:** PLEASE JUST WATCH OUT FOR YOURSELF, PLEEEEASE, %ALLY%!","**L & T:** Is there anything we can do to help?"],"imfinequote":["**S:** ...That depends.","**S:** ..Don't worry. I'll handle this.","**S:** Thank you for checking on us, but we're fine.\n**T**: Yeah.","**S:** Hey, you didn't have to. We're doing alright, I suppose.","**S:** The only one you should worry about for now is yourself.","**L:** Heh, it's not like this can strike me down a bunch. No need to worry.","**L:** Ey, do not bother worrying about us.\n**S:** Overexaggeration, but the spirit is there.","**L:** ..Shut up. We're fine.","**L:** This was only a scratch.","**L:** You didn't have to, seriously.","**T:** We're fiiiine, thanks for checking.","**T:** Pffff, it's good that you're concerned. Now shoo.\n**S:** Tempyyy...","**T:** The only one that would not be the most fine is Sunburn-\n**S:** EEEEY!","**T:** Don't worry. Let's just get to the end, okay?","**S & L:** That was nothing, okay?","**S & L:** Physically we're alright but mentally we are scrambled sometimes.","**S & T:** As if we're going to be dead with this, but we miiiight need some help.","**S & T:** Love you for the concern but don't worry.","**L & T:** You worry too much.","**S, L & T:** We're fine, thanks.","**L:** Tis but a scratch.","**S:** ...I don't know anymore... [he would sob...]"],"lvlquote":["**S:** I can feel the confidence rising, whether that is a good thing or not.","**S:** Come on, guys! Let's get further!\n**T & L:** YEAH!","**L:** OHHH THE POWER SURGE!","**L:** AAAA, GIVE ME MORE, PLEASE!","**T:** Mmmmm, sweet level up.\n**S:** -","**T:** Lovely!","**S & L:** Let's go! Let's get some more!","**S & T:** Ohhhh, awesome.","**L & T:** HYUCK! LET'S KICK SOME ASS.\n**S:** ..Oooor pacify if we don't have to use violence.\n**L:** I guess.","**S, T & L:** Sweet!"]},"leaderskill":{"name":"PhantomSupport","type":"buff","var1":"mag","var2":1},"lb":{}},"Patella":{"name":"Patella","owner":"441198920668938260","level":71,"hp":32,"mp":227,"maxhp":546,"maxmp":324,"basehp":42,"basemp":23,"melee":{"name":"ThrustN'Slice","type":"slash","pow":30,"acc":95,"crit":15},"xp":2205593,"maxxp":11188725,"skills":["UnseenSlashes","RottenSlash","3CutShock","Dokusei","Glare","Undead-Like(N)","Undead-Like(T)"],"deathquote":["Why you do this to me?","Guess I get no bitches afterall."],"bio":{"info":"'Representation of Death' in thought, in reality a lustful necromancer with ability to cheat death. Narcissistic, rash and reckless. Without fear of Death, which was shown by killing 'because I'm Death.' Can easily do mistakes.\nSeems like ever since a gang of people met up with him he quite ended up being a better person.","backstory":"Prior to death memories are cut, however events in and after were vividly remembered.\nA gang of people killing him one day after a difficult day, how tragic. Head smashed with a bottle, rib cage pulled, snout distorted, legs left to flesh, one ear ripped... Whoever necromanced him to life is uncertain.\n\n<Amnesia Pieces> ...Babysitting people...","voice":"Russel (Half-Life: Alyx)","theme":"[TBA]","species":"Tamandua","age":10,"likes":"Mind games, murder, weapons, capitalism, victory","dislikes":"People, hunger, failing at his job, help","fears":"__The Ascended__ (when angered), Lightning\n\n<Passive Abilities>\nIncredible Scythe Proficiency, Knowledge of Technology, Immunity to Life-Killing Diseases*(?)*, No Need to Eat or Drink\n\n*(?)*This means he is immune to things that kill over time, only because he technically is not alive. He's undead. However that doesn't mean he can't be downed, still making him affected by one hit KOs.","name":"Patella Necrovi","appearance":"https://cdn.discordapp.com/attachments/820036937791438859/965357438247247932/I-tried.png","\"it's":"It's unknown. Not sure how, but something must've cut off his memories to a certain moment. But maybe there are some hints lying around. After all, a skull smashed massively must mean something, right?","height":[4,0],"weight":0,"gender":"male","custom":{}},"trust":{"Karma":{"value":85,"nextLevel":260,"level":9},"Sutela":{"value":40,"nextLevel":240,"level":8,"amount":null},"Patella":{"value":20,"nextLevel":120,"level":2},"Terrly":{"value":220,"nextLevel":280,"level":10},"Miles":{"value":-175,"nextLevel":100,"level":1,"dislike":-165},"Permic":{"value":-50,"nextLevel":100,"level":1,"dislike":-40},"Euphorica":{"value":-100,"nextLevel":100,"level":1,"dislike":30},"'Sutela'":{"value":30,"nextLevel":280,"level":10},"Wish":{"amount":20,"maximum":100,"level":1},"Nighthug":{"amount":70,"maximum":100,"level":1},"Lacrimal":{"amount":70,"maximum":100,"level":1}},"critquote":["Wanna watch me do it again?\n\nWanna watch?","Awesome."],"charms":["Reservationist","GrubberflysElegy"],"curCharms":["Reservationist","GrubberflysElegy"],"weapon":{},"mainElement":"slash","nickname":"``''Death''``","mpMeter":["ForceEnergy","FE"],"armor":{},"teamCombo":{"Sutela":"ExtractForce"},"stats":{"atk":78,"mag":40,"prc":77,"end":41,"chr":26,"int":27,"agl":40,"luk":77},"basestats":{"baseatk":8,"basemag":5,"baseprc":7,"baseend":6,"basechr":3,"baseint":4,"baseagl":5,"baseluk":7},"affinities":{"superweak":["bless"],"weak":["water","ice"],"resist":["poison","earth"],"block":[],"repel":["curse"],"drain":[]},"autolearn":{"true":true},"quotes":{"meleequote":["Hiya!","RnVjayBldmVyeW9uZSBpbiBoZXJlLg=="],"physquote":["Yo guys, today we gonna play smash or pass, with %ENEMY%, which sounds like possible grounds for priso- [%SKILL%] SMASH!","I will fucking drink some alcohol after this my muscles are getting throbbing sore."],"magquote":["Hah, funny I can magic. Look! I can **perish someone!**","Lmao no way I am gonna use this."],"allyatkquote":["My deathbringer shall help.","I will take it from here."],"lbquote":["I didn't remember asking you for the right to live.","The perfect moment, to fuck you up."],"strongquote":["GOT YOUR WEAKNESS! TIME TO ABUSE!","And here we have someone on the verge of defeat."],"missquote":["....Really?","You're making shit miserable","Stop using anti-hit you stupi"],"weakquote":["WHY YOU BULLY ME?!","[whimper]"],"hurtquote":["Ow, that hurt... [:(]","Stop it.","..Don't.."],"resistquote":["Tis but a scratch.","Hot quote of the day: ''You did not do it today.''"],"blockquote":["AHA! I FOOL YOU ONCE AGAIN!","Hold it. [preps to drink water] Hydration time. [and he drinks]"],"repelquote":["Return to sender!","Ey you guys know where my repellent gone I have used it before battle and now I don't know where it is?"],"drainquote":["Ooooo, tastes like candy.","Thanks for the help! [angy blep]"],"dodgequote":["My bones are of swiftness and steel. You may not hurt me in the law of mine.","Hah, go suck your own enepussy now."],"killquote":["Now fuck off before I fuck on.","Another death, more satisfaction."],"allydeathquote":["NO! HOW COULD YOU DO THIS?","EYEYEY, NO. NO."],"healquote":["Oh how stupid you are sometimes.","Thank me later.."],"helpedquote":["Hey, thanks. I'll offer something later on, dw.","Oooo, you wanna do the uhhh, you know, heheh."],"consolequote":["EEEEY! Ya doing okay?","Please tell me this is a joke..."],"imfinequote":["Sis, I'm as fine as a cocoa bean on a sunday.. ..Which means yes, thanks for asking.","Your concern is cute."],"lvlquote":["Woo, more power to fuck around!","Eyyy, I expected more out of this, come on..."]},"lb":{"1":{"name":"BloodWithdrawal","class":"atk","pow":250,"cost":110,"status":"none","statuschance":0},"2":{"name":"EssenceGatheral","class":"atk","pow":520,"cost":220,"status":"none","statuschance":0},"3":{"name":"BodyRemoval","class":"atk","pow":770,"cost":330,"status":"none","statuschance":0}}},"Lacrimal":{"name":"Lacrimal","owner":"441198920668938260","level":60,"hp":485,"mp":139,"maxhp":485,"maxmp":164,"basehp":49,"basemp":11,"melee":{"name":"WhiffedPummel","type":"strike","pow":30,"acc":95,"crit":15},"xp":183,"maxxp":2318215,"skills":["GiganticFist","Headbutt","KillRush","BlurKicks","FlamingFist","FlipBird","RegenI"],"deathquote":[],"bio":{"info":"A pyromaniac that can't get enough of fire tech ever since a young age. Will always carry any of the fire tech he owns, without consideration. They are what allow him to be nefarious. So far, he was lucky with them. Often careless, doesn't listen to people, not willing to learn at moments. Doesn't mean he can't learn. Undying determination will always carry him even at darkest, even if it is him wanting to be an overlord. \n**But what if he had a different perspective on life?**","backstory":"Mainly a criminal, living in a not so good city. Used to steal a lot, and still does on occasion. There isn't much to it, really. **However he was the one that contributed to Sutela's change of mentality in big ways. He was the one to spread rumors.**","voice":"Luc Gaudin (The Saboteur)","theme":"[TBA]","species":"Tamandua","age":10,"likes":"Pyromaniac tools, feeling above others, undying determination","dislikes":"Sharing, learning through mistakes, height-shamed, creepy dolls","fears":"Spending time without a gadget\n\n<Passive Abilities>\nBreaking Walls When Running With His Horns, Stretchy Arms, Laced Fists_(?)_, Incredible Aim, Rapid Thinking\n\n*(?)*This one happens when his gloves are taken off. Basically if he punches someone without gloves, a second punch that bleeds the target happens at a later time. However he prefers wearing gloves because of __fair play__, **which is ironic when he isn't fair with people.**","appearance":"https://cdn.discordapp.com/attachments/937053847661187103/965371992461164644/Lacrimal.png","height":[4,0],"weight":0,"gender":"male","feard":"Spending time without a gadget\n\n<Passive Abilities>\nBreaking Walls When Running With His Horns, Stretchy Arms, Laced Fists, Incredible Aim, Rapid Thinking*\n\n*This one happens when his gloves are taken off. Basically if he punches someone without gloves, a second punch that bleeds the target happens at a later time.","custom":{}},"trust":{"Morisonu":{"value":50,"nextLevel":300,"level":5},"Hurricane":{"value":100,"nextLevel":250,"level":4},"Mike":{"value":100,"nextLevel":250,"level":4},"Sutela":{"value":-100,"nextLevel":100,"level":1,"dislike":100,"amount":null},"Sparky":{"value":50,"nextLevel":100,"level":1},"Patella":{"amount":70,"maximum":100,"level":1},"Nighthug":{"amount":70,"maximum":100,"level":1}},"lb4":{"name":"Flinch off Any Day","class":"atk","pow":1000,"cost":500,"status":"dizzy","statuschance":80},"charms":[],"curCharms":[],"mainElement":"strike","weapon":{},"nickname":"Crimson","mpMeter":["ForceEnergy","FE"],"armor":{},"critquote":[],"stats":{"atk":69,"mag":22,"prc":67,"end":35,"chr":21,"int":33,"agl":66,"luk":36},"basestats":{"baseatk":10,"basemag":2,"baseprc":8,"baseend":5,"basechr":1,"baseint":3,"baseagl":7,"baseluk":6},"affinities":{"weak":["earth","electric"],"resist":["fire"],"block":["metal"],"repel":[],"drain":[]},"autolearn":{"true":true},"quotes":{"meleequote":[],"physquote":["EEEEY YOU! YOU BETTER TAKE THIS %SKILL%"],"magquote":[],"allyatkquote":[],"lbquote":[],"strongquote":[],"missquote":[],"weakquote":[],"hurtquote":["What done ah say about strikin' people for no reason?!"],"resistquote":[],"blockquote":[],"repelquote":[],"drainquote":[],"dodgequote":[],"killquote":[],"allydeathquote":[],"healquote":[],"helpedquote":[],"consolequote":[],"imfinequote":[],"lvlquote":[]},"leaderskill":{"name":"FairFury","type":"boost","var1":"physical","var2":10},"lb":{"1":{"name":"Smack Em - Lackem","class":"atk","pow":360,"cost":100,"status":"dizzy","statuschance":25},"2":{"name":"Pummel O' Mega","class":"atk","pow":600,"cost":250,"status":"dizzy","statuschance":45},"3":{"name":"HeftyWhoop-OutPlatter","class":"atk","pow":600,"cost":350,"status":"none","statuschance":0}}},"Nighthug":{"name":"Nighthug","owner":"441198920668938260","level":80,"hp":432,"mp":463,"maxhp":432,"maxmp":619,"basehp":22,"basemp":43,"melee":{"name":"Strike Attack","type":"strike","pow":30,"acc":95,"crit":15},"xp":183,"maxxp":40561289,"skills":["StarshineAura","Masukukaja","Marakukaja","Mamakanda","BearHug","KindSoul"],"deathquote":[],"bio":{"info":"A man born from stars, in what seems to be a transition from soulless to selfless. Extremely empathetic, caring and huggable, yet humble and doesn't like to show himself in the brightest light possible. He still can occasionally do hiccups but you would know that is not necessarily his fault. Afterall, transitions can be hard...\n\nHe seems to also be a tad bit gullible, easy to trust in people who seem innocent. He's easy to fool, manipulate. You just gotta use the right strategy for it, but once he'll know about it, he might try educating you someday. ...Don't expect it to be violent tho. He swore not to do harm. This means he won't participate in battles by any means necesary.\n\nHe also has a sweet tooth for some reason, big fan of chocolate.","backstory":"....It's for the best to try not pushing for luck. He knows what he had done and deeply regrets it.","voice":"Archimedes Q. Porter (Tarzan)","theme":"[TBA]","species":"Bearcat ||[Albeit a mythical creature]||","age":10,"likes":"Relaxation and reflection, making sure people feel better, hot tea, chocolate, family","dislikes":"Snobs, coffee, evildoers, when people look down on themselves, ego in general","fears":"Damage dealt ``from himself on others, whether physical or mental``\n\n<Passive Abilities>\nAutomatic Empathy, Eternally Awake at Will, Floating, Immunity to Metabolic Disorders, Form Shifting*(?)*\n\n*(?)*He hasn't shifted at all since centuries because he is comfortable with this form, the most recognizable.","height":[4,0],"weight":0,"gender":"male","themes":"[TBA]","appearance":"https://cdn.discordapp.com/attachments/937053847661187103/965701238874325022/Nighthug.png","\"":" A man born from stars, in what seems to be a transition from soulless to selfless. Extremely empathetic, caring and huggable, yet humble and doesn't like to show himself in the brightest light possible. He still can occasionally do hiccups but you would know that is not necessarily his fault. Afterall, transitions can be hard...\n\nHe seems to also be a tad bit gullible, easy to trust in people who seem innocent. He's easy to fool, manipulate. You just gotta use the right strategy for it, but once he'll know about it, he might try educating you someday. ...Don't expect it to be violent tho. He swore not to do harm. This means he won't participate in battles by any means necesary.","custom":{}},"trust":{"Sutela":{"value":330,"nextLevel":580,"level":25,"amount":null},"Patella":{"amount":70,"maximum":100,"level":1},"Lacrimal":{"amount":70,"maximum":100,"level":1}},"charms":[],"curCharms":[],"mainElement":"gravity","nickname":"Huggy","mpMeter":["ForceEnergy","FE"],"weapon":{},"armor":{},"hidden":false,"critquote":[],"stats":{"atk":29,"mag":87,"prc":86,"end":46,"chr":87,"int":46,"agl":28,"luk":45},"basestats":{"baseatk":3,"basemag":8,"baseprc":7,"baseend":6,"basechr":8,"baseint":6,"baseagl":2,"baseluk":5},"affinities":{"superweak":["curse"],"weak":["psychic","strike"],"resist":["gravity"],"block":[],"repel":[],"drain":["bless"]},"autolearn":{"0":true,"1":true,"2":true,"3":true,"4":true,"5":true,"true":true},"quotes":{"meleequote":[],"physquote":[],"magquote":["As much as I don't want to do this, I have to %SKILL%"],"allyatkquote":[],"lbquote":[],"strongquote":[],"missquote":[],"weakquote":[],"hurtquote":[],"resistquote":[],"blockquote":["Twy something ewse, awwight?","Shame thiws doesn't wowk, does iwt?"],"repelquote":[],"drainquote":[],"dodgequote":["Mind if I hewped u with thawt?","Hewe, wet me get cwosew fow u.","Hey down't ovewwowk youwsewf if u down't feew good enough.","I couwd pewsonawwy twain thawt aim of youws if u wawnt."],"killquote":["I went ovewboawd, didn't I? Sowwy."],"allydeathquote":[],"healquote":[],"helpedquote":[],"consolequote":[],"imfinequote":[],"lvlquote":[]},"lb":{}},"Wish":{"name":"Wish","owner":"441198920668938260","hidden":false,"level":80,"hp":341,"mp":435,"maxhp":341,"maxmp":435,"basehp":25,"basemp":40,"mpMeter":["ForceEnergy","FE"],"melee":{"name":"WishfulNote","type":"pierce","pow":30,"acc":95,"crit":15},"weapon":{},"armor":{},"xp":0,"maxxp":40561289,"skills":["Kouga","Accordion","Vocadyne","Roar","Ear-PiercingScream","SoothingVoice","KindSoul"],"critquote":["Woah woah wooooooo, what a lucky day, never will happen again. Probably?","Hey hey hey, the best luck possible for this attack!","🎵 Hey, I'll make all your damage (damage (da-da-da))\n\nAin't no-one like you and that's a fact, that's a fact 🎵"],"deathquote":["🎵 I need someone to avenge me\nI need someone to take my place 🎵","Ahhhhh nooo, noooo, the musical mastermind shall be deathened...","Boo hoo, boo hoo, the strike made some murder, murder!","Ooooooooh, the dramatic death, ohhhh how killer must it be..."],"bio":{"species":"Wish Hyphen","age":560,"info":"Wish is one of the only __Wish Hyphens__ that ever existed, granting wishes to locals around in need. Able to fly with detached wings at relatively fast speed for them. Soft, energetic, very much eccentric, with a beautiful voice that is not to be left rotting. He'd be seen singing quite a lot through their life. But, he can be annoying to people. Usually when that happens, it is because they can't handle Wish's angelic voice.\n\n```Wish Hyphens belong to the same mythology as The Ascended's.```\n\n<Wish Specialty> Evasion and Prosperity\n<Wish Quality> Average\n<Wish Amount Allowed Per Day> 7\n\n<Fun Fact> If he speaks english without accents and all that jazz, you know he is threatening you.","backstory":"__Wish Hyphens__ were born from unknown circumstances in specific places for the sole reason of helping people out with wishes. Wish in this instance was born in a japanese-styled village, where citizens desperately needed safety and evasion would've allowed for that. He had a simple life going through, helping out in need, but the life simply could not last for so long, despite it going for over 500 years. The reason why Wish managed to end up in Yaretza is unknown. Many people over there speculate that as the connection of upper forces, which are defined in the ``Mythology of Ventrah``.","likes":"Musicals, beautiful voices, grantish wishes, anything soft, kiwi fruit","dislikes":"Evildoers trying to trick, being forced to have his mouth shut, dumb people, being made fun of","fears":"To be alone and useless, awkward silences\n\n<Passive Abilities>\nRapid Flight, Cat-like Reflexes and Flexibility, Cuteness and Appeal( :) ), Incredible Singing Voice, Immortality*(?)*\n\n*(?)*What this actually means is that his cell cycle is super slow, almost at a halt. He will take millions upon millions of years to die, which is enough for people to call as immortality.","voice":"\n__Normal:__ Yoshi (Super Mario World - Animated Series) [Andrew Sabiston]\n__Singing:__ [Sam Cooke](https://www.youtube.com/watch?v=dQw4w9WgXcQ)","theme":"[TBA]","gender":"male","height":[0,9],"weight":0,"appearance":"https://cdn.discordapp.com/attachments/937053847661187103/1002673929028116480/Wish---After-Expression-Challenge.png","\"wish":"Wish is one of the only Wish Hyphens that ever existed, granting wishes to locals around in need. Able to fly with detached wings at relatively fast speed for them. Soft, energetic, very much eccentric, with a beautiful voice that is not to be left rotting. He'd be seen singing quite a lot through their life. But, he can be annoying to people. Usually when that happens, it is because they can't handle Wish's angelic voice.\n\n```Wish Hyphens belong to the same mythology as The Ascended's.```\n\n<Wish Specialty> Evasion and Prosperity\n<Wish Quality> Average\n<Wish Amount Allowed Per Day> 7","custom":{}},"trust":{"Patella":{"amount":20,"maximum":100,"level":1}},"mainElement":"bless","transformations":{"GrandWish":{"name":"GrandWish","requirement":"trusteddown","desc":"","hp":15,"atk":0,"mag":1,"prc":5,"end":3,"chr":-3,"int":-1,"agl":8,"luk":-4,"tp":0,"tpmax":10,"level":1}},"charms":[],"curCharms":[],"nickname":"Kiwi","stats":{"atk":28,"mag":86,"prc":46,"end":43,"chr":88,"int":28,"agl":89,"luk":44},"basestats":{"baseatk":2,"basemag":7,"baseprc":6,"baseend":3,"basechr":9,"baseint":2,"baseagl":10,"baseluk":4},"affinities":{"superweak":["strike","pierce","slash"],"weak":["explode"],"resist":["bless","psychic"],"block":["spirit"],"repel":[],"drain":["sound"]},"autolearn":{"0":true,"1":true,"2":true,"3":true,"4":true,"5":true,"6":true,"true":true},"quotes":{"meleequote":["Power's out, POWER'S OUT! Uuuhuhuhu, the fist I can't handle.","What do you say, what do you say, when I shall aim at your kisser?"],"physquote":["🎵 Those problems I can always find a way\n\nWhere problems never end 🎵","🎵 My sword, shall be at peace\n\nThe shield, the axe, the sword of the holy 🎵","🎵 To worry about my sorrow sorrow and stand aside beautiful\n\nTo make your dying day 🎵"],"magquote":["🎵 I wanna take you far away, yeah\n\nTo a world where men are not afraid to fight 🎵","Yoo yoo yoooo, my specialty, the magic of peace."],"allyatkquote":["Hehehehehahaa, ooooo, no way you're about to do that alone.","🎵 I may not be the best assist\n\nbut an assist is better than nothing.\n\nIs that correct? 🎵"],"lbquote":["Hehehehehahaha, ha, ohhh the break is sure about to limit you, hohoh!","AAAAAAA, get ready, time to stay down!"],"strongquote":["Oh ohh, ohhhhhhhhhhh, the weakness is struck, the power skyrockets, all through!","🎵 What a revelation, what a transformation of events\n\nit all feels like a clover, but it's not all of luck 🎵","🎵 You've seen my worst and I know your worst too\n\nBut I wanna be the one for you because you're the one for me 🎵"],"missquote":["Way, to, gooooooo, this is not what, I expected.","Boo hoo hoooooo, what am I supposed to do?","I need to, I need to, I need to aim better, is that understandable, not always, who even knows."],"weakquote":["🎵 Nono nono nono nono nono \n\nnot the guts! 🎵","Eyyyyy, aaaaaaaaaaaaaaaa, why in the guts?","Waitwaitwaitwait, why this spot, no no no, why this spot?","Nooooonononononoo, my guts are frail, you know?"],"hurtquote":["Woah woah woah, why would you do that, you know?","What made you think it was the best idea, hooh hooh?","🎵 I may be in the injure area\n\nbut i plan to still walk like a king, oh yeah! 🎵"],"resistquote":["🎵 What I expected to be the worst\n\nturned out to be for the better 🎵","🎵 Aw hey, where is the form, soldier\n\nWe got some work to do, mister. 🎵","🎵 Hey hey hey, hey\n\nWould you look at that\n\nIt wasn't all so bad\n\ntry again. 🎵","Woah woah woah, how did that do absolutely nothing, woah woah?"],"blockquote":["Hehehehehhaaaaaaaa, haaaa, nothing was dealt, prepare for disappointment.","The feeling of nothingness, noooo, it was for the best, OOOOOH!","🎵 It all was for nothing\n\nit's all I will to accept\n\nit's within the better terms\n\nOF LIFE AND DEATH! 🎵"],"repelquote":["🎵 It's all like a tornado of thoughts\n\nbut those sure ain't mine, I am sure. 🎵","Hey hey hey, ooooo, that is not mine, you should know it.","Lovely lovely, right back at you, what a steal, ohhhhooohh!"],"drainquote":["🎵 You go, king\n\nsing after me, you know it yourself! 🎵","Daaaaaaw, that voice was so, so, beauty!!","Hey hey hey, thank you for some help out there. Real appreciated.","🎵 Let the musicaaaaaaal go on furtheeeeer! 🎵"],"dodgequote":["🎵 Hey hey hey\n\nyou're not a bowling ball\n\nI am not the pin of your luck 🎵","🎵 What a clover of all of my life\n\nalways useful, always treasured\n\nand this time, you don't deserve it! 🎵","🎵 You're not afraid to go for it\n\nI'm just a little bit out of your league, mmhm 🎵"],"killquote":["🎵 I'll make sure that you'll never see the light of day 🎵","Ooooh, what is the mattereth, oh, oh?","Ohhheheheheheheeee, the voice shall shatter one's soul at will, hahaaa.","🎵 The feeling of satisfaction when I finished the job\n\nThat comes from slaying a monster 🎵"],"allydeathquote":["🎵 I'm sitting here, feeling like I should leave\n\nMy mind's racing and my stomach's in knots and it's only me and you 🎵","Oh noooo, nononooooo, why must the hyphen suffer this faaaaaaate???","Hey hey, no no, this is not thy game we should be playing."],"healquote":["🎵 And the medicine shall bring the injured back 🎵","🎵 You can tell me what hurts the most\n\nI'll build you a bridge that'll last\n\nI'll hold on tight to your memories 🎵","Oh hey hey, oh hey hey, no worry, the music shall be the solution!"],"helpedquote":["Ohhhhhahahahah, haaaa, that was so sweet of ya.","Oooooh, ooooh, lovely that was!","🎵 Ohhhh, ohhhh, what a beauty that was. 🎵"],"consolequote":["🎵 Where does it hurt, how are you doing\n\nplease don't tell me you're about to pass 🎵","Heyheyheyhey, nonono, what are you doing, are you doing okay?","Ohh yiiiiii, you sure about handling this one?"],"imfinequote":["Nothing will not never seem to stop the wish maker, hee haa!","🎵 It's all as fine as a fresh avocado\n\nbut hey, who am I to judge? 🎵"],"lvlquote":["🎵 I'm walking with a spring in my step\n\nI'm walking around like a king, mmhm 🎵","🎵 It's all been happening so fast, happening so fast\n\nAll this power I don't deserve, don't deserve it 🎵"]},"leaderskill":{"name":"EvasionWish","type":"buff","var1":"agl","var2":1},"lb":{},"teamcombos":{"Dream":{"name":"testingsmth","users":["Wish","Dream"],"desc":"testingsmth"}},"statusaffinities":{"block":[]}},"Trecko":{"name":"Trecko","owner":"441198920668938260","level":66,"hp":410,"mp":500,"maxhp":410,"maxmp":500,"basehp":33,"basemp":32,"mpMeter":["Magic Points","MP"],"melee":{"name":"Strike Attack","type":"strike","pow":30,"acc":95,"crit":15},"weapon":{},"armor":{},"xp":916062,"maxxp":5470677,"skills":["Kougaon","Holyen","Makouga","MegatonRaid","Mahanama","Hanamadyne","VineLash"],"critquote":[],"deathquote":[],"bio":{"species":"Lychen Imp","age":10,"info":"A slightly stronger Lychen Imp that Sutela and Patella had pacified on their little adventure. A tad bit overconfident, but still a sunshine to them. They now stay with the group and assist when needed.","backstory":"","likes":"","dislikes":"","fears":"","voice":"","theme":"","weight":0,"height":[4,0],"appearance":"https://cdn.discordapp.com/attachments/937053847661187103/968848467155890186/Lychen_Imp.png","custom":{}},"trust":{"Lena":{"value":60,"nextLevel":100,"level":1},"Frosta":{"value":60,"nextLevel":100,"level":1},"Jelly":{"value":60,"nextLevel":100,"level":1},"Miles":{"value":30,"nextLevel":100,"level":1},"John":{"value":30,"nextLevel":100,"level":1},"Bayrero":{"value":30,"nextLevel":100,"level":1}},"mainElement":"bless","stats":{"atk":25,"mag":72,"prc":37,"end":38,"chr":25,"int":73,"agl":38,"luk":75},"basestats":{"baseatk":3,"basemag":7,"baseprc":4,"baseend":5,"basechr":3,"baseint":8,"baseagl":5,"baseluk":10},"affinities":{"superweak":["curse"],"weak":["fire","wind","metal"],"resist":["earth"],"block":["bless"],"repel":[],"drain":["water"]},"autolearn":{"4":true,"5":true,"6":true},"quotes":{"meleequote":[],"physquote":[],"magquote":[],"lbquote":[],"strongquote":[],"missquote":[],"weakquote":[],"hurtquote":[],"resistquote":[],"blockquote":[],"repelquote":[],"drainquote":[],"killquote":[],"healquote":[],"helpedquote":[]},"lb":{}},"Terrly":{"name":"Terrly","owner":"441198920668938260","level":69,"hp":462,"mp":419,"maxhp":462,"maxmp":419,"basehp":20,"basemp":45,"mpMeter":["RockEmission","RE"],"melee":{"name":"DiamondJabber","type":"pierce","pow":30,"acc":95,"crit":15},"weapon":{},"xp":157668,"maxxp":8403976,"skills":["PillarSquish","Materazi","CrystalPierce","PhantomShip","Astonish","Crystalize"],"critquote":[],"deathquote":[],"bio":{"species":"Crystal Guardian","age":10,"info":"Destined to be a guardian of Bloomfall Mineshaft, Terrly tends to be asocial at times. They're unknowing of the world around them, but knows their area the best. Heavy striker, despite being made out of crystal. After a certain group has visited, they opened up to people better, and who knows if they can be seen near the area.","backstory":"They got from Ventrah to Yaretza mainly because they felt like needing a place to guard, of which wasn't available in their home world to an extent. No one knows who made them, if they were even made artificially.","likes":"","dislikes":"","fears":"","voice":"","theme":"","height":[4,0],"weight":0,"gender":"","appearance":"https://cdn.discordapp.com/attachments/937053847661187103/968867212226076682/Terrly.png","custom":{}},"trust":{"Sutela":{"value":120,"nextLevel":260,"level":9},"Patella":{"value":220,"nextLevel":280,"level":10},"Rainbow":{"value":60,"nextLevel":120,"level":2},"Dawn":{"value":30,"nextLevel":100,"level":1},"Karma":{"value":200,"nextLevel":240,"level":8},"'Sutela'":{"value":50,"nextLevel":280,"level":10}},"nickname":"Terry","mainElement":"earth","charms":[],"curCharms":[],"armor":{},"stats":{"atk":25,"mag":74,"prc":38,"end":77,"chr":37,"int":25,"agl":73,"luk":37},"basestats":{"baseatk":2,"basemag":6,"baseprc":4,"baseend":9,"basechr":3,"baseint":2,"baseagl":5,"baseluk":3},"affinities":{"weak":["curse","psychic"],"resist":["strike"],"block":["earth"],"repel":[],"drain":[]},"autolearn":{"true":true},"quotes":{"meleequote":[],"physquote":[],"magquote":[],"lbquote":[],"strongquote":[],"missquote":[],"weakquote":[],"hurtquote":[],"resistquote":[],"blockquote":[],"repelquote":[],"drainquote":[],"killquote":[],"healquote":[],"helpedquote":[]},"leaderskill":{"name":"CrystalClear","type":"buff","var1":"prc","var2":1},"lb":{"1":{"name":"CrystalSwarm","class":"atk","pow":350,"cost":100,"status":"bleed","statuschance":10},"2":{"name":"GroundShatter","class":"atk","pow":600,"cost":175,"status":"bleed","statuschance":10},"3":{"name":"DiamondBreaker","class":"atk","pow":800,"cost":350,"status":"bleed","statuschance":20}}},"Need":{"name":"Need","owner":"441198920668938260","level":80,"hp":331,"mp":563,"maxhp":331,"maxmp":563,"basehp":15,"basemp":50,"mpMeter":["ForceEnergy","FE"],"melee":{"name":"TriumphantNeed","type":"pierce","pow":30,"acc":95,"crit":15},"weapon":{},"armor":{},"lb":{},"xp":0,"maxxp":40561289,"skills":["Kouga","Ziemia","Hanama","Marakukaja","Mavisukaja","Mamakakaja","Dia"],"critquote":[],"deathquote":[],"bio":{"species":"Wish Hyphen","age":10,"info":"The final of the __Wish Hyphens__ that ever existed, granting the quick needs from the locals. Also can fly just like other two. Way too energetic for her own good, doesn't consider people's needs as much and goes for whatever she thinks they need, by assuming way too quick. But hey, the charm in her, and luck, somehow make it all work out. Way more desperate in granting quick needs\n\n<Wish Specialty> Luck and anything worthwhile for a quick moment\n<Wish Quality> Terrible, something always goes wrong\n<Wish Amount Allowed Per Day> 20","backstory":"Need was born in a futuristic utopia, where she was instantly loved and called a 'Baby Flower'. Adored for her own existence, she was used as a marketing tool. She wasn't too happy with that since she didn't get to be herself, so she left the town only a year after birth. She didn't find much of interest in the future. The reason why she went to Yaretza is.... They all seem to be following the same place, huh?","likes":"Nature, Flowers, Good Smells, Family, Needs","dislikes":"Getting Pouty, Capitalism, Decay, Aging","fears":"That her brothers wouldn't be found, Isolation\n\n<Passive Abilities>\nRapid Flight, Flexibility, Cuteness & Appeal, Immortality(?), Charm(?2)\n\n(?)Seems like this is an innate ability for the species itself\n\n(?2)The power of convincing people","voice":"Chun-Li (Super Street Fighter IV)","theme":"[TBA]","appearance":"https://cdn.discordapp.com/attachments/937053847661187103/972152369678798928/Need.png","gender":"female","height":[4,0],"weight":0,"custom":{}},"trust":{},"mainElement":"bless","nickname":"Flower","transformations":{"EternalNeed":{"name":"EternalNeed","requirement":"allydown","desc":"","hp":15,"atk":-2,"mag":4,"prc":0,"end":3,"chr":-4,"int":2,"agl":5,"luk":3,"tp":0,"tpmax":10,"level":1}},"stats":{"atk":27,"mag":85,"prc":29,"end":45,"chr":85,"int":43,"agl":89,"luk":44},"basestats":{"baseatk":1,"basemag":6,"baseprc":3,"baseend":5,"basechr":6,"baseint":3,"baseagl":10,"baseluk":4},"affinities":{"superweak":["strike","slash","pierce"],"weak":["explode"],"resist":["bless","psychic"],"block":["spirit"],"repel":[],"drain":["grass"]},"autolearn":{"0":true,"1":true,"2":true,"3":true,"4":true,"5":true,"6":true,"autoLearn":true},"quotes":{"meleequote":[],"physquote":[],"magquote":[],"lbquote":[],"strongquote":[],"missquote":[],"weakquote":[],"hurtquote":[],"resistquote":[],"blockquote":[],"repelquote":[],"drainquote":[],"killquote":[],"healquote":[],"helpedquote":[]},"leaderskill":{"name":"QuickNeed","type":"discount","var1":"magic","var2":5}},"Dream":{"name":"Dream","owner":"441198920668938260","level":80,"hp":425,"mp":667,"maxhp":425,"maxmp":667,"basehp":30,"basemp":35,"mpMeter":["ForceEnergy","FE"],"melee":{"name":"DreamfulLeech","type":"pierce","pow":30,"acc":95,"crit":15},"weapon":{},"armor":{},"lb":{},"xp":0,"maxxp":40561289,"skills":["Holyize","MegaRave","Glowmax","Mindo","Stellion","Tinlok","Mamakanda"],"critquote":[],"deathquote":[],"bio":{"species":"Wish Hyphen","age":10,"info":"The second of the only __Wish Hyphens__ that ever existed, granting anything the locals dream of. Can also fly fast, just like Wish does. Soft, shy, asks a ton of questions to make sure people are comfortable with their actions. That could get on people's nerves. However there's just something more pure in him that people can't resist. He's a lot more crafty, liking to make things out of metals, and doesn't mind not granting as many dreams.\n\n<Wish Specialty> Purification, Intelligence and Property\n<Wish Quality> Excellent, no strings attached\n<Wish Amount Allowed Per Day> 3","backstory":"Dream, being born in an alleyway, had a sad life going for him. He didn't get to grant much, for there wasn't much for people to dream about where he was born, so he had to move places. He didn't find much luck but only 100 years later he found a small village on alpine mountains that needed a lot of help. He was of great use there, and he was happy the way he was. The reason why he came to Yaretza is unknown, but it could be from the same reason as Wish's.","likes":"Gold, Parenting, Yoghurt, Dreams, Comfort","dislikes":"Isolation, Wish, Granting too much, Poor People","fears":"Death, Disasters Out Of His Control\n\n<Passive Abilities>\nRapid Flight, Intelligence, Flexibility, Immortality(?), Quick Crafter, Truth Detection\n\n(?)Works like with Wish's Immortality","voice":"Yosuke Hanamura (SMT: Persona 4)","theme":"[TBA]","appearance":"https://cdn.discordapp.com/attachments/937053847661187103/972156173342081154/Dream.png","\"wish":"Wish Hyphen","height":[4,0],"weight":0,"gender":"male","custom":{}},"trust":{"Need":{"value":20,"nextLevel":100,"level":1}},"mainElement":"bless","transformations":{"LucidDream":{"name":"LucidDream","requirement":"leaderdown","desc":"","hp":15,"atk":-3,"mag":5,"prc":3,"end":-4,"chr":0,"int":0,"agl":4,"luk":5,"tp":0,"tpmax":10,"level":1}},"nickname":"Gold","stats":{"atk":28,"mag":86,"prc":45,"end":44,"chr":29,"int":88,"agl":89,"luk":43},"basestats":{"baseatk":2,"basemag":7,"baseprc":5,"baseend":4,"basechr":3,"baseint":9,"baseagl":10,"baseluk":3},"affinities":{"superweak":["strike","pierce","slash"],"weak":["explode"],"resist":["bless","psychic"],"block":["spirit"],"repel":[],"drain":["metal"]},"autolearn":{"0":true,"1":true,"2":true,"3":true,"4":true,"5":true,"6":true},"quotes":{"meleequote":[],"physquote":[],"magquote":[],"lbquote":[],"strongquote":[],"missquote":[],"weakquote":[],"hurtquote":[],"resistquote":[],"blockquote":[],"repelquote":[],"drainquote":[],"killquote":[],"healquote":[],"helpedquote":[]},"leaderskill":{"name":"BlessfulDream","type":"crit","var1":"physical","var2":10}}}
+{
+    "Sutela": {
+        "name": "Sutela",
+        "owner": "441198920668938260",
+        "level": 70,
+        "hp": 401,
+        "mp": 358,
+        "maxhp": 401,
+        "maxmp": 525,
+        "basehp": 29,
+        "basemp": 36,
+        "melee": {
+            "name": "WaveFist",
+            "type": "strike",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "xp": 525602,
+        "maxxp": 9696895,
+        "skills": [
+            "SpiralBreak",
+            "Andablast",
+            "SoulBeam",
+            "EtherealMirror",
+            "DespairsFood",
+            "Hexburst",
+            "TriAttack",
+            "KindSoul"
+        ],
+        "deathquote": [
+            "**S:** Well, it was a good run.",
+            "**S:** ...I see...",
+            "**S:** Maybe this was... Not the best idea...",
+            "**S:** Goodbye, world...",
+            "**L:** I REFUUUUUSE!",
+            "**L:** GH- Ack... No...",
+            "**L:** We will be back to life eventually, right?",
+            "**T:** AAAAAAAAAAAAA- [plops on the floor]",
+            "**T:** AVENGE USSSSSSS!!",
+            "**S, L & T:** [long session of sobbing on the ground]"
+        ],
+        "weapon": {},
+        "bio": {
+            "info": "A man with three spirits of separate identity, mind, and control. Likes to explore places. Preferred to be alone, but now is willing to be with people. Still guilty for things out of control, but no longer as worried. He's like a magnet for people.\n<Name Meaning> Sutela is comprised of three people's names' parts: **Su**nburn, **Te**mpus and **La**ut. However as a word it translates to __trick__, like a __cover up__, which he used to hide his secrets earlier.\n\n<Clothing> Western hat, fluffy adventurer jacket with logos of Yaretzan mountains, white performance split-toe socks, black leather combat boots",
+            "backstory": "He was born with multi-spirituality, from weakness. __The Ascended__, finally born. It was a secret kept to his parents. He was __forced to__ not reveal it. Yet he gathered friends with it. But at 16, it was revealed, from __rumors__.\n\n```The Ascended, from Mythology of Ventrah: someone on an ͢i͢l͢l͢e͢g͢a͢l͢ state of ascension, growing in spiritual force. ͢N͢e͢v͢e͢r͢ ͢m͢e͢a͢n͢t͢ ͢t͢o͢ ͢e͢x͢i͢s͢t͢, met with hatred.\nMaturity, harmony, and confidence, grants them infinitude.``` \n\nVentrah locals were ready for a hunt, by greed, and is still active. He had to __run away__. (Yaretza - dimensional travel).",
+            "voice": "\n__Neutral (Sunburn)__: Pheonix Wright (Ace Attorney)\n__Laut__: Commander Shepard (Mass Effect)\n__Tempus__: Cuphead (The Cuphead Show!)",
+            "theme": "[TBA]\n\n<Debunking a Myth>  Despite having an axolotl's parts, and their species being able to regenerate limbs, Sutela can not achieve that feat, as the other 2 species are the majority of his genetic mess.",
+            "species": "Red Panda? [Jack of Multiple Species]",
+            "age": 19,
+            "likes": "Peace and quiet (unless used to chaos), tea, solitude (sometimes), friends (when solitude inapplicable)",
+            "dislikes": "The feeling of weakness, disruptions of his normal lives, overly bad jokes, seeing people being in pain",
+            "fears": "__To be found again__ by ones with a specific intent, horror-like situations\n\n<Passive Abilities>\n__From a Red Panda__: Incredible Jump Height, Dexterity and Balance\n__From an Axolotl__: Water Breathing, Incredible Swimming Ability\n__From a Panda__: Slow Metabolism, Sturdiness",
+            "appearance": "https://cdn.discordapp.com/attachments/937053847661187103/965372177396428850/Sutela.png",
+            "height": [
+                3,
+                9
+            ],
+            "weight": 0,
+            "\"a": "A man of three identities, with the ability of changing between them, on accident. Tho they're pretty subtle right now, they can strengthen in a way or another. 3'9 in height, a guy that likes to explore on his own, or not try and spend time with the group. He prefers to be alone because of identity issues and how he believes it can hurt other people. A man of regrets, feeling guilty for a lot of things, but with great ways to cover that up, as a trick, hence 'Sutela'. A stoic, distant person with trust issues, hence why he likes to leave groups whenever he feels like it.\n\nEDIT: As of now he is getting a lot better with himself. He still hides stuff but he is going to be a lot more open about it.",
+            "gender": "male",
+            "custom": {},
+            "fullname": "Sunburn 'Sutela' Trephron"
+        },
+        "strikequote": [],
+        "critquote": [
+            "**S:** Lucky me.",
+            "**S:** Woohoo!",
+            "**S:** This couldn't get any better.",
+            "**L:** Ooooooh! WEAK SPOT!",
+            "**L:** HOW DO YOU LIKE THAT, %ENEMY%?",
+            "**L:** Bet this is gonna happen again right after.\n**T:** Bet.",
+            "**T:** MMMM, Nice.",
+            "**T:** Sweet.",
+            "**T:** Haha yes.",
+            "**S & L:** Yes! A critical!"
+        ],
+        "trust": {
+            "Flara": {
+                "value": 0,
+                "nextLevel": 200,
+                "level": 6
+            },
+            "Sun": {
+                "value": 160,
+                "nextLevel": 340,
+                "level": 7
+            },
+            "Valoria": {
+                "value": 0,
+                "nextLevel": 140,
+                "level": 3
+            },
+            "Sky": {
+                "value": 80,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Ira": {
+                "value": -25,
+                "nextLevel": 150,
+                "level": 2,
+                "dislike": 160
+            },
+            "Lanagu": {
+                "value": 110,
+                "nextLevel": 150,
+                "level": 2
+            },
+            "Euphorica": {
+                "value": -5,
+                "nextLevel": 150,
+                "level": 2,
+                "dislike": 90
+            },
+            "Hurricane": {
+                "value": 25,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Karma": {
+                "value": 0,
+                "nextLevel": 260,
+                "level": 9
+            },
+            "Permic": {
+                "value": 20,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "John": {
+                "value": 0,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Miles": {
+                "value": 0,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Harcvuk": {
+                "value": 20,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Patella": {
+                "value": 30,
+                "nextLevel": 280,
+                "level": 10,
+                "amount": null
+            },
+            "Sparky": {
+                "value": 85,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "XCyan": {
+                "value": 0,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Firestorm": {
+                "value": 0,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Rainbow": {
+                "value": 80,
+                "nextLevel": 140,
+                "level": 3
+            },
+            "Lacrimal": {
+                "value": -100,
+                "nextLevel": 100,
+                "level": 1,
+                "dislike": 100,
+                "amount": null
+            },
+            "Croato": {
+                "value": 80,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Terrly": {
+                "value": 50,
+                "nextLevel": 280,
+                "level": 10
+            },
+            "Dawn": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Nighthug": {
+                "value": 330,
+                "nextLevel": 580,
+                "level": 25,
+                "amount": null
+            },
+            "SuteIa": {
+                "value": 0,
+                "nextLevel": 100,
+                "level": 1
+            }
+        },
+        "charms": [
+            "GrubberflysElegy"
+        ],
+        "curCharms": [
+            "GrubberflysElegy"
+        ],
+        "mainElement": "spirit",
+        "mpMeter": [
+            "SpiritTechLife",
+            "STL"
+        ],
+        "transformations": {
+            "SyncedUp": {
+                "name": "SyncedUp",
+                "requirement": "trusteddown",
+                "desc": "",
+                "hp": 20,
+                "atk": 0,
+                "mag": 6,
+                "prc": 2,
+                "end": 8,
+                "chr": -6,
+                "int": 0,
+                "agl": 4,
+                "luk": 1,
+                "tp": 0,
+                "tpmax": 10,
+                "level": 1
+            }
+        },
+        "nickname": "TriTan",
+        "armor": {},
+        "teamCombo": {
+            "Sutela": "SoulLinkRemoval"
+        },
+        "stats": {
+            "atk": 26,
+            "mag": 77,
+            "prc": 41,
+            "end": 40,
+            "chr": 77,
+            "int": 76,
+            "agl": 41,
+            "luk": 25
+        },
+        "basestats": {
+            "baseatk": 3,
+            "basemag": 8,
+            "baseprc": 6,
+            "baseend": 5,
+            "basechr": 8,
+            "baseint": 7,
+            "baseagl": 6,
+            "baseluk": 2
+        },
+        "affinities": {
+            "superweak": [
+                "poison"
+            ],
+            "weak": [
+                "nuclear",
+                "pierce"
+            ],
+            "resist": [
+                "psychic"
+            ],
+            "block": [],
+            "repel": [],
+            "drain": [
+                "spirit"
+            ]
+        },
+        "autolearn": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true,
+            "7": true,
+            "true": true
+        },
+        "quotes": {
+            "meleequote": [
+                "**S:** Sorry, I am only doing this for the safety of my own energy.",
+                "**S:** Don't worry, I will do better.",
+                "**S:** A strike can always do something.",
+                "**S:** Get ready in the future, okay?",
+                "**L:** ...If only I could.",
+                "**L:** Please shut up.",
+                "**L:** I will get you, for sure.",
+                "**T:** ...I'm sorry.",
+                "**T:** Heeey, check out this new strike!"
+            ],
+            "physquote": [
+                "**S:** Time to show what we three are made of.",
+                "**S:** My %SKILL% should do something.",
+                "**S:** Get ready, %ENEMY%",
+                "**S:** This should do it.",
+                "**L:** Lemme handle this one.",
+                "**L:** I WILL POUND YOU UP LIKE A FILET OF FISH!",
+                "**L:** Ey, %ENEMY%. Eat some of %SKILL%!",
+                "**L:** HERE WE GO!",
+                "**L:** LEMME AT EM!\n**S:** Okay.\n**L:** WOOO!",
+                "**L:** EAT THIS!",
+                "**L:** Heheh, you won't see this coming.",
+                "**T:** I'm sorry, %ENEMY%.",
+                "**T:** Oh, fists. The weapon.",
+                "**T:** Mmm, lovely knuckle sandwich **that you will receive by the wrath of the __three, ascended, ``brothers.``__**",
+                "**S & L:** Get ready!"
+            ],
+            "magquote": [
+                "**S:** The real magic show starts here!",
+                "**S:** I will show you the way of the %SKILL%.\n**L:** Cliche-\n**S:**~~Shut up.~~",
+                "**S:** The two believe in me so... Get ready, %ENEMY%!",
+                "**S:** ..How would you like my attack?",
+                "**S:** This probably works.",
+                "**L:** I will take control for now.",
+                "**L:** RIGHT IN THE KISSER!\n**T:** Go off, slay!",
+                "**L:** GET OVER HERE AND LEMME %SKILL% YOU!",
+                "**L:** ...Proceed to unlive, please.",
+                "**L:** I WILL FLIP YOU OVER, STAY STILL!",
+                "**T:** Oooh, now this is the real magic.",
+                "**T:** My my, looks like I gotta use %SKILL%.",
+                "**T:** I will slay.\n**L:** You won't but you can always try.",
+                "**S & L:** Get ready!"
+            ],
+            "allyatkquote": [
+                "**S:** Here, let us help, okay, %ALLY%?",
+                "**S:** Hey you can't do this on your own, %ALLY%.",
+                "**S:** Here, have some help.",
+                "**L:** ...No time to question, I will help out.",
+                "**L:** As if you're going to do this on your own.",
+                "**L:** Don't you dare to think I'm not going to help with this one, %ALLY%.",
+                "**T:** Eyy, you clearly need us for this one, %ALLY%.",
+                "**T:** Panda boy to the rescueee!",
+                "**T:** Hehe, you have us for your needs, %ALLY%.",
+                "**T:** I seee, you need us for this one.",
+                "**S & L:** Don't worry about us, we'll handle this one, %ALLY%.",
+                "**S & T:** Here we go!"
+            ],
+            "lbquote": [
+                "**S, T & L:** Let this teach you a lesson.",
+                "**S, T & L:** Get ready!",
+                "**S, T & L:** Here we go!",
+                "**S, T & L:** Understand, we need to do this.",
+                "**S, T & L:** You know you are a threat when we have to use a limit break.",
+                "**S, T & L:** This should help the team."
+            ],
+            "strongquote": [
+                "**S:** Guess your weakness got figured out, huh?",
+                "**S:** Hey, not too shabby.",
+                "**S:** ..Interesting.",
+                "**S:** Laut I swear, if you will abuse-\n**L:** TOO LATE! LET'S GOOOOO- Just kidding.\n**S:** [💢]",
+                "**S:** Well I won't forget that now.",
+                "**L:** WOOO! WE GOT THEM!\n**S:** Just please, don't abuse without my approval.",
+                "**L:** Now prepare for the worst! Everyone, if you can, targe-\n**S:** EYEYEY NO!",
+                "**L:** Psssh, what are the chances of this?\n**S:** Big.\n**T:** Mhm, probs big.",
+                "**L:** Now that I know your weakness, WE WILL KICK YOUR ASS FOR SURE!\n**S:** I'm not gonna do it with that attitude.",
+                "**L:** Heh.",
+                "**T:** Ohhh, that'll be fun to abuse.\n**S & L:** WAIT NO.",
+                "**T:** The silver platter will now feature a new menu item called %ENEMY%.\n**S:** ..What?",
+                "**T:** Oh sweetie, you don't know what is waiting for you now.",
+                "**T:** [blep] Aweeesome.",
+                "**S & L:** Oh hey. Nice."
+            ],
+            "missquote": [
+                "**S:** Tempus, please. Don't cry about this.\n**T:** ...",
+                "**S:** Ey was this planned guys?\n**L:** No???",
+                "**S:** Oops, I didn't concentrate hard enough.",
+                "**S:** I'm sorry, I didn't do it right.",
+                "**S:** Maybe we need glasses...\n**T & L:** Ey this is not your fault.",
+                "**L:** EY THIS DID NOT COUNT!\n**S:** It does, sorry.",
+                "**L:** I must hit you next time, %ENEMY%...",
+                "**L:** Don't try next time, please.",
+                "**L:** You're making me desperate.",
+                "**L:** I will get you, mark my word!",
+                "**T:** WHWHWHWAAAAAAA__A__AAAAAAA???\n__**L:**__ Good grief..",
+                "**T:** I WILL GO FERAL!",
+                "**S & L:** Ohh why now?",
+                "**S & L:** This is not the outcome we were expecting.",
+                "**S, T & L:** ...Oh no..."
+            ],
+            "weakquote": [
+                "**S:** ACK- [throws up black stuff]",
+                "**S:** Ohhh no....",
+                "**S:** Why must you hit in the weak spot, %ENEMY%?",
+                "**S:** One more hit and we might be done for...\n**L:** Believable.",
+                "**S:** Please, stop.",
+                "**L:** Oh no, I feel the weakness now. NO!",
+                "**L:** NO! NOT THE SPOT!",
+                "**L:** CHEATING!",
+                "**T:** EYEYEYEYEY THIS IS A WEAK SPOT!",
+                "**T:** STOOOOOP!\n**L:** YEAH THIS IS CHEATING!",
+                "**S & L:** I refuse to believe this!",
+                "**S & L:** Nnngh, that was a dirty move.",
+                "**L & T:** Stop it!!!",
+                "**S, L & T: We will no longer allow this to happen any further.**"
+            ],
+            "hurtquote": [
+                "**S:** Oh no, not now.",
+                "**S:** Oh god oh god. Please we are not the most durable.\n**L:** You do realize %ENEMY%'s not going to care, right?",
+                "**S:** Okay okay, don't worry you two. This is not the end of the world.",
+                "**S:** Let's not worry too much about it, okay?\n**T:** ..I don't know...",
+                "**T:** EYEYEY AAAA!",
+                "**T:** NOOOO ONE HIT AND WE'RE DONE FOR.\n**L:** ..Stop overexaggerating.",
+                "**T:** AY CAN'T YOU SPARE ONE IN NEED?",
+                "**T:** STOP IT, PLEEEEEASE!",
+                "**L:** Yike- Ohhh now I am feeling this.",
+                "**L:** Ey ey watch it.",
+                "**L:** I refuse to acknowledge this.\n**T:** Good luck trying.",
+                "**T & L:** This is not getting comfortable for our tastes."
+            ],
+            "resistquote": [
+                "**S:** This... Could've been way worse.",
+                "**S:** I see you hit one of my resist spots.",
+                "**S:** Hey you just hit a spot, try again.",
+                "**S:** No way this didn't deal this much.",
+                "**S:** Wanna uhhh, try something else, %ENEMY%?",
+                "**L:** Ayo a tickle would do more than that, come on.\n**S:** Overexaggeration.",
+                "**L:** Hah, try again.",
+                "**L:** NO WAY YOU CAN'T HIT THIS MUCH!",
+                "**T:** WOW, what a noob.\n**L:** I agree!\n**S:** Guys, don't be so toxic!",
+                "**T:** This is great, couuuuld be better.",
+                "**T:** Oooooh, getting rough, oooooo-\n**L:** STOP MAKING EVERYTHING A FLIRTY SITUATION! YOU'RE MAKING US UNCOMFORTABLE!",
+                "**T:** Not the worst thing I survived today.",
+                "**T:** Weak.",
+                "**L & T:** Haha, you suck.\n**S:** ..You two should stop."
+            ],
+            "blockquote": [
+                "**S:** Well- This was not too bad.",
+                "**S:** Oh hey, that did not do anything.",
+                "**S:** Now it'll be my turn soon.",
+                "**S:** Well that did nothing.",
+                "**L:** AHAAAA, NO DAMAGE FROM YOU, SUCKER!\n**S:** Okay maybe don't be this egotistical about well, this?",
+                "**L:** Why don't you just, DO, BETTER?!",
+                "**L:** Not this time!",
+                "**T:** My my, looks like you hit the wrong SPOT!",
+                "**T:** Sweet sense of nothingness, don't you think?\n**L:** ...\n**S:** Please don't be creepy about this.",
+                "**T:** Boooooo, do better!",
+                "**S & L:** Eeeey, you don't get anything.",
+                "**S & L:** Haha, no.",
+                "**S & L:** I knew something about us would be useful."
+            ],
+            "repelquote": [
+                "**S:** I'm sorry, but this will become a rejection.",
+                "**S:** I will now proceed to repel this at you.\n**T:** Sorry for any inconvenience.\n**L:** What in the?",
+                "**S:** How about you get this instead?",
+                "**S:** I'm sorry, was this yours?",
+                "**L:** RETURN TO SENDER!",
+                "**L:** NAH NAH, THIS IS FOR YOU!",
+                "**L:** Not my problem. This is yours.",
+                "**L:** Lovely, just lovely.",
+                "**T:** Pfff, we refuse to get hit.\n**L:** Yeah we refuse!",
+                "**T:** Love you too, but this is friendzone territory.\n**L:** No wonder we call you... What was it again?",
+                "**S & L:** Whose is this? Surely not ours.",
+                "**S & L:** You didn't see that coming, huh?",
+                "**S, L & T:** Denied!",
+                "**S, L & T:** Not the spot you expected, huh?"
+            ],
+            "drainquote": [
+                "**S:** Thank you for the help, despite it being unintentional.",
+                "**S:** Appreciated.",
+                "**S:** Thaank you.",
+                "**S:** Aww, you didn't have to.",
+                "**L:** Do it again, I dare you, %ENEMY%. Nay, double dare you.\n**S:** Nay, triple dog dare you.",
+                "**L:** Okay that was very useful to us.",
+                "**L:** ...\n**T:** Sooo, can I date-\n**L** NO!",
+                "**T:** OHHHH that is what I NEEDED!\n**L:** That sounded super ho-\n**S:** Shut up.",
+                "**T:** Flattered.",
+                "**T:** Oooooo, delicious!\n**L:** AYO CAN YOU PLEASE STOP BEING WEIRD?",
+                "**S & T:** We'll take that as a thank you.",
+                "**S & T:** Best gift you could give this battle.",
+                "**S & L:** Please, do this again.",
+                "**S & L:** Awesome."
+            ],
+            "dodgequote": [
+                "**S:** Woah, that was close.",
+                "**S:** Not fast enough, it seems. That's alright.",
+                "**S:** Ey don't worry. You can do this next time.\n**L:** ...You can't be serious ARE YOU ENCOURAGING THEM?",
+                "**S:** Ohhh no, we better watch out next time.",
+                "**S:** Hey can you please, don't?",
+                "**L:** HAH. NOT THIS TIME.",
+                "**L:** Can you don't?",
+                "**L:** The axolotl speed is within me!\n**T:** Oh riiiight. I forgot you are one.",
+                "**T:** EAAAAAAAAAA, I'M GONNA DIE!\n**L:** ...Come on, T... You're not going to die.",
+                "**T:** NONONONO PLEEEASE!",
+                "**S & T:** Phew...",
+                "**S & T:** Woah, hey. Please. Don't."
+            ],
+            "killquote": [
+                "**S:** Unfortunate.",
+                "**S:** There goes it for you.",
+                "**S:** Well that was unfortunate, but maybe this will teach you a lesson.",
+                "**L:** AND STAY DOWN!\n**T:** YEAH!",
+                "**T:** Ohh yes, free monnnney.\n**S:** Pff, okay then???",
+                "**T:** Ah yes, the death.",
+                "**S, L & T: Death goes upon, for whoever rivals the ones in ascension, shall be slain in cold blood.**"
+            ],
+            "allydeathquote": [
+                "**S:** Nononono this can't be happening.",
+                "**S:** %ALLY%, please.. You can't give up like this.",
+                "**T:** NOOOOO, YOU CAN'T DIE ON US, PLEEEEASE!",
+                "**T:** %ALLY%!\n**L:**: ...",
+                "**L:** **...There will be vengance.**",
+                "**L:** EY! YOU! DO YOU NOT KNOW WHAT YOU HAVE DONE!?",
+                "**S & T:** NONONO PLEEEEASE!",
+                "**L & T:** WHAT WAS THAT FOR?",
+                "**S & T:** **We hope both sides of your pillow are warm.**",
+                "**S, L & T:** You do not just hurt anyone here. **Mess with who we trust, mess with us. Make sure you remember that.**"
+            ],
+            "healquote": [
+                "**S:** Don't worry. I will help you.",
+                "**S:** There is nothing to worry about, you're doing good out there.",
+                "**L:** ...Just don't die next time, okay?",
+                "**L:** Hey. Stop being weak.",
+                "**T:** Oooh, I can help this time.",
+                "**T:** Don't worry, bestie. You're in good hands.",
+                "**S, L & T:** Please, let us help."
+            ],
+            "helpedquote": [
+                "**S:** Thank you.",
+                "**S:** Appreciated.",
+                "**S:** Don't worry, we will try better.",
+                "**L:** I can't let myself be this weak.",
+                "**L:** Don't do it next time, I got this.",
+                "**T:** Ayooo, this is nice.",
+                "**T:** Love ya.",
+                "**S & L:** No need for help, but thanks.",
+                "**S & L:** I will cherish that moment.",
+                "**S, L & T:** Thank you so much."
+            ],
+            "consolequote": [
+                "**S:** Hey... You alright, %ALLY%?",
+                "**S:** Onononono you okay, %ALLY%?",
+                "**S:** Hey if you can't do it, just say it, okay, %ALLY%?",
+                "**S:** ...Do you need anything, %ALLY%?",
+                "**S:** Hey don't push on yourself too hard if you can't handle it, okay, %ALLY%?",
+                "**L:** ...You sure you're doing okay, %ALLY%?",
+                "**L:** Please don't tell me you're not going to die. You're doing okay, right, %ALLY%?",
+                "**L:** Ey, you okay, %ALLY%?",
+                "**T:** EEEK ARE YOU DOING OKAY, %ALLY%?",
+                "**T:** AAAAA PROMISE ME YOU'RE GOING TO BE OKAY, %ALLY%!",
+                "**T:** PLEASE JUST WATCH OUT FOR YOURSELF, PLEEEEASE, %ALLY%!",
+                "**L & T:** Is there anything we can do to help?"
+            ],
+            "imfinequote": [
+                "**S:** ...That depends.",
+                "**S:** ..Don't worry. I'll handle this.",
+                "**S:** Thank you for checking on us, but we're fine.\n**T**: Yeah.",
+                "**S:** Hey, you didn't have to. We're doing alright, I suppose.",
+                "**S:** The only one you should worry about for now is yourself.",
+                "**L:** Heh, it's not like this can strike me down a bunch. No need to worry.",
+                "**L:** Ey, do not bother worrying about us.\n**S:** Overexaggeration, but the spirit is there.",
+                "**L:** ..Shut up. We're fine.",
+                "**L:** This was only a scratch.",
+                "**L:** You didn't have to, seriously.",
+                "**T:** We're fiiiine, thanks for checking.",
+                "**T:** Pffff, it's good that you're concerned. Now shoo.\n**S:** Tempyyy...",
+                "**T:** The only one that would not be the most fine is Sunburn-\n**S:** EEEEY!",
+                "**T:** Don't worry. Let's just get to the end, okay?",
+                "**S & L:** That was nothing, okay?",
+                "**S & L:** Physically we're alright but mentally we are scrambled sometimes.",
+                "**S & T:** As if we're going to be dead with this, but we miiiight need some help.",
+                "**S & T:** Love you for the concern but don't worry.",
+                "**L & T:** You worry too much.",
+                "**S, L & T:** We're fine, thanks.",
+                "**L:** Tis but a scratch.",
+                "**S:** ...I don't know anymore... [he would sob...]"
+            ],
+            "lvlquote": [
+                "**S:** I can feel the confidence rising, whether that is a good thing or not.",
+                "**S:** Come on, guys! Let's get further!\n**T & L:** YEAH!",
+                "**L:** OHHH THE POWER SURGE!",
+                "**L:** AAAA, GIVE ME MORE, PLEASE!",
+                "**T:** Mmmmm, sweet level up.\n**S:** -",
+                "**T:** Lovely!",
+                "**S & L:** Let's go! Let's get some more!",
+                "**S & T:** Ohhhh, awesome.",
+                "**L & T:** HYUCK! LET'S KICK SOME ASS.\n**S:** ..Oooor pacify if we don't have to use violence.\n**L:** I guess.",
+                "**S, T & L:** Sweet!"
+            ]
+        },
+        "leaderskill": {
+            "name": "PhantomSupport",
+            "type": "buff",
+            "var1": "mag",
+            "var2": 1
+        },
+        "lb": {}
+    },
+    "Patella": {
+        "name": "Patella",
+        "owner": "441198920668938260",
+        "level": 71,
+        "hp": 32,
+        "mp": 227,
+        "maxhp": 546,
+        "maxmp": 324,
+        "basehp": 42,
+        "basemp": 23,
+        "melee": {
+            "name": "ThrustN'Slice",
+            "type": "slash",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "xp": 2205593,
+        "maxxp": 11188725,
+        "skills": [
+            "UnseenSlashes",
+            "RottenSlash",
+            "3CutShock",
+            "Dokusei",
+            "Glare",
+            "Undead-Like(N)",
+            "Undead-Like(T)"
+        ],
+        "deathquote": [
+            "Why you do this to me?",
+            "Guess I get no bitches afterall."
+        ],
+        "bio": {
+            "info": "'Representation of Death' in thought, in reality a lustful necromancer with ability to cheat death. Narcissistic, rash and reckless. Without fear of Death, which was shown by killing 'because I'm Death.' Can easily do mistakes.\nSeems like ever since a gang of people met up with him he quite ended up being a better person.",
+            "backstory": "Prior to death memories are cut, however events in and after were vividly remembered.\nA gang of people killing him one day after a difficult day, how tragic. Head smashed with a bottle, rib cage pulled, snout distorted, legs left to flesh, one ear ripped... Whoever necromanced him to life is uncertain.\n\n<Amnesia Pieces> ...Babysitting people...",
+            "voice": "Russel (Half-Life: Alyx)",
+            "theme": "[TBA]",
+            "species": "Tamandua",
+            "age": 10,
+            "likes": "Mind games, murder, weapons, capitalism, victory",
+            "dislikes": "People, hunger, failing at his job, help",
+            "fears": "__The Ascended__ (when angered), Lightning\n\n<Passive Abilities>\nIncredible Scythe Proficiency, Knowledge of Technology, Immunity to Life-Killing Diseases*(?)*, No Need to Eat or Drink\n\n*(?)*This means he is immune to things that kill over time, only because he technically is not alive. He's undead. However that doesn't mean he can't be downed, still making him affected by one hit KOs.",
+            "name": "Patella Necrovi",
+            "appearance": "https://cdn.discordapp.com/attachments/820036937791438859/965357438247247932/I-tried.png",
+            "\"it's": "It's unknown. Not sure how, but something must've cut off his memories to a certain moment. But maybe there are some hints lying around. After all, a skull smashed massively must mean something, right?",
+            "height": [
+                4,
+                0
+            ],
+            "weight": 0,
+            "gender": "male",
+            "custom": {}
+        },
+        "trust": {
+            "Karma": {
+                "value": 85,
+                "nextLevel": 260,
+                "level": 9
+            },
+            "Sutela": {
+                "value": 40,
+                "nextLevel": 240,
+                "level": 8,
+                "amount": null
+            },
+            "Patella": {
+                "value": 20,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Terrly": {
+                "value": 220,
+                "nextLevel": 280,
+                "level": 10
+            },
+            "Miles": {
+                "value": -175,
+                "nextLevel": 100,
+                "level": 1,
+                "dislike": -165
+            },
+            "Permic": {
+                "value": -50,
+                "nextLevel": 100,
+                "level": 1,
+                "dislike": -40
+            },
+            "Euphorica": {
+                "value": -100,
+                "nextLevel": 100,
+                "level": 1,
+                "dislike": 30
+            },
+            "'Sutela'": {
+                "value": 30,
+                "nextLevel": 280,
+                "level": 10
+            },
+            "Wish": {
+                "amount": 20,
+                "maximum": 100,
+                "level": 1
+            },
+            "Nighthug": {
+                "amount": 70,
+                "maximum": 100,
+                "level": 1
+            },
+            "Lacrimal": {
+                "amount": 70,
+                "maximum": 100,
+                "level": 1
+            }
+        },
+        "critquote": [
+            "Wanna watch me do it again?\n\nWanna watch?",
+            "Awesome."
+        ],
+        "charms": [
+            "Reservationist",
+            "GrubberflysElegy"
+        ],
+        "curCharms": [
+            "Reservationist",
+            "GrubberflysElegy"
+        ],
+        "weapon": {},
+        "mainElement": "slash",
+        "nickname": "``''Death''``",
+        "mpMeter": [
+            "ForceEnergy",
+            "FE"
+        ],
+        "armor": {},
+        "teamCombo": {
+            "Sutela": "ExtractForce"
+        },
+        "stats": {
+            "atk": 78,
+            "mag": 40,
+            "prc": 77,
+            "end": 41,
+            "chr": 26,
+            "int": 27,
+            "agl": 40,
+            "luk": 77
+        },
+        "basestats": {
+            "baseatk": 8,
+            "basemag": 5,
+            "baseprc": 7,
+            "baseend": 6,
+            "basechr": 3,
+            "baseint": 4,
+            "baseagl": 5,
+            "baseluk": 7
+        },
+        "affinities": {
+            "superweak": [
+                "bless"
+            ],
+            "weak": [
+                "water",
+                "ice"
+            ],
+            "resist": [
+                "poison",
+                "earth"
+            ],
+            "block": [],
+            "repel": [
+                "curse"
+            ],
+            "drain": []
+        },
+        "autolearn": {
+            "true": true
+        },
+        "quotes": {
+            "meleequote": [
+                "Hiya!",
+                "RnVjayBldmVyeW9uZSBpbiBoZXJlLg=="
+            ],
+            "physquote": [
+                "Yo guys, today we gonna play smash or pass, with %ENEMY%, which sounds like possible grounds for priso- [%SKILL%] SMASH!",
+                "I will fucking drink some alcohol after this my muscles are getting throbbing sore."
+            ],
+            "magquote": [
+                "Hah, funny I can magic. Look! I can **perish someone!**",
+                "Lmao no way I am gonna use this."
+            ],
+            "allyatkquote": [
+                "My deathbringer shall help.",
+                "I will take it from here."
+            ],
+            "lbquote": [
+                "I didn't remember asking you for the right to live.",
+                "The perfect moment, to fuck you up."
+            ],
+            "strongquote": [
+                "GOT YOUR WEAKNESS! TIME TO ABUSE!",
+                "And here we have someone on the verge of defeat."
+            ],
+            "missquote": [
+                "....Really?",
+                "You're making shit miserable",
+                "Stop using anti-hit you stupi"
+            ],
+            "weakquote": [
+                "WHY YOU BULLY ME?!",
+                "[whimper]"
+            ],
+            "hurtquote": [
+                "Ow, that hurt... [:(]",
+                "Stop it.",
+                "..Don't.."
+            ],
+            "resistquote": [
+                "Tis but a scratch.",
+                "Hot quote of the day: ''You did not do it today.''"
+            ],
+            "blockquote": [
+                "AHA! I FOOL YOU ONCE AGAIN!",
+                "Hold it. [preps to drink water] Hydration time. [and he drinks]"
+            ],
+            "repelquote": [
+                "Return to sender!",
+                "Ey you guys know where my repellent gone I have used it before battle and now I don't know where it is?"
+            ],
+            "drainquote": [
+                "Ooooo, tastes like candy.",
+                "Thanks for the help! [angy blep]"
+            ],
+            "dodgequote": [
+                "My bones are of swiftness and steel. You may not hurt me in the law of mine.",
+                "Hah, go suck your own enepussy now."
+            ],
+            "killquote": [
+                "Now fuck off before I fuck on.",
+                "Another death, more satisfaction."
+            ],
+            "allydeathquote": [
+                "NO! HOW COULD YOU DO THIS?",
+                "EYEYEY, NO. NO."
+            ],
+            "healquote": [
+                "Oh how stupid you are sometimes.",
+                "Thank me later.."
+            ],
+            "helpedquote": [
+                "Hey, thanks. I'll offer something later on, dw.",
+                "Oooo, you wanna do the uhhh, you know, heheh."
+            ],
+            "consolequote": [
+                "EEEEY! Ya doing okay?",
+                "Please tell me this is a joke..."
+            ],
+            "imfinequote": [
+                "Sis, I'm as fine as a cocoa bean on a sunday.. ..Which means yes, thanks for asking.",
+                "Your concern is cute."
+            ],
+            "lvlquote": [
+                "Woo, more power to fuck around!",
+                "Eyyy, I expected more out of this, come on..."
+            ]
+        },
+        "lb": {
+            "1": {
+                "name": "BloodWithdrawal",
+                "class": "atk",
+                "pow": 250,
+                "cost": 110,
+                "status": "none",
+                "statuschance": 0
+            },
+            "2": {
+                "name": "EssenceGatheral",
+                "class": "atk",
+                "pow": 520,
+                "cost": 220,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "BodyRemoval",
+                "class": "atk",
+                "pow": 770,
+                "cost": 330,
+                "status": "none",
+                "statuschance": 0
+            }
+        }
+    },
+    "Lacrimal": {
+        "name": "Lacrimal",
+        "owner": "441198920668938260",
+        "level": 60,
+        "hp": 485,
+        "mp": 139,
+        "maxhp": 485,
+        "maxmp": 164,
+        "basehp": 49,
+        "basemp": 11,
+        "melee": {
+            "name": "WhiffedPummel",
+            "type": "strike",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "xp": 183,
+        "maxxp": 2318215,
+        "skills": [
+            "GiganticFist",
+            "Headbutt",
+            "KillRush",
+            "BlurKicks",
+            "FlamingFist",
+            "FlipBird",
+            "RegenI"
+        ],
+        "deathquote": [],
+        "bio": {
+            "info": "A pyromaniac that can't get enough of fire tech ever since a young age. Will always carry any of the fire tech he owns, without consideration. They are what allow him to be nefarious. So far, he was lucky with them. Often careless, doesn't listen to people, not willing to learn at moments. Doesn't mean he can't learn. Undying determination will always carry him even at darkest, even if it is him wanting to be an overlord. \n**But what if he had a different perspective on life?**",
+            "backstory": "Mainly a criminal, living in a not so good city. Used to steal a lot, and still does on occasion. There isn't much to it, really. **However he was the one that contributed to Sutela's change of mentality in big ways. He was the one to spread rumors.**",
+            "voice": "Luc Gaudin (The Saboteur)",
+            "theme": "[TBA]",
+            "species": "Tamandua",
+            "age": 10,
+            "likes": "Pyromaniac tools, feeling above others, undying determination",
+            "dislikes": "Sharing, learning through mistakes, height-shamed, creepy dolls",
+            "fears": "Spending time without a gadget\n\n<Passive Abilities>\nBreaking Walls When Running With His Horns, Stretchy Arms, Laced Fists_(?)_, Incredible Aim, Rapid Thinking\n\n*(?)*This one happens when his gloves are taken off. Basically if he punches someone without gloves, a second punch that bleeds the target happens at a later time. However he prefers wearing gloves because of __fair play__, **which is ironic when he isn't fair with people.**",
+            "appearance": "https://cdn.discordapp.com/attachments/937053847661187103/965371992461164644/Lacrimal.png",
+            "height": [
+                4,
+                0
+            ],
+            "weight": 0,
+            "gender": "male",
+            "feard": "Spending time without a gadget\n\n<Passive Abilities>\nBreaking Walls When Running With His Horns, Stretchy Arms, Laced Fists, Incredible Aim, Rapid Thinking*\n\n*This one happens when his gloves are taken off. Basically if he punches someone without gloves, a second punch that bleeds the target happens at a later time.",
+            "custom": {}
+        },
+        "trust": {
+            "Morisonu": {
+                "value": 50,
+                "nextLevel": 300,
+                "level": 5
+            },
+            "Hurricane": {
+                "value": 100,
+                "nextLevel": 250,
+                "level": 4
+            },
+            "Mike": {
+                "value": 100,
+                "nextLevel": 250,
+                "level": 4
+            },
+            "Sutela": {
+                "value": -100,
+                "nextLevel": 100,
+                "level": 1,
+                "dislike": 100,
+                "amount": null
+            },
+            "Sparky": {
+                "value": 50,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Patella": {
+                "amount": 70,
+                "maximum": 100,
+                "level": 1
+            },
+            "Nighthug": {
+                "amount": 70,
+                "maximum": 100,
+                "level": 1
+            }
+        },
+        "lb4": {
+            "name": "Flinch off Any Day",
+            "class": "atk",
+            "pow": 1000,
+            "cost": 500,
+            "status": "dizzy",
+            "statuschance": 80
+        },
+        "charms": [],
+        "curCharms": [],
+        "mainElement": "strike",
+        "weapon": {},
+        "nickname": "Crimson",
+        "mpMeter": [
+            "ForceEnergy",
+            "FE"
+        ],
+        "armor": {},
+        "critquote": [],
+        "stats": {
+            "atk": 69,
+            "mag": 22,
+            "prc": 67,
+            "end": 35,
+            "chr": 21,
+            "int": 33,
+            "agl": 66,
+            "luk": 36
+        },
+        "basestats": {
+            "baseatk": 10,
+            "basemag": 2,
+            "baseprc": 8,
+            "baseend": 5,
+            "basechr": 1,
+            "baseint": 3,
+            "baseagl": 7,
+            "baseluk": 6
+        },
+        "affinities": {
+            "weak": [
+                "earth",
+                "electric"
+            ],
+            "resist": [
+                "fire"
+            ],
+            "block": [
+                "metal"
+            ],
+            "repel": [],
+            "drain": []
+        },
+        "autolearn": {
+            "true": true
+        },
+        "quotes": {
+            "meleequote": [],
+            "physquote": [
+                "EEEEY YOU! YOU BETTER TAKE THIS %SKILL%"
+            ],
+            "magquote": [],
+            "allyatkquote": [],
+            "lbquote": [],
+            "strongquote": [],
+            "missquote": [],
+            "weakquote": [],
+            "hurtquote": [
+                "What done ah say about strikin' people for no reason?!"
+            ],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "dodgequote": [],
+            "killquote": [],
+            "allydeathquote": [],
+            "healquote": [],
+            "helpedquote": [],
+            "consolequote": [],
+            "imfinequote": [],
+            "lvlquote": []
+        },
+        "leaderskill": {
+            "name": "FairFury",
+            "type": "boost",
+            "var1": "physical",
+            "var2": 10
+        },
+        "lb": {
+            "1": {
+                "name": "Smack Em - Lackem",
+                "class": "atk",
+                "pow": 360,
+                "cost": 100,
+                "status": "dizzy",
+                "statuschance": 25
+            },
+            "2": {
+                "name": "Pummel O' Mega",
+                "class": "atk",
+                "pow": 600,
+                "cost": 250,
+                "status": "dizzy",
+                "statuschance": 45
+            },
+            "3": {
+                "name": "HeftyWhoop-OutPlatter",
+                "class": "atk",
+                "pow": 600,
+                "cost": 350,
+                "status": "none",
+                "statuschance": 0
+            }
+        }
+    },
+    "Nighthug": {
+        "name": "Nighthug",
+        "owner": "441198920668938260",
+        "level": 80,
+        "hp": 432,
+        "mp": 463,
+        "maxhp": 432,
+        "maxmp": 619,
+        "basehp": 22,
+        "basemp": 43,
+        "melee": {
+            "name": "Strike Attack",
+            "type": "strike",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "xp": 183,
+        "maxxp": 40561289,
+        "skills": [
+            "StarshineAura",
+            "Masukukaja",
+            "Marakukaja",
+            "Mamakanda",
+            "BearHug",
+            "KindSoul"
+        ],
+        "deathquote": [],
+        "bio": {
+            "info": "A man born from stars, in what seems to be a transition from soulless to selfless. Extremely empathetic, caring and huggable, yet humble and doesn't like to show himself in the brightest light possible. He still can occasionally do hiccups but you would know that is not necessarily his fault. Afterall, transitions can be hard...\n\nHe seems to also be a tad bit gullible, easy to trust in people who seem innocent. He's easy to fool, manipulate. You just gotta use the right strategy for it, but once he'll know about it, he might try educating you someday. ...Don't expect it to be violent tho. He swore not to do harm. This means he won't participate in battles by any means necesary.\n\nHe also has a sweet tooth for some reason, big fan of chocolate.",
+            "backstory": "....It's for the best to try not pushing for luck. He knows what he had done and deeply regrets it.",
+            "voice": "Archimedes Q. Porter (Tarzan)",
+            "theme": "[TBA]",
+            "species": "Bearcat ||[Albeit a mythical creature]||",
+            "age": 10,
+            "likes": "Relaxation and reflection, making sure people feel better, hot tea, chocolate, family",
+            "dislikes": "Snobs, coffee, evildoers, when people look down on themselves, ego in general",
+            "fears": "Damage dealt ``from himself on others, whether physical or mental``\n\n<Passive Abilities>\nAutomatic Empathy, Eternally Awake at Will, Floating, Immunity to Metabolic Disorders, Form Shifting*(?)*\n\n*(?)*He hasn't shifted at all since centuries because he is comfortable with this form, the most recognizable.",
+            "height": [
+                4,
+                0
+            ],
+            "weight": 0,
+            "gender": "male",
+            "themes": "[TBA]",
+            "appearance": "https://cdn.discordapp.com/attachments/937053847661187103/965701238874325022/Nighthug.png",
+            "\"": " A man born from stars, in what seems to be a transition from soulless to selfless. Extremely empathetic, caring and huggable, yet humble and doesn't like to show himself in the brightest light possible. He still can occasionally do hiccups but you would know that is not necessarily his fault. Afterall, transitions can be hard...\n\nHe seems to also be a tad bit gullible, easy to trust in people who seem innocent. He's easy to fool, manipulate. You just gotta use the right strategy for it, but once he'll know about it, he might try educating you someday. ...Don't expect it to be violent tho. He swore not to do harm. This means he won't participate in battles by any means necesary.",
+            "custom": {}
+        },
+        "trust": {
+            "Sutela": {
+                "value": 330,
+                "nextLevel": 580,
+                "level": 25,
+                "amount": null
+            },
+            "Patella": {
+                "amount": 70,
+                "maximum": 100,
+                "level": 1
+            },
+            "Lacrimal": {
+                "amount": 70,
+                "maximum": 100,
+                "level": 1
+            }
+        },
+        "charms": [],
+        "curCharms": [],
+        "mainElement": "gravity",
+        "nickname": "Huggy",
+        "mpMeter": [
+            "ForceEnergy",
+            "FE"
+        ],
+        "weapon": {},
+        "armor": {},
+        "hidden": false,
+        "critquote": [],
+        "stats": {
+            "atk": 29,
+            "mag": 87,
+            "prc": 86,
+            "end": 46,
+            "chr": 87,
+            "int": 46,
+            "agl": 28,
+            "luk": 45
+        },
+        "basestats": {
+            "baseatk": 3,
+            "basemag": 8,
+            "baseprc": 7,
+            "baseend": 6,
+            "basechr": 8,
+            "baseint": 6,
+            "baseagl": 2,
+            "baseluk": 5
+        },
+        "affinities": {
+            "superweak": [
+                "curse"
+            ],
+            "weak": [
+                "psychic",
+                "strike"
+            ],
+            "resist": [
+                "gravity"
+            ],
+            "block": [],
+            "repel": [],
+            "drain": [
+                "bless"
+            ]
+        },
+        "autolearn": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "true": true
+        },
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [
+                "As much as I don't want to do this, I have to %SKILL%"
+            ],
+            "allyatkquote": [],
+            "lbquote": [],
+            "strongquote": [],
+            "missquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [
+                "Twy something ewse, awwight?",
+                "Shame thiws doesn't wowk, does iwt?"
+            ],
+            "repelquote": [],
+            "drainquote": [],
+            "dodgequote": [
+                "Mind if I hewped u with thawt?",
+                "Hewe, wet me get cwosew fow u.",
+                "Hey down't ovewwowk youwsewf if u down't feew good enough.",
+                "I couwd pewsonawwy twain thawt aim of youws if u wawnt."
+            ],
+            "killquote": [
+                "I went ovewboawd, didn't I? Sowwy."
+            ],
+            "allydeathquote": [],
+            "healquote": [],
+            "helpedquote": [],
+            "consolequote": [],
+            "imfinequote": [],
+            "lvlquote": []
+        },
+        "lb": {}
+    },
+    "Wish": {
+        "name": "Wish",
+        "owner": "441198920668938260",
+        "hidden": false,
+        "level": 80,
+        "hp": 341,
+        "mp": 435,
+        "maxhp": 341,
+        "maxmp": 435,
+        "basehp": 25,
+        "basemp": 40,
+        "mpMeter": [
+            "ForceEnergy",
+            "FE"
+        ],
+        "melee": {
+            "name": "WishfulNote",
+            "type": "pierce",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "weapon": {},
+        "armor": {},
+        "xp": 0,
+        "maxxp": 40561289,
+        "skills": [
+            "Kouga",
+            "Accordion",
+            "Vocadyne",
+            "Roar",
+            "Ear-PiercingScream",
+            "SoothingVoice",
+            "KindSoul"
+        ],
+        "critquote": [
+            "Woah woah wooooooo, what a lucky day, never will happen again. Probably?",
+            "Hey hey hey, the best luck possible for this attack!",
+            "🎵 Hey, I'll make all your damage (damage (da-da-da))\n\nAin't no-one like you and that's a fact, that's a fact 🎵"
+        ],
+        "deathquote": [
+            "🎵 I need someone to avenge me\nI need someone to take my place 🎵",
+            "Ahhhhh nooo, noooo, the musical mastermind shall be deathened...",
+            "Boo hoo, boo hoo, the strike made some murder, murder!",
+            "Ooooooooh, the dramatic death, ohhhh how killer must it be..."
+        ],
+        "bio": {
+            "species": "Wish Hyphen",
+            "age": 560,
+            "info": "Wish is one of the only __Wish Hyphens__ that ever existed, granting wishes to locals around in need. Able to fly with detached wings at relatively fast speed for them. Soft, energetic, very much eccentric, with a beautiful voice that is not to be left rotting. He'd be seen singing quite a lot through their life. But, he can be annoying to people. Usually when that happens, it is because they can't handle Wish's angelic voice.\n\n```Wish Hyphens belong to the same mythology as The Ascended's.```\n\n<Wish Specialty> Evasion and Prosperity\n<Wish Quality> Average\n<Wish Amount Allowed Per Day> 7\n\n<Fun Fact> If he speaks english without accents and all that jazz, you know he is threatening you.",
+            "backstory": "__Wish Hyphens__ were born from unknown circumstances in specific places for the sole reason of helping people out with wishes. Wish in this instance was born in a japanese-styled village, where citizens desperately needed safety and evasion would've allowed for that. He had a simple life going through, helping out in need, but the life simply could not last for so long, despite it going for over 500 years. The reason why Wish managed to end up in Yaretza is unknown. Many people over there speculate that as the connection of upper forces, which are defined in the ``Mythology of Ventrah``.",
+            "likes": "Musicals, beautiful voices, grantish wishes, anything soft, kiwi fruit",
+            "dislikes": "Evildoers trying to trick, being forced to have his mouth shut, dumb people, being made fun of",
+            "fears": "To be alone and useless, awkward silences\n\n<Passive Abilities>\nRapid Flight, Cat-like Reflexes and Flexibility, Cuteness and Appeal( :) ), Incredible Singing Voice, Immortality*(?)*\n\n*(?)*What this actually means is that his cell cycle is super slow, almost at a halt. He will take millions upon millions of years to die, which is enough for people to call as immortality.",
+            "voice": "\n__Normal:__ Yoshi (Super Mario World - Animated Series) [Andrew Sabiston]\n__Singing:__ [Sam Cooke](https://www.youtube.com/watch?v=dQw4w9WgXcQ)",
+            "theme": "[TBA]",
+            "gender": "male",
+            "height": [
+                0,
+                9
+            ],
+            "weight": 0,
+            "appearance": "https://cdn.discordapp.com/attachments/937053847661187103/1002673929028116480/Wish---After-Expression-Challenge.png",
+            "\"wish": "Wish is one of the only Wish Hyphens that ever existed, granting wishes to locals around in need. Able to fly with detached wings at relatively fast speed for them. Soft, energetic, very much eccentric, with a beautiful voice that is not to be left rotting. He'd be seen singing quite a lot through their life. But, he can be annoying to people. Usually when that happens, it is because they can't handle Wish's angelic voice.\n\n```Wish Hyphens belong to the same mythology as The Ascended's.```\n\n<Wish Specialty> Evasion and Prosperity\n<Wish Quality> Average\n<Wish Amount Allowed Per Day> 7",
+            "custom": {}
+        },
+        "trust": {
+            "Patella": {
+                "amount": 20,
+                "maximum": 100,
+                "level": 1
+            }
+        },
+        "mainElement": "bless",
+        "transformations": {
+            "GrandWish": {
+                "name": "GrandWish",
+                "requirement": "trusteddown",
+                "desc": "",
+                "hp": 15,
+                "atk": 0,
+                "mag": 1,
+                "prc": 5,
+                "end": 3,
+                "chr": -3,
+                "int": -1,
+                "agl": 8,
+                "luk": -4,
+                "tp": 0,
+                "tpmax": 10,
+                "level": 1
+            }
+        },
+        "charms": [],
+        "curCharms": [],
+        "nickname": "Kiwi",
+        "stats": {
+            "atk": 28,
+            "mag": 86,
+            "prc": 46,
+            "end": 43,
+            "chr": 88,
+            "int": 28,
+            "agl": 89,
+            "luk": 44
+        },
+        "basestats": {
+            "baseatk": 2,
+            "basemag": 7,
+            "baseprc": 6,
+            "baseend": 3,
+            "basechr": 9,
+            "baseint": 2,
+            "baseagl": 10,
+            "baseluk": 4
+        },
+        "affinities": {
+            "superweak": [
+                "strike",
+                "pierce",
+                "slash"
+            ],
+            "weak": [
+                "explode"
+            ],
+            "resist": [
+                "bless",
+                "psychic"
+            ],
+            "block": [
+                "spirit"
+            ],
+            "repel": [],
+            "drain": [
+                "sound"
+            ]
+        },
+        "autolearn": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true,
+            "true": true
+        },
+        "quotes": {
+            "meleequote": [
+                "Power's out, POWER'S OUT! Uuuhuhuhu, the fist I can't handle.",
+                "What do you say, what do you say, when I shall aim at your kisser?"
+            ],
+            "physquote": [
+                "🎵 Those problems I can always find a way\n\nWhere problems never end 🎵",
+                "🎵 My sword, shall be at peace\n\nThe shield, the axe, the sword of the holy 🎵",
+                "🎵 To worry about my sorrow sorrow and stand aside beautiful\n\nTo make your dying day 🎵"
+            ],
+            "magquote": [
+                "🎵 I wanna take you far away, yeah\n\nTo a world where men are not afraid to fight 🎵",
+                "Yoo yoo yoooo, my specialty, the magic of peace."
+            ],
+            "allyatkquote": [
+                "Hehehehehahaa, ooooo, no way you're about to do that alone.",
+                "🎵 I may not be the best assist\n\nbut an assist is better than nothing.\n\nIs that correct? 🎵"
+            ],
+            "lbquote": [
+                "Hehehehehahaha, ha, ohhh the break is sure about to limit you, hohoh!",
+                "AAAAAAA, get ready, time to stay down!"
+            ],
+            "strongquote": [
+                "Oh ohh, ohhhhhhhhhhh, the weakness is struck, the power skyrockets, all through!",
+                "🎵 What a revelation, what a transformation of events\n\nit all feels like a clover, but it's not all of luck 🎵",
+                "🎵 You've seen my worst and I know your worst too\n\nBut I wanna be the one for you because you're the one for me 🎵"
+            ],
+            "missquote": [
+                "Way, to, gooooooo, this is not what, I expected.",
+                "Boo hoo hoooooo, what am I supposed to do?",
+                "I need to, I need to, I need to aim better, is that understandable, not always, who even knows."
+            ],
+            "weakquote": [
+                "🎵 Nono nono nono nono nono \n\nnot the guts! 🎵",
+                "Eyyyyy, aaaaaaaaaaaaaaaa, why in the guts?",
+                "Waitwaitwaitwait, why this spot, no no no, why this spot?",
+                "Nooooonononononoo, my guts are frail, you know?"
+            ],
+            "hurtquote": [
+                "Woah woah woah, why would you do that, you know?",
+                "What made you think it was the best idea, hooh hooh?",
+                "🎵 I may be in the injure area\n\nbut i plan to still walk like a king, oh yeah! 🎵"
+            ],
+            "resistquote": [
+                "🎵 What I expected to be the worst\n\nturned out to be for the better 🎵",
+                "🎵 Aw hey, where is the form, soldier\n\nWe got some work to do, mister. 🎵",
+                "🎵 Hey hey hey, hey\n\nWould you look at that\n\nIt wasn't all so bad\n\ntry again. 🎵",
+                "Woah woah woah, how did that do absolutely nothing, woah woah?"
+            ],
+            "blockquote": [
+                "Hehehehehhaaaaaaaa, haaaa, nothing was dealt, prepare for disappointment.",
+                "The feeling of nothingness, noooo, it was for the best, OOOOOH!",
+                "🎵 It all was for nothing\n\nit's all I will to accept\n\nit's within the better terms\n\nOF LIFE AND DEATH! 🎵"
+            ],
+            "repelquote": [
+                "🎵 It's all like a tornado of thoughts\n\nbut those sure ain't mine, I am sure. 🎵",
+                "Hey hey hey, ooooo, that is not mine, you should know it.",
+                "Lovely lovely, right back at you, what a steal, ohhhhooohh!"
+            ],
+            "drainquote": [
+                "🎵 You go, king\n\nsing after me, you know it yourself! 🎵",
+                "Daaaaaaw, that voice was so, so, beauty!!",
+                "Hey hey hey, thank you for some help out there. Real appreciated.",
+                "🎵 Let the musicaaaaaaal go on furtheeeeer! 🎵"
+            ],
+            "dodgequote": [
+                "🎵 Hey hey hey\n\nyou're not a bowling ball\n\nI am not the pin of your luck 🎵",
+                "🎵 What a clover of all of my life\n\nalways useful, always treasured\n\nand this time, you don't deserve it! 🎵",
+                "🎵 You're not afraid to go for it\n\nI'm just a little bit out of your league, mmhm 🎵"
+            ],
+            "killquote": [
+                "🎵 I'll make sure that you'll never see the light of day 🎵",
+                "Ooooh, what is the mattereth, oh, oh?",
+                "Ohhheheheheheheeee, the voice shall shatter one's soul at will, hahaaa.",
+                "🎵 The feeling of satisfaction when I finished the job\n\nThat comes from slaying a monster 🎵"
+            ],
+            "allydeathquote": [
+                "🎵 I'm sitting here, feeling like I should leave\n\nMy mind's racing and my stomach's in knots and it's only me and you 🎵",
+                "Oh noooo, nononooooo, why must the hyphen suffer this faaaaaaate???",
+                "Hey hey, no no, this is not thy game we should be playing."
+            ],
+            "healquote": [
+                "🎵 And the medicine shall bring the injured back 🎵",
+                "🎵 You can tell me what hurts the most\n\nI'll build you a bridge that'll last\n\nI'll hold on tight to your memories 🎵",
+                "Oh hey hey, oh hey hey, no worry, the music shall be the solution!"
+            ],
+            "helpedquote": [
+                "Ohhhhhahahahah, haaaa, that was so sweet of ya.",
+                "Oooooh, ooooh, lovely that was!",
+                "🎵 Ohhhh, ohhhh, what a beauty that was. 🎵"
+            ],
+            "consolequote": [
+                "🎵 Where does it hurt, how are you doing\n\nplease don't tell me you're about to pass 🎵",
+                "Heyheyheyhey, nonono, what are you doing, are you doing okay?",
+                "Ohh yiiiiii, you sure about handling this one?"
+            ],
+            "imfinequote": [
+                "Nothing will not never seem to stop the wish maker, hee haa!",
+                "🎵 It's all as fine as a fresh avocado\n\nbut hey, who am I to judge? 🎵"
+            ],
+            "lvlquote": [
+                "🎵 I'm walking with a spring in my step\n\nI'm walking around like a king, mmhm 🎵",
+                "🎵 It's all been happening so fast, happening so fast\n\nAll this power I don't deserve, don't deserve it 🎵"
+            ]
+        },
+        "leaderskill": {
+            "name": "EvasionWish",
+            "type": "buff",
+            "var1": "agl",
+            "var2": 1
+        },
+        "lb": {},
+        "teamcombos": {
+            "Dream": {
+                "name": "testingsmth",
+                "users": [
+                    "Wish",
+                    "Dream"
+                ],
+                "desc": "testingsmth"
+            }
+        },
+        "statusaffinities": {
+            "block": []
+        }
+    },
+    "Trecko": {
+        "name": "Trecko",
+        "owner": "441198920668938260",
+        "level": 66,
+        "hp": 410,
+        "mp": 500,
+        "maxhp": 410,
+        "maxmp": 500,
+        "basehp": 33,
+        "basemp": 32,
+        "mpMeter": [
+            "Magic Points",
+            "MP"
+        ],
+        "melee": {
+            "name": "Strike Attack",
+            "type": "strike",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "weapon": {},
+        "armor": {},
+        "xp": 916062,
+        "maxxp": 5470677,
+        "skills": [
+            "Kougaon",
+            "Holyen",
+            "Makouga",
+            "MegatonRaid",
+            "Mahanama",
+            "Hanamadyne",
+            "VineLash"
+        ],
+        "critquote": [],
+        "deathquote": [],
+        "bio": {
+            "species": "Lychen Imp",
+            "age": 10,
+            "info": "A slightly stronger Lychen Imp that Sutela and Patella had pacified on their little adventure. A tad bit overconfident, but still a sunshine to them. They now stay with the group and assist when needed.",
+            "backstory": "",
+            "likes": "",
+            "dislikes": "",
+            "fears": "",
+            "voice": "",
+            "theme": "",
+            "weight": 0,
+            "height": [
+                4,
+                0
+            ],
+            "appearance": "https://cdn.discordapp.com/attachments/937053847661187103/968848467155890186/Lychen_Imp.png",
+            "custom": {}
+        },
+        "trust": {
+            "Lena": {
+                "value": 60,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Frosta": {
+                "value": 60,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Jelly": {
+                "value": 60,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Miles": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "John": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Bayrero": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            }
+        },
+        "mainElement": "bless",
+        "stats": {
+            "atk": 25,
+            "mag": 72,
+            "prc": 37,
+            "end": 38,
+            "chr": 25,
+            "int": 73,
+            "agl": 38,
+            "luk": 75
+        },
+        "basestats": {
+            "baseatk": 3,
+            "basemag": 7,
+            "baseprc": 4,
+            "baseend": 5,
+            "basechr": 3,
+            "baseint": 8,
+            "baseagl": 5,
+            "baseluk": 10
+        },
+        "affinities": {
+            "superweak": [
+                "curse"
+            ],
+            "weak": [
+                "fire",
+                "wind",
+                "metal"
+            ],
+            "resist": [
+                "earth"
+            ],
+            "block": [
+                "bless"
+            ],
+            "repel": [],
+            "drain": [
+                "water"
+            ]
+        },
+        "autolearn": {
+            "4": true,
+            "5": true,
+            "6": true
+        },
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "lbquote": [],
+            "strongquote": [],
+            "missquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "killquote": [],
+            "healquote": [],
+            "helpedquote": []
+        },
+        "lb": {}
+    },
+    "Terrly": {
+        "name": "Terrly",
+        "owner": "441198920668938260",
+        "level": 69,
+        "hp": 462,
+        "mp": 419,
+        "maxhp": 462,
+        "maxmp": 419,
+        "basehp": 20,
+        "basemp": 45,
+        "mpMeter": [
+            "RockEmission",
+            "RE"
+        ],
+        "melee": {
+            "name": "DiamondJabber",
+            "type": "pierce",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "weapon": {},
+        "xp": 157668,
+        "maxxp": 8403976,
+        "skills": [
+            "PillarSquish",
+            "Materazi",
+            "CrystalPierce",
+            "PhantomShip",
+            "Astonish",
+            "Crystalize"
+        ],
+        "critquote": [],
+        "deathquote": [],
+        "bio": {
+            "species": "Crystal Guardian",
+            "age": 10,
+            "info": "Destined to be a guardian of Bloomfall Mineshaft, Terrly tends to be asocial at times. They're unknowing of the world around them, but knows their area the best. Heavy striker, despite being made out of crystal. After a certain group has visited, they opened up to people better, and who knows if they can be seen near the area.",
+            "backstory": "They got from Ventrah to Yaretza mainly because they felt like needing a place to guard, of which wasn't available in their home world to an extent. No one knows who made them, if they were even made artificially.",
+            "likes": "",
+            "dislikes": "",
+            "fears": "",
+            "voice": "",
+            "theme": "",
+            "height": [
+                4,
+                0
+            ],
+            "weight": 0,
+            "gender": "",
+            "appearance": "https://cdn.discordapp.com/attachments/937053847661187103/968867212226076682/Terrly.png",
+            "custom": {}
+        },
+        "trust": {
+            "Sutela": {
+                "value": 120,
+                "nextLevel": 260,
+                "level": 9
+            },
+            "Patella": {
+                "value": 220,
+                "nextLevel": 280,
+                "level": 10
+            },
+            "Rainbow": {
+                "value": 60,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Dawn": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Karma": {
+                "value": 200,
+                "nextLevel": 240,
+                "level": 8
+            },
+            "'Sutela'": {
+                "value": 50,
+                "nextLevel": 280,
+                "level": 10
+            }
+        },
+        "nickname": "Terry",
+        "mainElement": "earth",
+        "charms": [],
+        "curCharms": [],
+        "armor": {},
+        "stats": {
+            "atk": 25,
+            "mag": 74,
+            "prc": 38,
+            "end": 77,
+            "chr": 37,
+            "int": 25,
+            "agl": 73,
+            "luk": 37
+        },
+        "basestats": {
+            "baseatk": 2,
+            "basemag": 6,
+            "baseprc": 4,
+            "baseend": 9,
+            "basechr": 3,
+            "baseint": 2,
+            "baseagl": 5,
+            "baseluk": 3
+        },
+        "affinities": {
+            "weak": [
+                "curse",
+                "psychic"
+            ],
+            "resist": [
+                "strike"
+            ],
+            "block": [
+                "earth"
+            ],
+            "repel": [],
+            "drain": []
+        },
+        "autolearn": {
+            "true": true
+        },
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "lbquote": [],
+            "strongquote": [],
+            "missquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "killquote": [],
+            "healquote": [],
+            "helpedquote": []
+        },
+        "leaderskill": {
+            "name": "CrystalClear",
+            "type": "buff",
+            "var1": "prc",
+            "var2": 1
+        },
+        "lb": {
+            "1": {
+                "name": "CrystalSwarm",
+                "class": "atk",
+                "pow": 350,
+                "cost": 100,
+                "status": "bleed",
+                "statuschance": 10
+            },
+            "2": {
+                "name": "GroundShatter",
+                "class": "atk",
+                "pow": 600,
+                "cost": 175,
+                "status": "bleed",
+                "statuschance": 10
+            },
+            "3": {
+                "name": "DiamondBreaker",
+                "class": "atk",
+                "pow": 800,
+                "cost": 350,
+                "status": "bleed",
+                "statuschance": 20
+            }
+        }
+    },
+    "Need": {
+        "name": "Need",
+        "owner": "441198920668938260",
+        "level": 80,
+        "hp": 331,
+        "mp": 563,
+        "maxhp": 331,
+        "maxmp": 563,
+        "basehp": 15,
+        "basemp": 50,
+        "mpMeter": [
+            "ForceEnergy",
+            "FE"
+        ],
+        "melee": {
+            "name": "TriumphantNeed",
+            "type": "pierce",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "weapon": {},
+        "armor": {},
+        "lb": {},
+        "xp": 0,
+        "maxxp": 40561289,
+        "skills": [
+            "Kouga",
+            "Ziemia",
+            "Hanama",
+            "Marakukaja",
+            "Mavisukaja",
+            "Mamakakaja",
+            "Dia"
+        ],
+        "critquote": [],
+        "deathquote": [],
+        "bio": {
+            "species": "Wish Hyphen",
+            "age": 10,
+            "info": "The final of the __Wish Hyphens__ that ever existed, granting the quick needs from the locals. Also can fly just like other two. Way too energetic for her own good, doesn't consider people's needs as much and goes for whatever she thinks they need, by assuming way too quick. But hey, the charm in her, and luck, somehow make it all work out. Way more desperate in granting quick needs\n\n<Wish Specialty> Luck and anything worthwhile for a quick moment\n<Wish Quality> Terrible, something always goes wrong\n<Wish Amount Allowed Per Day> 20",
+            "backstory": "Need was born in a futuristic utopia, where she was instantly loved and called a 'Baby Flower'. Adored for her own existence, she was used as a marketing tool. She wasn't too happy with that since she didn't get to be herself, so she left the town only a year after birth. She didn't find much of interest in the future. The reason why she went to Yaretza is.... They all seem to be following the same place, huh?",
+            "likes": "Nature, Flowers, Good Smells, Family, Needs",
+            "dislikes": "Getting Pouty, Capitalism, Decay, Aging",
+            "fears": "That her brothers wouldn't be found, Isolation\n\n<Passive Abilities>\nRapid Flight, Flexibility, Cuteness & Appeal, Immortality(?), Charm(?2)\n\n(?)Seems like this is an innate ability for the species itself\n\n(?2)The power of convincing people",
+            "voice": "Chun-Li (Super Street Fighter IV)",
+            "theme": "[TBA]",
+            "appearance": "https://cdn.discordapp.com/attachments/937053847661187103/972152369678798928/Need.png",
+            "gender": "female",
+            "height": [
+                4,
+                0
+            ],
+            "weight": 0,
+            "custom": {}
+        },
+        "trust": {},
+        "mainElement": "bless",
+        "nickname": "Flower",
+        "transformations": {
+            "EternalNeed": {
+                "name": "EternalNeed",
+                "requirement": "allydown",
+                "desc": "",
+                "hp": 15,
+                "atk": -2,
+                "mag": 4,
+                "prc": 0,
+                "end": 3,
+                "chr": -4,
+                "int": 2,
+                "agl": 5,
+                "luk": 3,
+                "tp": 0,
+                "tpmax": 10,
+                "level": 1
+            }
+        },
+        "stats": {
+            "atk": 27,
+            "mag": 85,
+            "prc": 29,
+            "end": 45,
+            "chr": 85,
+            "int": 43,
+            "agl": 89,
+            "luk": 44
+        },
+        "basestats": {
+            "baseatk": 1,
+            "basemag": 6,
+            "baseprc": 3,
+            "baseend": 5,
+            "basechr": 6,
+            "baseint": 3,
+            "baseagl": 10,
+            "baseluk": 4
+        },
+        "affinities": {
+            "superweak": [
+                "strike",
+                "slash",
+                "pierce"
+            ],
+            "weak": [
+                "explode"
+            ],
+            "resist": [
+                "bless",
+                "psychic"
+            ],
+            "block": [
+                "spirit"
+            ],
+            "repel": [],
+            "drain": [
+                "grass"
+            ]
+        },
+        "autolearn": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true,
+            "autoLearn": true
+        },
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "lbquote": [],
+            "strongquote": [],
+            "missquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "killquote": [],
+            "healquote": [],
+            "helpedquote": []
+        },
+        "leaderskill": {
+            "name": "QuickNeed",
+            "type": "discount",
+            "var1": "magic",
+            "var2": 5
+        }
+    },
+    "Dream": {
+        "name": "Dream",
+        "owner": "441198920668938260",
+        "level": 80,
+        "hp": 425,
+        "mp": 667,
+        "maxhp": 425,
+        "maxmp": 667,
+        "basehp": 30,
+        "basemp": 35,
+        "mpMeter": [
+            "ForceEnergy",
+            "FE"
+        ],
+        "melee": {
+            "name": "DreamfulLeech",
+            "type": "pierce",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "weapon": {},
+        "armor": {},
+        "lb": {},
+        "xp": 0,
+        "maxxp": 40561289,
+        "skills": [
+            "Holyize",
+            "MegaRave",
+            "Glowmax",
+            "Mindo",
+            "Stellion",
+            "Tinlok",
+            "Mamakanda"
+        ],
+        "critquote": [],
+        "deathquote": [],
+        "bio": {
+            "species": "Wish Hyphen",
+            "age": 10,
+            "info": "The second of the only __Wish Hyphens__ that ever existed, granting anything the locals dream of. Can also fly fast, just like Wish does. Soft, shy, asks a ton of questions to make sure people are comfortable with their actions. That could get on people's nerves. However there's just something more pure in him that people can't resist. He's a lot more crafty, liking to make things out of metals, and doesn't mind not granting as many dreams.\n\n<Wish Specialty> Purification, Intelligence and Property\n<Wish Quality> Excellent, no strings attached\n<Wish Amount Allowed Per Day> 3",
+            "backstory": "Dream, being born in an alleyway, had a sad life going for him. He didn't get to grant much, for there wasn't much for people to dream about where he was born, so he had to move places. He didn't find much luck but only 100 years later he found a small village on alpine mountains that needed a lot of help. He was of great use there, and he was happy the way he was. The reason why he came to Yaretza is unknown, but it could be from the same reason as Wish's.",
+            "likes": "Gold, Parenting, Yoghurt, Dreams, Comfort",
+            "dislikes": "Isolation, Wish, Granting too much, Poor People",
+            "fears": "Death, Disasters Out Of His Control\n\n<Passive Abilities>\nRapid Flight, Intelligence, Flexibility, Immortality(?), Quick Crafter, Truth Detection\n\n(?)Works like with Wish's Immortality",
+            "voice": "Yosuke Hanamura (SMT: Persona 4)",
+            "theme": "[TBA]",
+            "appearance": "https://cdn.discordapp.com/attachments/937053847661187103/972156173342081154/Dream.png",
+            "\"wish": "Wish Hyphen",
+            "height": [
+                4,
+                0
+            ],
+            "weight": 0,
+            "gender": "male",
+            "custom": {}
+        },
+        "trust": {
+            "Need": {
+                "value": 20,
+                "nextLevel": 100,
+                "level": 1
+            }
+        },
+        "mainElement": "bless",
+        "transformations": {
+            "LucidDream": {
+                "name": "LucidDream",
+                "requirement": "leaderdown",
+                "desc": "",
+                "hp": 15,
+                "atk": -3,
+                "mag": 5,
+                "prc": 3,
+                "end": -4,
+                "chr": 0,
+                "int": 0,
+                "agl": 4,
+                "luk": 5,
+                "tp": 0,
+                "tpmax": 10,
+                "level": 1
+            }
+        },
+        "nickname": "Gold",
+        "stats": {
+            "atk": 28,
+            "mag": 86,
+            "prc": 45,
+            "end": 44,
+            "chr": 29,
+            "int": 88,
+            "agl": 89,
+            "luk": 43
+        },
+        "basestats": {
+            "baseatk": 2,
+            "basemag": 7,
+            "baseprc": 5,
+            "baseend": 4,
+            "basechr": 3,
+            "baseint": 9,
+            "baseagl": 10,
+            "baseluk": 3
+        },
+        "affinities": {
+            "superweak": [
+                "strike",
+                "pierce",
+                "slash"
+            ],
+            "weak": [
+                "explode"
+            ],
+            "resist": [
+                "bless",
+                "psychic"
+            ],
+            "block": [
+                "spirit"
+            ],
+            "repel": [],
+            "drain": [
+                "metal"
+            ]
+        },
+        "autolearn": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true
+        },
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "lbquote": [],
+            "strongquote": [],
+            "missquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "killquote": [],
+            "healquote": [],
+            "helpedquote": []
+        },
+        "leaderskill": {
+            "name": "BlessfulDream",
+            "type": "crit",
+            "var1": "physical",
+            "var2": 10
+        }
+    }
+}

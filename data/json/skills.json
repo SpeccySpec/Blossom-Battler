@@ -46868,31 +46868,6 @@
         "powpkmn": 70,
         "levellock": 10
     },
-    "StopResponding": {
-        "name": "StopResponding",
-        "cost": 16,
-        "costtype": "mp",
-        "acc": 100,
-        "type": "electric",
-        "atktype": "magic",
-        "target": "one",
-        "desc": "Roars at the target, which may lower agility",
-        "originalAuthor": "547427816468381717",
-        "pow": 70,
-        "hits": 1,
-        "extras": {
-            "buff": [
-                [
-                    "user",
-                    "agl",
-                    -1,
-                    20,
-                    null
-                ]
-            ]
-        },
-        "levellock": 17
-    },
     "JoltHand": {
         "name": "Jolt Hand",
         "cost": 7,
@@ -61982,14 +61957,10 @@
             "buff": [
                 [
                     "target",
-                    "atk",
-                    1,
-                    100,
-                    null
-                ],
-                [
-                    "target",
-                    "mag",
+                    [
+                        "atk",
+                        "mag"
+                    ],
                     1,
                     100,
                     null
@@ -66478,7 +66449,9 @@
             "buff": [
                 [
                     "target",
-                    "end",
+                    [
+                        "end"
+                    ],
                     -1,
                     5,
                     3
@@ -67685,7 +67658,9 @@
             "buff": [
                 [
                     "target",
-                    "atk",
+                    [
+                        "atk"
+                    ],
                     -1,
                     5,
                     2
@@ -67872,5 +67847,320 @@
                 ]
             ]
         }
+    },
+    "Nightmare Flame": {
+        "name": "Nightmare Flame",
+        "type": "fire",
+        "atktype": "magic",
+        "pow": 145,
+        "hits": 1,
+        "acc": 80,
+        "cost": 16,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "547427816468381717",
+        "status": "burn",
+        "statuschance": 30,
+        "desc": "Hit the enemy with a small yet painful flame.\nThis may burn the foe."
+    },
+    "StopResponding": {
+        "name": "StopResponding",
+        "type": "electric",
+        "atktype": "magic",
+        "pow": 145,
+        "hits": 1,
+        "acc": 80,
+        "cost": 16,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "547427816468381717",
+        "status": "freeze",
+        "statuschance": 30,
+        "desc": "The user roars at the target.\nThis may freeze the foe."
+    },
+    "FireSurvivor": {
+        "name": "Fire Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "fire",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Fire Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "WaterSurvivor": {
+        "name": "Water Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "water",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Water Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "IceSurvivor": {
+        "name": "Ice Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "ice",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Ice Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "ElecSurvivor": {
+        "name": "Elec Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "electric",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Electric Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "WindSurvivor": {
+        "name": "Wind Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "wind",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Wind Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "EarthSurvivor": {
+        "name": "Earth Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "earth",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Earth Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "GrassSurvivor": {
+        "name": "Grass Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "grass",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Grass Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "PsychicSurvivor": {
+        "name": "Psychic Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "psychic",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Psychic Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "PoisonSurvivor": {
+        "name": "Poison Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "poison",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Poison Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "NuclearSurvivor": {
+        "name": "Nuclear Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "nuclear",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Nuclear Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "MetalSurvivor": {
+        "name": "Metal Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "metal",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Metal Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "CurseSurvivor": {
+        "name": "Curse Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "curse",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Curse Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "BlessSurvivor": {
+        "name": "Bless Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "bless",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Bless Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "GravitySurvivor": {
+        "name": "Gravity Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "gravity",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Gravity Type Skills have their power boosted by 15%",
+        "done": true
+    },
+    "SoundSurvivor": {
+        "name": "Sound Survivor",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "boost": [
+                [
+                    "sound",
+                    15
+                ]
+            ],
+            "endure": [
+                1,
+                1
+            ]
+        },
+        "desc": "The user can endure one fatal hit and their Sound Type Skills have their power boosted by 15%",
+        "done": true
     }
 }

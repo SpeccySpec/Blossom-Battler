@@ -119,7 +119,7 @@ elementColors = {
 	explode: '#FF5900',
 
 	fire: '#ff425f',
-	water: '#8c19ff',
+	water: '#030bfc',
 	ice: '#5cf4ff',
 	electric: '#ffe100',
 	wind: '#d6f2ff',

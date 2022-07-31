@@ -68,6 +68,8 @@ buffText = (buffArray) => {
 			finalText += ` ${curBuff[0] == 'target' ? "**the target's** " : "**the user's** "}`
 
 		for (j in curBuff[1]) {
+			if (typeof(curBuff[1][j]) === 'object') curBuff[1][j] = curBuff[1][j][0];
+
 			finalText += `**${curBuff[1][j].toUpperCase()}**`
 
 			if (j < curBuff[1].length - 2) {

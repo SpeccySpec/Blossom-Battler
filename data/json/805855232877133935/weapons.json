@@ -1,8 +1,8 @@
 {
     "Showstarter": {
         "name": "Showstarter",
-        "class": "ranged",
-        "cost": 5000,
+        "class": "staff",
+        "cost": 3000,
         "element": "fire",
         "desc": "Cyan and yellow glasses.\nWearing those gives a strange sense of dread and comfort combined.",
         "originalAuthor": "547427816468381717",
@@ -30,5 +30,17 @@
         "originalAuthor": "547427816468381717",
         "atk": 2,
         "mag": 5
+    },
+    "NightmareKnife": {
+        "name": "NightmareKnife",
+        "class": "pierce",
+        "cost": 1200,
+        "element": "slash",
+        "desc": "A red knife.\nHolding it makes you feel like you're burning...",
+        "originalAuthor": "547427816468381717",
+        "skill": "Nightmare Flame",
+        "melee": 45,
+        "atk": 21,
+        "mag": 18
     }
 }
