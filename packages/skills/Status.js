@@ -544,7 +544,7 @@ statusList = {
 			let type = args[2].toLowerCase()
 
 			if (trapName.length < 1) return void message.channel.send("You need to name the trap!");
-			if (!["buff", "status", "damage"].includes(trapName)) return void message.channel.send("That's not a valid trap type! The trap can only be a buff, status, or damage type.");
+			if (!["buff", "status", "damage"].includes(type)) return void message.channel.send("That's not a valid trap type! The trap can only be a buff, status, or damage type.");
 
 			if (type == "buff") {
 				let stat = args[3].toLowerCase()
