@@ -447,6 +447,19 @@ armorClasses = {
 	magic: "Magical pieces of armor, like barriers."
 }
 
+leaderSkillTxt = {
+	boost: 'Boosts the specified type.',
+	discount: 'Takes away the amount of cost specified to the specified type.',
+	buff: 'Start the battle with the specified stat buff.',
+	debuff: 'Start the battle with the specified stat debuff to the enemy team.',
+	status: 'Increased chance to land the specified status effect.',
+	crit: 'Increased crit chance to the specified element.',
+	money: 'Increased money gain after battle.',
+	items: 'Increased items gain after battle.',
+	pacify: 'Pacify Enemies by the specified percentage at the start of battle.',
+	endure: 'One character in your team can endure one fatal attack.',
+}
+
 enemyTypeColors = {
 	none: '#00FF24',
 	miniboss: '#F6FF00',

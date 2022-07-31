@@ -67497,5 +67497,61 @@
         "costtype": "mp",
         "target": "one",
         "originalAuthor": "313972298992451585"
+    },
+    "Strike Break": {
+        "name": "Strike Break",
+        "type": "status",
+        "cost": 32,
+        "costtype": "MP",
+        "target": "allopposing",
+        "originalAuthor": "516359709779820544",
+        "statusses": {
+            "changeaffinity": [
+                [
+                    "target",
+                    "strike",
+                    "normal",
+                    "resist",
+                    3
+                ]
+            ]
+        },
+        "desc": "Removes all foes' <:resist:963413917185491014>Resisting <:strike:962465470458499132>**Strike** affinities for 3 turns."
+    },
+    "FinalStrike(DS)": {
+        "name": "Final Strike",
+        "type": "heal",
+        "cost": 1,
+        "costtype": "hp",
+        "target": "one",
+        "originalAuthor": "363363984390356993",
+        "heal": {
+            "healstat": [
+                [
+                    -999,
+                    "hp"
+                ]
+            ]
+        },
+        "desc": "The user deals extreme Miracle damage to one enemy but their own HP drops to 1",
+        "done": true
+    },
+    "PhysDrain": {
+        "name": "Phys Drain",
+        "type": "status",
+        "cost": 50,
+        "costtype": "MP",
+        "target": "allallies",
+        "originalAuthor": "363363984390356993",
+        "statusses": {
+            "trap": [
+                "Physical Drain",
+                -1,
+                "status",
+                "bleed",
+                100
+            ]
+        },
+        "desc": "All allies will drain the next physical attack"
     }
 }

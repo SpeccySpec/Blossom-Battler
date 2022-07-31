@@ -1407,9 +1407,15 @@ let disallowedLeaderSkillElelemts = {
 	crit: ['status', 'heal', 'passive'],
 	endure: ['status', 'heal', 'passive']
 }
+
+let leaderTxt = '';
+for (let i in leaderSkillTxt) {
+	leaderTxt += `+ ${i.toUpperCase()}: ${leaderSkillTxt[i]}\n`;
+}
+
 // Leader Skills
 commands.leaderskill = new Command({
-	desc: "A Leader Skill is a skill characters activate for the entire team when they are at the front of a party. This can have various effects on the characters reccomended to use, the skills reccomended to use, the playstyle of your party and more!",
+	desc: "A Leader Skill is a skill characters activate for the entire team when they are at the front of a party. This can have various effects on the characters reccomended to use, the skills reccomended to use, the playstyle of your party and more!```diff\n" + leaderTxt + "```",
 	aliases: ['setleaderskill', 'leadskill', 'frontskill', 'orderskill'],
 	section: "characters",
 	args: [

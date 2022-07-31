@@ -4563,10 +4563,14 @@
             "baseluk": 8
         },
         "affinities": {
-            "weak": [],
+            "weak": [
+                "water",
+                "nuclear"
+            ],
             "resist": [],
             "block": [
-                "almighty"
+                "almighty",
+                "fire"
             ],
             "repel": [],
             "drain": []
@@ -19214,12 +19218,12 @@
         "skills": [
             "ViciousStrike",
             "GiganticFist",
-            "GuardBreak",
             "FireballVolley",
             "Marakukaja",
             "Matarukaja",
             "RegenIII",
-            "HighCounter"
+            "HighCounter",
+            "Strike Break"
         ],
         "critquote": [],
         "deathquote": [],
