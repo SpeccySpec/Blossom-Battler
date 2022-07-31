@@ -155,6 +155,7 @@ const affinityScores = {
 	drain: 1.5,
 
 	[-999]: "Your local hacker.",
+	[-40]: "Literally the weakest character in the world, at least you'll stop now.",
 	[-10]: "Please stop.",
 	[-9]: "A bunch of useless atoms.",
 	[-8]: "A corpse.",
@@ -175,7 +176,8 @@ const affinityScores = {
 	[7]: "Probably the protagonist of the story.",
 	[8]: "How about you learn the word balance?",
 	[9]: "Ever heard of weak affinities?",
-	[10]: "Plot armor v2."
+	[10]: "Plot armor v2.",
+	[30]: "Oh I get it now, you like creating almighty invincible gods."
 }
 
 longDescription = (charDefs, level, server, message) => {
