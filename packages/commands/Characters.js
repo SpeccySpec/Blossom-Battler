@@ -3228,7 +3228,7 @@ commands.exportchar = new Command({
 		let userdata = setUpUserData(message.author.id);
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send('You are not the owner of this character!');
+		if (!utilityFuncs.RPGBotAdmin(message.author.id, message.guild.id) && charFile[args[0]].owner != message.author.id) return message.channel.send('You are not the owner of this character!');
 
 		// Alright, let's get the character!
 		userdata.exports[args[0]] = charFile[args[0]];
