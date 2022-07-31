@@ -1288,7 +1288,7 @@ extrasList = {
 			if (char.custom?.rollouts) {
 				let bst = (vars[0]/100)*char.custom.rollouts;
 
-				skill.pow *= bst;
+				skill.pow += skill.pow * bst;
 				if (bst >= vars[1]) {
 					killVar(char, 'rollouts');
 					killVar(char, 'forcemove');
