@@ -356,7 +356,7 @@ healList = {
 			return `__${char.name}__ sacrificed themselves, lowering their HP to __${vars[0]}__!`;
 		},
 		getinfo(vars, skill) {
-			return extraslist.sacrifice.getinfo(vars, skill);
+			return extrasList.sacrifice.getinfo(vars, skill);
 		}
 	}),
 
