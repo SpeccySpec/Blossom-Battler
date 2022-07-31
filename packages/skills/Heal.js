@@ -68,7 +68,7 @@ healList = {
 			return '';
 		},
 		getinfo(vars, skill) {
-			let healType = vars[1];
+			let healType = vars[1] ?? 'hp';
 
 			if (healType.includes('percent')) healType = '% of target\'s ' + healType.replace('percent', '').toUpperCase();
 			else if (healType.includes('lb')) healType = '% LB';

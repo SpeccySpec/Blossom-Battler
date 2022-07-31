@@ -27635,21 +27635,20 @@
     },
     "CuriosityKilledTheBloomBattler": {
         "name": "CuriosityKilledTheBloomBattler",
-        "type": "almighty",
-        "atktype": "magic",
-        "pow": 120,
-        "hits": 1,
-        "acc": 95,
-        "cost": 0,
-        "costtype": "mp",
-        "target": "one",
+        "type": "heal",
+        "cost": 10,
+        "costtype": "MP",
+        "target": "ally",
         "originalAuthor": "363363984390356993",
-        "desc": "Curiosity broke the Bloom Batter. Now it's time for the Blossom Battler",
-        "extras": {
-            "drain": [
-                0
+        "heal": {
+            "healstat": [
+                [
+                    10,
+                    "lb"
+                ]
             ]
-        }
+        },
+        "desc": "Curiosity killer the Bloom Battler. Now it's time for Blossom Battler"
     },
     "MadTeaParty": {
         "name": "Mad Tea Party",
@@ -40385,6 +40384,10 @@
             [
                 "FangedChomp",
                 21
+            ],
+            [
+                "AuraSphereBurstV",
+                55
             ]
         ],
         "levellock": null,
@@ -50886,6 +50889,10 @@
             [
                 "remove",
                 35
+            ],
+            [
+                "LightChomp",
+                56
             ]
         ],
         "levellock": 57
