@@ -1334,7 +1334,7 @@ buildPassive = (message, extra, args) => {
 		return false;
 	}
 
-	applyPassive(message, skill, extra, args.slice(3))
+	applyPassive(message, skill, extra.toLowerCase(), args.slice(3))
 	
 	if (skill.done) {
 		delete skill.done;
