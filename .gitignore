@@ -3,8 +3,3 @@ node_modules/
 package-lock.json
 package.json
 *.zip
-data/dailyskill.txt
-*.txt
-*.json
-*.json
-*.json

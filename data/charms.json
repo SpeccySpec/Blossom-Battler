@@ -1,0 +1,86 @@
+{
+	"GatheringSwarm": {
+		"name": "Gathering Swarm",
+		"desc": "The bearer will gain extra money after battle.",
+		"notches": 1,
+		"rarity": 6
+	},
+	"StalwartShell": {
+		"name": "Stalwart Shell",
+		"desc": "The bearer will gain a +5 to their endurance.",
+		"notches": 2,
+		"rarity": 4
+	},
+	"ShamanStone": {
+		"name": "Shaman Stone",
+		"desc": "The bearer have their offensive magic skills' power increased by 50%, at the cost for extra MP.",
+		"notches": 3,
+		"rarity": 2
+	},
+	"GrubberflysElegy": {
+		"name": "Grubberfly's Elegy",
+		"desc": "The bearer fires white hot beams of light from their attacks, allowing for a higher chance to land their skills.",
+		"notches": 3,
+		"rarity": 2
+	},
+	"FragileHeart": {
+		"name": "Fragile Heart",
+		"desc": "The bearer will 50 extra max HP, however, if the bearer is defeated during battle, the charm will be destroyed, rendering it unusable.",
+		"notches": 2,
+		"rarity": 3
+	},
+	"UnbreakableHeart": {
+		"name": "Unbreakable Heart",
+		"desc": "The bearer will 50 extra max HP, permanantly.",
+		"notches": 2,
+		"rarity": 1
+	},
+	"FragileGreed": {
+		"name": "Fragile Greed",
+		"desc": "The bearer will gain alot of extra money after battle, however, if the bearer is defeated during battle, the charm will be destroyed, rendering it unusable.",
+		"notches": 2,
+		"rarity": 3
+	},
+	"UnbreakableGreed": {
+		"name": "Unbreakable Greed",
+		"desc": "The bearer will gain alot of extra money after battle, permanantly.",
+		"notches": 2,
+		"rarity": 1
+	},
+	"FragileStrength": {
+		"name": "Fragile Strength",
+		"desc": "The bearer will deal extra damage with their physical attacks, however, if the bearer is defeated during battle, the charm will be destroyed, rendering it unusable.",
+		"notches": 2,
+		"rarity": 3
+	},
+	"UnbreakableStrength": {
+		"name": "Unbreakable Strength",
+		"desc": "The bearer will deal extra damage with their physical attacks, permanantly.",
+		"notches": 2,
+		"rarity": 1
+	},
+	"DeepFocus": {
+		"name": "Deep Focus",
+		"desc": "The bearer has their healing skills' power increased by 25%, at the cost of extra MP",
+		"notches": 3,
+		"rarity": 1
+	},
+	"QuickFocus": {
+		"name": "Quick Focus",
+		"desc": "The bearer has their healing skills' cost reduced by 20%",
+		"notches": 2,
+		"rarity": 2
+	},
+	"Reservationist": {
+		"name": "Reservationist",
+		"desc": "The bearer has their skills' power reduced slightly, but also has their skills' cost reduced greatly.",
+		"notches": 2,
+		"rarity": 3
+	},
+	"PureVision": {
+		"name": "Pure Vision",
+		"desc": "The bearer's vision is amplified to negate Perception Stat Changes and <:psychic:877140522530140171>Future Sight.",
+		"notches": 3,
+		"rarity": 4
+	}
+}

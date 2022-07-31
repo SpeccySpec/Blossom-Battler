@@ -1,0 +1,521 @@
+{
+    "1": {
+        "name": "1",
+        "currency": 0,
+        "members": [
+            "Lanagu"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {},
+        "discoveries": {}
+    },
+    "2": {
+        "name": "2",
+        "currency": 0,
+        "members": [
+            "Pank"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {},
+        "discoveries": {}
+    },
+    "3": {
+        "name": "3",
+        "currency": 0,
+        "members": [
+            "Wish"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {},
+        "discoveries": {}
+    },
+    "4": {
+        "name": "4",
+        "currency": 0,
+        "members": [
+            "Gura"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {},
+        "discoveries": {}
+    },
+    "TanukiProwess": {
+        "name": "TanukiProwess",
+        "currency": 0,
+        "members": [
+            "Valoria"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "Wolf": {
+        "name": "Wolf",
+        "currency": 0,
+        "members": [
+            "Harcvuk"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "kek": {
+        "name": "kek",
+        "currency": 0,
+        "members": [
+            "Mumei",
+            "Gura"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "Spacies": {
+        "name": "Spacies",
+        "currency": -44,
+        "members": [
+            "Valoria",
+            "Euphorica",
+            "Ramia",
+            "Dusk"
+        ],
+        "backup": [
+            "Dawn",
+            "Axel",
+            "Melarue"
+        ],
+        "items": {},
+        "negotiates": {
+            "Grassage": 6
+        },
+        "negotiateAllies": {
+            "Grassage": {
+                "nickname": "Grassage",
+                "hp": 342,
+                "mp": 321,
+                "maxhp": 342,
+                "maxmp": 321,
+                "atkbuff": 7,
+                "magbuff": 10,
+                "endbuff": 2,
+                "skill": "Makarakarn",
+                "stats": {
+                    "atk": 13,
+                    "mag": 43,
+                    "prc": 36,
+                    "end": 28,
+                    "chr": 30,
+                    "int": 23,
+                    "agl": 30,
+                    "luk": 33
+                },
+                "happines": 255,
+                "mood": "happy",
+                "food": 100
+            }
+        },
+        "discoveries": {},
+        "weapons": {
+            "Wooden Sword": {
+                "name": "Wooden Sword",
+                "class": "bladed",
+                "cost": 1500,
+                "element": "slash",
+                "desc": "A basic sword made out of wood. Not too effective but still useful.",
+                "originalAuthor": "516359709779820544",
+                "melee": 80,
+                "atk": 5
+            }
+        },
+        "armors": {
+            "Wooden Shield": {
+                "name": "Wooden Shield",
+                "class": "light",
+                "cost": 1500,
+                "element": "strike",
+                "desc": "A basic shield made out of wood. Not too effective but still useful.",
+                "originalAuthor": "516359709779820544",
+                "end": 5
+            }
+        }
+    },
+    "A": {
+        "name": "A",
+        "currency": 0,
+        "members": [
+            "Carlo"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "Neon": {
+        "name": "Neon",
+        "currency": 0,
+        "members": [
+            "Neon"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "HarTest": {
+        "name": "HarTest",
+        "currency": 0,
+        "members": [
+            "Harcvuk"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "NewCanonTeam": {
+        "name": "NewCanonTeam",
+        "currency": 0,
+        "members": [
+            "Harcvuk",
+            "John",
+            "Miles",
+            "Frylo"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "Test": {
+        "name": "Test",
+        "currency": 0,
+        "members": [
+            "Neon"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "Harc": {
+        "name": "Harc",
+        "currency": 0,
+        "members": [
+            "Harcvuk",
+            "Miles"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "Trinity Cast Moment": {
+        "name": "Trinity Cast Moment",
+        "currency": 0,
+        "members": [
+            "Sutela",
+            "Patella",
+            "Wish",
+            "Nighthug"
+        ],
+        "backup": [
+            "Dream",
+            "Need",
+            "Terrly",
+            "Lacrimal"
+        ],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "Harcvuk": {
+        "name": "Harcvuk",
+        "currency": 0,
+        "members": [
+            "Harcvuk"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "Wish": {
+        "name": "Wish",
+        "currency": 0,
+        "members": [
+            "Wish",
+            "Need"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "pvp1": {
+        "name": "pvp1",
+        "currency": 0,
+        "members": [
+            "Valoria"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "pvp2": {
+        "name": "pvp2",
+        "currency": 0,
+        "members": [
+            "Sutela"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "pvp3": {
+        "name": "pvp3",
+        "currency": 0,
+        "members": [
+            "Pank"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "pvp4": {
+        "name": "pvp4",
+        "currency": 0,
+        "members": [
+            "Harcvuk"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "TheHarc": {
+        "name": "The Harc",
+        "currency": 0,
+        "members": [
+            "Harcvuk"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "Spacies2": {
+        "name": "Spacies2",
+        "currency": 50,
+        "members": [
+            "Ramia",
+            "Dusk"
+        ],
+        "backup": [],
+        "items": {
+            "Sweet": 3
+        },
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "Snow": {
+        "name": "Snow",
+        "currency": 0,
+        "members": [
+            "Snow"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "Trinity": {
+        "name": "Trinity",
+        "currency": 0,
+        "members": [
+            "Sutela",
+            "Patella",
+            "Nighthug",
+            "Lacrimal"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "Sky'sExtrasLmao": {
+        "name": "Sky'sExtrasLmao",
+        "currency": 0,
+        "members": [
+            "Valoria"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {},
+        "discoveries": {}
+    },
+    "Cat": {
+        "name": "Cat",
+        "currency": 0,
+        "members": [
+            "John"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "Sutela": {
+        "name": "Sutela",
+        "currency": 0,
+        "members": [
+            "Sutela"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "Valoria": {
+        "name": "Valoria",
+        "currency": 0,
+        "members": [
+            "Ramia",
+            "Euphorica"
+        ],
+        "backup": [
+            "Dusk"
+        ],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "TrueTeamIg": {
+        "name": "TrueTeamIg",
+        "currency": 0,
+        "members": [
+            "Valoria",
+            "Ramia"
+        ],
+        "backup": [
+            "Euphorica",
+            "Dusk"
+        ],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "TheWishmakers": {
+        "name": "TheWishmakers",
+        "currency": 0,
+        "members": [
+            "Wish",
+            "Dream",
+            "Need"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "it be like that": {
+        "name": "it be like that",
+        "currency": 0,
+        "members": [],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    },
+    "Explorers": {
+        "name": "Explorers",
+        "currency": 0,
+        "members": [
+            "Valoria",
+            "Lanagu",
+            "Lophari"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
+    }
+}

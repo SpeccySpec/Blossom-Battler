@@ -3411,6 +3411,8 @@ commands.exportcharjson = new Command({
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is a nonexistant character!`);
 
 		let link = await hastebin(JSON.stringify(charFile[args[0]], '	', 4), {extension: "json"});
+
+		message.channel.send(`👍 ${message.author}, check your DMs!`);
 		message.author.send(`Here is the character data for ${charFile[args[0]].name}!\n${link}`);
 	}
 })

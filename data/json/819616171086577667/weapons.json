@@ -1,0 +1,54 @@
+{
+    "Buff": {
+        "name": "Buff",
+        "cost": "50",
+        "element": "fire",
+        "desc": "lmao no",
+        "originalAuthor": "441198920668938260",
+        "skill": "Agi",
+        "melee": "12",
+        "atk": "12",
+        "mag": "12",
+        "recipe": {
+            "amount": 1,
+            "shapeless": false,
+            "recipe": {
+                "0": "Sweet",
+                "4": "Sweet",
+                "8": "Sweet"
+            }
+        }
+    },
+    "RoyalRapier": {
+        "name": "RoyalRapier",
+        "cost": 6955,
+        "element": "pierce",
+        "desc": "A shining rapier passed down the Cosmarian royal family. Younger ones who were part of the royal family were to be skilled in rapier usage just in case the worst happened.",
+        "originalAuthor": "516359709779820544",
+        "skill": "Pralaya",
+        "melee": "300",
+        "atk": "12"
+    },
+    "Wooden Sword": {
+        "name": "Wooden Sword",
+        "class": "bladed",
+        "cost": 1500,
+        "element": "slash",
+        "desc": "A basic sword made out of wood. Not too effective but still useful.",
+        "originalAuthor": "516359709779820544",
+        "melee": "80",
+        "atk": "5"
+    },
+    "Flame Spear": {
+        "name": "Flame Spear",
+        "class": "pierce",
+        "cost": 1500,
+        "element": "fire",
+        "desc": "A basic spear infused with an <:physical:973077052129423411>Agi Gem.",
+        "originalAuthor": "516359709779820544",
+        "skill": "Agi",
+        "melee": 70,
+        "atk": 2,
+        "mag": 2
+    }
+}

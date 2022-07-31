@@ -1,0 +1,123 @@
+{
+    "exports": {
+        "Lophari": {
+            "name": "Lophari",
+            "owner": "275771864373133312",
+            "level": 7,
+            "hp": 90,
+            "mp": 41,
+            "maxhp": 90,
+            "maxmp": 41,
+            "basehp": 45,
+            "basemp": 20,
+            "mpMeter": [
+                "Magic Points",
+                "MP"
+            ],
+            "melee": {
+                "name": "Strike Attack",
+                "type": "strike",
+                "pow": 30,
+                "acc": 95,
+                "crit": 15
+            },
+            "weapon": {},
+            "armor": {},
+            "xp": 0,
+            "maxxp": 1179,
+            "skills": [
+                "HopKick",
+                "Assimilate"
+            ],
+            "critquote": [],
+            "deathquote": [],
+            "bio": {
+                "species": "Lopunny",
+                "age": 19,
+                "info": "Doesn't seem to remember much from her past, origins are unknown. Lophari is a Lopunny with surprisingly very little knowledge of her surroundings. She's quiet, kind and likes cuddling with friends of hers for comfort. And uh, yes, she's submissive, I guess.",
+                "backstory": "Comes from an unknown place in the universe, something teleported her to this world and looked for an exit on the start of her journey until [this happened](https://discord.com/channels/819616171086577667/819617998934376459/973039875546841119), messing with her physiques and mind-ques, and she's someone else now.",
+                "likes": "Cuddling, Sleeping and Playing",
+                "dislikes": "Meat that isn't Fish",
+                "fears": "Being forgotten or Left Behind",
+                "voice": "[Sky (Shantae & The Seven Sirens)](https://www.youtube.com/watch?v=2eFpCbtRCcU)",
+                "theme": "[Event Battle](https://www.youtube.com/watch?v=4P3uUyLLeRM)",
+                "gender": "female",
+                "height": [
+                    4,
+                    1
+                ],
+                "weight": 110.23,
+                "appearance": "https://cdn.discordapp.com/attachments/820036937791438859/1002681308465602682/No_turning_back.png",
+                "<backstory>": "Comes from Manyato, something transported here during sleep and was turned into a different species, she's missing her memories from home.",
+                "custom": {
+                    "Abilities": "Being some kind of rabbid creature, she can move quickly and jump high. Her main method of defense is her own legs, kicking and knocking out her foes, although she can use her hands as well. Sometimes it may happen that she accidentally assimilates with whoever touches her, and they become one of her. Thankfully, it's a passing effect."
+                }
+            },
+            "trust": {},
+            "mainElement": "strike",
+            "charms": [],
+            "curCharms": [],
+            "stats": {
+                "atk": 13,
+                "mag": 3,
+                "prc": 13,
+                "end": 9,
+                "chr": 9,
+                "int": 5,
+                "agl": 16,
+                "luk": 8
+            },
+            "basestats": {
+                "baseatk": 7,
+                "basemag": 1,
+                "baseprc": 7,
+                "baseend": 6,
+                "basechr": 6,
+                "baseint": 3,
+                "baseagl": 10,
+                "baseluk": 5
+            },
+            "affinities": {
+                "weak": [
+                    "sound",
+                    "slash"
+                ],
+                "resist": [
+                    "gravity",
+                    "psychic",
+                    "ice"
+                ],
+                "block": [],
+                "repel": [],
+                "drain": []
+            },
+            "autolearn": {
+                "true": true
+            },
+            "quotes": {
+                "meleequote": [],
+                "physquote": [],
+                "magquote": [],
+                "lbquote": [],
+                "strongquote": [],
+                "missquote": [],
+                "weakquote": [],
+                "hurtquote": [],
+                "resistquote": [],
+                "blockquote": [],
+                "repelquote": [],
+                "drainquote": [],
+                "killquote": [],
+                "healquote": [],
+                "helpedquote": []
+            },
+            "lb": {},
+            "leaderskill": {
+                "name": "Comfort",
+                "type": "boost",
+                "var1": "heal",
+                "var2": 25
+            }
+        }
+    }
+}

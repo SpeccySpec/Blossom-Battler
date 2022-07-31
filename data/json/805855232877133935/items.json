@@ -1,0 +1,20 @@
+{
+    "Scam Reminder": {
+        "name": "Scam Reminder",
+        "rarity": "common",
+        "cost": 2000,
+        "type": "skill",
+        "originalAuthor": "547427816468381717",
+        "desc": "A reminder that you've been scammed.\nCongratulations!",
+        "skill": "Dreadful Rage"
+    },
+    "Banana": {
+        "name": "Banana",
+        "rarity": "rare",
+        "cost": 5000,
+        "type": "heal",
+        "originalAuthor": "547427816468381717",
+        "desc": "Potassium",
+        "heal": 800
+    }
+}

@@ -1,0 +1,34 @@
+{
+    "Showstarter": {
+        "name": "Showstarter",
+        "class": "ranged",
+        "cost": 5000,
+        "element": "fire",
+        "desc": "Cyan and yellow glasses.\nWearing those gives a strange sense of dread and comfort combined.",
+        "originalAuthor": "547427816468381717",
+        "skill": "SnapFingers",
+        "melee": 20,
+        "atk": 12,
+        "mag": 16
+    },
+    "FrostKnife": {
+        "name": "FrostKnife",
+        "class": "pierce",
+        "cost": 300,
+        "element": "slash",
+        "desc": "A cyan knife.\nTouching it makes you feel like it's snowing...",
+        "originalAuthor": "547427816468381717",
+        "skill": "ColdSurprise",
+        "atk": 9,
+        "mag": 2
+    },
+    "Paintbrush": {
+        "name": "Paintbrush",
+        "class": "staff",
+        "cost": 200,
+        "element": "strike",
+        "originalAuthor": "547427816468381717",
+        "atk": 2,
+        "mag": 5
+    }
+}

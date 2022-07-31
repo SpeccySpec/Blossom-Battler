@@ -1,0 +1,218 @@
+{
+    "957671132457234556": {
+        "Yucky": {
+            "originalAuthor": "441198920668938260",
+            "name": "Yucky",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "weapon",
+                "Buff"
+            ],
+            "hidden": false,
+            "items": {
+                "item": {
+                    "Sweet": 6,
+                    "S": 20
+                },
+                "weapon": {
+                    "Buff": 3
+                },
+                "armor": {
+                    "Bluff": 11
+                }
+            },
+            "desc": "Fuck off"
+        },
+        "LootTest": {
+            "originalAuthor": "441198920668938260",
+            "name": "LootTest",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "none",
+                "a"
+            ],
+            "hidden": false,
+            "items": {
+                "loot": {
+                    "Beef": 1,
+                    "beef": 1,
+                    "a": 2
+                }
+            },
+            "desc": "Testing loot"
+        },
+        "itemTest": {
+            "originalAuthor": "441198920668938260",
+            "name": "itemTest",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "none",
+                "a"
+            ],
+            "hidden": false,
+            "items": {
+                "weapon": {
+                    "Buff": 553
+                },
+                "item": {
+                    "S": 3,
+                    "Sweet": 410
+                },
+                "armor": {
+                    "Bluff": 520
+                }
+            },
+            "desc": "Testing new Item thingy"
+        },
+        "ringTest": {
+            "originalAuthor": "441198920668938260",
+            "name": "ringTest",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "none",
+                "a"
+            ],
+            "hidden": false,
+            "items": {
+                "money": 200
+            },
+            "desc": "Testing new Item thingy"
+        },
+        "l": {
+            "originalAuthor": "441198920668938260",
+            "name": "l",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "none",
+                "0"
+            ],
+            "hidden": false,
+            "items": {}
+        },
+        "FuckMyAss": {
+            "originalAuthor": "441198920668938260",
+            "name": "FuckMyAss",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "none",
+                "0"
+            ],
+            "hidden": false,
+            "items": {
+                "weapon": {
+                    "Buff": 5
+                },
+                "item": {
+                    "Sweet": 4,
+                    "S": 5
+                },
+                "armor": {
+                    "Bluff": 2
+                }
+            }
+        },
+        "FuckMyAss_LootEdition": {
+            "originalAuthor": "441198920668938260",
+            "name": "FuckMyAss_LootEdition",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "none",
+                "0"
+            ],
+            "hidden": false,
+            "items": {
+                "money": 99999
+            }
+        },
+        "PackageForSpectra": {
+            "originalAuthor": "441198920668938260",
+            "name": "PackageForSpectra",
+            "channel": "957671132457234556",
+            "party": "",
+            "lock": [
+                "none",
+                "-"
+            ],
+            "hidden": false,
+            "items": {
+                "item": {
+                    "Sky": 999999
+                }
+            },
+            "desc": "Sky's package for Spectra"
+        }
+    },
+    "967822532017274980": {
+        "Team Spacies's lost items": {
+            "originalAuthor": "957671901197647912",
+            "name": "Team Spacies's lost items",
+            "channel": "967822532017274980",
+            "party": "",
+            "lock": [
+                "none",
+                "0"
+            ],
+            "hidden": true,
+            "items": {
+                "Sweet": 38
+            },
+            "desc": "Team Spacies lost a battle on 24/07/2022. This is what happened to their items."
+        }
+    },
+    "958747864970981376": {
+        "Buff": {
+            "originalAuthor": "441198920668938260",
+            "name": "Buff",
+            "channel": "958747864970981376",
+            "party": "",
+            "lock": [
+                "none",
+                "0"
+            ],
+            "hidden": false,
+            "items": {
+                "Sweet": 50,
+                "S": 5
+            },
+            "weapons": {
+                "Buff": {
+                    "name": "Buff",
+                    "cost": "50",
+                    "element": "fire",
+                    "desc": "lmao no",
+                    "originalAuthor": "441198920668938260",
+                    "skill": "Agi",
+                    "melee": "12",
+                    "atk": "12",
+                    "mag": "12",
+                    "recipe": {
+                        "amount": 1,
+                        "shapeless": false,
+                        "recipe": {
+                            "0": "Sweet",
+                            "4": "Sweet",
+                            "8": "Sweet"
+                        }
+                    }
+                }
+            },
+            "money": 80,
+            "armors": {
+                "Bluff": {
+                    "name": "Bluff",
+                    "cost": 1220,
+                    "element": "water",
+                    "originalAuthor": "441198920668938260",
+                    "end": "20"
+                }
+            }
+        }
+    }
+}

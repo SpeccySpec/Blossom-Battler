@@ -214,10 +214,10 @@ longDescription = (charDefs, level, server, message) => {
 		if (typeof(char.weaponclass) == 'object') {
 			desc += `_Can wield ${char.weaponclass[0]} and ${char.weaponclass[1]} weapons._\n`;
 		} else {
-			desc += `_Can wield ${char.weaponclass} weapons._\n`;
+			if (char.weaponclass && char.weaponclass != "none") desc += `_Can wield ${char.weaponclass} weapons._\n`;
 		}
 	}
-	if (char.armorclass) desc += `_Can wear ${char.armorclass} armor._\n`;
+	if (char.armorclass && char.armorclass != "none") desc += `_Can wear ${char.armorclass} armor._\n`;
 	desc += '\n';
 
 	if (char.leaderskill && settings.mechanics.leaderskills) desc += `**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} ${char.leaderskill.var1 ? `toward ${elementEmoji[char.leaderskill.var1] ?? ''}${char.leaderskill.var1.toUpperCase()}` : ''};`
@@ -302,7 +302,7 @@ longDescription = (charDefs, level, server, message) => {
 			let statusaffinityscore = 0
 			let statAffs = '';
 			for (const affinity in char.statusaffinities) {
-				if (char.statusaffinities[affinity].length > 0) statAffs += `\n${affinityEmoji[affinity]}: `
+				if (char.affinities[affinity].length > 0) statAffs += `\n${affinityEmoji[affinity]}: `
 				for (const i in char.statusaffinities[affinity]) {
 					statusaffinityscore += affinityScores[affinity]
 					statAffs += `${statusEmojis[char.statusaffinities[affinity][i]]}`;
@@ -317,7 +317,7 @@ longDescription = (charDefs, level, server, message) => {
 	if (charAffs != '') DiscordEmbed.fields.push({ name: 'Affinities', value: charAffs, inline: true });
 
 	if (settings.mechanics.charms && char.curCharms && char.curCharms.length > 0) {
-		let charmFile = setUpFile(`${dataPath}/json/charms.json`);
+		let charmFile = setUpFile(`${dataPath}/charms.json`);
 			
 		let notches = 0
 		if (charDefs.charms) {

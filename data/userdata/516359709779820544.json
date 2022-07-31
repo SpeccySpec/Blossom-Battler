@@ -1,0 +1,118 @@
+{
+    "exports": {
+        "Amorpha": {
+            "name": "Amorpha",
+            "mainElement": "water",
+            "weaponclass": "none",
+            "armorclass": "none",
+            "weapons": {},
+            "armors": {},
+            "curweapon": {},
+            "curarmor": {},
+            "owner": "516359709779820544",
+            "level": 1,
+            "hp": 27,
+            "mp": 38,
+            "maxhp": 27,
+            "maxmp": 38,
+            "basehp": 27,
+            "basemp": 38,
+            "mpMeter": [
+                "Magic Points",
+                "MP"
+            ],
+            "status": "none",
+            "statusturns": 0,
+            "melee": {
+                "name": "Strike Attack",
+                "type": "strike",
+                "pow": 30,
+                "acc": 95,
+                "crit": 15
+            },
+            "stats": {
+                "atk": 3,
+                "mag": 9,
+                "prc": 4,
+                "end": 5,
+                "chr": 8,
+                "int": 5,
+                "agl": 2,
+                "luk": 3
+            },
+            "basestats": {
+                "baseatk": 3,
+                "basemag": 9,
+                "baseprc": 4,
+                "baseend": 5,
+                "basechr": 8,
+                "baseint": 5,
+                "baseagl": 2,
+                "baseluk": 3
+            },
+            "lb": 0,
+            "xp": 0,
+            "maxxp": 500,
+            "affinities": {
+                "superweak": [],
+                "weak": [],
+                "resist": [],
+                "block": [],
+                "repel": [],
+                "drain": []
+            },
+            "skills": [],
+            "autolearn": [],
+            "quotes": {
+                "meleequote": [],
+                "physquote": [],
+                "magquote": [],
+                "allyatkquote": [],
+                "lbquote": [],
+                "tcquote": [],
+                "strongquote": [],
+                "badatkquote": [],
+                "landedquote": [],
+                "missquote": [],
+                "superweakquote": [],
+                "weakquote": [],
+                "hurtquote": [],
+                "resistquote": [],
+                "blockquote": [],
+                "repelquote": [],
+                "drainquote": [],
+                "dodgequote": [],
+                "deathquote": [],
+                "killquote": [],
+                "pacifyquote": [],
+                "allydeathquote": [],
+                "healquote": [],
+                "helpedquote": [],
+                "consolequote": [],
+                "imfinequote": [],
+                "lvlquote": []
+            },
+            "bio": {
+                "fullname": "",
+                "nickname": "",
+                "species": "",
+                "gender": "other",
+                "height": [
+                    4,
+                    0
+                ],
+                "weight": 0,
+                "age": 10,
+                "info": "",
+                "backstory": "",
+                "likes": "",
+                "dislikes": "",
+                "fears": "",
+                "voice": "",
+                "theme": "",
+                "custom": {}
+            },
+            "trust": {}
+        }
+    }
+}
