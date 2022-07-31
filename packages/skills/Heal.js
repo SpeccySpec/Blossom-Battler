@@ -453,7 +453,7 @@ buildHeal = (message, extra, args) => {
 		return false;
 	}
 
-	applyHeal(message, skill, extra, args.slice(6))
+	applyHeal(message, skill, extra.toLowerCase(), args.slice(6))
 	
 	if (skill.done) {
 		delete skill.done;

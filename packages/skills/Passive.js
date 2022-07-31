@@ -1277,7 +1277,7 @@ passiveList = {
 			}
 		},
 		getinfo(vars, skill) {
-			return `Nets a **__${vars[1]}__** for every heal the user obrains until it reaches **${vars[0]}**`
+			return `Nets a **__${vars[1]}__** for every heal the user obtains until it reaches **${vars[0]}**`
 		}
 	})
 }
@@ -1334,7 +1334,7 @@ buildPassive = (message, extra, args) => {
 		return false;
 	}
 
-	applyPassive(message, skill, extra, args.slice(3))
+	applyPassive(message, skill, extra.toLowerCase(), args.slice(3))
 	
 	if (skill.done) {
 		delete skill.done;
