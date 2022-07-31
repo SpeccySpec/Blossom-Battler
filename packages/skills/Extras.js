@@ -400,7 +400,7 @@ extrasList = {
 		name: "Stat Buff",
 		desc: "Will buff or debuff the <Target/User>'s <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff. You can also make a buff/debuff last {Turns} turns.",
 		multiple: true,
-		diffflag: [0, 1, 3],
+		diffflag: [0, 1, 2],
 		args: [
 			{
 				name: "Target/User",
