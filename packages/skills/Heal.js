@@ -68,13 +68,21 @@ healList = {
 			return '';
 		},
 		getinfo(vars, skill) {
-			let healType = vars[1] ?? 'hp';
+			let text = 'Restores **'
+			for (i in vars) {
+				let healType = vars[i][1] ?? 'hp';
 
-			if (healType.includes('percent')) healType = '% of target\'s ' + healType.replace('percent', '').toUpperCase();
-			else if (healType.includes('lb')) healType = '% LB';
-			else healType = ` ${healType.toUpperCase()}`;
+				if (healType.includes('percent')) healType = '% of target\'s ' + healType.replace('percent', '').toUpperCase();
+				else if (healType.includes('lb')) healType = '% LB';
+				else healType = ` ${healType.toUpperCase()}`;
+
+				text += `${vars[i][0]}${healType}`;
+
+				if (i < vars.length-2) text += ', ';
+				else if (i == vars.length-2) text += ' and ';
+			}
 			
-			return `Restores around **${vars[0]}${healType}**`
+			return text+`**`
 		}
 	}),
 
