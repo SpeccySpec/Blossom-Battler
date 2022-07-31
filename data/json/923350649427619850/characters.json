@@ -338,11 +338,11 @@
         "curweapon": {},
         "curarmor": {},
         "owner": "642841151484985365",
-        "level": 1,
-        "hp": 20,
-        "mp": 40,
-        "maxhp": 20,
-        "maxmp": 40,
+        "level": 7,
+        "hp": 41,
+        "mp": 79,
+        "maxhp": 41,
+        "maxmp": 79,
         "basehp": 20,
         "basemp": 40,
         "mpMeter": [
@@ -357,14 +357,14 @@
             "crit": 10
         },
         "stats": {
-            "atk": 5,
-            "mag": 10,
-            "prc": 7,
-            "end": 3,
-            "chr": 4,
-            "int": 5,
-            "agl": 4,
-            "luk": 4
+            "atk": 8,
+            "mag": 16,
+            "prc": 13,
+            "end": 5,
+            "chr": 6,
+            "int": 11,
+            "agl": 7,
+            "luk": 7
         },
         "basestats": {
             "baseatk": 5,
@@ -378,7 +378,7 @@
         },
         "lb": 0,
         "xp": 0,
-        "maxxp": 500,
+        "maxxp": 1179,
         "affinities": {
             "superweak": [
                 "electric"
