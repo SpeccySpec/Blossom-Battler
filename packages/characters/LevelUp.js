@@ -95,7 +95,6 @@ levelUp = (charDefs, forceEvo, server) => {
 
 	if (charDefs.level >= settings.caps.levelcap) {
 		charDefs.xp = charDefs.maxxp - 1
-		console.log(`LevelUp: ${charDefs.name} cannot level up further.`)
 		return false
 	}
 
@@ -151,7 +150,6 @@ levelUp = (charDefs, forceEvo, server) => {
 levelDown = (charDefs, server) => {
 	if (charDefs.level <= 1) {
 		charDefs.xp = 1;
-		console.log(`LevelUp: ${charDefs.name} cannot level down further.`);
 		return false;
 	}
 
