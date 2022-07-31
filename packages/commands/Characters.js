@@ -1571,22 +1571,22 @@ commands.setlb = new Command({
 		{
 			name: "Limit Break Name",
 			type: "Word",
-			forced: false
+			forced: true
 		},
 		{
 			name: "Limit Break Level",
 			type: "Num",
-			forced: false
+			forced: true
 		},
 		{
 			name: "Limit Break Type",
 			type: "Word",
-			forced: false
+			forced: true
 		},
 		{
 			name: "LB% Required",
 			type: "Num",
-			forced: false
+			forced: true
 		},
 		{
 			name: "Power",
@@ -1658,7 +1658,7 @@ commands.setlb = new Command({
 	
 		if (thingDefs[args[0]].level < levelLocks[args[2]-1]) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but they must be at level ${levelLocks[args[2]-1]} to obtain a level ${args[2]} limit break.`);
 
-		if (args[3].toLowerCase() != 'atk' || args[3].toLowerCase() != 'heal') return message.channel.send('Invalid Limit Break Type! Please enter either "Atk" or "Heal".');
+		if (args[3].toLowerCase() != 'atk' && args[3].toLowerCase() != 'heal') return message.channel.send('Invalid Limit Break Type! Please enter either "Atk" or "Heal".');
 		if (thingDefs[args[0]].lb) {
 			if (thingDefs[args[0]][args[2]-1].type != args[3].toLowerCase()) return message.channel.send(`Please enter limit breaks within the same type! You already have a ${thingDefs[args[0]][args[2]-1].type} Limit Break.`);
 		}

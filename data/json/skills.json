@@ -67808,5 +67808,72 @@
                 ]
             ]
         }
+    },
+    "Led": {
+        "name": "Led",
+        "type": "ice",
+        "atktype": "magic",
+        "pow": 80,
+        "hits": 1,
+        "acc": 90,
+        "cost": 6,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "532291526634635285",
+        "status": "freeze",
+        "statuschance": 1,
+        "desc": "A stronger form of Ioca '(i-oh-ka)' that doesn’t freeze opponents often and doesn’t lower one's agility."
+    },
+    "Ioca": {
+        "name": "Ioca",
+        "type": "ice",
+        "atktype": "magic",
+        "pow": 60,
+        "hits": 1,
+        "acc": 95,
+        "cost": 4,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "532291526634635285",
+        "status": "freeze",
+        "statuschance": 5,
+        "desc": "An alternative to Bufu that can freeze and/or slow one's foe down temporarily for 2 turns.",
+        "extras": {
+            "buff": [
+                [
+                    "target",
+                    "agl",
+                    -1,
+                    5,
+                    2
+                ]
+            ]
+        }
+    },
+    "Frosbi": {
+        "name": "Frosbi",
+        "type": "ice",
+        "atktype": "magic",
+        "pow": 40,
+        "hits": 1,
+        "acc": 90,
+        "cost": 5,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "532291526634635285",
+        "status": "freeze",
+        "statuschance": 10,
+        "desc": "A weaker form of Ioca (i-oh-ka) that can freeze and/or slow one's foe down at a greater chance.",
+        "extras": {
+            "buff": [
+                [
+                    "target",
+                    "agl",
+                    -1,
+                    10,
+                    2
+                ]
+            ]
+        }
     }
 }

@@ -27181,8 +27181,23 @@
             "baseagl": 5,
             "baseluk": 5
         },
-        "lb": 0,
-        "xp": 0,
+        "lb": {
+            "1": {
+                "name": "kill",
+                "level": 1,
+                "class": "atk",
+                "pow": 420,
+                "cost": 169,
+                "hits": 1,
+                "target": "one",
+                "originalAuthor": "412328234198237189",
+                "crit": 3,
+                "status": "dizzy",
+                "statuschance": "memes.",
+                "desc": "memes."
+            }
+        },
+        "xp": 615066352,
         "maxxp": 500,
         "affinities": {
             "superweak": [],
