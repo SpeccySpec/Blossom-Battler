@@ -1478,7 +1478,7 @@ extrasList = {
 		],
 		applyfunc(message, skill, args) {
 			let skills = args;
-			skills = skills.filter(skill => !skillFile[skill] || skillFile?.[skill]?.type === "passive");
+			skills = skills.filter(skill => skillFile[skill] && skillFile[skill]?.type !== "passive");
 			makeExtra(skill, "metronome", skills);
 			return true
 		},

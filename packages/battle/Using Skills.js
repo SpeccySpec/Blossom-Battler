@@ -915,7 +915,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 		}
 
 		// Get the skill in question.
-		let skillname = possible[randNum(1, possible.length-1)];
+		let skillname = possible[randNum(0, possible.length-1)];
 
 		// Get Metronome's cost.
 		let cost = [skill.cost, skill.costtype];
