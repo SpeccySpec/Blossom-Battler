@@ -197,7 +197,6 @@ levelUpTimes = (charDefs, forceEvo, times, message) => {
 
 	let DiscordEmbed = briefDescription(charDefs);
 	DiscordEmbed.title = `${charDefs.name} levelled up${(times <= 1) ? '!' : ' ' + times + ' times!'}`;
-//	DiscordEmbed.description = `_${charDefs.name}: "${selectQuote(charDefs, 'lvl')}"_\n\n${DiscordEmbed.description}`;
-	DiscordEmbed.description = `_${charDefs.name}: "ae"_\n\n**Level ${charDefs.level}**\n${DiscordEmbed.description}`;
+	if (selectQuote(charDefs, 'lvl')) DiscordEmbed.description = `_${charDefs.name}: "${selectQuote(charDefs, 'lvl')}"_\n\n${DiscordEmbed.description}`;
 	message.channel.send({embeds: [DiscordEmbed]});
 }

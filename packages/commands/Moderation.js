@@ -746,6 +746,11 @@ commands.caps = new Command({
 
 		switch (args[0].toLowerCase()) {
 			case 'levelcap':
+				if (args[1] > 999) return message.channel.send("That's too high of a level cap!");
+				settings['caps'][args[0].toLowerCase()] = args[1]
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+				message.channel.send(fullNames[args[0].toLowerCase()] + ' set to ' + args[1])
+				break;
 			case 'hpmpcap':
 			case 'statcap':
 			case 'basestatcap':

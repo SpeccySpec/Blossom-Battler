@@ -11,7 +11,7 @@
         "technicaldamage": true
     },
     "caps": {
-        "levelcap": 99,
+        "levelcap": 9999999,
         "hpmpcap": 65,
         "statcap": 99,
         "basestatcap": 10,

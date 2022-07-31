@@ -21,13 +21,11 @@
             "MP"
         ],
         "melee": {
-            "name": "Gravi Hold",
-            "type": "strike",
+            "name": "Just Watch",
+            "type": "pierce",
             "pow": 0,
-            "acc": 100,
-            "crit": 0,
-            "status": "paralyze",
-            "statuschance": 80
+            "acc": 0,
+            "crit": 0
         },
         "stats": {
             "atk": 5,
