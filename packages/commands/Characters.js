@@ -974,6 +974,7 @@ commands.levelup = new Command({
 		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
 		if (args[1] <= 0) return message.channel.send("Don't even try it.");
 		if (charFile[args[0]].level >= settings.caps.levelcap) return message.channel.send(`${charFile[args[0]].name} cannot level up any further!`);
+		if (args[1] >= 999) return message.channel.send("Don't even try it.");
 
 		// levelUpTimes function handles everything.
 		levelUpTimes(charFile[args[0]], false, args[1], message);
