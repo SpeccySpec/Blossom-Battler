@@ -10779,23 +10779,22 @@
     },
     "Rollout": {
         "name": "Rollout",
-        "cost": 5,
-        "costtype": "mp",
-        "pow": 30,
-        "acc": 90,
-        "crit": 5,
         "type": "earth",
         "atktype": "physical",
-        "target": "one",
-        "originalAuthor": "363363984390356993",
-        "powlamk": 16,
-        "powpkmn": 30,
+        "pow": 95,
         "hits": 1,
+        "acc": 90,
+        "cost": 6,
+        "costtype": "hppercent",
+        "target": "randomopposing",
+        "originalAuthor": "363363984390356993",
+        "crit": 5,
+        "desc": "The user continually rolls into the target over five turns. It becomes more powerful each time it hits.",
         "extras": {
             "rollout": [
-                125,
-                2,
-                4
+                100,
+                100,
+                5
             ]
         }
     },
@@ -67863,7 +67862,9 @@
             "buff": [
                 [
                     "target",
-                    "agl",
+                    [
+                        "agl"
+                    ],
                     -1,
                     5,
                     2

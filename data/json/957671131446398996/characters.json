@@ -15854,7 +15854,7 @@
             "PlasmaCannon",
             "BowBelt",
             "HyperBeam",
-            "ChaosBombs",
+            "OffenseUp-Omega",
             "PsyTurboX"
         ],
         "critquote": [],
@@ -27143,11 +27143,11 @@
         "curweapon": {},
         "curarmor": {},
         "owner": "412328234198237189",
-        "level": 1,
-        "hp": 30,
-        "mp": 5,
-        "maxhp": 30,
-        "maxmp": 5,
+        "level": 999,
+        "hp": 5519,
+        "mp": 2999,
+        "maxhp": 5519,
+        "maxmp": 2999,
         "basehp": 30,
         "basemp": 5,
         "mpMeter": [
@@ -27162,14 +27162,14 @@
             "crit": 15
         },
         "stats": {
-            "atk": 5,
-            "mag": 5,
-            "prc": 5,
-            "end": 5,
-            "chr": 5,
-            "int": 5,
-            "agl": 5,
-            "luk": 5
+            "atk": 99,
+            "mag": 99,
+            "prc": 99,
+            "end": 99,
+            "chr": 99,
+            "int": 99,
+            "agl": 99,
+            "luk": 99
         },
         "basestats": {
             "baseatk": 5,
@@ -27197,8 +27197,8 @@
                 "desc": "memes."
             }
         },
-        "xp": 615066352,
-        "maxxp": 500,
+        "xp": -3.427294310587205e+65,
+        "maxxp": 5.272760477826469e+64,
         "affinities": {
             "superweak": [],
             "weak": [],
