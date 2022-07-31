@@ -4,7 +4,7 @@
         "limitbreaks": false,
         "teamcombos": false,
         "onemores": false,
-        "stataffinities": false,
+        "stataffinities": true,
         "charms": false,
         "leaderskills": false,
         "transformations": false,
@@ -59,6 +59,8 @@
         "enemies": {}
     },
     "banned": [],
-    "encountered": [],
+    "encountered": [
+        "PVPSandbag"
+    ],
     "desc": ""
 }

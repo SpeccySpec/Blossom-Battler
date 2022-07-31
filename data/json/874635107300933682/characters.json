@@ -1,1 +1,121 @@
-{}
+{
+    "Alia": {
+        "name": "Alia",
+        "mainElement": "gravity",
+        "weaponclass": "none",
+        "armorclass": "none",
+        "weapons": {},
+        "armors": {},
+        "curweapon": {},
+        "curarmor": {},
+        "owner": "363363984390356993",
+        "level": 1,
+        "hp": 30,
+        "mp": 35,
+        "maxhp": 30,
+        "maxmp": 35,
+        "basehp": 30,
+        "basemp": 35,
+        "mpMeter": [
+            "Magic Points",
+            "MP"
+        ],
+        "melee": {
+            "name": "Gravi Hold",
+            "type": "strike",
+            "pow": 0,
+            "acc": 100,
+            "crit": 0,
+            "status": "paralyze",
+            "statuschance": 80
+        },
+        "stats": {
+            "atk": 5,
+            "mag": 5,
+            "prc": 5,
+            "end": 5,
+            "chr": 5,
+            "int": 5,
+            "agl": 5,
+            "luk": 5
+        },
+        "basestats": {
+            "baseatk": 5,
+            "basemag": 5,
+            "baseprc": 5,
+            "baseend": 5,
+            "basechr": 5,
+            "baseint": 5,
+            "baseagl": 5,
+            "baseluk": 5
+        },
+        "lb": 0,
+        "xp": 0,
+        "maxxp": 500,
+        "affinities": {
+            "superweak": [],
+            "weak": [],
+            "resist": [],
+            "block": [],
+            "repel": [],
+            "drain": []
+        },
+        "skills": [
+            "Metrofuckingnome"
+        ],
+        "autolearn": [],
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "allyatkquote": [],
+            "lbquote": [],
+            "tcquote": [],
+            "strongquote": [],
+            "badatkquote": [],
+            "landedquote": [],
+            "missquote": [],
+            "superweakquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "dodgequote": [],
+            "deathquote": [],
+            "killquote": [],
+            "pacifyquote": [],
+            "allydeathquote": [],
+            "healquote": [],
+            "helpedquote": [],
+            "consolequote": [],
+            "imfinequote": [],
+            "lvlquote": []
+        },
+        "bio": {
+            "fullname": "",
+            "nickname": "",
+            "species": "",
+            "gender": "other",
+            "height": [
+                4,
+                0
+            ],
+            "weight": 0,
+            "age": 10,
+            "info": "",
+            "backstory": "",
+            "likes": "",
+            "dislikes": "",
+            "fears": "",
+            "voice": "",
+            "theme": "",
+            "custom": {}
+        },
+        "trust": {},
+        "statusaffinities": {
+            "block": []
+        }
+    }
+}

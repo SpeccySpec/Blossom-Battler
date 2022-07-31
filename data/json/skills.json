@@ -421,7 +421,7 @@
         "hits": 1,
         "acc": 95,
         "cost": 5,
-        "costtype": "mp",
+        "costtype": "hppercent",
         "target": "one",
         "originalAuthor": "621307633718132746",
         "crit": 5,
@@ -1255,7 +1255,7 @@
         "hits": 2,
         "acc": 85,
         "cost": 20,
-        "costtype": "mp",
+        "costtype": "hppercent",
         "target": "one",
         "originalAuthor": "621307633718132746",
         "crit": 6,
@@ -1284,7 +1284,7 @@
         "hits": 1,
         "acc": 90,
         "cost": 8,
-        "costtype": "mp",
+        "costtype": "hppercent",
         "target": "one",
         "originalAuthor": "621307633718132746",
         "crit": 10,
@@ -1373,7 +1373,7 @@
         "hits": 3,
         "acc": 82,
         "cost": 24,
-        "costtype": "mp",
+        "costtype": "hppercent",
         "target": "one",
         "originalAuthor": "621307633718132746",
         "crit": 5,
@@ -1520,7 +1520,7 @@
         "hits": 1,
         "acc": 87,
         "cost": 14,
-        "costtype": "mp",
+        "costtype": "hppercent",
         "target": "one",
         "originalAuthor": "621307633718132746",
         "crit": 12,
@@ -25363,7 +25363,7 @@
     "Splash": {
         "name": "Splash",
         "type": "status",
-        "cost": 1,
+        "cost": 0,
         "costtype": "mp",
         "target": "caster",
         "desc": "The user flops around.",
@@ -59922,7 +59922,9 @@
             "buff": [
                 [
                     "user",
-                    "mag",
+                    [
+                        "mag"
+                    ],
                     1,
                     20,
                     null
@@ -60942,7 +60944,7 @@
     },
     "ABigThing": {
         "name": "ABigThing",
-        "cost": 2,
+        "cost": 0,
         "costtype": "hp",
         "pow": 150,
         "acc": 100,
@@ -60960,7 +60962,15 @@
                 19
             ]
         ],
-        "levellock": 20
+        "levellock": 20,
+        "extras": {
+            "hpcalc": [
+                100
+            ],
+            "mpcalc": [
+                100
+            ]
+        }
     },
     "MagicMissile": {
         "name": "Magic Missile",
@@ -66424,7 +66434,7 @@
         "originalAuthor": "532291526634635285",
         "status": "burn",
         "statuschance": 1,
-        "desc": "A stronger form of Agi that deals more damage than giving burns.",
+        "desc": "A stronger form of Scorch that doesn’t lower defences and lower burn chances.",
         "preskills": [
             [
                 "Remove",
@@ -66445,7 +66455,7 @@
         "originalAuthor": "532291526634635285",
         "status": "burn",
         "statuschance": 1,
-        "desc": "A stronger form of Maragi that deals more damage than giving burns."
+        "desc": "A stronger form of Sear that doesn’t lower defenses and lower burn chance."
     },
     "Extra Safety Net": {
         "name": "Extra Safety Net",
@@ -66485,6 +66495,13 @@
                         "end"
                     ],
                     1,
+                    5,
+                    3
+                ],
+                [
+                    "target",
+                    "end",
+                    -1,
                     5,
                     3
                 ]
@@ -66534,7 +66551,7 @@
         "originalAuthor": "532291526634635285",
         "status": "burn",
         "statuschance": 8,
-        "desc": "A weaker version of Agi that can burn more often.",
+        "desc": "A weaker form of Scorch that doesn’t lower defenses, but has a higher burn chance.",
         "preskills": [
             [
                 "Remove",
@@ -67553,5 +67570,264 @@
             ]
         },
         "desc": "All allies will drain the next physical attack"
+    },
+    "PSIAbsorption-Alpha": {
+        "name": "PSI Absorption α",
+        "type": "passive",
+        "originalAuthor": "621307633718132746",
+        "passive": {
+            "alterpain": [
+                1
+            ]
+        },
+        "desc": "The user will absorb 1% of damage taken as PP.",
+        "levellock": 3,
+        "evoskills": [
+            [
+                "PSIAbsorption-Beta",
+                68
+            ]
+        ]
+    },
+    "PSIAbsorption-Beta": {
+        "name": "PSI Absorption β",
+        "type": "passive",
+        "originalAuthor": "621307633718132746",
+        "passive": {
+            "alterpain": [
+                3
+            ]
+        },
+        "desc": "The user will absorb 3% of damage taken as PP.",
+        "levellock": 68,
+        "preskills": [
+            [
+                "PSIAbsorption-Alpha",
+                67
+            ]
+        ],
+        "evoskills": [
+            [
+                "PSIAbsorption-Omega",
+                88
+            ]
+        ]
+    },
+    "PSIAbsorption-Omega": {
+        "name": "PSI Absorption Ω",
+        "type": "passive",
+        "originalAuthor": "621307633718132746",
+        "passive": {
+            "alterpain": [
+                5
+            ]
+        },
+        "desc": "The user will absorb 5% of damage taken as PP.",
+        "levellock": 88,
+        "preskills": [
+            [
+                "PSIAbsorption-Beta",
+                87
+            ]
+        ]
+    },
+    "ElementalMagic": {
+        "name": "Elemental Magic",
+        "type": "almighty",
+        "atktype": "magic",
+        "pow": 140,
+        "hits": 1,
+        "acc": 90,
+        "cost": 8,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "desc": "The user randomly selects between <:fire:962465467845464214><:water:962465470533996586><:ice:962465468042575922><:electric:962465467400851518><:wind:962465470466883705><:earth:962465467455373443><:grass:962465467799310366> elements and casts a tier-2 elemental spell on all enemies",
+        "extras": {
+            "metronome": []
+        }
+    },
+    "Metrofuckingnome": {
+        "name": "Metrofuckingnome",
+        "type": "almighty",
+        "atktype": "magic",
+        "pow": 96,
+        "hits": 1,
+        "acc": 100,
+        "cost": 0,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "363363984390356993",
+        "desc": "This is a test skill to see the limits of Metronome extra",
+        "extras": {
+            "metronome": []
+        }
+    },
+    "Choma": {
+        "name": "Choma",
+        "type": "fire",
+        "atktype": "magic",
+        "pow": 40,
+        "hits": 1,
+        "acc": 85,
+        "cost": 10,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "532291526634635285",
+        "status": "burn",
+        "statuschance": 8,
+        "desc": "A weaker form of Sear that doesn’t lower defenses, but a higher burn chance."
+    },
+    "Maji": {
+        "name": "Maji",
+        "type": "water",
+        "atktype": "magic",
+        "pow": 80,
+        "hits": 1,
+        "acc": 90,
+        "cost": 6,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "532291526634635285",
+        "desc": "A stronger form of Drop that doesn’t lower one's attack."
+    },
+    "Drop": {
+        "name": "Drop",
+        "type": "water",
+        "atktype": "magic",
+        "pow": 60,
+        "hits": 1,
+        "acc": 95,
+        "cost": 5,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "532291526634635285",
+        "desc": "An alternative to Aqua that can dampen one's attacks for two turns.",
+        "extras": {
+            "buff": [
+                [
+                    "target",
+                    [
+                        "atk"
+                    ],
+                    -1,
+                    5,
+                    2
+                ]
+            ]
+        }
+    },
+    "Sear": {
+        "name": "Sear",
+        "type": "fire",
+        "atktype": "magic",
+        "pow": 60,
+        "hits": 1,
+        "acc": 90,
+        "cost": 9,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "532291526634635285",
+        "status": "burn",
+        "statuschance": 5,
+        "desc": "An alternative to Maragi that can have a chance to lower the enemy's defenses temporarily, by one stage, for a single turn.",
+        "extras": {
+            "buff": [
+                [
+                    "target",
+                    "end",
+                    -1,
+                    3,
+                    1
+                ]
+            ]
+        }
+    },
+    "Flut": {
+        "name": "Flut",
+        "type": "water",
+        "atktype": "magic",
+        "pow": 40,
+        "hits": 1,
+        "acc": 90,
+        "cost": 6,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "532291526634635285",
+        "desc": "A weaker version of Drop that can lower a foe's attack at a greater chance.",
+        "extras": {
+            "buff": [
+                [
+                    "target",
+                    [
+                        "atk"
+                    ],
+                    -1,
+                    10,
+                    2
+                ]
+            ]
+        }
+    },
+    "Auga": {
+        "name": "Auga",
+        "type": "water",
+        "atktype": "magic",
+        "pow": 80,
+        "hits": 1,
+        "acc": 85,
+        "cost": 14,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "532291526634635285",
+        "desc": "A stronger form of Soak, but doesn't lower one's attack."
+    },
+    "Soak": {
+        "name": "Soak",
+        "type": "water",
+        "atktype": "magic",
+        "pow": 60,
+        "hits": 1,
+        "acc": 90,
+        "cost": 8,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "532291526634635285",
+        "desc": "An alternative to Malaqua that can lower one's enemies' attack for two turns.",
+        "extras": {
+            "buff": [
+                [
+                    "target",
+                    "atk",
+                    -1,
+                    3,
+                    2
+                ]
+            ]
+        }
+    },
+    "Tulva": {
+        "name": "Tulva",
+        "type": "water",
+        "atktype": "magic",
+        "pow": 40,
+        "hits": 1,
+        "acc": 90,
+        "cost": 12,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "532291526634635285",
+        "desc": "A weaker form of Soak that has a greater chance at lowering the foes' attack for two turns.",
+        "extras": {
+            "buff": [
+                [
+                    "target",
+                    "atk",
+                    -1,
+                    10,
+                    2
+                ]
+            ]
+        }
     }
 }
