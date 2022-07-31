@@ -28498,9 +28498,6 @@
         "powpkmn": {},
         "originalAuthor": "776480348757557308",
         "heal": {
-            "fullheal": [
-                true
-            ],
             "healstat": [
                 100,
                 "hppercent"
@@ -28569,8 +28566,9 @@
         "powpkmn": {},
         "originalAuthor": "776480348757557308",
         "heal": {
-            "fullheal": [
-                true
+            "healstat": [
+                100,
+                "hppercent"
             ]
         }
     },
@@ -28585,9 +28583,6 @@
         "powpkmn": {},
         "originalAuthor": "776480348757557308",
         "heal": {
-            "fullheal": [
-                true
-            ],
             "healstat": [
                 100,
                 "hppercent"
@@ -28967,8 +28962,9 @@
         "powlamk": 5456743299,
         "powpkmn": 9999999999,
         "heal": {
-            "fullheal": [
-                true
+            "healstat": [
+                100,
+                "hppercent"
             ]
         },
         "preskills": [
@@ -67539,7 +67535,7 @@
         "type": "heal",
         "cost": 1,
         "costtype": "hp",
-        "target": "one",
+        "target": "ally",
         "originalAuthor": "363363984390356993",
         "heal": {
             "healstat": [
