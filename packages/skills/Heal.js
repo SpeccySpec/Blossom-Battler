@@ -2,6 +2,8 @@ healList = {
 	healstat: new Extra({
 		name: "Heal Stat",
 		desc: "The default heal type. Restores <Meter> by <Heal Amount>. _Negative values for <Heal Amount> will damage the target!_",
+		multiple: true,
+		diffflag: 0,
 		args: [
 			{
 				name: "Heal Amount",
