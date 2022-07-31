@@ -158,7 +158,7 @@ const affinityScores = {
 	[-9]: "A bunch of useless atoms.",
 	[-8]: "A corpse.",
 	[-7]: "Are you sure they are still alive by now?",
-	[-6]: "Even glass survies more hits.",
+	[-6]: "Even glass survives more hits.",
 	[-5]: "Extremely likely to get hurt a lot.",
 	[-4]: "A fragile individual.",
 	[-3]: "Easily hurt, but could survive.",
