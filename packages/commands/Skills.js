@@ -1196,7 +1196,10 @@ commands.editskill = new Command({
 					break;
 				case 'acc':
 				case 'crit':
-					skillFile[args[0]][editField] = args[2];
+					if (isNaN(args[2])) return message.channel.send(`${args[2]} is not a number!`);
+					let amount = parseFloat(args[2])
+					if (amount < 0) return message.channel.send('This field can\'t be below 0!'); 
+					skillFile[args[0]][editField] = amount;
 					break;
 
 				case 'name':
@@ -1213,8 +1216,23 @@ commands.editskill = new Command({
 				case 'status chance':
 				case 'statchance':
 					if (isNaN(args[2])) return message.channel.send(`${args[2]} is not a number!`);
+					let amount2 = parseFloat(args[2])
+					if (amount2 < 0) return message.channel.send('This field can\'t be below 0!'); 
 					if (!skillFile[args[0]].status) return message.channel.send(`You need a status effectto set the status chance!`);
-					skillFile[args[0]].statuschance = parseFloat(args[2]);
+					skillFile[args[0]].statuschance = parseFloat(amount2);
+					break;
+
+				case 'cost':
+					if (isNaN(args[2])) return message.channel.send(`${args[2]} is not a number!`);
+					let amount3 = parseFloat(args[2])
+					if (amount3 < 0) return message.channel.send('This field can\'t be below 0!');
+					skillFile[args[0]].cost = parseFloat(amount3);
+					break;
+
+				case 'costtype':
+				case 'cost type':
+					if (!costTypes.includes(args[2].toLowerCase())) return message.channel.send(`${args[2].toLowerCase()} is an invalid cost type! Valid cost types are: ${costTypes.join(', ')}`);
+					skillFile[args[0]].costtype = args[2].toLowerCase();
 					break;
 
 				case 'type':
