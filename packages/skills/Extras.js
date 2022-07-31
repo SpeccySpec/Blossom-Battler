@@ -471,8 +471,8 @@ extrasList = {
 			}
 			if (targ.charms && targ.charms.includes("PureVision") && stat === 'prc') return `${targ.name}'s Pure Vision negated the change.`;
 			let txt = amount > 0
-				? `__${targ.name}__'s _${stat.toUpperCase()}_ was buffed **${amount}** time(s)!`
-				: `__${targ.name}__'s _${stat.toUpperCase()}_ was debuffed **${absamount}** time(s)!`
+				? `__${targ.name}__'s _${stat ? stat.toUpperCase() : "???"}_ was buffed **${amount}** time(s)!`
+				: `__${targ.name}__'s _${stat ?stat.toUpperCase() : "???"}_ was debuffed **${absamount}** time(s)!`
 			if (chance && chance < 100) {
 				const rchance = randNum(1, 100);
 

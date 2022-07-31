@@ -12132,11 +12132,11 @@
     "Anti-Sky": {
         "name": "Anti-Sky",
         "owner": "313972298992451585",
-        "level": 69,
-        "hp": 555,
-        "mp": 326,
-        "maxhp": 555,
-        "maxmp": 326,
+        "level": 76,
+        "hp": 607,
+        "mp": 357,
+        "maxhp": 607,
+        "maxmp": 357,
         "basehp": 45,
         "basemp": 20,
         "mpMeter": [
@@ -12152,16 +12152,16 @@
         },
         "weapon": {},
         "armor": {},
-        "xp": 0,
-        "maxxp": 8403976,
+        "xp": -94116113,
+        "maxxp": 22883377,
         "skills": [
             "KiBlast[2]",
             "God'sHand",
             "Maragidyne",
             "ReturnToSender",
             "InvigIII",
-            "ȶɦɛʝ",
-            "BuiltDifferent"
+            "BuiltDifferent",
+            "LifeMooch"
         ],
         "critquote": [],
         "deathquote": [],
@@ -12207,14 +12207,14 @@
             }
         },
         "stats": {
-            "atk": 76,
-            "mag": 41,
-            "prc": 24,
-            "end": 40,
-            "chr": 24,
-            "int": 39,
-            "agl": 75,
-            "luk": 78
+            "atk": 83,
+            "mag": 45,
+            "prc": 26,
+            "end": 44,
+            "chr": 26,
+            "int": 43,
+            "agl": 82,
+            "luk": 85
         },
         "basestats": {
             "baseatk": 8,
@@ -26231,5 +26231,247 @@
                 "statuschance": 0
             }
         }
+    },
+    "Violet(MAX)": {
+        "name": "Violet(MAX)",
+        "mainElement": "curse",
+        "weaponclass": "none",
+        "armorclass": "none",
+        "weapons": {},
+        "armors": {},
+        "curweapon": {},
+        "curarmor": {},
+        "owner": "621307633718132746",
+        "level": 99,
+        "hp": 628,
+        "mp": 662,
+        "maxhp": 628,
+        "maxmp": 662,
+        "basehp": 40,
+        "basemp": 25,
+        "mpMeter": [
+            "Magic Points",
+            "MP"
+        ],
+        "melee": {
+            "name": "StickStrike",
+            "type": "strike",
+            "pow": 25,
+            "acc": 95,
+            "crit": 15,
+            "status": "dizzy",
+            "statuschance": 5
+        },
+        "stats": {
+            "atk": 53,
+            "mag": 99,
+            "prc": 35,
+            "end": 53,
+            "chr": 99,
+            "int": 99,
+            "agl": 36,
+            "luk": 56
+        },
+        "basestats": {
+            "baseatk": 4,
+            "basemag": 9,
+            "baseprc": 2,
+            "baseend": 4,
+            "basechr": 8,
+            "baseint": 8,
+            "baseagl": 3,
+            "baseluk": 7
+        },
+        "lb": 0,
+        "xp": 615066352,
+        "maxxp": 615066353,
+        "affinities": {
+            "superweak": [],
+            "weak": [
+                "bless",
+                "fire"
+            ],
+            "resist": [
+                "ice",
+                "psychic"
+            ],
+            "block": [
+                "curse"
+            ],
+            "repel": [],
+            "drain": []
+        },
+        "skills": [
+            "UltimateStickStrikeX",
+            "PKCurse-Sigma",
+            "PKCurse-Omega",
+            "DespairYielder",
+            "PKFire-Sigma",
+            "FireRay",
+            "PSIVision-Omega"
+        ],
+        "autolearn": [],
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "allyatkquote": [],
+            "lbquote": [],
+            "tcquote": [],
+            "strongquote": [],
+            "badatkquote": [],
+            "landedquote": [],
+            "missquote": [],
+            "superweakquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "dodgequote": [],
+            "deathquote": [],
+            "killquote": [],
+            "pacifyquote": [],
+            "allydeathquote": [],
+            "healquote": [],
+            "helpedquote": [],
+            "consolequote": [],
+            "imfinequote": [],
+            "lvlquote": []
+        },
+        "bio": {
+            "fullname": "",
+            "nickname": "",
+            "species": "",
+            "gender": "other",
+            "height": [
+                4,
+                0
+            ],
+            "weight": 0,
+            "age": 10,
+            "info": "",
+            "backstory": "",
+            "likes": "",
+            "dislikes": "",
+            "fears": "",
+            "voice": "",
+            "theme": "",
+            "custom": {}
+        },
+        "trust": {}
+    },
+    "Kragg": {
+        "name": "Kragg",
+        "mainElement": "earth",
+        "weaponclass": "none",
+        "armorclass": "none",
+        "weapons": {},
+        "armors": {},
+        "curweapon": {},
+        "curarmor": {},
+        "owner": "313972298992451585",
+        "level": 1,
+        "hp": 40,
+        "mp": 25,
+        "maxhp": 40,
+        "maxmp": 25,
+        "basehp": 40,
+        "basemp": 25,
+        "mpMeter": [
+            "Magic Points",
+            "MP"
+        ],
+        "melee": {
+            "name": "Strike Attack",
+            "type": "strike",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "stats": {
+            "atk": 9,
+            "mag": 3,
+            "prc": 7,
+            "end": 10,
+            "chr": 1,
+            "int": 5,
+            "agl": 4,
+            "luk": 6
+        },
+        "basestats": {
+            "baseatk": 9,
+            "basemag": 3,
+            "baseprc": 7,
+            "baseend": 10,
+            "basechr": 1,
+            "baseint": 5,
+            "baseagl": 4,
+            "baseluk": 6
+        },
+        "lb": 0,
+        "xp": 0,
+        "maxxp": 500,
+        "affinities": {
+            "superweak": [],
+            "weak": [],
+            "resist": [],
+            "block": [],
+            "repel": [],
+            "drain": []
+        },
+        "skills": [],
+        "autolearn": [],
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "allyatkquote": [],
+            "lbquote": [],
+            "tcquote": [],
+            "strongquote": [],
+            "badatkquote": [],
+            "landedquote": [],
+            "missquote": [],
+            "superweakquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "dodgequote": [],
+            "deathquote": [],
+            "killquote": [],
+            "pacifyquote": [],
+            "allydeathquote": [],
+            "healquote": [],
+            "helpedquote": [],
+            "consolequote": [],
+            "imfinequote": [],
+            "lvlquote": []
+        },
+        "bio": {
+            "fullname": "",
+            "nickname": "",
+            "species": "",
+            "gender": "other",
+            "height": [
+                4,
+                0
+            ],
+            "weight": 0,
+            "age": 10,
+            "info": "",
+            "backstory": "",
+            "likes": "",
+            "dislikes": "",
+            "fears": "",
+            "voice": "",
+            "theme": "",
+            "custom": {}
+        },
+        "trust": {}
     }
 }

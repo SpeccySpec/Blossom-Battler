@@ -60325,15 +60325,19 @@
             "buff": [
                 [
                     "user",
-                    "agl",
-                    1,
+                    [
+                        "prc"
+                    ],
+                    -1,
                     100,
                     null
                 ],
                 [
                     "user",
-                    "prc",
-                    -1,
+                    [
+                        "agl"
+                    ],
+                    1,
                     100,
                     null
                 ]
@@ -60869,29 +60873,6 @@
         "powlamk": 82,
         "powpkmn": 150,
         "extras": {
-            "buff": [
-                [
-                    "user",
-                    "prc",
-                    -1,
-                    65,
-                    null
-                ],
-                [
-                    "user",
-                    "prc",
-                    -1,
-                    100,
-                    null
-                ],
-                [
-                    "user",
-                    "agl",
-                    -1,
-                    100,
-                    null
-                ]
-            ],
             "takemp": [
                 5
             ],
@@ -60904,6 +60885,22 @@
                 110,
                 2,
                 4
+            ],
+            "buff": [
+                [
+                    "target",
+                    "prc",
+                    -1,
+                    100,
+                    null
+                ],
+                [
+                    "target",
+                    "agl",
+                    -1,
+                    100,
+                    null
+                ]
             ]
         },
         "levellock": 76
@@ -67488,5 +67485,17 @@
                 79
             ]
         ]
+    },
+    "DefenseBall": {
+        "name": "DefenseBall",
+        "type": "earth",
+        "atktype": "physical",
+        "pow": 110,
+        "hits": 3,
+        "acc": 80,
+        "cost": 16,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "313972298992451585"
     }
 }
