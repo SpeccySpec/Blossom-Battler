@@ -52,8 +52,9 @@ buffText = (buffArray) => {
 		}
 
 		if (oldBuff == [] || curBuff[3] != oldBuff[3]) {
-			if (curBuff[3] != 100) finalText += `${i == 0 ? '' : 'Has'} a **${curBuff[3]}%** chance to buff `
-			else {
+			if (curBuff[3] != 100) { 
+				finalText += `${i == 0 ? '' : 'Has'} a **${curBuff[3]}%** chance to ${curBuff[2] > 0 ? 'buff' : 'debuff'} `
+			} else {
 				if (curBuff[2] > 0)
 					if (i == 0) finalText += `Buffs `
 					else finalText += ` buffs `
