@@ -448,7 +448,11 @@ commands.updateskills = new Command({
 				}
 			} else if (skillFile[skill].type == 'status') {
 				if (skillFile[skill].statusses) {
-					// Nothing yet
+					if (skillFile[skill].statusses.buff) {
+						for (let vars of skillFile[skill].statusses.buff) {
+							if (typeof(vars[0]) === 'object') vars[0] = vars[0][0];
+						}
+					}
 				} else {
 					skillFile[skill].statusses = {};
 

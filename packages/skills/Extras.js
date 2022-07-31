@@ -97,7 +97,6 @@ extrasList = {
 		name: "Need",
 		desc: 'Will make the skill require <Less/More> than <Percent>% of <Cost Type> for it to work.',
 		multiple: true,
-		diffflag: [0, 3],
 		args: [
 			{
 				name: "Less/More",
@@ -182,7 +181,6 @@ extrasList = {
 		name: "Change Affinity",
 		desc: "Will change <Target/User>'s affinity from the <Weak/Resist/Both> side of <Element> to <Affinity>. *Keep in mind that if you want it to last {Turns} turns, it can't be overwritten by a different affinity until then.*",
 		multiple: true,
-		diffflag: [0, 1, 2],
 		args: [
 			{
 				name: "Target/User",
@@ -400,7 +398,6 @@ extrasList = {
 		name: "Stat Buff",
 		desc: "Will buff or debuff the <Target/User>'s <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff. You can also make a buff/debuff last {Turns} turns.",
 		multiple: true,
-		diffflag: [0, 1, 2],
 		args: [
 			{
 				name: "Target/User",
@@ -529,7 +526,6 @@ extrasList = {
 		name: "Power Buff",
 		desc: "Boosts skill power with <Stat> buffs by, or by up to <Number>, or <Number>% of skill's power.",
 		multiple: true,
-		diffflag: 0,
 		args: [
 			{
 				name: "Stat",
@@ -652,6 +648,7 @@ extrasList = {
 	steal: new Extra({
 		name: "Steal",
 		desc: "Has a <Chance>% chance to steal {Amount} of the foe team's items.",
+		multiple: true,
 		args: [
 			{
 				name: "Chance",
@@ -664,8 +661,6 @@ extrasList = {
 				forced: true
 			}
 		],
-		multiple: true,
-		diffflag: 0,
 		applyfunc(message, skill, args) {
 			const chance = args[0]
 			const amount = args[1]
@@ -1583,6 +1578,7 @@ function makeExtra(skill, extra, func) {
 	if (!skill.extras[extra]) skill.extras[extra] = [];
 
 	if (extrasList[extra].multiple) {
+/*
 		if (extrasList[extra].diffflag) {
 			for (i in skill.extras[extra]) {
 				if (typeof skill.extras[extra][i] == "number") {
@@ -1605,6 +1601,7 @@ function makeExtra(skill, extra, func) {
 				}
 			}
 		}
+*/
 		skill.extras[extra].push(func);
 	} else {
 		skill.extras[extra] = func;

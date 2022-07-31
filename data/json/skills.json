@@ -10779,23 +10779,22 @@
     },
     "Rollout": {
         "name": "Rollout",
-        "cost": 5,
-        "costtype": "mp",
-        "pow": 30,
-        "acc": 90,
-        "crit": 5,
         "type": "earth",
         "atktype": "physical",
-        "target": "one",
-        "originalAuthor": "363363984390356993",
-        "powlamk": 16,
-        "powpkmn": 30,
+        "pow": 95,
         "hits": 1,
+        "acc": 90,
+        "cost": 6,
+        "costtype": "hppercent",
+        "target": "randomopposing",
+        "originalAuthor": "363363984390356993",
+        "crit": 5,
+        "desc": "The user continually rolls into the target over five turns. It becomes more powerful each time it hits.",
         "extras": {
             "rollout": [
-                125,
-                2,
-                4
+                100,
+                100,
+                5
             ]
         }
     },
@@ -28497,9 +28496,6 @@
         "powpkmn": {},
         "originalAuthor": "776480348757557308",
         "heal": {
-            "fullheal": [
-                true
-            ],
             "healstat": [
                 100,
                 "hppercent"
@@ -28568,8 +28564,9 @@
         "powpkmn": {},
         "originalAuthor": "776480348757557308",
         "heal": {
-            "fullheal": [
-                true
+            "healstat": [
+                100,
+                "hppercent"
             ]
         }
     },
@@ -28584,9 +28581,6 @@
         "powpkmn": {},
         "originalAuthor": "776480348757557308",
         "heal": {
-            "fullheal": [
-                true
-            ],
             "healstat": [
                 100,
                 "hppercent"
@@ -28966,8 +28960,9 @@
         "powlamk": 5456743299,
         "powpkmn": 9999999999,
         "heal": {
-            "fullheal": [
-                true
+            "healstat": [
+                100,
+                "hppercent"
             ]
         },
         "preskills": [
@@ -67523,7 +67518,7 @@
         "type": "heal",
         "cost": 1,
         "costtype": "hp",
-        "target": "one",
+        "target": "ally",
         "originalAuthor": "363363984390356993",
         "heal": {
             "healstat": [
@@ -67842,7 +67837,9 @@
             "buff": [
                 [
                     "target",
-                    "agl",
+                    [
+                        "agl"
+                    ],
                     -1,
                     5,
                     2
