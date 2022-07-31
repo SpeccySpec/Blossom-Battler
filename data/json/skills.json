@@ -34491,16 +34491,14 @@
         "passive": {
             "affinitypoint": [
                 10,
-                1,
-                [
-                    "heal"
-                ]
+                "Spirit Point"
             ]
         },
         "desc": "When an ally assists Sky by healing him, his spirit power increments by 1 and maxes at 10. When the battle ends, Sky's spirit power resets to 0.",
         "powlamk": {},
         "powpkmn": {},
-        "originalAuthor": "776480348757557308"
+        "originalAuthor": "776480348757557308",
+        "done": true
     },
     "ShadowCounter": {
         "name": "Shadow Counter",
