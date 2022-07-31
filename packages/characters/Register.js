@@ -313,7 +313,7 @@ longDescription = (charDefs, level, server, message) => {
 			}
 			if (statAffs != '') {
 				let scorecomment = affinityScores[(statusaffinityscore > 0 ? Math.ceil : Math.floor)(statusaffinityscore)]
-				if (scorecomment && statusaffinityscoree <= 3 && statusaffinityscore >= -3 && statustotaffinities >= 9)
+				if (scorecomment && statusaffinityscore <= 3 && statusaffinityscore >= -3 && statustotaffinities >= 9)
 					scorecomment += "\nOr at least that would be the case if you didn't have so many affinities."
 				if (statustotaffinities == 1)
 					scorecomment += "\nThey...probably should have more than 1 affinity though."
