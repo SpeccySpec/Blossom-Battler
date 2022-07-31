@@ -77,7 +77,7 @@ statusList = {
 		desc: extrasList.buff.desc,
 		args: extrasList.buff.args,
 		multiple: true,
-		diffflag: [0, 1, 3],
+		diffflag: [0, 1, 2],
 		applyfunc(message, skill, args) {
 			const target = args[0].toLowerCase()
 			const stat = args[1].toLowerCase()
