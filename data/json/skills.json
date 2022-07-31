@@ -40263,7 +40263,7 @@
         "acc": 90,
         "crit": 8,
         "type": "pierce",
-        "status": "daze",
+        "status": "dazed",
         "statuschance": 12,
         "atktype": "physical",
         "target": "one",
@@ -40278,7 +40278,14 @@
                 83
             ]
         ],
-        "levellock": 95
+        "levellock": 60,
+        "pow": "180",
+        "preskills": [
+            [
+                "ShockChomp",
+                59
+            ]
+        ]
     },
     "UniverseChomp": {
         "name": "UniverseChomp",
@@ -40294,7 +40301,14 @@
         "powlamk": 16,
         "powpkmn": {},
         "hits": 1,
-        "levellock": 95
+        "levellock": 83,
+        "pow": "20",
+        "preskills": [
+            [
+                "GalaxyChomp",
+                82
+            ]
+        ]
     },
     "DualChomp": {
         "name": "DualChomp",
@@ -40316,7 +40330,13 @@
                 48
             ]
         ],
-        "levellock": 99
+        "levellock": 36,
+        "preskills": [
+            [
+                "FangedChomp",
+                35
+            ]
+        ]
     },
     "FangedChomp": {
         "name": "FangedChomp",
@@ -40338,7 +40358,14 @@
                 36
             ]
         ],
-        "levellock": 21
+        "levellock": 21,
+        "pow": "85",
+        "preskills": [
+            [
+                "LightChomp",
+                20
+            ]
+        ]
     },
     "LightChomp": {
         "name": "LightChomp",
@@ -40360,7 +40387,8 @@
                 21
             ]
         ],
-        "levellock": 33
+        "levellock": null,
+        "pow": "50"
     },
     "ButWhy": {
         "name": "Check out this Gun I found, I think it's...",
@@ -41694,7 +41722,7 @@
             "pierce",
             "electric"
         ],
-        "status": "daze",
+        "status": "dazed",
         "statuschance": 6,
         "atktype": "physical",
         "target": "one",
@@ -41709,7 +41737,14 @@
                 60
             ]
         ],
-        "levellock": 95
+        "levellock": 48,
+        "pow": "120",
+        "preskills": [
+            [
+                "DualChomp",
+                47
+            ]
+        ]
     },
     "Mawisp": {
         "name": "Mawisp",
@@ -50731,7 +50766,7 @@
                 49
             ]
         ],
-        "levellock": 48
+        "levellock": 50
     },
     "AuraSphereShowerV": {
         "name": "Aura Sphere [Shower Volley]",
@@ -50827,13 +50862,13 @@
         "costtype": "mp",
         "acc": 90,
         "crit": 5,
-        "hits": 2,
+        "hits": "2",
         "type": "psychic",
         "atktype": "magic",
         "target": "allopposing",
-        "desc": "The user channels energy around them, creating energy balls that are then sent at all foes, two each; when the second energy ball hits, an otherwise harmless spire of energy is briefly formed. The energy balls have explosive properties and are easy to make, but not all that powerful. The second sphere that hits any enemy will not be stronger than the first.",
+        "desc": "The user channels energy around them, creating energy balls that are then sent at all foes, two each; when the second energy ball hits, an otherwise harmless spire of energy is briefly formed. The energy balls have explosive properties and are easy to make, but not all that powerful.",
         "originalAuthor": "642841151484985365",
-        "pow": 30,
+        "pow": "30",
         "powlamk": 16,
         "powpkmn": 30,
         "extras": {
@@ -50886,7 +50921,7 @@
         "type": "psychic",
         "atktype": "magic",
         "target": "one",
-        "desc": "The user channels energy into their hands, creating two energy balls that are then thrown at a foe, one after the other; when the second energy ball hits, an otherwise harmless spire of energy is briefly formed. The energy balls have explosive properties and are easy to make, but not all that powerful. The second sphere will not be stronger than the first.",
+        "desc": "The user channels energy into their hands, creating two energy balls that are then thrown at a foe, one after the other; when the second energy ball hits, an otherwise harmless spire of energy is briefly formed. The energy balls have explosive properties and are easy to make, but not all that powerful.",
         "originalAuthor": "642841151484985365",
         "pow": 30,
         "powlamk": 16,
@@ -51008,7 +51043,7 @@
                 25
             ]
         ],
-        "levellock": 33
+        "levellock": 5
     },
     "MEAnsblast": {
         "name": "MEAnsblast",
@@ -67193,8 +67228,24 @@
         "costtype": "-",
         "target": "caster",
         "originalAuthor": "363363984390356993",
-        "heal": {},
-        "desc": "The user heals themselves for 180 HP over 5 turns, slowly spending their MP"
+        "heal": {
+            "regenerate": [
+                36,
+                5
+            ],
+            "invigorate": [
+                -2,
+                5
+            ]
+        },
+        "desc": "The user heals themselves for 180 HP over 5 turns, slowly spending their MP",
+        "done": true,
+        "evoskills": [
+            [
+                "Arcadiara",
+                20
+            ]
+        ]
     },
     "Arcadiara": {
         "name": "Arcadiara",
@@ -67203,8 +67254,30 @@
         "costtype": "-",
         "target": "caster",
         "originalAuthor": "363363984390356993",
-        "heal": {},
-        "desc": "The user heals themselves for 270 HP over 5 turns, slowly spending their MP"
+        "heal": {
+            "regenerate": [
+                54,
+                5
+            ],
+            "invigorate": [
+                -3,
+                5
+            ]
+        },
+        "desc": "The user heals themselves for 270 HP over 5 turns, slowly spending their MP",
+        "done": true,
+        "evoskills": [
+            [
+                "Arcadiarama",
+                35
+            ]
+        ],
+        "preskills": [
+            [
+                "Arcadia",
+                19
+            ]
+        ]
     },
     "Arcadiarama": {
         "name": "Arcadiarama",
@@ -67213,8 +67286,30 @@
         "costtype": "-",
         "target": "caster",
         "originalAuthor": "363363984390356993",
-        "heal": {},
-        "desc": "The user heals themselves for 360 HP over 5 turns, slowly spending their MP"
+        "heal": {
+            "regenerate": [
+                72,
+                5
+            ],
+            "invigorate": [
+                -4,
+                5
+            ]
+        },
+        "desc": "The user heals themselves for 360 HP over 5 turns, slowly spending their MP",
+        "done": true,
+        "evoskills": [
+            [
+                "Arcadiarahan",
+                50
+            ]
+        ],
+        "preskills": [
+            [
+                "Arcadia",
+                34
+            ]
+        ]
     },
     "Arcadiarahan": {
         "name": "Arcadiarahan",
@@ -67223,8 +67318,24 @@
         "costtype": "-",
         "target": "caster",
         "originalAuthor": "363363984390356993",
-        "heal": {},
-        "desc": "The user heals themselves for 1000 HP over 5 turns, slowly spending their MP"
+        "heal": {
+            "regenerate": [
+                200,
+                5
+            ],
+            "invigorate": [
+                -11,
+                5
+            ]
+        },
+        "desc": "The user heals themselves for 1000 HP over 5 turns, slowly spending their MP",
+        "done": true,
+        "preskills": [
+            [
+                "Arcadiarama",
+                49
+            ]
+        ]
     },
     "ElementalCycle": {
         "name": "Elemental Cycle",
@@ -67283,5 +67394,92 @@
                 true
             ]
         }
+    },
+    "Oscuro": {
+        "name": "Oscuro",
+        "type": "curse",
+        "atktype": "magic",
+        "pow": 95,
+        "hits": 1,
+        "acc": 80,
+        "cost": 7,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "621307633718132746",
+        "desc": "The user attacks with light dark damage, and surrounds the foe with a dark aura for 2 turns.",
+        "extras": {
+            "spreadverse": [
+                20,
+                2,
+                "The foe was surrounded by a dark aura!"
+            ]
+        },
+        "levellock": 20,
+        "evoskills": [
+            [
+                "Oscurante",
+                55
+            ]
+        ]
+    },
+    "Oscurante": {
+        "name": "Oscurante",
+        "type": "curse",
+        "atktype": "magic",
+        "pow": 220,
+        "hits": 1,
+        "acc": 80,
+        "cost": 14,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "621307633718132746",
+        "desc": "The user attacks with moderate dark damage, and surrounds the foe with a dark aura for 3 turns.",
+        "extras": {
+            "spreadverse": [
+                40,
+                3,
+                "The foe was surrounded by a dark aura!"
+            ]
+        },
+        "levellock": 55,
+        "preskills": [
+            [
+                "Oscuro",
+                54
+            ]
+        ],
+        "evoskills": [
+            [
+                "Oscuratezza",
+                80
+            ]
+        ]
+    },
+    "Oscuratezza": {
+        "name": "Oscuratezza",
+        "type": "curse",
+        "atktype": "magic",
+        "pow": 530,
+        "hits": 1,
+        "acc": 80,
+        "cost": 21,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "621307633718132746",
+        "desc": "The user attacks with heavy dark damage, and surrounds the foe with a dark aura for 4 turns.",
+        "extras": {
+            "spreadverse": [
+                55,
+                4,
+                "The foe was surrounded by a dark aura!"
+            ]
+        },
+        "levellock": 80,
+        "preskills": [
+            [
+                "Oscurante",
+                79
+            ]
+        ]
     }
 }

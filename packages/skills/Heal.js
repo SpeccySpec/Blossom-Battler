@@ -2,6 +2,7 @@ healList = {
 	healstat: new Extra({
 		name: "Heal Stat",
 		desc: "The default heal type. Restores <Meter> by <Heal Amount>. _Negative values for <Heal Amount> will damage the target!_",
+		multiple: true,
 		args: [
 			{
 				name: "Heal Amount",
@@ -32,8 +33,9 @@ healList = {
 			switch(vars[1]) {
 				case 'hp':
 				case 'mp':
-					targ[vars[1]] = Math.min(targ[`max${vars[1]}`], targ[vars[1]]+vars[0]);
-					return `__${targ.name}__'s ${vars[1].toUpperCase()} was restored by **${vars[0]}**!`;
+					let heal = vars[0] + (-8+randNum(16));
+					targ[vars[1]] = Math.min(targ[`max${vars[1]}`], targ[vars[1]]+heal);
+					return `__${targ.name}__'s **${vars[1].toUpperCase()}** was restored by **${heal}**!`;
 
 				case 'hppercent':
 					if (vars[0] >= 100) {
