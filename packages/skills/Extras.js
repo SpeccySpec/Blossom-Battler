@@ -161,7 +161,20 @@ extrasList = {
 			return true;
 		},
 		getinfo(vars, skill) {
-			return `Requires **${vars[0]} than ${vars[1] ? 'or equal to' : ''} ${vars[2]}${vars[3].toUpperCase()}** to use`;
+			let text = `Requires **`
+			
+			for (i in vars) {
+				let healText = ` ${vars[i][3].toUpperCase()}`
+				if (healText.includes('PERCENT')) healText = `% of target's max ${healText.replace('PERCENT', '')}`
+				if (healText.includes('LB')) healText = `% LB`
+
+				text += `${vars[i][0]} than ${vars[i][1] ? 'or equal to' : ''} ${vars[i][2]}${healText}`
+
+				if (i < vars.length - 2) text += ', ';
+				else if (i == vars.length - 2) text += ' and ';
+			}
+
+			return text + '** to use';
 		}
 	}),
 
