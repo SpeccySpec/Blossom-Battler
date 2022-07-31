@@ -1,4 +1,4 @@
-﻿///////////////////////////////////
+///////////////////////////////////
 // MAIN SCRIPT FOR BLOSSOM BATTLER //
 // grassimp :) ////////////////////
 ///////////////////////////////////
@@ -1134,6 +1134,47 @@ client.on("guildCreate", (guild) => {
 		.then(() => channel.send({embeds: [DiscordEmbed]}))
 })
 
+similarity = (s1, s2) => {
+	var longer = s1;
+	var shorter = s2;
+	if (s1.length < s2.length) {
+		longer = s2;
+		shorter = s1;
+	}
+	var longerLength = longer.length;
+	if (longerLength == 0) {
+		return 1.0;
+	}
+	return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+}
+
+editDistance = (s1, s2) => {
+	s1 = s1.toLowerCase();
+	s2 = s2.toLowerCase();
+
+	var costs = new Array();
+	for (var i = 0; i <= s1.length; i++) {
+		var lastValue = i;
+		for (var j = 0; j <= s2.length; j++) {
+			if (i == 0)
+				costs[j] = j;
+			else {
+				if (j > 0) {
+					var newValue = costs[j - 1];
+				if (s1.charAt(i - 1) != s2.charAt(j - 1))
+					newValue = Math.min(Math.min(newValue, lastValue),
+					costs[j]) + 1;
+				costs[j - 1] = lastValue;
+				lastValue = newValue;
+				}
+			}
+		}
+		if (i > 0)
+		costs[s2.length] = lastValue;
+	}
+	return costs[s2.length];
+}
+
 client.on("messageCreate", (message) => {
 	if (message.author.bot) return;
 	if (message.channel.type === 'DM') return message.channel.send("Don't use me in DMs! That's kinda sussy!");
@@ -1149,10 +1190,33 @@ client.on("messageCreate", (message) => {
 	if (args.length == 0) return;
 
 	let command = commands[args[0].toLowerCase()];
-	if (!command) return;
+	
+	if (!command) {
+		let similarities = [];
+		for (const i in commands) {
+			let similarityPercent = similarity(args[0].toLowerCase(), i)
+			similarityPercent = similarityPercent.toFixed(2)
 
-	args.shift();
-	command.call(message, args);
+			if (similarityPercent >= 0.85) {
+				args.shift();
+				return commands[i].call(message, args);
+			}
+
+			if (similarityPercent >= 0.4) similarities.push({command: i, similarity: similarityPercent})
+		}
+		//order based on highest to lowest similarity and then leave only the top 5
+		similarities.sort((a, b) => b.similarity - a.similarity)
+		similarities = similarities.slice(0, 3)
+
+		if (similarities.length == 1) {
+			args.shift();
+			return commands[similarities[0].command].call(message, args);
+		}
+		if (similarities.length > 1) return similarityButtonCollector(message, similarities, args)
+	} else {
+		args.shift();
+		command.call(message, args);
+	}
 })
 
 //last ditch things
@@ -1207,4 +1271,44 @@ if (battleFiles.length > 0) {
 			})
 			.catch(console.error)
 	}
+}
+
+async function similarityButtonCollector(message, similarities, args) {
+	let DiscordEmbed = new Discord.MessageEmbed()
+		.setColor('#0099ff')
+		.setTitle('Similarities found')
+		.setDescription('Seems like the command you were looking for was not found. There were similar ones, but I can\'t tell which one you were looking for.\n\nHere are the top similarities:')
+		.addFields(similarities.map(el => {
+			return {name: `${getPrefix(message.guild.id)}${el.command} (${el.similarity * 100}% similarity)`, value: commands[el.command].getFullDesc(), inline: false}
+		}
+	))
+
+	let buttons = []
+
+	for (i in similarities) {
+		let similarity = similarities[i]
+		buttons.push( makeButton(similarity.command.charAt(0).toUpperCase() + similarity.command.slice(1), null, "green", null, null) )
+	}
+	buttons.push( makeButton("Neither", "✖️", "red", null, null) )
+	
+	let embedMessage = await message.channel.send({
+		embeds: [DiscordEmbed],
+		components: [new Discord.MessageActionRow({components: buttons})]
+	})
+
+	const collector = embedMessage.createMessageComponentCollector({
+		filter: ({user}) => user.id == message.author.id
+	})
+
+	collector.on('collect', async interaction => {
+		if (interaction.component.customId == 'neither') {
+			embedMessage.delete();
+			return collector.stop()
+		}
+
+		embedMessage.delete();
+		collector.stop()
+		args.shift();
+		commands[interaction.component.customId].call(message, args);
+	})
 }
