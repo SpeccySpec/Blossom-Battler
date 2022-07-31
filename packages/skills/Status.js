@@ -911,13 +911,13 @@ statusList = {
 			let turns = args[0];
 			let power = args[1];
 			let accuracy = args[2];
-			let critChance = math.max((args[3] ?? 0), 0);
+			let critChance = Math.max((args[3] ?? 0), 0);
 			let hits = args[4];
 			let element = args[5]?.toLowerCase();
 			let atype = args[6]?.toLowerCase();
 			let targets = args[7]?.toLowerCase();
 			let status = args[8] || "none";
-			let statusChance = math.min(math.max((args[9] ?? 0), 0), 100);
+			let statusChance = Math.min(Math.max((args[9] ?? 0), 0), 100);
 
 			if (turns < 1) return void message.channel.send("Turns must be at least 1!");
 
