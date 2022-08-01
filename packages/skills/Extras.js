@@ -550,7 +550,7 @@ extrasList = {
 			const stat = args[0].toLowerCase()
 			const trueFa = (args[3] == 'true' || args[3] == 'yes' || args[3] == 'y' || args[3] == '1')
 			const upto = (args[2] == 'true' || args[2] == 'yes' || args[2] == 'y' || args[2] == '1')
-			if (!utilityFuncs.validStat(stat))
+			if (!stats.includes(stat))
 				return void message.channel.send("That's not a valid stat!");
 			makeExtra(skill, "powerbuff", [stat, args[1], upto, trueFa]);
 			return true
