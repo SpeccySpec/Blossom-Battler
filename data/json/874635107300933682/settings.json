@@ -1,12 +1,12 @@
 {
     "prefix": "rpg!",
     "mechanics": {
-        "limitbreaks": false,
-        "teamcombos": false,
+        "limitbreaks": true,
+        "teamcombos": true,
         "onemores": false,
         "stataffinities": true,
         "charms": false,
-        "leaderskills": false,
+        "leaderskills": true,
         "transformations": false,
         "technicaldamage": false
     },

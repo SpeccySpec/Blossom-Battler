@@ -11823,11 +11823,11 @@
     "Anti-Sky": {
         "name": "Anti-Sky",
         "owner": "313972298992451585",
-        "level": 76,
-        "hp": 607,
-        "mp": 357,
-        "maxhp": 607,
-        "maxmp": 357,
+        "level": 94,
+        "hp": 742,
+        "mp": 438,
+        "maxhp": 742,
+        "maxmp": 438,
         "basehp": 45,
         "basemp": 20,
         "mpMeter": [
@@ -11844,8 +11844,8 @@
         },
         "weapon": {},
         "armor": {},
-        "xp": -94116113,
-        "maxxp": 22883377,
+        "xp": -1900144743,
+        "maxxp": 300733935,
         "skills": [
             "BuiltDifferent",
             "God'sHand",
@@ -11853,7 +11853,7 @@
             "LifeMooch",
             "InvigIII",
             "Eight Trigrams Sixty-Four Belts",
-            "FireLeaves"
+            "ThatOneMove"
         ],
         "critquote": [],
         "deathquote": [],
@@ -11899,14 +11899,14 @@
             }
         },
         "stats": {
-            "atk": 83,
-            "mag": 45,
-            "prc": 26,
-            "end": 44,
-            "chr": 26,
-            "int": 43,
-            "agl": 82,
-            "luk": 85
+            "atk": 99,
+            "mag": 54,
+            "prc": 32,
+            "end": 53,
+            "chr": 32,
+            "int": 52,
+            "agl": 99,
+            "luk": 99
         },
         "basestats": {
             "baseatk": 8,

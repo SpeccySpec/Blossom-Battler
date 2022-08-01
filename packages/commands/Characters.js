@@ -978,6 +978,8 @@ commands.levelup = new Command({
 
 		// levelUpTimes function handles everything.
 		levelUpTimes(charFile[args[0]], false, args[1], message);
+		charFile[args[0]].xp = 0;
+
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
@@ -1018,6 +1020,7 @@ commands.forcelevel = new Command({
 			if (charFile[args[0]].skills[skill].levelLock > args[1]) charFile[args[0]].skills[skill] = '';
 		}
 		charFile[args[0]].skills = charFile[args[0]].skills.filter(skill => skill != '');
+		charFile[args[0]].xp = 0;
 
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 
@@ -1025,6 +1028,7 @@ commands.forcelevel = new Command({
 		let DiscordEmbed = briefDescription(charFile[args[0]]);
 		DiscordEmbed.title = `${charFile[args[0]].name} was forced to Level ${args[1]}!`;
 		DiscordEmbed.description = `**Level ${charFile[args[0]].level}**\n${DiscordEmbed.description}`;
+
 		message.channel.send({embeds: [DiscordEmbed]});
 	}
 })

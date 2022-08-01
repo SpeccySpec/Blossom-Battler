@@ -42210,6 +42210,24 @@
                 100,
                 2,
                 4
+            ],
+            "buff": [
+                [
+                    "user",
+                    "agl",
+                    null,
+                    null,
+                    null
+                ]
+            ],
+            "changeaffinity": [
+                [
+                    "target",
+                    "strike",
+                    "resist",
+                    "weak",
+                    null
+                ]
             ]
         },
         "levellock": 84

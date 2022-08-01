@@ -65,7 +65,6 @@
         "skills": [
             "FinalStrike(DS)",
             "ElementalMagic",
-            "CuriosityKilledTheBloomBattler",
             "CopySelf",
             "Garu"
         ],
@@ -124,10 +123,10 @@
             "block": []
         },
         "leaderskill": {
-            "name": "Mana Circulation",
-            "type": "discount",
-            "var1": "strike",
-            "var2": 11
+            "name": "Healing Hands",
+            "type": "boost",
+            "var1": "heal",
+            "var2": 30
         }
     },
     "Shoutmon-DRA": {
