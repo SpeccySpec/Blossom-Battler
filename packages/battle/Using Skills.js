@@ -31,11 +31,13 @@ isTech = (char, element) => {
 	if (!char.status) return false;
 	if (char.status === 'sleep' || char.status === 'blind') return true;
 
-	if (typeof element == 'string') {
-		return elementTechs[char.status].includes(element.toLowerCase());
-	} else {
-		for (let k in element) {
-			if (elementTechs[char.status].includes(element[k].toLowerCase())) return true;
+	if (elementTechs[char.status]) {
+		if (typeof element == 'string') {
+			return elementTechs[char.status].includes(element.toLowerCase());
+		} else {
+			for (let k in element) {
+				if (elementTechs[char.status].includes(element[k].toLowerCase())) return true;
+			}
 		}
 	}
 
