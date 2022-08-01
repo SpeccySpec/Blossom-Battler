@@ -13466,8 +13466,8 @@
         "owner": "441198920668938260",
         "hidden": false,
         "level": 80,
-        "hp": 341,
-        "mp": 435,
+        "hp": 174,
+        "mp": 335,
         "maxhp": 341,
         "maxmp": 435,
         "basehp": 25,
@@ -13485,7 +13485,7 @@
         },
         "weapon": {},
         "armor": {},
-        "xp": 0,
+        "xp": 8960,
         "maxxp": 40561289,
         "skills": [
             "Kouga",
@@ -13494,7 +13494,8 @@
             "Roar",
             "Ear-PiercingScream",
             "SoothingVoice",
-            "KindSoul"
+            "KindSoul",
+            "Captcha"
         ],
         "critquote": [
             "Woah woah wooooooo, what a lucky day, never will happen again. Probably?",
