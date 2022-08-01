@@ -1668,7 +1668,7 @@ commands.getskill = new Command({
 	],
 	func: (message, args) => {
 		if (skillFile[args[0]])
-			skillFuncs.skillDesc(skillFile[args[0]], skillFile[args[0]].name, message, `Here is the data for ${skillFile[args[0]].name}`)	
+			skillFuncs.skillDesc(skillFile[args[0]], args[0], message, `Here is the data for ${skillFile[args[0]].name}`)	
 		else
 			return message.channel.send(`${args[0]} is an invalid Skill Name!`)
 	}
