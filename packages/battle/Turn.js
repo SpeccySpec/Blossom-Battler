@@ -1382,7 +1382,7 @@ doTurn = async(btl, noTurnEmbed) => {
 	// Status Effects.
 	let canMove = true;
 
-	if (char.status && statusEffectFuncs[char.status.toLowerCase()] && statusEffectFuncs[char.status.toLowerCase()].onturn) {
+	if (char.status && statusEffectFuncs[char.status.toLowerCase()]) {
 		if (statusEffectFuncs[char.status.toLowerCase()].onturn) {
 			let statusEff = (statusEffectFuncs[char.status.toLowerCase()].onturn(btl, char) ?? '');
 
