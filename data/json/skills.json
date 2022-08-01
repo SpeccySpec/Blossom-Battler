@@ -69900,13 +69900,23 @@
             "buff": [
                 [
                     "user",
-                    "prc",
+                    [
+                        "prc"
+                    ],
+                    1,
+                    100,
+                    null
+                ],
+                [
+                    "user",
+                    "agl",
                     1,
                     100,
                     null
                 ]
             ]
         },
-        "desc": "The user moves their legs in a circular pattern while being stationary, then they turn the potential energy gathered into kinetic energy."
+        "desc": "The user moves their legs in a circular pattern while being stationary, then they turn the potential energy gathered into kinetic energy.",
+        "done": true
     }
 }

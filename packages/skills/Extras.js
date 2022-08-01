@@ -1026,7 +1026,7 @@ extrasList = {
 		],
 		applyfunc(message, skill, args) {
 			const stat = args[0].toLowerCase()
-			if (!utilityFuncs.validStat(stat))
+			if (!stats.includes(stat))
 				return void message.channel.send("That's not a valid stat!");
 			makeExtra(skill, "statcalc", [stat]);
 			return true
@@ -1049,7 +1049,7 @@ extrasList = {
 		],
 		applyfunc(message, skill, args) {
 			const stat = args[0].toLowerCase()
-			if (!utilityFuncs.validStat(stat))
+			if (!stats.includes(stat))
 				return void message.channel.send("That's not a valid stat!");
 			makeExtra(skill, "hitcalc", [stat]);
 			return true
