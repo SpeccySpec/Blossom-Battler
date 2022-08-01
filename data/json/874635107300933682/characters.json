@@ -54,12 +54,13 @@
             "superweak": [],
             "weak": [],
             "resist": [],
-            "block": [],
+            "block": [
+                "gravity"
+            ],
             "repel": [],
             "drain": []
         },
         "skills": [
-            "Agidyne",
             "FinalStrike(DS)",
             "ElementalMagic"
         ],
@@ -117,5 +118,239 @@
         "statusaffinities": {
             "block": []
         }
+    },
+    "Shoutmon-DRA": {
+        "name": "Shoutmon-DRA",
+        "mainElement": "sound",
+        "weaponclass": "none",
+        "armorclass": "none",
+        "weapons": {},
+        "armors": {},
+        "curweapon": {},
+        "curarmor": {},
+        "owner": "494699050550165515",
+        "level": 1,
+        "hp": 33,
+        "mp": 32,
+        "maxhp": 33,
+        "maxmp": 32,
+        "basehp": 33,
+        "basemp": 32,
+        "mpMeter": [
+            "Magic Points",
+            "MP"
+        ],
+        "melee": {
+            "name": "Strike Attack",
+            "type": "strike",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "stats": {
+            "atk": 7,
+            "mag": 7,
+            "prc": 6,
+            "end": 6,
+            "chr": 5,
+            "int": 5,
+            "agl": 4,
+            "luk": 5
+        },
+        "basestats": {
+            "baseatk": 7,
+            "basemag": 7,
+            "baseprc": 6,
+            "baseend": 6,
+            "basechr": 5,
+            "baseint": 5,
+            "baseagl": 4,
+            "baseluk": 5
+        },
+        "lb": 0,
+        "xp": 0,
+        "maxxp": 500,
+        "affinities": {
+            "superweak": [],
+            "weak": [],
+            "resist": [
+                "sound",
+                "fire",
+                "psychic"
+            ],
+            "block": [],
+            "repel": [],
+            "drain": []
+        },
+        "skills": [],
+        "autolearn": [],
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "allyatkquote": [],
+            "lbquote": [],
+            "tcquote": [],
+            "strongquote": [],
+            "badatkquote": [],
+            "landedquote": [],
+            "missquote": [],
+            "superweakquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "dodgequote": [],
+            "deathquote": [],
+            "killquote": [],
+            "pacifyquote": [],
+            "allydeathquote": [],
+            "healquote": [],
+            "helpedquote": [],
+            "consolequote": [],
+            "imfinequote": [],
+            "lvlquote": []
+        },
+        "bio": {
+            "fullname": "",
+            "nickname": "",
+            "species": "",
+            "gender": "other",
+            "height": [
+                4,
+                0
+            ],
+            "weight": 0,
+            "age": 10,
+            "info": "",
+            "backstory": "",
+            "likes": "",
+            "dislikes": "",
+            "fears": "",
+            "voice": "",
+            "theme": "",
+            "custom": {}
+        },
+        "trust": {}
+    },
+    "Herisseon": {
+        "name": "Herisseon",
+        "mainElement": "electric",
+        "weaponclass": "none",
+        "armorclass": "none",
+        "weapons": {},
+        "armors": {},
+        "curweapon": {},
+        "curarmor": {},
+        "owner": "494699050550165515",
+        "level": 1,
+        "hp": 30,
+        "mp": 35,
+        "maxhp": 30,
+        "maxmp": 35,
+        "basehp": 30,
+        "basemp": 35,
+        "mpMeter": [
+            "Magic Points",
+            "MP"
+        ],
+        "melee": {
+            "name": "Strike Attack",
+            "type": "strike",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "stats": {
+            "atk": 8,
+            "mag": 7,
+            "prc": 6,
+            "end": 6,
+            "chr": 5,
+            "int": 5,
+            "agl": 7,
+            "luk": 4
+        },
+        "basestats": {
+            "baseatk": 8,
+            "basemag": 7,
+            "baseprc": 6,
+            "baseend": 6,
+            "basechr": 5,
+            "baseint": 5,
+            "baseagl": 7,
+            "baseluk": 4
+        },
+        "lb": 0,
+        "xp": 0,
+        "maxxp": 500,
+        "affinities": {
+            "superweak": [],
+            "weak": [
+                "explode"
+            ],
+            "resist": [
+                "earth"
+            ],
+            "block": [],
+            "repel": [],
+            "drain": [
+                "electric"
+            ]
+        },
+        "skills": [],
+        "autolearn": [],
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "allyatkquote": [],
+            "lbquote": [],
+            "tcquote": [],
+            "strongquote": [],
+            "badatkquote": [],
+            "landedquote": [],
+            "missquote": [],
+            "superweakquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "dodgequote": [],
+            "deathquote": [],
+            "killquote": [],
+            "pacifyquote": [],
+            "allydeathquote": [],
+            "healquote": [],
+            "helpedquote": [],
+            "consolequote": [],
+            "imfinequote": [],
+            "lvlquote": []
+        },
+        "bio": {
+            "fullname": "",
+            "nickname": "",
+            "species": "",
+            "gender": "other",
+            "height": [
+                4,
+                0
+            ],
+            "weight": 0,
+            "age": 10,
+            "info": "",
+            "backstory": "",
+            "likes": "",
+            "dislikes": "",
+            "fears": "",
+            "voice": "",
+            "theme": "",
+            "custom": {}
+        },
+        "trust": {}
     }
 }

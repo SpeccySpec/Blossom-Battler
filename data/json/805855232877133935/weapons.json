@@ -42,5 +42,26 @@
         "melee": 45,
         "atk": 21,
         "mag": 18
+    },
+    "Puppet Strings": {
+        "name": "Puppet Strings",
+        "class": "staff",
+        "cost": 1000,
+        "element": "curse",
+        "desc": "A bunch of strings that can be attached to someone to increase their magic.",
+        "originalAuthor": "547427816468381717",
+        "skill": "StringPuppet",
+        "mag": 16
+    },
+    "Crash Hammer": {
+        "name": "Crash Hammer",
+        "class": "bludgeon",
+        "cost": 1200,
+        "element": "electric",
+        "desc": "A hammer with a pattern resembling a blue screen.\nHopefully you don't crash while using this...",
+        "originalAuthor": "547427816468381717",
+        "melee": 25,
+        "atk": 21,
+        "mag": 15
     }
 }

@@ -23366,14 +23366,15 @@
                 "strike"
             ]
         },
-        "levellock": 40
+        "levellock": 40,
+        "target": "caster"
     },
     "VirusTrap": {
         "name": "Virus Trap",
         "type": "status",
         "cost": 35,
         "costtype": "mp",
-        "desc": "The user puts up a biological trap. If attacked by a physical attack after, the power is halved, weaknesses are nullified, and the attacker is ill",
+        "desc": "The user puts up a biological trap. If attacked by a physical attack after, the power is halved, weaknesses are nullified, and the attacker's stats are scrambled",
         "originalAuthor": "363363984390356993",
         "powlamk": {},
         "powpkmn": {},
@@ -23385,7 +23386,8 @@
                 "illness",
                 100
             ]
-        }
+        },
+        "target": "caster"
     },
     "FlipBird": {
         "name": "Flip a Bird",
@@ -24772,7 +24774,9 @@
             "buff": [
                 [
                     "target",
-                    "crit",
+                    [
+                        "crit"
+                    ],
                     1,
                     100,
                     null
@@ -24794,7 +24798,9 @@
             "buff": [
                 [
                     "target",
-                    "crit",
+                    [
+                        "crit"
+                    ],
                     1,
                     100,
                     null
@@ -27045,7 +27051,9 @@
             "buff": [
                 [
                     "target",
-                    "end",
+                    [
+                        "end"
+                    ],
                     1,
                     100,
                     null
@@ -27107,7 +27115,9 @@
             "buff": [
                 [
                     "target",
-                    "atk",
+                    [
+                        "atk"
+                    ],
                     1,
                     100,
                     null
@@ -27638,25 +27648,28 @@
     },
     "CuriosityKilledTheBloomBattler": {
         "name": "CuriosityKilledTheBloomBattler",
-        "type": "heal",
+        "type": "strike",
+        "atktype": "physical",
+        "pow": 100,
+        "hits": 100,
+        "acc": 100,
         "cost": 0,
-        "costtype": "-",
-        "target": "caster",
+        "costtype": "mp",
+        "target": "one",
         "originalAuthor": "363363984390356993",
-        "heal": {
-            "healstat": [
+        "crit": 100,
+        "desc": "We are breaking bots again",
+        "extras": {
+            "buff": [
                 [
+                    "user",
+                    "atk",
+                    -1,
                     100,
-                    "hppercent"
-                ],
-                [
-                    100,
-                    "mppercent"
+                    null
                 ]
             ]
-        },
-        "desc": "???",
-        "done": true
+        }
     },
     "MadTeaParty": {
         "name": "Mad Tea Party",
@@ -53272,9 +53285,11 @@
         "extras": {
             "buff": [
                 [
-                    "user",
-                    "prc",
-                    -1,
+                    "target",
+                    [
+                        "prc"
+                    ],
+                    1,
                     100,
                     null
                 ]
@@ -66386,7 +66401,7 @@
         "originalAuthor": "532291526634635285",
         "status": "burn",
         "statuschance": 1,
-        "desc": "A stronger form of Scorch that doesn’t lower defences and lower burn chances.",
+        "desc": "A stronger form of <:fire:962465467845464214>Scorch that doesn’t lower defenses and has a lower burn chance.",
         "preskills": [
             [
                 "Remove",
@@ -66407,7 +66422,7 @@
         "originalAuthor": "532291526634635285",
         "status": "burn",
         "statuschance": 1,
-        "desc": "A stronger form of Sear that doesn’t lower defenses and lower burn chance."
+        "desc": "A stronger form of <:fire:962465467845464214>Sear that doesn’t lower defenses and has a lower burn chance."
     },
     "Extra Safety Net": {
         "name": "Extra Safety Net",
@@ -66438,7 +66453,7 @@
         "originalAuthor": "532291526634635285",
         "status": "burn",
         "statuschance": 5,
-        "desc": "An alternative to Agi with a low chance at lowering one's defence.",
+        "desc": "An alternative to <:fire:962465467845464214>Agi with a low chance of reducing one's defences.",
         "extras": {
             "buff": [
                 [
@@ -66498,14 +66513,25 @@
         "target": "one",
         "originalAuthor": "532291526634635285",
         "status": "burn",
-        "statuschance": 8,
-        "desc": "A weaker form of Scorch that doesn’t lower defenses, but has a higher burn chance.",
+        "statuschance": 6,
+        "desc": "A weaker form of <:fire:962465467845464214>Scorch that has a greater defence debuff chance and burn chance.",
         "preskills": [
             [
                 "Remove",
                 6
             ]
-        ]
+        ],
+        "extras": {
+            "buff": [
+                [
+                    "target",
+                    "end",
+                    -1,
+                    6,
+                    3
+                ]
+            ]
+        }
     },
     "FireCorrosion": {
         "name": "Fire Corrosion",
@@ -67646,7 +67672,18 @@
         "originalAuthor": "532291526634635285",
         "status": "burn",
         "statuschance": 8,
-        "desc": "A weaker form of Sear that doesn’t lower defenses, but a higher burn chance."
+        "desc": "A weaker form of <:fire:962465467845464214>Sear that has a better chance of burning and/or debuffing a foe's defences.",
+        "extras": {
+            "buff": [
+                [
+                    "target",
+                    "end",
+                    -1,
+                    4,
+                    3
+                ]
+            ]
+        }
     },
     "Maji": {
         "name": "Maji",
@@ -67659,7 +67696,7 @@
         "costtype": "mp",
         "target": "one",
         "originalAuthor": "532291526634635285",
-        "desc": "A stronger form of Drop that doesn’t lower one's attack."
+        "desc": "A stronger form of <:water:962465470533996586>Drop that doesn’t focus on dampness."
     },
     "Drop": {
         "name": "Drop",
@@ -67672,7 +67709,7 @@
         "costtype": "mp",
         "target": "one",
         "originalAuthor": "532291526634635285",
-        "desc": "An alternative to Aqua that can dampen one's attacks for two turns.",
+        "desc": "An alternative to <:water:962465470533996586>Aqua that can dampen one's attacks for two turns.",
         "extras": {
             "buff": [
                 [
@@ -67700,12 +67737,14 @@
         "originalAuthor": "532291526634635285",
         "status": "burn",
         "statuschance": 5,
-        "desc": "An alternative to Maragi that can have a chance to lower the enemy's defenses temporarily, by one stage, for a single turn.",
+        "desc": "An alternative to <:fire:962465467845464214>Maragi that has a chance to lower one's defences.",
         "extras": {
             "buff": [
                 [
                     "target",
-                    "end",
+                    [
+                        "end"
+                    ],
                     -1,
                     3,
                     1
@@ -67724,12 +67763,14 @@
         "costtype": "mp",
         "target": "one",
         "originalAuthor": "532291526634635285",
-        "desc": "A weaker version of Drop that can lower a foe's attack at a greater chance.",
+        "desc": "A weaker version of <:water:962465470533996586>Drop that can dampen one's attack more often.",
         "extras": {
             "buff": [
                 [
                     "target",
-                    "atk",
+                    [
+                        "atk"
+                    ],
                     -1,
                     10,
                     2
@@ -67785,12 +67826,14 @@
         "costtype": "mp",
         "target": "allopposing",
         "originalAuthor": "532291526634635285",
-        "desc": "A weaker form of Soak that has a greater chance at lowering the foes' attack for two turns.",
+        "desc": "A weaker form of <:water:962465470533996586>Soak that has a greater chance to dampen one's attacks.",
         "extras": {
             "buff": [
                 [
                     "target",
-                    "atk",
+                    [
+                        "atk"
+                    ],
                     -1,
                     10,
                     2
@@ -68328,7 +68371,9 @@
             "buff": [
                 [
                     "target",
-                    "agl",
+                    [
+                        "agl"
+                    ],
                     -1,
                     5,
                     2
@@ -68725,8 +68770,998 @@
         "costtype": "mp",
         "target": "one",
         "originalAuthor": "532291526634635285",
-        "status": "blind",
+        "status": [
+            "fear",
+            "blind"
+        ],
         "statuschance": 1,
-        "desc": "A stronger form of <:curse:962465467283415040> Detil, but very little chance for statuses."
+        "desc": "A stronger form of <:curse:962465467283415040> Detil, but very little chance for statuses.",
+        "extras": {}
+    },
+    "Colda": {
+        "name": "Colda",
+        "type": "ice",
+        "atktype": "magic",
+        "pow": 40,
+        "hits": 1,
+        "acc": 90,
+        "cost": 6,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "532291526634635285",
+        "status": "freeze",
+        "statuschance": 8,
+        "desc": "A more weaker form of <:ice:962465468042575922>Chilo, but with a higher freeze chance and slow down chance to your opposing team.",
+        "extras": {
+            "buff": [
+                [
+                    "target",
+                    "agl",
+                    -1,
+                    6,
+                    2
+                ]
+            ]
+        }
+    },
+    "HauntedDream(ATK-ATK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Strength"
+    },
+    "HauntedDream(ATK-MAG)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Magic"
+    },
+    "HauntedDream(ATK-PRC)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Perception"
+    },
+    "HauntedDream(ATK-END)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Endurance"
+    },
+    "HauntedDream(ATK-CHR)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Charisma"
+    },
+    "HauntedDream(ATK-INT)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Intelligence"
+    },
+    "HauntedDream(ATK-AGL)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Agility"
+    },
+    "HauntedDream(ATK-LUK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Luck"
+    },
+    "HauntedDream(MAG-ATK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Strength"
+    },
+    "HauntedDream(MAG-MAG)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Magic"
+    },
+    "HauntedDream(MAG-PRC)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Perception"
+    },
+    "HauntedDream(MAG-END)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Endurance"
+    },
+    "HauntedDream(MAG-CHR)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Charisma"
+    },
+    "HauntedDream(MAG-INT)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Intelligence"
+    },
+    "HauntedDream(MAG-AGL)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Agility"
+    },
+    "HauntedDream(MAG-LUK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Luck"
+    },
+    "HauntedDream(PRC-ATK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Strength"
+    },
+    "HauntedDream(PRC-MAG)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Magic"
+    },
+    "HauntedDream(PRC-PRC)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Perception"
+    },
+    "HauntedDream(PRC-END)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Endurance"
+    },
+    "HauntedDream(PRC-CHR)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Charisma"
+    },
+    "HauntedDream(PRC-INT)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Intelligence"
+    },
+    "HauntedDream(PRC-AGL)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Agility"
+    },
+    "HauntedDream(PRC-LUK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Luck"
+    },
+    "HauntedDream(END-ATK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Strength"
+    },
+    "HauntedDream(END-MAG)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Magic"
+    },
+    "HauntedDream(END-PRC)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Perception"
+    },
+    "HauntedDream(END-END)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Endurance"
+    },
+    "HauntedDream(END-CHR)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Charisma"
+    },
+    "HauntedDream(END-INT)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Intelligence"
+    },
+    "HauntedDream(END-AGL)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Agility"
+    },
+    "HauntedDream(END-LUK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Luck"
+    },
+    "HauntedDream(CHR-ATK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Strength"
+    },
+    "HauntedDream(CHR-MAG)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Magic"
+    },
+    "HauntedDream(CHR-PRC)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Perception"
+    },
+    "HauntedDream(CHR-END)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Endurance"
+    },
+    "HauntedDream(CHR-CHR)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Charisma"
+    },
+    "HauntedDream(CHR-INT)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Intelligence"
+    },
+    "HauntedDream(CHR-AGL)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Agility"
+    },
+    "HauntedDream(CHR-LUK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Luck"
+    },
+    "HauntedDream(INT-ATK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Strength"
+    },
+    "HauntedDream(INT-MAG)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Magic"
+    },
+    "HauntedDream(INT-PRC)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Perception"
+    },
+    "HauntedDream(INT-END)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Endurance"
+    },
+    "HauntedDream(INT-CHR)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Charisma"
+    },
+    "HauntedDream(INT-INT)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Intelligence"
+    },
+    "HauntedDream(INT-AGL)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Agility"
+    },
+    "HauntedDream(INT-LUK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Luck"
+    },
+    "HauntedDream(AGL-ATK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Strength"
+    },
+    "HauntedDream(AGL-MAG)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Magic"
+    },
+    "HauntedDream(AGL-PRC)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Perception"
+    },
+    "HauntedDream(AGL-END)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Endurance"
+    },
+    "HauntedDream(AGL-CHR)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Charisma"
+    },
+    "HauntedDream(AGL-INT)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Intelligence"
+    },
+    "HauntedDream(AGL-AGL)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Agility"
+    },
+    "HauntedDream(AGL-LUK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Luck"
+    },
+    "HauntedDream(LUK-ATK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Strength"
+    },
+    "HauntedDream(LUK-MAG)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Magic"
+    },
+    "HauntedDream(LUK-PRC)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Perception"
+    },
+    "HauntedDream(LUK-END)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Endurance"
+    },
+    "HauntedDream(LUK-CHR)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Charisma"
+    },
+    "HauntedDream(LUK-INT)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Intelligence"
+    },
+    "HauntedDream(LUK-AGL)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Agility"
+    },
+    "HauntedDream(LUK-LUK)": {
+        "name": "Haunted Dream",
+        "type": "spirit",
+        "atktype": "magic",
+        "pow": 258,
+        "hits": 1,
+        "acc": 95,
+        "cost": 28,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "status": "sensitive",
+        "statuschance": 7,
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Luck"
     }
 }
