@@ -23997,7 +23997,7 @@
     "REAcarm": {
         "name": "REAcarm",
         "type": "status",
-        "cost": 400,
+        "cost": 0,
         "costtype": "money",
         "desc": "Purchase this DLC to revive a dead ally",
         "originalAuthor": "363363984390356993",
@@ -27661,7 +27661,7 @@
         "acc": 100,
         "cost": 0,
         "costtype": "mp",
-        "target": "one",
+        "target": "everyone",
         "originalAuthor": "363363984390356993",
         "crit": 100,
         "desc": "We are breaking bots again",

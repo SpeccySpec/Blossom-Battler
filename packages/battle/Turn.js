@@ -378,18 +378,25 @@ const menuStates = {
 }
 
 setUpComponents = (char, btl, menustate) => {
-	let comps = []
-	menuStates[parseInt(menustate)]({char, btl, comps})
+	let comps = [];
+	menuStates[parseInt(menustate)]({char, btl, comps});
 
 	if (menustate != MENU_ACT && menustate != MENU_ENEMYINFO) {
 		if (!comps[0] || !comps[0][0]) {
 			comps[0] = [makeButton('Nothing Here :/', '◀️', 'grey', true, 'back')];
 		} else {
+			let didadd = false;
+
 			for (let i in comps) {
 				if (comps[i].length < 5) {
 					comps[i].push(makeButton('Back', '◀️', 'grey'));
+					didadd = true;
 					break;
 				}
+			}
+
+			if (!didadd) {
+				comps[comps.length] = [makeButton('Back', '◀️', 'grey')];
 			}
 		}
 	}

@@ -55,7 +55,9 @@
         "affinities": {
             "superweak": [],
             "weak": [],
-            "resist": [],
+            "resist": [
+                "poison"
+            ],
             "block": [
                 "gravity"
             ],
@@ -63,11 +65,11 @@
             "drain": []
         },
         "skills": [
-            "FinalStrike(DS)",
+            "REAcarm",
             "ElementalMagic",
             "CopySelf",
-            "Garu",
-            "CuriosityKilledTheBloomBattler"
+            "Baeiha",
+            "MassMedia"
         ],
         "autolearn": [],
         "quotes": {
@@ -363,5 +365,532 @@
             "custom": {}
         },
         "trust": {}
+    },
+    "Valoria": {
+        "name": "Valoria",
+        "owner": "516359709779820544",
+        "level": 7,
+        "hp": 63,
+        "mp": 74,
+        "maxhp": 63,
+        "maxmp": 74,
+        "basehp": 30,
+        "basemp": 35,
+        "melee": {
+            "name": "PsyBash",
+            "type": "strike",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "xp": 1273706,
+        "maxxp": 1179,
+        "skills": [
+            "Atma",
+            "Dia",
+            "CuringAura"
+        ],
+        "deathquote": [],
+        "weapon": {},
+        "bio": {
+            "info": "Valoria is a quiet, innocent Tanuki. She does not speak much amongst those she's not very familiar with. Many things are foreign to her due to the fact that she is not from Yaretza. She prefers peace over violence, and due to her timidness, may not fight back if provoked alone. Incapable of making choices alone.",
+            "backstory": "Valoria is a tanuki from space, hailing from a once extravagant planet called Cosmaria. She was part of the royal family, as her mother was a sister of the king's daughter. She lived with her parents, and brother. \n\nHowever, cruel figures that I'm too lazy to describe right now arrived to invade. Most of the royal family was killed, and that includes her parents. 3 others escaped, herself, her brother and the king's daughter.\n\nThe three were separated, both having escaped in separate ''Capsules''. Her capsule crash-landed on the <#833106074659454986> of Yaretza, and was discovered by the group.",
+            "voice": "[Haru (Persona 5)](https://www.youtube.com/watch?v=SKOY2Xavtn0)",
+            "theme": "[Pull the Trigger - Persona Q2: New Cinema Labyrinth](https://youtu.be/n5O_jq1CSv0)",
+            "species": "Cosmarian Tanuki",
+            "age": 10,
+            "likes": "Hugs, Cakes, Close Friendships",
+            "dislikes": "Violence, Making Choices",
+            "fears": "Being stranded, Near death situations\n\n<Advantages> Usually very kind, F l o  a t, Knowledge about the ✨ stars ✨ \n\n<Disadvantages> Heat makes her tired, Scares easilly, Not very agile",
+            "appearance": "https://cdn.discordapp.com/attachments/820036937791438859/924800883454271578/Valoria.png",
+            "height": [
+                4,
+                0
+            ],
+            "weight": 0,
+            "gender": "female",
+            "custom": {}
+        },
+        "critquote": [
+            "Did... I do that...??",
+            "...Maybe I should infuse my attacks with the power of pizza thoughts..."
+        ],
+        "trust": {
+            "Sky": {
+                "value": 566,
+                "nextLevel": 990,
+                "level": 19,
+                "amount": {}
+            },
+            "Euphorica": {
+                "value": 45,
+                "nextLevel": 120,
+                "level": 2,
+                "amount": "[object Object]35353535353535353535"
+            },
+            "Lena": {
+                "value": 45,
+                "nextLevel": 950,
+                "level": 18
+            },
+            "Dusk": {
+                "value": 125,
+                "nextLevel": 150,
+                "level": 2,
+                "amount": "[object Object]35353535353535353535"
+            },
+            "Ramia": {
+                "value": 5,
+                "nextLevel": 190,
+                "level": 4,
+                "amount": "[object Object]3535353535353535353535"
+            },
+            "Ira": {
+                "value": 65,
+                "nextLevel": 210,
+                "level": 5
+            },
+            "Sparky": {
+                "value": 140,
+                "nextLevel": 190,
+                "level": 4
+            },
+            "Rainbow": {
+                "value": 75,
+                "nextLevel": 170,
+                "level": 3
+            },
+            "Karma": {
+                "value": 60,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Croato": {
+                "value": 95,
+                "nextLevel": 210,
+                "level": 5
+            },
+            "Rattle": {
+                "value": 10,
+                "nextLevel": 210,
+                "level": 5
+            },
+            "Brainfreeze": {
+                "value": 45,
+                "nextLevel": 150,
+                "level": 2
+            },
+            "Permic": {
+                "value": 70,
+                "nextLevel": 160,
+                "level": 4
+            },
+            "Sutela": {
+                "value": 0,
+                "nextLevel": 140,
+                "level": 3
+            },
+            "Firestorm": {
+                "value": 50,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Morisonu": {
+                "value": 25,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Flara": {
+                "value": 910,
+                "nextLevel": 1000,
+                "level": 10
+            },
+            "SAUM-052": {
+                "value": 10,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "XCyan": {
+                "value": 35,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Lanagu": {
+                "value": 195,
+                "nextLevel": 490,
+                "level": 10
+            },
+            "Harcvuk": {
+                "value": 40,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Melarue": {
+                "value": 40,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Axel": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Sun": {
+                "value": 80,
+                "nextLevel": 140,
+                "level": 3
+            },
+            "Bow": {
+                "value": 35,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Yanna": {
+                "value": 0,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Monum": {
+                "value": 50,
+                "nextLevel": 180,
+                "level": 5
+            },
+            "Ayumi": {
+                "value": 90,
+                "nextLevel": 100,
+                "level": 1,
+                "amount": {}
+            },
+            "Gura": {
+                "value": 80,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Bayrero": {
+                "value": 130,
+                "nextLevel": 160,
+                "level": 4
+            },
+            "Pank": {
+                "value": 50,
+                "nextLevel": 220,
+                "level": 7
+            },
+            "Nazier": {
+                "value": 50,
+                "nextLevel": 140,
+                "level": 3
+            },
+            "Sky(B)": {
+                "value": 100,
+                "nextLevel": 140,
+                "level": 3
+            },
+            "Taletan": {
+                "value": 50,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Rosy": {
+                "value": 60,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Viridian": {
+                "value": 60,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Sky(H)": {
+                "value": 80,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Valoria": {
+                "amount": 215,
+                "maximum": 205,
+                "level": 8
+            }
+        },
+        "charms": [
+            "FragileHeart"
+        ],
+        "curCharms": [
+            "FragileHeart"
+        ],
+        "lb4": {
+            "name": "SoothingTune",
+            "class": "heal",
+            "pow": 9999,
+            "cost": 450,
+            "status": "none",
+            "statuschance": 0
+        },
+        "mainElement": "heal",
+        "mpMeter": [
+            "PsychicEnergy",
+            "PSY"
+        ],
+        "armor": {},
+        "nickname": "Sweet",
+        "teamCombo": {
+            "Sky": "FlyingColors",
+            "Flara": "ChargedBlizzard",
+            "Lanagu": "DarknessRise",
+            "Ira": "PsychicDestruction"
+        },
+        "stats": {
+            "atk": 3,
+            "mag": 15,
+            "prc": 7,
+            "end": 8,
+            "chr": 13,
+            "int": 9,
+            "agl": 8,
+            "luk": 13
+        },
+        "basestats": {
+            "baseatk": 1,
+            "basemag": 9,
+            "baseprc": 5,
+            "baseend": 5,
+            "basechr": 7,
+            "baseint": 6,
+            "baseagl": 5,
+            "baseluk": 7
+        },
+        "affinities": {
+            "weak": [
+                "gravity"
+            ],
+            "resist": [
+                "ice"
+            ],
+            "block": [],
+            "repel": [],
+            "drain": [
+                "spirit"
+            ]
+        },
+        "autolearn": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true,
+            "7": true,
+            "8": true,
+            "9": true,
+            "10": true,
+            "11": true
+        },
+        "quotes": {
+            "meleequote": [
+                "Sorry, but I must do this.",
+                "Let's do this.",
+                "Encountering us was a mistake.",
+                "You dare challenge this group?",
+                "Here I come...!"
+            ],
+            "physquote": [
+                "Here I come...!",
+                "I absolutely must... hey... wait... what is this script?",
+                "Let's try %SKILL%..."
+            ],
+            "magquote": [
+                "Let's try %SKILL%...",
+                "Here... goes nothing!",
+                "Here I come!",
+                "Take this! %SKILL%!",
+                "Here comes my %SKILL%!",
+                "%SKILL%...!"
+            ],
+            "allyatkquote": [
+                "%ALLY%, can I assist you?",
+                "%ALLY%, let's strike together.",
+                "We can do more if we do it together, %ALLY%!"
+            ],
+            "lbquote": [],
+            "strongquote": [
+                "Did I do that...?",
+                "How convenient.",
+                "Taake this!",
+                "Maybe this'll stop you from attacking."
+            ],
+            "missquote": [
+                "Stand still... will you...?",
+                "Y-You saw n-nothing..."
+            ],
+            "weakquote": [
+                "Look away, LOOK AWAY!",
+                "H-Hey, I h-have friends to protect!",
+                "aaaaAAAAAAAAAAA!!",
+                "T-This isn't the end...",
+                "H-Hey! Watch the dress!"
+            ],
+            "hurtquote": [],
+            "resistquote": [
+                "Almost cold.",
+                "How n**ice** of you! {I'm going to hate myself for this...}",
+                "Uhm... ”Brrrr“...?",
+                "I've... never been given a Christmas present before... thank you..."
+            ],
+            "blockquote": [],
+            "repelquote": [
+                "Sending this right back at you!",
+                "UwU"
+            ],
+            "drainquote": [
+                "I've... never been given a Christmas present before... thank you..."
+            ],
+            "dodgequote": [
+                "Uhm... I think you missed...",
+                "I guess I'll pass on death.",
+                "I'm so slow... You're just terrible at aiming...",
+                "I was expecting to get hit as I always do... maybe you're blind...?",
+                "B-But I didn't move... I'm concerned.",
+                "As one of the slowest here... Shame on you.",
+                "Almost... almost.",
+                "Your target is a grey Tanuki...",
+                "Dodging!",
+                "Predictable!",
+                "You're targetting my fur, aren't you.",
+                "Maybe next time.",
+                "Not today.",
+                "If you keep trying...",
+                "If you want... I can help check your eyesight...",
+                "Come on, I stick out like a sore thumb!",
+                "Do you... need assistance...?",
+                "I can give you a map with directions to the closest place you can get your eyesight checked... wait..."
+            ],
+            "killquote": [
+                "Teamwork!"
+            ],
+            "allydeathquote": [
+                "%ALLY%...",
+                "%ALLY%...! Nooo!",
+                "%ALLY%! %ENEMY% will pay for this...",
+                "It seems",
+                "I... failed...",
+                "%ALLY%..."
+            ],
+            "healquote": [
+                "Tough Spot?",
+                "Allow me to help!",
+                "No dying now.",
+                "We've come too far to lose.",
+                "I won't let you get hurt like this.",
+                "Those... monsters! We must prevail!",
+                "As long as I'm here, there's no harming us."
+            ],
+            "helpedquote": [
+                "You're the best!",
+                "That was close...",
+                "Much obliged.",
+                "[👍]"
+            ],
+            "consolequote": [
+                "%ALLY%... are you okay...?",
+                "%ALLY%...?",
+                "You're fine... right, %ALLY%?"
+            ],
+            "imfinequote": [
+                "It's fine... thank you, %ALLY%.",
+                "Thank you for checking, %ALLY%, but I'm okay.",
+                "%ALLY%... it was... quite a hit..."
+            ],
+            "lvlquote": [
+                "This rush of power..."
+            ]
+        },
+        "leaderskill": {
+            "name": "Perseverence",
+            "type": "buff",
+            "var1": "mag",
+            "var2": 1
+        },
+        "lb": {
+            "1": {
+                "name": "Restoring Light",
+                "class": "heal",
+                "pow": 200,
+                "cost": 100,
+                "status": "none",
+                "statuschance": 0
+            },
+            "2": {
+                "name": "Song Of Healing",
+                "class": "heal",
+                "pow": 300,
+                "cost": 200,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "Revitalizing Melody",
+                "class": "heal",
+                "pow": 400,
+                "cost": 300,
+                "status": "none",
+                "statuschance": 0
+            }
+        },
+        "teamcombos": {
+            "Sutela": {
+                "name": "Spirits Aligned",
+                "users": [
+                    "Valoria",
+                    "Sutela"
+                ],
+                "desc": "Valoria and Sutela strike the foe's very soul together, knocking it out of the foe's body and back, which sends them for a dizzying ride! This attack also places down a healing aura that restores 80% of allies' HP who attack them.",
+                "extras": {
+                    "healverse": [
+                        80,
+                        3,
+                        null
+                    ]
+                }
+            }
+        },
+        "weapons": {
+            "RoyalRapier": {
+                "name": "Royal Rapier",
+                "cost": 6955,
+                "element": "pierce",
+                "desc": "A shining rapier passed down the Cosmarian royal family. Younger ones who were part of the royal family were to be skilled in rapier usage just in case the worst happened.",
+                "originalAuthor": "516359709779820544",
+                "skill": "Pralaya",
+                "melee": "300",
+                "atk": "12"
+            }
+        },
+        "armors": {},
+        "weaponclass": [
+            "staff",
+            "pierce"
+        ],
+        "armorclass": "light",
+        "curweapon": {
+            "name": "Flame Spear",
+            "class": "pierce",
+            "cost": 1500,
+            "element": "fire",
+            "desc": "A basic spear infused with an <:physical:973077052129423411>Agi Gem.",
+            "originalAuthor": "516359709779820544",
+            "skill": "Agi",
+            "melee": 70,
+            "atk": 2,
+            "mag": 2
+        },
+        "statusaffinities": {
+            "resist": [
+                "ego"
+            ],
+            "weak": [
+                "burn"
+            ]
+        }
     }
 }
