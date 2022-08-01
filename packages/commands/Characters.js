@@ -1327,7 +1327,8 @@ commands.forgetskill = new Command({
 		{
 			name: "Skill Name",
 			type: "Word",
-			forced: true
+			forced: true,
+			multiple: true
 		}
 	],
 	checkban: true,
@@ -1336,25 +1337,29 @@ commands.forgetskill = new Command({
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
-		let thingDefs = ''
 	
-		if (charFile[args[0]]) {
-			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
-			thingDefs = charFile;
-		} else if (enemyFile[args[0]]) {
-			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to remove a skill for ${args[0]}.`);
-			thingDefs = enemyFile;
-		} else return message.channel.send(`${args[0]} doesn't exist!`);
+		const name = args[0]
+		let thingdef
+
+		if (charFile[name]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[name].owner != message.author.id) return message.channel.send(`${name} does not belong to you!`);
+			thingdef = charFile[name];
+		} else if (enemyFile[name]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to remove a skill for ${name}.`);
+			thingdef = enemyFile[name];
+		} else return message.channel.send(`${name} doesn't exist!`);
 
 		// Do we know the skill
-		if (!knowsSkill(thingDefs[args[0]], args[1])) return message.channel.send(`${thingDefs[args[0]].name} doesn't know ${args[1]}!`);
-
-		// Let's kill it!
-		let num = knowsSkill(thingDefs[args[0]], args[1])
-		thingDefs[args[0]].skills.splice(num, 1)
+		args.shift()
+		for (const skill of args) {
+			if (!knowsSkill(thingdef, skill))
+				return void message.channel.send(`${thingdef.name} doesn't know ${skill}!`)
+			const num = knowsSkill(thingdef, skill)
+			thingdef.skills.splice(num, 1)
+		}
 
 		message.react('👍');
-		if (thingDefs[args[0]].type) {
+		if (thingdef.type) {
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
 		} else {
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
