@@ -1224,6 +1224,7 @@ client.on("messageCreate", (message) => {
 
 //last ditch things
 makeDirectory(`${dataPath}/userdata`)
+makeDirectory(`${dataPath}/error`);
 
 // Token Check
 console.log(`${process.env.TOKEN} is the token!`);
