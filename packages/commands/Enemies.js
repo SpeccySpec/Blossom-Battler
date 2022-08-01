@@ -99,7 +99,8 @@ commands.registerenemy = new Command({
 			message.channel.send(`${args[0]} already exists, so I'll overwrite them for you.`);
 		}
 
-		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements) || args[1].toLowerCase() == "almighty") return message.channel.send(`${args[1]} is not a valid main element that an enemy can have.`);
+		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements)) return message.channel.send({content: 'Please enter a valid element for **Main Element!**', embeds: [elementList()]});
+		if (args[1].toLowerCase() === 'passive') return message.channel.send('You cannot use the element "Passive" as a main element.');
 
 		//from arg 1 to arg 12, make sure they are above zero, and change them to 1 if it's the case
 		for (let i = 2; i < 14; i++) {

@@ -11,7 +11,7 @@ commands.registerchar = new Command({
 		{
 			name: "Main Element",
 			type: "Word",
-			forced: false
+			forced: true
 		},
 		{
 			name: "Base HP",
@@ -69,6 +69,12 @@ commands.registerchar = new Command({
 		let settings = setUpSettings(message.guild.id)
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
+		let enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		if (enmFile[args[0]]) {
+			message.channel.send(`${args[0]} already exists as an enemy. I'll add (Character) to the end of the name for you.`);
+			args[0] += '(Character)';
+		}
+
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (charFile[args[0]]) {
 			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) {
@@ -78,13 +84,8 @@ commands.registerchar = new Command({
 			}
 		}
 
-		let enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		if (enmFile[args[0]]) {
-			message.channel.send(`${enmFile[0]} already exists as an enemy. I'll add (Character) to the end of the name for you.`);
-			enmFile[0] += '(Character)';
-		}
-
 		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements)) return message.channel.send({content: 'Please enter a valid element for **Main Element!**', embeds: [elementList()]});
+		if (args[1].toLowerCase() === 'passive' || args[1].toLowerCase() === 'almighty') return message.channel.send('You cannot use **Passive** or **Almighty** as your main element.');
 
 		if ((args[2] + args[3]) > settings.caps.hpmpcap) return message.channel.send(`The maximum total points for HP and MP is 70! Currently, you have ${args[2]+args[3]}.`);
 
