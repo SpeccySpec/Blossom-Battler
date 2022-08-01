@@ -822,7 +822,7 @@ setUpUserData = (user) => {
 	return userdata
 }
 
-getBar = (type, value, maxvalue) => {
+getBar = (type, value, maxvalue, len) => {
 	let barType = barEmojis[type.toLowerCase()] ?? barEmojis.none;
 
 	let p = Math.floor((parseInt(value)/parseInt(maxvalue))*10);
@@ -831,10 +831,10 @@ getBar = (type, value, maxvalue) => {
 	if (p < 1) firstOne = barEmojis.none.left;
 
 	let lastOne = barType.right;
-	if (p < 10) lastOne = barEmojis.none.right;
+	if (p < (len ?? 10)) lastOne = barEmojis.none.right;
 
 	let middleOnes = '';
-	for (let i = 2; i < 9; i++) {
+	for (let i = 2; i < ((len ?? 10)-1); i++) {
 		middleOnes += (p >= i) ? barType.middle : barEmojis.none.middle;
 	}
 
