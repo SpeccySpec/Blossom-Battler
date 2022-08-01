@@ -1269,10 +1269,10 @@ saveError = (err) => {
 //a
 battleFiles = [];
 
-let error = fs.readFileSync('./data/error.txt', {flag: 'as+'});
+let error = fs.readFileSync('./data/error/battles.txt', {flag: 'as+'});
 if (error && error != '') battleFiles = JSON.parse(error);
 
-fs.unlink('./data/error.txt', (err) => {
+fs.unlink('./data/error/battles.txt', (err) => {
     if (err) throw err;
     console.log("Deleted the Error.txt and noticed it :)");
 });
