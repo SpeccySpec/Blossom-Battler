@@ -1627,10 +1627,13 @@ statusEffectFuncs = {
 	},
 
 	rage: {
-		onremove(btl, char) {
+		forceturns: 2,
+		onremove(char) {
 			killVar(char, 'forcemove');
 		},
 		turnoverride(btl, char) {
+			console.log(`${char.statusturns} rage turns left.`);
+
 			let randteam = randNum(btl.teams.length-1);
 			while (randteam == char.team) randteam = randNum(btl.teams.length-1);
 
