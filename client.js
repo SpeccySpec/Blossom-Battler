@@ -1236,12 +1236,35 @@ console.log(`The bot is now in session! Enjoy!`)
 
 // On an actual error, either due to my incompetence, others' errors or I suck.
 client.on('shardError', err => {
-	console.log("Let's write this down so we don't forget...");
-	if (battleFiles) {
-		if (battleFiles.length > 0) fs.writeFileSync('./data/error.txt', JSON.stringify(battleFiles, null, '    '));
-		console.log('Written in "./data/error.txt".');
-	}
+	saveError(err);
 });
+
+process.on('unhandledRejection', err => {
+	saveError(err);
+});
+
+process.on('uncaughtException', err => {
+	saveError(err);
+});
+
+saveError = (err) => {
+	console.log(`Uh oh... We got an error. Logging now.\n\n${err.stack}`);
+	let errorText = `${err.stack}`;
+	//don't render it on one line
+	errorText = errorText.split('\n').join('\n');
+
+	let date = new Date();
+	let dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}_${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}`;
+
+	fs.writeFileSync(`./data/error/${dateString}.txt`, errorText);
+
+	if (battleFiles) {
+		if (battleFiles.length > 0) {
+			fs.writeFileSync('./data/error/battles.txt', JSON.stringify(battleFiles, null, '    '));
+			console.log('Written backup of battles');
+		}
+	}
+}
 
 //a
 battleFiles = [];
