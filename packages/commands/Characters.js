@@ -1156,7 +1156,8 @@ commands.setmelee = new Command({
 			}
 
 			thingDefs[args[0]].melee.status = args[6].toLowerCase();
-			if (isFinite(args[7]) && args[7] < 100) thingDefs[args[0]].melee.statuschance = args[7];
+			statusChance = args[7] ?? 1;
+			if (!isNaN(args[7]) && parseInt(args[7]) > 0) thingDefs[args[0]].melee.statuschance = Math.max(Math.min(parseInt(args[7]), 100), 1);
 		}
 
 		// Display Message

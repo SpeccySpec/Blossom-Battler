@@ -1186,6 +1186,8 @@ client.on("messageCreate", (message) => {
 	prefix = getPrefix(message.guild.id)
 	if (!message.content.toLowerCase().startsWith(prefix)) return;
 
+	message.content = message.content.replace(/“/g, '"').replace(/”/g, '"') // iOS quotation marks 
+
 	let args = [...message.content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
 	if (args.length == 0) return;
 	
