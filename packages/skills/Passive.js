@@ -36,7 +36,7 @@ passiveList = {
 		},
 		statmod(btl, char, skill, vars) {
 			if ((typeof(skill.type) === 'object' && skill.type.includes(vars[0])) || (typeof(skill.type) === 'string' && skill.type == vars[0])) {
-				skill.pow *= vars[1]/100;
+				skill.pow *= (vars[1]/100) + 1;
 			}
 		},
 		getinfo(vars, skill) {
@@ -99,7 +99,7 @@ passiveList = {
 		},
 		statmod(btl, char, skill, vars) {
 			if (char.custom?.angry) {
-				skill.pow *= vars[0]/100;
+				skill.pow *= (vars[0]/100) + 1;
 			} else {
 				skill.pow *= 1-(100-vars[0])/100;
 			}
@@ -1092,7 +1092,7 @@ passiveList = {
 			return true
 		},
 		statmod(btl, char, skill, vars) {
-			if (skill.extras?.sacrifice) skill.pow *= vars[0]/100;
+			if (skill.extras?.sacrifice) skill.pow *= (vars[0]/100) + 1;
 		},
 		getinfo(vars, skill) {
 			return `Boosts the power of sacrifice skills by **${vars[0]}%**`
