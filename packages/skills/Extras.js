@@ -453,7 +453,7 @@ extrasList = {
 		},
 		buffChange(targ, skill, btl, vars) {
 			const stat = vars[1] ?? 'atk';
-			const amount = !isNaN(vars[2]) ? vars[2] ? 1;
+			const amount = !isNaN(vars[2]) ? vars[2] : 1;
 			const absamount = Math.abs(amount);
 			const chance = vars[3] ?? 100;
 			const turns = vars[4];
