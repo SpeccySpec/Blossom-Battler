@@ -18,7 +18,11 @@
         },
         "xp": 1273706,
         "maxxp": 1179,
-        "skills": [],
+        "skills": [
+            "Atma",
+            "Dia",
+            "CuringAura"
+        ],
         "deathquote": [],
         "weapon": {},
         "bio": {
@@ -11838,7 +11842,6 @@
         "xp": -94116113,
         "maxxp": 22883377,
         "skills": [
-            "KiBlast[2]",
             "BuiltDifferent",
             "God'sHand",
             "ReturnToSender",
@@ -11972,10 +11975,7 @@
         "xp": 923899,
         "maxxp": 7572,
         "skills": [
-            "DeepStab",
-            "SliceAway",
-            "XSlash",
-            "DarkBeam"
+            "ThinStab"
         ],
         "critquote": [],
         "deathquote": [],
@@ -12140,7 +12140,18 @@
             "pierce",
             "ranged"
         ],
-        "armorclass": "light"
+        "armorclass": "light",
+        "statusaffinities": {
+            "block": [
+                "bleed"
+            ],
+            "weak": [
+                "burn"
+            ],
+            "resist": [
+                "rage"
+            ]
+        }
     },
     "Viridian": {
         "name": "Viridian",

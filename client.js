@@ -1188,6 +1188,10 @@ client.on("messageCreate", (message) => {
 
 	let args = [...message.content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
 	if (args.length == 0) return;
+	
+	for (let i in args) {
+		if (args[i] === "undefined") return void message.channel.send("Don't even try it.");
+	}
 
 	let command = commands[args[0].toLowerCase()];
 	
