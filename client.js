@@ -670,8 +670,8 @@ setUpFile = (file, force) => {
 	let fileRead = fs.readFileSync(file, {flag: 'as+'});
 
 	if (!fileRead || fileRead == "" || fileRead == " ") {
-		fileRead = "{}"
-		fs.writeFileSync(file, fileRead);
+		fs.writeFileSync(file, "{}");
+		return {};
 	}
 
 	let fileFile = JSON.parse(fileRead);
