@@ -1046,6 +1046,9 @@ useSkill = (char, btl, act, forceskill, ally) => {
 			skill.pow += skill.pow * (party.leaderskill.var2 / 100);
 		}
 	}
+	
+	// Double melee power when inflicted with rage.
+	if (skill.melee && char.status && char.status === 'rage') skill.pow *= 2;
 
 	// Final Text
 	let quotetype = 'phys';
