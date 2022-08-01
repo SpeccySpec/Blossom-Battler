@@ -9952,9 +9952,14 @@
         "affinities": {
             "weak": [],
             "resist": [],
-            "block": [],
+            "block": [
+                "wind"
+            ],
             "repel": [],
-            "drain": []
+            "drain": [],
+            "superweak": [
+                "water"
+            ]
         },
         "autolearn": {
             "true": true
@@ -25058,7 +25063,9 @@
             "Eagle Kick",
             "Sonic Wind",
             "WindAura",
-            "Ring Gather"
+            "Ring Gather",
+            "Peelout",
+            "QuickReflexes"
         ],
         "autolearn": [],
         "quotes": {

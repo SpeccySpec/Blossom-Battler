@@ -1393,7 +1393,10 @@ doTurn = async(btl, noTurnEmbed) => {
 		}
 	}
 
-	let stackable = ['confusion', 'infatuation'];
+	let stackable = [];
+	for (let i in statusEffectFuncs) {
+		if (statusEffectFuncs[i].stackable) stackable.push(i);
+	}
 
 	for (let i in stackable) {
 		if (char[stackable[i]] && statusEffectFuncs[stackable[i]] && statusEffectFuncs[stackable[i]].onturn) {
