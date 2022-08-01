@@ -1289,6 +1289,11 @@ useSkill = (char, btl, act, forceskill, ally) => {
 						noassistance: true
 					}
 
+					if (char2.melee.status) {
+						meleeAtk.status = char2.melee.status;
+						meleeAtk.statuschance = char2.melee.statuschance;
+					}
+
 					finalText += `\n${char2.name} wants to assist in attacking!\n`;
 					let result = attackWithSkill(char2, targ, meleeAtk, btl);
 					finalText += `${result.txt}\n`;

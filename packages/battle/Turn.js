@@ -1138,6 +1138,11 @@ doAction = (char, btl, action) => {
 				melee: true
 			}
 
+			if (char.melee.status) {
+				meleeAtk.status = char.melee.status;
+				meleeAtk.statuschance = char.melee.statuschance;
+			}
+
 			useSkill(char, btl, action, meleeAtk);
 			break;
 
