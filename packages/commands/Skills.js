@@ -1849,7 +1849,15 @@ commands.listskills = new Command({
 				}
 			}
 
-			array.push({title: `${elementEmoji[skillFile[i].type]}${skillFile[i].name} (${i})`, desc: descTxt});
+			let element = ''
+			if (typeof skillFile[i].type == 'string') {
+				element += elementEmoji[skillFile[i].type]
+			} else {
+				for (const j in skillFile[i].type) {
+					element += elementEmoji[skillFile[i].type[j]]
+				}
+			}
+			array.push({title: `${element} ${skillFile[i].name} (${i})`, desc: descTxt});
 		}
 
 		if (array.length < 1) return message.channel.send('No skills found!');
@@ -1889,7 +1897,15 @@ commands.searchskills = new Command({
 					}
 				}
 
-				array.push({title: `${elementEmoji[skillFile[i].type]}${skillFile[i].name} (${i})`, desc: descTxt});
+				let element = ''
+				if (typeof skillFile[i].type == 'string') {
+					element += elementEmoji[skillFile[i].type]
+				} else {
+					for (const j in skillFile[i].type) {
+						element += elementEmoji[skillFile[i].type[j]]
+					}
+				}
+				array.push({title: `${element} ${skillFile[i].name} (${i})`, desc: descTxt});
 			}
 		}
 
