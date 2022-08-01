@@ -249,6 +249,49 @@ commands.help = new Command({
 	}
 })
 
+commands.searchcommands = new Command({
+	desc: "Searches for commands based on a given word.",
+	section: "misc",
+	aliases: ["searchcommand"],
+	args: [
+		{
+			name: "Word",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: async (message, args) => {
+		let commandsList = []
+		for (let command in commands) {
+			if (command.toLowerCase().includes(args[0].toLowerCase())) {
+				commandsList.push([`${getPrefix(message.guild.id)}${command}`, commands[command].section, commands[command].getFullDesc()])
+			}
+		}
+
+		if (commandsList.length < 1) {
+			return message.channel.send("No commands found.")
+		}
+
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle('List of Commands')
+
+		if (commandsList.length > 12) {
+			let commandsByCategory = {}
+			for (let command of commandsList) {
+				if (!commandsByCategory[command[1]]) commandsByCategory[command[1]] = []
+				commandsByCategory[command[1]].push([command[0], command[2]])
+			}
+			return sendHelp(message, commandsByCategory)
+		} else {
+			for (let i = 0; i < commandsList.length; i++) {
+				DiscordEmbed.addField(commandsList[i][0], commandsList[i][2], true)
+			}
+		}
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
 let inviteLink = 'https://discord.com/oauth2/authorize?client_id=776480348757557308&scope=bot&permissions=319441726528'
 
 commands.invite = new Command({
