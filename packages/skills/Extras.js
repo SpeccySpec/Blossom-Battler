@@ -1417,7 +1417,7 @@ extrasList = {
 		args: [
 			{
 				name: "Multiplier",
-				type: "Num",
+				type: "Decimal",
 				forced: true
 			},
 			{
@@ -1428,16 +1428,9 @@ extrasList = {
 			}
 		],
 		applyfunc(message, skill, args) {
-			let statusses;
-			try {
-				statuses = args.map(status => {
-					status = status.toLowerCase();
-					if (!statusEffects.includes(status)) throw void message.channel.send(`The status ${status} does not exist!`);
-					return status;
-				})
-			} catch {
-				return false;
-			}
+			let statusses = args.slice(1);
+			statusses.filter(status => statusEffects.includes(status));
+			if (statusses.length == 0) return void message.channel.send("You didn't specify any valid statuses!");
 
 			makeExtra(skill, "guts", [args[0], ...statusses]);
 			return true;
@@ -1448,6 +1441,7 @@ extrasList = {
 		},
 		getinfo(vars, skill) { //SOMEONE HAS TO TEST IF THIS WORKS PROPERLY
 			let txt = `**${vars[0]}x** power boost when inflicted with `;
+			vars.shift();
 			for (const i in vars) {
 				txt += `**${statusEmojis[vars[i]]}${vars[i]}**`
 				if (i == vars.length-2)
@@ -1579,15 +1573,23 @@ function makeExtra(skill, extra, func) {
 
 	if (extrasList[extra].multiple) {
 /*
-		if (extrasList[extra].diffflag) {
-			for (i in skill.extras[extra]) {
-				if (typeof skill.extras[extra][i] == "number") {
+		if (extrasList[extra].diffflag) { //if there is a diffflag
+			for (i in skill.extras[extra]) { //check through every element of an extra
+				if (typeof skill.extras[extra][i] == "number") { //if the diffflag is not an array
+
+					//so let's say the diffflag is 0 and the arrays are: [1, lmao] and [1, wow]. New one is latter. 
+					//If the element of the first array with the index of 0 matches with the index 0 of latter, replace the former array with the new one.
 					if (skill.extras[extra][i][extrasList[extra].diffflag] === func[extrasList[extra].diffflag]) {
 						skill.extras[extra][i] = func;
 						return true;
 					}
-				} else {
+				} else { //this is for if it's an array
 					let alltrue = true;
+
+					//this one is similar to the above, but it checks if all the elements the diffflag considers.
+					//So let's say the difflag is [0, 1] and the arrays are [1, lmao, 2] and [1, wow, 2]. New one is latter.
+					//It will compare all the elements the difflag considers, so 1 and lmao/wow.
+					//If all the elements match eith each other, then it will replace the former array with the new one.
 					for (j in extrasList[extra].diffflag) {
 						if (skill.extras[extra][i][extrasList[extra].diffflag[j]] !== func[extrasList[extra].diffflag[j]]) {
 							alltrue = false;
@@ -1600,7 +1602,7 @@ function makeExtra(skill, extra, func) {
 					}
 				}
 			}
-		}
+		} //If these fail, push the new one onto the array instead.
 */
 		skill.extras[extra].push(func);
 	} else {

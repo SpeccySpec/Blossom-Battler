@@ -68728,5 +68728,25 @@
         "status": "blind",
         "statuschance": 1,
         "desc": "A stronger form of <:curse:962465467283415040> Detil, but very little chance for statuses."
+    },
+    "test": {
+        "name": "test",
+        "type": "fire",
+        "atktype": "magic",
+        "pow": 1,
+        "hits": 1,
+        "acc": 100,
+        "cost": 1,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "441198920668938260",
+        "extras": {
+            "guts": [
+                1.1,
+                "burn",
+                "paralyze",
+                "poison"
+            ]
+        }
     }
 }

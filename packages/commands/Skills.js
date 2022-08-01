@@ -1893,6 +1893,8 @@ commands.searchskills = new Command({
 			}
 		}
 
+		if (array.length < 1) return message.channel.send('No skills found!');
+
 		listArray(message.channel, array, message.author.id);
 	}
 })
