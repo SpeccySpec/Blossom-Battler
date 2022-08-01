@@ -579,7 +579,7 @@ extrasList = {
 
 				curPB = powBuffs[i]
 
-				txt += ` by **${curPB[2] ? 'up to' : ''} ${curPB[1] + (curPB[2] ? 100 : 0) }${curPB[3] ? '% of' : ''} power**`
+				txt += ` by **${curPB[2] ? 'up to' : ''} ${curPB[1] + ((curPB[2] && curPB[3]) ? 100 : 0) }${curPB[3] ? '% of' : ''} power**`
 
 				if (i < powBuffs.length - 2) {
 					txt += `, `

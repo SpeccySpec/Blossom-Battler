@@ -1,98 +1,24 @@
 buffText = (buffArray) => {
-	let finalText = '';
-
-	buffArray.sort((a, b) => {
-		return (((a[0] == 'target' ? 2000000 : 1000000) + (100000 * (stats.indexOf(a[1]) + 1)) + [100 - a[3]]) - ((b[0] == 'target' ? 2000000 : 1000000) + (100000 * (stats.indexOf(b[1]) + 1)) + [100 - b[3]]))
-	})
-
-	let uhh = 0
-
-	while (uhh <= 3) {
-		for (i in buffArray) {
-			if (i > 0 && buffArray[i][0] == buffArray[i - 1][0] && buffArray[i][1] == buffArray[i - 1][1] && buffArray[i][3] == buffArray[i - 1][3]) {
-				buffArray[i - 1][2] += buffArray[i][2]
-				buffArray.splice(i, 1)
-			}
-		}
-		uhh++
+	let finaltext = ""
+	let i = 0
+	for (const buff of buffArray) {
+		i++
+		const target = buff[0]
+		const stat = buff[1]
+		const stages = buff[2]
+		const chance = buff[3]
+		const turns = buff[4]
+		const start = chance < 100 ? `Has a **${chance}%** chance to` : "Will"
+		const type = stages < 0 ? "debuff" : "buff"
+		const stats = typeof stat == "object"
+			? stat.map(stat => stat.toUpperCase()).join(" and ")
+			: stat.toUpperCase()
+		const stagestext = stages == 1 ? "" : ` by **${stages}** stages`
+		const turnstext = turns ? ` for **${turns}** turns` : ""
+		const end = i < buffArray.length ? ".\n" : ""
+		finaltext += `${start} ${type} the **${target}'s ${stats}**${stagestext}${turnstext}${end}`
 	}
-
-	buffArray.sort((a, b) => {
-		return (((a[0] == 'target' ? 2000000 : 1000000) + (100 * a[2] < 0 ? (a[2] * -0.2) : a[2]) + [10000 - a[3]]) - ((b[0] == 'target' ? 2000000 : 1000000) + (100 * b[2] < 0 ? (b[2] * -0.2) : b[2]) + [10000 - b[3]]))
-	})
-
-	for (i in buffArray) {
-		buffArray[i][1] = [buffArray[i][1]]
-	}
-
-	uhh = 0
-	while (uhh <= 3) {
-		for (i in buffArray) {
-			if (i > 0 && buffArray[i][0] == buffArray[i - 1][0] && buffArray[i][2] == buffArray[i - 1][2] && buffArray[i][3] == buffArray[i - 1][3]) {
-				buffArray[i - 1][1].push(...buffArray[i][1])
-				buffArray.splice(i, 1)
-			}
-		}
-
-		uhh++
-	}
-
-	buffArray.sort((a, b) => {
-		return (((a[0] == 'target' ? 2000000 : 1000000) + (100000 * (stats.indexOf(a[1]) + 1)) + [100 - a[3]]) - ((b[0] == 'target' ? 2000000 : 1000000) + (100000 * (stats.indexOf(b[1]) + 1)) + [100 - b[3]]))
-	})
-
-	let curBuff = []
-	let oldBuff = []
-
-	for (i in buffArray) {
-		curBuff = buffArray[i]
-
-		if (oldBuff == []) {
-			if (curBuff[3] != 100) finalText += `Has`
-		}
-
-		if (oldBuff == [] || curBuff[3] != oldBuff[3]) {
-			if (curBuff[3] != 100) { 
-				finalText += `${i == 0 ? '' : 'Has'} a **${curBuff[3]}%** chance to ${curBuff[2] > 0 ? 'buff' : 'debuff'} `
-			} else {
-				if (curBuff[2] > 0)
-					if (i == 0) finalText += `Buffs `
-					else finalText += ` buffs `
-				else
-					if (i == 0) finalText += `Debuffs `
-					else finalText += ` debuffs `
-			}
-		}
-
-		if (oldBuff == [] || curBuff[0] != oldBuff[0])
-			finalText += ` ${curBuff[0] == 'target' ? "**the target's** " : "**the user's** "}`
-
-		for (j in curBuff[1]) {
-			if (typeof(curBuff[1][j]) === 'object') curBuff[1][j] = curBuff[1][j][0];
-
-			finalText += `**${curBuff[1][j].toUpperCase()}**`
-
-			if (j < curBuff[1].length - 2) {
-				finalText += `, `
-			} else if (j == curBuff[1].length - 2) {
-				finalText += ` and `
-			}
-		}
-
-		if (curBuff[2] != oldBuff[2] || oldBuff == []) {
-			finalText += ` by **${Math.abs(curBuff[2])}** stage${Math.abs(curBuff[2]) <= 1 ? '' : 's'}`
-
-			if (i < buffArray.filter(x => x[3] == curBuff[3]).length - 2) {
-				finalText += `, `
-			} else if (i == buffArray.filter(x => x[3] == curBuff[3]).length - 2) {
-				finalText += ` and `
-			}
-		}
-
-		oldBuff = curBuff
-	}
-
-	return finalText
+	return finaltext
 }
 
 require("./skills/Extras")

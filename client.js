@@ -1214,7 +1214,8 @@ client.on("messageCreate", (message) => {
 		similarities.sort((a, b) => b.similarity - a.similarity)
 		similarities = similarities.slice(0, 3)
 
-		return similarityButtonCollector(message, similarities, args)
+		if (similarities.length > 0) return similarityButtonCollector(message, similarities, args)
+		else return
 	} else {
 		args.shift();
 		command.call(message, args);
