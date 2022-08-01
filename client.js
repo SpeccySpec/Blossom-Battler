@@ -1202,17 +1202,13 @@ client.on("messageCreate", (message) => {
 				return commands[i].call(message, args);
 			}
 
-			if (similarityPercent >= 0.4) similarities.push({command: i, similarity: similarityPercent})
+			if (similarityPercent >= 0.6) similarities.push({command: i, similarity: similarityPercent})
 		}
 		//order based on highest to lowest similarity and then leave only the top 5
 		similarities.sort((a, b) => b.similarity - a.similarity)
 		similarities = similarities.slice(0, 3)
 
-		if (similarities.length == 1) {
-			args.shift();
-			return commands[similarities[0].command].call(message, args);
-		}
-		if (similarities.length > 1) return similarityButtonCollector(message, similarities, args)
+		return similarityButtonCollector(message, similarities, args)
 	} else {
 		args.shift();
 		command.call(message, args);
@@ -1289,7 +1285,7 @@ async function similarityButtonCollector(message, similarities, args) {
 		let similarity = similarities[i]
 		buttons.push( makeButton(similarity.command.charAt(0).toUpperCase() + similarity.command.slice(1), null, "green", null, null) )
 	}
-	buttons.push( makeButton("Neither", "✖️", "red", null, null) )
+	buttons.push( makeButton("None", "✖️", "red", null, null) )
 	
 	let embedMessage = await message.channel.send({
 		embeds: [DiscordEmbed],
@@ -1301,7 +1297,7 @@ async function similarityButtonCollector(message, similarities, args) {
 	})
 
 	collector.on('collect', async interaction => {
-		if (interaction.component.customId == 'neither') {
+		if (interaction.component.customId == 'none') {
 			embedMessage.delete();
 			return collector.stop()
 		}
