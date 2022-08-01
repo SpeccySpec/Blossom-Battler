@@ -384,7 +384,9 @@
             "repel": [],
             "drain": []
         },
-        "skills": [],
+        "skills": [
+            "TornadoStrike2"
+        ],
         "autolearn": [],
         "quotes": {
             "meleequote": [

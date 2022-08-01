@@ -42182,10 +42182,10 @@
     "ThatOneMove": {
         "name": "ThatOneMove",
         "costtype": "hp",
-        "pow": 0,
+        "pow": " ",
         "acc": 200,
         "crit": -87,
-        "hits": 3,
+        "hits": " ",
         "type": "fire",
         "status": "mirror",
         "statuschance": 100,
@@ -42228,6 +42228,9 @@
                     "weak",
                     null
                 ]
+            ],
+            "drain": [
+                null
             ]
         },
         "levellock": 84
@@ -62479,11 +62482,14 @@
         "powpkmn": 100,
         "heal": {
             "healstat": [
-                100,
-                "hp"
+                [
+                    100,
+                    "hp"
+                ]
             ]
         },
-        "levellock": 10
+        "levellock": 10,
+        "done": true
     },
     "Diara": {
         "name": "Diara",
@@ -62497,10 +62503,13 @@
         "powpkmn": 100,
         "heal": {
             "healstat": [
-                100,
-                "hp"
+                [
+                    100,
+                    "hp"
+                ]
             ]
         },
+        "done": true,
         "levellock": 10
     },
     "SoulConversion": {
@@ -69862,7 +69871,7 @@
         "desc": "none"
     },
     "BrokenDebilitizer": {
-        "name": "BrokenDebilitizer",
+        "name": "Debilitizer (Broken)",
         "type": "status",
         "cost": 15,
         "costtype": "hppercent",
@@ -69889,7 +69898,13 @@
             ]
         },
         "desc": "The user shoots an unstable debilitating beam, hopefully temporarily debuffing the foe's ATK and MAG.",
-        "done": true
+        "done": true,
+        "evoskills": [
+            [
+                "Debilitizer",
+                40
+            ]
+        ]
     },
     "CopySelf": {
         "name": "Copy Self",
@@ -69936,5 +69951,40 @@
         },
         "desc": "The user moves their legs in a circular pattern while being stationary, then they turn the potential energy gathered into kinetic energy.",
         "done": true
+    },
+    "Debilitizer": {
+        "name": "Debilitizer",
+        "type": "status",
+        "cost": 30,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "621307633718132746",
+        "statusses": {
+            "buff": [
+                [
+                    "target",
+                    "atk",
+                    -1,
+                    100,
+                    null
+                ],
+                [
+                    "target",
+                    "mag",
+                    -1,
+                    100,
+                    null
+                ]
+            ]
+        },
+        "desc": "The user shoots a debilitating beam, debuffing the foe's ATK and MAG.",
+        "done": true,
+        "levellock": 40,
+        "preskills": [
+            [
+                "BrokenDebilitizer",
+                39
+            ]
+        ]
     }
 }

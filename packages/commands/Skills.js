@@ -1183,7 +1183,7 @@ commands.editskill = new Command({
 				case 'pow':
 				case 'power':
 				case 'strength':
-					if (isNaN(args[2])) return message.channel.send(`${args[2]} is not a number!`);
+					if (isNaN(args[2]) || typeof(args[2]) != 'number') return message.channel.send(`${args[2]} is not a number!`);
 					totalDmg = args[2]*skillFile[args[0]].hits;
 					if (totalDmg > 2000) return message.channel.send(`The Power cap for skills is 2000! A skill of ${skillFile[args[0]].hits} hits can have a maximum of ${2000/skillFile[args[0]].hits} power!`);
 					if (args[2] < 0) return message.channel.send('Skills cannot go below 0 power.');
@@ -1191,7 +1191,7 @@ commands.editskill = new Command({
 					skillFile[args[0]].pow = args[2];
 					break;
 				case 'hits':
-					if (isNaN(args[2])) return message.channel.send(`${args[2]} is not a number!`);
+					if (isNaN(args[2]) || typeof(args[2]) != 'number') return message.channel.send(`${args[2]} is not a number!`);
 					totalDmg = skillFile[args[0]].pow*args[2];
 					if (totalDmg > 2000) return message.channel.send(`The Power cap for skills is 2000! A skill of ${skillFile[args[0]].hits} hits can have a maximum of ${2000/skillFile[args[0]].hits} power!`);
 					if (args[2] < 0) return message.channel.send('Skills cannot go below 0 power.');
