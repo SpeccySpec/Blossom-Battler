@@ -61591,7 +61591,8 @@
         "statuschance": 15,
         "powlamk": {},
         "powpkmn": {},
-        "levellock": 10
+        "levellock": 10,
+        "target": "one"
     },
     "FloweryScent": {
         "name": "FloweryScent",
@@ -69783,5 +69784,17 @@
                 "poison"
             ]
         }
+    },
+    "BrainwashTest": {
+        "name": "BrainwashTest",
+        "type": "status",
+        "cost": 1,
+        "costtype": "MP",
+        "target": "caster",
+        "originalAuthor": "441198920668938260",
+        "statusses": {},
+        "status": "brainwash",
+        "statuschance": "100",
+        "desc": "none"
     }
 }

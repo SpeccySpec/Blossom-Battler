@@ -21,11 +21,13 @@
             "MP"
         ],
         "melee": {
-            "name": "Just Watch",
-            "type": "pierce",
+            "name": "???",
+            "type": "strike",
             "pow": 0,
-            "acc": 0,
-            "crit": 0
+            "acc": 100,
+            "crit": 0,
+            "status": "confusion",
+            "statuschance": 100
         },
         "stats": {
             "atk": 5,
