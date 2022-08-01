@@ -43,7 +43,7 @@ healList = {
 						targ.hp = targ.maxhp;
 						return `__${targ.name}__'s HP was _fully restored_!`;
 					} else {
-						let amount = Math.round((targ.hp/targ.maxhp)*vars[0]);
+						let amount = Math.round((targ.maxhp/100)*vars[0]);
 
 						targ.hp = Math.min(targ.maxhp, targ.hp+amount);
 						return `__${targ.name}__'s HP was restored by **${amount}**!`;
@@ -54,7 +54,7 @@ healList = {
 						targ.mp = targ.maxmp;
 						return `__${targ.name}__'s MP was _fully restored_!`;
 					} else {
-						let amountm = Math.round((targ.mp/targ.maxmp)*vars[0]);
+						let amountm = Math.round((targ.maxmp/100)*vars[0]);
 
 						targ.mp = Math.min(targ.maxmp, targ.mp+amountm);
 						return `__${targ.name}__'s MP was restored by **${amountm}**!`;
