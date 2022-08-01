@@ -1627,19 +1627,22 @@ statusEffectFuncs = {
 	},
 
 	rage: {
-		turnoverride: function(btl, char) {
+		onremove(btl, char) {
+			killVar(char, 'forcemove');
+		},
+		turnoverride(btl, char) {
 			let randteam = randNum(btl.teams.length-1);
 			while (randteam == char.team) randteam = randNum(btl.teams.length-1);
 
 			let randchar = randNum(btl.teams[randteam].members.length-1);
+			while (btl.teams[randteam].members[randchar].hp <= 0) randchar = randNum(btl.teams[randteam].members.length-1);
 
 			let result = {
 				move: 'melee',
 				index: 0,
 				target: [randteam, randchar],
 			}
-
-			doAction(char, btl, result);
+			addCusVal(char, 'forcemove', [char.statusturns, result]);
 		}
 	},
 

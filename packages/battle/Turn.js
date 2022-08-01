@@ -1134,7 +1134,8 @@ doAction = (char, btl, action) => {
 				acc: Math.min(100, char.melee.acc),
 				crit: char.melee.crit,
 				atktype: atkType,
-				target: 'one'
+				target: 'one',
+				melee: true
 			}
 
 			useSkill(char, btl, action, meleeAtk);
@@ -1392,24 +1393,24 @@ doTurn = async(btl, noTurnEmbed) => {
 				if (!statusEff[1]) canMove = false;
 				statusTxt += statusEff[0]
 			}
-			
-			if (char.hp <= 0) {
-				canMove = false;
-				if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(char);
-				delete char.status;
-				delete char.statusturns;
-			} else {
-				char.statusturns--;
-				if (char.statusturns <= 0) {
-					if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(char);
-					delete char.status;
-					delete char.statusturns;
-				}
-			}
 
 			if (statusTxt != '') statusTxt += '\n';
 		} else if (statusEffectFuncs[char.status.toLowerCase()].turnoverride) {
 			if (!statusEffectFuncs[char.status.toLowerCase()].turnoverride(btl, char)) canMove = false;
+		}
+
+		if (char.hp <= 0) {
+			canMove = false;
+			if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(char);
+			delete char.status;
+			delete char.statusturns;
+		} else {
+			char.statusturns--;
+			if (char.statusturns <= 0) {
+				if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(char);
+				delete char.status;
+				delete char.statusturns;
+			}
 		}
 	}
 
