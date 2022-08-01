@@ -1672,7 +1672,6 @@ customVariables = {
 				}
 
 				useSkill(char, btl, vars[1], meleeAtk);
-				break;
 			} else {
 				if (vars[2])
 					useSkill(char, btl, vars[1], vars[2]);
