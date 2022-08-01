@@ -1235,7 +1235,7 @@ console.log(`The bot is now in session! Enjoy!`)
 // Lastly... resend all embeds if a battle errored out!
 
 // On an actual error, either due to my incompetence, others' errors or I suck.
-client.on('shardError', err => {
+process.on('shardError', err => {
 	saveError(err);
 });
 
