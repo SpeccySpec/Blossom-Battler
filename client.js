@@ -1026,8 +1026,8 @@ setTimeout(function() {
 }, midnightInMS());
 
 typeParsers = {
-	Num: ({arg}) => {return isNaN(arg) ? undefined : parseInt(arg)},
-	Decimal: ({arg}) => {return isNaN(arg) ? undefined : parseFloat(arg)},
+	Num: ({arg}) => {return (!isNaN(arg) && isFinite(parseInt(arg))) ? parseInt(arg) : undefined},
+	Decimal: ({arg}) => {return (!isNaN(arg) && isFinite(parseFloat(arg))) ? parseFloat(arg) : undefined},
 	YesNo: ({arg}) => {return (arg.toLowerCase() === 'yes' || arg.toLowerCase() === 'true' || arg.toLowerCase() === 'ok') ?? undefined},
 	Ping: ({message}) => {return message.mentions.users.first()},
 	Channel: ({message, arg}) => {return message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')) ? message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')).id : undefined},
