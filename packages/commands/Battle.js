@@ -330,13 +330,14 @@ commands.channeldata = new Command({
 
 commands.endbattle = new Command({
 	desc: "Manually ends a battle happening in this channel. No stat changes, xp or money is saved.",
-	admin: "You do not have permission to manually end the battle!",
 	section: "battle",
 	aliases: ["endfight"],
 	func: (message, args) => {
 		// Set up files
 		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
 		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
+
+		if (!utilityFuncs.isAdmin(message) && btl?.initiator != message.author.id) return message.channel.send("You don't have permission to end this battle!");
 
 		// Can't end a battle if it's not actually happening :/
 		if (!btl.battling) return message.channel.send("No battle is happening in this channel!");
@@ -1129,6 +1130,7 @@ commands.testbattle = new Command({
 			turnorder: [],
 			
 			testing: args[1],
+			initiator: message.author.id,
 
 //			weather: 'none',
 //			terrain: 'none',
