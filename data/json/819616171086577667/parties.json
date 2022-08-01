@@ -514,5 +514,19 @@
         "armors": {},
         "negotiates": {},
         "negotiateAllies": {}
+    },
+    "Anti-Sky": {
+        "name": "Anti-Sky",
+        "currency": 0,
+        "members": [
+            "Anti-Sky"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {},
+        "discoveries": {}
     }
 }

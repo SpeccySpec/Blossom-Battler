@@ -21,11 +21,13 @@
             "MP"
         ],
         "melee": {
-            "name": "Just Watch",
-            "type": "pierce",
+            "name": "Arcane Slash",
+            "type": "slash",
             "pow": 0,
-            "acc": 0,
-            "crit": 0
+            "acc": 100,
+            "crit": 0,
+            "status": "bleed",
+            "statuschance": 65
         },
         "stats": {
             "atk": 5,

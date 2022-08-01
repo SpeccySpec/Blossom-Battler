@@ -1578,6 +1578,7 @@ statusEffectFuncs = {
 	},
 
 	brainwash: {
+		forceturns: 2,
 		turnoverride: function(btl, char) {
 			let skill = char.skills[randNum(char.skills.length-1)];
 
@@ -1607,6 +1608,7 @@ statusEffectFuncs = {
 			skillDefs.target = targFlip[skillDefs.target];
 
 			useSkill(char, btl, result, skillDefs);
+			return false;
 		}
 	},
 
@@ -1650,10 +1652,12 @@ statusEffectFuncs = {
 	},
 
 	ego: {
+		forceturns: 3,
 		hardcoded: true
 	},
 
 	silence: {
+		forceturns: 2,
 		hardcoded: true
 	},
 
