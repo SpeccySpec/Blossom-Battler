@@ -252,15 +252,14 @@
     },
     "Wish": {
         "name": "Wish",
-        "currency": 0,
+        "currency": 202,
         "members": [
-            "Wish",
-            "Need"
+            "Wish"
         ],
         "backup": [],
-        "items": {},
-        "weapons": {},
-        "armors": {},
+        "items": {
+            "Sweet": 58
+        },
         "negotiates": {},
         "negotiateAllies": {}
     },
