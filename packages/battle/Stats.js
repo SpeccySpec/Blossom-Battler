@@ -76,17 +76,29 @@ buffStat = (f, stat, amount) => {
 	if (f.buffs[statBuff] < -3) f.buffs[statBuff] = -3;
 }
 
-inflictStatus = (char, status) => {
-	if (status === 'paralysis' || status === 'paralyse') status = 'paralyze';
+inflictStatus = (char, status, notxt) => {
+	if (!status) return '';
+	if (status.toLowerCase() === 'paralysis' || status.toLowerCase() === 'paralyse') status = 'paralyze';
+	if (!statusEffectFuncs[status.toLowerCase()]) return '';
 
-	if (hasStatusAffinity(char, status.toLowerCase(), 'block')) return `${char.name} blocked the ${statusNames[char.status]}!`;
+	// Do we block this status?
+	if (hasStatusAffinity(char, status.toLowerCase(), 'block')) 
+		return notxt ? '' : `${char.name} blocked the ${statusNames[char.status]}!`;
 
-	char.status = status.toLowerCase();
-	char.statusturns = statusEffectFuncs[char.status] ? statusEffectFuncs[char.status].forceturns : 3;
-	if (statusEffectFuncs[char.status] && statusEffectFuncs[char.status].oninflict)
-		statusEffectFuncs[char.status].oninflict(char);
+	// Inflict the status.
+	let statusfuncs = statusEffectFuncs[status.toLowerCase()];
+	if (statusfuncs.stackable) {
+		char[status.toLowerCase()] = statusfuncs.forceturns ?? 3;
+	} else {
+		char.status = status.toLowerCase();
+		char.statusturns = statusfuncs.forceturns ?? 3;
+	}
 
-	return `${char.name} was inflicted with ${statusNames[char.status]}!`;
+	// OnInflict status hook
+	if (statusfuncs.oninflict) statusfuncs.oninflict(char);
+
+	// Status text.
+	return notxt ? '' : `${char.name} was inflicted with ${statusNames[char.status]}!`;
 }
 
 getCharFromId = (id, btl) => {

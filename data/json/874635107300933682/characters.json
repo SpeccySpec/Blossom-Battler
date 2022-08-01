@@ -21,12 +21,12 @@
             "MP"
         ],
         "melee": {
-            "name": "???",
+            "name": "?@!",
             "type": "strike",
             "pow": 0,
             "acc": 100,
             "crit": 0,
-            "status": "confusion",
+            "status": "sensitive",
             "statuschance": 100
         },
         "stats": {
@@ -64,7 +64,10 @@
         },
         "skills": [
             "FinalStrike(DS)",
-            "ElementalMagic"
+            "ElementalMagic",
+            "CuriosityKilledTheBloomBattler",
+            "CopySelf",
+            "Garu"
         ],
         "autolearn": [],
         "quotes": {
@@ -119,6 +122,12 @@
         "trust": {},
         "statusaffinities": {
             "block": []
+        },
+        "leaderskill": {
+            "name": "Mana Circulation",
+            "type": "discount",
+            "var1": "strike",
+            "var2": 11
         }
     },
     "Shoutmon-DRA": {

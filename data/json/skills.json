@@ -23261,7 +23261,9 @@
             "buff": [
                 [
                     "target",
-                    "agl",
+                    [
+                        "agl"
+                    ],
                     3,
                     100,
                     null
@@ -26980,7 +26982,9 @@
             "buff": [
                 [
                     "target",
-                    "agl",
+                    [
+                        "agl"
+                    ],
                     1,
                     100,
                     null
@@ -27081,7 +27085,9 @@
             "buff": [
                 [
                     "target",
-                    "mag",
+                    [
+                        "mag"
+                    ],
                     1,
                     100,
                     null
@@ -27651,7 +27657,7 @@
         "type": "strike",
         "atktype": "physical",
         "pow": 100,
-        "hits": 100,
+        "hits": "1",
         "acc": 100,
         "cost": 0,
         "costtype": "mp",
@@ -27667,6 +27673,14 @@
                     -1,
                     100,
                     null
+                ]
+            ],
+            "powerbuff": [
+                [
+                    "atk",
+                    -20,
+                    false,
+                    false
                 ]
             ]
         }
@@ -61485,8 +61499,38 @@
         "statusses": {
             "terrain": [
                 "light"
+            ],
+            "buff": [
+                [
+                    "user",
+                    [
+                        "prc"
+                    ],
+                    1,
+                    100,
+                    3
+                ],
+                [
+                    "target",
+                    [
+                        "mag"
+                    ],
+                    1,
+                    100,
+                    null
+                ],
+                [
+                    "target",
+                    [
+                        "atk"
+                    ],
+                    2,
+                    70,
+                    null
+                ]
             ]
-        }
+        },
+        "done": true
     },
     "MagicCharge": {
         "name": "Magic Charge",
@@ -61560,7 +61604,9 @@
             "buff": [
                 [
                     "target",
-                    "agl",
+                    [
+                        "agl"
+                    ],
                     2,
                     100,
                     null
@@ -69796,5 +69842,71 @@
         "status": "brainwash",
         "statuschance": "100",
         "desc": "none"
+    },
+    "BrokenDebilitizer": {
+        "name": "BrokenDebilitizer",
+        "type": "status",
+        "cost": 15,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "621307633718132746",
+        "statusses": {
+            "buff": [
+                [
+                    "target",
+                    [
+                        "atk"
+                    ],
+                    -1,
+                    60,
+                    5
+                ],
+                [
+                    "target",
+                    "mag",
+                    -1,
+                    40,
+                    3
+                ]
+            ]
+        },
+        "desc": "The user shoots an unstable debilitating beam, hopefully temporarily debuffing the foe's ATK and MAG.",
+        "done": true
+    },
+    "CopySelf": {
+        "name": "Copy Self",
+        "type": "status",
+        "cost": 15,
+        "costtype": "MP",
+        "target": "caster",
+        "originalAuthor": "363363984390356993",
+        "statusses": {
+            "clone": [
+                50,
+                50,
+                50
+            ]
+        },
+        "desc": "The caster creates a copy of themselves. The copy is only half as powerful as the caster"
+    },
+    "Peelout": {
+        "name": "Peelout",
+        "type": "status",
+        "cost": 24,
+        "costtype": "MP",
+        "target": "Caster",
+        "originalAuthor": "313972298992451585",
+        "statusses": {
+            "buff": [
+                [
+                    "user",
+                    "prc",
+                    1,
+                    100,
+                    null
+                ]
+            ]
+        },
+        "desc": "The user moves their legs in a circular pattern while being stationary, then they turn the potential energy gathered into kinetic energy."
     }
 }

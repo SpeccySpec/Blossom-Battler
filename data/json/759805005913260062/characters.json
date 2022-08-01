@@ -343,11 +343,11 @@
             "MP"
         ],
         "melee": {
-            "name": "Strike Attack",
-            "type": "strike",
-            "pow": 30,
+            "name": "Slash Swift",
+            "type": "slash",
+            "pow": 20,
             "acc": 95,
-            "crit": 15
+            "crit": 5
         },
         "stats": {
             "atk": 6,
@@ -373,8 +373,12 @@
         "xp": 0,
         "maxxp": 500,
         "affinities": {
-            "superweak": [],
-            "weak": [],
+            "superweak": [
+                "water"
+            ],
+            "weak": [
+                "electric"
+            ],
             "resist": [],
             "block": [],
             "repel": [],
