@@ -21,13 +21,13 @@
             "MP"
         ],
         "melee": {
-            "name": "Arcane Slash",
-            "type": "slash",
+            "name": "???",
+            "type": "strike",
             "pow": 0,
             "acc": 100,
             "crit": 0,
-            "status": "bleed",
-            "statuschance": 65
+            "status": "confusion",
+            "statuschance": 100
         },
         "stats": {
             "atk": 5,

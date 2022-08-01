@@ -1580,16 +1580,27 @@ statusEffectFuncs = {
 	brainwash: {
 		forceturns: 2,
 		turnoverride: function(btl, char) {
-			let skill = char.skills[randNum(char.skills.length-1)];
+			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+			
+			let usableskills = [];
+			for (let i in char.skills) {
+				if (canUseSkill(skillFile[char.skills[i]])) usableskills.push(char.skills[i]);
+			}
+			
+			if (usableskills.length <= 0) {
+				let dmg = char.stats.atk + (-8 + randNum(16));
 
-			let result = {
-				move: 'skills',
-				index: skill,
-				target: [char.team, randNum(btl.teams[char.team].members.length-1)],
+				DiscordEmbed = new Discord.MessageEmbed()
+					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setTitle(`${char.name} => Self`)
+					.setDescription(`__${char.name}__ has no usable skills! __${char.name}__ strikes themselves, taking ${dmg} damage!`);
+				btl.channel.send({embeds: [DiscordEmbed]});
+				
+				char.hp -= dmg;
+				return false;
 			}
 
-			// Get the skill we use.
-			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+			let skill = usableskills[randNum(usableskills.length-1)];
 			let skillDefs = objClone(skillFile[skill]);
 
 			// Flip the skill's target.
@@ -1605,7 +1616,17 @@ statusEffectFuncs = {
 				spreadopposing: 'spreadallies',
 				spreadallies: 'spreadopposing'
 			}
-			skillDefs.target = targFlip[skillDefs.target];
+
+			if (!skillDefs.target)
+				skillDefs.target = 'ally';
+			else
+				skillDefs.target = targFlip[skillDefs.target];
+
+			let result = {
+				move: 'skills',
+				index: skill,
+				target: [char.team, randNum(btl.teams[char.team].members.length-1)],
+			}
 
 			useSkill(char, btl, result, skillDefs);
 			return false;
@@ -1634,8 +1655,6 @@ statusEffectFuncs = {
 			killVar(char, 'forcemove');
 		},
 		turnoverride(btl, char) {
-			console.log(`${char.statusturns} rage turns left.`);
-
 			let randteam = randNum(btl.teams.length-1);
 			while (randteam == char.team) randteam = randNum(btl.teams.length-1);
 
