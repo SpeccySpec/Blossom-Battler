@@ -27260,5 +27260,145 @@
             "custom": {}
         },
         "trust": {}
+    },
+    "Sky": {
+        "name": "Sky",
+        "mainElement": "strike",
+        "weaponclass": [
+            "bladed",
+            "bludgeon"
+        ],
+        "armorclass": "light",
+        "weapons": {},
+        "armors": {},
+        "curweapon": {},
+        "curarmor": {},
+        "owner": "412328234198237189",
+        "level": 25,
+        "hp": 196,
+        "mp": 157,
+        "maxhp": 196,
+        "maxmp": 157,
+        "basehp": 40,
+        "basemp": 25,
+        "mpMeter": [
+            "Magic Points",
+            "MP"
+        ],
+        "melee": {
+            "name": "Illusion Blade",
+            "type": "slash",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "stats": {
+            "atk": 32,
+            "mag": 13,
+            "prc": 31,
+            "end": 17,
+            "chr": 9,
+            "int": 18,
+            "agl": 31,
+            "luk": 18
+        },
+        "basestats": {
+            "baseatk": 8,
+            "basemag": 5,
+            "baseprc": 7,
+            "baseend": 5,
+            "basechr": 1,
+            "baseint": 6,
+            "baseagl": 7,
+            "baseluk": 6
+        },
+        "lb": 0,
+        "xp": -112905,
+        "maxxp": 15487,
+        "affinities": {
+            "superweak": [
+                "bless"
+            ],
+            "weak": [],
+            "resist": [
+                "ice"
+            ],
+            "block": [
+                "curse",
+                "spirit"
+            ],
+            "repel": [],
+            "drain": []
+        },
+        "skills": [
+            "FurDriver",
+            "WideSlash",
+            "FlurrySlice",
+            "QuickStab",
+            "Tanukimation",
+            "SpiritCharge",
+            "DistortionCounter"
+        ],
+        "autolearn": [],
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "allyatkquote": [],
+            "lbquote": [],
+            "tcquote": [],
+            "strongquote": [],
+            "badatkquote": [],
+            "landedquote": [],
+            "missquote": [],
+            "superweakquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "dodgequote": [],
+            "deathquote": [],
+            "killquote": [],
+            "pacifyquote": [],
+            "allydeathquote": [],
+            "healquote": [],
+            "helpedquote": [],
+            "consolequote": [],
+            "imfinequote": [],
+            "lvlquote": []
+        },
+        "bio": {
+            "fullname": "",
+            "nickname": "",
+            "species": "Yaretzan Tanuki",
+            "gender": "male",
+            "height": [
+                3,
+                1
+            ],
+            "weight": 115.19,
+            "age": 18,
+            "info": "A mentally strong, but protective Tanuki. He wears a slightly loose, blue short-sleeved turtleneck to match his Brown fur with dark tan cargo shorts, and a utility belt where he keeps his shortsword around his waist. Sky's tail is slightly larger, as well as somewhat fluffier than most Tanukis' tails are. [Gain more trust to reveal this.]",
+            "backstory": "[Gain more trust to reveal this.]",
+            "likes": "[Gain more trust to reveal this.]",
+            "dislikes": "[Gain more trust to reveal this.]",
+            "fears": "[Gain more trust to reveal this]",
+            "voice": "Vegeta (Dragon Ball Super)",
+            "theme": "[INT LR Vegeta & Goku OST - Dokkan Battle](https://youtu.be/_nKN_9WL2aQ)",
+            "custom": {
+                "Abilities": "[Gain more trust to reveal this.]"
+            },
+            "appearance": "https://cdn.discordapp.com/attachments/964696378943094846/1003288805530423446/Sky_Official_Art_By_Sky_WOOOOO.png"
+        },
+        "trust": {},
+        "leaderskill": {
+            "name": "Brotherly Pride",
+            "type": "discount",
+            "var1": "physical",
+            "var2": 10
+        },
+        "nickname": "Cookie"
     }
 }

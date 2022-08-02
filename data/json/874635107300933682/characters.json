@@ -61,12 +61,7 @@
             "drain": []
         },
         "skills": [
-            "UltimateHit",
-            "ElementalMagic",
-            "FireBomb",
-            "Unsacrifice",
-            "FireBoostX",
-            "FindX"
+            "UltimateHit"
         ],
         "autolearn": [],
         "quotes": {

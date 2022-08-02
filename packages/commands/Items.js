@@ -251,12 +251,15 @@ commands.registeritem = new Command({
             case 'pacify':
                 amount = args[4] && parseInt(args[4]) ? Math.max(0, Math.min(parseInt(args[4]), 100)) : 30;
                 break;
+			case 'material':
+				// Nothing here...
+				break;
 
 			default:
 				return message.channel.send("Invalid item type!");
         }
 
-        if (amount) itemFile[args[0]][args[3]] = amount;
+        if (amount) itemFile[args[0]][args[3].toLowerCase()] = amount;
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/items.json`, JSON.stringify(itemFile, null, 4));
 

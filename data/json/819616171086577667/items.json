@@ -49,5 +49,22 @@
         "type": "heal",
         "originalAuthor": "621307633718132746",
         "heal": 1
+    },
+    "Wood": {
+        "name": "Wood",
+        "rarity": "common",
+        "cost": 20,
+        "type": "material",
+        "originalAuthor": "516359709779820544",
+        "desc": "Just your run of the mill wood used for virtually everything in a crafting aspect."
+    },
+    "Potion": {
+        "name": "Potion",
+        "rarity": "common",
+        "cost": 100,
+        "type": "heal",
+        "originalAuthor": "516359709779820544",
+        "desc": "A basic potion, formed with common ingredients. Restores the consumer's HP by 50.",
+        "heal": 50
     }
 }

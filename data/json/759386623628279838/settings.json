@@ -16,7 +16,7 @@
         "statcap": 5,
         "basestatcap": 10,
         "bstcap": 45,
-        "skillamount": 8,
+        "skillamount": -1,
         "teamsize": 4,
         "transformations": {
             "hpcap": 10,

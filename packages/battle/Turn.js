@@ -1591,6 +1591,9 @@ advanceTurn = (btl, firstturn) => {
 				delete char.statusturns;
 			}
 
+			// Max & Min LB
+			char.lb = Math.min(Math.max(char.lb, 0), 1000);
+
 			// This character is dead or pacified.
 			if (char.hp <= 0 || char.pacified) {
 				pLeft--;
