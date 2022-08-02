@@ -66693,7 +66693,7 @@
     "FireCorrosion": {
         "name": "Fire Corrosion",
         "type": "status",
-        "cost": 44,
+        "cost": 0,
         "costtype": "MP",
         "target": "allopposing",
         "originalAuthor": "363363984390356993",
@@ -70761,7 +70761,7 @@
         "costtype": "mp",
         "target": "one",
         "originalAuthor": "363363984390356993",
-        "crit": 100,
+        "crit": 0,
         "desc": "An alternative melee attack that deals Almighty damage"
     },
     "Antiphysical": {

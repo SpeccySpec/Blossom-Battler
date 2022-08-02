@@ -622,10 +622,10 @@ statusList = {
 			return true
 		},
 		onselect(char, skill, btl, vars) {
-			extrasList.changeaffinity.onselect(char, skill, btl, vars);
+			return extrasList.changeaffinity.onselect(char, skill, btl, vars);
 		},
 		onuse(char, targ, skill, btl, vars) {
-			extrasList.changeaffinity.onuse(char, targ, skill, btl, vars);
+			return extrasList.changeaffinity.onuse(char, targ, skill, btl, vars);
 		},
 		getinfo: extrasList.changeaffinity.getinfo
 	}),

@@ -229,12 +229,12 @@ extrasList = {
 			return true
 		},
 		onselect(char, skill, btl, vars) {
-			if (vars[0].toLowerCase() != 'user') return
+			if (vars[0].toLowerCase() != 'user') return '';
 
 			return extrasList.changeaffinity.targetchange(char, vars, skill)
 		},
 		onuse(char, targ, skill, btl, vars) {
-			if (vars[0].toLowerCase() != 'target') return
+			if (vars[0].toLowerCase() != 'target') return '';
 
 			return extrasList.changeaffinity.targetchange(targ, vars, skill)
 		},
