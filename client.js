@@ -667,6 +667,13 @@ truncNum = (x, n) => {
 fileStore = {};
 setUpFile = (file, force) => {
 	if (fileStore[file] && !force) return fileStore[file];
+
+	// check if the directories before this file exists
+	let dir = file.split("/");
+	dir.pop();
+	makeDirectory(dir.join("/"));
+
+	// Let's get this file!
 	let fileRead = fs.readFileSync(file, {flag: 'as+'});
 
 	if (!fileRead || fileRead == "" || fileRead == " ") {

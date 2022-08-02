@@ -506,7 +506,8 @@
         "currency": 0,
         "members": [
             "Valoria",
-            "Lophari"
+            "Lophari",
+            "Lanagu"
         ],
         "backup": [],
         "items": {},
@@ -528,5 +529,18 @@
         "negotiates": {},
         "negotiateAllies": {},
         "discoveries": {}
+    },
+    "Sky": {
+        "name": "Sky",
+        "currency": 0,
+        "members": [
+            "Sky"
+        ],
+        "backup": [],
+        "items": {},
+        "weapons": {},
+        "armors": {},
+        "negotiates": {},
+        "negotiateAllies": {}
     }
 }

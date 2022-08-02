@@ -66,5 +66,58 @@
         "originalAuthor": "516359709779820544",
         "desc": "A basic potion, formed with common ingredients. Restores the consumer's HP by 50.",
         "heal": 50
+    },
+    "Leather": {
+        "name": "Leather",
+        "rarity": "common",
+        "cost": 25,
+        "type": "material",
+        "originalAuthor": "532291526634635285",
+        "desc": "Some animal based leather, used for armor related crafting."
+    },
+    "MP Potion": {
+        "name": "MP Potion",
+        "rarity": "common",
+        "cost": 100,
+        "type": "healmp",
+        "originalAuthor": "516359709779820544",
+        "desc": "A basic potion, formed with common ingredients. Restores the consumer's MP by 50.",
+        "healmp": 50
+    },
+    "Bottle of Water": {
+        "name": "Bottle of Water",
+        "rarity": "common",
+        "cost": 50,
+        "type": "healhpmp",
+        "originalAuthor": "516359709779820544",
+        "desc": "A refreshing, ice cold bottle of water! Nothing better to calm you down after a long day... Unfortunately, it doesn't have much of a purpose in battle, restoring 5HP and 5MP.",
+        "healhpmp": 5
+    },
+    "Splen Berry": {
+        "name": "Splen Berry",
+        "rarity": "common",
+        "cost": 45,
+        "type": "heal",
+        "originalAuthor": "532291526634635285",
+        "desc": "A typical berry you find all throughout Yaretza, yet it does many wonders on its own to heal 75 hp.",
+        "heal": 75
+    },
+    "Corsela Berry": {
+        "name": "Corsela Berry",
+        "rarity": "common",
+        "cost": 50,
+        "type": "healmp",
+        "originalAuthor": "516359709779820544",
+        "desc": "Common berry often growing on the trees of Yaretza. Used in many potions! Restores 20MP to the consumer.",
+        "healmp": 20
+    },
+    "Golsa Berry": {
+        "name": "Golsa Berry",
+        "rarity": "common",
+        "cost": 80,
+        "type": "healhpmp",
+        "originalAuthor": "532291526634635285",
+        "desc": "A common yet also hidden berry amongst the trees that heals your wounds and rejuvenates your magic. Restores HP and MP by 35.",
+        "healhpmp": 35
     }
 }

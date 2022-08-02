@@ -27537,7 +27537,15 @@
         "armorclass": "light",
         "weapons": {},
         "armors": {},
-        "curweapon": {},
+        "curweapon": {
+            "name": "Sky's Sword",
+            "class": "bladed",
+            "cost": 4500,
+            "element": "slash",
+            "desc": "Sky's trusty shortsword that he carries with him everywhere.",
+            "originalAuthor": "412328234198237189",
+            "melee": 30
+        },
         "curarmor": {},
         "owner": "412328234198237189",
         "level": 25,
@@ -27579,7 +27587,7 @@
             "baseluk": 6
         },
         "lb": 0,
-        "xp": -112905,
+        "xp": 0,
         "maxxp": 15487,
         "affinities": {
             "superweak": [

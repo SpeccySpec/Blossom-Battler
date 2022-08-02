@@ -50,5 +50,14 @@
         "melee": 70,
         "atk": 2,
         "mag": 2
+    },
+    "Sky's Sword": {
+        "name": "Sky's Sword",
+        "class": "bladed",
+        "cost": 4500,
+        "element": "slash",
+        "desc": "Sky's trusty shortsword that he carries with him everywhere.",
+        "originalAuthor": "412328234198237189",
+        "melee": 30
     }
 }

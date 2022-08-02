@@ -146,11 +146,11 @@
             "MP"
         ],
         "melee": {
-            "name": "Strike Attack",
-            "type": "strike",
-            "pow": 30,
+            "name": "Devi-Blade",
+            "type": "slash",
+            "pow": 55,
             "acc": 95,
-            "crit": 15
+            "crit": 5
         },
         "stats": {
             "atk": 7,
@@ -177,15 +177,23 @@
         "maxxp": 500,
         "affinities": {
             "superweak": [],
-            "weak": [],
-            "resist": [
-                "sound",
-                "fire",
-                "psychic"
+            "weak": [
+                "gravity"
             ],
-            "block": [],
-            "repel": [],
-            "drain": []
+            "resist": [
+                "fire",
+                "psychic",
+                "sound"
+            ],
+            "block": [
+                "curse"
+            ],
+            "repel": [
+                "nuclear"
+            ],
+            "drain": [
+                "spirit"
+            ]
         },
         "skills": [],
         "autolearn": [],
@@ -262,11 +270,11 @@
             "MP"
         ],
         "melee": {
-            "name": "Strike Attack",
-            "type": "strike",
-            "pow": 30,
+            "name": "HedgeClaw",
+            "type": "slash",
+            "pow": 50,
             "acc": 95,
-            "crit": 15
+            "crit": 5
         },
         "stats": {
             "atk": 8,

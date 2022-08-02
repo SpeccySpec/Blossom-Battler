@@ -27650,28 +27650,27 @@
     },
     "CuriosityKilledTheBloomBattler": {
         "name": "CuriosityKilledTheBloomBattler",
-        "type": "status",
-        "cost": 0,
-        "costtype": "MP",
-        "target": "spectra",
+        "type": "explode",
+        "atktype": "ranged",
+        "pow": 50,
+        "hits": 2,
+        "acc": 90,
+        "cost": 10,
+        "costtype": "mp",
+        "target": "spreadopposing",
         "originalAuthor": "363363984390356993",
-        "statusses": {
-            "futuresight": [
-                {
-                    "name": "CuriosityKilledTheBloomBattler",
-                    "pow": 100,
-                    "acc": 100,
-                    "crit": 0,
-                    "type": "explode",
-                    "hits": 1,
-                    "atktype": "magic",
-                    "turns": 2,
-                    "target": "spectra"
-                }
+        "crit": 5,
+        "desc": "Not a single moment of rest with you...",
+        "extras": {
+            "need": [
+                [
+                    "more",
+                    true,
+                    100,
+                    "mppercent"
+                ]
             ]
-        },
-        "desc": "We'll make Blossom Battler great again",
-        "done": true
+        }
     },
     "MadTeaParty": {
         "name": "Mad Tea Party",
