@@ -1800,11 +1800,11 @@ commands.listskills = new Command({
 							break;
 						case 'levellock':
 							if (args[a].toString().toLowerCase() != 'true' && args[a].toString().toLowerCase() != 'false') {
-								if (!isNaN(variable)) {
+								if (!isNaN(args[a])) {
 									args[a] = parseInt(args[a]);
 								}
 
-								isConditionMet = skillFile[i].levellock && skillFile[i].levellock.includes(args[a])
+								isConditionMet = skillFile[i].levellock && skillFile[i].levellock == args[a].toString().toLowerCase()
 							} else if (args[a].toString().toLowerCase() == 'true') {
 								isConditionMet = skillFile[i].levellock
 							} else if (args[a].toString().toLowerCase() == 'false') {
