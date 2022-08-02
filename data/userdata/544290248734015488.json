@@ -356,7 +356,7 @@
             "deathquote": [],
             "bio": {
                 "info": "Croato is a smart wolf from planet Yaretza. He doesn't talk often, so he mostly lets action speak for him.",
-                "backstory": "Croato had been working as a scientist at the age of 10 due to having extremely stellar grades in school. However, due to an incident in another lab, he had gotten worried that scientists' reputations had gotten worried, and had fled his hometown because of that.",
+                "backstory": "Croato had very stellar grades in school, graduating early twice. He was very passionate about science, and worked as a scientist in a lab that did experiments on things that weren't alive at only the age of 10 ~~(so maybe it's about time you go outside and interact with someone)~~. He had enjoyed his job very much, but there was another lab, run by two deranged scientists, that captured animals and other organisms and forced them to go through experiments that would change how the organisms lived forever. He couldn't help but notice how cruel that other lab was, but he was too much of a coward to tell them. 3 years later, when Croato was 13, some animals of that other lab had escaped. When he heard that news, he had feared that scientists would get a bad reputation and that the animals who escaped would be coming for him, so he fled his hometown. The rest is shrouded in mystery...",
                 "voice": "Ai (Puyo Puyo)",
                 "theme": "",
                 "species": "Wolf",
@@ -625,7 +625,7 @@
                 "species": "Tyrannosaurus Rex",
                 "age": 13,
                 "info": "A T-Rex with cyan scales that is much smaller than the average size of his species. He is pretty playful and often lets curiosity take the best of him. Due to not being told much by the scientists who revived him from his fossil, he doesn't know much about the current technology.",
-                "backstory": "Bayrero had lived when dinosaurs originally thrived, but had gotten caught in the mass extinction event when he was only 13. Millions of years later though, he was revived from his fossil as an experiment, to see a more modern world than what he's used to, as well as being left confused as to what today's technology even is.",
+                "backstory": "Bayrero was originally born 13 years before whatever the equivalent of the K-T mass extinction even was. He had enjoyed his life before then, but when the extinction event did happen, he tried to escape, but failed to do so...\n\nSo, fast-forward several million years later. A group of scientists have found his fossil and are in the process of reviving him. The next day, it was complete. Bayrero had been reborn. The scientists who revived him had told him mostly about his past, but not much else, thus leaving him confused as to how he got revived, and what new things he may encounter in his new life.",
                 "likes": "Kind creatures, friends",
                 "dislikes": "Unnatural things",
                 "fears": "Robots",
@@ -1358,7 +1358,7 @@
             ],
             "bio": {
                 "info": "A tamoan chihuahua who enjoys trouble, is active, and can be overconfident and cocky at times. He has yellow-orange fur, green shoes, and a blue collar with a gold emblem with an electricity symbol on it. He is mostly clueless about the world around him, but he is eager to explore it more and make friends along the way.",
-                "backstory": "Sparky had been living in his home planet, Tamoa, for 10 years, before it was attacked, war broke out, and he had to evacuate to a partner planet via an escape pod. His ride was going smoothly, until he lost control of his pod. It went crazy and he crashed on Yaretza. He was seriously injured from the crash and it's possible that he will never forget that unfortunate experience.",
+                "backstory": "Sparky's from Planet Tamoa. He has been living in his hometown for 11 years. It has been very peaceful and happy in that hometown, until it was attacked and war broke out. The president of the town instructed the youth to evacuate the planet to a partner planet via an emergency space ship. Sparky's trip was going fine, until the space ship started going out of his control and went crazy, and ended up crashing on the planet called Yaretza. He was seriously injured from the crash but thanks to somebody healing him, he was able to recover. The events still come in his mind at times, but he stays calm and acts like it never happened most of the time.",
                 "voice": "Morgana (Persona 5)",
                 "theme": "",
                 "species": "Tamoan Chihuahua",
@@ -1653,9 +1653,9 @@
             "melee": {
                 "name": "PsychicBash",
                 "type": "strike",
-                "pow": 30,
-                "acc": 95,
-                "crit": 15
+                "pow": 10,
+                "acc": 100,
+                "crit": 0
             },
             "weapon": {},
             "xp": 623088,
@@ -1681,7 +1681,7 @@
             "bio": {
                 "species": "Altarian Cat",
                 "age": 4,
-                "info": "Ira is a shy and timid altarian cat who is very short. She has psychic powers, but they are unstable due to her very young age. She's very kind to those she can trust and is willing to help them out. She has white fur, pink shoes, a purple and pink scarf, and a pale purple dress.",
+                "info": "Ira is a shy and timid altarian cat who is very short. She has psychic powers, but they are unstable due to her very young age. She is easily intimidated by those much larger than her and is easily scared in general. However, she's very kind to those she can trust and is willing to help them out. She has white fur, pink shoes, a purple and pink scarf, and a pale purple dress.",
                 "backstory": "Ira originally was from Altaria, where she had lived a peaceful(?) life. When war had broken out, she was the first to evacuate. She had no idea where to go, so she had just went to a random planet (which was conveniently(?) the same planet that the group was on).",
                 "likes": "People whom she can trust, comfortable spots, warmness.",
                 "dislikes": "Loud Noises",
@@ -2270,7 +2270,7 @@
             "bio": {
                 "species": "Angel-Devil Dragon ||(Previously a lizard)||",
                 "age": 18,
-                "info": "A female angel-devil dragon (who was previously a lizard) who is another friend of Permic's (and before anyone assumes, no, not a girlfriend or wife.). She is pretty energetic and extroverted, and loves those who are short and/or cute.\n<Appearance (Dragon)> Yanna's current appearance has 2 halves to it. One half has white scales, an angelic wing, short claws, and a half-halo over that half of her head, resembling an angel. However, the other half has black scales, a devil wing, sharp claws, and a horn on that side of her head, resembling a devil. These features had given her unnatural species the name of 'Angel-Devil Dragons.' Asides from those, she has gray shoes, and a short tail.\n<Appearance (Lizard)> Yanna's past appearance was not the same as her current appearance. She had gray scales and middle-length claws. And just like her current appearance, she had gray shoes and a short tail. She was also shorter compared to her current form, being 4' if she were still a lizard today.",
+                "info": "A female angel-devil dragon (who was previously a lizard) who is another friend of Permic's (and before anyone assumes, no, not a girlfriend or wife.). She is pretty energetic and extroverted, and loves those who are short and/or cute.\n<Appearance (Dragon)> Yanna's current appearance has 2 halves to it. One half has white scales, an angelic wing, short claws, and a half-halo over that half of her head, resembling an angel. However, the other half has black scales, a devil wing, sharp claws, and a horn on that side of her head, resembling a devil. These features had given her unnatural species the name of 'Angel-Devil Dragons.' Asides from those, she has gray shoes, and a short tail.\n<Appearance (Lizard)> Yanna's past appearance was not the same as her current appearance. She had gray scales and middle-length claws. And just like her current appearance, she had gray shoes and a short tail. She was also shorter compared to her current form, being 4'3 if she were still a lizard today.",
                 "backstory": "It starts hundreds of years ago, with a Flasheriz dragon and a Darkeriz dragon, named Yango and Yinga respectively. They had completely opposite beliefs, and were pissed off at each other because of that, so, they fought every time they could, in any area they could. This greatly disturbed the deities, who had tried to get them to stop numerous times, but all failed. One day, they all decided enough was enough for the two, and they had decided to curse them. When the two were getting ready for yet another brawl in a cave, they suddenly got stuck to each other (obligatory horny joke goes here), and then had suddenly became a black and white orb of liquid; meaning the curse was successful. They couldn't move, nor could they speak. They were just an orb, for hundreds of years...\n\nNow, we skip to 3 years before present day, where Yanna, Permic, and Mike were exploring. They were exploring the cave that Yango and Yinga had gotten cursed. They had then stumbled upon the orb those two were turned into. They did not know what it did or why it was here. Permic and Mike were suspicious and didn't touch it, however Yanna let her curiousity get the best of her, and decided to try and grab the orb. Upon touching the orb, the liquid had entered Yanna's body via her hand. And then, she changed. Her scales changed colors to black on one half and white on the other, her claws on the white half shortened, while on the black half, they sharpened. She had also sprouted an angelic wing on the white half, and a devil wing on the black half, and grew a horn on a black half, while a half-halo sprouted from her head on the white half. Lastly, she grew by two feet and Yango and Yinga both became entities in her mind without a physical form. Yango and Yinga could speak but only Yanna would hear them. Her initial reaction was panicked, and it'd be that way for quite a bit, but she'd settle soon. It's not entirely known what happened after...",
                 "likes": "Cute/Short people, cute things in general, hanging out with friends",
                 "dislikes": "People who flex their extraordinary aspects, like intelligence or strength.",

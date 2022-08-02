@@ -626,14 +626,17 @@ commands.updateskills = new Command({
 
 				if (skillFile[skill].heal) {
 					if (skillFile[skill].heal.default) {
-						skillFile[skill].heal.healstat = [skillFile[skill].heal.default[0], "hp"];
+						skillFile[skill].heal.healstat = [[skillFile[skill].heal.default[0], "hp"]];
 						delete skillFile[skill].heal.default;
 					} else if (skillFile[skill].heal.healmp) {
-						skillFile[skill].heal.healstat = [skillFile[skill].heal.healmp[0], "mp"];
+						skillFile[skill].heal.healstat = [[skillFile[skill].heal.healmp[0], "mp"]];
 						delete skillFile[skill].heal.healmp;
 					} else if (skillFile[skill].heal.fullheal) {
-						skillFile[skill].heal.healstat = [100, "hppercent"];
+						skillFile[skill].heal.healstat = [[100, "hppercent"]];
 						delete skillFile[skill].heal.fullheal;
+					// HealStat is now a multi extra.
+					} else if (skillFile[skill].heal.healstat) {
+						if (typeof(skillFile[skill].heal.healstat[0]) != 'object') skillFile[skill].heal.healstat = [skillFile[skill].heal.healstat]
 					}
 				} else {
 					skillFile[skill].heal = {};

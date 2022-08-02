@@ -385,7 +385,9 @@
             "drain": []
         },
         "skills": [
-            "TornadoStrike2"
+            "TornadoStrike2",
+            "PSIFreeze-Alpha",
+            "SwordSmash"
         ],
         "autolearn": [],
         "quotes": {
@@ -400,17 +402,29 @@
                 "How about I try this?",
                 "Ya won't be able to predict this!"
             ],
-            "allyatkquote": [],
+            "allyatkquote": [
+                "A follow-up!"
+            ],
             "lbquote": [
                 "Now or never!"
             ],
-            "tcquote": [],
-            "strongquote": [],
-            "badatkquote": [],
+            "tcquote": [
+                "Let's go full throttle on this!"
+            ],
+            "strongquote": [
+                "DROP DEAD!"
+            ],
+            "badatkquote": [
+                "Crap..."
+            ],
             "landedquote": [],
             "missquote": [],
-            "superweakquote": [],
-            "weakquote": [],
+            "superweakquote": [
+                "GAHHHH!!"
+            ],
+            "weakquote": [
+                "Tch!"
+            ],
             "hurtquote": [],
             "resistquote": [],
             "blockquote": [],
@@ -419,12 +433,24 @@
             "dodgequote": [],
             "deathquote": [],
             "killquote": [],
-            "pacifyquote": [],
-            "allydeathquote": [],
-            "healquote": [],
-            "helpedquote": [],
-            "consolequote": [],
-            "imfinequote": [],
+            "pacifyquote": [
+                "Hmmm..ya know? Maybe this whole encounter was pointless?"
+            ],
+            "allydeathquote": [
+                "We may need a change of plans!"
+            ],
+            "healquote": [
+                "Stay still..."
+            ],
+            "helpedquote": [
+                "Saved you there for a second."
+            ],
+            "consolequote": [
+                "Hey...things are okay....Atleast it's over."
+            ],
+            "imfinequote": [
+                "I guess worse things could have went down..."
+            ],
             "lvlquote": [
                 "That was worth it!"
             ]
@@ -441,7 +467,7 @@
             "weight": 0,
             "age": 19,
             "info": "",
-            "backstory": "",
+            "backstory": "Raised by Queen Windi and King Heck, this Altarian prince is skilled with the sword. He's kind and goofy at times, but he gets timid around some girls (plus maybe a few guys?) at times. Regardless of that, he really is a cool dude.",
             "likes": "Swords, friends, fish, cute gals",
             "dislikes": "absolute freaks, water (I mean, he's still weak to it-), cucumbers, people grabbing his tail.",
             "fears": "",

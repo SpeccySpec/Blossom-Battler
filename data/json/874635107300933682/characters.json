@@ -21,13 +21,11 @@
             "MP"
         ],
         "melee": {
-            "name": "?@!",
-            "type": "strike",
+            "name": "Just Watch",
+            "type": "pierce",
             "pow": 0,
-            "acc": 100,
-            "crit": 0,
-            "status": "sensitive",
-            "statuschance": 100
+            "acc": 0,
+            "crit": 0
         },
         "stats": {
             "atk": 5,
@@ -55,9 +53,7 @@
         "affinities": {
             "superweak": [],
             "weak": [],
-            "resist": [
-                "poison"
-            ],
+            "resist": [],
             "block": [
                 "gravity"
             ],
@@ -65,11 +61,8 @@
             "drain": []
         },
         "skills": [
-            "REAcarm",
-            "ElementalMagic",
-            "CopySelf",
-            "Baeiha",
-            "MassMedia"
+            "UltimateHit",
+            "ElementalMagic"
         ],
         "autolearn": [],
         "quotes": {
@@ -126,9 +119,9 @@
             "block": []
         },
         "leaderskill": {
-            "name": "Healing Hands",
+            "name": "Almighty Amp +",
             "type": "boost",
-            "var1": "heal",
+            "var1": "almighty",
             "var2": 30
         }
     },

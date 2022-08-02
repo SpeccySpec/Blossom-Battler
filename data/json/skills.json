@@ -27654,36 +27654,27 @@
     },
     "CuriosityKilledTheBloomBattler": {
         "name": "CuriosityKilledTheBloomBattler",
-        "type": "strike",
-        "atktype": "physical",
-        "pow": 100,
-        "hits": "1",
-        "acc": 100,
+        "type": "status",
         "cost": 0,
-        "costtype": "mp",
-        "target": "everyone",
+        "costtype": "MP",
+        "target": "one",
         "originalAuthor": "363363984390356993",
-        "crit": 100,
-        "desc": "We are breaking bots again",
-        "extras": {
-            "buff": [
-                [
-                    "user",
-                    "atk",
-                    -1,
-                    100,
-                    null
-                ]
-            ],
-            "powerbuff": [
-                [
-                    "atk",
-                    -20,
-                    false,
-                    false
-                ]
+        "statusses": {
+            "futuresight": [
+                {
+                    "name": "CuriosityKilledTheBloomBattler",
+                    "pow": 100,
+                    "acc": 95,
+                    "crit": 5,
+                    "type": "explode",
+                    "target": "single",
+                    "hits": 1,
+                    "atktype": "physical",
+                    "turns": 2
+                }
             ]
-        }
+        },
+        "desc": "We'll make Blossom Battler great again"
     },
     "MadTeaParty": {
         "name": "Mad Tea Party",
@@ -30312,15 +30303,19 @@
     "NimbleStance": {
         "name": "Nimble Stance",
         "type": "passive",
-        "desc": "Increases the chance to dodge attacks while guarding",
+        "desc": "Increases the chance to dodge attacks while guarding but decreases guard efficiency",
         "originalAuthor": "363363984390356993",
         "passive": {
             "guarddodge": [
-                10
+                45
+            ],
+            "guardboost": [
+                -15
             ]
         },
         "powlamk": {},
-        "powpkmn": {}
+        "powpkmn": {},
+        "done": true
     },
     "AlmightyAuraX": {
         "name": "Almighty Aura X",
@@ -35345,7 +35340,13 @@
                 88
             ]
         ],
-        "levellock": 65
+        "levellock": 65,
+        "passive": {
+            "affinitycutter": [
+                100
+            ]
+        },
+        "done": true
     },
     "PierceAll(Weak)": {
         "name": "Pierce All (Weak)",
@@ -35362,7 +35363,13 @@
                 87
             ]
         ],
-        "levellock": 88
+        "levellock": 88,
+        "passive": {
+            "affinityslicer": [
+                100
+            ]
+        },
+        "done": true
     },
     "ȶɦɛʝ": {
         "name": "ȶɦɛʝ",
@@ -42178,62 +42185,6 @@
             ]
         ],
         "levellock": 100
-    },
-    "ThatOneMove": {
-        "name": "ThatOneMove",
-        "costtype": "hp",
-        "pow": " ",
-        "acc": 200,
-        "crit": -87,
-        "hits": " ",
-        "type": "fire",
-        "status": "mirror",
-        "statuschance": 100,
-        "atktype": "physical",
-        "target": "caster",
-        "originalAuthor": "313972298992451585",
-        "powlamk": 0,
-        "powpkmn": 0,
-        "extras": {
-            "spreadverse": [
-                {},
-                3,
-                "%ENEMY% is now shrowded in a spread aura"
-            ],
-            "steal": [
-                [
-                    99,
-                    1
-                ]
-            ],
-            "rollout": [
-                100,
-                2,
-                4
-            ],
-            "buff": [
-                [
-                    "user",
-                    "agl",
-                    null,
-                    null,
-                    null
-                ]
-            ],
-            "changeaffinity": [
-                [
-                    "target",
-                    "strike",
-                    "resist",
-                    "weak",
-                    null
-                ]
-            ],
-            "drain": [
-                null
-            ]
-        },
-        "levellock": 84
     },
     "FireRay": {
         "name": "FireRay",
@@ -65391,19 +65342,6 @@
         "powlamk": 60,
         "powpkmn": 110
     },
-    "Anti-Phys": {
-        "name": "Anti-Phys",
-        "type": "passive",
-        "desc": "Changes user's affinities towards Physical attacks to Resist",
-        "originalAuthor": "363363984390356993",
-        "passive": {
-            "swordbreaker": [
-                100
-            ]
-        },
-        "powlamk": 55,
-        "powpkmn": 100
-    },
     "InfinitePower": {
         "name": "InfinitePower",
         "type": "passive",
@@ -67697,7 +67635,7 @@
         "pow": 140,
         "hits": 1,
         "acc": 90,
-        "cost": 8,
+        "cost": 12,
         "costtype": "mp",
         "target": "allopposing",
         "originalAuthor": "363363984390356993",
@@ -67943,7 +67881,7 @@
         "originalAuthor": "532291526634635285",
         "status": "freeze",
         "statuschance": 5,
-        "desc": "An alternative to Bufu that can freeze and/or slow one's foe down temporarily for 2 turns.",
+        "desc": "An alternative to <:ice:962465468042575922>Bufu that can freeze and/or slow a foe down a bit for two turns.",
         "extras": {
             "buff": [
                 [
@@ -68809,7 +68747,74 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "This skill is not yet complete, so I won't explain how it's supposed to work"
+        "desc": "This skill is not yet complete, so I won't explain how it's supposed to work",
+        "extras": {
+            "metronome": [
+                "HauntedDream(ATK-ATK)",
+                "HauntedDream(ATK-MAG)",
+                "HauntedDream(ATK-PRC)",
+                "HauntedDream(ATK-END)",
+                "HauntedDream(ATK-CHR)",
+                "HauntedDream(ATK-INT)",
+                "HauntedDream(ATK-AGL)",
+                "HauntedDream(ATK-LUK)",
+                "HauntedDream(MAG-ATK)",
+                "HauntedDream(MAG-MAG)",
+                "HauntedDream(MAG-PRC)",
+                "HauntedDream(MAG-END)",
+                "HauntedDream(MAG-CHR)",
+                "HauntedDream(MAG-INT)",
+                "HauntedDream(MAG-AGL)",
+                "HauntedDream(MAG-LUK)",
+                "HauntedDream(PRC-ATK)",
+                "HauntedDream(PRC-MAG)",
+                "HauntedDream(PRC-PRC)",
+                "HauntedDream(PRC-END)",
+                "HauntedDream(PRC-CHR)",
+                "HauntedDream(PRC-INT)",
+                "HauntedDream(PRC-AGL)",
+                "HauntedDream(PRC-LUK)",
+                "HauntedDream(END-ATK)",
+                "HauntedDream(END-MAG)",
+                "HauntedDream(END-PRC)",
+                "HauntedDream(END-END)",
+                "HauntedDream(END-CHR)",
+                "HauntedDream(END-INT)",
+                "HauntedDream(END-AGL)",
+                "HauntedDream(END-LUK)",
+                "HauntedDream(CHR-MAG)",
+                "HauntedDream(CHR-PRC)",
+                "HauntedDream(CHR-END)",
+                "HauntedDream(CHR-CHR)",
+                "HauntedDream(CHR-INT)",
+                "HauntedDream(CHR-AGL)",
+                "HauntedDream(CHR-LUK)",
+                "HauntedDream(INT-ATK)",
+                "HauntedDream(INT-MAG)",
+                "HauntedDream(INT-PRC)",
+                "HauntedDream(INT-END)",
+                "HauntedDream(INT-CHR)",
+                "HauntedDream(INT-INT)",
+                "HauntedDream(INT-AGL)",
+                "HauntedDream(INT-LUK)",
+                "HauntedDream(AGL-ATK)",
+                "HauntedDream(AGL-MAG)",
+                "HauntedDream(AGL-PRC)",
+                "HauntedDream(AGL-END)",
+                "HauntedDream(AGL-CHR)",
+                "HauntedDream(AGL-INT)",
+                "HauntedDream(AGL-AGL)",
+                "HauntedDream(AGL-LUK)",
+                "HauntedDream(LUK-ATK)",
+                "HauntedDream(LUK-MAG)",
+                "HauntedDream(LUK-PRC)",
+                "HauntedDream(LUK-END)",
+                "HauntedDream(LUK-CHR)",
+                "HauntedDream(LUK-INT)",
+                "HauntedDream(LUK-AGL)",
+                "HauntedDream(LUK-LUK)"
+            ]
+        }
     },
     "StoneArmor": {
         "name": "StoneArmor",
@@ -68891,7 +68896,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Strength to harm enemy Strength"
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Strength",
+        "extras": {
+            "statcalc": [
+                "atk"
+            ],
+            "hitcalc": [
+                "atk"
+            ]
+        }
     },
     "HauntedDream(ATK-MAG)": {
         "name": "Haunted Dream",
@@ -68906,7 +68919,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Strength to harm enemy Magic"
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Magic",
+        "extras": {
+            "statcalc": [
+                "atk"
+            ],
+            "hitcalc": [
+                "mag"
+            ]
+        }
     },
     "HauntedDream(ATK-PRC)": {
         "name": "Haunted Dream",
@@ -68921,7 +68942,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Strength to harm enemy Perception"
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Perception",
+        "extras": {
+            "statcalc": [
+                "atk"
+            ],
+            "hitcalc": [
+                "prc"
+            ]
+        }
     },
     "HauntedDream(ATK-END)": {
         "name": "Haunted Dream",
@@ -68936,7 +68965,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Strength to harm enemy Endurance"
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Endurance",
+        "extras": {
+            "statcalc": [
+                "atk"
+            ],
+            "hitcalc": [
+                "end"
+            ]
+        }
     },
     "HauntedDream(ATK-CHR)": {
         "name": "Haunted Dream",
@@ -68951,7 +68988,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Strength to harm enemy Charisma"
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Charisma",
+        "extras": {
+            "statcalc": [
+                "atk"
+            ],
+            "hitcalc": [
+                "chr"
+            ]
+        }
     },
     "HauntedDream(ATK-INT)": {
         "name": "Haunted Dream",
@@ -68966,7 +69011,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Strength to harm enemy Intelligence"
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Intelligence",
+        "extras": {
+            "statcalc": [
+                "atk"
+            ],
+            "hitcalc": [
+                "int"
+            ]
+        }
     },
     "HauntedDream(ATK-AGL)": {
         "name": "Haunted Dream",
@@ -68981,7 +69034,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Strength to harm enemy Agility"
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Agility",
+        "extras": {
+            "statcalc": [
+                "atk"
+            ],
+            "hitcalc": [
+                "agl"
+            ]
+        }
     },
     "HauntedDream(ATK-LUK)": {
         "name": "Haunted Dream",
@@ -68996,7 +69057,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Strength to harm enemy Luck"
+        "desc": "The mischievous spirits use the caster's Strength to harm enemy Luck",
+        "extras": {
+            "statcalc": [
+                "atk"
+            ],
+            "hitcalc": [
+                "luk"
+            ]
+        }
     },
     "HauntedDream(MAG-ATK)": {
         "name": "Haunted Dream",
@@ -69011,7 +69080,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Magic to harm enemy Strength"
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Strength",
+        "extras": {
+            "statcalc": [
+                "mag"
+            ],
+            "hitcalc": [
+                "atk"
+            ]
+        }
     },
     "HauntedDream(MAG-MAG)": {
         "name": "Haunted Dream",
@@ -69026,7 +69103,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Magic to harm enemy Magic"
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Magic",
+        "extras": {
+            "statcalc": [
+                "mag"
+            ],
+            "hitcalc": [
+                "mag"
+            ]
+        }
     },
     "HauntedDream(MAG-PRC)": {
         "name": "Haunted Dream",
@@ -69041,7 +69126,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Magic to harm enemy Perception"
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Perception",
+        "extras": {
+            "statcalc": [
+                "mag"
+            ],
+            "hitcalc": [
+                "prc"
+            ]
+        }
     },
     "HauntedDream(MAG-END)": {
         "name": "Haunted Dream",
@@ -69056,7 +69149,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Magic to harm enemy Endurance"
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Endurance",
+        "extras": {
+            "statcalc": [
+                "mag"
+            ],
+            "hitcalc": [
+                "end"
+            ]
+        }
     },
     "HauntedDream(MAG-CHR)": {
         "name": "Haunted Dream",
@@ -69071,7 +69172,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Magic to harm enemy Charisma"
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Charisma",
+        "extras": {
+            "statcalc": [
+                "mag"
+            ],
+            "hitcalc": [
+                "chr"
+            ]
+        }
     },
     "HauntedDream(MAG-INT)": {
         "name": "Haunted Dream",
@@ -69086,7 +69195,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Magic to harm enemy Intelligence"
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Intelligence",
+        "extras": {
+            "statcalc": [
+                "mag"
+            ],
+            "hitcalc": [
+                "int"
+            ]
+        }
     },
     "HauntedDream(MAG-AGL)": {
         "name": "Haunted Dream",
@@ -69101,7 +69218,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Magic to harm enemy Agility"
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Agility",
+        "extras": {
+            "statcalc": [
+                "mag"
+            ],
+            "hitcalc": [
+                "agl"
+            ]
+        }
     },
     "HauntedDream(MAG-LUK)": {
         "name": "Haunted Dream",
@@ -69116,7 +69241,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Magic to harm enemy Luck"
+        "desc": "The mischievous spirits use the caster's Magic to harm enemy Luck",
+        "extras": {
+            "statcalc": [
+                "mag"
+            ],
+            "hitcalc": [
+                "luk"
+            ]
+        }
     },
     "HauntedDream(PRC-ATK)": {
         "name": "Haunted Dream",
@@ -69131,7 +69264,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Perception to harm enemy Strength"
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Strength",
+        "extras": {
+            "statcalc": [
+                "prc"
+            ],
+            "hitcalc": [
+                "atk"
+            ]
+        }
     },
     "HauntedDream(PRC-MAG)": {
         "name": "Haunted Dream",
@@ -69146,7 +69287,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Perception to harm enemy Magic"
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Magic",
+        "extras": {
+            "statcalc": [
+                "prc"
+            ],
+            "hitcalc": [
+                "mag"
+            ]
+        }
     },
     "HauntedDream(PRC-PRC)": {
         "name": "Haunted Dream",
@@ -69161,7 +69310,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Perception to harm enemy Perception"
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Perception",
+        "extras": {
+            "statcalc": [
+                "prc"
+            ],
+            "hitcalc": [
+                "prc"
+            ]
+        }
     },
     "HauntedDream(PRC-END)": {
         "name": "Haunted Dream",
@@ -69176,7 +69333,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Perception to harm enemy Endurance"
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Endurance",
+        "extras": {
+            "statcalc": [
+                "prc"
+            ],
+            "hitcalc": [
+                "end"
+            ]
+        }
     },
     "HauntedDream(PRC-CHR)": {
         "name": "Haunted Dream",
@@ -69191,7 +69356,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Perception to harm enemy Charisma"
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Charisma",
+        "extras": {
+            "statcalc": [
+                "prc"
+            ],
+            "hitcalc": [
+                "chr"
+            ]
+        }
     },
     "HauntedDream(PRC-INT)": {
         "name": "Haunted Dream",
@@ -69206,7 +69379,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Perception to harm enemy Intelligence"
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Intelligence",
+        "extras": {
+            "statcalc": [
+                "prc"
+            ],
+            "hitcalc": [
+                "int"
+            ]
+        }
     },
     "HauntedDream(PRC-AGL)": {
         "name": "Haunted Dream",
@@ -69221,7 +69402,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Perception to harm enemy Agility"
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Agility",
+        "extras": {
+            "statcalc": [
+                "prc"
+            ],
+            "hitcalc": [
+                "agl"
+            ]
+        }
     },
     "HauntedDream(PRC-LUK)": {
         "name": "Haunted Dream",
@@ -69236,7 +69425,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Perception to harm enemy Luck"
+        "desc": "The mischievous spirits use the caster's Perception to harm enemy Luck",
+        "extras": {
+            "statcalc": [
+                "prc"
+            ],
+            "hitcalc": [
+                "luk"
+            ]
+        }
     },
     "HauntedDream(END-ATK)": {
         "name": "Haunted Dream",
@@ -69251,7 +69448,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Strength"
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Strength",
+        "extras": {
+            "statcalc": [
+                "end"
+            ],
+            "hitcalc": [
+                "atk"
+            ]
+        }
     },
     "HauntedDream(END-MAG)": {
         "name": "Haunted Dream",
@@ -69266,7 +69471,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Magic"
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Magic",
+        "extras": {
+            "statcalc": [
+                "end"
+            ],
+            "hitcalc": [
+                "mag"
+            ]
+        }
     },
     "HauntedDream(END-PRC)": {
         "name": "Haunted Dream",
@@ -69281,7 +69494,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Perception"
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Perception",
+        "extras": {
+            "statcalc": [
+                "end"
+            ],
+            "hitcalc": [
+                "prc"
+            ]
+        }
     },
     "HauntedDream(END-END)": {
         "name": "Haunted Dream",
@@ -69296,7 +69517,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Endurance"
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Endurance",
+        "extras": {
+            "statcalc": [
+                "end"
+            ],
+            "hitcalc": [
+                "end"
+            ]
+        }
     },
     "HauntedDream(END-CHR)": {
         "name": "Haunted Dream",
@@ -69311,7 +69540,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Charisma"
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Charisma",
+        "extras": {
+            "statcalc": [
+                "end"
+            ],
+            "hitcalc": [
+                "chr"
+            ]
+        }
     },
     "HauntedDream(END-INT)": {
         "name": "Haunted Dream",
@@ -69326,7 +69563,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Intelligence"
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Intelligence",
+        "extras": {
+            "statcalc": [
+                "end"
+            ],
+            "hitcalc": [
+                "int"
+            ]
+        }
     },
     "HauntedDream(END-AGL)": {
         "name": "Haunted Dream",
@@ -69341,7 +69586,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Agility"
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Agility",
+        "extras": {
+            "statcalc": [
+                "end"
+            ],
+            "hitcalc": [
+                "agl"
+            ]
+        }
     },
     "HauntedDream(END-LUK)": {
         "name": "Haunted Dream",
@@ -69356,7 +69609,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Luck"
+        "desc": "The mischievous spirits use the caster's Endurance to harm enemy Luck",
+        "extras": {
+            "statcalc": [
+                "end"
+            ],
+            "hitcalc": [
+                "luk"
+            ]
+        }
     },
     "HauntedDream(CHR-ATK)": {
         "name": "Haunted Dream",
@@ -69371,7 +69632,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Strength"
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Strength",
+        "extras": {
+            "statcalc": [
+                "chr"
+            ],
+            "hitcalc": [
+                "atk"
+            ]
+        }
     },
     "HauntedDream(CHR-MAG)": {
         "name": "Haunted Dream",
@@ -69386,7 +69655,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Magic"
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Magic",
+        "extras": {
+            "statcalc": [
+                "chr"
+            ],
+            "hitcalc": [
+                "mag"
+            ]
+        }
     },
     "HauntedDream(CHR-PRC)": {
         "name": "Haunted Dream",
@@ -69401,7 +69678,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Perception"
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Perception",
+        "extras": {
+            "statcalc": [
+                "chr"
+            ],
+            "hitcalc": [
+                "prc"
+            ]
+        }
     },
     "HauntedDream(CHR-END)": {
         "name": "Haunted Dream",
@@ -69416,7 +69701,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Endurance"
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Endurance",
+        "extras": {
+            "statcalc": [
+                "chr"
+            ],
+            "hitcalc": [
+                "end"
+            ]
+        }
     },
     "HauntedDream(CHR-CHR)": {
         "name": "Haunted Dream",
@@ -69431,7 +69724,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Charisma"
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Charisma",
+        "extras": {
+            "statcalc": [
+                "chr"
+            ],
+            "hitcalc": [
+                "chr"
+            ]
+        }
     },
     "HauntedDream(CHR-INT)": {
         "name": "Haunted Dream",
@@ -69446,7 +69747,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Intelligence"
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Intelligence",
+        "extras": {
+            "statcalc": [
+                "chr"
+            ],
+            "hitcalc": [
+                "int"
+            ]
+        }
     },
     "HauntedDream(CHR-AGL)": {
         "name": "Haunted Dream",
@@ -69461,7 +69770,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Agility"
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Agility",
+        "extras": {
+            "statcalc": [
+                "chr"
+            ],
+            "hitcalc": [
+                "agl"
+            ]
+        }
     },
     "HauntedDream(CHR-LUK)": {
         "name": "Haunted Dream",
@@ -69476,7 +69793,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Luck"
+        "desc": "The mischievous spirits use the caster's Charisma to harm enemy Luck",
+        "extras": {
+            "statcalc": [
+                "chr"
+            ],
+            "hitcalc": [
+                "luk"
+            ]
+        }
     },
     "HauntedDream(INT-ATK)": {
         "name": "Haunted Dream",
@@ -69491,7 +69816,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Strength"
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Strength",
+        "extras": {
+            "statcalc": [
+                "int"
+            ],
+            "hitcalc": [
+                "atk"
+            ]
+        }
     },
     "HauntedDream(INT-MAG)": {
         "name": "Haunted Dream",
@@ -69506,7 +69839,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Magic"
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Magic",
+        "extras": {
+            "statcalc": [
+                "int"
+            ],
+            "hitcalc": [
+                "mag"
+            ]
+        }
     },
     "HauntedDream(INT-PRC)": {
         "name": "Haunted Dream",
@@ -69521,7 +69862,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Perception"
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Perception",
+        "extras": {
+            "statcalc": [
+                "int"
+            ],
+            "hitcalc": [
+                "prc"
+            ]
+        }
     },
     "HauntedDream(INT-END)": {
         "name": "Haunted Dream",
@@ -69536,7 +69885,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Endurance"
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Endurance",
+        "extras": {
+            "statcalc": [
+                "int"
+            ],
+            "hitcalc": [
+                "end"
+            ]
+        }
     },
     "HauntedDream(INT-CHR)": {
         "name": "Haunted Dream",
@@ -69551,7 +69908,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Charisma"
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Charisma",
+        "extras": {
+            "statcalc": [
+                "int"
+            ],
+            "hitcalc": [
+                "chr"
+            ]
+        }
     },
     "HauntedDream(INT-INT)": {
         "name": "Haunted Dream",
@@ -69566,7 +69931,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Intelligence"
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Intelligence",
+        "extras": {
+            "statcalc": [
+                "int"
+            ],
+            "hitcalc": [
+                "int"
+            ]
+        }
     },
     "HauntedDream(INT-AGL)": {
         "name": "Haunted Dream",
@@ -69581,7 +69954,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Agility"
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Agility",
+        "extras": {
+            "statcalc": [
+                "int"
+            ],
+            "hitcalc": [
+                "agl"
+            ]
+        }
     },
     "HauntedDream(INT-LUK)": {
         "name": "Haunted Dream",
@@ -69596,7 +69977,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Luck"
+        "desc": "The mischievous spirits use the caster's Intelligence to harm enemy Luck",
+        "extras": {
+            "statcalc": [
+                "int"
+            ],
+            "hitcalc": [
+                "luk"
+            ]
+        }
     },
     "HauntedDream(AGL-ATK)": {
         "name": "Haunted Dream",
@@ -69611,7 +70000,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Agility to harm enemy Strength"
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Strength",
+        "extras": {
+            "statcalc": [
+                "agl"
+            ],
+            "hitcalc": [
+                "atk"
+            ]
+        }
     },
     "HauntedDream(AGL-MAG)": {
         "name": "Haunted Dream",
@@ -69626,7 +70023,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Agility to harm enemy Magic"
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Magic",
+        "extras": {
+            "statcalc": [
+                "agl"
+            ],
+            "hitcalc": [
+                "mag"
+            ]
+        }
     },
     "HauntedDream(AGL-PRC)": {
         "name": "Haunted Dream",
@@ -69641,7 +70046,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Agility to harm enemy Perception"
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Perception",
+        "extras": {
+            "statcalc": [
+                "agl"
+            ],
+            "hitcalc": [
+                "prc"
+            ]
+        }
     },
     "HauntedDream(AGL-END)": {
         "name": "Haunted Dream",
@@ -69656,7 +70069,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Agility to harm enemy Endurance"
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Endurance",
+        "extras": {
+            "statcalc": [
+                "agl"
+            ],
+            "hitcalc": [
+                "end"
+            ]
+        }
     },
     "HauntedDream(AGL-CHR)": {
         "name": "Haunted Dream",
@@ -69671,7 +70092,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Agility to harm enemy Charisma"
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Charisma",
+        "extras": {
+            "statcalc": [
+                "agl"
+            ],
+            "hitcalc": [
+                "chr"
+            ]
+        }
     },
     "HauntedDream(AGL-INT)": {
         "name": "Haunted Dream",
@@ -69686,7 +70115,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Agility to harm enemy Intelligence"
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Intelligence",
+        "extras": {
+            "statcalc": [
+                "agl"
+            ],
+            "hitcalc": [
+                "int"
+            ]
+        }
     },
     "HauntedDream(AGL-AGL)": {
         "name": "Haunted Dream",
@@ -69701,7 +70138,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Agility to harm enemy Agility"
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Agility",
+        "extras": {
+            "statcalc": [
+                "agl"
+            ],
+            "hitcalc": [
+                "agl"
+            ]
+        }
     },
     "HauntedDream(AGL-LUK)": {
         "name": "Haunted Dream",
@@ -69716,7 +70161,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Agility to harm enemy Luck"
+        "desc": "The mischievous spirits use the caster's Agility to harm enemy Luck",
+        "extras": {
+            "statcalc": [
+                "agl"
+            ],
+            "hitcalc": [
+                "luk"
+            ]
+        }
     },
     "HauntedDream(LUK-ATK)": {
         "name": "Haunted Dream",
@@ -69731,7 +70184,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Luck to harm enemy Strength"
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Strength",
+        "extras": {
+            "statcalc": [
+                "luk"
+            ],
+            "hitcalc": [
+                "atk"
+            ]
+        }
     },
     "HauntedDream(LUK-MAG)": {
         "name": "Haunted Dream",
@@ -69746,7 +70207,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Luck to harm enemy Magic"
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Magic",
+        "extras": {
+            "statcalc": [
+                "luk"
+            ],
+            "hitcalc": [
+                "mag"
+            ]
+        }
     },
     "HauntedDream(LUK-PRC)": {
         "name": "Haunted Dream",
@@ -69761,7 +70230,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Luck to harm enemy Perception"
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Perception",
+        "extras": {
+            "statcalc": [
+                "luk"
+            ],
+            "hitcalc": [
+                "prc"
+            ]
+        }
     },
     "HauntedDream(LUK-END)": {
         "name": "Haunted Dream",
@@ -69776,7 +70253,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Luck to harm enemy Endurance"
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Endurance",
+        "extras": {
+            "statcalc": [
+                "luk"
+            ],
+            "hitcalc": [
+                "end"
+            ]
+        }
     },
     "HauntedDream(LUK-CHR)": {
         "name": "Haunted Dream",
@@ -69791,7 +70276,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Luck to harm enemy Charisma"
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Charisma",
+        "extras": {
+            "statcalc": [
+                "luk"
+            ],
+            "hitcalc": [
+                "chr"
+            ]
+        }
     },
     "HauntedDream(LUK-INT)": {
         "name": "Haunted Dream",
@@ -69806,7 +70299,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Luck to harm enemy Intelligence"
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Intelligence",
+        "extras": {
+            "statcalc": [
+                "luk"
+            ],
+            "hitcalc": [
+                "int"
+            ]
+        }
     },
     "HauntedDream(LUK-AGL)": {
         "name": "Haunted Dream",
@@ -69821,7 +70322,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Luck to harm enemy Agility"
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Agility",
+        "extras": {
+            "statcalc": [
+                "luk"
+            ],
+            "hitcalc": [
+                "agl"
+            ]
+        }
     },
     "HauntedDream(LUK-LUK)": {
         "name": "Haunted Dream",
@@ -69836,7 +70345,15 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "The mischievous spirits use the caster's Luck to harm enemy Luck"
+        "desc": "The mischievous spirits use the caster's Luck to harm enemy Luck",
+        "extras": {
+            "statcalc": [
+                "luk"
+            ],
+            "hitcalc": [
+                "luk"
+            ]
+        }
     },
     "test": {
         "name": "test",
@@ -69906,22 +70423,6 @@
             ]
         ]
     },
-    "CopySelf": {
-        "name": "Copy Self",
-        "type": "status",
-        "cost": 15,
-        "costtype": "MP",
-        "target": "caster",
-        "originalAuthor": "363363984390356993",
-        "statusses": {
-            "clone": [
-                50,
-                50,
-                50
-            ]
-        },
-        "desc": "The caster creates a copy of themselves. The copy is only half as powerful as the caster"
-    },
     "Peelout": {
         "name": "Peelout",
         "type": "status",
@@ -69986,5 +70487,143 @@
                 39
             ]
         ]
+    },
+    "FireBreath": {
+        "name": "Fire Breath",
+        "type": "fire",
+        "atktype": "physical",
+        "pow": 30,
+        "hits": 1,
+        "acc": 95,
+        "cost": 0,
+        "costtype": "mp",
+        "target": "spreadopposing",
+        "originalAuthor": "363363984390356993",
+        "crit": 5,
+        "status": "burn",
+        "statuschance": 5,
+        "desc": "A good alternative for a melee attack if you're a dragon"
+    },
+    "SummonKnight": {
+        "name": "SummonKnight",
+        "type": "status",
+        "cost": 0,
+        "costtype": "MP",
+        "target": "caster",
+        "originalAuthor": "363363984390356993",
+        "statusses": {
+            "reincarnate": [
+                4,
+                9,
+                75,
+                75,
+                "%PLAYER% is an asshole!",
+                [
+                    "Multi-Strike"
+                ]
+            ]
+        },
+        "desc": "???"
+    },
+    "Revitarahan": {
+        "name": "Revitarahan",
+        "type": "heal",
+        "cost": 10,
+        "costtype": "hppercent",
+        "target": "ally",
+        "originalAuthor": "363363984390356993",
+        "heal": {
+            "healstat": [
+                [
+                    100,
+                    "mppercent"
+                ]
+            ]
+        },
+        "desc": "The user fully restores one ally's MP",
+        "done": true
+    },
+    " ": {
+        "name": " ",
+        "costtype": "hp",
+        "pow": " ",
+        "acc": 200,
+        "crit": -87,
+        "hits": " ",
+        "type": "fire",
+        "status": "mirror",
+        "statuschance": 100,
+        "atktype": "physical",
+        "target": "caster",
+        "originalAuthor": "313972298992451585",
+        "powlamk": 0,
+        "powpkmn": 0,
+        "extras": {
+            "spreadverse": [
+                {},
+                3,
+                "%ENEMY% is now shrowded in a spread aura"
+            ],
+            "steal": [
+                [
+                    99,
+                    1
+                ]
+            ],
+            "rollout": [
+                100,
+                2,
+                4
+            ],
+            "buff": [
+                [
+                    "user",
+                    "agl",
+                    {},
+                    {},
+                    {}
+                ]
+            ],
+            "changeaffinity": [
+                [
+                    "target",
+                    "strike",
+                    "resist",
+                    "weak",
+                    {}
+                ]
+            ],
+            "drain": [
+                {}
+            ]
+        },
+        "levellock": 84
+    },
+    "UltimateHit": {
+        "name": "Ultimate Hit",
+        "type": "almighty",
+        "atktype": "physical",
+        "pow": 30,
+        "hits": 1,
+        "acc": 95,
+        "cost": 0,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "363363984390356993",
+        "crit": 15,
+        "desc": "An alternative melee attack that deals Almighty damage"
+    },
+    "Antiphysical": {
+        "name": "Antiphysical",
+        "type": "passive",
+        "desc": "Changes user's affinities towards Physical attacks to Resist",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "swordbreaker": [
+                100
+            ]
+        },
+        "powlamk": 55,
+        "powpkmn": 100
     }
 }

@@ -11823,11 +11823,11 @@
     "Anti-Sky": {
         "name": "Anti-Sky",
         "owner": "313972298992451585",
-        "level": 94,
-        "hp": 742,
-        "mp": 430,
-        "maxhp": 742,
-        "maxmp": 438,
+        "level": 99,
+        "hp": 780,
+        "mp": 461,
+        "maxhp": 780,
+        "maxmp": 461,
         "basehp": 45,
         "basemp": 20,
         "mpMeter": [
@@ -11844,8 +11844,8 @@
         },
         "weapon": {},
         "armor": {},
-        "xp": -1900143439,
-        "maxxp": 300733935,
+        "xp": 0,
+        "maxxp": 709691946,
         "skills": [
             "BuiltDifferent",
             "God'sHand",
@@ -11853,7 +11853,7 @@
             "LifeMooch",
             "InvigIII",
             "Eight Trigrams Sixty-Four Belts",
-            "ThatOneMove"
+            " "
         ],
         "critquote": [],
         "deathquote": [],
@@ -11900,11 +11900,11 @@
         },
         "stats": {
             "atk": 99,
-            "mag": 54,
-            "prc": 32,
-            "end": 53,
-            "chr": 32,
-            "int": 52,
+            "mag": 56,
+            "prc": 34,
+            "end": 55,
+            "chr": 34,
+            "int": 54,
             "agl": 99,
             "luk": 99
         },
@@ -25600,6 +25600,1558 @@
                 "Alright.",
                 "Stronger and stronger!"
             ]
+        },
+        "lb": {}
+    },
+    "Croato": {
+        "name": "Croato",
+        "owner": "544290248734015488",
+        "level": 7,
+        "hp": 99,
+        "mp": 45,
+        "maxhp": 99,
+        "maxmp": 45,
+        "basehp": 45,
+        "basemp": 15,
+        "melee": {
+            "name": "IQPunch",
+            "type": "strike",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "xp": 0,
+        "maxxp": 1179,
+        "skills": [
+            "Aqua",
+            "Bufu"
+        ],
+        "deathquote": [],
+        "bio": {
+            "info": "Croato is a smart wolf from planet Yaretza. He doesn't talk often, so he mostly lets action speak for him.",
+            "backstory": "Croato had very stellar grades in school, graduating early twice. He was very passionate about science, and worked as a scientist in a lab that did experiments on things that weren't alive at only the age of 10 ~~(so maybe it's about time you go outside and interact with someone)~~. He had enjoyed his job very much, but there was another lab, run by two deranged scientists, that captured animals and other organisms and forced them to go through experiments that would change how the organisms lived forever. He couldn't help but notice how cruel that other lab was, but he was too much of a coward to tell them. 3 years later, when Croato was 13, some animals of that other lab had escaped. When he heard that news, he had feared that scientists would get a bad reputation and that the animals who escaped would be coming for him, so he fled his hometown. The rest is shrouded in mystery...",
+            "voice": "Ai (Puyo Puyo)",
+            "theme": "",
+            "species": "Wolf",
+            "age": 15,
+            "likes": "Adventuring, Reading, Drawing",
+            "dislikes": "Electricity",
+            "fears": "Lightning (sometimes)",
+            "appearance": "https://cdn.discordapp.com/attachments/950052537753559051/1002696005810147379/unknown.png",
+            "height": [
+                3,
+                6
+            ],
+            "weight": 0,
+            "gender": "male",
+            "custom": {}
+        },
+        "trust": {
+            "Sparky": {
+                "value": 0,
+                "nextLevel": 300,
+                "level": 5
+            },
+            "Permic": {
+                "value": 180,
+                "nextLevel": 300,
+                "level": 5
+            },
+            "Sky": {
+                "value": 85,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Valoria": {
+                "value": 55,
+                "nextLevel": 210,
+                "level": 5
+            },
+            "Rattle": {
+                "value": 55,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Brainfreeze": {
+                "value": 70,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Rainbow": {
+                "value": 70,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Sutela": {
+                "value": 80,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Flara": {
+                "value": 60,
+                "nextLevel": 180,
+                "level": 5
+            },
+            "Ramia": {
+                "value": 50,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Melarue": {
+                "value": 70,
+                "nextLevel": 160,
+                "level": 4
+            },
+            "Axel": {
+                "value": 20,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Sun": {
+                "value": 30,
+                "nextLevel": 160,
+                "level": 4
+            },
+            "Lena": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Lanagu": {
+                "value": 150,
+                "nextLevel": 160,
+                "level": 4
+            },
+            "Euphorica": {
+                "value": 30,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Bow": {
+                "value": 20,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Dusk": {
+                "value": 20,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "SAUM-052": {
+                "value": 20,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Bayrero": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Monum": {
+                "value": 20,
+                "nextLevel": 180,
+                "level": 5
+            },
+            "Ira": {
+                "value": 150,
+                "nextLevel": 160,
+                "level": 4
+            }
+        },
+        "critquote": [],
+        "weapon": {},
+        "charms": [],
+        "curCharms": [],
+        "mainElement": "water",
+        "mpMeter": [
+            "Magic Points",
+            "MP"
+        ],
+        "armor": {},
+        "teamCombo": {
+            "Sparky": "ThunderousWave",
+            "Permic": "SizzledWave"
+        },
+        "stats": {
+            "atk": 3,
+            "mag": 9,
+            "prc": 16,
+            "end": 15,
+            "chr": 5,
+            "int": 13,
+            "agl": 3,
+            "luk": 8
+        },
+        "basestats": {
+            "baseatk": 1,
+            "basemag": 6,
+            "baseprc": 10,
+            "baseend": 9,
+            "basechr": 2,
+            "baseint": 7,
+            "baseagl": 1,
+            "baseluk": 5
+        },
+        "affinities": {
+            "superweak": [
+                "electric"
+            ],
+            "weak": [
+                "poison",
+                "grass"
+            ],
+            "resist": [
+                "fire",
+                "earth"
+            ],
+            "block": [],
+            "repel": [],
+            "drain": [
+                "water"
+            ]
+        },
+        "autolearn": {
+            "0": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true,
+            "7": true,
+            "true": true
+        },
+        "quotes": {
+            "meleequote": [],
+            "physquote": [
+                "I ABSOLUTE- Wait shit I'm not supposed to say anything-"
+            ],
+            "magquote": [],
+            "lbquote": [],
+            "strongquote": [],
+            "missquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "dodgequote": [],
+            "killquote": [],
+            "healquote": [],
+            "helpedquote": [
+                "[👍]",
+                "[👍]"
+            ],
+            "lvlquote": []
+        },
+        "leaderskill": {
+            "name": "Persistence",
+            "type": "buff",
+            "var1": "end",
+            "var2": 1
+        },
+        "lb": {}
+    },
+    "Bayrero": {
+        "name": "Bayrero",
+        "owner": "544290248734015488",
+        "level": 7,
+        "hp": 91,
+        "mp": 39,
+        "maxhp": 91,
+        "maxmp": 39,
+        "basehp": 40,
+        "basemp": 15,
+        "mpMeter": [
+            "PrehistoricEnergy",
+            "PHE"
+        ],
+        "melee": {
+            "name": "Bite",
+            "type": "pierce",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "weapon": {},
+        "xp": 0,
+        "maxxp": 1179,
+        "skills": [
+            "BigMunch",
+            "Tera"
+        ],
+        "critquote": [
+            "There's still more to come!",
+            "Seems like I'm getting lucky."
+        ],
+        "deathquote": [
+            "Ancestors... I've failed...",
+            "...I've tried my best..."
+        ],
+        "bio": {
+            "species": "Tyrannosaurus Rex",
+            "age": 13,
+            "info": "A T-Rex with cyan scales that is much smaller than the average size of his species. He is pretty playful and often lets curiosity take the best of him. Due to not being told much by the scientists who revived him from his fossil, he doesn't know much about the current technology.",
+            "backstory": "Bayrero was originally born 13 years before whatever the equivalent of the K-T mass extinction even was. He had enjoyed his life before then, but when the extinction event did happen, he tried to escape, but failed to do so...\n\nSo, fast-forward several million years later. A group of scientists have found his fossil and are in the process of reviving him. The next day, it was complete. Bayrero had been reborn. The scientists who revived him had told him mostly about his past, but not much else, thus leaving him confused as to how he got revived, and what new things he may encounter in his new life.",
+            "likes": "Kind creatures, friends",
+            "dislikes": "Unnatural things",
+            "fears": "Robots",
+            "voice": "[TBD]",
+            "theme": "",
+            "gender": "male",
+            "height": [
+                3,
+                2
+            ],
+            "weight": 0,
+            "custom": {}
+        },
+        "trust": {
+            "Croato": {
+                "value": 40,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Melarue": {
+                "value": 40,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Euphorica": {
+                "value": 40,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "SAUM-052": {
+                "value": 40,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Ramia": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Sun": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Axel": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Permic": {
+                "value": 80,
+                "nextLevel": 140,
+                "level": 3
+            },
+            "Dusk": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Bow": {
+                "value": 20,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "John": {
+                "value": 110,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Miles": {
+                "value": 80,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Frylo": {
+                "value": 80,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "DemonicDesire": {
+                "value": 90,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Karma": {
+                "value": 80,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Lena": {
+                "value": 60,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Frosta": {
+                "value": 60,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Trecko": {
+                "value": 60,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Jelly": {
+                "value": 60,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Sky": {
+                "value": 20,
+                "nextLevel": 140,
+                "level": 3
+            },
+            "Valoria": {
+                "value": 120,
+                "nextLevel": 180,
+                "level": 5
+            },
+            "Pank": {
+                "value": 20,
+                "nextLevel": 180,
+                "level": 5
+            },
+            "Nazier": {
+                "value": 50,
+                "nextLevel": 140,
+                "level": 3
+            },
+            "Rattle": {
+                "value": 60,
+                "nextLevel": 160,
+                "level": 4
+            },
+            "Sky(B)": {
+                "value": 80,
+                "nextLevel": 140,
+                "level": 3
+            },
+            "Taletan": {
+                "value": 50,
+                "nextLevel": 120,
+                "level": 2
+            }
+        },
+        "mainElement": "pierce",
+        "nickname": "Rero",
+        "lb4": {
+            "name": "ABiteOfThePast",
+            "class": "atk",
+            "pow": 430,
+            "cost": 480,
+            "status": "bleed",
+            "statuschance": 100
+        },
+        "charms": [],
+        "curCharms": [],
+        "armor": {},
+        "teamCombo": {
+            "Ira": "PsychicChomp",
+            "Sparky": "VoltCrunch"
+        },
+        "stats": {
+            "atk": 15,
+            "mag": 3,
+            "prc": 9,
+            "end": 15,
+            "chr": 6,
+            "int": 8,
+            "agl": 4,
+            "luk": 12
+        },
+        "basestats": {
+            "baseatk": 9,
+            "basemag": 1,
+            "baseprc": 6,
+            "baseend": 9,
+            "basechr": 3,
+            "baseint": 5,
+            "baseagl": 2,
+            "baseluk": 6
+        },
+        "affinities": {
+            "superweak": [
+                "explode"
+            ],
+            "weak": [
+                "metal",
+                "ice"
+            ],
+            "resist": [
+                "fire",
+                "electric"
+            ],
+            "block": [],
+            "repel": [
+                "earth"
+            ],
+            "drain": []
+        },
+        "autolearn": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true,
+            "7": true
+        },
+        "quotes": {
+            "meleequote": [],
+            "physquote": [
+                "I'm not gonna fuck around, but I will find out something.",
+                "Here comes the %SKILL%!"
+            ],
+            "magquote": [
+                "Let's go! %SKILL%!",
+                "Here comes the %SKILL%!",
+                "Fear my prehistoric origins!",
+                "Let's go! %SKILL%!"
+            ],
+            "allyatkquote": [
+                "Let's show them the power of teamwork!",
+                "We're gonna do this together!"
+            ],
+            "lbquote": [
+                "It's time for you to go extinct!",
+                "If I go down, I'm taking you with me!"
+            ],
+            "strongquote": [
+                "You've made a huge mistake, %ENEMY%.",
+                "Prepare to meet your doom!"
+            ],
+            "missquote": [
+                "Darn, I think I overshot.",
+                "Why are you moving so darn much?"
+            ],
+            "weakquote": [
+                "Uh oh!",
+                "This could be really bad!"
+            ],
+            "hurtquote": [],
+            "resistquote": [
+                "That barely hurt.",
+                "That won't be enough to stop me."
+            ],
+            "blockquote": [
+                "...Seriously?",
+                "I thought that'd do more, to be honest."
+            ],
+            "repelquote": [
+                "Bouncing back, apparently.",
+                "I guess your attack backfired."
+            ],
+            "drainquote": [
+                "...That happened.",
+                "What am I supposed to say here exactly? Delicious??"
+            ],
+            "dodgequote": [
+                "Keep trying, keep trying.",
+                "I'm slow. You've gotta work on your aim..."
+            ],
+            "killquote": [
+                "I have done my ancestors justice!",
+                "The dinosaurs shall live on!"
+            ],
+            "allydeathquote": [
+                "Don't worry, %ALLY%, I will avenge you well.",
+                "I'm not about to let that slide, %ENEMY%!"
+            ],
+            "healquote": [
+                "I'm not letting you guys go down.",
+                "I'm not entirely sure you need this, but here you go!"
+            ],
+            "helpedquote": [
+                "I'm not gonna go extinct just yet!",
+                "Thank you so much!"
+            ],
+            "consolequote": [
+                "Jeez, you took quite the beating.",
+                "%ALLY%, you don't look too good."
+            ],
+            "imfinequote": [
+                "[Pant] I'm, okay...",
+                "I'm just grateful I'm still here, %ALLY%."
+            ],
+            "lvlquote": [
+                "One step closer to doing my ancestors justice...",
+                "I've seemed to have gained power!"
+            ]
+        },
+        "leaderskill": {
+            "name": "PrehistoricBuff",
+            "type": "buff",
+            "var1": "atk",
+            "var2": 1
+        },
+        "lb": {
+            "1": {
+                "name": "ShredOfFossils",
+                "class": "atk",
+                "pow": 300,
+                "cost": 120,
+                "status": "bleed",
+                "statuschance": 13
+            },
+            "2": {
+                "name": "DinosaurRush",
+                "class": "atk",
+                "pow": 600,
+                "cost": 240,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "PrehistoricRumble",
+                "class": "atk",
+                "pow": 800,
+                "cost": 360,
+                "status": "none",
+                "statuschance": 0
+            }
+        }
+    },
+    "Sparky": {
+        "name": "Sparky",
+        "weapon": {},
+        "owner": "544290248734015488",
+        "level": 61,
+        "hp": 314,
+        "mp": 254,
+        "maxhp": 314,
+        "maxmp": 254,
+        "basehp": 32,
+        "basemp": 32,
+        "melee": {
+            "name": "Bite",
+            "type": "pierce",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "xp": 0,
+        "maxxp": 2674863,
+        "skills": [
+            "LightningTackle",
+            "Ziodyne",
+            "ThunderFang",
+            "Mazionga",
+            "Zioverse",
+            "ThunderWave",
+            "Masukukaja",
+            "ElectroAmp"
+        ],
+        "deathquote": [
+            "Oh, phooey.",
+            "Just not my day..."
+        ],
+        "bio": {
+            "info": "A tamoan chihuahua who enjoys trouble, is active, and can be overconfident and cocky at times. He has yellow-orange fur, green shoes, and a blue collar with a gold emblem with an electricity symbol on it. He is mostly clueless about the world around him, but he is eager to explore it more and make friends along the way.",
+            "backstory": "Sparky's from Planet Tamoa. He has been living in his hometown for 11 years. It has been very peaceful and happy in that hometown, until it was attacked and war broke out. The president of the town instructed the youth to evacuate the planet to a partner planet via an emergency space ship. Sparky's trip was going fine, until the space ship started going out of his control and went crazy, and ended up crashing on the planet called Yaretza. He was seriously injured from the crash but thanks to somebody healing him, he was able to recover. The events still come in his mind at times, but he stays calm and acts like it never happened most of the time.",
+            "voice": "Morgana (Persona 5)",
+            "theme": "",
+            "species": "Tamoan Chihuahua",
+            "age": 10,
+            "likes": "Battling, Cuddling, Cool Breezes",
+            "dislikes": "Promise-breakers",
+            "fears": "Earthquakes",
+            "height": [
+                2,
+                10
+            ],
+            "weight": 0,
+            "gender": "male",
+            "custom": {}
+        },
+        "strikequote": [
+            "Found the weak spot!"
+        ],
+        "critquote": [
+            "Weak spot found!",
+            "Lucky! Lucky! Lucky!"
+        ],
+        "trust": {
+            "Croato": {
+                "value": 0,
+                "nextLevel": 300,
+                "level": 5
+            },
+            "Permic": {
+                "value": 0,
+                "nextLevel": 300,
+                "level": 5
+            },
+            "Ira": {
+                "value": -70,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Valoria": {
+                "value": 140,
+                "nextLevel": 190,
+                "level": 4
+            },
+            "Dusk": {
+                "value": 5,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Flara": {
+                "value": 5,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Ramia": {
+                "value": 140,
+                "nextLevel": 300,
+                "level": 5
+            },
+            "Rainbow": {
+                "value": 65,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Sky": {
+                "value": 90,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Lena": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "SAUM-052": {
+                "value": 10,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Sutela": {
+                "value": 65,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "XCyan": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Lanagu": {
+                "value": 5,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Harcvuk": {
+                "value": 25,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Lacrimal": {
+                "value": 50,
+                "nextLevel": 100,
+                "level": 1
+            }
+        },
+        "charms": [],
+        "curCharms": [],
+        "lb4": {
+            "name": "Thunderstorm",
+            "class": "atk",
+            "pow": 1000,
+            "cost": 500,
+            "status": "paralyze",
+            "statuschance": 30
+        },
+        "mainElement": "electric",
+        "mpMeter": [
+            "ZapPower",
+            "ZP"
+        ],
+        "nickname": "",
+        "armor": {},
+        "stats": {
+            "atk": 35,
+            "mag": 35,
+            "prc": 22,
+            "end": 33,
+            "chr": 67,
+            "int": 21,
+            "agl": 70,
+            "luk": 68
+        },
+        "basestats": {
+            "baseatk": 5,
+            "basemag": 5,
+            "baseprc": 2,
+            "baseend": 3,
+            "basechr": 7,
+            "baseint": 1,
+            "baseagl": 10,
+            "baseluk": 8
+        },
+        "affinities": {
+            "weak": [
+                "earth"
+            ],
+            "resist": [
+                "electric"
+            ],
+            "block": [],
+            "repel": [],
+            "drain": []
+        },
+        "autolearn": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true,
+            "7": true
+        },
+        "quotes": {
+            "meleequote": [
+                "Wa-pow!",
+                "What the dog doin'?"
+            ],
+            "physquote": [
+                "Hiyah!!",
+                "I ABSOLUTELY MUST SCREW AROUND, AND ADDITIONALLY FIND OUT!"
+            ],
+            "magquote": [
+                "Alakablam!",
+                "Here I go!"
+            ],
+            "allyatkquote": [
+                "Two heads are better than one!",
+                "Come on, %ALLY%! Let's show these enemies that encountering us was a huge mistake!"
+            ],
+            "lbquote": [
+                "It's over for you!"
+            ],
+            "strongquote": [
+                "You shouldn't have challenged us!",
+                "Stay down and don't get back up!"
+            ],
+            "missquote": [
+                "I will simply hit you next time!",
+                "Hey! Stop drifting out of the way!"
+            ],
+            "weakquote": [
+                "AH! WHAT THE-",
+                "YIP! YIP! YIP!"
+            ],
+            "hurtquote": [
+                "Hey! Watch the fur!",
+                "Owwww-"
+            ],
+            "resistquote": [
+                "You can do better than that!",
+                "Hey, you have more moves, y'know."
+            ],
+            "blockquote": [
+                "Are you even trying?",
+                "Not happening!"
+            ],
+            "repelquote": [
+                "Right back at ya!",
+                "Oh! I love tennis!"
+            ],
+            "drainquote": [
+                "mmmm. Delicious.",
+                "Is this your way of giving me a christmas present? If so, thank you so much!"
+            ],
+            "dodgequote": [
+                "What? Did you seriously think I was just gonna stand there and take the hit?",
+                "Simply aim for the yellow chihuahua.",
+                "The pain train has been avoided!"
+            ],
+            "killquote": [
+                "Too cool!",
+                "Piece of cake!"
+            ],
+            "allydeathquote": [
+                "%ALLY%! NOOOO!",
+                "%ALLY%! This can't be happening!"
+            ],
+            "healquote": [
+                "Ya-ho!",
+                "Here ya go!"
+            ],
+            "helpedquote": [
+                "Thank you very much!",
+                "Lucky me!"
+            ],
+            "consolequote": [
+                "Whoa! That looks like quite a hit!",
+                "Don't worry, %ALLY%, you'll be juuuust fine."
+            ],
+            "imfinequote": [
+                "Tis but a scratch.",
+                "I'll be absolutely fine!"
+            ],
+            "lvlquote": [
+                "Wow! I feel stronger!",
+                "POWER!!!!"
+            ]
+        },
+        "leaderskill": {
+            "name": "SpeedSpark",
+            "type": "buff",
+            "var1": "agl",
+            "var2": 1
+        },
+        "lb": {
+            "1": {
+                "name": "Chaotic Lightning",
+                "pow": 300,
+                "cost": 100,
+                "status": "paralyze",
+                "statuschance": 50,
+                "class": "atk"
+            },
+            "2": {
+                "name": "Plasmatic Rush",
+                "class": "atk",
+                "pow": 600,
+                "cost": 250,
+                "status": "paralyze",
+                "statuschance": 10
+            },
+            "3": {
+                "name": "Sharp Zap",
+                "class": "atk",
+                "pow": 400,
+                "cost": 300,
+                "status": "paralyze",
+                "statuschance": 100
+            }
+        }
+    },
+    "Ira": {
+        "name": "Ira",
+        "owner": "544290248734015488",
+        "level": 68,
+        "hp": 365,
+        "mp": 437,
+        "maxhp": 365,
+        "maxmp": 437,
+        "basehp": 30,
+        "basemp": 35,
+        "melee": {
+            "name": "PsychicBash",
+            "type": "strike",
+            "pow": 10,
+            "acc": 100,
+            "crit": 0
+        },
+        "weapon": {},
+        "xp": 623088,
+        "maxxp": 7283446,
+        "skills": [
+            "Mediarama",
+            "RegenAria",
+            "MePatra",
+            "Diarahan",
+            "Recarm",
+            "Bapsio",
+            "Psiodyne",
+            "KindSoul"
+        ],
+        "critquote": [
+            "I-I hit a weak spot?",
+            "W-wow!"
+        ],
+        "deathquote": [
+            "S-sorry, e-everyone...",
+            "N-no... I-I can't..."
+        ],
+        "bio": {
+            "species": "Altarian Cat",
+            "age": 4,
+            "info": "Ira is a shy and timid altarian cat who is very short. She has psychic powers, but they are unstable due to her very young age. She is easily intimidated by those much larger than her and is easily scared in general. However, she's very kind to those she can trust and is willing to help them out. She has white fur, pink shoes, a purple and pink scarf, and a pale purple dress.",
+            "backstory": "Ira originally was from Altaria, where she had lived a peaceful(?) life. When war had broken out, she was the first to evacuate. She had no idea where to go, so she had just went to a random planet (which was conveniently(?) the same planet that the group was on).",
+            "likes": "People whom she can trust, comfortable spots, warmness.",
+            "dislikes": "Loud Noises",
+            "fears": "Nightmares, those much larger than her that she doesn't know she can trust\n<Instability> Ira's psychic powers are very unstable, and they can often be activated on accident when she's going through a strong emotion. If she were to be forced to constantly abuse her powers with no breaks, she'll enter a phase of pure instability, and if she tries to user her powers in this state, one or more of the following can happen:\n- The thing she intended to do (extremely unlikely)\n- A harsh psychic attack to a random person\n- A harsh psychic attack to everyone around her\n- A harsh psychic attack to herself\n- Levitating and then dashing into the closest person or a wall\n- Telekinesis throwing the closest person or object",
+            "voice": "Lidelle - Puyo Puyo (Japanese)",
+            "theme": "",
+            "height": [
+                1,
+                5
+            ],
+            "weight": 0,
+            "gender": "female",
+            "custom": {}
+        },
+        "trust": {
+            "Valoria": {
+                "value": 65,
+                "nextLevel": 190,
+                "level": 4
+            },
+            "Dusk": {
+                "value": 55,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Flara": {
+                "value": 140,
+                "nextLevel": 210,
+                "level": 5
+            },
+            "Sparky": {
+                "value": -70,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Ramia": {
+                "value": 75,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Sky": {
+                "value": 45,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Rainbow": {
+                "value": 0,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Karma": {
+                "value": 20,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Sutela": {
+                "value": -25,
+                "nextLevel": 150,
+                "level": 2,
+                "dislike": 160
+            },
+            "Lanagu": {
+                "value": 95,
+                "nextLevel": 210,
+                "level": 5
+            },
+            "Sun": {
+                "value": 130,
+                "nextLevel": 140,
+                "level": 3
+            },
+            "Euphorica": {
+                "value": 85,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Hurricane": {
+                "value": 25,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "XCyan": {
+                "value": 25,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Harcvuk": {
+                "value": 95,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Yanna": {
+                "value": 20,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "John": {
+                "value": 90,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "DemonicDesire": {
+                "value": 70,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Frylo": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Exetior": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Bow": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Miles": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Monum": {
+                "value": 115,
+                "nextLevel": 180,
+                "level": 5
+            },
+            "Croato": {
+                "value": 110,
+                "nextLevel": 140,
+                "level": 3
+            }
+        },
+        "lb4": {
+            "name": "GaiaHealing",
+            "class": "heal",
+            "pow": 800,
+            "cost": 500,
+            "status": "none",
+            "statuschance": 0
+        },
+        "charms": [],
+        "curCharms": [],
+        "mainElement": "heal",
+        "mpMeter": [
+            "Magic Points",
+            "MP"
+        ],
+        "armor": {},
+        "teamCombo": {
+            "Valoria": "PsychicExplosion"
+        },
+        "stats": {
+            "atk": 23,
+            "mag": 77,
+            "prc": 39,
+            "end": 26,
+            "chr": 39,
+            "int": 39,
+            "agl": 73,
+            "luk": 76
+        },
+        "basestats": {
+            "baseatk": 1,
+            "basemag": 10,
+            "baseprc": 5,
+            "baseend": 4,
+            "basechr": 5,
+            "baseint": 5,
+            "baseagl": 6,
+            "baseluk": 9
+        },
+        "affinities": {
+            "superweak": [
+                "nuclear"
+            ],
+            "weak": [
+                "curse"
+            ],
+            "resist": [
+                "bless",
+                "gravity"
+            ],
+            "block": [
+                "psychic"
+            ],
+            "repel": [],
+            "drain": []
+        },
+        "autolearn": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true,
+            "7": true
+        },
+        "quotes": {
+            "meleequote": [],
+            "physquote": [
+                "I absolutely must... uhhhhhh...",
+                "H-h-here I go..."
+            ],
+            "magquote": [
+                "S-s-so b-be it!",
+                "H-here I go!"
+            ],
+            "allyatkquote": [
+                "I'll help!",
+                "Let's do this, %ALLY%!"
+            ],
+            "lbquote": [
+                "I'm ready!"
+            ],
+            "strongquote": [
+                "...O-oops...",
+                "H-how d-did I..."
+            ],
+            "missquote": [
+                "N-no!",
+                "...H-hey...!"
+            ],
+            "weakquote": [
+                "NYAAA!",
+                "%ALLY%! H-help me!"
+            ],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [
+                "h-huh?",
+                "..."
+            ],
+            "repelquote": [
+                "...U-uhh...",
+                "...W-why would you d-d-do this to yourself...?"
+            ],
+            "drainquote": [
+                "...?",
+                "...I-I d-don't..."
+            ],
+            "dodgequote": [
+                "...I-",
+                "W-w-what...?"
+            ],
+            "killquote": [
+                "Y-you had that coming, %ENEMY%!",
+                "I-I d-did it!"
+            ],
+            "allydeathquote": [
+                "...",
+                "%ALLY%..."
+            ],
+            "healquote": [
+                "I-I'm here to help!",
+                "Uh... H-here you go..."
+            ],
+            "helpedquote": [
+                "T-thank you...!",
+                "E-everything will be okay... I-I hope..."
+            ],
+            "consolequote": [
+                "%ALLY%, are you okay...?",
+                "I-I'd better help you, you're not looking too good..."
+            ],
+            "imfinequote": [
+                "I-I think I'm fine...!",
+                "[Pant] Th-thank you for checking on me, %ALLY%..."
+            ],
+            "lvlquote": [
+                "I-I t-think I g-got it!",
+                "I-I did it!"
+            ]
+        },
+        "leaderskill": {
+            "name": "Healer'sGift",
+            "type": "boost",
+            "var1": "heal",
+            "var2": 12
+        },
+        "lb": {
+            "1": {
+                "name": "MegaHeal",
+                "class": "heal",
+                "pow": 150,
+                "cost": 100,
+                "status": "none",
+                "statuschance": 0
+            },
+            "2": {
+                "name": "SuperDia",
+                "class": "heal",
+                "pow": 300,
+                "cost": 200,
+                "status": "none",
+                "statuschance": 0
+            },
+            "3": {
+                "name": "PsycheHeal",
+                "class": "heal",
+                "pow": 400,
+                "cost": 350,
+                "status": "none",
+                "statuschance": 0
+            }
+        },
+        "statusaffinities": {
+            "weak": [
+                "sensitive",
+                "irradiation"
+            ],
+            "resist": [
+                "brainwash"
+            ]
+        }
+    },
+    "Yanna": {
+        "name": "Yanna",
+        "owner": "544290248734015488",
+        "level": 71,
+        "hp": 380,
+        "mp": 385,
+        "maxhp": 380,
+        "maxmp": 385,
+        "basehp": 30,
+        "basemp": 35,
+        "mpMeter": [
+            "Angel-Devil'sEnergy",
+            "ADE"
+        ],
+        "melee": {
+            "name": "SlashAttack",
+            "type": "slash",
+            "pow": 30,
+            "acc": 95,
+            "crit": 15
+        },
+        "weapon": {},
+        "armor": {},
+        "xp": 181866,
+        "maxxp": 11188725,
+        "skills": [
+            "FortunateSpirit",
+            "ImmoralMagnetism",
+            "Maeigaon",
+            "Eigaon",
+            "IlluminatedLuckiness",
+            "Makougaon",
+            "Kougaon",
+            "Angel-DevilFury"
+        ],
+        "critquote": [
+            "Oooo! Luckiness!",
+            "Oh yeah!"
+        ],
+        "deathquote": [
+            "No... Not... Now...",
+            "Not... good..."
+        ],
+        "bio": {
+            "species": "Angel-Devil Dragon ||(Previously a lizard)||",
+            "age": 18,
+            "info": "A female angel-devil dragon (who was previously a lizard) who is another friend of Permic's (and before anyone assumes, no, not a girlfriend or wife.). She is pretty energetic and extroverted, and loves those who are short and/or cute.\n<Appearance (Dragon)> Yanna's current appearance has 2 halves to it. One half has white scales, an angelic wing, short claws, and a half-halo over that half of her head, resembling an angel. However, the other half has black scales, a devil wing, sharp claws, and a horn on that side of her head, resembling a devil. These features had given her unnatural species the name of 'Angel-Devil Dragons.' Asides from those, she has gray shoes, and a short tail.\n<Appearance (Lizard)> Yanna's past appearance was not the same as her current appearance. She had gray scales and middle-length claws. And just like her current appearance, she had gray shoes and a short tail. She was also shorter compared to her current form, being 4'3 if she were still a lizard today.",
+            "backstory": "It starts hundreds of years ago, with a Flasheriz dragon and a Darkeriz dragon, named Yango and Yinga respectively. They had completely opposite beliefs, and were pissed off at each other because of that, so, they fought every time they could, in any area they could. This greatly disturbed the deities, who had tried to get them to stop numerous times, but all failed. One day, they all decided enough was enough for the two, and they had decided to curse them. When the two were getting ready for yet another brawl in a cave, they suddenly got stuck to each other (obligatory horny joke goes here), and then had suddenly became a black and white orb of liquid; meaning the curse was successful. They couldn't move, nor could they speak. They were just an orb, for hundreds of years...\n\nNow, we skip to 3 years before present day, where Yanna, Permic, and Mike were exploring. They were exploring the cave that Yango and Yinga had gotten cursed. They had then stumbled upon the orb those two were turned into. They did not know what it did or why it was here. Permic and Mike were suspicious and didn't touch it, however Yanna let her curiousity get the best of her, and decided to try and grab the orb. Upon touching the orb, the liquid had entered Yanna's body via her hand. And then, she changed. Her scales changed colors to black on one half and white on the other, her claws on the white half shortened, while on the black half, they sharpened. She had also sprouted an angelic wing on the white half, and a devil wing on the black half, and grew a horn on a black half, while a half-halo sprouted from her head on the white half. Lastly, she grew by two feet and Yango and Yinga both became entities in her mind without a physical form. Yango and Yinga could speak but only Yanna would hear them. Her initial reaction was panicked, and it'd be that way for quite a bit, but she'd settle soon. It's not entirely known what happened after...",
+            "likes": "Cute/Short people, cute things in general, hanging out with friends",
+            "dislikes": "People who flex their extraordinary aspects, like intelligence or strength.",
+            "fears": "Lightning",
+            "voice": "Amitie - Puyo Puyo",
+            "theme": "",
+            "gender": "female",
+            "height": [
+                6,
+                3
+            ],
+            "weight": 0,
+            "custom": {}
+        },
+        "trust": {
+            "Valoria": {
+                "value": 0,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Ira": {
+                "value": 20,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Dusk": {
+                "value": 20,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Ramia": {
+                "value": 20,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "F.Troll": {
+                "value": 60,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Snow(Felix)": {
+                "value": 60,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Morisonu": {
+                "value": 0,
+                "nextLevel": 180,
+                "level": 5
+            },
+            "Golena": {
+                "value": 70,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Viridian": {
+                "value": 20,
+                "nextLevel": 120,
+                "level": 2
+            },
+            "Carlo": {
+                "value": 60,
+                "nextLevel": 100,
+                "level": 1
+            },
+            "Karuma": {
+                "value": 30,
+                "nextLevel": 100,
+                "level": 1
+            }
+        },
+        "charms": [],
+        "curCharms": [],
+        "mainElement": "spirit",
+        "teamCombo": {
+            "Permic": "BurningAngel",
+            "Mike": "PoisonedDevil"
+        },
+        "stats": {
+            "atk": 24,
+            "mag": 25,
+            "prc": 78,
+            "end": 39,
+            "chr": 79,
+            "int": 38,
+            "agl": 41,
+            "luk": 80
+        },
+        "basestats": {
+            "baseatk": 1,
+            "basemag": 2,
+            "baseprc": 8,
+            "baseend": 4,
+            "basechr": 9,
+            "baseint": 3,
+            "baseagl": 6,
+            "baseluk": 10
+        },
+        "affinities": {
+            "superweak": [],
+            "weak": [
+                "ice",
+                "electric"
+            ],
+            "resist": [
+                "wind",
+                "spirit"
+            ],
+            "block": [],
+            "repel": [],
+            "drain": []
+        },
+        "autolearn": {
+            "0": true,
+            "1": true,
+            "2": true,
+            "3": true,
+            "4": true,
+            "5": true,
+            "6": true,
+            "7": true
+        },
+        "quotes": {
+            "meleequote": [],
+            "physquote": [
+                "I ABSOLUTELY MUST FUCK AROUND, AND ADDITIONALLY FIND OUT!",
+                "Ha! Taaaaaaaaaaaaaake THIS!"
+            ],
+            "magquote": [
+                "I will make you fear me!",
+                "Haaaaaaaaaaaaa!"
+            ],
+            "allyatkquote": [
+                "Allow me to be of assistance!",
+                "I'm feeling generous today."
+            ],
+            "lbquote": [
+                "It’s time!",
+                "Begone!"
+            ],
+            "strongquote": [
+                "Haha! I found your weak spot!",
+                "Haha. **You're in danger.**"
+            ],
+            "missquote": [
+                "Pfft. That miss meant nothing. **Now I will get serious.**",
+                "It seems."
+            ],
+            "weakquote": [
+                "WHY MEEEEEEE",
+                "A- S̵t̵o̵p̵ ̵t̴h̴a̵t̴ ̷r̴i̵g̷h̸t̸ ̵n̸o̸w̵,̴ ̷o̸r̴ ̴w̸e̴'̷l̶l̸ ̵h̸a̷v̴e̴ ̶p̶r̶o̴b̵l̷e̸m̸s̸.̴"
+            ],
+            "hurtquote": [],
+            "resistquote": [
+                "That's nothing!",
+                "That's never gonna stop me!"
+            ],
+            "blockquote": [
+                "PFFT. You're so dumb...",
+                "That's nothing! ...Literally."
+            ],
+            "repelquote": [
+                "Right back around it goes!",
+                "Too bad for you~!"
+            ],
+            "drainquote": [
+                "So is nobody gonna question how I drained that?"
+            ],
+            "dodgequote": [
+                "Denied!",
+                "Damn you suck."
+            ],
+            "killquote": [
+                "You put up a great fight! Too bad it's all over... for you!",
+                "You never stood a chance."
+            ],
+            "allydeathquote": [
+                "NOOO! Not %ALLY%!",
+                "I will remember this, %ENEMY%."
+            ],
+            "healquote": [
+                "Have some help. You'll need it.",
+                "I'll bless you this time!"
+            ],
+            "helpedquote": [
+                "O, how do I express my gratitude?",
+                "I'm still in this!"
+            ],
+            "consolequote": [
+                "You're not hurt, are you?",
+                "Are you okay!? That had to hurt!"
+            ],
+            "imfinequote": [
+                "Ha. I'll be okay.",
+                "Tis but a scratch."
+            ],
+            "lvlquote": [
+                "More power and hopefully more balance!",
+                "Aw yeah! This is happening!"
+            ]
+        },
+        "leaderskill": {
+            "name": "Angel-DevilPower",
+            "type": "buff",
+            "var1": "mag",
+            "var2": 1
         },
         "lb": {}
     }
