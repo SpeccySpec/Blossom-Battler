@@ -380,13 +380,14 @@
                 "electric"
             ],
             "resist": [],
-            "block": [],
+            "block": [
+                "wind"
+            ],
             "repel": [],
             "drain": []
         },
         "skills": [
             "TornadoStrike2",
-            "SwordSmash",
             "PSIFreeze-Alpha"
         ],
         "autolearn": [],

@@ -510,7 +510,13 @@
             "Lanagu"
         ],
         "backup": [],
-        "items": {},
+        "items": {
+            "Potion": 4,
+            "Splen Berry": 4,
+            "Corsela Berry": 4,
+            "MP Potion": 2,
+            "Wood": 1
+        },
         "weapons": {},
         "armors": {},
         "negotiates": {},

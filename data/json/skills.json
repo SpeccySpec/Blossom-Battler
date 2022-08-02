@@ -70561,7 +70561,7 @@
     "FireBreath": {
         "name": "Fire Breath",
         "type": "fire",
-        "atktype": "physical",
+        "atktype": "ranged",
         "pow": 30,
         "hits": 1,
         "acc": 95,
