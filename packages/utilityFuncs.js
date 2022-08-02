@@ -2,7 +2,8 @@ const adminList = [
 	'516359709779820544',
 	'532291526634635285',
 	'441198920668938260',
-	'412328234198237189'
+	'412328234198237189',
+	'621307633718132746'
 ]
 
 checkListArgument = (type, variable, validTypes, message, settings) => {

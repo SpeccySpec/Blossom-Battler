@@ -806,9 +806,9 @@
         "melee": {
             "name": "DivePress",
             "type": "strike",
-            "pow": 30,
-            "acc": 95,
-            "crit": 15
+            "pow": 20,
+            "acc": 100,
+            "crit": 0
         },
         "xp": 812578,
         "maxxp": 12910067,
@@ -827,18 +827,18 @@
             "...I somewhat knew this would happen..."
         ],
         "bio": {
-            "info": "Permic is a dragon that was previously a lizard because of an experiment. He's mostly rude and stubborn, but can be nice at times. He has dark red scales, grey fingerless gloves, and pink shoes.",
-            "backstory": "Permic used to be a lizard, rather than a dragon, for 13 years. Then, just after his 14th birthday, he wandered off to a strange lab. He was dosed with some suspicious medicine, but didn't feel anything, so he went to bed. The next morning, however, he felt different. He had horns on his head and he had gained the ability to breathe fire (He always had the pyrokinesis abilities since he was a lizard dw about that). He had been turned into a dragon. His first reaction was to find a way to get back into his older form, but he hasn't been able to do so. He has gotten used to this new form, however he does still look for ways to get back to his older form.",
+            "info": "Permic is a komodo dragon who's mostly rude and stubborn. However, he can be nice at times and has a clear soft side. He has dark red scales, grey fingerless gloves, and pink shoes.",
+            "backstory": "[I don't have ideas atm]",
             "voice": "Satan - Puyo Puyo (Japanese)",
             "theme": "",
-            "species": "Dragon (previously a lizard)",
-            "age": 10,
+            "species": "Komodo Dragon",
+            "age": 18,
             "likes": "Training, Hot areas, Messing around with others",
             "dislikes": "Those who go mad with power.",
             "fears": "Fairies... for some reason...",
             "height": [
-                4,
-                0
+                5,
+                3
             ],
             "weight": 0,
             "gender": "male",
@@ -2123,9 +2123,9 @@
         "melee": {
             "name": "PsychicBash",
             "type": "strike",
-            "pow": 10,
+            "pow": 15,
             "acc": 100,
-            "crit": 0
+            "crit": 5
         },
         "weapon": {},
         "xp": 623088,

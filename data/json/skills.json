@@ -42656,17 +42656,18 @@
     },
     "Agi": {
         "name": "Agi",
-        "type": "status",
-        "cost": 5,
-        "costtype": "MP",
+        "type": "fire",
+        "atktype": "magic",
+        "pow": 60,
+        "hits": 1,
+        "acc": 95,
+        "cost": 4,
+        "costtype": "mp",
         "target": "one",
-        "originalAuthor": "798092550392381450",
-        "statusses": {
-            "heartswap": [
-                true
-            ]
-        },
-        "desc": "a"
+        "originalAuthor": "516359709779820544",
+        "status": "burn",
+        "statuschance": 5,
+        "desc": "Your typical tier one Fire skill. Uses a small Fire to deal damage."
     },
     "MarEAgion": {
         "name": "MarEAgion",
@@ -43997,17 +43998,18 @@
     },
     "Agidyne": {
         "name": "Agidyne",
-        "type": "status",
-        "cost": 1,
-        "costtype": "MP",
+        "type": "fire",
+        "atktype": "magic",
+        "pow": 350,
+        "hits": 1,
+        "acc": 95,
+        "cost": 16,
+        "costtype": "mp",
         "target": "one",
-        "originalAuthor": "621307633718132746",
-        "statusses": {
-            "heartswap": [
-                true
-            ]
-        },
-        "desc": "a"
+        "originalAuthor": "516359709779820544",
+        "status": "burn",
+        "statuschance": 5,
+        "desc": "The user engulfs the target in a huge flame."
     },
     "ConflagrationPummel": {
         "name": "Conflagration Pummel",
