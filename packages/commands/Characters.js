@@ -1138,7 +1138,7 @@ commands.setmelee = new Command({
 
 		// Some element and balancing checks
 		if (args[2].toLowerCase() != 'strike' && args[2].toLowerCase() != 'slash' && args[2].toLowerCase() != 'pierce' && args[2].toLowerCase() != 'explode') return message.channel.send('You can only use Physical Elements in melee attacks! _(Strike, Slash, Pierce, Explode)_');
-		if (args[3] > 80) return message.channel.send('Melee Attacks cannot go above **80 power**!')
+		if (args[3] > 60) return message.channel.send('Melee Attacks cannot go above **60 power**!')
 		if (args[5] > 15) return message.channel.send('Melee Attacks cannot go above **15% Critical Hit Chance**!')
 
 		// Make the Melee Attack
