@@ -64,7 +64,8 @@
             "UltimateHit",
             "ElementalMagic",
             "FireBomb",
-            "ElementalCycle"
+            "ElementalCycle",
+            "Unsacrifice"
         ],
         "autolearn": [],
         "quotes": {

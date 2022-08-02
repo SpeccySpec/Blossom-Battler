@@ -67748,25 +67748,6 @@
             ]
         }
     },
-    "Metrofuckingnome": {
-        "name": "Метроном",
-        "type": "almighty",
-        "atktype": "magic",
-        "pow": 96,
-        "hits": 1,
-        "acc": 100,
-        "cost": 0,
-        "costtype": "mp",
-        "target": "one",
-        "originalAuthor": "363363984390356993",
-        "desc": "This is a test skill to see the limits of Metronome extra",
-        "extras": {
-            "metronome": [
-                "Agi",
-                "Last-Resort"
-            ]
-        }
-    },
     "Choma": {
         "name": "Choma",
         "type": "fire",
@@ -71064,5 +71045,38 @@
         "desc": "The user revives fallen team members, fully restores team's HP, and cures all ailments, but reduces caster's HP to 1.",
         "done": true,
         "levellock": 65
+    },
+    "Unsacrifice": {
+        "name": "Unsacrifice",
+        "type": "heal",
+        "cost": 0,
+        "costtype": "hp",
+        "target": "caster",
+        "originalAuthor": "363363984390356993",
+        "heal": {
+            "sacrifice": [
+                100
+            ]
+        },
+        "desc": "I wonder what this is...",
+        "done": true
+    },
+    "Finita": {
+        "name": "Finita",
+        "type": "heal",
+        "cost": 0,
+        "costtype": "MP",
+        "target": "caster",
+        "originalAuthor": "363363984390356993",
+        "heal": {
+            "healstat": [
+                [
+                    -1e+99,
+                    "lb"
+                ]
+            ]
+        },
+        "desc": "The caster is cheating",
+        "done": true
     }
 }

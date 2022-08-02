@@ -182,7 +182,7 @@ commands.registerstatus = new Command({
 		}
 	],
 	func: (message, args) => {
-		if (skillFile[args[0]] && message.author.id != skillFile[args[0]].originalAuthor) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
+		if (skillFile[args[0]] && message.author.id != skillFile[args[0]].originalAuthor && !utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
 
 		let skill = buildStatus(message, args[5], args)
 		if (!skill) return;
@@ -238,7 +238,7 @@ commands.registerheal = new Command({
 		},
 	],
 	func: (message, args) => {
-		if (skillFile[args[0]] && message.author.id != skillFile[args[0]].originalAuthor) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
+		if (skillFile[args[0]] && message.author.id != skillFile[args[0]].originalAuthor && !utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
 
 		let skill = buildHeal(message, args[5], args)
 		if (!skill) return;
@@ -279,7 +279,7 @@ commands.registerpassive = new Command({
 		}
 	],
 	func: (message, args) => {
-		if (skillFile[args[0]] && message.author.id != skillFile[args[0]].originalAuthor) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
+		if (skillFile[args[0]] && message.author.id != skillFile[args[0]].originalAuthor && !utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
 
 		let skill = buildPassive(message, args[2], args)
 		if (!skill) return;
