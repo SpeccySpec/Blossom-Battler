@@ -1265,39 +1265,8 @@ saveError = (err) => {
 			console.log('Written backup of battles');
 		}
 	}
-}
 
-//a
-battleFiles = [];
-
-let error = fs.readFileSync('./data/error/battles.txt', {flag: 'as+'});
-if (error && error != '') battleFiles = JSON.parse(error);
-
-fs.unlink('./data/error/battles.txt', (err) => {
-    if (err) throw err;
-    console.log("Deleted the Error.txt and noticed it :)");
-});
-
-if (battleFiles.length > 0) {
-	console.log("Pulled from Error.txt!");
-	for (let btlp of battleFiles) {
-		console.log(btlp);
-		let btl = setUpFile(btlp, true);
-
-		// Sadly, no battle.
-		if (!btl.battling) continue;
-
-		// Set channel again
-		client.channels.get(btl.channel.id)
-			.then(channel => {
-				btl.channel = channel;
-				channel.send("I'm so sorry ;-;\nThis battle got interrupted by some sort of error... I'll restart it from it's last position.");
-
-				// Resend the Embed
-				sendCurTurnEmbed(getCharFromTurn(btl), btl)
-			})
-			.catch(console.error)
-	}
+	process.exit(1);
 }
 
 async function similarityButtonCollector(message, similarities, args) {
@@ -1337,5 +1306,50 @@ async function similarityButtonCollector(message, similarities, args) {
 		collector.stop()
 		args.shift();
 		commands[interaction.component.customId].call(message, args);
+	})
+}
+
+//error logging
+battleFiles = [];
+
+let error = fs.readFileSync('./data/error/battles.txt', {flag: 'as+'});
+if (error && error != '') battleFiles = JSON.parse(error);
+
+fs.unlink('./data/error/battles.txt', (err) => {
+    if (err) throw err;
+    console.log("Deleted the Error.txt and noticed it :)");
+});
+
+if (battleFiles.length > 0) {
+	console.log("Pulled from Error.txt!");
+	for (let btlp of battleFiles) {
+		console.log(btlp);
+		let btl = setUpFile(btlp, true);
+
+		// Sadly, no battle.
+		if (!btl.battling) continue;
+
+		sendError(btl);
+	}
+}
+
+async function sendError(btl) {
+	//get server from btl.channel.guildId
+	await client.guilds.fetch(btl.channel.guildId).then(guild => {
+		//then channel from btl.channel.id
+		guild.channels.fetch(btl.channel.id).then(channel => {
+			//then message from btl.messageId
+			channel.messages.fetch(btl.channel.messages[btl.channel.messages.length - 1]).then(message => {
+				//then send error
+				message.channel.send("I'm so sorry ;-;\nThis battle got interrupted by some sort of error... I'll restart it from it's last position.").then(msg => {
+					//delete after a second
+					setTimeout(() => {
+						msg.delete();
+					}, 5000);
+
+					commands.resendembed.call(msg, []);
+				})
+			})
+		})
 	})
 }
