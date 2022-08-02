@@ -33,8 +33,8 @@
             "Metronome",
             "MorningStar",
             "BlackViper",
-            "PowerCharge",
-            "MindCharge"
+            "MindCharge",
+            "PowerCharge"
         ],
         "journal": "A usually calm doggo that runs the ask cafe.",
         "dreams": [],
@@ -726,8 +726,8 @@
             "Clawshread",
             "DoubleCrunch",
             "BrainBite",
-            "Rakukaja",
-            "Tarunda"
+            "Tarunda",
+            "Rakukaja"
         ],
         "journal": "Crocodile that enjoys gnawing on things. They often mistake their friends as wood, and bite them.",
         "dreams": [
@@ -1182,8 +1182,8 @@
             "LeafStorm",
             "Mahanamadyne",
             "Hanamadyne",
-            "GrassyTerrain",
-            "Mamakakaja"
+            "Mamakakaja",
+            "GrassyTerrain"
         ],
         "journal": "A bunch of Grassimps piled together. They're found primarily in swamps, they huddle together for warmth and safety.",
         "dreams": [
@@ -1241,8 +1241,8 @@
             "Magnara",
             "Mahanama",
             "Hanamadyne",
-            "Makarakarn",
             "Makakaja",
+            "Makarakarn",
             "Media"
         ],
         "image": "Grassage",
@@ -1521,8 +1521,8 @@
         "skills": [
             "GiganticFist",
             "RockThrow",
-            "RockyShield",
-            "Tarukaja"
+            "Tarukaja",
+            "RockyShield"
         ],
         "journal": "An animate stone, usually mild in nature. Usually found on mountains.",
         "dreams": [
@@ -1598,8 +1598,8 @@
         },
         "skills": [
             "ExplosiveMist",
-            "ConfusingMist",
-            "DrainingMist"
+            "DrainingMist",
+            "ConfusingMist"
         ],
         "journal": "An animate stone, usually mild in nature. Usually found on mountains.",
         "dreams": [
@@ -1682,8 +1682,8 @@
             "Rainfall",
             "Thunderstorm",
             "Thunder",
-            "ConfusingMist",
-            "DrainingMist"
+            "DrainingMist",
+            "ConfusingMist"
         ],
         "journal": "An animate cloud, very agressive in nature. They like to mimic clouds, and strike their foes with lightning from the sky.",
         "dreams": [
@@ -2707,8 +2707,8 @@
             "DragonClaw",
             "TripleCrunch",
             "WingRush",
-            "Glare",
-            "Roar"
+            "Roar",
+            "Glare"
         ],
         "journal": "Thought to be closely related to the diety Nyamem. They fight together to guard their mother, said to be Nyamem themselves.",
         "dreams": [
@@ -2768,8 +2768,8 @@
             "TripleCrunch",
             "WingRush",
             "InfectiousOutbreak",
-            "GooDrench",
-            "Glare"
+            "Glare",
+            "GooDrench"
         ],
         "journal": "Thought to be closely related to the diety Nyamem. They fight together to guard their mother, said to be Nyamem themselves. As it is infected, it cannot do it's job as well.",
         "dreams": [
@@ -2888,9 +2888,9 @@
             "TripleCrunch",
             "TidalWave",
             "Current",
-            "ThunderWings",
+            "Roar",
             "Makakaja",
-            "Roar"
+            "ThunderWings"
         ],
         "journal": "A live creature, hiding the true diety within it. If it were to be defeated, it would calm the diety inside.",
         "dreams": [
@@ -2972,9 +2972,9 @@
             "Current",
             "Psio",
             "InfectiousOutbreak",
-            "Makarakarn",
+            "ThunderWings",
             "GooDrench",
-            "ThunderWings"
+            "Makarakarn"
         ],
         "journal": "A live creature, hiding the true diety within it. It was infected, and now strikes at full power.",
         "dreams": [
@@ -3035,9 +3035,9 @@
             "Maeiga",
             "Eigaon",
             "Megido",
-            "ForestCurse",
+            "Matarunda",
             "Debilitate",
-            "Matarunda"
+            "ForestCurse"
         ],
         "journal": "A tree, hiding the true diety within it. Defeating this strong foe would calm the entity inside for a long period of time without using the Fantasy Wielder.",
         "dreams": [
@@ -3154,9 +3154,9 @@
             "Shockwave",
             "Earthquake",
             "EyeCannon",
-            "Tetrakarn",
+            "Tarukaja",
             "Masukunda",
-            "Tarukaja"
+            "Tetrakarn"
         ],
         "journal": "The diety of rock and earth. They're huge, and have the power to start powerful earthquakes with a simple stomp.",
         "dreams": [
@@ -3284,8 +3284,8 @@
             "AquaSlash",
             "GaleSlash",
             "Tarukaja",
-            "SharpParry",
-            "Swordbreaker"
+            "Swordbreaker",
+            "SharpParry"
         ],
         "lb": {
             "1": {
@@ -3404,14 +3404,14 @@
             "Psiodyne",
             "Maeigaon",
             "Eigaon",
-            "Mahama",
             "Hama",
+            "Mahama",
             "Makougaon",
             "Kougaon",
             "LightStorm",
             "Megidolaon",
-            "Tetrakarn",
             "Makarakarn",
+            "Tetrakarn",
             "Diarama"
         ],
         "journal": "The Luminosity aged over time, and lost some of her power due to the fact that everybody stopped worshipping her. Her elder ancestor would step in if provoked. This is her at full power, while everyone still worshipped her, and gave strength. This battle will be a lengthy one. **Good luck**.",
@@ -3513,8 +3513,8 @@
             "AssaultDive",
             "Discharge",
             "Jinodyne",
-            "Charge",
-            "ThunderWave"
+            "ThunderWave",
+            "Charge"
         ],
         "journal": "An electrical robot that gathers electricity for more power.",
         "dreams": [
@@ -4092,8 +4092,8 @@
             "Magnara",
             "Mahanama",
             "Hanama",
-            "Tetrakarn",
-            "Makarakarn"
+            "Makarakarn",
+            "Tetrakarn"
         ],
         "journal": "This Frostsage's leaves froze over, and it now uses this as a better method of defense. Unfortunately, it's a worse method of defense.",
         "dreams": [
@@ -4164,10 +4164,10 @@
             "crit": 15
         },
         "skills": [
-            "Hail",
-            "Makakaja",
+            "FrostTrap",
             "IcyShield",
-            "FrostTrap"
+            "Makakaja",
+            "Hail"
         ],
         "journal": "An icy fly. Physically unable to attack, so it assists it's allies instead.",
         "dreams": [
@@ -4223,8 +4223,8 @@
             "FreezerBurn",
             "Bufudyne",
             "Magnara",
-            "IcyShield",
-            "FrostTrap"
+            "FrostTrap",
+            "IcyShield"
         ],
         "journal": "A huge statue made of snow. It guards the Freeing Peaks and it's surroundings.",
         "dreams": [],
@@ -4587,10 +4587,10 @@
             "Freidyne",
             "Maeiga",
             "Eigaon",
-            "Debilitate",
-            "Marakunda",
+            "Matarunda",
             "Mamakanda",
-            "Matarunda"
+            "Marakunda",
+            "Debilitate"
         ],
         "journal": "A small robotic creature that yells at it's foes to intimidate them.",
         "dreams": [
@@ -4872,9 +4872,9 @@
             "Avalanche",
             "Magnadyne",
             "Megido",
-            "FrostTrap",
+            "Sandstorm",
             "FreezingAir",
-            "Sandstorm"
+            "FrostTrap"
         ],
         "journal": "One of the weapons of mass destruction sealed away to protect the world from the ''The Destroyer''. This one focused on ice attacks and was the stronger of the three.",
         "dreams": [],
@@ -4945,8 +4945,8 @@
             "Eigaon",
             "GalacticBlast",
             "Kougaon",
-            "Mamakakaja",
-            "ElectricTrap"
+            "ElectricTrap",
+            "Mamakakaja"
         ],
         "journal": "A small bot with a body that looks like it's a small galaxy. Loves to be in groups of three or four when adventuring.",
         "dreams": [],
@@ -5163,8 +5163,8 @@
             "Psio",
             "Madokudyne",
             "Dokudyne",
-            "Mamakakaja",
-            "Poisma"
+            "Poisma",
+            "Mamakakaja"
         ],
         "journal": "The controller of the Refurbished Frost robot. Unlike the others that controlled their robots, he will fight alongside it and make sure it does its intended duty. ~~Haha, snek men joke here~~",
         "dreams": [],
@@ -5338,8 +5338,8 @@
             "BraveBlade",
             "3ProngedThrust",
             "X-Scissor",
-            "Marakunda",
-            "Tarukaja"
+            "Tarukaja",
+            "Marakunda"
         ],
         "journal": "A larger, bipedal Grassimp, holding a sword and shield. This type of Grassimp emerged quite recently due to the massive spike of Grassimp murder. They fight for the safety of their kind.",
         "dreams": [],
@@ -5420,9 +5420,9 @@
             "BraveBlade",
             "3ProngedThrust",
             "BulletSeed",
-            "Mamakanda",
+            "Tetrakarn",
             "Tarukaja",
-            "Tetrakarn"
+            "Mamakanda"
         ],
         "journal": "A larger, bipedal Grassimp, holding a sword and shield. This type of Grassimp emerged quite recently due to the massive spike of Grassimp murder. They fight for the safety of their kind, and looks over all of the Grassy Warriors.",
         "dreams": [],
@@ -5566,8 +5566,8 @@
             "Psyshot",
             "Mapsio",
             "Psiodyne",
-            "Tetrakarn",
-            "Mamakakaja"
+            "Mamakakaja",
+            "Tetrakarn"
         ],
         "journal": "Small, flying creatures that love to play around. They are the main species that utilise the Psychic type.",
         "dreams": [
@@ -5739,9 +5739,9 @@
             "Psiodyne",
             "Maeiga",
             "Eigaon",
-            "MarinKarin",
+            "ConfuseRay",
             "Will-O-Wisp",
-            "ConfuseRay"
+            "MarinKarin"
         ],
         "journal": "Large, Agile creature with a strong trident.",
         "dreams": [
@@ -5808,10 +5808,10 @@
         },
         "skills": [
             "Psio",
-            "ScaryMist",
-            "DrainingMist",
+            "ConfusingMist",
             "DizzyingMist",
-            "ConfusingMist"
+            "DrainingMist",
+            "ScaryMist"
         ],
         "journal": "Polygonic creature shrouded in mist, litterally. It roams the Torrential Tower in attempts to scare others away from what lies at the top.",
         "dreams": [
@@ -6171,8 +6171,8 @@
             "Malaquadyne",
             "Garudyne",
             "Psiodyne",
-            "Mamakakaja",
-            "Roar"
+            "Roar",
+            "Mamakakaja"
         ],
         "journal": "The once calm Nyamem, now fueled by a primal and destructive rage because of the destruction of the nature of Yaretza. Be aware that she isn't going to go easy against anyone that tries to take her down, peacefully or destructively, without a long fight.",
         "dreams": [],
@@ -6472,8 +6472,8 @@
             "CrystalPierce",
             "Materazi",
             "PillarSquish",
-            "PhantomShip",
             "Astonish",
+            "PhantomShip",
             "Crystalize"
         ],
         "journal": "A crystal guardian trying to do the best job of protecting the area they are in. However they can assume things too much, from age, and mistrust possibly. Will always show loyalty when needed.",
@@ -6916,10 +6916,10 @@
             "3ProngedThrust",
             "RapierStrike",
             "ShadowStrike",
-            "Matarunda",
-            "Tarukaja",
-            "Visukaja",
             "Sukukaja",
+            "Visukaja",
+            "Tarukaja",
+            "Matarunda",
             "ShadowCounter"
         ],
         "journal": "Travelling shadow. Fulfilling a purpose.",
@@ -6984,9 +6984,9 @@
         "skills": [
             "PoisonFang",
             "PoisonOoze",
-            "FutureSight",
+            "Masukunda",
             "Mavisunda",
-            "Masukunda"
+            "FutureSight"
         ],
         "journal": "A cyclical jelly-like plant that wiggles with the wind. Despite it's static behaviour, it has been known for countless poison related deaths, and has been known to nibble on the heads of those who get close.",
         "dreams": [],
@@ -7152,8 +7152,8 @@
             "RockThrow",
             "Mamagnadyne",
             "Magnadyne",
-            "Masukunda",
-            "Mavisunda"
+            "Mavisunda",
+            "Masukunda"
         ],
         "journal": "Some have said that this creature is the evolved sandy flies of the Avacado Desert, but unlike their past self, they have been seen in many caves throughout the lands. They can see their prey even through the pitch dark and blinding sandstorms.",
         "dreams": [],
@@ -7229,10 +7229,10 @@
         "skills": [
             "CrystalLazer",
             "CrystalLightshow",
-            "Pulinpa",
-            "Mavisunda",
+            "Mamakakaja",
             "Mavisukaja",
-            "Mamakakaja"
+            "Mavisunda",
+            "Pulinpa"
         ],
         "journal": "The Sandmounds of Yaretza evolved to have all sorts of crystalline-like objects to grow upon them. These enemies tend to more help their allies, but they'll use magic if needed.",
         "dreams": [],
@@ -7304,9 +7304,9 @@
         "skills": [
             "Mapsio",
             "Psiodyne",
-            "Mavisunda",
+            "ConfusingMist",
             "DizzyingMist",
-            "ConfusingMist"
+            "Mavisunda"
         ],
         "journal": "A spherical being shielded by the mist it produces. Inhaling the mist has been known to produce possibly fatal side effects.",
         "dreams": [],
@@ -7354,8 +7354,8 @@
             "Makouga",
             "Kouga",
             "Mavisukaja",
-            "MePatra",
-            "Dia"
+            "Dia",
+            "MePatra"
         ],
         "journal": "Jolly mushrooms with a playful attitude. They glow on touch and have been known to assist in lighting dark rooms. They will offer Glow Shrooms to those they like, and love being pet. While they are technically two creatures, they share one mind.",
         "dreams": [],
@@ -7442,8 +7442,8 @@
             "Aquadyne",
             "ThunderFang",
             "Ziodyne",
-            "Mamakanda",
-            "Marakunda"
+            "Marakunda",
+            "Mamakanda"
         ],
         "journal": "The once peaceful and playful Nyamos are now lost into the primal rage of Nyamem's. They are now much more aggressive than they were before, and they pack quite a punch.",
         "dreams": [],
@@ -7521,9 +7521,9 @@
             "Malaquadyne",
             "Magarudyne",
             "Garudyne",
-            "Roar",
+            "Makarakarn",
             "Mamakakaja",
-            "Makarakarn"
+            "Roar"
         ],
         "journal": "The Nyamush, despite the separation between Windrush and Wateriz, is still related to Nyamem. This dragon is now deeply angred, fueled mainly from Nyamem's awakened primal rage. They use their water to harm and prevent others from harming the others.",
         "dreams": [],
@@ -7599,8 +7599,8 @@
             "TripleCrunch",
             "DoubleCrunch",
             "2ProngedThrust",
-            "Roar",
-            "Matarunda"
+            "Matarunda",
+            "Roar"
         ],
         "journal": "A powerful grassy creature with mushrooms growing on it's back. It uses tusks to strike it's foes, but only when it needs to. It usually only attacks when awakened from slumber.",
         "dreams": [],
@@ -7674,8 +7674,8 @@
             "UnseenSlashes",
             "3ProngedThrust",
             "AquaticImpalement",
-            "Tetrakarn",
-            "Marakukaja"
+            "Marakukaja",
+            "Tetrakarn"
         ],
         "journal": "The fabled clad of elite Nyamos with the strength and ability to walk upon two legs. These are known to actually help out both Hydruu and Nyamem to keep the peace among the Nyamos.",
         "dreams": [],
@@ -7731,8 +7731,8 @@
         "skills": [
             "Mamagnara",
             "Magnadyne",
-            "Marakunda",
-            "Mamakanda"
+            "Mamakanda",
+            "Marakunda"
         ],
         "journal": "Rocky bugs that often remain in buildings, or rocky areas.",
         "dreams": [],
@@ -7803,9 +7803,9 @@
             "2ProngedThrust",
             "Eigaon",
             "PiercingRoar",
-            "Masukunda",
+            "Roar",
             "Marakukaja",
-            "Roar"
+            "Masukunda"
         ],
         "journal": "An ancient husk, reanimated by a ghostly being. Without feeling, it cannot be negotiated with, to calm it briefly, you must defeat it in battle.",
         "dreams": [],
@@ -8227,8 +8227,8 @@
             "FatalEnd",
             "HeavyShot",
             "Eigaon",
-            "Sandstorm",
-            "Tarukaja"
+            "Tarukaja",
+            "Sandstorm"
         ],
         "journal": "Huge Spiders that strike after stalking the target for a while.",
         "dreams": [],
@@ -8300,8 +8300,8 @@
         "skills": [
             "Agidyne",
             "Magnara",
-            "Sandstorm",
-            "SunnyDay"
+            "SunnyDay",
+            "Sandstorm"
         ],
         "journal": "Large pyramid-like structures that often guard something precious, dangerous or significant",
         "dreams": [],
@@ -8378,8 +8378,8 @@
             "Malaques",
             "Aquadyne",
             "Dokusei",
-            "Makanda",
-            "Masukukaja"
+            "Masukukaja",
+            "Makanda"
         ],
         "journal": "An aquatic amphibian, lurking in area with the precense of water.",
         "dreams": [],
@@ -8454,8 +8454,8 @@
             "TorturedClaws",
             "SilencedDark",
             "Eigaon",
-            "AggroLeak",
-            "BloodySpeed"
+            "BloodySpeed",
+            "AggroLeak"
         ],
         "journal": "An envolved form of the Darklins that have embraced the corruption around them that are willing to fight off any intruders to allow the corruption to grow.",
         "dreams": [],
@@ -8596,8 +8596,8 @@
             "crit": 15
         },
         "skills": [
-            "Fireball",
             "FireTriangle",
+            "Fireball",
             "Pyroblast",
             "Hex",
             "PhantomShip",
@@ -8821,8 +8821,8 @@
             "Kougaon",
             "Grydyne",
             "Starfall",
-            "Samakakaja",
-            "IntenseShine"
+            "IntenseShine",
+            "Samakakaja"
         ],
         "journal": "A ghostly entity guarding the finest of Dolense Fruit. It uses the foe's sins to strike them harder.",
         "dreams": [],
@@ -8896,8 +8896,8 @@
             "HeatOfRage",
             "Agilao",
             "Maeiha",
-            "Taunt",
-            "Mamakakaja"
+            "Mamakakaja",
+            "Taunt"
         ],
         "journal": "[WRATH]\nThe one that represents pure hatred and uncontrollable violence. Will do absolutely nothing to hit you at all times, and punish you for what you have done. The only way to calm them down is not by repenting, but by stepping yourself down to them.",
         "dreams": [],
@@ -8990,8 +8990,8 @@
             "NightmareSurround",
             "SinfulCharisma",
             "Eiga",
-            "Mavisukaja",
-            "Lullaby"
+            "Lullaby",
+            "Mavisukaja"
         ],
         "journal": "[SLOTH]\nThe one that represents the feeling of a constant daydream and lack of effort. Ironically enough, it still wants to get a hit at you but there might not be enough effort for that to happen. The only way to calm them down is not by repenting, but by stepping yourself down to them.",
         "dreams": [],
@@ -9381,8 +9381,8 @@
             "StomachDraining",
             "CruelIntent",
             "MySecretRecipe",
-            "CurseBoost",
-            "SpikyBody"
+            "SpikyBody",
+            "CurseBoost"
         ],
         "journal": "[GLUTTONY]\nThe one that represents endless hunger and infinitude in terms of indulging themselves in overeating whatever they see on their path. They don't insist on making their target to be defeated. None of that. Instead on top of they, they desire eating everything they see, like a ground worm of eldritch nightmares. The only way to calm them down is not by repenting, but by stepping yourself down to them.",
         "dreams": [],
@@ -9566,8 +9566,8 @@
         "skills": [
             "FatalEnd",
             "Eigaon",
-            "ProtectionBuster",
-            "Tarukaja"
+            "Tarukaja",
+            "ProtectionBuster"
         ],
         "journal": "A sibling of the void. Thought to be directly related to the Destructive Titan. It is only seen at lower points within the ground, or in shadowy areas. It sees anything not made of the void-like substance called Eruyami as a threat. It also sees Eruyami creatures siding with those of other kind as betrayal.",
         "dreams": [],
@@ -9812,8 +9812,8 @@
             "AuraScythe",
             "AuraSphere",
             "AuraBarrage",
-            "Makanda",
-            "Makakaja"
+            "Makakaja",
+            "Makanda"
         ],
         "journal": "A somewhat familiar hedgehog(?), overrun with a weird multicoloured power. He wields an energy-based scythe and will show no mercy.",
         "dreams": [],
@@ -10074,8 +10074,8 @@
             "FinalStrike",
             "SpecialAttack",
             "SpectriteGasterBlaster",
-            "InfiniteEndure",
-            "InfiniteMana"
+            "InfiniteMana",
+            "InfiniteEndure"
         ],
         "quotes": {
             "meleequote": [],
@@ -10323,9 +10323,9 @@
             "AtheneChords",
             "SongOfHypnosis",
             "InstrumentalFakeout",
-            "Deafening",
+            "BeastRoar",
             "DefiantShout",
-            "BeastRoar"
+            "Deafening"
         ],
         "quotes": {
             "meleequote": [],

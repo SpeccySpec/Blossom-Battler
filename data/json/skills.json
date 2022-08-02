@@ -27660,16 +27660,18 @@
                 {
                     "name": "CuriosityKilledTheBloomBattler",
                     "pow": 100,
-                    "acc": 95,
-                    "crit": 5,
+                    "acc": 100,
+                    "crit": 0,
                     "type": "explode",
                     "hits": 1,
-                    "atktype": "physical",
-                    "turns": 2
+                    "atktype": "magic",
+                    "turns": 2,
+                    "target": "spectra"
                 }
             ]
         },
-        "desc": "We'll make Blossom Battler great again"
+        "desc": "We'll make Blossom Battler great again",
+        "done": true
     },
     "MadTeaParty": {
         "name": "Mad Tea Party",
@@ -35389,7 +35391,7 @@
                 88
             ]
         ],
-        "levellock": 65,
+        "levellock": 62,
         "passive": {
             "affinitycutter": [
                 100
@@ -42653,26 +42655,18 @@
         "hits": 1
     },
     "Agi": {
-        "costtype": "mp",
-        "cost": 4,
-        "pow": 60,
-        "acc": 95,
-        "type": "fire",
-        "status": "burn",
-        "statuschance": 5,
-        "atktype": "magic",
-        "target": "one",
         "name": "Agi",
-        "powlamk": 33,
-        "powpkmn": 60,
-        "originalAuthor": "776480348757557308",
-        "hits": 1,
-        "evoskills": [
-            [
-                "Agilao",
-                20
+        "type": "status",
+        "cost": 5,
+        "costtype": "MP",
+        "target": "one",
+        "originalAuthor": "798092550392381450",
+        "statusses": {
+            "heartswap": [
+                true
             ]
-        ]
+        },
+        "desc": "a"
     },
     "MarEAgion": {
         "name": "MarEAgion",
@@ -44002,33 +43996,18 @@
         "levellock": 40
     },
     "Agidyne": {
-        "costtype": "mp",
-        "cost": 16,
-        "pow": 350,
-        "acc": 95,
-        "crit": 0,
-        "type": "fire",
-        "status": "burn",
-        "statuschance": 5,
-        "atktype": "magic",
-        "target": "one",
         "name": "Agidyne",
-        "powlamk": 191,
-        "powpkmn": 350,
-        "originalAuthor": "776480348757557308",
-        "hits": 1,
-        "evoskills": [
-            [
-                "Trisagion",
-                85
+        "type": "status",
+        "cost": 1,
+        "costtype": "MP",
+        "target": "one",
+        "originalAuthor": "621307633718132746",
+        "statusses": {
+            "heartswap": [
+                true
             ]
-        ],
-        "preskills": [
-            [
-                "Agilao",
-                44
-            ]
-        ]
+        },
+        "desc": "a"
     },
     "ConflagrationPummel": {
         "name": "Conflagration Pummel",
@@ -61513,45 +61492,15 @@
         "name": "Test",
         "type": "status",
         "cost": 1,
-        "costtype": "mp",
-        "originalAuthor": "621307633718132746",
-        "status": "bleed",
-        "statuschance": 10,
+        "costtype": "MP",
+        "target": "one",
+        "originalAuthor": "798092550392381450",
         "statusses": {
-            "terrain": [
-                "light"
-            ],
-            "buff": [
-                [
-                    "user",
-                    [
-                        "prc"
-                    ],
-                    1,
-                    100,
-                    3
-                ],
-                [
-                    "target",
-                    [
-                        "mag"
-                    ],
-                    1,
-                    100,
-                    null
-                ],
-                [
-                    "target",
-                    [
-                        "atk"
-                    ],
-                    2,
-                    70,
-                    null
-                ]
+            "heartswap": [
+                true
             ]
         },
-        "done": true
+        "desc": "a"
     },
     "MagicCharge": {
         "name": "Magic Charge",
@@ -66693,7 +66642,7 @@
     "FireCorrosion": {
         "name": "Fire Corrosion",
         "type": "status",
-        "cost": 0,
+        "cost": 44,
         "costtype": "MP",
         "target": "allopposing",
         "originalAuthor": "363363984390356993",
@@ -68847,18 +68796,6 @@
         "desc": "An alternative to Eiha that can cause a foe to be either blinded or left in fear.",
         "extras": {}
     },
-    "Shockun": {
-        "name": "Shockun",
-        "type": "status",
-        "cost": 15,
-        "costtype": "hppercent",
-        "target": "one",
-        "originalAuthor": "621307633718132746",
-        "statusses": {},
-        "status": "paralyze",
-        "statuschance": "40",
-        "desc": "The user fires electricity from their gun to stun and paralyze the foe."
-    },
     "BitWars": {
         "name": "Bit-Wars",
         "type": "passive",
@@ -70761,7 +70698,7 @@
         "costtype": "mp",
         "target": "one",
         "originalAuthor": "363363984390356993",
-        "crit": 0,
+        "crit": 15,
         "desc": "An alternative melee attack that deals Almighty damage"
     },
     "Antiphysical": {
@@ -70776,5 +70713,356 @@
         },
         "powlamk": 55,
         "powpkmn": 100
+    },
+    "FireBomb": {
+        "name": "FireBomb",
+        "type": "status",
+        "cost": 0,
+        "costtype": "MP",
+        "target": "spreadopposing",
+        "originalAuthor": "363363984390356993",
+        "statusses": {
+            "futuresight": [
+                {
+                    "name": "FireBomb",
+                    "pow": 50,
+                    "acc": 95,
+                    "crit": 0,
+                    "type": "fire",
+                    "hits": 1,
+                    "atktype": "magic",
+                    "turns": 2,
+                    "target": "spreadopposing"
+                }
+            ]
+        },
+        "desc": "Blast them fools!",
+        "done": true
+    },
+    "Strengthen": {
+        "name": "Strengthen",
+        "type": "status",
+        "cost": 10,
+        "costtype": "MP",
+        "target": "allallies",
+        "originalAuthor": "363363984390356993",
+        "statusses": {
+            "changeaffinity": [
+                [
+                    "target",
+                    "strike",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "slash",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "pierce",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "explode",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "fire",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "water",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "ice",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "electric",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "wind",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "earth",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "grass",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "psychic",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "poison",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "nuclear",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "metal",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "curse",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "bless",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "spirit",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "gravity",
+                    "normal",
+                    "weak",
+                    null
+                ],
+                [
+                    "target",
+                    "sound",
+                    "normal",
+                    "weak",
+                    null
+                ]
+            ]
+        },
+        "desc": "The user neutralizes all elemental weaknesses within their team",
+        "done": true,
+        "levellock": 37
+    },
+    "BrokenShockun": {
+        "name": "Shockun (Broken)",
+        "type": "status",
+        "cost": 15,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "621307633718132746",
+        "statusses": {},
+        "status": "paralyze",
+        "statuschance": "40",
+        "desc": "The user fires weak electricity from their gun to try to paralyze the foe."
+    },
+    "Shockun": {
+        "name": "Shockun",
+        "type": "status",
+        "cost": 30,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "621307633718132746",
+        "statusses": {
+            "changeaffinity": [
+                [
+                    "target",
+                    "electric",
+                    "weak",
+                    "resist",
+                    3
+                ]
+            ]
+        },
+        "desc": "The user fires electricity from their gun to paralyze and make the foe weak to electricity for 3 turns.",
+        "status": "paralyze",
+        "statuschance": "60",
+        "done": true,
+        "levellock": 80
+    },
+    "Marecarm": {
+        "name": "Marecarm",
+        "type": "heal",
+        "cost": 15,
+        "costtype": "mppercent",
+        "target": "allallies",
+        "originalAuthor": "363363984390356993",
+        "heal": {
+            "revive": [
+                2
+            ]
+        },
+        "desc": "The user revives all downed allies with half of their max HP",
+        "levellock": 42,
+        "evoskills": [
+            [
+                "Masamarecarm",
+                77
+            ]
+        ]
+    },
+    "Masamarecarm": {
+        "name": "Masamarecarm",
+        "type": "heal",
+        "cost": 30,
+        "costtype": "mppercent",
+        "target": "allallies",
+        "originalAuthor": "363363984390356993",
+        "heal": {
+            "revive": [
+                1
+            ]
+        },
+        "desc": "The user fully restores all downed allies",
+        "levellock": 77,
+        "preskills": [
+            [
+                "Marecarm",
+                76
+            ]
+        ]
+    },
+    "Recarmloss": {
+        "name": "Recarmloss",
+        "type": "heal",
+        "cost": 25,
+        "costtype": "mppercent",
+        "target": "allallies",
+        "originalAuthor": "363363984390356993",
+        "heal": {
+            "revive": [
+                1
+            ],
+            "statusheal": [
+                [
+                    "burn"
+                ],
+                [
+                    "bleed"
+                ],
+                [
+                    "freeze"
+                ],
+                [
+                    "paralyze"
+                ],
+                [
+                    "dizzy"
+                ],
+                [
+                    "sleep"
+                ],
+                [
+                    "despair"
+                ],
+                [
+                    "poison"
+                ],
+                [
+                    "brainwash"
+                ],
+                [
+                    "fear"
+                ],
+                [
+                    "rage"
+                ],
+                [
+                    "ego"
+                ],
+                [
+                    "silence"
+                ],
+                [
+                    "dazed"
+                ],
+                [
+                    "hunger"
+                ],
+                [
+                    "infatuation"
+                ],
+                [
+                    "blind"
+                ],
+                [
+                    "confusion"
+                ],
+                [
+                    "irradiation"
+                ],
+                [
+                    "sensitive"
+                ],
+                [
+                    "happy"
+                ],
+                [
+                    "mirror"
+                ]
+            ],
+            "healstat": [
+                [
+                    100,
+                    "hppercent"
+                ]
+            ],
+            "sacrifice": [
+                1
+            ]
+        },
+        "desc": "The user revives fallen team members, fully restores team's HP, and cures all ailments, but reduces caster's HP to 1.",
+        "done": true,
+        "levellock": 65
     }
 }

@@ -63,9 +63,8 @@
         "skills": [
             "UltimateHit",
             "ElementalMagic",
-            "ElementalCycle",
-            "FireCorrosion",
-            "Agidyne"
+            "FireBomb",
+            "ElementalCycle"
         ],
         "autolearn": [],
         "quotes": {
@@ -122,10 +121,10 @@
             "block": []
         },
         "leaderskill": {
-            "name": "Mana Circulation",
-            "type": "discount",
-            "var1": "magic",
-            "var2": 10
+            "name": "Almighty Amp +",
+            "type": "boost",
+            "var1": "almighty",
+            "var2": 30
         }
     },
     "Shoutmon-DRA": {
@@ -382,9 +381,9 @@
         "xp": 1273706,
         "maxxp": 1179,
         "skills": [
-            "Atma",
             "Dia",
-            "CuringAura"
+            "CuringAura",
+            "Atma"
         ],
         "deathquote": [],
         "weapon": {},

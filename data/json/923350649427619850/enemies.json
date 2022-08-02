@@ -36,8 +36,8 @@
             "drain": []
         },
         "skills": [
-            "InfiniteEndure",
-            "Splash"
+            "Splash",
+            "InfiniteEndure"
         ],
         "quotes": {
             "meleequote": [],

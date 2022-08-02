@@ -547,8 +547,8 @@
             "TormentedSwipes",
             "Majino",
             "SteelyStrike",
-            "Mavisunda",
-            "Marakunda"
+            "Marakunda",
+            "Mavisunda"
         ],
         "critquote": [
             "Cash Money!",
@@ -862,8 +862,8 @@
             "Maragion",
             "MegaKick",
             "GiganticFist",
-            "Matarukaja",
-            "Mamakakaja"
+            "Mamakakaja",
+            "Matarukaja"
         ],
         "deathquote": [
             "No...",
@@ -1830,10 +1830,10 @@
             "Malaquadyne",
             "Mabufula",
             "Bufudyne",
-            "Marakukaja",
             "Mavisukaja",
-            "InvigII",
-            "WaterBoost"
+            "Marakukaja",
+            "WaterBoost",
+            "InvigII"
         ],
         "deathquote": [],
         "bio": {
@@ -2087,8 +2087,8 @@
             "Mamagnara",
             "Magnara",
             "Masukunda",
-            "DragonicRage",
-            "InvigI"
+            "InvigI",
+            "DragonicRage"
         ],
         "deathquote": [
             "No....not like this....",
@@ -2449,8 +2449,8 @@
             "Maeiga",
             "BurningSpirit",
             "SpiritHorns",
-            "Masukukaja",
-            "Makanda"
+            "Makanda",
+            "Masukukaja"
         ],
         "deathquote": [
             "https://media.discordapp.net/attachments/868140063102500954/877983843884335104/image0.jpg",
@@ -2586,8 +2586,8 @@
             "ThunderFang",
             "Mazionga",
             "Zioverse",
-            "ThunderWave",
             "Masukukaja",
+            "ThunderWave",
             "ElectroAmp"
         ],
         "deathquote": [
@@ -2900,10 +2900,10 @@
         "skills": [
             "IcicleCrash",
             "FrozenShards",
-            "FlareTrap",
-            "ElectricTrap",
-            "IcyGuard",
             "IcyShield",
+            "IcyGuard",
+            "ElectricTrap",
+            "FlareTrap",
             "CoolBreeze",
             "InvigI"
         ],
@@ -3790,10 +3790,10 @@
             "Hanamadyne",
             "Mahanama",
             "Magnara",
-            "Makarakarn",
             "Mamakakaja",
-            "CuringAura",
+            "Makarakarn",
             "HealSymphony",
+            "CuringAura",
             "PoisonPunish"
         ],
         "deathquote": [],
@@ -4544,10 +4544,10 @@
         "xp": 0,
         "maxxp": 40561289,
         "skills": [
-            "StarshineAura",
-            "Masukukaja",
-            "Marakukaja",
             "Mamakanda",
+            "Marakukaja",
+            "Masukukaja",
+            "StarshineAura",
             "BearHug",
             "KindSoul"
         ],
@@ -4699,8 +4699,8 @@
             "RottenSlash",
             "3CutShock",
             "Dokusei",
-            "Glare",
             "Undead-Like(N)",
+            "Glare",
             "Undead-Like(T)"
         ],
         "deathquote": [
@@ -5174,10 +5174,10 @@
             "BoneToss",
             "FlamesOfTheDamned",
             "FlamesOfWickedness",
-            "BoneShield",
-            "Matarukaja",
+            "BurningCurse",
             "Will-O-Wisp",
-            "BurningCurse"
+            "Matarukaja",
+            "BoneShield"
         ],
         "critquote": [],
         "deathquote": [],
@@ -5582,8 +5582,8 @@
             "DedicationStrike",
             "Psiodyne",
             "BladeBlast",
-            "Pun",
-            "Sukukaja"
+            "Sukukaja",
+            "Pun"
         ],
         "critquote": [
             "HAH HAH HAH! NOW THAT WAS A GOOD ONE!",
@@ -7512,8 +7512,8 @@
             "IceBeam",
             "GigaDrain",
             "LeafBlade",
-            "ChaosStir",
-            "SwordsDance"
+            "SwordsDance",
+            "ChaosStir"
         ],
         "critquote": [
             "Eon~"
@@ -7782,10 +7782,10 @@
             "BulletSeed",
             "DragonAscent",
             "EarthPower",
-            "ChaosStir",
-            "GrassyTerrain",
+            "PoisonPowder",
             "SleepPowder",
-            "PoisonPowder"
+            "GrassyTerrain",
+            "ChaosStir"
         ],
         "critquote": [],
         "deathquote": [],
@@ -7898,10 +7898,10 @@
             "Hanamadyne",
             "Mahanama",
             "Aques",
-            "LeafShield",
-            "Mamakakaja",
+            "Marakukaja",
             "Mavisukaja",
-            "Marakukaja"
+            "Mamakakaja",
+            "LeafShield"
         ],
         "critquote": [],
         "deathquote": [
@@ -8061,10 +8061,10 @@
             "ElectricLaser",
             "Discharge",
             "Psy-Strike",
-            "ElectricTrap",
-            "ThunderWave",
-            "ElectricalShield",
             "Mamakakaja",
+            "ElectricalShield",
+            "ThunderWave",
+            "ElectricTrap",
             "HealSymphony"
         ],
         "critquote": [
@@ -8324,8 +8324,8 @@
             "SwipesOfMany",
             "Ziodyne",
             "Psiodyne",
-            "Visukaja",
             "Matarukaja",
+            "Visukaja",
             "SharpParry"
         ],
         "critquote": [
@@ -8555,8 +8555,8 @@
             "Shuriken",
             "AirSlash",
             "WindPunch",
-            "ShieldOfLeaves",
             "EvasiveLeaf",
+            "ShieldOfLeaves",
             "DodgePhys"
         ],
         "critquote": [],
@@ -8850,10 +8850,10 @@
             "FissionStrike",
             "Mafreila",
             "TungstenTear",
-            "Marakukaja",
             "Matarukaja",
-            "MentalSwitch",
-            "RegenII"
+            "Marakukaja",
+            "RegenII",
+            "MentalSwitch"
         ],
         "critquote": [
             "*You're done for!*"
@@ -9099,9 +9099,9 @@
             "Grydyne",
             "Starshower",
             "MagicalBlast",
-            "WhirlwindShield",
-            "SoothingVoice",
             "Mamakakaja",
+            "SoothingVoice",
+            "WhirlwindShield",
             "KindSoul"
         ],
         "critquote": [],
@@ -9265,8 +9265,8 @@
             "ArmCannon",
             "Majino",
             "Jinodyne",
-            "Matarukaja",
-            "Makarakarn"
+            "Makarakarn",
+            "Matarukaja"
         ],
         "critquote": [],
         "deathquote": [
@@ -9551,8 +9551,8 @@
             "MegatonRaid",
             "Magnadyne",
             "Hanamadyne",
-            "Tetrakarn",
-            "Makarakarn"
+            "Makarakarn",
+            "Tetrakarn"
         ],
         "critquote": [],
         "deathquote": [],
@@ -10363,8 +10363,8 @@
             "Metronome",
             "MorningStar",
             "BlackViper",
-            "PowerCharge",
-            "MindCharge"
+            "MindCharge",
+            "PowerCharge"
         ],
         "critquote": [
             "I **will** seal your fate."
@@ -10900,8 +10900,8 @@
             "Chaos",
             "Thunder",
             "MagicMissile",
-            "Eclipse",
             "Labyrinth",
+            "Eclipse",
             "MultiII"
         ],
         "critquote": [],
@@ -11315,10 +11315,10 @@
             "AquaticImpalement",
             "TempestSlash",
             "Pralayam",
-            "BubbleShield",
             "FreezingAir",
-            "REFLECT",
-            "EvadePhys"
+            "BubbleShield",
+            "EvadePhys",
+            "REFLECT"
         ],
         "critquote": [
             "Oops! Did that hurt?"
@@ -11594,8 +11594,8 @@
             "Psio",
             "RocketStorm",
             "ShadowyBlast",
-            "BloodBlind",
-            "Sukukaja"
+            "Sukukaja",
+            "BloodBlind"
         ],
         "critquote": [],
         "deathquote": [],
@@ -12295,10 +12295,10 @@
             "SilkStrike",
             "StarThrust",
             "ShamansCurse",
-            "Tarunda",
-            "Tarukaja",
-            "Mavisukaja",
             "Masukukaja",
+            "Mavisukaja",
+            "Tarukaja",
+            "Tarunda",
             "ShadowCounter"
         ],
         "critquote": [],
@@ -12447,8 +12447,8 @@
             "PillarSquish",
             "Materazi",
             "CrystalPierce",
-            "PhantomShip",
             "Astonish",
+            "PhantomShip",
             "Crystalize"
         ],
         "critquote": [],
@@ -12730,9 +12730,9 @@
             "Blizzard",
             "Magarula",
             "Garudyne",
-            "Mamakakaja",
+            "SexyDance",
             "Poisma",
-            "SexyDance"
+            "Mamakakaja"
         ],
         "critquote": [
             "Next time, you'll think twice about facing a deity!"
@@ -12924,9 +12924,9 @@
             "DragoCut",
             "FatalEnd",
             "Malaquadyne",
-            "Mamakakaja",
+            "ThunderWings",
             "Roar",
-            "ThunderWings"
+            "Mamakakaja"
         ],
         "critquote": [],
         "deathquote": [],
@@ -13040,8 +13040,8 @@
             "Magnadyne",
             "Eigaon",
             "Megido",
-            "ForestCurse",
-            "Debilitate"
+            "Debilitate",
+            "ForestCurse"
         ],
         "critquote": [],
         "deathquote": [],
@@ -13159,9 +13159,9 @@
             "Shockwave",
             "Earthquake",
             "EyeCannon",
-            "Tetrakarn",
+            "Matarukaja",
             "Marakukaja",
-            "Matarukaja"
+            "Tetrakarn"
         ],
         "critquote": [],
         "deathquote": [],
@@ -13491,11 +13491,11 @@
             "Kouga",
             "Accordion",
             "Vocadyne",
-            "Roar",
-            "Ear-PiercingScream",
+            "BrainwashTest",
             "SoothingVoice",
-            "KindSoul",
-            "BrainwashTest"
+            "Ear-PiercingScream",
+            "Roar",
+            "KindSoul"
         ],
         "critquote": [
             "Woah woah wooooooo, what a lucky day, never will happen again. Probably?",
@@ -13761,9 +13761,9 @@
             "HealSymphony",
             "CuringWall",
             "Kougaon",
-            "Marakukaja",
-            "Mavisukaja",
             "Mamakakaja",
+            "Mavisukaja",
+            "Marakukaja",
             "DodgePhys"
         ],
         "critquote": [],
@@ -14117,12 +14117,12 @@
         "maxxp": 8403976,
         "skills": [
             "KiBlast[2]",
-            "BuiltDifferent",
             "God'sHand",
             "Maragidyne",
             "ReturnToSender",
             "InvigIII",
-            "ȶɦɛʝ"
+            "ȶɦɛʝ",
+            "BuiltDifferent"
         ],
         "critquote": [],
         "deathquote": [],
@@ -14445,8 +14445,8 @@
             "PKBeam-Beta",
             "DiffusiveSlice",
             "PKLove-Alpha",
-            "OffenseUp-Omega",
             "Wormhole-Alpha",
+            "OffenseUp-Omega",
             "NukeAmp"
         ],
         "critquote": [
@@ -14660,8 +14660,8 @@
             "LonelyCrash",
             "NetherianFire",
             "DemonicBlast",
-            "Endure",
-            "AmazingAgility"
+            "AmazingAgility",
+            "Endure"
         ],
         "critquote": [
             "Bet that hurt, huh?"
@@ -15244,10 +15244,10 @@
             "DespairScatter",
             "DeathSlice",
             "BraveBlade",
-            "Omniphobia",
             "Rhabdophobia",
-            "AuraofFear",
-            "CurseAmp"
+            "Omniphobia",
+            "CurseAmp",
+            "AuraofFear"
         ],
         "critquote": [
             "That's gonna leave you a mark~",
@@ -15424,8 +15424,8 @@
             "TormentedSwipes",
             "Majino",
             "SteelyStrike",
-            "Mavisunda",
-            "Marakunda"
+            "Marakunda",
+            "Mavisunda"
         ],
         "critquote": [],
         "deathquote": [],
@@ -15739,9 +15739,9 @@
         "maxxp": 9696895,
         "skills": [
             "ShadowPunch",
-            "SHIT",
             "ShadowSpirit",
-            "ShadowCounter"
+            "ShadowCounter",
+            "SHIT"
         ],
         "critquote": [],
         "deathquote": [],
@@ -16124,8 +16124,8 @@
             "HydroWave",
             "Cyclodeus",
             "AerialDice",
-            "Focus",
-            "AtmosCharge"
+            "AtmosCharge",
+            "Focus"
         ],
         "critquote": [
             "That hurt you a bit more than I anticipated...",
@@ -16895,10 +16895,10 @@
             "PKSoul-Beta",
             "NegaBlast",
             "NegaBeam",
-            "PSICounter-Omega",
             "Counter-Omega",
-            "Lifeup-Omega",
-            "Lifeup-Sigma"
+            "PSICounter-Omega",
+            "Lifeup-Sigma",
+            "Lifeup-Omega"
         ],
         "critquote": [],
         "deathquote": [
@@ -17102,8 +17102,8 @@
             "UnseenSlashes",
             "SwipesOfMany",
             "BodySlam",
-            "Taunt",
             "FiendishThinking",
+            "Taunt",
             "Endure"
         ],
         "critquote": [],
@@ -17426,8 +17426,8 @@
             "ZaGan",
             "MakeshiftMissile",
             "TungstenDrop",
-            "FlashTrap",
-            "ElectricTrap"
+            "ElectricTrap",
+            "FlashTrap"
         ],
         "critquote": [
             "See how amazing my wares are now?",
@@ -17700,9 +17700,9 @@
             "HealSymphony",
             "CuringWall",
             "Kougaon",
-            "Marakukaja",
-            "Mavisukaja",
             "Mamakakaja",
+            "Mavisukaja",
+            "Marakukaja",
             "DodgePhys"
         ],
         "critquote": [],
@@ -17845,8 +17845,8 @@
             "FilletDine",
             "JeanO'Dine",
             "Shelf-Disstrack",
-            "MetalBar",
-            "MacaroniCheeseSaladWithTarAndCake"
+            "MacaroniCheeseSaladWithTarAndCake",
+            "MetalBar"
         ],
         "critquote": [],
         "deathquote": [],
@@ -18090,8 +18090,8 @@
             "FissionStrike",
             "Mafreila",
             "ChromiumCrash",
-            "Marakukaja",
             "Matarukaja",
+            "Marakukaja",
             "RegenII"
         ],
         "critquote": [],
@@ -18242,8 +18242,8 @@
             "FilletDine",
             "JeanO'Dine",
             "Shelf-Disstrack",
-            "MetalBar",
-            "MacaroniCheeseSaladWithTarAndCake"
+            "MacaroniCheeseSaladWithTarAndCake",
+            "MetalBar"
         ],
         "critquote": [],
         "deathquote": [],
@@ -18872,8 +18872,8 @@
             "Freidyne",
             "Jinodyne",
             "Self-Destruct",
-            "Tetrakarn",
-            "Matarukaja"
+            "Matarukaja",
+            "Tetrakarn"
         ],
         "critquote": [
             "[hell yea](https://www.youtube.com/watch?v=-T-F-sYy5VE)"
@@ -19434,8 +19434,8 @@
             "FilletDine",
             "JeanO'Dine",
             "Shelf-Disstrack",
-            "MetalBar",
-            "MacaroniCheeseSaladWithTarAndCake"
+            "MacaroniCheeseSaladWithTarAndCake",
+            "MetalBar"
         ],
         "critquote": [
             "[hell yea](https://www.youtube.com/watch?v=-T-F-sYy5VE)"
@@ -20460,8 +20460,8 @@
             "LeafStorm",
             "MegatonRaid",
             "Magnara",
-            "Tetrakarn",
-            "Marakukaja"
+            "Marakukaja",
+            "Tetrakarn"
         ],
         "critquote": [],
         "deathquote": [],
@@ -20600,9 +20600,9 @@
             "FilletDine",
             "JeanO'Dine",
             "Shelf-Disstrack",
-            "MarinKarin",
+            "MacaroniCheeseSaladWithTarAndCake",
             "MetalBar",
-            "MacaroniCheeseSaladWithTarAndCake"
+            "MarinKarin"
         ],
         "critquote": [],
         "deathquote": [],
@@ -20723,8 +20723,8 @@
             "ShadedWave",
             "ShadedWater",
             "Aquadyne",
-            "DarkRise",
             "Pulinpa",
+            "DarkRise",
             "SmallFrame"
         ],
         "critquote": [
@@ -20988,13 +20988,13 @@
         "maxxp": 615066353,
         "skills": [
             "SnowRocket",
-            "Debilitate",
-            "Test",
-            "Shield",
-            "Makarakarn",
             "Tetrakarn",
-            "DodgePhys",
-            "DodgeMag"
+            "Makarakarn",
+            "Shield",
+            "Test",
+            "Debilitate",
+            "DodgeMag",
+            "DodgePhys"
         ],
         "critquote": [],
         "deathquote": [
@@ -21172,10 +21172,10 @@
             "GiganticFist",
             "GuardBreak",
             "FireballVolley",
-            "Matarukaja",
             "Marakukaja",
-            "HighCounter",
-            "RegenIII"
+            "Matarukaja",
+            "RegenIII",
+            "HighCounter"
         ],
         "critquote": [],
         "deathquote": [],
@@ -21543,9 +21543,9 @@
             "HeavySuperSlash",
             "PinpointPuncture",
             "Annoy",
-            "Float",
+            "AffinityCutter",
             "RudeHeart",
-            "AffinityCutter"
+            "Float"
         ],
         "critquote": [
             "Ha! Survive that, bitch!"
@@ -22301,10 +22301,10 @@
             "Hug",
             "LunaticRedEyes",
             "FinalEvisceration",
-            "AnimeComeback",
-            "TrueAnimeInstinct",
+            "TrueAnimeInstinct(B)",
             "CurseTurbo",
-            "TrueAnimeInstinct(B)"
+            "TrueAnimeInstinct",
+            "AnimeComeback"
         ],
         "critquote": [
             "Sorry, but I've no patience for you right now."
@@ -22558,9 +22558,9 @@
             "SnowGrave",
             "PKFreeze-Gamma",
             "Wormhole-Beta",
-            "RudeHeart",
+            "Ice+",
             "InvigII",
-            "Ice+"
+            "RudeHeart"
         ],
         "critquote": [],
         "deathquote": [
@@ -22964,10 +22964,10 @@
             "Wavetu",
             "Magarudyne",
             "Garudyne",
-            "Mavisukaja",
             "Marakukaja",
-            "InvigII",
-            "WaterBoost"
+            "Mavisukaja",
+            "WaterBoost",
+            "InvigII"
         ],
         "critquote": [],
         "deathquote": [],
@@ -23139,8 +23139,8 @@
             "SharpChomp-III",
             "RevengeBite",
             "WolfBite",
-            "Makanda",
-            "Makakaja"
+            "Makakaja",
+            "Makanda"
         ],
         "critquote": [
             "Huh, must've put more power into that one.",
@@ -23674,8 +23674,8 @@
             "XObliterate",
             "UltimateSmash",
             "DarkRay",
-            "PKCurse-Omega",
             "PKCurse-Sigma",
+            "PKCurse-Omega",
             "CalmDown"
         ],
         "critquote": [],
@@ -24154,9 +24154,9 @@
             "PsychoForce",
             "MeteorSmash",
             "Makarakarn",
-            "PsyAuraX",
+            "PsychicCounterA",
             "PsychicCounterB",
-            "PsychicCounterA"
+            "PsyAuraX"
         ],
         "critquote": [],
         "deathquote": [],
@@ -24264,8 +24264,8 @@
             "ShadowStrike",
             "UnseenSnatch",
             "BurningSpirit",
-            "Taunt",
-            "Kiss"
+            "Kiss",
+            "Taunt"
         ],
         "critquote": [],
         "deathquote": [],
@@ -24382,9 +24382,9 @@
             "Sunfall",
             "SwiftStrike",
             "Tanukimation",
-            "IllusoryParry(B)",
+            "Swordbreaker",
             "SpiritCharge",
-            "Swordbreaker"
+            "IllusoryParry(B)"
         ],
         "deathquote": [
             "Not... Here....",
@@ -25105,9 +25105,9 @@
             "JackRipper",
             "KillerDoll",
             "EternalMeek",
-            "Agility",
+            "TimeStill",
             "TimeFreeze",
-            "TimeStill"
+            "Agility"
         ],
         "critquote": [],
         "deathquote": [
@@ -25362,8 +25362,8 @@
             "SnowRocket",
             "Bufudyne",
             "Mabufula",
-            "PerfectFreeze",
-            "CirnoFreeze"
+            "CirnoFreeze",
+            "PerfectFreeze"
         ],
         "critquote": [],
         "deathquote": [],
@@ -26197,11 +26197,11 @@
         "maxxp": 46801487,
         "skills": [
             "Moan",
+            "SHIT",
             "Sex",
             "Penetration",
             "Constipation",
-            "Shit",
-            "SHIT"
+            "Shit"
         ],
         "critquote": [
             "[moan]"
@@ -26359,9 +26359,9 @@
             "Makougaon",
             "Garula",
             "Mamakakaja",
-            "Diarahan",
+            "HealSymphony",
             "EnergyWave",
-            "HealSymphony"
+            "Diarahan"
         ],
         "critquote": [],
         "deathquote": [
@@ -26789,9 +26789,9 @@
             "Kouga",
             "Ziemia",
             "Hanama",
-            "Marakukaja",
-            "Mavisukaja",
             "Mamakakaja",
+            "Mavisukaja",
+            "Marakukaja",
             "Dia"
         ],
         "critquote": [],

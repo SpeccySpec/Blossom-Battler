@@ -619,8 +619,8 @@
             "RottenSlash",
             "3CutShock",
             "Dokusei",
-            "Glare",
             "Undead-Like(N)",
+            "Glare",
             "Undead-Like(T)"
         ],
         "deathquote": [
@@ -1112,10 +1112,10 @@
         "xp": 183,
         "maxxp": 40561289,
         "skills": [
-            "StarshineAura",
-            "Masukukaja",
-            "Marakukaja",
             "Mamakanda",
+            "Marakukaja",
+            "Masukukaja",
+            "StarshineAura",
             "BearHug",
             "KindSoul"
         ],
@@ -1284,9 +1284,9 @@
             "Kouga",
             "Accordion",
             "Vocadyne",
-            "Roar",
-            "Ear-PiercingScream",
             "SoothingVoice",
+            "Ear-PiercingScream",
+            "Roar",
             "KindSoul"
         ],
         "critquote": [
@@ -1706,8 +1706,8 @@
             "PillarSquish",
             "Materazi",
             "CrystalPierce",
-            "PhantomShip",
             "Astonish",
+            "PhantomShip",
             "Crystalize"
         ],
         "critquote": [],
@@ -1885,9 +1885,9 @@
             "Kouga",
             "Ziemia",
             "Hanama",
-            "Marakukaja",
-            "Mavisukaja",
             "Mamakakaja",
+            "Mavisukaja",
+            "Marakukaja",
             "Dia"
         ],
         "critquote": [],

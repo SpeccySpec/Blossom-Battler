@@ -26,8 +26,8 @@
             "SharpChomp-III",
             "RevengeBite",
             "WolfBite",
-            "Makanda",
-            "Makakaja"
+            "Makakaja",
+            "Makanda"
         ],
         "critquote": [
             "Huh, must've put more power into that one.",
@@ -398,9 +398,9 @@
             "drain": []
         },
         "skills": [
-            "NoSlot",
+            "AuraSphereZero",
             "LightChomp",
-            "AuraSphereZero"
+            "NoSlot"
         ],
         "autolearn": [
             null,
