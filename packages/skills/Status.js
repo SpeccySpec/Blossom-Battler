@@ -611,8 +611,8 @@ statusList = {
 			const turns = args[4]
 			if (target != 'target' && target != 'user')
 				return void message.channel.send("You entered an invalid value for <target/user>! It can be either Target or User.");
-			if (![...Affinities, 'normal'].includes(affinity))
-				return void message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: " + Affinities.join(', ') + " or Normal.");
+			if (![...Affinities, 'normal', 'deadly'].includes(affinity))
+				return void message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: deadly, " + Affinities.join(', ') + " or Normal.");
 			if (!Elements.includes(element))
 				return void message.channel.send("You entered an invalid value for <Element>!");
 			if (['status', 'heal', 'passive', 'almighty'].includes(element))
@@ -1328,7 +1328,7 @@ buildStatus = (message, extra, args) => {
 		name: args[0],
 		type: 'status',
 		cost: args[1],
-		costtype: args[2],
+		costtype: args[2].toLowerCase(),
 		target: args[3],
 		originalAuthor: message.author.id
 	}

@@ -1,4 +1,4 @@
-const weakSide = ['superweak', 'weak', 'normal']
+const weakSide = ['deadly', 'superweak', 'weak', 'normal']
 const resistSide = ['normal', 'resist', 'block', 'repel', 'drain']
 const damageFormulas = ['persona', 'pokemon', 'lamonka', 'beta']
 const ArgList = require("../arglist.js")
@@ -215,8 +215,8 @@ extrasList = {
 			const turns = args[4]
 			if (target != 'target' && target != 'user')
 				return void message.channel.send("You entered an invalid value for <target/user>! It can be either Target or User.");
-			if (![...Affinities, 'normal'].includes(affinity))
-				return void message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: " + Affinities.join(', ') + " or Normal.");
+			if (![...Affinities, 'normal', 'deadly'].includes(affinity))
+				return void message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: deadly, " + Affinities.join(', ') + " or Normal.");
 			if (!Elements.includes(element))
 				return void message.channel.send("You entered an invalid value for <Element>!");
 			if (['status', 'heal', 'passive', 'almighty'].includes(element))

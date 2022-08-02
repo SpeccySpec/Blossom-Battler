@@ -231,7 +231,7 @@ getAffinity = (char, skillType) => {
 	}
 
 	if (skillType && skillType != "almighty") {
-		const affinities = ["superweak", "weak", "resist", "block", "repel", "drain"]
+		const affinities = ["deadly", "superweak", "weak", "resist", "block", "repel", "drain"]
 
 		if (typeof skillType === 'string') {
 			for (const i in affinities) {
@@ -243,7 +243,7 @@ getAffinity = (char, skillType) => {
 				}
 			}
 		} else {
-			let results = [-2, -1, 1, 2, 2, 2] //results that would appear
+			let results = [-4, -2, -1, 1, 2, 2, 2] //results that would appear
 			let points = 0
 
 			let affinityToConsider = ''
