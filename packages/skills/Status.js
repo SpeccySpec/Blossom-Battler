@@ -1328,7 +1328,7 @@ buildStatus = (message, extra, args) => {
 		name: args[0],
 		type: 'status',
 		cost: args[1],
-		costtype: args[2],
+		costtype: args[2].toLowerCase(),
 		target: args[3],
 		originalAuthor: message.author.id
 	}
