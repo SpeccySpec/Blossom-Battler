@@ -344,6 +344,9 @@ statusList = {
 		},
 		onuse(char, targ, skill, btl, vars) {
 			let newchar = objClone(char);
+			let hpPercent = vars[0];
+			let mpPercent = vars[1];
+			let percent = vars[2];
 
 			newchar.clone = true;
 			newchar.maxhp *= hpPercent/100;
