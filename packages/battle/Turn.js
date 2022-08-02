@@ -1379,8 +1379,9 @@ doTurn = async(btl, noTurnEmbed) => {
 
 	// Start Of Turn passives.
 	for (let s of char.skills) {
-		let skill = skillFile[s]
-		if (skill.type == 'passive') {
+		let skill = skillFile[s];
+
+		if (skill && skill.type == 'passive') {
 			for (let i in skill.passive) {
 				if (passiveList[i] && passiveList[i].onturn) {
 					if (passiveList[i].multiple) {

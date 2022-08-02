@@ -542,10 +542,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			let techs = [];
 
 			// Here we go...
-			for (let i = 1; i <= totalHits; i++) {
+			for (let i = 0; i < totalHits; i++) {
 				let dmg = genDmg(char, targ, btl, skill);
 				
-				if (i > 1 && !skill.extras?.sustain) {
+				if (i > 0 && !skill.extras?.sustain) {
 					if (skill.extras?.reverse) {
 						let lowestpow = divideBy(dmg, 9, 10, totalHits-1);
 						let diff = dmg-lowestpow;
@@ -705,6 +705,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				// This damage is done!
 				damages.push(Math.max(1, Math.round(dmg)));
 			}
+			
+			console.log(crits);
+			console.log(affinities);
+			console.log(techs);
 
 			let dmgTxt = '';
 			if (affinity == 'drain') {
