@@ -62,7 +62,10 @@
         },
         "skills": [
             "UltimateHit",
-            "ElementalMagic"
+            "ElementalMagic",
+            "ElementalCycle",
+            "FireCorrosion",
+            "Agidyne"
         ],
         "autolearn": [],
         "quotes": {
@@ -119,10 +122,10 @@
             "block": []
         },
         "leaderskill": {
-            "name": "Almighty Amp +",
-            "type": "boost",
-            "var1": "almighty",
-            "var2": 30
+            "name": "Mana Circulation",
+            "type": "discount",
+            "var1": "magic",
+            "var2": 10
         }
     },
     "Shoutmon-DRA": {

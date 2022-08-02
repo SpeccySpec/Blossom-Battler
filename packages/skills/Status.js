@@ -894,11 +894,6 @@ statusList = {
 				forced: true
 			},
 			{
-				name: "Targets",
-				type: "Word",
-				forced: true
-			},
-			{
 				name: "Status",
 				type: "Word",
 			},
@@ -915,9 +910,8 @@ statusList = {
 			let hits = args[4];
 			let element = args[5]?.toLowerCase();
 			let atype = args[6]?.toLowerCase();
-			let targets = args[7]?.toLowerCase();
-			let status = args[8] || "none";
-			let statusChance = Math.min(Math.max((args[9] ?? 0), 0), 100);
+			let status = args[7] || "none";
+			let statusChance = Math.min(Math.max((args[8] ?? 0), 0), 100);
 
 			if (turns < 1) return void message.channel.send("Turns must be at least 1!");
 
@@ -935,18 +929,16 @@ statusList = {
 
 			if (atype != 'physical' && atype != 'magic' && atype != 'ranged') return void message.channel.send(`${atype} is an invalid form of contact! Try physical, magic or ranged.`);
 
-			if (Targets.includes(targets)) return void message.channel.send('Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n-SpreadOpposing\n- SpreadAllies```')
-
 			let definition = {
 				name: skill.name,
 				pow: power,
 				acc: accuracy,
 				crit: critChance,
 				type: element,
-				target: targets,
 				hits: hits,
 				atktype: atype,
 				turns: turns,
+				target: skill.target
 			}
 
 			if (status != 'none') {
@@ -954,7 +946,7 @@ statusList = {
 					let str = `${status} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
 					for (let i in statusEffects) str += `\n-${statusEffects[i]}`;
 					str += '```'
-	
+
 					return void message.channel.send(str)
 				}
 
@@ -979,8 +971,8 @@ statusList = {
 			}
 		},
 		getinfo(vars, skill) {
-			const attackInfo = vars[0]
-			return `Strieks with a **${attackInfo.type}** attack in **${attackInfo.turns}** turns`
+			const attackInfo = vars[0];
+			return `Strikes with a **${attackInfo.type}** attack in **${attackInfo.turns}** turns`;
 		}
 	}),
 

@@ -452,6 +452,8 @@ commands.updateskills = new Command({
 						for (let vars of skillFile[skill].statusses.buff) {
 							if (typeof(vars[0]) === 'object') vars[0] = vars[0][0];
 						}
+					} else if (skillFile[skill].statusses.futuresight) {
+						skillFile[skill].target = skillFile[skill].statusses.futuresight.target
 					}
 				} else {
 					skillFile[skill].statusses = {};

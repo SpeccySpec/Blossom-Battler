@@ -10792,8 +10792,8 @@
         "desc": "The user continually rolls into the target over five turns. It becomes more powerful each time it hits.",
         "extras": {
             "rollout": [
-                100,
-                100,
+                20,
+                20,
                 5
             ]
         }
@@ -24817,7 +24817,6 @@
         "costtype": "mp",
         "desc": "The hell is that ticking noise...",
         "originalAuthor": "363363984390356993",
-        "target": "everyone",
         "powlamk": {},
         "powpkmn": {},
         "statusses": {
@@ -26287,7 +26286,6 @@
         "cost": 40,
         "costtype": "mp",
         "desc": "Lays a curse on the foe that inflicts heavy fire damage in two turns.",
-        "target": "one",
         "powlamk": 164,
         "powpkmn": 300,
         "originalAuthor": "776480348757557308",
@@ -26312,7 +26310,6 @@
         "cost": 20,
         "costtype": "mp",
         "desc": "Deals heavy psychic damage in two turns.",
-        "target": "one",
         "name": "Time-Accelerate",
         "powlamk": {},
         "powpkmn": {},
@@ -26338,7 +26335,6 @@
         "type": "status",
         "cost": 20,
         "costtype": "mp",
-        "target": "one",
         "desc": "Deals heavy psychic damage in two turns.",
         "powlamk": {},
         "powpkmn": {},
@@ -27657,7 +27653,7 @@
         "type": "status",
         "cost": 0,
         "costtype": "MP",
-        "target": "one",
+        "target": "spectra",
         "originalAuthor": "363363984390356993",
         "statusses": {
             "futuresight": [
@@ -27667,7 +27663,6 @@
                     "acc": 95,
                     "crit": 5,
                     "type": "explode",
-                    "target": "single",
                     "hits": 1,
                     "atktype": "physical",
                     "turns": 2
@@ -28213,8 +28208,10 @@
         "originalAuthor": "547427816468381717",
         "heal": {
             "healstat": [
-                10,
-                "hp"
+                [
+                    10,
+                    "hp"
+                ]
             ]
         },
         "levellock": 1
@@ -28229,8 +28226,10 @@
         "originalAuthor": "547427816468381717",
         "heal": {
             "healstat": [
-                10,
-                "hp"
+                [
+                    10,
+                    "hp"
+                ]
             ]
         },
         "levellock": 1
@@ -28245,8 +28244,10 @@
         "originalAuthor": "547427816468381717",
         "heal": {
             "healstat": [
-                60,
-                "hp"
+                [
+                    60,
+                    "hp"
+                ]
             ]
         },
         "levellock": 1
@@ -28261,8 +28262,10 @@
         "originalAuthor": "547427816468381717",
         "heal": {
             "healstat": [
-                350,
-                "hp"
+                [
+                    350,
+                    "hp"
+                ]
             ]
         },
         "levellock": 40,
@@ -28283,8 +28286,10 @@
         "originalAuthor": "547427816468381717",
         "heal": {
             "healstat": [
-                130,
-                "hp"
+                [
+                    130,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -28305,8 +28310,10 @@
         "originalAuthor": "547427816468381717",
         "heal": {
             "healstat": [
-                250,
-                "hp"
+                [
+                    250,
+                    "hp"
+                ]
             ]
         },
         "levellock": 20
@@ -28321,8 +28328,10 @@
         "originalAuthor": "547427816468381717",
         "heal": {
             "healstat": [
-                70,
-                "hp"
+                [
+                    70,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -28345,8 +28354,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                120,
-                "mp"
+                [
+                    120,
+                    "mp"
+                ]
             ]
         },
         "levellock": 30
@@ -28365,8 +28376,10 @@
         "powpkmn": 80,
         "heal": {
             "healstat": [
-                80,
-                "hp"
+                [
+                    80,
+                    "hp"
+                ]
             ]
         },
         "levellock": 17
@@ -28408,8 +28421,10 @@
         "powpkmn": 30,
         "heal": {
             "healstat": [
-                30,
-                "hp"
+                [
+                    30,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -28438,8 +28453,10 @@
         "powpkmn": 30,
         "heal": {
             "healstat": [
-                30,
-                "hp"
+                [
+                    30,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -28526,8 +28543,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                100,
-                "hppercent"
+                [
+                    100,
+                    "hppercent"
+                ]
             ]
         },
         "preskills": [
@@ -28594,8 +28613,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                100,
-                "hppercent"
+                [
+                    100,
+                    "hppercent"
+                ]
             ]
         }
     },
@@ -28611,8 +28632,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                100,
-                "hppercent"
+                [
+                    100,
+                    "hppercent"
+                ]
             ]
         },
         "preskills": [
@@ -28658,8 +28681,10 @@
         "powpkmn": 50,
         "heal": {
             "healstat": [
-                50,
-                "mp"
+                [
+                    50,
+                    "mp"
+                ]
             ]
         },
         "preskills": [
@@ -28699,8 +28724,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                45,
-                "mp"
+                [
+                    45,
+                    "mp"
+                ]
             ]
         },
         "levellock": 10
@@ -28717,8 +28744,10 @@
         "powpkmn": 40,
         "heal": {
             "healstat": [
-                40,
-                "hp"
+                [
+                    40,
+                    "hp"
+                ]
             ]
         },
         "levellock": 10
@@ -28735,8 +28764,10 @@
         "powpkmn": 35,
         "heal": {
             "healstat": [
-                35,
-                "mp"
+                [
+                    35,
+                    "mp"
+                ]
             ]
         }
     },
@@ -28801,8 +28832,10 @@
         "powpkmn": 25,
         "heal": {
             "healstat": [
-                25,
-                "mp"
+                [
+                    25,
+                    "mp"
+                ]
             ]
         },
         "preskills": [
@@ -28855,8 +28888,10 @@
         "powpkmn": 25,
         "heal": {
             "healstat": [
-                25,
-                "mp"
+                [
+                    25,
+                    "mp"
+                ]
             ]
         },
         "preskills": [
@@ -28877,8 +28912,10 @@
         "powpkmn": 30,
         "heal": {
             "healstat": [
-                30,
-                "mp"
+                [
+                    30,
+                    "mp"
+                ]
             ]
         },
         "levellock": 15
@@ -28894,8 +28931,10 @@
         "powpkmn": 22,
         "heal": {
             "healstat": [
-                22,
-                "mp"
+                [
+                    22,
+                    "mp"
+                ]
             ]
         },
         "evoskills": [
@@ -28990,8 +29029,10 @@
         "powpkmn": 9999999999,
         "heal": {
             "healstat": [
-                100,
-                "hppercent"
+                [
+                    100,
+                    "hppercent"
+                ]
             ]
         },
         "preskills": [
@@ -29033,8 +29074,10 @@
         "powpkmn": 1000,
         "heal": {
             "healstat": [
-                1000,
-                "hp"
+                [
+                    1000,
+                    "hp"
+                ]
             ]
         },
         "levellock": 90
@@ -29051,8 +29094,10 @@
         "powpkmn": 600,
         "heal": {
             "healstat": [
-                600,
-                "hp"
+                [
+                    600,
+                    "hp"
+                ]
             ]
         }
     },
@@ -29068,8 +29113,10 @@
         "powpkmn": 325,
         "heal": {
             "healstat": [
-                265,
-                "hp"
+                [
+                    265,
+                    "hp"
+                ]
             ]
         },
         "preskills": [
@@ -29092,8 +29139,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                200,
-                "hp"
+                [
+                    200,
+                    "hp"
+                ]
             ]
         },
         "preskills": [
@@ -62144,8 +62193,10 @@
         "originalAuthor": "547427816468381717",
         "heal": {
             "healstat": [
-                250,
-                "hp"
+                [
+                    250,
+                    "hp"
+                ]
             ]
         },
         "levellock": 20
@@ -62160,8 +62211,10 @@
         "originalAuthor": "547427816468381717",
         "heal": {
             "healstat": [
-                100,
-                "hp"
+                [
+                    100,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -62202,8 +62255,10 @@
         "powpkmn": 42,
         "heal": {
             "healstat": [
-                42,
-                "mp"
+                [
+                    42,
+                    "mp"
+                ]
             ]
         },
         "levellock": 4
@@ -62220,8 +62275,10 @@
         "powpkmn": 200,
         "heal": {
             "healstat": [
-                200,
-                "hp"
+                [
+                    200,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -62250,8 +62307,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                175,
-                "mp"
+                [
+                    175,
+                    "mp"
+                ]
             ]
         },
         "levellock": 50
@@ -62268,8 +62327,10 @@
         "powpkmn": 165,
         "heal": {
             "healstat": [
-                165,
-                "hp"
+                [
+                    165,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -62298,8 +62359,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                150,
-                "hp"
+                [
+                    150,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -62321,8 +62384,10 @@
         "powpkmn": 150,
         "heal": {
             "healstat": [
-                150,
-                "hp"
+                [
+                    150,
+                    "hp"
+                ]
             ]
         },
         "levellock": 15
@@ -62339,8 +62404,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                140,
-                "hp"
+                [
+                    140,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -62368,8 +62435,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                140,
-                "hp"
+                [
+                    140,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -62398,8 +62467,10 @@
         "powpkmn": 120,
         "heal": {
             "healstat": [
-                120,
-                "hp"
+                [
+                    120,
+                    "hp"
+                ]
             ]
         }
     },
@@ -62415,8 +62486,10 @@
         "powpkmn": 110,
         "heal": {
             "healstat": [
-                110,
-                "hp"
+                [
+                    110,
+                    "hp"
+                ]
             ]
         },
         "levellock": 15
@@ -62476,8 +62549,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                100,
-                "hp"
+                [
+                    100,
+                    "hp"
+                ]
             ]
         }
     },
@@ -62493,8 +62568,10 @@
         "powpkmn": 100,
         "heal": {
             "healstat": [
-                100,
-                "hp"
+                [
+                    100,
+                    "hp"
+                ]
             ]
         },
         "levellock": 14
@@ -62511,8 +62588,10 @@
         "powpkmn": 100,
         "heal": {
             "healstat": [
-                100,
-                "hp"
+                [
+                    100,
+                    "hp"
+                ]
             ]
         }
     },
@@ -62528,8 +62607,10 @@
         "powpkmn": 100,
         "heal": {
             "healstat": [
-                100,
-                "hp"
+                [
+                    100,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -62551,8 +62632,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                140,
-                "hp"
+                [
+                    140,
+                    "hp"
+                ]
             ]
         }
     },
@@ -62568,8 +62651,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                140,
-                "hp"
+                [
+                    140,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -62615,8 +62700,10 @@
         "powpkmn": 125,
         "heal": {
             "healstat": [
-                125,
-                "hp"
+                [
+                    125,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -62645,8 +62732,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                300,
-                "hp"
+                [
+                    300,
+                    "hp"
+                ]
             ]
         }
     },
@@ -62662,8 +62751,10 @@
         "powpkmn": 300,
         "heal": {
             "healstat": [
-                300,
-                "hp"
+                [
+                    300,
+                    "hp"
+                ]
             ]
         },
         "preskills": [
@@ -62686,8 +62777,10 @@
         "powpkmn": 300,
         "heal": {
             "healstat": [
-                300,
-                "mp"
+                [
+                    300,
+                    "mp"
+                ]
             ]
         },
         "levellock": 30
@@ -62704,8 +62797,10 @@
         "powpkmn": 300,
         "heal": {
             "healstat": [
-                300,
-                "hp"
+                [
+                    300,
+                    "hp"
+                ]
             ]
         },
         "preskills": [
@@ -62728,8 +62823,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                225,
-                "mp"
+                [
+                    225,
+                    "mp"
+                ]
             ]
         },
         "levellock": 70
@@ -62746,8 +62843,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                200,
-                "hp"
+                [
+                    200,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -62776,8 +62875,10 @@
         "powpkmn": 200,
         "heal": {
             "healstat": [
-                200,
-                "hp"
+                [
+                    200,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -62806,8 +62907,10 @@
         "powpkmn": 100,
         "heal": {
             "healstat": [
-                100,
-                "hp"
+                [
+                    100,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -62896,8 +62999,10 @@
         "powpkmn": 75,
         "heal": {
             "healstat": [
-                75,
-                "hp"
+                [
+                    75,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -62920,8 +63025,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                75,
-                "hp"
+                [
+                    75,
+                    "hp"
+                ]
             ]
         }
     },
@@ -62956,8 +63063,10 @@
         "powpkmn": 70,
         "heal": {
             "healstat": [
-                70,
-                "hp"
+                [
+                    70,
+                    "hp"
+                ]
             ]
         },
         "preskills": [
@@ -62980,8 +63089,10 @@
         "powpkmn": 70,
         "heal": {
             "healstat": [
-                70,
-                "hp"
+                [
+                    70,
+                    "hp"
+                ]
             ]
         },
         "preskills": [
@@ -63004,8 +63115,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                60,
-                "hp"
+                [
+                    60,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -63027,8 +63140,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                60,
-                "hp"
+                [
+                    60,
+                    "hp"
+                ]
             ]
         }
     },
@@ -63044,8 +63159,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                60,
-                "hp"
+                [
+                    60,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -63151,8 +63268,10 @@
         "powpkmn": 20,
         "heal": {
             "healstat": [
-                20,
-                "mp"
+                [
+                    20,
+                    "mp"
+                ]
             ]
         }
     },
@@ -63168,8 +63287,10 @@
         "powpkmn": 20,
         "heal": {
             "healstat": [
-                20,
-                "mp"
+                [
+                    20,
+                    "mp"
+                ]
             ]
         },
         "evoskills": [
@@ -63192,8 +63313,10 @@
         "powpkmn": 18,
         "heal": {
             "healstat": [
-                18,
-                "mp"
+                [
+                    18,
+                    "mp"
+                ]
             ]
         },
         "evoskills": [
@@ -63222,8 +63345,10 @@
         "powpkmn": 18,
         "heal": {
             "healstat": [
-                18,
-                "mp"
+                [
+                    18,
+                    "mp"
+                ]
             ]
         },
         "evoskills": [
@@ -63250,8 +63375,10 @@
         "powpkmn": 16,
         "heal": {
             "healstat": [
-                16,
-                "mp"
+                [
+                    16,
+                    "mp"
+                ]
             ]
         },
         "evoskills": [
@@ -63275,8 +63402,10 @@
         "powpkmn": 10,
         "heal": {
             "healstat": [
-                10,
-                "mp"
+                [
+                    10,
+                    "mp"
+                ]
             ]
         },
         "evoskills": [
@@ -63298,8 +63427,10 @@
         "powpkmn": 10,
         "heal": {
             "healstat": [
-                10,
-                "mp"
+                [
+                    10,
+                    "mp"
+                ]
             ]
         },
         "evoskills": [
@@ -63321,8 +63452,10 @@
         "powpkmn": 10,
         "heal": {
             "healstat": [
-                10,
-                "mp"
+                [
+                    10,
+                    "mp"
+                ]
             ]
         },
         "evoskills": [
@@ -63374,8 +63507,10 @@
         "originalAuthor": "776480348757557308",
         "heal": {
             "healstat": [
-                50,
-                "hp"
+                [
+                    50,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -63405,8 +63540,10 @@
         "powpkmn": 50,
         "heal": {
             "healstat": [
-                50,
-                "hp"
+                [
+                    50,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -63435,8 +63572,10 @@
         "powpkmn": 50,
         "heal": {
             "healstat": [
-                50,
-                "hp"
+                [
+                    50,
+                    "hp"
+                ]
             ]
         },
         "evoskills": [
@@ -63464,8 +63603,10 @@
         "powpkmn": 50,
         "heal": {
             "healstat": [
-                50,
-                "mp"
+                [
+                    50,
+                    "mp"
+                ]
             ]
         }
     },
@@ -63481,8 +63622,10 @@
         "powpkmn": 35,
         "heal": {
             "healstat": [
-                35,
-                "mp"
+                [
+                    35,
+                    "mp"
+                ]
             ]
         }
     },
@@ -63545,8 +63688,10 @@
         "powpkmn": -50,
         "heal": {
             "healstat": [
-                -50,
-                "hp"
+                [
+                    -50,
+                    "hp"
+                ]
             ]
         }
     },
@@ -67153,8 +67298,10 @@
         "originalAuthor": "363363984390356993",
         "heal": {
             "healstat": [
-                100,
-                "hppercent"
+                [
+                    100,
+                    "hppercent"
+                ]
             ],
             "statusheal": [
                 [
@@ -67534,7 +67681,7 @@
         "type": "heal",
         "cost": 1,
         "costtype": "hp",
-        "target": "one",
+        "target": "ally",
         "originalAuthor": "363363984390356993",
         "heal": {
             "healstat": [
@@ -68574,14 +68721,18 @@
     "Ring Gather": {
         "name": "Ring Gather",
         "type": "heal",
-        "atktype": "magic",
         "pow": 287,
         "hits": 1,
-        "acc": 100,
         "cost": 15,
         "costtype": "mppercent",
         "target": "caster",
-        "originalAuthor": "313972298992451585"
+        "originalAuthor": "313972298992451585",
+        "heal": {
+            "healstat": [
+                287,
+                "hp"
+            ]
+        }
     },
     "VengefulSoul": {
         "name": "VengefulSoul",
@@ -70610,7 +70761,7 @@
         "costtype": "mp",
         "target": "one",
         "originalAuthor": "363363984390356993",
-        "crit": 15,
+        "crit": 100,
         "desc": "An alternative melee attack that deals Almighty damage"
     },
     "Antiphysical": {
