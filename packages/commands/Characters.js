@@ -370,6 +370,8 @@ commands.getgear = new Command({
 			if (armors != '') DiscordEmbed.fields.push({ name: "Armor List", value: armors, inline: true });
 		}
 
+		if (DiscordEmbed.fields.length < 1) return message.channel.send('This character has no gear!');
+
 		message.channel.send({embeds: [DiscordEmbed]});
 	}
 })
