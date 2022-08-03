@@ -208,7 +208,7 @@ commands.help = new Command({
 
 			let commandsList = []
 			for (let command in commands) {
-				if (commands[command].section == category || category == "all") {
+				if ((commands[command].section == category || category == "all") && commands[command].section != 'aliases') {
 					commandsList.push([`${getPrefix(message.guild.id)}${command}`, commands[command].section, commands[command].getFullDesc()])
 				}
 			}
