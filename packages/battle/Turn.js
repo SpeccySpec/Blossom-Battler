@@ -424,6 +424,8 @@ function GetCharStatus(char) {
 		str += statusEmojis[shield.type ?? "reduce"]
 	if (char.status)
 		str += statusEmojis[char.status]
+	if (char.custom?.pinch)
+		str += statusEmojis.pinch
 	return str
 }
 
@@ -493,7 +495,7 @@ sendCurTurnEmbed = (char, btl) => {
 		.addFields({name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true})
 
 	let message = {
-		content: `<@${char.owner}>`,
+		content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 		embeds: [DiscordEmbed],
 		components: setUpComponents(char, btl, menustate)
 	};
@@ -511,7 +513,7 @@ sendCurTurnEmbed = (char, btl) => {
 	});
 
 	let collector = makeCollector(btl.channel, {
-		filter: ({user}) => (user.id == char.owner || utilityFuncs.RPGBotAdmin(user.id))
+		filter: ({user}) => (user.id == char.owner || utilityFuncs.RPGBotAdmin(user.id) || user.id == btl?.initiator)
 	})
 
 	let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`, true);
@@ -1564,7 +1566,11 @@ advanceTurn = (btl, firstturn) => {
 
 	// End the battle in a test battle.
 	if (btl.testing && !firstturn) {
-		btl.testing--;
+		let turnCheck = btl.curturn+1;
+
+		if (btl.turnorder[turnCheck] == null) {
+			btl.testing--;
+		}
 		if (btl.testing <= 0) {
 			btl.channel.send("The test battle is now over!");
 			fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, '{}');

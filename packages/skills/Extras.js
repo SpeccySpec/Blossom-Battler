@@ -84,7 +84,13 @@ extrasList = {
 			return true
 		},
 		onuse(char, targ, skill, btl, vars) {
-			char.hp = vars[0];
+			if (!vars[0])
+				char.hp = 0;
+			else
+				char.hp = vars[0];
+
+			if (char.hp > char.maxhp) char.hp = char.maxhp;
+			if (char.hp < 0) char.hp = 0;
 
 			return `__${char.name}__ sacrificed themselves! Their HP dropped to **${vars[0]}**!`;
 		},
@@ -164,7 +170,7 @@ extrasList = {
 			
 			for (i in vars) {
 				let healText = ` ${vars[i][3].toUpperCase()}`
-				if (healText.includes('PERCENT')) healText = `% of target's max ${healText.replace('PERCENT', '')}`
+				if (healText.includes('PERCENT')) healText = `% of caster's max ${healText.replace('PERCENT', '')}`
 				if (healText.includes('LB')) healText = `% LB`
 
 				text += `${vars[i][0]} than ${vars[i][1] ? 'or equal to' : ''} ${vars[i][2]}${healText}`
@@ -469,7 +475,7 @@ extrasList = {
 			if (targ.charms && targ.charms.includes("PureVision") && stat === 'prc') return `${targ.name}'s Pure Vision negated the change.`;
 			let txt = amount > 0
 				? `__${targ.name}__'s _${stat ? stat.toUpperCase() : "???"}_ was buffed **${amount}** time(s)!`
-				: `__${targ.name}__'s _${stat ?stat.toUpperCase() : "???"}_ was debuffed **${absamount}** time(s)!`
+				: `__${targ.name}__'s _${stat ? stat.toUpperCase() : "???"}_ was debuffed **${absamount}** time(s)!`
 			if (chance && chance < 100) {
 				const rchance = randNum(1, 100);
 
@@ -1976,7 +1982,7 @@ customVariables = {
 						target: [char.team, char.pos],
 					};
 
-					useSkill(inf, btl, act, char.custom.futuresight, ally);
+					useSkill(inf, btl, act, char.custom.futuresight);
 					killVar(char, 'futuresight');
 					return '';
 				}

@@ -248,7 +248,7 @@ healList = {
 		diffflag: 0,
 		applyfunc(message, skill, args) {
 			const status = args[0]?.toLowerCase();
-			if (status != 'physical' || status != 'mental' || status != 'all') {
+			if (status != 'physical' && status != 'mental' && status != 'all') {
 				if (!statusEffects.includes(status)) return void message.channel.send("That's not a valid status!");
 			}
 			makeHeal(skill, "statusheal", [status]);
@@ -353,6 +353,9 @@ healList = {
 			else
 				char.hp = vars[0];
 
+			if (char.hp > char.maxhp) char.hp = char.maxhp;
+			if (char.hp < 0) char.hp = 0;
+
 			return `__${char.name}__ sacrificed themselves, lowering their HP to __${vars[0]}__!`;
 		},
 		getinfo(vars, skill) {
@@ -405,14 +408,14 @@ function makeHeal(skill, extra, func) {
 	if (!skill.heal[extra]) skill.heal[extra] = [];
 
 	if (healList[extra].multiple) {
-		if (healList[extra].diffflag) {
+		/*if (healList[extra].diffflag) {
 			for (i in skill.heal[extra]) {
 				if (skill.heal[extra][i][healList[extra].diffflag] === func[healList[extra].diffflag]) {
 					skill.heal[extra][i] = func;
 					return true;
 				}
 			}
-		}
+		}*/
 		skill.heal[extra].push(func);
 	} else {
 		skill.heal[extra] = func;
