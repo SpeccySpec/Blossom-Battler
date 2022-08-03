@@ -71048,24 +71048,6 @@
         "desc": "I wonder what this is...",
         "done": true
     },
-    "Finita": {
-        "name": "Finita",
-        "type": "heal",
-        "cost": 0,
-        "costtype": "MP",
-        "target": "caster",
-        "originalAuthor": "363363984390356993",
-        "heal": {
-            "healstat": [
-                [
-                    -1e+99,
-                    "lb"
-                ]
-            ]
-        },
-        "desc": "The caster is cheating",
-        "done": true
-    },
     "BrokenPiercer": {
         "name": "Piercer (Broken)",
         "type": "pierce",
@@ -71332,18 +71314,5 @@
                 -15
             ]
         }
-    },
-    "SecondWind": {
-        "name": "SecondWind",
-        "type": "passive",
-        "originalAuthor": "363363984390356993",
-        "passive": {
-            "endure": [
-                1,
-                30
-            ]
-        },
-        "desc": "WTF",
-        "done": true
     }
 }

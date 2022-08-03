@@ -17876,7 +17876,9 @@
         "armor": {},
         "xp": 0,
         "maxxp": 7572,
-        "skills": [],
+        "skills": [
+            "HopKick"
+        ],
         "critquote": [],
         "deathquote": [],
         "bio": {
@@ -17896,7 +17898,8 @@
                 0
             ],
             "weight": 0,
-            "custom": {}
+            "custom": {},
+            "appearance": "https://cdn.discordapp.com/attachments/955180093049798756/1004454612755034254/IMG_0789.png"
         },
         "trust": {
             "Bayrero": {
@@ -18019,8 +18022,11 @@
             }
         },
         "armors": {},
-        "weaponclass": "none",
-        "armorclass": "none"
+        "weaponclass": [
+            "pierce",
+            "bladed"
+        ],
+        "armorclass": "magic"
     },
     "Trecko": {
         "name": "Trecko",
