@@ -1067,15 +1067,22 @@ passiveList = {
 			makePassive(skill, "pinchmode", [starthp, extradmg, lostdef, losthp])
 			return true;
 		},
-		getinfo(vars, skill) {
-			return `When downed, the user is revived with **${vars[0]}% of their max HP** and will deal **${vars[1]}%** mode damage, but they will lose **${vars[3]}%** HP every turn, take **${vars[2]}%** more damage and cannot be healed`
-		},
 		ondamage(char, inf, skill, dmg, passive, btl, vars) {
 			if (char.hp <= 0 && !char.custom?.pinch) {
 				addCusVal(char, "pinch", true)
 				char.hp = (char.maxhp * vars[0]) / 100
-				return `...but they refuse to die just yet, and become enraged!`
+				return "...but they refuse to die just yet, and become enraged!"
 			}
+		},
+		onturn(btl, char, vars) {
+			if (char.custom?.pinch) {
+				const damage = (char.maxhp * vars[3]) / 100
+				char.hp -= damage
+				return `__${char.name}__ took ${statusEmojis.pinch}**${damage}** damage${char.hp <= 0 ? " and was defeated" : ""}!`
+			}
+		},
+		getinfo(vars, skill) {
+			return `When downed, the user is revived with **${vars[0]}% of their max HP** and will deal **${vars[1]}%** mode damage, but they will lose **${vars[3]}%** HP every turn, take **${vars[2]}%** more damage and cannot be healed`
 		},
 	}),
 
