@@ -1035,7 +1035,7 @@ passiveList = {
 
 	pinchmode: new Extra({
 		name: "Pinch Mode",
-		desc: "Once the user is downed, they will be revived at <Revive HP%>% max HP, will deal <Damage Boost>% more damage, will recieve <Defence Lost>% more damage and every turn they will also lose <Lost HP%>% max HP. If their HP is ever healed the effect will cancel and they will be downed again.",
+		desc: "Once the user is downed, they will be revived at <Revive HP%>% max HP and their skills will have <Damage Boost>% more power, but they will get <Defence Lost>% more damage and every turn they will lose <Lost HP%>% of their max HP. Heals will have no effect on them.",
 		args: [
 			{
 				name: "Revive HP%",
@@ -1082,8 +1082,13 @@ passiveList = {
 				return `__${char.name}__ took ${statusEmojis.pinch}**${damage}** damage${char.hp <= 0 ? " and was defeated" : ""}!`
 			}
 		},
+		statmod(btl, char, skill, vars) {
+			if (char.custom?.pinch) {
+				skill.pow *= (vars[1] / 100) + 1;
+			}
+		},
 		getinfo(vars, skill) {
-			return `When downed, the user is revived with **${vars[0]}% of their max HP** and will deal **${vars[1]}%** mode damage, but they will lose **${vars[3]}%** HP every turn, take **${vars[2]}%** more damage and heals will cancel the effect`
+			return `When downed, the user is revived with **${vars[0]}% of their max HP** and their skills will have **${vars[1]}%** more power, but they will lose **${vars[3]}%** HP every turn, take **${vars[2]}%** more damage and heals will not work`
 		},
 	}),
 
