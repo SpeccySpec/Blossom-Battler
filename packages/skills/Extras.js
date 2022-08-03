@@ -1995,7 +1995,7 @@ customVariables = {
 						target: [char.team, char.pos],
 					};
 
-					useSkill(inf, btl, act, char.custom.futuresight, ally);
+					useSkill(inf, btl, act, char.custom.futuresight);
 					killVar(char, 'futuresight');
 					return '';
 				}
