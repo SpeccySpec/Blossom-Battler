@@ -888,6 +888,10 @@ commands.updateskills = new Command({
 			if (skillFile[skill].status) {
 				if (skillFile[skill].status == 'illness') skillFile[skill].status = 'irradiation';
 				else if (skillFile[skill].status.includes('illness')) skillFile[skill].status[skillFile[skill].status.indexOf('illness')] = 'irradiation';
+
+				//same but poison and toxin
+				if (skillFile[skill].status == 'poison') skillFile[skill].status = 'toxin';
+				else if (skillFile[skill].status.includes('poison')) skillFile[skill].status[skillFile[skill].status.indexOf('poison')] = 'toxin';
 			}
 		}
 		fs.writeFileSync(dataPath+'/json/skills.json', JSON.stringify(skillFile, null, '    '));
@@ -2170,7 +2174,7 @@ commands.liststatus = new Command({
 			bleed: '<:physical:973077052129423411>Take 1/10th of max HP damage each until cured, or the inflicted is defeated.',
 			freeze: '<:physical:973077052129423411>Immobilized for one turn.',
 			paralyze: '<:physical:973077052129423411>Chance to be immobilized until the status passes.',
-			poison: '<:physical:973077052129423411>Take 1/10th of max HP damage each turn until cured, or you reach one hp. Halves MAG stat.',
+			toxin: '<:physical:973077052129423411>Take 1/10th of max HP damage each turn until cured, or you reach one hp. Halves MAG stat.',
 			dazed: '<:physical:973077052129423411>Unable to use any physical skills for 2 turns.',
 			hunger: '<:physical:973077052129423411>ATK & MAG halved.',
 			blind: '<:physical:973077052129423411>PRC and AGL halved.',

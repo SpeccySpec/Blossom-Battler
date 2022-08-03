@@ -79,6 +79,8 @@ buffStat = (f, stat, amount) => {
 inflictStatus = (char, status, notxt) => {
 	if (!status) return '';
 	if (status.toLowerCase() === 'paralysis' || status.toLowerCase() === 'paralyse') status = 'paralyze';
+	//same with poison but toxin
+	if (status.toLowerCase() === 'poison') status = 'toxin';
 	if (!statusEffectFuncs[status.toLowerCase()]) return '';
 
 	// Do we block this status?

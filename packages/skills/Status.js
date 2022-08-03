@@ -1411,7 +1411,7 @@ statusEffectFuncs = {
 		}
 	},
 
-	poison: {
+	toxin: {
 		onturn: function(btl, char) {
 			let statusTxt = '';
 			let affinityTxt = '';
@@ -1419,23 +1419,23 @@ statusEffectFuncs = {
 			let dmg = Math.round(char.maxhp/10)
 			if (isBoss(char)) dmg = 5;
 
-			if (hasStatusAffinity(char, 'poison', 'weak')) {
+			if (hasStatusAffinity(char, 'toxin', 'weak')) {
 				dmg *= 2;
 				affinityTxt = affinityEmoji.weak;
-			} else if (hasStatusAffinity(char, 'poison', 'resist')) {
+			} else if (hasStatusAffinity(char, 'toxin', 'resist')) {
 				dmg /= 2;
 				affinityTxt = affinityEmoji.resist;
 			}
 
 			char.hp = Math.max(1, char.hp-dmg);
-			return `${char.name} took ${dmg}${affinityTxt} damage from their poison!`;
+			return `${char.name} took ${dmg}${affinityTxt} damage from their toxin!`;
 		},
 		statmod: function(char, stats) {
 			if (isBoss(char)) return stats;
 
-			if (hasStatusAffinity(char, 'poison', 'weak')) {
+			if (hasStatusAffinity(char, 'toxin', 'weak')) {
 				stats.mag /= 4;
-			} else if (hasStatusAffinity(char, 'poison', 'resist')) {
+			} else if (hasStatusAffinity(char, 'toxin', 'resist')) {
 				stats.mag /= 1.25;
 			} else {
 				stats.mag /= 2;

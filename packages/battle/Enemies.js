@@ -40,7 +40,7 @@ let st = {
 	dizzy: 2,
 	sleep: 2,
 	despair: 1,
-	poison: 1,
+	toxin: 1,
 	brainwash: 4,
 	fear: 2,
 	rage: 1,
