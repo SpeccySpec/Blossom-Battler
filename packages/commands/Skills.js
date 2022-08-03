@@ -93,6 +93,9 @@ commands.registerskill = new Command({
 		if (args[6] < 1) return message.channel.send('Skills with 0 hits or less will not function!');
 		if (!isFinite(args[6])) return message.channel.send('Please enter a whole number for **Hits**!');
 
+		let totalDmg = (args[3] < 1 ? 1 : args[3])*args[6];
+		if (totalDmg > 2000) return message.channel.send(`The Power cap for skills is 2000! A skill of ${args[6]} hits can have a maximum of ${2000/args[6]} power!`);
+
 		if (!args[7] || !utilityFuncs.inArray(args[7].toLowerCase(), Elements)) {
 			return message.channel.send({content: 'Please enter a valid element for **Element!**', embeds: [elementList()]})
 		}
