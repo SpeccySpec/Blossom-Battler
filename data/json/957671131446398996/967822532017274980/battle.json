@@ -7,55 +7,9 @@
         "parentId": "957671132457234554",
         "permissionOverwrites": [],
         "messages": [
-            "1004445945997574254",
-            "1004446082614435880",
-            "1004446069255577650",
-            "1004446090281615370",
-            "1004446099282608230",
-            "1004446107738325062",
-            "1004446122993008753",
-            "1004451220242575510",
-            "1004451221396004904",
-            "1004451221907714209",
-            "1004451223698681958",
-            "1004451225313476718",
-            "1004451251234275347",
-            "1004451260042317896",
-            "1004451268611276800",
-            "1004451270079299605",
-            "1004451278019113072",
-            "1004451287250780241",
-            "1004451295446454363",
-            "1004451297866563776",
-            "1004451305101725756",
-            "1004451313888796724",
-            "1004451322646511777",
-            "1004451324034814005",
-            "1004451335694995546",
-            "1004451369513648209",
-            "1004451606722523216",
-            "1004451644433518692",
-            "1004451759659417802",
-            "1004451768396169258",
-            "1004451777120325762",
-            "1004451779364274308",
-            "1004451786821750885",
-            "1004451836109000734",
-            "1004451837249863700",
-            "1004451837929328690",
-            "1004451838566871061",
-            "1004451839468634172",
-            "1004451866987466792",
-            "1004451868493226045",
-            "1004451873769660458",
-            "1004451874776293387",
-            "1004451955986411542",
-            "1004451958129704960",
-            "1004451958565904394",
-            "1004451960218456145",
-            "1004451960793092196",
-            "1004451961518686239",
-            "1004451962659553413"
+            "1004467256488636426",
+            "1004468005268377650",
+            "1004468007021580298"
         ],
         "threads": [],
         "nsfw": false,
@@ -63,7 +17,7 @@
         "name": "testing",
         "rawPosition": 2,
         "topic": null,
-        "lastMessageId": "1004451962659553413",
+        "lastMessageId": "1004467970958962708",
         "rateLimitPerUser": 0,
         "createdTimestamp": 1650817272906
     },
@@ -76,11 +30,7 @@
         "members": [
             "776480348757557308",
             "621307633718132746",
-            "957666180791947294",
-            "516359709779820544",
-            "412328234198237189",
-            "441198920668938260",
-            "963785169242841118"
+            "957666180791947294"
         ],
         "channels": [
             "957671132457234554",
@@ -173,9 +123,7 @@
     "turnorder": [
         0,
         1,
-        2,
-        3,
-        4
+        1
     ],
     "testing": 100,
     "initiator": "621307633718132746",
@@ -213,7 +161,7 @@
                     "skills": [
                         "FireCrack",
                         "PKFire-Pi",
-                        "SnowGrave",
+                        "Dia",
                         "PKFreeze-Gamma",
                         "Wormhole-Beta",
                         "Ice+",
@@ -408,93 +356,72 @@
             "forcehorde": true,
             "members": [
                 {
-                    "level": 14,
-                    "hp": 200,
-                    "mp": 100,
+                    "level": 75,
+                    "hp": 7000,
+                    "mp": 6000,
                     "melee": {
-                        "name": "Strike Attack",
-                        "type": "strike",
+                        "name": "Pierce Attack",
+                        "type": "pierce",
                         "pow": 30,
                         "acc": 95,
                         "crit": 15
                     },
                     "skills": [
-                        "Lunge",
-                        "Magna",
-                        "Mahana",
-                        "Hanama"
+                        "LightHand",
+                        "TentacleSwipe",
+                        "Maragidyne",
+                        "Agidyne",
+                        "Mabufudyne",
+                        "Bufudyne",
+                        "Maziodyne",
+                        "Ziodyne",
+                        "Magarudyne",
+                        "Garudyne",
+                        "Mapsiodyne",
+                        "Psiodyne",
+                        "Maeigaon",
+                        "Eigaon",
+                        "Hama",
+                        "Mahama",
+                        "Makougaon",
+                        "Kougaon",
+                        "LightStorm",
+                        "Megidolaon",
+                        "Makarakarn",
+                        "Tetrakarn",
+                        "Diarama"
                     ],
-                    "image": "https://cdn.discordapp.com/attachments/958747864970981376/970731346198679652/Grassimp.png",
-                    "journal": "Defenseless bug that hides under bushes. They warm up to other people very quickly, and never intend to hurt others. They love being held & pet, and nuzzle others to show their trust. During the summers, they bloom & hand out the blueberries produced to friends & trusted allies.",
-                    "dreams": [
-                        "...Food... Food...",
-                        "...Scary... Scary...",
-                        "...Run... Run...",
-                        "...Find... Shelter..."
-                    ],
-                    "loot": [
-                        {
-                            "type": "item",
-                            "id": "Sweet",
-                            "amount": 25,
-                            "chance": 33.3333333
-                        }
-                    ],
-                    "negotiate": [
-                        {
-                            "name": "Pet",
-                            "desc": "Pet the Grassimp.",
-                            "action": "%PLAYER% pets the Grassimp! It's satisfied.",
-                            "convince": 100
-                        }
-                    ],
-                    "negotiateDefs": {
-                        "required": 4,
-                        "qualities": {
-                            "atk": 1,
-                            "mag": 7,
-                            "end": 1,
-                            "skill": "Hanama"
-                        }
-                    },
-                    "name": "Grassimp",
-                    "mainElement": "almighty",
-                    "xp": 1252,
+                    "journal": "The Luminosity aged over time, and lost some of her power due to the fact that everybody stopped worshipping her. Her elder ancestor would step in if provoked. This is her at full power, while everyone still worshipped her, and gave strength. This battle will be a lengthy one. **Good luck**.",
+                    "dreams": [],
+                    "name": "ElderLuminosity",
+                    "image": "Luminosity",
+                    "mainElement": "strike",
+                    "xp": 200000,
                     "stats": {
-                        "atk": 18,
-                        "mag": 18,
-                        "prc": 16,
-                        "end": 19,
-                        "chr": 11,
-                        "int": 12,
-                        "agl": 12,
-                        "luk": 17
+                        "atk": 81,
+                        "mag": 81,
+                        "prc": 75,
+                        "end": 22,
+                        "chr": 58,
+                        "int": 51,
+                        "agl": 21,
+                        "luk": 32
                     },
                     "affinities": {
-                        "weak": [
-                            "fire"
-                        ],
-                        "resist": [
-                            "grass"
-                        ],
+                        "weak": [],
+                        "resist": [],
                         "block": [],
                         "repel": [],
-                        "drain": [
-                            "water"
-                        ]
+                        "drain": []
                     },
                     "quotes": {},
                     "lb": null,
-                    "type": "none",
-                    "statusaffinities": {
-                        "block": [
-                            "ego"
-                        ]
-                    },
+                    "type": "deity",
+                    "difficulty": "legacy",
                     "enemy": true,
-                    "truename": "Grassimp",
-                    "maxhp": 200,
-                    "maxmp": 100,
+                    "truename": "ElderLuminosity",
+                    "maxhp": 7000,
+                    "maxmp": 6000,
                     "id": 1,
                     "memory": {},
                     "pacify": 0,
@@ -510,318 +437,6 @@
                     "donetc": false,
                     "team": "1",
                     "pos": "0"
-                },
-                {
-                    "level": 14,
-                    "hp": 200,
-                    "mp": 100,
-                    "melee": {
-                        "name": "Strike Attack",
-                        "type": "strike",
-                        "pow": 30,
-                        "acc": 95,
-                        "crit": 15
-                    },
-                    "skills": [
-                        "Lunge",
-                        "Magna",
-                        "Mahana",
-                        "Hanama"
-                    ],
-                    "image": "https://cdn.discordapp.com/attachments/958747864970981376/970731346198679652/Grassimp.png",
-                    "journal": "Defenseless bug that hides under bushes. They warm up to other people very quickly, and never intend to hurt others. They love being held & pet, and nuzzle others to show their trust. During the summers, they bloom & hand out the blueberries produced to friends & trusted allies.",
-                    "dreams": [
-                        "...Food... Food...",
-                        "...Scary... Scary...",
-                        "...Run... Run...",
-                        "...Find... Shelter..."
-                    ],
-                    "loot": [
-                        {
-                            "type": "item",
-                            "id": "Sweet",
-                            "amount": 25,
-                            "chance": 33.3333333
-                        }
-                    ],
-                    "negotiate": [
-                        {
-                            "name": "Pet",
-                            "desc": "Pet the Grassimp.",
-                            "action": "%PLAYER% pets the Grassimp! It's satisfied.",
-                            "convince": 100
-                        }
-                    ],
-                    "negotiateDefs": {
-                        "required": 4,
-                        "qualities": {
-                            "atk": 1,
-                            "mag": 7,
-                            "end": 1,
-                            "skill": "Hanama"
-                        }
-                    },
-                    "name": "Grassimp",
-                    "mainElement": "almighty",
-                    "xp": 1252,
-                    "stats": {
-                        "atk": 18,
-                        "mag": 18,
-                        "prc": 16,
-                        "end": 19,
-                        "chr": 11,
-                        "int": 12,
-                        "agl": 12,
-                        "luk": 17
-                    },
-                    "affinities": {
-                        "weak": [
-                            "fire"
-                        ],
-                        "resist": [
-                            "grass"
-                        ],
-                        "block": [],
-                        "repel": [],
-                        "drain": [
-                            "water"
-                        ]
-                    },
-                    "quotes": {},
-                    "lb": null,
-                    "type": "none",
-                    "statusaffinities": {
-                        "block": [
-                            "ego"
-                        ]
-                    },
-                    "enemy": true,
-                    "truename": "Grassimp",
-                    "maxhp": 200,
-                    "maxmp": 100,
-                    "id": 2,
-                    "memory": {},
-                    "pacify": 0,
-                    "buffs": {
-                        "atk": 0,
-                        "mag": 0,
-                        "end": 0,
-                        "prc": 0,
-                        "agl": 0,
-                        "crit": 0
-                    },
-                    "lbp": 0,
-                    "donetc": false,
-                    "team": "1",
-                    "pos": "1"
-                },
-                {
-                    "level": 14,
-                    "hp": 200,
-                    "mp": 100,
-                    "melee": {
-                        "name": "Strike Attack",
-                        "type": "strike",
-                        "pow": 30,
-                        "acc": 95,
-                        "crit": 15
-                    },
-                    "skills": [
-                        "Lunge",
-                        "Magna",
-                        "Mahana",
-                        "Hanama"
-                    ],
-                    "image": "https://cdn.discordapp.com/attachments/958747864970981376/970731346198679652/Grassimp.png",
-                    "journal": "Defenseless bug that hides under bushes. They warm up to other people very quickly, and never intend to hurt others. They love being held & pet, and nuzzle others to show their trust. During the summers, they bloom & hand out the blueberries produced to friends & trusted allies.",
-                    "dreams": [
-                        "...Food... Food...",
-                        "...Scary... Scary...",
-                        "...Run... Run...",
-                        "...Find... Shelter..."
-                    ],
-                    "loot": [
-                        {
-                            "type": "item",
-                            "id": "Sweet",
-                            "amount": 25,
-                            "chance": 33.3333333
-                        }
-                    ],
-                    "negotiate": [
-                        {
-                            "name": "Pet",
-                            "desc": "Pet the Grassimp.",
-                            "action": "%PLAYER% pets the Grassimp! It's satisfied.",
-                            "convince": 100
-                        }
-                    ],
-                    "negotiateDefs": {
-                        "required": 4,
-                        "qualities": {
-                            "atk": 1,
-                            "mag": 7,
-                            "end": 1,
-                            "skill": "Hanama"
-                        }
-                    },
-                    "name": "Grassimp",
-                    "mainElement": "almighty",
-                    "xp": 1252,
-                    "stats": {
-                        "atk": 18,
-                        "mag": 18,
-                        "prc": 16,
-                        "end": 19,
-                        "chr": 11,
-                        "int": 12,
-                        "agl": 12,
-                        "luk": 17
-                    },
-                    "affinities": {
-                        "weak": [
-                            "fire"
-                        ],
-                        "resist": [
-                            "grass"
-                        ],
-                        "block": [],
-                        "repel": [],
-                        "drain": [
-                            "water"
-                        ]
-                    },
-                    "quotes": {},
-                    "lb": null,
-                    "type": "none",
-                    "statusaffinities": {
-                        "block": [
-                            "ego"
-                        ]
-                    },
-                    "enemy": true,
-                    "truename": "Grassimp",
-                    "maxhp": 200,
-                    "maxmp": 100,
-                    "id": 3,
-                    "memory": {},
-                    "pacify": 0,
-                    "buffs": {
-                        "atk": 0,
-                        "mag": 0,
-                        "end": 0,
-                        "prc": 0,
-                        "agl": 0,
-                        "crit": 0
-                    },
-                    "lbp": 0,
-                    "donetc": false,
-                    "team": "1",
-                    "pos": "2"
-                },
-                {
-                    "level": 14,
-                    "hp": 200,
-                    "mp": 100,
-                    "melee": {
-                        "name": "Strike Attack",
-                        "type": "strike",
-                        "pow": 30,
-                        "acc": 95,
-                        "crit": 15
-                    },
-                    "skills": [
-                        "Lunge",
-                        "Magna",
-                        "Mahana",
-                        "Hanama"
-                    ],
-                    "image": "https://cdn.discordapp.com/attachments/958747864970981376/970731346198679652/Grassimp.png",
-                    "journal": "Defenseless bug that hides under bushes. They warm up to other people very quickly, and never intend to hurt others. They love being held & pet, and nuzzle others to show their trust. During the summers, they bloom & hand out the blueberries produced to friends & trusted allies.",
-                    "dreams": [
-                        "...Food... Food...",
-                        "...Scary... Scary...",
-                        "...Run... Run...",
-                        "...Find... Shelter..."
-                    ],
-                    "loot": [
-                        {
-                            "type": "item",
-                            "id": "Sweet",
-                            "amount": 25,
-                            "chance": 33.3333333
-                        }
-                    ],
-                    "negotiate": [
-                        {
-                            "name": "Pet",
-                            "desc": "Pet the Grassimp.",
-                            "action": "%PLAYER% pets the Grassimp! It's satisfied.",
-                            "convince": 100
-                        }
-                    ],
-                    "negotiateDefs": {
-                        "required": 4,
-                        "qualities": {
-                            "atk": 1,
-                            "mag": 7,
-                            "end": 1,
-                            "skill": "Hanama"
-                        }
-                    },
-                    "name": "Grassimp",
-                    "mainElement": "almighty",
-                    "xp": 1252,
-                    "stats": {
-                        "atk": 18,
-                        "mag": 18,
-                        "prc": 16,
-                        "end": 19,
-                        "chr": 11,
-                        "int": 12,
-                        "agl": 12,
-                        "luk": 17
-                    },
-                    "affinities": {
-                        "weak": [
-                            "fire"
-                        ],
-                        "resist": [
-                            "grass"
-                        ],
-                        "block": [],
-                        "repel": [],
-                        "drain": [
-                            "water"
-                        ]
-                    },
-                    "quotes": {},
-                    "lb": null,
-                    "type": "none",
-                    "statusaffinities": {
-                        "block": [
-                            "ego"
-                        ]
-                    },
-                    "enemy": true,
-                    "truename": "Grassimp",
-                    "maxhp": 200,
-                    "maxmp": 100,
-                    "id": 4,
-                    "memory": {},
-                    "pacify": 0,
-                    "buffs": {
-                        "atk": 0,
-                        "mag": 0,
-                        "end": 0,
-                        "prc": 0,
-                        "agl": 0,
-                        "crit": 0
-                    },
-                    "lbp": 0,
-                    "donetc": false,
-                    "team": "1",
-                    "pos": "3"
                 }
             ],
             "backup": [],
@@ -829,7 +444,9 @@
             "pets": {}
         }
     ],
+    "bossbattle": true,
     "curturn": 0,
+    "forcemessage": "1004468007021580298",
     "action": {
         "move": "melee",
         "index": 0,
@@ -837,6 +454,5 @@
             0,
             0
         ]
-    },
-    "forcemessage": "1004451962659553413"
+    }
 }
