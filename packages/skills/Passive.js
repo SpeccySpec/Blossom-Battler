@@ -1035,7 +1035,7 @@ passiveList = {
 
 	pinchmode: new Extra({
 		name: "Pinch Mode",
-		desc: "Once the user is downed, they will be revived at <Revive HP%>% max HP, will deal <Damage Boost>% more damage and will recieve <Defence Lost>% more damage. Every turn they will also lose <Lost HP%>% max HP every turn and cannot be healed.",
+		desc: "Once the user is downed, they will be revived at <Revive HP%>% max HP, will deal <Damage Boost>% more damage, will recieve <Defence Lost>% more damage and every turn they will also lose <Lost HP%>% max HP. If their HP is ever healed the effect will cancel and they will be downed again.",
 		args: [
 			{
 				name: "Revive HP%",
@@ -1073,6 +1073,16 @@ passiveList = {
 				addCusVal(char, "pinch", true)
 				char.hp = (char.maxhp * vars[0]) / 100
 				return "...but they refuse to die just yet, and become enraged!"
+			}
+		},
+		onheal(char, ally, skill, heal, btl, vars) {
+			const healstat = skill.heal?.healstat
+			if (healstat && char.custom?.pinch) {
+				const healtype = healstat[0][1]
+				if (healtype == "hp" || healtype == "hppercent") {
+					char.hp = 0
+					return "...but this cancels their rage, and they become defeated again!"
+				}
 			}
 		},
 		onturn(btl, char, vars) {
