@@ -61,7 +61,10 @@
             "drain": []
         },
         "skills": [
-            "UltimateHit"
+            "UltimateHit",
+            "Dragon Rage",
+            "CuriosityKilledTheBloomBattler",
+            "SecondWind"
         ],
         "autolearn": [],
         "quotes": {

@@ -4077,10 +4077,10 @@
         "preskills": [
             [
                 "SharpPoke",
-                24
+                30
             ]
         ],
-        "levellock": 25
+        "levellock": 30
     },
     "Shuriken": {
         "name": "Shuriken",
@@ -20787,7 +20787,7 @@
     },
     "HolyDance": {
         "name": "Holy Dance",
-        "cost": 30,
+        "cost": 37,
         "costtype": "mp",
         "pow": 200,
         "acc": 80,
@@ -27650,27 +27650,15 @@
     },
     "CuriosityKilledTheBloomBattler": {
         "name": "CuriosityKilledTheBloomBattler",
-        "type": "explode",
-        "atktype": "ranged",
-        "pow": 50,
-        "hits": 2,
-        "acc": 90,
-        "cost": 10,
+        "type": "almighty",
+        "atktype": "magic",
+        "pow": 100,
+        "hits": 1,
+        "acc": 100,
+        "cost": 0,
         "costtype": "mp",
-        "target": "spreadopposing",
-        "originalAuthor": "363363984390356993",
-        "crit": 5,
-        "desc": "Not a single moment of rest with you...",
-        "extras": {
-            "need": [
-                [
-                    "more",
-                    true,
-                    100,
-                    "mppercent"
-                ]
-            ]
-        }
+        "target": "caster",
+        "originalAuthor": "363363984390356993"
     },
     "MadTeaParty": {
         "name": "Mad Tea Party",
@@ -40941,7 +40929,7 @@
         "evoskills": [
             [
                 "QuickStab",
-                25
+                30
             ]
         ],
         "preskills": [
@@ -65485,7 +65473,7 @@
     "IllusoryParry": {
         "name": "Illusory Parry",
         "type": "passive",
-        "desc": "The user disappears on strike almost as if they hit a double which disorients the attacker, before the user appears behind them and attacks with their respective weapon. 45% chance to activate against physicals and counters with slash type damage (200 power). Modified by <:passive:962465469942616074>SpiritCharge.",
+        "desc": "The user disappears on strike almost as if they hit a double which disorients the attacker, before the user appears behind them and attacks with their respective weapon. 45% chance to activate against physicals and counters with slash type damage (200 power). Modified by <:passive:962465469942616074>**Spirit Charge**.",
         "originalAuthor": "412328234198237189",
         "passive": {
             "counter": [
@@ -67631,7 +67619,7 @@
         "type": "heal",
         "cost": 1,
         "costtype": "hp",
-        "target": "ally",
+        "target": "one",
         "originalAuthor": "363363984390356993",
         "heal": {
             "healstat": [
@@ -68817,7 +68805,7 @@
         "originalAuthor": "363363984390356993",
         "status": "sensitive",
         "statuschance": 7,
-        "desc": "This skill is not yet complete, so I won't explain how it's supposed to work",
+        "desc": "The caster summons mischievous spirits who deal moderate Spirit damage to all enemies and have a small chance to make them sensitive. The spirits will use caster's own strength as they see fit and strike at enemy constitution as they please...",
         "extras": {
             "metronome": [
                 "HauntedDream(ATK-ATK)",
@@ -70682,19 +70670,6 @@
         "crit": 15,
         "desc": "An alternative melee attack that deals Almighty damage"
     },
-    "Antiphysical": {
-        "name": "Antiphysical",
-        "type": "passive",
-        "desc": "Changes user's affinities towards Physical attacks to Resist",
-        "originalAuthor": "363363984390356993",
-        "passive": {
-            "swordbreaker": [
-                100
-            ]
-        },
-        "powlamk": 55,
-        "powpkmn": 100
-    },
     "FireBomb": {
         "name": "FireBomb",
         "type": "status",
@@ -71293,5 +71268,82 @@
         "target": "one",
         "originalAuthor": "759383213621379094",
         "desc": "Click Here To Restore Purchase 'Direct Hit With Nuclear Energy'"
+    },
+    "Dragon Fury": {
+        "name": "Dragon Fury",
+        "type": "strike",
+        "atktype": "physical",
+        "pow": 40,
+        "hits": 1,
+        "acc": 100,
+        "cost": 13,
+        "costtype": "hppercent",
+        "target": "spreadopposing",
+        "originalAuthor": "363363984390356993",
+        "extras": {
+            "dragonrage": [
+                40
+            ]
+        }
+    },
+    "ResistAll": {
+        "name": "Resist All",
+        "type": "passive",
+        "desc": "The user resists all damage except Almighty attacks",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "swordbreaker": [
+                100
+            ]
+        },
+        "powlamk": 55,
+        "powpkmn": 100
+    },
+    "AeroSoul": {
+        "name": "AeroSoul",
+        "type": "passive",
+        "originalAuthor": "455434131808059422",
+        "passive": {
+            "boost": [
+                [
+                    "wind",
+                    5
+                ]
+            ]
+        },
+        "desc": "Boosts Wind attacks by 5%"
+    },
+    "PurityofHatred": {
+        "name": "Purity of Hatred",
+        "type": "explode",
+        "atktype": "magic",
+        "pow": 200,
+        "hits": 3,
+        "acc": 85,
+        "cost": 22,
+        "costtype": "mp",
+        "target": "randomopposing",
+        "originalAuthor": "363363984390356993",
+        "crit": 17,
+        "status": "rage",
+        "statuschance": 8,
+        "extras": {
+            "affinitypow": [
+                -15
+            ]
+        }
+    },
+    "SecondWind": {
+        "name": "SecondWind",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "endure": [
+                1,
+                30
+            ]
+        },
+        "desc": "WTF",
+        "done": true
     }
 }

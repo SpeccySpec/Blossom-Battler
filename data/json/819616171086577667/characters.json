@@ -487,18 +487,7 @@
                 }
             }
         },
-        "weapons": {
-            "RoyalRapier": {
-                "name": "Royal Rapier",
-                "cost": 6955,
-                "element": "pierce",
-                "desc": "A shining rapier passed down the Cosmarian royal family. Younger ones who were part of the royal family were to be skilled in rapier usage just in case the worst happened.",
-                "originalAuthor": "516359709779820544",
-                "skill": "Pralaya",
-                "melee": "300",
-                "atk": "12"
-            }
-        },
+        "weapons": {},
         "armors": {},
         "weaponclass": [
             "staff",
@@ -514,6 +503,7 @@
             "originalAuthor": "516359709779820544",
             "skill": "Agi",
             "melee": 70,
+            "level": 1,
             "atk": 2,
             "mag": 2
         },
@@ -17876,19 +17866,17 @@
             "MP"
         ],
         "melee": {
-            "name": "Strike Attack",
-            "type": "strike",
-            "pow": 30,
-            "acc": 95,
-            "crit": 15
+            "name": "Worn Dagger",
+            "type": "slash",
+            "pow": 50,
+            "acc": 85,
+            "crit": 2
         },
         "weapon": {},
         "armor": {},
         "xp": 0,
         "maxxp": 7572,
-        "skills": [
-            "WornDagger"
-        ],
+        "skills": [],
         "critquote": [],
         "deathquote": [],
         "bio": {
@@ -18018,7 +18006,21 @@
             "var2": 25
         },
         "lb": {},
-        "mainElement": "slash"
+        "mainElement": "slash",
+        "weapons": {
+            "Nazier's Worn Dagger": {
+                "name": "Nazier's Worn Dagger",
+                "class": "bladed",
+                "cost": 4500,
+                "element": "slash",
+                "desc": "Nazier's trusty worn dagger. He's not a fighter, but he has resigned to at least carrying a weapon when required.",
+                "originalAuthor": "412328234198237189",
+                "melee": 50
+            }
+        },
+        "armors": {},
+        "weaponclass": "none",
+        "armorclass": "none"
     },
     "Trecko": {
         "name": "Trecko",
@@ -19273,7 +19275,7 @@
         "melee": {
             "name": "Uppercut",
             "type": "strike",
-            "pow": 80,
+            "pow": 60,
             "acc": 65,
             "crit": 15
         },
@@ -25254,8 +25256,11 @@
     "Lanagu": {
         "name": "Lanagu",
         "mainElement": "curse",
-        "weaponclass": "none",
-        "armorclass": "none",
+        "weaponclass": [
+            "pierce",
+            "ranged"
+        ],
+        "armorclass": "light",
         "weapons": {},
         "armors": {},
         "curweapon": {},
@@ -27607,12 +27612,22 @@
             "FurDriver",
             "WideSlash",
             "FlurrySlice",
-            "QuickStab",
+            "SharpPoke",
             "Tanukimation",
             "SpiritCharge",
-            "DistortionCounter"
+            "DistortionCounter",
+            "Swordbreaker"
         ],
-        "autolearn": [],
+        "autolearn": [
+            true,
+            true,
+            true,
+            true,
+            null,
+            false,
+            true,
+            true
+        ],
         "quotes": {
             "meleequote": [],
             "physquote": [],

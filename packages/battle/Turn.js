@@ -1566,7 +1566,11 @@ advanceTurn = (btl, firstturn) => {
 
 	// End the battle in a test battle.
 	if (btl.testing && !firstturn) {
-		btl.testing--;
+		let turnCheck = btl.curturn+1;
+
+		if (btl.turnorder[turnCheck] == null) {
+			btl.testing--;
+		}
 		if (btl.testing <= 0) {
 			btl.channel.send("The test battle is now over!");
 			fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, '{}');

@@ -4,7 +4,7 @@
         "limitbreaks": false,
         "teamcombos": false,
         "onemores": false,
-        "stataffinities": false,
+        "stataffinities": true,
         "charms": false,
         "leaderskills": false,
         "transformations": false,
@@ -17,7 +17,7 @@
         "basestatcap": 10,
         "bstcap": 45,
         "skillamount": 8,
-        "teamsize": 4,
+        "teamsize": 5,
         "transformations": {
             "hpcap": 10,
             "statcap": 99,

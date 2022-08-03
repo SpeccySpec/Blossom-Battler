@@ -59,5 +59,14 @@
         "desc": "Sky's trusty shortsword that he carries with him everywhere.",
         "originalAuthor": "412328234198237189",
         "melee": 30
+    },
+    "Nazier's Worn Dagger": {
+        "name": "Nazier's Worn Dagger",
+        "class": "bladed",
+        "cost": 4500,
+        "element": "slash",
+        "desc": "Nazier's trusty worn dagger. He's not a fighter, but he has resigned to at least carrying a weapon when required.",
+        "originalAuthor": "412328234198237189",
+        "melee": 50
     }
 }
