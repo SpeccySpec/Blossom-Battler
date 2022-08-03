@@ -170,7 +170,7 @@ commands.registertrial = new Command({
 
         trialFile[args[0]] = {
             name: args[0],
-            endless: args[1] ? args[1].toLowerCase() == 'true' : false,
+            endless: args[1] ? (args[1].toLowerCase() == 'true' || args[1].toLowerCase() == 'yes' || args[1].toLowerCase() == 'y' || args[1].toLowerCase() == '1') : false,
             waves: [],
         }
 
