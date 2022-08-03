@@ -1001,11 +1001,11 @@
         "curweapon": {},
         "curarmor": {},
         "owner": "759383213621379094",
-        "level": 1,
-        "hp": 11,
-        "mp": 4,
-        "maxhp": 11,
-        "maxmp": 4,
+        "level": 6,
+        "hp": 24,
+        "mp": 8,
+        "maxhp": 24,
+        "maxmp": 8,
         "basehp": 11,
         "basemp": 4,
         "mpMeter": [
@@ -1020,14 +1020,14 @@
             "crit": 15
         },
         "stats": {
-            "atk": 2,
-            "mag": 1,
-            "prc": 1,
-            "end": 3,
-            "chr": 2,
-            "int": 1,
-            "agl": 1,
-            "luk": 4
+            "atk": 5,
+            "mag": 3,
+            "prc": 3,
+            "end": 5,
+            "chr": 5,
+            "int": 4,
+            "agl": 4,
+            "luk": 5
         },
         "basestats": {
             "baseatk": 2,
@@ -1041,15 +1041,15 @@
         },
         "lb": 0,
         "xp": 0,
-        "maxxp": 500,
+        "maxxp": 1022,
         "affinities": {
             "superweak": [
                 "water",
-                "fire",
-                "explode",
+                "fire"
+            ],
+            "weak": [
                 "ice"
             ],
-            "weak": [],
             "resist": [
                 "electric"
             ],
@@ -1057,7 +1057,10 @@
             "repel": [],
             "drain": []
         },
-        "skills": [],
+        "skills": [
+            "skillname",
+            "Restore Purchases"
+        ],
         "autolearn": [],
         "quotes": {
             "meleequote": [],
@@ -1111,7 +1114,8 @@
         "trust": {},
         "statusaffinities": {
             "weak": [
-                "freeze"
+                "freeze",
+                "burn"
             ]
         }
     }

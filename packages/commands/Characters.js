@@ -303,6 +303,36 @@ commands.getchar = new Command({
 	}
 })
 
+commands.getgear = new Command({
+	desc: "Lists a character's gear and equipment, like held items, weapons, armor and more.",
+	aliases: ['getequipment'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+
+		let char = charFile[args[0]];
+
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor(elementColors[char.mainElement])
+			.setTitle(`__${elementEmoji[char.mainElement]}${char.name}'s gear__`)
+
+		if (char.curweapon) {
+		}
+
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
 commands.listchars = new Command({
 	desc: 'Lists *all* existing characters. Types and Variables must be written as shown.',
 	section: "characters",

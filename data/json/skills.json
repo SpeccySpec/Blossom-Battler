@@ -70438,7 +70438,6 @@
         "originalAuthor": "441198920668938260",
         "extras": {
             "guts": [
-                1.1,
                 "burn",
                 "paralyze",
                 "poison"
@@ -70886,7 +70885,13 @@
         "statusses": {},
         "status": "paralyze",
         "statuschance": "40",
-        "desc": "The user fires weak electricity from their gun to try to paralyze the foe."
+        "desc": "The user fires weak electricity from their gun to try to paralyze the foe.",
+        "evoskills": [
+            [
+                "Shockun",
+                80
+            ]
+        ]
     },
     "Shockun": {
         "name": "Shockun",
@@ -70910,7 +70915,13 @@
         "status": "paralyze",
         "statuschance": "60",
         "done": true,
-        "levellock": 80
+        "levellock": 80,
+        "preskills": [
+            [
+                "BrokenShockun",
+                79
+            ]
+        ]
     },
     "Marecarm": {
         "name": "Marecarm",
@@ -71079,5 +71090,208 @@
         },
         "desc": "The caster is cheating",
         "done": true
+    },
+    "BrokenPiercer": {
+        "name": "Piercer (Broken)",
+        "type": "pierce",
+        "atktype": "ranged",
+        "pow": 40,
+        "hits": 1,
+        "acc": 45.75,
+        "cost": 3,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "621307633718132746",
+        "crit": 0.5,
+        "desc": "The user fires a beam capable of breaking any shield...too bad the weapon is so damaged you're lucky if it even fires.",
+        "extras": {
+            "brickbreak": [
+                0.2
+            ]
+        },
+        "evoskills": [
+            [
+                "Piercer",
+                50
+            ]
+        ]
+    },
+    "Piercer": {
+        "name": "Piercer",
+        "type": "pierce",
+        "atktype": "ranged",
+        "pow": 250,
+        "hits": 1,
+        "acc": 80,
+        "cost": 20,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "621307633718132746",
+        "crit": 10,
+        "desc": "The user fires a piercing beam that can break the foe's shield.",
+        "levellock": 50,
+        "extras": {
+            "brickbreak": [
+                0.5
+            ]
+        },
+        "preskills": [
+            [
+                "BrokenPiercer",
+                49
+            ]
+        ]
+    },
+    "Cataclysm": {
+        "name": "Cataclysm",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "elementstore": [
+                [
+                    "fire",
+                    60,
+                    100
+                ],
+                [
+                    "water",
+                    60,
+                    100
+                ],
+                [
+                    "ice",
+                    60,
+                    100
+                ],
+                [
+                    "electric",
+                    60,
+                    100
+                ],
+                [
+                    "wind",
+                    60,
+                    100
+                ],
+                [
+                    "earth",
+                    60,
+                    100
+                ],
+                [
+                    "grass",
+                    60,
+                    100
+                ],
+                [
+                    "psychic",
+                    60,
+                    100
+                ],
+                [
+                    "poison",
+                    60,
+                    100
+                ],
+                [
+                    "nuclear",
+                    60,
+                    100
+                ],
+                [
+                    "metal",
+                    60,
+                    100
+                ],
+                [
+                    "curse",
+                    60,
+                    100
+                ],
+                [
+                    "bless",
+                    60,
+                    100
+                ],
+                [
+                    "spirit",
+                    60,
+                    100
+                ],
+                [
+                    "gravity",
+                    60,
+                    100
+                ],
+                [
+                    "sound",
+                    60,
+                    100
+                ]
+            ]
+        },
+        "desc": "60% of all damage taken is added to the user's next attack (except Strike, Slash, Pierce, Explode and Almighty)",
+        "done": true,
+        "levellock": 101
+    },
+    "Dragon Rage": {
+        "name": "Dragon Rage",
+        "type": "strike",
+        "atktype": "physical",
+        "pow": 40,
+        "hits": 1,
+        "acc": 100,
+        "cost": 10,
+        "costtype": "hppercent",
+        "target": "one",
+        "originalAuthor": "516359709779820544",
+        "desc": "The user strikes the target in a way that will always deal 40 damage, no-matter what.",
+        "extras": {
+            "dragonrage": [
+                40
+            ]
+        }
+    },
+    "Psycho Shift": {
+        "name": "Psycho Shift",
+        "type": "status",
+        "cost": 16,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "516359709779820544",
+        "statusses": {},
+        "extras": {
+            "psychoshift": [
+                true
+            ]
+        },
+        "desc": "The user transfers their status ailment to the target."
+    },
+    "skillname": {
+        "name": "skillname",
+        "type": "strike",
+        "atktype": "physical",
+        "pow": 62,
+        "hits": 1,
+        "acc": 90.5,
+        "cost": 4,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "759383213621379094",
+        "crit": 8.20284,
+        "desc": "skilldesc"
+    },
+    "Restore Purchases": {
+        "name": "Restore Purchases",
+        "type": "nuclear",
+        "atktype": "magic",
+        "pow": 61,
+        "hits": 1,
+        "acc": 93,
+        "cost": 5,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "759383213621379094",
+        "desc": "Click Here To Restore Purchase 'Direct Hit With Nuclear Energy'"
     }
 }

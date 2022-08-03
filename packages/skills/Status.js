@@ -1266,6 +1266,32 @@ statusList = {
 		getinfo(vars, skill) {
 			return `Modifies user's ATK and MAG by **${vars[0]}**x and END by **${vars[1]}**x for **${vars[2]}** turns. Falls asleep afterwards`
 		}
+	}),
+
+	psychoshift: new Extra({
+		name: "Psycho Shift",
+		args: [],
+		desc: extrasList.psychoshift.desc,
+		applyfunc: extrasList.psychoshift.applyfunc,
+		onuse(char, targ, skill, btl, vars) {
+			if (char.status && char.statusturns) {
+				targ.status = char.status;
+				targ.statusturns = char.status;
+				statusEffectFuncs[targ.status].oninflict(targ);
+
+				delete char.status;
+				delete char.statusturns;
+				return `__${char.name}__ transferred their **${targ.status}** to __${targ.name}__!`;
+			}
+
+			return 'But it failed!';
+		},
+		aithinker(char, targ, act, skill, btl, vars) {
+			if (char.status) act.points += 2;
+		},
+		getinfo(vars, skill) {
+			return extrasList.psychoshift.getinfo(vars, skill);
+		}
 	})
 }
 

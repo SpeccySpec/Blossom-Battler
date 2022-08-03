@@ -1194,6 +1194,8 @@ commands.editskill = new Command({
 				case 'pow':
 				case 'power':
 				case 'strength':
+					if (skillFile[args[0]].extras?.dragonrage) return message.channel.send(`You can't edit the power of "Dragon Rage" skills!`);
+
 					if (isNaN(args[2]) || typeof(args[2]) != 'number') return message.channel.send(`${args[2]} is not a number!`);
 					totalDmg = args[2]*skillFile[args[0]].hits;
 					if (totalDmg > 2000) return message.channel.send(`The Power cap for skills is 2000! A skill of ${skillFile[args[0]].hits} hits can have a maximum of ${2000/skillFile[args[0]].hits} power!`);

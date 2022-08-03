@@ -1280,6 +1280,22 @@ passiveList = {
 			return `Nets a **__${vars[1]}__** for every heal the user obtains until it reaches **${vars[0]}**`
 		}
 	})
+
+/*
+	arenatrap: new Extra({
+		name: "Arena Trap",
+		desc: "Disables fleeing, or backup switching for the opposing teams as long as the user is alive.",
+		args: [],
+		applyfunc(message, skill, args) {
+			makePassive(skill, "srenatrap", [percent]);
+			return true
+		},
+		hardcoded: true,
+		getinfo(vars, skill) {
+			return "Disables **fleeing, or backup switching**"
+		}
+	})
+*/
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.

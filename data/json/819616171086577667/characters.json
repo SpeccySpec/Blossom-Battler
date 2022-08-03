@@ -11981,7 +11981,10 @@
         "xp": 923899,
         "maxxp": 7572,
         "skills": [
-            "ThinStab"
+            "ThinStab",
+            "BrokenPiercer",
+            "BrokenDebilitizer",
+            "BrokenShockun"
         ],
         "critquote": [],
         "deathquote": [],
@@ -17861,11 +17864,11 @@
     "Nazier": {
         "name": "Nazier",
         "owner": "527727267900686336",
-        "level": 73,
-        "hp": 431,
-        "mp": 344,
-        "maxhp": 431,
-        "maxmp": 344,
+        "level": 20,
+        "hp": 139,
+        "mp": 105,
+        "maxhp": 139,
+        "maxmp": 105,
         "basehp": 35,
         "basemp": 20,
         "mpMeter": [
@@ -17881,17 +17884,10 @@
         },
         "weapon": {},
         "armor": {},
-        "xp": 2588258,
-        "maxxp": 14896231,
+        "xp": 0,
+        "maxxp": 7572,
         "skills": [
-            "HyperSlide",
-            "WornDagger",
-            "FlameBurst",
-            "HydroFlurry",
-            "ElectroCurrent",
-            "TornadoShower",
-            "StarCrash",
-            "NeedForSpeed"
+            "WornDagger"
         ],
         "critquote": [],
         "deathquote": [],
@@ -17957,14 +17953,14 @@
             }
         },
         "stats": {
-            "atk": 41,
-            "mag": 28,
-            "prc": 79,
-            "end": 40,
-            "chr": 27,
-            "int": 41,
-            "agl": 79,
-            "luk": 77
+            "atk": 15,
+            "mag": 10,
+            "prc": 26,
+            "end": 14,
+            "chr": 9,
+            "int": 15,
+            "agl": 26,
+            "luk": 24
         },
         "basestats": {
             "baseatk": 5,
@@ -17978,15 +17974,17 @@
         },
         "affinities": {
             "weak": [
-                "nuclear",
-                "curse"
+                "pierce",
+                "poison"
             ],
-            "resist": [],
-            "block": [],
+            "resist": [
+                "ice"
+            ],
+            "block": [
+                "spirit"
+            ],
             "repel": [],
-            "drain": [
-                "bless"
-            ]
+            "drain": []
         },
         "autolearn": {
             "0": true,
@@ -18019,7 +18017,8 @@
             "var1": "slash",
             "var2": 25
         },
-        "lb": {}
+        "lb": {},
+        "mainElement": "slash"
     },
     "Trecko": {
         "name": "Trecko",
@@ -27198,7 +27197,7 @@
             "age": 18,
             "likes": "Training, Hot areas, Messing around with others",
             "dislikes": "Those who go mad with power.",
-            "fears": "Fairies... for some reason...",
+            "fears": "Melting an icy area on accident",
             "height": [
                 5,
                 3

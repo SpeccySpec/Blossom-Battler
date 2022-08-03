@@ -1564,6 +1564,60 @@ extrasList = {
 			return "Halves the target's current HP.";
 		}
 	}),
+
+	psychoshift: new Extra({
+		name: "Psycho Shift",
+		desc: "Transfers the user's status to the target. Cannot transfer stackable statusses.",
+		args: [],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "psychoshift", [true]);
+			return true
+		},
+		onuse(char, targ, skill, btl, vars) {
+			if (char.status && char.statusturns) {
+				targ.status = char.status;
+				targ.statusturns = char.status;
+				statusEffectFuncs[targ.status].oninflict(targ);
+
+				delete char.status;
+				delete char.statusturns;
+				return `__${char.name}__ transferred their **${targ.status}** to __${targ.name}__!`;
+			}
+
+			return '';
+		},
+		aithinker(char, targ, act, skill, btl, vars) {
+			if (char.status) act.points += 2;
+		},
+		getinfo(vars, skill) {
+			return "Transfers a **Non-Stackable Status** to the target.";
+		}
+	}),
+
+	dragonrage: new Extra({
+		name: "Dragon Rage",
+		desc: "Deals an exact number of damage to the target.",
+		args: [
+			{
+				name: "Damage",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (args[0] <= 0 || args[0] > 2000) return message.channel.send(`${args[0]} is an invalid number! Please enter a value between 0 and 2000.`);
+
+			skill.pow = args[0];
+			makeExtra(skill, "dragonrage", [args[0]]);
+			return true
+		},
+		dmgmod(char, targ, dmg, skill, btl, vars) {
+			dmg = vars[0];
+		},
+		getinfo(vars, skill) {
+			return `Deals EXACTLY **${vars[0]}** damage.`;
+		}
+	}),
 }
 
 // Make an Extra for a skill. "func" should be an array of 1-5 values indicating what the extra does.

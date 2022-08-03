@@ -426,14 +426,22 @@
             "weakquote": [
                 "Tch!"
             ],
-            "hurtquote": [],
+            "hurtquote": [
+                "I have to think...."
+            ],
             "resistquote": [],
             "blockquote": [],
             "repelquote": [],
             "drainquote": [],
-            "dodgequote": [],
-            "deathquote": [],
-            "killquote": [],
+            "dodgequote": [
+                "That didn't land!?"
+            ],
+            "deathquote": [
+                "I'll come back..."
+            ],
+            "killquote": [
+                "That's one!"
+            ],
             "pacifyquote": [
                 "Hmmm..ya know? Maybe this whole encounter was pointless?"
             ],
