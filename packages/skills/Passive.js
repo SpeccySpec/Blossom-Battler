@@ -1028,6 +1028,53 @@ passiveList = {
 		}
 	}),
 
+	pinchmode: new Extra({
+		name: "Pinch Mode",
+		desc: "Once the user is downed, they will be revived at <Revive HP%>% max HP, will deal <Damage Boost>% more damage and will recieve <Defence Lost>% more damage. Every turn they will also lose <Lost HP%>% max HP every turn and cannot be healed.",
+		args: [
+			{
+				name: "Revive HP%",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Damage Boost",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Defence Lost",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Lost HP%",
+				type: "Num",
+				forced: true
+			}	
+		],
+		applyfunc(message, skill, args) {
+			const starthp = args[0]
+			const extradmg = args[1]
+			const lostdef = args[2]
+			const losthp = args[3]
+			if (starthp <= 0 || starthp > 100 || losthp <= 0)
+				return void message.channel.send("Don't even try.")
+			makePassive(skill, "pinchmode", [starthp, extradmg, lostdef, losthp])
+			return true;
+		},
+		getinfo(vars, skill) {
+			return `When downed, the user is revived with **${vars[0]}% of their max HP** and will deal **${vars[1]}%** mode damage, but they will lose **${vars[3]}%** HP every turn, take **${vars[2]}%** more damage and cannot be healed`
+		},
+		ondamage(char, inf, skill, dmg, passive, btl, vars) {
+			if (char.hp <= 0 && !char.custom?.pinch) {
+				addCusVal(char, "pinch", true)
+				char.hp = (char.maxhp * vars[0]) / 100
+				return `...but they refuse to die just yet, and become enraged!`
+			}
+		},
+	}),
+
 	guardboost: new Extra({
 		name: "Guard Boost",
 		desc: "Reduces damage taken when guarding further by <Percent>%.",

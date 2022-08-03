@@ -424,6 +424,8 @@ function GetCharStatus(char) {
 		str += statusEmojis[shield.type ?? "reduce"]
 	if (char.status)
 		str += statusEmojis[char.status]
+	if (char.custom?.pinch)
+		str += statusEmojis.pinch
 	return str
 }
 

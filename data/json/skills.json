@@ -61491,14 +61491,14 @@
     },
     "Test": {
         "name": "Test",
-        "type": "status",
-        "cost": 1,
-        "costtype": "MP",
-        "target": "one",
-        "originalAuthor": "798092550392381450",
-        "statusses": {
-            "heartswap": [
-                true
+        "type": "passive",
+        "originalAuthor": "621307633718132746",
+        "passive": {
+            "pinchmode": [
+                100,
+                50,
+                50,
+                20
             ]
         },
         "desc": "a"
