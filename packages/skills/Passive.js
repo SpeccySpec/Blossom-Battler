@@ -1093,7 +1093,7 @@ passiveList = {
 			}
 		},
 		getinfo(vars, skill) {
-			return `When downed, the user is revived with **${vars[0]}% of their max HP** and will deal **${vars[1]}%** mode damage, but they will lose **${vars[3]}%** HP every turn, take **${vars[2]}%** more damage and cannot be healed`
+			return `When downed, the user is revived with **${vars[0]}% of their max HP** and will deal **${vars[1]}%** mode damage, but they will lose **${vars[3]}%** HP every turn, take **${vars[2]}%** more damage and heals will cancel the effect.`
 		},
 	}),
 
