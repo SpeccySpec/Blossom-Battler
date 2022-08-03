@@ -493,7 +493,7 @@ sendCurTurnEmbed = (char, btl) => {
 		.addFields({name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true})
 
 	let message = {
-		content: `<@${char.owner}>`,
+		content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 		embeds: [DiscordEmbed],
 		components: setUpComponents(char, btl, menustate)
 	};
@@ -511,7 +511,7 @@ sendCurTurnEmbed = (char, btl) => {
 	});
 
 	let collector = makeCollector(btl.channel, {
-		filter: ({user}) => (user.id == char.owner || utilityFuncs.RPGBotAdmin(user.id))
+		filter: ({user}) => (user.id == char.owner || utilityFuncs.RPGBotAdmin(user.id) || user.id == btl?.initiator)
 	})
 
 	let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`, true);
