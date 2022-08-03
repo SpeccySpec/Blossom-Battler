@@ -24,6 +24,8 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
+			if (targ.custom?.pinch)
+				return `__${targ.name}__ cannot be healed while they are in a pinch!`
 			if (!vars[0] || vars[0] == null || vars[0] == 0) return '';
 
 			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {

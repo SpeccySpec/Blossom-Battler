@@ -1075,16 +1075,6 @@ passiveList = {
 				return "...but they refuse to die just yet, and become enraged!"
 			}
 		},
-		onheal(char, ally, skill, heal, btl, vars) {
-			const healstat = skill.heal?.healstat
-			if (healstat && char.custom?.pinch) {
-				const healtype = healstat[0][1]
-				if (healtype == "hp" || healtype == "hppercent") {
-					char.hp = 0
-					return "...but this cancels their rage, and they become defeated again!"
-				}
-			}
-		},
 		onturn(btl, char, vars) {
 			if (char.custom?.pinch) {
 				const damage = (char.maxhp * vars[3]) / 100
