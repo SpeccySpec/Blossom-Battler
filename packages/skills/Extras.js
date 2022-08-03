@@ -471,6 +471,19 @@ extrasList = {
 					buffChange(targ, skill, btl, [target, "end", amount, chance, turns]) + "\n" +
 					buffChange(targ, skill, btl, [target, "agl", amount, chance, turns]) + "\n" +
 					buffChange(targ, skill, btl, [target, "prc", amount, chance, turns])
+			} else if (typeof stat == "object") {
+				const buffChange = extrasList.buff.buffChange
+				const target = vars[0]
+				const stats = stat
+				let finaltext = ""
+				let i = 0
+				for (const stat of stats) {
+					i++
+					finaltext += buffChange(targ, skill, btl, [target, stat, amount, chance, turns])
+					if (i < stats.length)
+						finaltext += "\n"
+				}
+				return finaltext
 			}
 			if (targ.charms && targ.charms.includes("PureVision") && stat === 'prc') return `${targ.name}'s Pure Vision negated the change.`;
 			let txt = amount > 0
