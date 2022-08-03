@@ -149,7 +149,7 @@ commands.changetruename = new Command({
 			if (enemyFile[args[1]]) return message.channel.send(`${args[1]} already exists as an enemy! I cannot let you rename the character for access reasons.`);
 		}
 
-		thingDefs[args[1]] = thingDefs[args[0]];
+		thingDefs[args[1]] = objClone(thingDefs[args[0]]);
 		delete thingDefs[args[0]];
 
 		if (thingDefs[args[1]].type) {
@@ -3312,7 +3312,7 @@ commands.exportname = new Command({
 			for (const i in userdata.exports) charList += `- ${i}\n`;
 			charList += '```'
 
-			return message.channel.send(`${args[0]} has not been exported! Did you mean:${charList}`);
+			return message.channel.send(`${args[0]} does not exist! Did you mean:${charList}`);
 		}
 
 		if (args[0] == args[1]) return message.channel.send(`What's the point...?`);
@@ -3323,7 +3323,7 @@ commands.exportname = new Command({
 
 		// Alright, let's get the character's name changed.
 		message.channel.send(`Changed ${args[0]} to ${args[1]}.`);
-		fs.writeFileSync(`${dataPath}/userdata/${message.author.id}.json`, JSON.stringify(settings, null, 4));
+		fs.writeFileSync(`${dataPath}/userdata/${message.author.id}.json`, JSON.stringify(userdata, null, 4));
 	}
 })
 
@@ -4266,7 +4266,7 @@ commands.gettc = new Command({
 			typeof(skillFile[skills[1][0]].type) === 'object' ? skillFile[skills[1][0]].type[0] : skillFile[skills[1][0]].type
 		]
 
-		message.channel.send({content: `Here is the data for ${args[0]} and ${args[1]}'s Team Combo: ${tc.name}.`, embeds: [skillFuncs.skillDesc(tc, tc.name, message.guild.id)]})
+		message.channel.send({content: `Here is the data for ${args[0]} and ${args[1]}'s Team Combo: ${tc.name}.`, embeds: [skillFuncs.skillDesc(tc, tc.name, message)]})
 	}
 })
 
