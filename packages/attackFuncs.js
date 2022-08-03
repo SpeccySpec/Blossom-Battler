@@ -91,7 +91,7 @@ const statusEffects = [
 	"dizzy",
 	"sleep",
 	"despair",
-    "poison",
+    "toxin",
     "brainwash",
 	"fear",
 	"rage",
@@ -114,7 +114,7 @@ const statusEmojis = {
 	sleep: "💤",
 	dizzy: "💫",
 	despair: "💦",
-    poison: "<:poison:906903499961434132>",
+    toxin: "<:poison:906903499961434132>",
 	dizzy: "💫",
     brainwash: "🦆",
 	fear: "👁",
@@ -246,7 +246,7 @@ const elementTechs = {
 	dizzy: ['psychic', 'earth', 'wind'],
 	sleep: ['all'],
 	despair: ['psychic', 'curse', 'grass'],
-	poison: ['slash', 'pierce', 'wind'],
+	toxin: ['slash', 'pierce', 'wind'],
 	brainwash: ['psychic', 'bless', 'curse'],
 	fear: ['psychic', 'curse', 'ice'],
 	rage: ['bless', 'ice', 'psychic'],
@@ -289,7 +289,7 @@ function isPhysicalStatus(status) {
 	if (!status) return false;
 
 	let statusName = status.toLowerCase()
-	if (statusName === 'burn' || statusName === 'bleed' || statusName === 'freeze' || statusName === 'paralyze' || statusName === 'poison' || statusName === 'hunger' || statusName === 'dazed' || statusName === 'illness' || statusName === 'mirror' || statusName === 'blind')
+	if (statusName === 'burn' || statusName === 'bleed' || statusName === 'freeze' || statusName === 'paralyze' || statusName === 'toxin' || statusName === 'hunger' || statusName === 'dazed' || statusName === 'illness' || statusName === 'mirror' || statusName === 'blind')
 		return true;
 
 	return false;
@@ -522,7 +522,7 @@ function genDmg(userDefs, targDefs, skillDefs, server, forceDmgType, btl) {
 	if (skillDefs.atktype === "magic") {
 		atkStat = statWithBuff(userDefs.mag, userDefs.buffs.mag);
 		
-		if (userDefs.status === 'poison') atkStat /= 2;
+		if (userDefs.status === 'toxin') atkStat /= 2;
 	} else {
 		if (userDefs.status === 'burn') atkStat /= 2;
 	}
