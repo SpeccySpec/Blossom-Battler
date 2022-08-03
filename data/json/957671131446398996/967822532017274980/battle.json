@@ -1,1 +1,458 @@
-{}
+{
+    "battling": true,
+    "channel": {
+        "type": "GUILD_TEXT",
+        "guild": "957671131446398996",
+        "guildId": "957671131446398996",
+        "parentId": "957671132457234554",
+        "permissionOverwrites": [],
+        "messages": [
+            "1004467256488636426",
+            "1004468005268377650",
+            "1004468007021580298"
+        ],
+        "threads": [],
+        "nsfw": false,
+        "id": "967822532017274980",
+        "name": "testing",
+        "rawPosition": 2,
+        "topic": null,
+        "lastMessageId": "1004467970958962708",
+        "rateLimitPerUser": 0,
+        "createdTimestamp": 1650817272906
+    },
+    "guild": {
+        "id": "957671131446398996",
+        "name": "Blossom Battler's Dev Server!",
+        "icon": "61afca82e26c439838dd94afd4988c2d",
+        "features": [],
+        "commands": [],
+        "members": [
+            "776480348757557308",
+            "621307633718132746",
+            "957666180791947294"
+        ],
+        "channels": [
+            "957671132457234554",
+            "957671132457234555",
+            "957671132457234556",
+            "957671132457234557",
+            "967822532017274980",
+            "970691652916248576",
+            "974985316727402537",
+            "976932071039705168",
+            "979841088988807168",
+            "958747864970981376"
+        ],
+        "bans": [],
+        "roles": [
+            "957671131446398996",
+            "957671281149493298",
+            "957671638751670285",
+            "958411597888491575",
+            "963785751668064329",
+            "970598244361072660",
+            "1002662030609760298"
+        ],
+        "stageInstances": [],
+        "invites": [],
+        "scheduledEvents": [],
+        "splash": null,
+        "banner": null,
+        "description": null,
+        "verificationLevel": "NONE",
+        "vanityURLCode": null,
+        "nsfwLevel": "DEFAULT",
+        "premiumSubscriptionCount": 0,
+        "discoverySplash": null,
+        "premiumProgressBarEnabled": false,
+        "applicationId": null,
+        "afkTimeout": 300,
+        "afkChannelId": null,
+        "systemChannelId": "957671132457234556",
+        "premiumTier": "NONE",
+        "widgetEnabled": false,
+        "widgetChannelId": null,
+        "explicitContentFilter": "DISABLED",
+        "mfaLevel": "NONE",
+        "defaultMessageNotifications": "ALL_MESSAGES",
+        "systemChannelFlags": 0,
+        "maximumMembers": 500000,
+        "maximumPresences": 25000,
+        "approximateMemberCount": 9,
+        "approximatePresenceCount": 8,
+        "vanityURLUses": null,
+        "rulesChannelId": null,
+        "publicUpdatesChannelId": null,
+        "preferredLocale": "en-US",
+        "ownerId": "516359709779820544",
+        "emojis": [
+            "964148473295409155",
+            "970044964870434836",
+            "970044964992090142",
+            "990629394236211230",
+            "990629395486089216",
+            "990629396983476275",
+            "990629398258540604",
+            "990629399902695445",
+            "990629401517506580",
+            "990629402851299338",
+            "990629404126355496",
+            "990629407238529044",
+            "990629408907870330",
+            "991703685098917908",
+            "991703686881480794",
+            "991704544847335546",
+            "991704547791749200",
+            "991704552086716437",
+            "995268449154629699",
+            "1004429944518098974"
+        ],
+        "stickers": [],
+        "memberCount": 9,
+        "large": false,
+        "joinedTimestamp": 1659123656683,
+        "createdTimestamp": 1648396990406,
+        "nameAcronym": "BBDS!",
+        "iconURL": "https://cdn.discordapp.com/icons/957671131446398996/61afca82e26c439838dd94afd4988c2d.webp",
+        "splashURL": null,
+        "discoverySplashURL": null,
+        "bannerURL": null
+    },
+    "turn": 1,
+    "turnorder": [
+        0,
+        1,
+        1
+    ],
+    "testing": 100,
+    "initiator": "621307633718132746",
+    "effects": {},
+    "teams": [
+        {
+            "name": "Rosy",
+            "id": "Rosy",
+            "members": [
+                {
+                    "name": "Rosy",
+                    "owner": "621307633718132746",
+                    "level": 71,
+                    "hp": 310,
+                    "mp": 630,
+                    "maxhp": 310,
+                    "maxmp": 630,
+                    "basehp": 30,
+                    "basemp": 35,
+                    "mpMeter": [
+                        "Magic Points",
+                        "MP"
+                    ],
+                    "melee": {
+                        "name": "\"Punch\"",
+                        "type": "strike",
+                        "pow": 30,
+                        "acc": 95,
+                        "crit": 15
+                    },
+                    "weapon": {},
+                    "armor": {},
+                    "xp": 123610,
+                    "maxxp": 11188725,
+                    "skills": [
+                        "FireCrack",
+                        "PKFire-Pi",
+                        "Dia",
+                        "PKFreeze-Gamma",
+                        "Wormhole-Beta",
+                        "Ice+",
+                        "InvigII",
+                        "Test"
+                    ],
+                    "critquote": [],
+                    "deathquote": [
+                        "...I will...make you pay for this...",
+                        "...I..I refuse! I can still...I...",
+                        "..."
+                    ],
+                    "bio": {
+                        "species": "Loly",
+                        "age": 10,
+                        "info": "Rosy is a tsundere with anger issues.\nShe only trusts her friends.",
+                        "backstory": "Rosy lived with her sister (Ruby) and read her books until MW1 happened. Being the only surviving Loly of MW1, Rosy started travelling in other universes looking for a new home. In one of them she was kidnapped  and locked away in a dungeon...to be later rescued by Felix. He let her live in the abandoned library on FelixLand where she spends most of her time with [Redacted].\n\n<Loly Gender> DualEyed",
+                        "likes": "",
+                        "dislikes": "",
+                        "fears": "",
+                        "voice": "",
+                        "theme": "",
+                        "height": [
+                            1,
+                            4
+                        ],
+                        "gender": "female",
+                        "weight": 0,
+                        "custom": {},
+                        "fullname": "Rosy Natsuki"
+                    },
+                    "trust": {
+                        "Negagen": {
+                            "value": 10,
+                            "nextLevel": 120,
+                            "level": 2
+                        },
+                        "Valoria": {
+                            "value": 60,
+                            "nextLevel": 120,
+                            "level": 2
+                        },
+                        "Pank": {
+                            "value": 60,
+                            "nextLevel": 100,
+                            "level": 1
+                        },
+                        "Viridian": {
+                            "value": 60,
+                            "nextLevel": 100,
+                            "level": 1
+                        }
+                    },
+                    "mainElement": "fire",
+                    "stats": {
+                        "atk": 24,
+                        "mag": 80,
+                        "prc": 42,
+                        "end": 25,
+                        "chr": 38,
+                        "int": 80,
+                        "agl": 77,
+                        "luk": 40
+                    },
+                    "basestats": {
+                        "baseatk": 1,
+                        "basemag": 10,
+                        "baseprc": 7,
+                        "baseend": 2,
+                        "basechr": 3,
+                        "baseint": 10,
+                        "baseagl": 7,
+                        "baseluk": 5
+                    },
+                    "affinities": {
+                        "weak": [
+                            "electric",
+                            "earth",
+                            "psychic"
+                        ],
+                        "resist": [],
+                        "block": [
+                            "fire",
+                            "ice"
+                        ],
+                        "repel": [],
+                        "drain": []
+                    },
+                    "autolearn": {
+                        "0": true,
+                        "1": true,
+                        "2": true,
+                        "3": true,
+                        "5": true,
+                        "6": true
+                    },
+                    "quotes": {
+                        "meleequote": [],
+                        "physquote": [],
+                        "magquote": [
+                            "...%SKILL%.",
+                            "I'll show you my special hell.",
+                            "You can either burn to death or freeze to death, what's your choice?",
+                            "You're a waste of my time."
+                        ],
+                        "allyatkquote": [],
+                        "lbquote": [],
+                        "strongquote": [
+                            "Of course you'd be weak to this.",
+                            "Noted."
+                        ],
+                        "missquote": [
+                            "...I can and WILL try again.",
+                            "...Happens to EVERYONE.",
+                            "..."
+                        ],
+                        "weakquote": [
+                            "Agh! I'll make you PAY.",
+                            "You ruined my dress.",
+                            "...Just like Ruby."
+                        ],
+                        "hurtquote": [
+                            "My dress will get dirty thanks to you.",
+                            "Ow.",
+                            "..."
+                        ],
+                        "resistquote": [],
+                        "blockquote": [
+                            "...Seriously?",
+                            "Oh yeah let's use the same magic she's attacking us with, how could it fail? IDIOT."
+                        ],
+                        "repelquote": [],
+                        "drainquote": [],
+                        "dodgequote": [
+                            "...I expected worse.",
+                            "...Is this all you can do?"
+                        ],
+                        "killquote": [
+                            "I hope you enjoyed my special hell.",
+                            "And you died. Maybe think twice next time? Ah no, you can't...you're DEAD.",
+                            "Finally. You were getting really annoying."
+                        ],
+                        "allydeathquote": [],
+                        "healquote": [],
+                        "helpedquote": [
+                            "This is useful.",
+                            "...Thanks.",
+                            "Do it sooner next time."
+                        ],
+                        "consolequote": [],
+                        "imfinequote": [],
+                        "lvlquote": []
+                    },
+                    "leaderskill": {
+                        "name": "QuickWormholes",
+                        "type": "buff",
+                        "var1": "agl",
+                        "var2": 1
+                    },
+                    "lb": null,
+                    "truename": "Rosy",
+                    "id": 0,
+                    "buffs": {
+                        "atk": 0,
+                        "mag": 0,
+                        "end": 0,
+                        "prc": 0,
+                        "agl": 1,
+                        "crit": 0
+                    },
+                    "lbp": 0,
+                    "donetc": false,
+                    "leader": true,
+                    "team": "0",
+                    "pos": "0"
+                }
+            ],
+            "backup": [],
+            "items": {},
+            "pets": {},
+            "leaderskill": {
+                "name": "QuickWormholes",
+                "type": "buff",
+                "var1": "agl",
+                "var2": 1
+            }
+        },
+        {
+            "name": "Enemies",
+            "id": "enemies",
+            "enemyteam": true,
+            "forcehorde": true,
+            "members": [
+                {
+                    "level": 75,
+                    "hp": 7000,
+                    "mp": 6000,
+                    "melee": {
+                        "name": "Pierce Attack",
+                        "type": "pierce",
+                        "pow": 30,
+                        "acc": 95,
+                        "crit": 15
+                    },
+                    "skills": [
+                        "LightHand",
+                        "TentacleSwipe",
+                        "Maragidyne",
+                        "Agidyne",
+                        "Mabufudyne",
+                        "Bufudyne",
+                        "Maziodyne",
+                        "Ziodyne",
+                        "Magarudyne",
+                        "Garudyne",
+                        "Mapsiodyne",
+                        "Psiodyne",
+                        "Maeigaon",
+                        "Eigaon",
+                        "Hama",
+                        "Mahama",
+                        "Makougaon",
+                        "Kougaon",
+                        "LightStorm",
+                        "Megidolaon",
+                        "Makarakarn",
+                        "Tetrakarn",
+                        "Diarama"
+                    ],
+                    "journal": "The Luminosity aged over time, and lost some of her power due to the fact that everybody stopped worshipping her. Her elder ancestor would step in if provoked. This is her at full power, while everyone still worshipped her, and gave strength. This battle will be a lengthy one. **Good luck**.",
+                    "dreams": [],
+                    "name": "ElderLuminosity",
+                    "image": "Luminosity",
+                    "mainElement": "strike",
+                    "xp": 200000,
+                    "stats": {
+                        "atk": 81,
+                        "mag": 81,
+                        "prc": 75,
+                        "end": 22,
+                        "chr": 58,
+                        "int": 51,
+                        "agl": 21,
+                        "luk": 32
+                    },
+                    "affinities": {
+                        "weak": [],
+                        "resist": [],
+                        "block": [],
+                        "repel": [],
+                        "drain": []
+                    },
+                    "quotes": {},
+                    "lb": null,
+                    "type": "deity",
+                    "difficulty": "legacy",
+                    "enemy": true,
+                    "truename": "ElderLuminosity",
+                    "maxhp": 7000,
+                    "maxmp": 6000,
+                    "id": 1,
+                    "memory": {},
+                    "pacify": 0,
+                    "buffs": {
+                        "atk": 0,
+                        "mag": 0,
+                        "end": 0,
+                        "prc": 0,
+                        "agl": 0,
+                        "crit": 0
+                    },
+                    "lbp": 0,
+                    "donetc": false,
+                    "team": "1",
+                    "pos": "0"
+                }
+            ],
+            "backup": [],
+            "items": {},
+            "pets": {}
+        }
+    ],
+    "bossbattle": true,
+    "curturn": 0,
+    "forcemessage": "1004468007021580298",
+    "action": {
+        "move": "melee",
+        "index": 0,
+        "target": [
+            0,
+            0
+        ]
+    }
+}
