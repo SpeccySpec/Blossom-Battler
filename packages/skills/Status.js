@@ -431,8 +431,6 @@ statusList = {
 				forced: true
 			}
 		],
-		multiple: true,
-		diffflag: 0,
 		applyfunc(message, skill, args) {
 			let phys = args[0].toLowerCase()
 
@@ -1301,7 +1299,7 @@ function makeStatus(skill, extra, func) {
 	if (!skill.statusses[extra]) skill.statusses[extra] = [];
 
 	if (statusList[extra].multiple) {
-		if (statusList[extra].diffflag) {
+		/*if (statusList[extra].diffflag) {
 			for (i in skill.statusses[extra]) {
 				if (typeof skill.statusses[extra][i] == "number") {
 					if (skill.statusses[extra][i][statusList[extra].diffflag] === func[statusList[extra].diffflag]) {
@@ -1322,7 +1320,7 @@ function makeStatus(skill, extra, func) {
 					}
 				}
 			}
-		}
+		}*/
 		skill.statusses[extra].push(func);
 	} else {
 		skill.statusses[extra] = func;
