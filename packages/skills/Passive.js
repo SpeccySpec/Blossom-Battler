@@ -1022,7 +1022,7 @@ passiveList = {
 			let endures = char.custom.endure;
 			if (char.hp <= 0 && endures < vars[0]) {
 				char.custom.endure++;
-				char.hp = 1;
+				char.hp = vars[1];
 
 				return `...however, ${char.name} was able to endure the attack!`;
 			}
@@ -1362,14 +1362,14 @@ function makePassive(skill, extra, func) {
 	if (!skill.passive[extra]) skill.passive[extra] = [];
 
 	if (passiveList[extra].multiple) {
-		if (passiveList[extra].diffflag) {
+		/*if (passiveList[extra].diffflag) {
 			for (i in skill.passive[extra]) {
 				if (skill.passive[extra][i][passiveList[extra].diffflag] === func[passiveList[extra].diffflag]) {
 					skill.passive[extra][i] = func;
 					return true;
 				}
 			}
-		}
+		}*/
 		skill.passive[extra].push(func);
 	} else {
 		skill.passive[extra] = func;
