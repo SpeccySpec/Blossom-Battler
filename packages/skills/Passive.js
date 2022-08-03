@@ -1087,6 +1087,13 @@ passiveList = {
 				skill.pow *= (vars[1] / 100) + 1;
 			}
 		},
+		dmgmod(char, targ, dmg, skill, btl, vars) {
+			console.log(char.name, targ.name, "idiots here")
+			if (targ.custom?.pinch) {
+				skill.pow *= (vars[2] / 100) + 1;
+				console.log(skill.name, "is pain")
+			}
+		},
 		getinfo(vars, skill) {
 			return `When downed, the user is revived with **${vars[0]}% of their max HP** and their skills will have **${vars[1]}%** more power, but they will lose **${vars[3]}%** HP every turn, take **${vars[2]}%** more damage and heals will not work`
 		},
