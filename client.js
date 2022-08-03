@@ -307,7 +307,7 @@ statusEmojis = {
 	repelphys: "<:tetrakarn:991704547791749200>",
 	repelmag: "<:makarakarn:991704552086716437>",
 
-	pinch: "<:pinch:1004429944518098974>",
+	pinch: "<:pinch:1004506376036429924>",
 }
 
 elementTechs = {
