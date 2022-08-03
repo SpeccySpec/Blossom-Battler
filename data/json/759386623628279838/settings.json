@@ -1,7 +1,7 @@
 {
     "prefix": "rpg!",
     "mechanics": {
-        "limitbreaks": false,
+        "limitbreaks": true,
         "teamcombos": false,
         "onemores": false,
         "stataffinities": true,

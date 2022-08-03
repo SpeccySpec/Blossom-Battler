@@ -324,9 +324,50 @@ commands.getgear = new Command({
 
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor(elementColors[char.mainElement])
-			.setTitle(`__${elementEmoji[char.mainElement]}${char.name}'s gear__`)
+			.setTitle(`__${elementEmoji[char.mainElement]}${char.name}'s gear__`);
 
 		if (char.curweapon) {
+			var desc = '';
+			if (char.curweapon.class) desc += `_${char.curweapon.class}_ weapon\n`;
+			if (char.curweapon.melee) desc += `${char.curweapon.melee}<:physical:973077052129423411>\n`;
+
+			if (char.curweapon.atk) desc += `+${char.curweapon.atk}ATK\n`;
+			if (char.curweapon.mag) desc += `+${char.curweapon.mag}MAG\n`;
+			if (char.curweapon.skill) desc += `Grants __${char.curweapon.skill}__\n`;
+
+			if (char.curweapon.desc) desc += `_${char.curweapon.desc}_`;
+
+			if (desc != '') DiscordEmbed.fields.push({ name: `Current Weapon: __${char.curweapon.name}__`, value: desc, inline: false });
+		}
+
+		if (char.curarmor) {
+			var desc = '';
+			if (char.curarmor.class) desc += `_${char.curarmor.class}_ armor\n`;
+
+			if (char.curarmor.end) desc += `+${char.curarmor.end}END\n`;
+			if (char.curarmor.skill) desc += `Grants __${char.curarmor.skill}__\n`;
+
+			if (char.curarmor.desc) desc += `_${char.curarmor.desc}_`;
+
+			if (desc != '') DiscordEmbed.fields.push({ name: `Current Armor: __${char.curarmor.name}__`, value: desc, inline: false });
+		}
+
+		if (char.weapons && Object.keys(char.weapons).length > 0) {
+			let weapons = '';
+			for (let i in char.weapons) {
+				weapons += `**${char.weapons[i].name}** - Lv ${char.weapons[i].level ?? 1}\n`;
+			}
+
+			if (weapons != '') DiscordEmbed.fields.push({ name: "Weapons List", value: weapons, inline: true });
+		}
+
+		if (char.armors && Object.keys(char.armors).length > 0) {
+			let armors = '';
+			for (let i in char.armors) {
+				armors += `**${char.armors[i].name}** - Lv ${char.armors[i].level ?? 1}\n`;
+			}
+
+			if (armors != '') DiscordEmbed.fields.push({ name: "Armor List", value: armors, inline: true });
 		}
 
 		message.channel.send({embeds: [DiscordEmbed]});

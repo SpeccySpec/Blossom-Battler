@@ -6682,6 +6682,236 @@
                     "happy"
                 ]
             }
+        },
+        "DJ": {
+            "name": "DJ",
+            "owner": "532291526634635285",
+            "level": 99,
+            "hp": 932,
+            "mp": 608,
+            "maxhp": 932,
+            "maxmp": 608,
+            "basehp": 50,
+            "basemp": 20,
+            "melee": {
+                "name": "Strike Attack",
+                "type": "strike",
+                "pow": 30,
+                "acc": 95,
+                "crit": 15
+            },
+            "xp": 106579641,
+            "maxxp": 615066353,
+            "skills": [
+                "BlazingHell",
+                "IceAge",
+                "WildThunder",
+                "MechaRays",
+                "ShadowDrown",
+                "WarriorCry",
+                "Dustify"
+            ],
+            "critquote": [],
+            "deathquote": [],
+            "weapon": {},
+            "bio": {
+                "info": "The world's 'Reaper' that enjoys watching those suffer. He lived in the void with others, but he does possess an ability unlike the others to travel to various other locations without having permission to leave.\n\nOne day, however, he disappeared from the void and hasn't came back, and no one knows the true reason why he did. It's said that he could have possibly left due to his mental state, or perhaps just left due to the amount of disorder. Whatever the case is, he is nowhere to be seen, for now.",
+                "backstory": "Haha, fuck you. You don't get a backstory for the 'Reaper'",
+                "voice": "Frieza (Japanese)",
+                "theme": "",
+                "species": "",
+                "age": 9999,
+                "likes": "Order, Caramel, Enlightened and kindhearted folks.",
+                "dislikes": "Complete disorder, strawberry jam, onions",
+                "fears": "Using his complete power, having his emotions go uncontrollable, sanity snapping",
+                "height": [
+                    4,
+                    0
+                ],
+                "weight": 0,
+                "gender": "",
+                "custom": {}
+            },
+            "trust": {
+                "RecolorNate": {
+                    "value": 550,
+                    "nextLevel": 1000,
+                    "level": 19
+                },
+                "Nighthug": {
+                    "value": 550,
+                    "nextLevel": 1000,
+                    "level": 19
+                },
+                "OldSky": {
+                    "value": 4814,
+                    "nextLevel": 6320,
+                    "level": 312
+                },
+                "Pointy": {
+                    "value": 15,
+                    "nextLevel": 100,
+                    "level": 1
+                },
+                "UltiHeal": {
+                    "value": 60,
+                    "nextLevel": 100,
+                    "level": 1
+                }
+            },
+            "leader": true,
+            "lb4": {
+                "name": "HellsRulerUltimate",
+                "class": "atk",
+                "pow": 1250,
+                "cost": 325,
+                "status": "burn",
+                "statuschance": 200
+            },
+            "charms": [],
+            "curCharms": [],
+            "mainElement": "strike",
+            "nickname": "Reaper of Yaretza",
+            "mpMeter": [
+                "ReaperStamina",
+                "RS"
+            ],
+            "armor": {},
+            "teamCombo": {
+                "OldSky": "AbyssalDarkness"
+            },
+            "stats": {
+                "atk": 41,
+                "mag": 41,
+                "prc": 57,
+                "end": 57,
+                "chr": 57,
+                "int": 106,
+                "agl": 106,
+                "luk": 106
+            },
+            "basestats": {
+                "baseatk": 8,
+                "basemag": 8,
+                "baseprc": 8,
+                "baseend": 8,
+                "basechr": 8,
+                "baseint": 8,
+                "baseagl": 8,
+                "baseluk": 8
+            },
+            "affinities": {
+                "weak": [
+                    "water",
+                    "nuclear"
+                ],
+                "resist": [],
+                "block": [
+                    "almighty",
+                    "fire"
+                ],
+                "repel": [],
+                "drain": []
+            },
+            "autolearn": {
+                "0": true,
+                "1": true,
+                "2": true,
+                "3": true,
+                "4": true,
+                "5": true,
+                "6": true
+            },
+            "quotes": {
+                "meleequote": [],
+                "physquote": [
+                    "Say goodbye!"
+                ],
+                "magquote": [
+                    "I will end this!",
+                    "YOU MUST DIE BY MY HANDS!",
+                    "You're welcome to keep trying.",
+                    "You shouldn't have done what you did."
+                ],
+                "allyatkquote": [],
+                "lbquote": [],
+                "strongquote": [
+                    "Now that fuels my sadistic tendencies."
+                ],
+                "missquote": [],
+                "weakquote": [],
+                "hurtquote": [],
+                "resistquote": [
+                    "Resistance is futile!"
+                ],
+                "blockquote": [],
+                "repelquote": [
+                    "That won't do you any good!"
+                ],
+                "drainquote": [],
+                "dodgequote": [
+                    "You can't touch me, dumbass!",
+                    "You are pissing your fucking pants now?",
+                    "Are you trembling?",
+                    "You seriously are a joke.",
+                    "You're a god damn moron!",
+                    "My Grandma aims better than that",
+                    "Get those preceptors fixed!",
+                    "L for those to made you exist to miss",
+                    "You're pathetic compared to my speed!",
+                    "Dodge fest, lmao",
+                    "Your speed sucks",
+                    "Did me standing here wide open lives here",
+                    "My piss hits more often!",
+                    "Grovel at my feet, and I may feel remorseful",
+                    "Oh ok",
+                    "Try again, but use your best move this time"
+                ],
+                "killquote": [
+                    "You're history!",
+                    "You're dust!",
+                    "You didn't stand a chance!",
+                    "You shouldn't have tried to face the reaper, after all."
+                ],
+                "allydeathquote": [],
+                "healquote": [],
+                "helpedquote": [],
+                "consolequote": [],
+                "imfinequote": [],
+                "lvlquote": []
+            },
+            "leaderskill": {
+                "name": "EverHell",
+                "type": "discount",
+                "var1": "magic",
+                "var2": 50
+            },
+            "lb": {
+                "1": {
+                    "name": "HellPower",
+                    "class": "atk",
+                    "pow": 550,
+                    "cost": 100,
+                    "status": "burn",
+                    "statuschance": 125
+                },
+                "2": {
+                    "name": "HellsReign",
+                    "class": "atk",
+                    "pow": 800,
+                    "cost": 225,
+                    "status": "burn",
+                    "statuschance": 150
+                },
+                "3": {
+                    "name": "HellsSupremacy",
+                    "class": "atk",
+                    "pow": 1000,
+                    "cost": 295,
+                    "status": "burn",
+                    "statuschance": 175
+                }
+            }
         }
     }
 }
