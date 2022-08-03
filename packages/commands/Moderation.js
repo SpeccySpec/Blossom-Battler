@@ -746,7 +746,8 @@ commands.caps = new Command({
 
 		switch (args[0].toLowerCase()) {
 			case 'levelcap':
-				if (args[1] > 999) return message.channel.send("That's too high of a level cap!");
+				if (args[1] > 999) return message.channel.send("That's too high of a level cap! Max level cap is 999.")
+				if (args[1] < 1) return message.channel.send("That's too low of a level cap!");
 				settings['caps'][args[0].toLowerCase()] = args[1]
 				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 				message.channel.send(fullNames[args[0].toLowerCase()] + ' set to ' + args[1])
@@ -757,6 +758,10 @@ commands.caps = new Command({
 			case 'bstcap':
 			case 'skillamount':
 			case 'teamsize':
+				if (args[1] < 1) return message.channel.send("That's too low of a cap!");
+				if (args[0].toLowerCase() == 'teamsize' || args[0].toLowerCase() == 'skillamount') {
+					if (args[1] > 16) return message.channel.send("That's too high of a cap! It must be less than or equal to 16.");
+				}
 				settings['caps'][args[0].toLowerCase()] = args[1]
 				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 				message.channel.send(fullNames[args[0].toLowerCase()] + ' set to ' + args[1])
@@ -807,6 +812,7 @@ commands.transformationcaps = new Command({
 			case 'bstcap':
 			case 'level':
 			case 'transformationlimit':
+				if (args[1] < 1) return message.channel.send("That's too low of a cap!");
 				settings['caps']['transformations'][args[0].toLowerCase()] = args[1]
 				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 				message.channel.send(fullNames[args[0].toLowerCase()] + ' set to ' + args[1])
@@ -854,6 +860,7 @@ commands.affinityrates = new Command({
 			case 'resist':
 			case 'repel':
 			case 'drain':
+				if (args[1] <= 0) return message.channel.send("That's too low of a rate!");
 				settings['rates']['affinities'][args[0].toLowerCase()] = args[1]
 				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 				message.channel.send(fullNames[args[0].toLowerCase()] + 'damage rate set to ' + args[1])
