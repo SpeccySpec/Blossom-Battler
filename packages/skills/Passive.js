@@ -1023,6 +1023,7 @@ passiveList = {
 			if (char.hp <= 0 && endures < vars[0]) {
 				char.custom.endure++;
 				char.hp = vars[1];
+				if (char.hp > char.maxhp) char.hp = char.maxhp;
 
 				return `...however, ${char.name} was able to endure the attack!`;
 			}
