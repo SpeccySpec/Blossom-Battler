@@ -581,9 +581,9 @@ passiveList = {
 		},
 		onaffinitycheck(char, inf, skill, passive, affinity, btl, vars) {
 			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic')) {
-				if (randNum(1, 100) <= vars[2]) {
+				if (randNum(1, 100) <= vars[1]) {
 					// Run this function again... but with the COUNTER. Ban repelling to avoid infinite loops, and avoid taking damage ourselves.
-					let newResults = attackWithSkill(char, inf, objClone(vars[3]), btl, true);
+					let newResults = attackWithSkill(char, inf, objClone(vars[2]), btl, true);
 					result.oneMore = newResults.oneMore;
 					result.teamCombo = newResults.teamCombo;
 
