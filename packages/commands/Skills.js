@@ -1900,7 +1900,7 @@ commands.searchskills = new Command({
 	func: (message, args) => {
 		let array = []
 		for (const i in skillFile) {
-			if (skillFile[i].name.includes(args[0])) {
+			if ((skillFile[i]?.name && skillFile[i].name.includes(args[0])) || i.includes(args[0])) {
 				let descTxt = '';
 				if (skillFile[i].type.toString().toLowerCase() == 'passive') {
 					descTxt = 'A passive skill.';

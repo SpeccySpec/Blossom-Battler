@@ -1403,7 +1403,7 @@ passiveList = {
 			return `Defeating __${targ.name}__ let __${char.name}'s__ _${passive.name}_ buff **${vars[0].toUpperCase()} ${vars[1]} times**.`;
 		},
 		getinfo(vars, skill) {
-			return `Upon foe defeat, buffs ${vars[0]} **${vars[1]}** times.`
+			return `Upon foe defeat, buffs ${vars[0].toUpperCase()} **${vars[1]}** times.`
 		}
 	}),
 

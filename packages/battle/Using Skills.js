@@ -801,7 +801,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 							for (let k in skillFile[char.skills[i]].passive) {
 								if (passiveList[k] && passiveList[k].onkill) {
-									result.txt += passiveList[k].onkill(char, targ, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k]);
+									result.txt += `\n${passiveList[k].onkill(char, targ, skill, total, skillFile[char.skills[i]], btl, skillFile[char.skills[i]].passive[k])}`;
 								}
 							}
 						}
