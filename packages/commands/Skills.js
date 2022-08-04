@@ -2184,23 +2184,23 @@ commands.liststatus = new Command({
 			irradiation: '<:physical:973077052129423411>Switch 3 random stats for 3 turns.',
 
 			// Mental
-			dizzy: '<:mental:973077052053921792>Accuracy of all skills halved for 3 turns.',
-			sleep: '<:mental:973077052053921792>Immobilized for 2 turns, restore 1/20th of HP & MP while affected.',
-			despair: '<:mental:973077052053921792>Lose 1/10th of max MP every turn until cured. Downs the inflicted once they reach 0MP.',
-			brainwash: '<:mental:973077052053921792>Use a random move on the incorrect target for 2 turns.',
-			fear: '<:mental:973077052053921792>50% chance to be immobilized but cured from the status.',
-			rage: '<:mental:973077052053921792>Forced to use stronger melee attack on a random target for 2 turns.',
-			ego: '<:mental:973077052053921792>Unnable to use heal skills for 3 turns.',
-			silence: '<:mental:973077052053921792>Unable to use any magical skills and be healed for 2 turns.',
-			infatuation: '<:mental:973077052053921792>50% chance to hault attack. Stacks with other status effects.',
-			confusion: '<:mental:973077052053921792>50% chance to damage self when attacking. Stacks with other status effects.',
-			sensitive: '<:mental:973077052053921792>Debuff a random stat once hit a single time per opponent for 3 turns.',
+			dizzy: '<:mental:1004855144745291887>Accuracy of all skills halved for 3 turns.',
+			sleep: '<:mental:1004855144745291887>Immobilized for 2 turns, restore 1/20th of HP & MP while affected.',
+			despair: '<:mental:1004855144745291887>Lose 1/10th of max MP every turn until cured. Downs the inflicted once they reach 0MP.',
+			brainwash: '<:mental:1004855144745291887>Use a random move on the incorrect target for 2 turns.',
+			fear: '<:mental:1004855144745291887>50% chance to be immobilized but cured from the status.',
+			rage: '<:mental:1004855144745291887>Forced to use stronger melee attack on a random target for 2 turns.',
+			ego: '<:mental:1004855144745291887>Unnable to use heal skills for 3 turns.',
+			silence: '<:mental:1004855144745291887>Unable to use any magical skills and be healed for 2 turns.',
+			infatuation: '<:mental:1004855144745291887>50% chance to hault attack. Stacks with other status effects.',
+			confusion: '<:mental:1004855144745291887>50% chance to damage self when attacking. Stacks with other status effects.',
+			sensitive: '<:mental:1004855144745291887>Debuff a random stat once hit a single time per opponent for 3 turns.',
 
 			// Positive Physical
 			mirror: '<:physical:973077052129423411>Positive Status Effect. Immobilized for 3 turns. Repel magic skills.',
 
 			// Positive Mental
-			happy: '<:mental:973077052053921792>Positive Status Effect. LUK and AGL increased, PRC decreased. Can still be teched on your opponents.'
+			happy: '<:mental:1004855144745291887>Positive Status Effect. LUK and AGL increased, PRC decreased. Can still be teched on your opponents.'
 		}
 
 		for (const i in statusEffects) {
