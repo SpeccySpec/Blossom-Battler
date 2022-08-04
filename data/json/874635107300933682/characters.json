@@ -54,11 +54,11 @@
             "superweak": [],
             "weak": [],
             "resist": [],
-            "block": [
-                "gravity"
-            ],
+            "block": [],
             "repel": [],
-            "drain": []
+            "drain": [
+                "gravity"
+            ]
         },
         "skills": [
             "UltimateHit",

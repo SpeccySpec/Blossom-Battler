@@ -1461,6 +1461,22 @@ passiveList = {
 
 			return `${txt} when HP is below **${vars[2]}%**`;
 		}
+	}),
+
+	neutralisinggas: new Extra({
+		name: "Neutralising Gas",
+		desc: "Nullifies all passives in battle.",
+		args: [],
+		applyfunc(message, skill, args) {
+			makePassive(skill, "neutralisinggas", [true]);
+			return true;
+		},
+		battlestart(char, skill, btl, vars) {
+			btl.nopassives = [skill.name, char.id];
+		},
+		getinfo(vars, skill) {
+			return "Neutralises all passives in battle.";
+		}
 	})
 }
 
