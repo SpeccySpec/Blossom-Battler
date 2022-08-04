@@ -87,7 +87,7 @@ commands.registerchar = new Command({
 		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements)) return message.channel.send({content: 'Please enter a valid element for **Main Element!**', embeds: [elementList()]});
 		if (args[1].toLowerCase() === 'passive' || args[1].toLowerCase() === 'almighty') return message.channel.send('You cannot use **Passive** or **Almighty** as your main element.');
 
-		if ((args[2] + args[3]) > settings.caps.hpmpcap) return message.channel.send(`The maximum total points for HP and MP is 70! Currently, you have ${args[2]+args[3]}.`);
+		if ((args[2] + args[3]) > settings.caps.hpmpcap) return message.channel.send(`The maximum total points for HP and MP is ${settings.caps.hpmpcap}! Currently, you have ${args[2]+args[3]}.`);
 
 		let bst = 0;
 		for (let i = 4; i < args.length-1; i++) {
