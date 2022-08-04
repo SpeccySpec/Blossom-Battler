@@ -1451,7 +1451,7 @@ passiveList = {
 			for (let i in vars) {
 				if (!vars[i]) continue;
 
-				txt += `${elementEmoji[vars[i][0]] ?? ''}**${vars[i][0].charAt(0).toUpperCase() + vars[i][0].slice(1)}** attacks by ${vars[i][1]}%`
+				txt += `${elementEmoji[vars[i][0]] ?? ''}**${vars[i][0].charAt(0).toUpperCase() + vars[i][0].slice(1)}** attacks by ${vars[i][1]}% when HP is below **${vars[i][2]}%**`
 
 				if (i < vars.length - 2) 
 					txt += `, `
@@ -1459,7 +1459,7 @@ passiveList = {
 					txt += ` and `
 			}
 
-			return `${txt} when HP is below **${vars[2]}%**`;
+			return txt;
 		}
 	}),
 
