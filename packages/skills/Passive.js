@@ -509,9 +509,9 @@ passiveList = {
 			let accuracy = args[4];
 			let critChance = Math.max((args[5] ?? 0), 0);
 			let hits = args[6];
-			let element = args[7]?.toLowerCase();
-			let atype = args[8]?.toLowerCase();
-			let targets = args[9]?.toLowerCase();
+			let element = args[7].toLowerCase();
+			let atype = args[8].toLowerCase();
+			let targets = args[9].toLowerCase();
 			let status = args[10] || "none";
 			let statusChance = Math.min(Math.max((args[11] ?? 0), 0), 100);
 
@@ -537,7 +537,7 @@ passiveList = {
 
 			if (atype != 'physical' && atype != 'magic' && atype != 'ranged') return void message.channel.send(`${atype} is an invalid form of contact! Try physical, magic or ranged.`);
 
-			if (Targets.includes(targets)) return void message.channel.send('Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n-SpreadOpposing\n- SpreadAllies```')
+			if (!Targets.includes(targets)) return void message.channel.send(`${targets} is an invalid target!\n` + 'Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n- SpreadOpposing\n- SpreadAllies```')
 
 			if (status != 'none') {
 				if (!utilityFuncs.inArray(status, statusEffects)) {
@@ -581,9 +581,9 @@ passiveList = {
 		},
 		onaffinitycheck(char, inf, skill, passive, affinity, btl, vars) {
 			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic')) {
-				if (randNum(1, 100) <= vars[2]) {
+				if (randNum(1, 100) <= vars[1]) {
 					// Run this function again... but with the COUNTER. Ban repelling to avoid infinite loops, and avoid taking damage ourselves.
-					let newResults = attackWithSkill(char, inf, objClone(vars[3]), btl, true);
+					let newResults = attackWithSkill(char, inf, objClone(vars[2]), btl, true);
 					result.oneMore = newResults.oneMore;
 					result.teamCombo = newResults.teamCombo;
 
@@ -1355,7 +1355,7 @@ passiveList = {
 		getinfo(vars, skill) {
 			return `Nets a **__${vars[1]}__** for every heal the user obtains until it reaches **${vars[0]}**`
 		}
-	})
+	}),
 
 /*
 	arenatrap: new Extra({
@@ -1372,6 +1372,112 @@ passiveList = {
 		}
 	})
 */
+
+	koboost: new Extra({
+		name: "KO Boost",
+		desc: "Upon foe defeat, buff a stat.",
+		args: [
+			{
+				name: "Stat",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Stages",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let stat = args[0].toLowerCase();
+			let stages = args[1];
+
+			if (!stats.includes(stat)) return void message.channel.send("That's not a valid stat!");
+			if (stages == 0) return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
+			
+			makePassive(skill, "koboost", [stat, stages]);
+			return true
+		},
+		onkill(char, targ, skill, dmg, passive, btl, vars) {
+			buffStat(char, vars[0], vars[1]);
+			return `Defeating __${targ.name}__ let __${char.name}'s__ _${passive.name}_ buff **${vars[0].toUpperCase()} ${vars[1]} times**.`;
+		},
+		getinfo(vars, skill) {
+			return `Upon foe defeat, buffs ${vars[0]} **${vars[1]}** times.`
+		}
+	}),
+
+	finalpush: new Extra({
+		name: "Final Push",
+		desc: "Boosts the powers of skills of a specific element by <Percentage> when HP is below <HPPercent>",
+		args: [
+			{
+				name: "Element",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Percentage",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "HPPercent",
+				type: "Decimal",
+				forced: true
+			},
+		],
+		multiple: true,
+		diffflag: 0,
+		applyfunc(message, skill, args) {
+			let element = args[0]?.toLowerCase();
+			let percentage = args[1];
+			let hppercentage = args[2];
+
+			if ((!Elements.includes(element) && element != 'all' && element != 'magic' && element != 'physical') || element === 'almighty') return void message.channel.send("You entered an invalid element!");
+			if (hppercentage > 100 && hppercentage < 0) return void message.channel.send(`Please enter a value for <HPPercent> above 0 and below 100.`);
+
+			makePassive(skill, "finalpush", [element, percentage, hppercentage]);
+			return true;
+		},
+		statmod(btl, char, skill, vars) {
+			if (char.hp <= (char.maxhp/100)*vars[2]) {
+				return passiveList.boost.statmod(btl, char, skill, vars);
+			}
+		},
+		getinfo(vars, skill) {
+			let txt = `Boosts `
+
+			for (let i in vars) {
+				if (!vars[i]) continue;
+
+				txt += `${elementEmoji[vars[i][0]] ?? ''}**${vars[i][0].charAt(0).toUpperCase() + vars[i][0].slice(1)}** attacks by ${vars[i][1]}%`
+
+				if (i < vars.length - 2) 
+					txt += `, `
+				else if (i == vars.length - 2) 
+					txt += ` and `
+			}
+
+			return `${txt} when HP is below **${vars[2]}%**`;
+		}
+	}),
+
+	neutralisinggas: new Extra({
+		name: "Neutralising Gas",
+		desc: "Nullifies all passives in battle.",
+		args: [],
+		applyfunc(message, skill, args) {
+			makePassive(skill, "neutralisinggas", [true]);
+			return true;
+		},
+		battlestart(char, skill, btl, vars) {
+			btl.nopassives = [skill.name, char.id];
+		},
+		getinfo(vars, skill) {
+			return "Neutralises all passives in battle.";
+		}
+	})
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.

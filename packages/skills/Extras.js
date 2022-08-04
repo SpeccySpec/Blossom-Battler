@@ -26,6 +26,33 @@ Extra = class extends ArgList {
 	}
 }
 
+/*
+	[[[Hook Documentation - EXTRAS hooks in order of appearance.]]]
+
+	- onuseoverride(char, targ, skill, btl, vars)
+	Overrides the turn, including all damage calculations, and does something else. Should return
+	a string.
+	
+	- onuse(char, targ, skill, btl, vars)
+	If the skill lands, this should do something extra. Should return a string.
+
+	- canuse(char, skill, btl, vars)
+	Can this skill be used? Return a string if not, otherwise, return true. This is calculated when the skill
+	is selected through button. This also affects enemies, as they will ignore this skill in
+	the ai if it cannot be used.
+
+	- onselect(char, skill, btl, vars)
+	onuse but it is ran before all of the damage functions. Should return a string.
+	
+	- statmod(char, skill, vars, btl)
+	Lets you freely modify the stats of a character or skill before use. Don't worry, this is reverted
+	after the damage for this particular skill on this particular target! Should not return anything.
+	
+	- ondamage(char, targ, dmg, skill, btl, vars)
+	onuse but it's done AFTER damage is dealt. Also lets you use the damage we've taken freely, like in
+	drain. Should return a string.
+*/
+
 extrasList = {
 	ohko: new Extra({
 		name: "One Hit KO",
@@ -237,15 +264,18 @@ extrasList = {
 		onselect(char, skill, btl, vars) {
 			if (vars[0].toLowerCase() != 'user') return '';
 
-			return extrasList.changeaffinity.targetchange(char, vars, skill)
+			return extrasList.changeaffinity.targetchange(char, char, vars, skill)
 		},
 		onuse(char, targ, skill, btl, vars) {
 			if (vars[0].toLowerCase() != 'target') return '';
 
-			return extrasList.changeaffinity.targetchange(targ, vars, skill)
+			return extrasList.changeaffinity.targetchange(char, targ, vars, skill)
 		},
-		targetchange(target, vars, skill) {
+		targetchange(char, target, vars, skill) {
 			if (!target.affinities) target.affinities = [];
+
+			// Fail on bosses
+			if (char.team != target.team && isBoss(target) && skill.type === "status") return "...but it failed!";
 
 			let setAffinities = [];
 			let wasChanged = false;
@@ -651,7 +681,7 @@ extrasList = {
 		},
 		onuseoverride(char, targ, skill, btl, vars) {
 			if (targ.mp <= 0) return `But it failed!`;
-			let mpStolen = Math.max(1, skill.pow+randNum(-10, 10));
+			let mpStolen = Math.floor(Math.max(1, skill.pow+randNum(-10, 10)));
 			if (targ.mp < mpStolen) mpStolen = targ.mp;
 			
 			targ.mp = Math.max(0, targ.mp-mpStolen)
@@ -693,6 +723,8 @@ extrasList = {
 		onuse(char, targ, skill, btl, vars) {
 			let num = randNum(100)
 			let stealTxt = ''
+			
+			if (isBoss(targ)) return '';
 
 			if (targ?.loot && num <= vars[0]) {
 				let weaponFile = setUpFile(`${dataPath}/json/${btl.guild.id}/weapons.json`);
@@ -772,7 +804,7 @@ extrasList = {
 					return stealTxt;
 				}
 			}
-			return `__${char.name}__ failed to steal anything.`
+			return '';
 		},
 		getinfo(vars, skill) {
 			let txt = `Has a ` 

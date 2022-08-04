@@ -326,13 +326,15 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				}
 			}
 
-			for (let i in targ.skills) {
-				if (!skillFile[targ.skills[i]]) continue;
-				if (skillFile[targ.skills[i]].type != 'passive') continue;
+			if (doPassives(btl)) {
+				for (let i in targ.skills) {
+					if (!skillFile[targ.skills[i]]) continue;
+					if (skillFile[targ.skills[i]].type != 'passive') continue;
 
-				for (let k in skillFile[targ.skills[i]].passive) {
-					if (passiveList[k] && passiveList[k].onheal) {
-						result.txt += `\n${passiveList[k].onheal(targ, char, skill, skill.pow, btl, skillFile[targ.skills[i]].passive[k]) ?? ''}`;
+					for (let k in skillFile[targ.skills[i]].passive) {
+						if (passiveList[k] && passiveList[k].onheal) {
+							result.txt += `\n${passiveList[k].onheal(targ, char, skill, skill.pow, btl, skillFile[targ.skills[i]].passive[k]) ?? ''}`;
+						}
 					}
 				}
 			}
@@ -393,56 +395,58 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 		let shieldtype = targ.custom?.shield?.type ?? undefined;
 
 		// ForceDodge and OnAffinityCheck passive funcs
-		for (let i in targ.skills) {
-			if (!skillFile[targ.skills[i]]) continue;
-			if (skillFile[targ.skills[i]].type != 'passive') continue;
+		if (doPassives(btl)) {
+			for (let i in targ.skills) {
+				if (!skillFile[targ.skills[i]]) continue;
+				if (skillFile[targ.skills[i]].type != 'passive') continue;
 
-			for (let k in skillFile[targ.skills[i]].passive) {
-				if (passiveList[k] && passiveList[k].forcedodge) {
-					const psv = passiveList[k];
-					const passive = skillFile[targ.skills[i]];
-					let dodge = false;
-					
-					if (psv.multiple) {
-						for (let j in passive.passive[k]) {
-							if (psv.forcedodge(targ, char, skill, passive, btl, passive.passive[k][j])) {
-								dodge = true;
-								break;
+				for (let k in skillFile[targ.skills[i]].passive) {
+					if (passiveList[k] && passiveList[k].forcedodge) {
+						const psv = passiveList[k];
+						const passive = skillFile[targ.skills[i]];
+						let dodge = false;
+						
+						if (psv.multiple) {
+							for (let j in passive.passive[k]) {
+								if (psv.forcedodge(targ, char, skill, passive, btl, passive.passive[k][j])) {
+									dodge = true;
+									break;
+								}
 							}
+						} else {
+							dodge = psv.forcedodge(targ, char, skill, passive, btl, passive.passive[k]);
 						}
-					} else {
-						dodge = psv.forcedodge(targ, char, skill, passive, btl, passive.passive[k]);
-					}
 
-					if (dodge) {
-						result.txt += `__${targ.name}__'s _${passive.name}_ allowed them to dodge __${char.name}__'s _${skill.name}_!`;
-						return result
-					}
-				} else if (passiveList[k] && passiveList[k].onaffinitycheck && !noRepel) {
-					const psv = passiveList[k];
-					const passive = skillFile[targ.skills[i]];
-					let endfunc = false;
+						if (dodge) {
+							result.txt += `__${targ.name}__'s _${passive.name}_ allowed them to dodge __${char.name}__'s _${skill.name}_!`;
+							return result
+						}
+					} else if (passiveList[k] && passiveList[k].onaffinitycheck && !noRepel) {
+						const psv = passiveList[k];
+						const passive = skillFile[targ.skills[i]];
+						let endfunc = false;
 
-					if (psv.multiple) {
-						for (let j in passive.passive[k]) {
-							let str = psv.onaffinitycheck(targ, char, skill, passive, affinity, btl, passive.passive[k][j], result);
+						if (psv.multiple) {
+							for (let j in passive.passive[k]) {
+								let str = psv.onaffinitycheck(targ, char, skill, passive, affinity, btl, passive.passive[k][j], result);
+
+								if (str) {
+									endfunc = true;
+									result.txt += str;
+									break;
+								}
+							}
+						} else {
+							let str = psv.onaffinitycheck(targ, char, skill, passive, affinity, btl, passive.passive[k], result);
 
 							if (str) {
 								endfunc = true;
 								result.txt += str;
-								break;
 							}
 						}
-					} else {
-						let str = psv.onaffinitycheck(targ, char, skill, passive, affinity, btl, passive.passive[k], result);
 
-						if (str) {
-							endfunc = true;
-							result.txt += str;
-						}
+						if (endfunc) return result;
 					}
-
-					if (endfunc) return result;
 				}
 			}
 		}
@@ -574,40 +578,42 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 						curAffinity = statusEffectFuncs[char.status].affinitymod(char, targ, skill, btl, affinity);
 					}
 
-					for (let i in char.skills) {
-						if (!skillFile[char.skills[i]]) continue;
-						if (skillFile[char.skills[i]].type != 'passive') continue;
+					if (doPassives(btl)) {
+						for (let i in char.skills) {
+							if (!skillFile[char.skills[i]]) continue;
+							if (skillFile[char.skills[i]].type != 'passive') continue;
 
-						for (let k in skillFile[char.skills[i]].passive) {
-							if (passiveList[k] && passiveList[k].affinitymod) {
-								let a = passiveList[k].affinitymod(targ, char, skill, btl, skillFile[char.skills[i]].passive[k])
+							for (let k in skillFile[char.skills[i]].passive) {
+								if (passiveList[k] && passiveList[k].affinitymod) {
+									let a = passiveList[k].affinitymod(targ, char, skill, btl, skillFile[char.skills[i]].passive[k])
 
-								if (a && a != null && a != false) {
-									if (typeof(a) === 'string') {
-										curAffinity = a;
-									} else {
-										curAffinity = a[0];
-										results.txt += a[1];
+									if (a && a != null && a != false) {
+										if (typeof(a) === 'string') {
+											curAffinity = a;
+										} else {
+											curAffinity = a[0];
+											results.txt += a[1];
+										}
 									}
 								}
 							}
 						}
-					}
 
-					for (let i in targ.skills) {
-						if (!skillFile[targ.skills[i]]) continue;
-						if (skillFile[targ.skills[i]].type != 'passive') continue;
+						for (let i in targ.skills) {
+							if (!skillFile[targ.skills[i]]) continue;
+							if (skillFile[targ.skills[i]].type != 'passive') continue;
 
-						for (let k in skillFile[targ.skills[i]].passive) {
-							if (passiveList[k] && passiveList[k].affinitymodoninf) {
-								let a = passiveList[k].affinitymodoninf(targ, char, skill, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k])
-								
-								if (a && a != null && a != false) {
-									if (typeof(a) === 'string') {
-										curAffinity = a;
-									} else {
-										curAffinity = a[0];
-										results.txt += a[1];
+							for (let k in skillFile[targ.skills[i]].passive) {
+								if (passiveList[k] && passiveList[k].affinitymodoninf) {
+									let a = passiveList[k].affinitymodoninf(targ, char, skill, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k])
+									
+									if (a && a != null && a != false) {
+										if (typeof(a) === 'string') {
+											curAffinity = a;
+										} else {
+											curAffinity = a[0];
+											results.txt += a[1];
+										}
 									}
 								}
 							}
@@ -788,7 +794,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 						}
 					}
 
-					if (targ.hp <= 0) {
+					if (targ.hp <= 0 && doPassives(btl)) {
 						for (let i in char.skills) {
 							if (!skillFile[char.skills[i]]) continue;
 							if (skillFile[char.skills[i]].type != 'passive') continue;
@@ -853,18 +859,20 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					}
 				}
 
-				for (let i in targ.skills) {
-					if (!skillFile[targ.skills[i]]) continue;
-					if (skillFile[targ.skills[i]].type != 'passive') continue;
+				if (doPassives(btl)) {
+					for (let i in targ.skills) {
+						if (!skillFile[targ.skills[i]]) continue;
+						if (skillFile[targ.skills[i]].type != 'passive') continue;
 
-					for (let k in skillFile[targ.skills[i]].passive) {
-						if (passiveList[k] && passiveList[k].ondamage) {
-							if (passiveList[k].multiple) {
-								for (let l in skillFile[targ.skills[i]].passive[k]) {
-									result.txt += '\n' + (passiveList[k].ondamage(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k][l]) ?? '');
+						for (let k in skillFile[targ.skills[i]].passive) {
+							if (passiveList[k] && passiveList[k].ondamage) {
+								if (passiveList[k].multiple) {
+									for (let l in skillFile[targ.skills[i]].passive[k]) {
+										result.txt += '\n' + (passiveList[k].ondamage(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k][l]) ?? '');
+									}
+								} else {
+									result.txt += '\n' + (passiveList[k].ondamage(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k]) ?? '');
 								}
-							} else {
-								result.txt += '\n' + (passiveList[k].ondamage(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k]) ?? '');
 							}
 						}
 					}
@@ -976,18 +984,20 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	if (!skill.hits) skill.hits = 1;
 
 	// Passives
-	for (let skillName of char.skills) {
-		if (!skillFile[skillName]) continue;
+	if (doPassives(btl)) {
+		for (let skillName of char.skills) {
+			if (!skillFile[skillName]) continue;
 
-		let psv = skillFile[skillName];
-		if (psv.type != 'passive' || !psv.passive) continue;
+			let psv = skillFile[skillName];
+			if (psv.type != 'passive' || !psv.passive) continue;
 
-		for (let i in psv.passive) {
-			if (passiveList[i] && passiveList[i].statmod) {
-				if (passiveList[i].multiple) {
-					for (let k in psv.passive[i]) passiveList[i].statmod(btl, char, skill, psv.passive[i][k]);
-				} else
-					passiveList[i].statmod(btl, char, skill, psv.passive[i]);
+			for (let i in psv.passive) {
+				if (passiveList[i] && passiveList[i].statmod) {
+					if (passiveList[i].multiple) {
+						for (let k in psv.passive[i]) passiveList[i].statmod(btl, char, skill, psv.passive[i][k]);
+					} else
+						passiveList[i].statmod(btl, char, skill, psv.passive[i]);
+				}
 			}
 		}
 	}

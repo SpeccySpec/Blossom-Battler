@@ -54,16 +54,15 @@
             "superweak": [],
             "weak": [],
             "resist": [],
-            "block": [
-                "gravity"
-            ],
+            "block": [],
             "repel": [],
-            "drain": []
+            "drain": [
+                "gravity"
+            ]
         },
         "skills": [
             "UltimateHit",
-            "Dragon Rage",
-            "CuriosityKilledTheBloomBattler"
+            "Dragon Rage"
         ],
         "autolearn": [],
         "quotes": {
@@ -197,7 +196,9 @@
                 "spirit"
             ]
         },
-        "skills": [],
+        "skills": [
+            "DX-Buster"
+        ],
         "autolearn": [],
         "quotes": {
             "meleequote": [],
@@ -304,10 +305,13 @@
         "affinities": {
             "superweak": [],
             "weak": [
-                "explode"
+                "explode",
+                "metal",
+                "pierce"
             ],
             "resist": [
-                "earth"
+                "earth",
+                "grass"
             ],
             "block": [],
             "repel": [],

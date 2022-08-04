@@ -27648,18 +27648,6 @@
         "powpkmn": {},
         "levellock": 2
     },
-    "CuriosityKilledTheBloomBattler": {
-        "name": "CuriosityKilledTheBloomBattler",
-        "type": "almighty",
-        "atktype": "magic",
-        "pow": 100,
-        "hits": 1,
-        "acc": 100,
-        "cost": 0,
-        "costtype": "mp",
-        "target": "caster",
-        "originalAuthor": "363363984390356993"
-    },
     "MadTeaParty": {
         "name": "Mad Tea Party",
         "cost": 100,
@@ -57327,7 +57315,7 @@
         "name": "DX-Buster",
         "cost": 15,
         "costtype": "mppercent",
-        "pow": 300,
+        "pow": "65",
         "acc": 95,
         "crit": 20,
         "type": "bless",
@@ -57349,8 +57337,7 @@
                 "DX-Buster",
                 0
             ]
-        ],
-        "levellock": 20
+        ]
     },
     "StarCombine": {
         "name": "StarCombine",
@@ -71330,8 +71317,71 @@
         },
         "desc": "The user tries to corrupt a foe, and bend their will to the user's."
     },
+    "Votl": {
+        "type": "electric",
+        "atktype": "magic",
+        "pow": 60,
+        "hits": 1,
+        "acc": 95,
+        "cost": 7,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "532291526634635285",
+        "status": "paralyze",
+        "statuschance": 5,
+        "desc": "An alternative to <:electric:962465467400851518>Zio that can paralyze a foe, along with stealing a portion of MP.",
+        "extras": {
+            "takemp": [
+                1
+            ]
+        }
+    },
+    "Herzt": {
+        "name": "Herzt",
+        "type": "electric",
+        "atktype": "magic",
+        "pow": 60,
+        "hits": 1,
+        "acc": 90,
+        "cost": 14,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "532291526634635285",
+        "status": "paralyze",
+        "statuschance": 5,
+        "desc": "An alternative to <:electric:962465467400851518>Mazio that takes a certain amount of MP, and has a chance to paralyze.",
+        "extras": {
+            "takemp": [
+                3
+            ]
+        }
+    },
+    "TimeForPain": {
+        "name": "TimeForPain",
+        "type": "fire",
+        "atktype": "magic",
+        "pow": 1,
+        "hits": "99",
+        "acc": 100,
+        "cost": 5,
+        "costtype": "mp",
+        "target": "one",
+        "originalAuthor": "798092550392381450",
+        "crit": 4,
+        "desc": "test"
+    },
+    "Neutralising Gas": {
+        "name": "Neutralising Gas",
+        "type": "passive",
+        "originalAuthor": "516359709779820544",
+        "passive": {
+            "neutralisinggas": [
+                true
+            ]
+        },
+        "desc": "The user emits a spore that disables all passives in battle as long as the user is alive."
+    },
     "Corrupted": {
-        "name": "Corrupted",
         "type": "passive",
         "originalAuthor": "621307633718132746",
         "passive": {

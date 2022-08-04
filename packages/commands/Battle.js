@@ -575,6 +575,7 @@ commands.startbattle = new Command({
 			if (enemy.loot) enemy.loot = objClone(lootFile?.[enemy.loot]?.items) ?? [];
 		}
 
+		funcsAtBattleStart(battle);
 		if (settings?.mechanics?.leaderskills) battle = leaderSkillsAtBattleStart(battle);
 
 		// turn order :)
@@ -879,6 +880,8 @@ commands.startpvp = new Command({
 			battle.pvpmode = args[1].toLowerCase();
 		}
 
+		funcsAtBattleStart(battle);
+
 		// turn order :)
 		battle.turnorder = getTurnOrder(battle);
 
@@ -1064,6 +1067,7 @@ commands.starttrial = new Command({
 				battle.teams[1].backup.push(enemy);
 		}
 
+		funcsAtBattleStart(battle);
 		if (settings?.mechanics?.leaderskills) battle = leaderSkillsAtBattleStart(battle);
 
 		// turn order :)
@@ -1323,6 +1327,7 @@ commands.testbattle = new Command({
 			if (enemy.loot) enemy.loot = objClone(lootFile?.[enemy.loot]?.items) ?? [];
 		}
 
+		funcsAtBattleStart(battle);
 		if (settings?.mechanics?.leaderskills) battle = leaderSkillsAtBattleStart(battle);
 
 		// turn order :)
@@ -1459,6 +1464,7 @@ commands.aibattle = new Command({
 			});
 		}
 
+		funcsAtBattleStart(battle);
 		if (settings?.mechanics?.leaderskills) battle = leaderSkillsAtBattleStart(battle);
 
 		// turn order :)

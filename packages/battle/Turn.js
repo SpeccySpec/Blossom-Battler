@@ -445,6 +445,13 @@ sendCurTurnEmbed = (char, btl) => {
 	if (btl.weather) weatherTxt += `\n${btl.weather.type.toUpperCase()} Weather.`;
 	if (btl.terrain) weatherTxt += `\n${btl.terrain.type.toUpperCase()} Terrain.`;
 	statDesc += weatherTxt;
+	
+	// No Passives
+	if (btl.nopassives) {
+		if (getCharFromId(btl.nopassives[1], btl).hp > 0) {
+			statDesc += `\n<:warning:878094052208296007> Passives disabled by ${getCharFromId(btl.nopassives[1], btl).name}'s ${btl.nopassives[0]}!`;
+		}
+	}
 
 	let teamDesc = '';
 	let op = (char.team <= 0) ? 1 : 0;
@@ -1383,18 +1390,20 @@ doTurn = async(btl, noTurnEmbed) => {
 	let statusTxt = '';
 
 	// Start Of Turn passives.
-	for (let s of char.skills) {
-		let skill = skillFile[s];
+	if (doPassives(btl)) {
+		for (let s of char.skills) {
+			let skill = skillFile[s];
 
-		if (skill && skill.type == 'passive') {
-			for (let i in skill.passive) {
-				if (passiveList[i] && passiveList[i].onturn) {
-					if (passiveList[i].multiple) {
-						for (let k in skill.passive[i]) statusTxt += (passiveList[i].onturn(btl, char, skill.passive[i][k]) ?? '');;
-					} else
-						statusTxt += (passiveList[i].onturn(btl, char, skill.passive[i]) ?? '');
+			if (skill && skill.type == 'passive') {
+				for (let i in skill.passive) {
+					if (passiveList[i] && passiveList[i].onturn) {
+						if (passiveList[i].multiple) {
+							for (let k in skill.passive[i]) statusTxt += (passiveList[i].onturn(btl, char, skill.passive[i][k]) ?? '');;
+						} else
+							statusTxt += (passiveList[i].onturn(btl, char, skill.passive[i]) ?? '');
 
-					if (statusTxt != '') statusTxt += '\n';
+						if (statusTxt != '') statusTxt += '\n';
+					}
 				}
 			}
 		}

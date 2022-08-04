@@ -25611,7 +25611,15 @@
                 "Stronger and stronger!"
             ]
         },
-        "lb": {}
+        "lb": {},
+        "statusaffinities": {
+            "block": [
+                "toxin"
+            ],
+            "weak": [
+                "ego"
+            ]
+        }
     },
     "Croato": {
         "name": "Croato",

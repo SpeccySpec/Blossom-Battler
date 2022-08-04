@@ -389,7 +389,8 @@
             ],
             "resist": [
                 "psychic",
-                "poison"
+                "poison",
+                "wind"
             ],
             "block": [
                 "ice"
@@ -446,7 +447,7 @@
                 5
             ],
             "weight": 0,
-            "age": 1,
+            "age": 12,
             "info": "",
             "backstory": "",
             "likes": "",
@@ -459,10 +460,18 @@
         "trust": {},
         "statusaffinities": {
             "resist": [
-                "freeze"
+                "freeze",
+                "toxin"
             ],
             "weak": [
-                "dizzy"
+                "dizzy",
+                "burn",
+                "paralyze",
+                "rage"
+            ],
+            "block": [
+                "sensitive",
+                "happy"
             ]
         }
     }

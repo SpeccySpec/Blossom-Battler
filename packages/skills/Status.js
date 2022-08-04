@@ -11,6 +11,19 @@ forceSingleTarget = (skill) => {
 	return skill;
 }
 
+/*
+	[[[HOOK DOCUMENTATION - STATUS hooks in order of appearance]]]
+
+	- onuse(char, targ, skill, btl, vars)
+	If the skill lands, this should do something extra. Should return a string.
+
+	- onselect(char, skill, btl, vars)
+	onuse but it is ran before all of the damage functions. Should return a string.
+
+	- aithinker(char, targ, act, skill, btl, vars)
+	Modify the points for this action (act) for ai.
+*/
+
 statusList = {
 	status: new Extra({
 		name: 'Status',
@@ -256,8 +269,9 @@ statusList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
-			if (char.id === targ.id) return '...but you cannot transform into yourself!';
-			if (char.mimic || char.custom?.revert) return 'But it failed!';
+			if (char.id === targ.id) return '...But you cannot transform into yourself!';
+			if (isBoss(targ)) return '...But it failed!';
+			if (char.mimic || char.custom?.revert) return '...But it failed!';
 
 			addCusVal(char, 'revert', [vars[0], {}, `__${char.name}__ stopped mimicking __${targ.name}__!`]);
 
