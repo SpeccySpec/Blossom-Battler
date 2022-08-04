@@ -2039,6 +2039,7 @@ customVariables = {
 	},
 
 	regenheal: {
+		toembed: "<:revive:973078509868183572>",
 		onturn(btl, char, vars) {
 			if (char.custom?.regenheal) {
 				let txt = '';

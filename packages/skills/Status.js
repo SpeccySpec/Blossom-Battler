@@ -697,6 +697,47 @@ statusList = {
 		}
 	}),
 
+	corrupt: new Extra({
+		name: "Corrupt",
+		desc: "Has a chance to corrupt the foe, and make them work for your party for a few turns, the corrupted foe will be weaker and will constantly take damage. Corruption chance based on foe's HP and <Chance Stat>, the chance cannot be exceed 20%.",
+		args: [
+			{
+				name: "Chance stat",
+				type: "Word",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			const stat = args[0].toLowerCase()
+			if (!stats.includes(stat))
+				return void message.channel.send("That's not a valid stat!");
+			makeStatus(skill, "corrupt", [stat])
+			return true
+		},
+		onuse(char, targ, skill, btl, vars) {
+			const stat = vars[0]
+			const chance = ((targ.maxhp / targ.hp) / 10) * (char.stats[stat] / targ.stats[stat]) * (char.stats.luk / targ.stats.luk)
+			console.log(chance)
+			if (Math.random() * 100 <= chance) {
+				if (isBoss(targ)) {
+					extrasList.buff.buffChange(targ, skill, btl, ["target", "all", -1, 100, 3])
+					return `...but __${targ.name}__ is too strong to be corrupted completely, they are weakened instead!`
+				}
+				targ.hp = 0
+				const corrupted = objClone(targ)
+				corrupted.hp = corrupted.maxhp
+				addCusVal(corrupted, "pinch", true)
+				corrupted.skills.push("Corrupted")
+				btl.teams[char.team].members.push(corrupted)
+				return `__${targ.name}__ was defeated and corrupted!`
+			}
+			return "...but it failed!"
+		},
+		getinfo(vars, skill) {
+			return `Attempts to corrupt the foe using **${vars[0].toUpperCase()}**`
+		}
+	}),
+
 	reincarnate: new Extra({
 		name: "Reincarnate",
 		desc: "Summons a level <Level> reincarnate to the user's team. The reincarnate will have stats randomized between <Minimum of Stat> and <Maximum of Stat>, HP at <HP Percent>% of user's Max HP and MP at <Percent>% of user's Max HP. You also choose which skills the reincarnated has. You can add flair to this skill with a {Deploy Message}. These can use %PLAYER% to replace with the user, and %UNDEAD% to replace with the undead.",

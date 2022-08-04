@@ -7,32 +7,16 @@
         "parentId": "957671132457234554",
         "permissionOverwrites": [],
         "messages": [
-            "1004677615753363456",
-            "1004677649211342878",
-            "1004677650687733821",
-            "1004677653896384512",
-            "1004677679653601300",
-            "1004677732329857034",
-            "1004677759899013130",
-            "1004677784465064048",
-            "1004677793835126784",
-            "1004677817356779640",
-            "1004677829629325333",
-            "1004677831369965588",
-            "1004677848486912012",
-            "1004677919743942706",
-            "1004677920884801586",
-            "1004677942028275784",
-            "1004677944263843920",
-            "1004677963364704346",
-            "1004677998848512042",
-            "1004678000597549106",
-            "1004678003474837557",
-            "1004678026992300062",
-            "1004678035309596762",
-            "1004678036668559371",
-            "1004678052825026620",
-            "1004678061993775254"
+            "1004774417957666866",
+            "1004774434726486017",
+            "1004774436211277906",
+            "1004774438283251733",
+            "1004774439549927464",
+            "1004774456046125097",
+            "1004774464862556171",
+            "1004774474027106304",
+            "1004774482709319731",
+            "1004774484240252978"
         ],
         "threads": [],
         "nsfw": false,
@@ -40,7 +24,7 @@
         "name": "testing",
         "rawPosition": 2,
         "topic": null,
-        "lastMessageId": "1004678061993775254",
+        "lastMessageId": "1004774484240252978",
         "rateLimitPerUser": 0,
         "createdTimestamp": 1650817272906
     },
@@ -52,9 +36,8 @@
         "commands": [],
         "members": [
             "957666180791947294",
-            "621307633718132746",
-            "441198920668938260",
-            "516359709779820544"
+            "963785169242841118",
+            "621307633718132746"
         ],
         "channels": [
             "957671132457234554",
@@ -90,7 +73,7 @@
         "nsfwLevel": "DEFAULT",
         "premiumSubscriptionCount": 0,
         "discoverySplash": null,
-        "memberCount": 9,
+        "memberCount": 11,
         "large": false,
         "premiumProgressBarEnabled": false,
         "applicationId": null,
@@ -141,1398 +124,135 @@
         "discoverySplashURL": null,
         "bannerURL": null
     },
-    "turn": 1,
+    "turn": 2,
     "turnorder": [
-        1,
-        2,
         0,
-        4
+        1,
+        1
     ],
-    "testing": 100,
+    "testing": 99,
     "initiator": "621307633718132746",
     "effects": {},
     "teams": [
         {
-            "name": "Valoria",
-            "id": "Valoria",
+            "name": "Rosy",
+            "id": "Rosy",
             "members": [
                 {
-                    "name": "Ramia",
-                    "owner": "516359709779820544",
-                    "level": 65,
-                    "hp": 426,
-                    "mp": 310,
-                    "maxhp": 426,
-                    "maxmp": 310,
-                    "basehp": 36,
-                    "basemp": 29,
-                    "melee": {
-                        "name": "Strike Attack",
-                        "type": "strike",
-                        "pow": 30,
-                        "acc": 95,
-                        "crit": 15
-                    },
-                    "xp": 675315,
-                    "maxxp": 4741253,
-                    "skills": [
-                        "Dokudyne",
-                        "Madokusei",
-                        "BrainBite",
-                        "VileAssault",
-                        "Trickery",
-                        "SpiritLeech",
-                        "UrticatingEnd",
-                        "WebTrap"
-                    ],
-                    "deathquote": [
-                        "Guh... I... tried my best..."
-                    ],
-                    "bio": {
-                        "info": "A small child who usually tries to act pretty seriously to seem all high and mighty, but when she comes into contact with something she loves, that seriousness deteriorates pretty quickly. She loves to play around with those she trusts, however",
-                        "backstory": "",
-                        "voice": "",
-                        "theme": "[Trust me, it's perfect.](https://youtu.be/rcKFUp4YioU)",
-                        "species": "Spider",
-                        "age": 10,
-                        "likes": "",
-                        "dislikes": "",
-                        "fears": "",
-                        "appearance": "https://media.discordapp.net/attachments/686313572975771648/789201984732528640/image0.png",
-                        "height": [
-                            4,
-                            0
-                        ],
-                        "weight": 0,
-                        "gender": "female",
-                        "\"2'7''\"": "2'7''",
-                        "custom": {}
-                    },
-                    "critquote": [
-                        "Ayo, da pizza here!",
-                        "Yeah, take that, %ENEMY%!",
-                        "I hope %ALLY% saw that!"
-                    ],
-                    "trust": {
-                        "Harcvuk": {
-                            "value": 1,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Sky": {
-                            "value": 65,
-                            "nextLevel": 220,
-                            "level": 3,
-                            "amount": {}
-                        },
-                        "Valoria": {
-                            "value": 35,
-                            "nextLevel": 190,
-                            "level": 4,
-                            "amount": "[object Object]35353520352020202035202320202020351535352035201535353020"
-                        },
-                        "Euphorica": {
-                            "value": 105,
-                            "nextLevel": 120,
-                            "level": 2,
-                            "amount": "[object Object]35353535353535353535"
-                        },
-                        "Ira": {
-                            "value": 75,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Rainbow": {
-                            "value": 25,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Dusk": {
-                            "value": 35,
-                            "nextLevel": 140,
-                            "level": 3,
-                            "amount": "[object Object]35353535353535353535"
-                        },
-                        "Flara": {
-                            "value": 45,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Sparky": {
-                            "value": 140,
-                            "nextLevel": 300,
-                            "level": 5
-                        },
-                        "Lena": {
-                            "value": 65,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "SAUM-052": {
-                            "value": 30,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Croato": {
-                            "value": 60,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Melarue": {
-                            "value": 0,
-                            "nextLevel": 140,
-                            "level": 3
-                        },
-                        "Axel": {
-                            "value": 20,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Sun": {
-                            "value": 20,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Lanagu": {
-                            "value": 30,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Bow": {
-                            "value": 20,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Permic": {
-                            "value": 20,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Bayrero": {
-                            "value": 30,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Yanna": {
-                            "value": 20,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Sky(H)": {
-                            "value": 60,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Ayumi": {
-                            "value": 30,
-                            "nextLevel": 100,
-                            "level": 1,
-                            "amount": {}
-                        }
-                    },
-                    "weapon": {},
-                    "charms": [],
-                    "curCharms": [],
-                    "mainElement": "poison",
-                    "mpMeter": [
-                        "Magic Points",
-                        "MP"
-                    ],
-                    "armor": {},
-                    "teamCombo": {
-                        "Valoria": "PsychoWebs"
-                    },
-                    "stats": {
-                        "atk": 38,
-                        "mag": 38,
-                        "prc": 70,
-                        "end": 26,
-                        "chr": 71,
-                        "int": 24,
-                        "agl": 37,
-                        "luk": 71
-                    },
-                    "basestats": {
-                        "baseatk": 6,
-                        "basemag": 6,
-                        "baseprc": 6,
-                        "baseend": 5,
-                        "basechr": 7,
-                        "baseint": 3,
-                        "baseagl": 5,
-                        "baseluk": 7
-                    },
-                    "affinities": {
-                        "weak": [
-                            "earth",
-                            "fire"
-                        ],
-                        "resist": [
-                            "psychic",
-                            "grass"
-                        ],
-                        "block": [],
-                        "repel": [],
-                        "drain": [
-                            "poison"
-                        ]
-                    },
-                    "autolearn": {
-                        "0": true,
-                        "1": true,
-                        "2": true,
-                        "3": true,
-                        "4": true,
-                        "5": true,
-                        "6": true,
-                        "7": true
-                    },
-                    "quotes": {
-                        "meleequote": [],
-                        "physquote": [
-                            "Check this out!",
-                            "Take this, %ENEMY%!",
-                            "Here comes the chuu-chuu train! Hope you like %SKILL%s!"
-                        ],
-                        "magquote": [
-                            "Haah! Take this!",
-                            "Can you take my %SKILL%, %ENEMY%???",
-                            "This %SKILL%'s coming for you!"
-                        ],
-                        "allyatkquote": [],
-                        "lbquote": [],
-                        "strongquote": [
-                            "And stay down!!",
-                            "Don't try us!",
-                            "We won't go down without a fight!",
-                            "Your first mistake was encountering us, your second was standing in our way!"
-                        ],
-                        "missquote": [
-                            "Maybe I'm the one who needs glasses."
-                        ],
-                        "weakquote": [
-                            "It isn't my day, is it?"
-                        ],
-                        "hurtquote": [
-                            "Alright, [this](https://www.youtube.com/watch?v=dQw4w9WgXcQ) is what you get!!",
-                            "Hey, leave me alone!",
-                            "Stop it stop it!!",
-                            "-",
-                            "Owie!",
-                            "What was that for??"
-                        ],
-                        "resistquote": [
-                            "OW OW OW OW OW- Wait, wrong line.",
-                            "Wrong answer!"
-                        ],
-                        "blockquote": [],
-                        "repelquote": [],
-                        "drainquote": [
-                            "Is it Christmas yet?"
-                        ],
-                        "dodgequote": [
-                            "Missed me!",
-                            "Are you blind?",
-                            "Denied!",
-                            "Try aiming!",
-                            "Aim!!!",
-                            "I know some of these things don't have eyes, but come on, this is a bit much!",
-                            "Darn, your skill was just an inch away.",
-                            "No Perception or what?",
-                            "I exist, yknow...",
-                            "Better than most, actually.",
-                            "Come on now, use that high perception of yours!",
-                            "And I'm not even the fastest on the team.",
-                            "Skill issue?"
-                        ],
-                        "killquote": [
-                            "I guess I was just too strong for you!"
-                        ],
-                        "allydeathquote": [
-                            "It seems",
-                            "Alright %ENEMY%, that's the last straw!",
-                            "Leave %ALLY% alone!!"
-                        ],
-                        "healquote": [],
-                        "helpedquote": [
-                            "[👍]"
-                        ],
-                        "consolequote": [],
-                        "imfinequote": [],
-                        "lvlquote": []
-                    },
-                    "leaderskill": {
-                        "name": "LuckyShot",
-                        "type": "crit",
-                        "var1": "physical",
-                        "var2": 10
-                    },
-                    "lb": null,
-                    "teamcombos": {
-                        "Valoria": {
-                            "name": "Psychokinetic Webfire",
-                            "users": [
-                                "Ramia",
-                                "Valoria"
-                            ],
-                            "desc": "Ramia fires webs upward, and with Valoria's help, they rain down on the foe, with each one exploding in a purple explosion as they hit the floor. This debuffs the foe's agility 3 times.",
-                            "hits": 5,
-                            "extras": {
-                                "buff": [
-                                    [
-                                        "agl",
-                                        "-3",
-                                        100
-                                    ]
-                                ]
-                            }
-                        }
-                    },
-                    "truename": "Ramia",
-                    "id": 0,
-                    "buffs": {
-                        "atk": 0,
-                        "mag": 0,
-                        "end": 0,
-                        "prc": 0,
-                        "agl": 0,
-                        "crit": 0
-                    },
-                    "lbp": 0,
-                    "donetc": false,
-                    "leader": true,
-                    "team": "0",
-                    "pos": "0"
-                },
-                {
-                    "name": "Euphorica",
-                    "owner": "516359709779820544",
-                    "level": 65,
-                    "hp": 483,
-                    "mp": 350,
-                    "maxhp": 483,
-                    "maxmp": 350,
-                    "basehp": 35,
-                    "basemp": 30,
-                    "melee": {
-                        "name": "Strike Attack",
-                        "type": "strike",
-                        "pow": 30,
-                        "acc": 95,
-                        "crit": 15
-                    },
-                    "xp": 2845762,
-                    "maxxp": 4741253,
-                    "skills": [
-                        "Freidyne",
-                        "Mafreidyne",
-                        "RadiationBurn",
-                        "Mabufula",
-                        "FrostBurn",
-                        "Bufudyne",
-                        "Mamakakaja",
-                        "NukeAmp"
-                    ],
-                    "weapon": {},
-                    "bio": {
-                        "info": "A gooey cyan blob with a nuclear core, hailing from space. They communicate in splishy noises, frequent splishing indicates excitement.",
-                        "backstory": "",
-                        "voice": "s l i m e",
-                        "theme": "",
-                        "species": "",
-                        "age": 10,
-                        "likes": "",
-                        "dislikes": "",
-                        "fears": "",
-                        "appearance": "https://media.discordapp.net/attachments/525031181616545818/728963333734268968/euph.png",
-                        "height": [
-                            4,
-                            0
-                        ],
-                        "weight": 0,
-                        "gender": "",
-                        "custom": {}
-                    },
-                    "critquote": [],
-                    "deathquote": [],
-                    "trust": {
-                        "Valoria": {
-                            "value": 45,
-                            "nextLevel": 120,
-                            "level": 2,
-                            "amount": "[object Object]353535203520202020302035153535203520153535202020"
-                        },
-                        "Ramia": {
-                            "value": 95,
-                            "nextLevel": 120,
-                            "level": 2,
-                            "amount": "[object Object]35353535353535353535"
-                        },
-                        "Sky": {
-                            "value": 65,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Dusk": {
-                            "value": 30,
-                            "nextLevel": 120,
-                            "level": 2,
-                            "amount": "[object Object]35353535353535353535"
-                        },
-                        "Flara": {
-                            "value": 20,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Sutela": {
-                            "value": -5,
-                            "nextLevel": 150,
-                            "level": 2,
-                            "dislike": 90
-                        },
-                        "Ira": {
-                            "value": 85,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Lanagu": {
-                            "value": 10,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Sun": {
-                            "value": 100,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Hurricane": {
-                            "value": 25,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Karma": {
-                            "value": 45,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Permic": {
-                            "value": 50,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "John": {
-                            "value": 25,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Miles": {
-                            "value": 25,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Harcvuk": {
-                            "value": 25,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Patella": {
-                            "value": -100,
-                            "nextLevel": 100,
-                            "level": 1,
-                            "dislike": 30
-                        },
-                        "Croato": {
-                            "value": 60,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Melarue": {
-                            "value": 130,
-                            "nextLevel": 140,
-                            "level": 3
-                        },
-                        "Axel": {
-                            "value": 20,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Lena": {
-                            "value": 30,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Bow": {
-                            "value": 20,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "SAUM-052": {
-                            "value": 20,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Bayrero": {
-                            "value": 30,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Sky(H)": {
-                            "value": 90,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Ayumi": {
-                            "value": 30,
-                            "nextLevel": 100,
-                            "level": 1
-                        }
-                    },
-                    "charms": [],
-                    "curCharms": [],
-                    "mainElement": "nuclear",
-                    "nickname": "Euphy",
-                    "mpMeter": [
-                        "Magic Points",
-                        "MP"
-                    ],
-                    "armor": {},
-                    "stats": {
-                        "atk": 22,
-                        "mag": 74,
-                        "prc": 37,
-                        "end": 71,
-                        "chr": 37,
-                        "int": 25,
-                        "agl": 71,
-                        "luk": 38
-                    },
-                    "basestats": {
-                        "baseatk": 1,
-                        "basemag": 10,
-                        "baseprc": 5,
-                        "baseend": 7,
-                        "basechr": 5,
-                        "baseint": 4,
-                        "baseagl": 7,
-                        "baseluk": 6
-                    },
-                    "affinities": {
-                        "weak": [
-                            "curse",
-                            "earth"
-                        ],
-                        "resist": [
-                            "water",
-                            "strike"
-                        ],
-                        "block": [],
-                        "repel": [],
-                        "drain": [
-                            "nuclear"
-                        ]
-                    },
-                    "autolearn": {
-                        "7": true,
-                        "true": true
-                    },
-                    "quotes": {
-                        "meleequote": [],
-                        "physquote": [],
-                        "magquote": [],
-                        "allyatkquote": [],
-                        "lbquote": [],
-                        "strongquote": [
-                            "[Agressive Splishing]"
-                        ],
-                        "missquote": [],
-                        "weakquote": [],
-                        "hurtquote": [],
-                        "resistquote": [],
-                        "blockquote": [],
-                        "repelquote": [],
-                        "drainquote": [
-                            "[Absorption sounds, then a thankful smile]"
-                        ],
-                        "dodgequote": [
-                            "[Smug Splishing]"
-                        ],
-                        "killquote": [],
-                        "allydeathquote": [],
-                        "healquote": [],
-                        "helpedquote": [
-                            "[👍]"
-                        ],
-                        "consolequote": [],
-                        "imfinequote": [],
-                        "lvlquote": []
-                    },
-                    "leaderskill": {
-                        "name": "Intramural Core",
-                        "type": "status",
-                        "var1": "freeze",
-                        "var2": 10
-                    },
-                    "lb": null,
-                    "truename": "Euphorica",
-                    "id": 1,
-                    "buffs": {
-                        "atk": 0,
-                        "mag": 0,
-                        "end": 0,
-                        "prc": 0,
-                        "agl": 0,
-                        "crit": 0
-                    },
-                    "lbp": 0,
-                    "donetc": false,
-                    "team": "0",
-                    "pos": "1",
-                    "guard": 0.45
-                },
-                {
-                    "name": "Valoria",
-                    "owner": "516359709779820544",
-                    "level": 77,
-                    "hp": 498,
-                    "mp": 493,
-                    "maxhp": 498,
-                    "maxmp": 529,
+                    "name": "Rosy",
+                    "owner": "621307633718132746",
+                    "level": 71,
+                    "hp": 155,
+                    "mp": 542,
+                    "maxhp": 310,
+                    "maxmp": 630,
                     "basehp": 30,
                     "basemp": 35,
+                    "mpMeter": [
+                        "Magic Points",
+                        "MP"
+                    ],
                     "melee": {
-                        "name": "PsyBash",
+                        "name": "\"Punch\"",
                         "type": "strike",
                         "pow": 30,
                         "acc": 95,
                         "crit": 15
                     },
-                    "xp": 1273706,
-                    "maxxp": 26403897,
-                    "skills": [
-                        "HealSymphony",
-                        "CuringWall",
-                        "Samarecarm",
-                        "Diarahan",
-                        "CopySkill",
-                        "EncasedPsyche",
-                        "Prakrti",
-                        "InvigII",
-                        "Pralaya"
-                    ],
-                    "deathquote": [],
                     "weapon": {},
-                    "bio": {
-                        "info": "Valoria is a quiet, innocent Tanuki. She does not speak much amongst those she's not very familiar with. Many things are foreign to her due to the fact that she is not from Yaretza. She prefers peace over violence, and due to her timidness, may not fight back if provoked alone. Incapable of making choices alone.",
-                        "backstory": "Valoria is a tanuki from space, hailing from a once extravagant planet called Cosmaria. She was part of the royal family, as her mother was a sister of the king's daughter. She lived with her parents, and brother. \n\nHowever, cruel figures that I'm too lazy to describe right now arrived to invade. Most of the royal family was killed, and that includes her parents. 3 others escaped, herself, her brother and the king's daughter.\n\nThe three were separated, both having escaped in separate ''Capsules''. Her capsule crash-landed on the <#833106074659454986> of Yaretza, and was discovered by the group.",
-                        "voice": "[Haru (Persona 5)](https://www.youtube.com/watch?v=SKOY2Xavtn0)",
-                        "theme": "[Pull the Trigger - Persona Q2: New Cinema Labyrinth](https://youtu.be/n5O_jq1CSv0)",
-                        "species": "Cosmarian Tanuki",
-                        "age": 10,
-                        "likes": "Hugs, Cakes, Close Friendships",
-                        "dislikes": "Violence, Making Choices",
-                        "fears": "Being stranded, Near death situations\n\n<Advantages> Usually very kind, F l o  a t, Knowledge about the ✨ stars ✨ \n\n<Disadvantages> Heat makes her tired, Scares easilly, Not very agile",
-                        "appearance": "https://cdn.discordapp.com/attachments/820036937791438859/924800883454271578/Valoria.png",
-                        "height": [
-                            4,
-                            0
-                        ],
-                        "weight": 0,
-                        "gender": "female",
-                        "custom": {}
-                    },
-                    "critquote": [
-                        "Did... I do that...??",
-                        "...Maybe I should infuse my attacks with the power of pizza thoughts..."
+                    "armor": {},
+                    "xp": 123610,
+                    "maxxp": 11188725,
+                    "skills": [
+                        "FireCrack",
+                        "PKFire-Pi",
+                        "Corrupt",
+                        "PKFreeze-Gamma",
+                        "Wormhole-Beta",
+                        "Ice+",
+                        "InvigII",
+                        "Test"
                     ],
+                    "critquote": [],
+                    "deathquote": [
+                        "...I will...make you pay for this...",
+                        "...I..I refuse! I can still...I...",
+                        "..."
+                    ],
+                    "bio": {
+                        "species": "Loly",
+                        "age": 10,
+                        "info": "Rosy is a tsundere with anger issues.\nShe only trusts her friends.",
+                        "backstory": "Rosy lived with her sister (Ruby) and read her books until MW1 happened. Being the only surviving Loly of MW1, Rosy started travelling in other universes looking for a new home. In one of them she was kidnapped  and locked away in a dungeon...to be later rescued by Felix. He let her live in the abandoned library on FelixLand where she spends most of her time with [Redacted].\n\n<Loly Gender> DualEyed",
+                        "likes": "",
+                        "dislikes": "",
+                        "fears": "",
+                        "voice": "",
+                        "theme": "",
+                        "height": [
+                            1,
+                            4
+                        ],
+                        "gender": "female",
+                        "weight": 0,
+                        "custom": {},
+                        "fullname": "Rosy Natsuki"
+                    },
                     "trust": {
-                        "Sky": {
-                            "value": 566,
-                            "nextLevel": 990,
-                            "level": 19,
-                            "amount": {}
-                        },
-                        "Euphorica": {
-                            "value": 45,
-                            "nextLevel": 120,
-                            "level": 2,
-                            "amount": "[object Object]35353535353535353535"
-                        },
-                        "Lena": {
-                            "value": 45,
-                            "nextLevel": 950,
-                            "level": 18
-                        },
-                        "Dusk": {
-                            "value": 125,
-                            "nextLevel": 150,
-                            "level": 2,
-                            "amount": "[object Object]35353535353535353535"
-                        },
-                        "Ramia": {
-                            "value": 5,
-                            "nextLevel": 190,
-                            "level": 4,
-                            "amount": "[object Object]3535353535353535353535"
-                        },
-                        "Ira": {
-                            "value": 65,
-                            "nextLevel": 210,
-                            "level": 5
-                        },
-                        "Sparky": {
-                            "value": 140,
-                            "nextLevel": 190,
-                            "level": 4
-                        },
-                        "Rainbow": {
-                            "value": 75,
-                            "nextLevel": 170,
-                            "level": 3
-                        },
-                        "Karma": {
-                            "value": 60,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Croato": {
-                            "value": 95,
-                            "nextLevel": 210,
-                            "level": 5
-                        },
-                        "Rattle": {
+                        "Negagen": {
                             "value": 10,
-                            "nextLevel": 210,
-                            "level": 5
-                        },
-                        "Brainfreeze": {
-                            "value": 45,
-                            "nextLevel": 150,
+                            "nextLevel": 120,
                             "level": 2
                         },
-                        "Permic": {
-                            "value": 70,
-                            "nextLevel": 160,
-                            "level": 4
-                        },
-                        "Sutela": {
-                            "value": 0,
-                            "nextLevel": 140,
-                            "level": 3
-                        },
-                        "Firestorm": {
-                            "value": 50,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Morisonu": {
-                            "value": 25,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Flara": {
-                            "value": 910,
-                            "nextLevel": 1000,
-                            "level": 10
-                        },
-                        "SAUM-052": {
-                            "value": 10,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "XCyan": {
-                            "value": 35,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Lanagu": {
-                            "value": 195,
-                            "nextLevel": 490,
-                            "level": 10
-                        },
-                        "Harcvuk": {
-                            "value": 40,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Melarue": {
-                            "value": 40,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Axel": {
-                            "value": 30,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Sun": {
-                            "value": 80,
-                            "nextLevel": 140,
-                            "level": 3
-                        },
-                        "Bow": {
-                            "value": 35,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Yanna": {
-                            "value": 0,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Monum": {
-                            "value": 50,
-                            "nextLevel": 180,
-                            "level": 5
-                        },
-                        "Ayumi": {
-                            "value": 90,
-                            "nextLevel": 100,
-                            "level": 1,
-                            "amount": {}
-                        },
-                        "Gura": {
-                            "value": 80,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Bayrero": {
-                            "value": 130,
-                            "nextLevel": 160,
-                            "level": 4
+                        "Valoria": {
+                            "value": 60,
+                            "nextLevel": 120,
+                            "level": 2
                         },
                         "Pank": {
-                            "value": 50,
-                            "nextLevel": 220,
-                            "level": 7
-                        },
-                        "Nazier": {
-                            "value": 50,
-                            "nextLevel": 140,
-                            "level": 3
-                        },
-                        "Sky(B)": {
-                            "value": 100,
-                            "nextLevel": 140,
-                            "level": 3
-                        },
-                        "Taletan": {
-                            "value": 50,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Rosy": {
                             "value": 60,
-                            "nextLevel": 120,
-                            "level": 2
+                            "nextLevel": 100,
+                            "level": 1
                         },
                         "Viridian": {
                             "value": 60,
                             "nextLevel": 100,
                             "level": 1
-                        },
-                        "Sky(H)": {
-                            "value": 80,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Valoria": {
-                            "amount": 215,
-                            "maximum": 205,
-                            "level": 8
                         }
                     },
-                    "charms": [
-                        "FragileHeart"
-                    ],
-                    "curCharms": [
-                        "FragileHeart"
-                    ],
-                    "lb4": {
-                        "name": "SoothingTune",
-                        "class": "heal",
-                        "pow": 9999,
-                        "cost": 450,
-                        "status": "none",
-                        "statuschance": 0
-                    },
-                    "mainElement": "heal",
-                    "mpMeter": [
-                        "PsychicEnergy",
-                        "PSY"
-                    ],
-                    "armor": {},
-                    "nickname": "Sweet",
-                    "teamCombo": {
-                        "Sky": "FlyingColors",
-                        "Flara": "ChargedBlizzard",
-                        "Lanagu": "DarknessRise",
-                        "Ira": "PsychicDestruction"
-                    },
+                    "mainElement": "fire",
                     "stats": {
-                        "atk": 34,
-                        "mag": 85,
-                        "prc": 30,
-                        "end": 43,
-                        "chr": 83,
-                        "int": 44,
-                        "agl": 43,
-                        "luk": 83
+                        "atk": 24,
+                        "mag": 80,
+                        "prc": 42,
+                        "end": 25,
+                        "chr": 38,
+                        "int": 80,
+                        "agl": 77,
+                        "luk": 40
                     },
                     "basestats": {
                         "baseatk": 1,
-                        "basemag": 9,
-                        "baseprc": 5,
-                        "baseend": 5,
-                        "basechr": 7,
-                        "baseint": 6,
-                        "baseagl": 5,
-                        "baseluk": 7
-                    },
-                    "affinities": {
-                        "weak": [
-                            "gravity"
-                        ],
-                        "resist": [
-                            "ice"
-                        ],
-                        "block": [],
-                        "repel": [],
-                        "drain": [
-                            "spirit"
-                        ]
-                    },
-                    "autolearn": {
-                        "0": true,
-                        "1": true,
-                        "2": true,
-                        "3": true,
-                        "4": true,
-                        "5": true,
-                        "6": true,
-                        "7": true,
-                        "8": true,
-                        "9": true,
-                        "10": true,
-                        "11": true
-                    },
-                    "quotes": {
-                        "meleequote": [
-                            "Sorry, but I must do this.",
-                            "Let's do this.",
-                            "Encountering us was a mistake.",
-                            "You dare challenge this group?",
-                            "Here I come...!"
-                        ],
-                        "physquote": [
-                            "Here I come...!",
-                            "I absolutely must... hey... wait... what is this script?",
-                            "Let's try %SKILL%..."
-                        ],
-                        "magquote": [
-                            "Let's try %SKILL%...",
-                            "Here... goes nothing!",
-                            "Here I come!",
-                            "Take this! %SKILL%!",
-                            "Here comes my %SKILL%!",
-                            "%SKILL%...!"
-                        ],
-                        "allyatkquote": [
-                            "%ALLY%, can I assist you?",
-                            "%ALLY%, let's strike together.",
-                            "We can do more if we do it together, %ALLY%!"
-                        ],
-                        "lbquote": [],
-                        "strongquote": [
-                            "Did I do that...?",
-                            "How convenient.",
-                            "Taake this!",
-                            "Maybe this'll stop you from attacking."
-                        ],
-                        "missquote": [
-                            "Stand still... will you...?",
-                            "Y-You saw n-nothing..."
-                        ],
-                        "weakquote": [
-                            "Look away, LOOK AWAY!",
-                            "H-Hey, I h-have friends to protect!",
-                            "aaaaAAAAAAAAAAA!!",
-                            "T-This isn't the end...",
-                            "H-Hey! Watch the dress!"
-                        ],
-                        "hurtquote": [],
-                        "resistquote": [
-                            "Almost cold.",
-                            "How n**ice** of you! {I'm going to hate myself for this...}",
-                            "Uhm... ”Brrrr“...?",
-                            "I've... never been given a Christmas present before... thank you..."
-                        ],
-                        "blockquote": [],
-                        "repelquote": [
-                            "Sending this right back at you!",
-                            "UwU"
-                        ],
-                        "drainquote": [
-                            "I've... never been given a Christmas present before... thank you..."
-                        ],
-                        "dodgequote": [
-                            "Uhm... I think you missed...",
-                            "I guess I'll pass on death.",
-                            "I'm so slow... You're just terrible at aiming...",
-                            "I was expecting to get hit as I always do... maybe you're blind...?",
-                            "B-But I didn't move... I'm concerned.",
-                            "As one of the slowest here... Shame on you.",
-                            "Almost... almost.",
-                            "Your target is a grey Tanuki...",
-                            "Dodging!",
-                            "Predictable!",
-                            "You're targetting my fur, aren't you.",
-                            "Maybe next time.",
-                            "Not today.",
-                            "If you keep trying...",
-                            "If you want... I can help check your eyesight...",
-                            "Come on, I stick out like a sore thumb!",
-                            "Do you... need assistance...?",
-                            "I can give you a map with directions to the closest place you can get your eyesight checked... wait..."
-                        ],
-                        "killquote": [
-                            "Teamwork!"
-                        ],
-                        "allydeathquote": [
-                            "%ALLY%...",
-                            "%ALLY%...! Nooo!",
-                            "%ALLY%! %ENEMY% will pay for this...",
-                            "It seems",
-                            "I... failed...",
-                            "%ALLY%..."
-                        ],
-                        "healquote": [
-                            "Tough Spot?",
-                            "Allow me to help!",
-                            "No dying now.",
-                            "We've come too far to lose.",
-                            "I won't let you get hurt like this.",
-                            "Those... monsters! We must prevail!",
-                            "As long as I'm here, there's no harming us."
-                        ],
-                        "helpedquote": [
-                            "You're the best!",
-                            "That was close...",
-                            "Much obliged.",
-                            "[👍]"
-                        ],
-                        "consolequote": [
-                            "%ALLY%... are you okay...?",
-                            "%ALLY%...?",
-                            "You're fine... right, %ALLY%?"
-                        ],
-                        "imfinequote": [
-                            "It's fine... thank you, %ALLY%.",
-                            "Thank you for checking, %ALLY%, but I'm okay.",
-                            "%ALLY%... it was... quite a hit..."
-                        ],
-                        "lvlquote": [
-                            "This rush of power..."
-                        ]
-                    },
-                    "leaderskill": {
-                        "name": "Perseverence",
-                        "type": "buff",
-                        "var1": "mag",
-                        "var2": 1
-                    },
-                    "lb": null,
-                    "teamcombos": {
-                        "Sutela": {
-                            "name": "Spirits Aligned",
-                            "users": [
-                                "Valoria",
-                                "Sutela"
-                            ],
-                            "desc": "Valoria and Sutela strike the foe's very soul together, knocking it out of the foe's body and back, which sends them for a dizzying ride! This attack also places down a healing aura that restores 80% of allies' HP who attack them.",
-                            "extras": {
-                                "healverse": [
-                                    80,
-                                    3,
-                                    {}
-                                ]
-                            }
-                        }
-                    },
-                    "weapons": {
-                        "RoyalRapier": {
-                            "name": "Royal Rapier",
-                            "cost": 6955,
-                            "element": "pierce",
-                            "desc": "A shining rapier passed down the Cosmarian royal family. Younger ones who were part of the royal family were to be skilled in rapier usage just in case the worst happened.",
-                            "originalAuthor": "516359709779820544",
-                            "skill": "Pralaya",
-                            "melee": "300",
-                            "atk": "12"
-                        }
-                    },
-                    "armors": {},
-                    "weaponclass": [
-                        "staff",
-                        "pierce"
-                    ],
-                    "armorclass": "light",
-                    "curweapon": {
-                        "name": "Royal Rapier",
-                        "cost": 6955,
-                        "element": "pierce",
-                        "desc": "A shining rapier passed down the Cosmarian royal family. Younger ones who were part of the royal family were to be skilled in rapier usage just in case the worst happened.",
-                        "originalAuthor": "516359709779820544",
-                        "skill": "Pralaya",
-                        "melee": "300",
-                        "atk": "12"
-                    },
-                    "truename": "Valoria",
-                    "id": 2,
-                    "buffs": {
-                        "atk": 0,
-                        "mag": 0,
-                        "end": 0,
-                        "prc": 0,
-                        "agl": 0,
-                        "crit": 0
-                    },
-                    "lbp": 23.85,
-                    "donetc": false,
-                    "team": "0",
-                    "pos": "2"
-                }
-            ],
-            "backup": [
-                {
-                    "name": "Dusk",
-                    "owner": "516359709779820544",
-                    "level": 65,
-                    "hp": 690,
-                    "mp": 175,
-                    "maxhp": 690,
-                    "maxmp": 175,
-                    "basehp": 50,
-                    "basemp": 15,
-                    "melee": {
-                        "name": "Lacerate",
-                        "type": "pierce",
-                        "pow": 30,
-                        "acc": 95,
-                        "crit": 15
-                    },
-                    "xp": 475136,
-                    "maxxp": 4741253,
-                    "skills": [
-                        "BraveBlade",
-                        "UnseenSlashes",
-                        "HurricaneSlash",
-                        "RapierStrike",
-                        "VoidBash",
-                        "YowlingSpirits",
-                        "Masukunda",
-                        "ShadowCounter"
-                    ],
-                    "weapon": {},
-                    "bio": {
-                        "info": "",
-                        "backstory": "",
-                        "voice": "",
-                        "theme": "",
-                        "species": "Eruyami Creature",
-                        "age": 10,
-                        "likes": "",
-                        "dislikes": "",
-                        "fears": "",
-                        "height": [
-                            4,
-                            0
-                        ],
-                        "weight": 0,
-                        "gender": "other",
-                        "custom": {}
-                    },
-                    "trust": {
-                        "Firestorm": {
-                            "value": 60,
-                            "nextLevel": 650,
-                            "level": 12
-                        },
-                        "Valoria": {
-                            "value": 125,
-                            "nextLevel": 150,
-                            "level": 2,
-                            "amount": "[object Object]3535352035202020202035153535203520153535202020"
-                        },
-                        "Sky": {
-                            "value": 80,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Flara": {
-                            "value": 60,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Ira": {
-                            "value": 55,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Sparky": {
-                            "value": 5,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Ramia": {
-                            "value": 65,
-                            "nextLevel": 140,
-                            "level": 3,
-                            "amount": "[object Object]35353535353535353535"
-                        },
-                        "Rainbow": {
-                            "value": 5,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Brainfreeze": {
-                            "value": 40,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Euphorica": {
-                            "value": 40,
-                            "nextLevel": 120,
-                            "level": 2,
-                            "amount": "[object Object]35353535353535353535"
-                        },
-                        "Croato": {
-                            "value": 60,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Melarue": {
-                            "value": 60,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Axel": {
-                            "value": 20,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Sun": {
-                            "value": 20,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Lena": {
-                            "value": 30,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Lanagu": {
-                            "value": 30,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Bow": {
-                            "value": 20,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Permic": {
-                            "value": 20,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "SAUM-052": {
-                            "value": 20,
-                            "nextLevel": 120,
-                            "level": 2
-                        },
-                        "Bayrero": {
-                            "value": 30,
-                            "nextLevel": 100,
-                            "level": 1
-                        },
-                        "Yanna": {
-                            "value": 20,
-                            "nextLevel": 120,
-                            "level": 2
-                        }
-                    },
-                    "lb4": {
-                        "name": "ShadowTendrils",
-                        "class": "atk",
-                        "pow": 1000,
-                        "cost": 450,
-                        "status": "bleed",
-                        "statuschance": 33
-                    },
-                    "critquote": [],
-                    "deathquote": [],
-                    "charms": [],
-                    "curCharms": [],
-                    "mainElement": "slash",
-                    "mpMeter": [
-                        "Magic Points",
-                        "MP"
-                    ],
-                    "transformations": {
-                        "Darkness": {
-                            "name": "Darkness",
-                            "requirement": "belowhalfhp",
-                            "desc": "",
-                            "hp": 0,
-                            "atk": 8,
-                            "mag": -3,
-                            "prc": 3,
-                            "end": 3,
-                            "chr": 0,
-                            "int": 0,
-                            "agl": 1,
-                            "luk": 0,
-                            "tp": 0,
-                            "tpmax": 10,
-                            "level": 1
-                        }
-                    },
-                    "armor": {},
-                    "stats": {
-                        "atk": 74,
-                        "mag": 35,
-                        "prc": 39,
-                        "end": 74,
-                        "chr": 23,
-                        "int": 23,
-                        "agl": 71,
-                        "luk": 36
-                    },
-                    "basestats": {
-                        "baseatk": 10,
-                        "basemag": 3,
+                        "basemag": 10,
                         "baseprc": 7,
-                        "baseend": 10,
-                        "basechr": 2,
-                        "baseint": 2,
+                        "baseend": 2,
+                        "basechr": 3,
+                        "baseint": 10,
                         "baseagl": 7,
-                        "baseluk": 4
+                        "baseluk": 5
                     },
                     "affinities": {
-                        "superweak": [
-                            "bless"
-                        ],
                         "weak": [
-                            "strike"
+                            "electric",
+                            "earth",
+                            "psychic"
                         ],
                         "resist": [],
                         "block": [
-                            "pierce",
-                            "curse"
+                            "fire",
+                            "ice"
                         ],
-                        "repel": [
-                            "slash"
-                        ],
+                        "repel": [],
                         "drain": []
                     },
                     "autolearn": {
@@ -1540,93 +260,101 @@
                         "1": true,
                         "2": true,
                         "3": true,
-                        "4": true,
                         "5": true,
-                        "6": true,
-                        "7": true
+                        "6": true
                     },
                     "quotes": {
                         "meleequote": [],
                         "physquote": [],
                         "magquote": [
-                            "[Wondering how they are %SKILL%ing.]"
+                            "...%SKILL%.",
+                            "I'll show you my special hell.",
+                            "You can either burn to death or freeze to death, what's your choice?",
+                            "You're a waste of my time."
                         ],
                         "allyatkquote": [],
                         "lbquote": [],
-                        "strongquote": [],
-                        "missquote": [],
-                        "weakquote": [],
-                        "hurtquote": [],
-                        "resistquote": [],
-                        "blockquote": [],
-                        "repelquote": [],
-                        "drainquote": [],
-                        "dodgequote": [],
-                        "killquote": [],
-                        "allydeathquote": [
+                        "strongquote": [
+                            "Of course you'd be weak to this.",
+                            "Noted."
+                        ],
+                        "missquote": [
+                            "...I can and WILL try again.",
+                            "...Happens to EVERYONE.",
                             "..."
                         ],
+                        "weakquote": [
+                            "Agh! I'll make you PAY.",
+                            "You ruined my dress.",
+                            "...Just like Ruby."
+                        ],
+                        "hurtquote": [
+                            "My dress will get dirty thanks to you.",
+                            "Ow.",
+                            "..."
+                        ],
+                        "resistquote": [],
+                        "blockquote": [
+                            "...Seriously?",
+                            "Oh yeah let's use the same magic she's attacking us with, how could it fail? IDIOT."
+                        ],
+                        "repelquote": [],
+                        "drainquote": [],
+                        "dodgequote": [
+                            "...I expected worse.",
+                            "...Is this all you can do?"
+                        ],
+                        "killquote": [
+                            "I hope you enjoyed my special hell.",
+                            "And you died. Maybe think twice next time? Ah no, you can't...you're DEAD.",
+                            "Finally. You were getting really annoying."
+                        ],
+                        "allydeathquote": [],
                         "healquote": [],
                         "helpedquote": [
-                            "[👍]"
+                            "This is useful.",
+                            "...Thanks.",
+                            "Do it sooner next time."
                         ],
                         "consolequote": [],
                         "imfinequote": [],
                         "lvlquote": []
                     },
                     "leaderskill": {
-                        "name": "Courage",
+                        "name": "QuickWormholes",
                         "type": "buff",
-                        "var1": "atk",
+                        "var1": "agl",
                         "var2": 1
                     },
-                    "lb": {
-                        "1": {
-                            "name": "Rapier Arts",
-                            "class": "atk",
-                            "pow": 400,
-                            "cost": 100,
-                            "status": "bleed",
-                            "statuschance": 20
-                        },
-                        "2": {
-                            "name": "Rapier Storm",
-                            "class": "atk",
-                            "pow": 600,
-                            "cost": 230,
-                            "status": "bleed",
-                            "statuschance": 20
-                        },
-                        "3": {
-                            "name": "Shadow Slashes",
-                            "class": "atk",
-                            "pow": 800,
-                            "cost": 300,
-                            "status": "bleed",
-                            "statuschance": 20
-                        }
-                    },
-                    "id": 3,
+                    "lb": null,
+                    "truename": "Rosy",
+                    "id": 0,
                     "buffs": {
                         "atk": 0,
                         "mag": 0,
                         "end": 0,
                         "prc": 0,
-                        "agl": 0,
+                        "agl": 1,
                         "crit": 0
                     },
                     "lbp": 0,
                     "donetc": false,
-                    "team": 0
+                    "leader": true,
+                    "team": "0",
+                    "pos": "0",
+                    "lastdmg": [
+                        155
+                    ]
                 }
             ],
+            "backup": [],
             "items": {},
             "pets": {},
             "leaderskill": {
-                "name": "LuckyShot",
-                "type": "crit",
-                "var1": "physical",
-                "var2": 10
+                "name": "QuickWormholes",
+                "type": "buff",
+                "var1": "agl",
+                "var2": 1
             }
         },
         {
@@ -1636,118 +364,95 @@
             "forcehorde": true,
             "members": [
                 {
-                    "level": 14,
-                    "hp": 9,
-                    "mp": 100,
+                    "level": 75,
+                    "hp": 7000,
+                    "mp": 5968,
                     "melee": {
-                        "name": "Strike Attack",
-                        "type": "strike",
+                        "name": "Pierce Attack",
+                        "type": "pierce",
                         "pow": 30,
                         "acc": 95,
                         "crit": 15
                     },
                     "skills": [
-                        "Lunge",
-                        "Magna",
-                        "Mahana",
-                        "Hanama"
+                        "LightHand",
+                        "TentacleSwipe",
+                        "Maragidyne",
+                        "Agidyne",
+                        "Mabufudyne",
+                        "Bufudyne",
+                        "Maziodyne",
+                        "Ziodyne",
+                        "Magarudyne",
+                        "Garudyne",
+                        "Mapsiodyne",
+                        "Psiodyne",
+                        "Maeigaon",
+                        "Eigaon",
+                        "Hama",
+                        "Mahama",
+                        "Makougaon",
+                        "Kougaon",
+                        "LightStorm",
+                        "Megidolaon",
+                        "Makarakarn",
+                        "Tetrakarn",
+                        "Diarama"
                     ],
-                    "image": "https://cdn.discordapp.com/attachments/958747864970981376/970731346198679652/Grassimp.png",
-                    "journal": "Defenseless bug that hides under bushes. They warm up to other people very quickly, and never intend to hurt others. They love being held & pet, and nuzzle others to show their trust. During the summers, they bloom & hand out the blueberries produced to friends & trusted allies.",
-                    "dreams": [
-                        "...Food... Food...",
-                        "...Scary... Scary...",
-                        "...Run... Run...",
-                        "...Find... Shelter..."
-                    ],
-                    "loot": [
-                        {
-                            "type": "item",
-                            "id": "Sweet",
-                            "amount": 25,
-                            "chance": 33.3333333
-                        }
-                    ],
-                    "negotiate": [
-                        {
-                            "name": "Pet",
-                            "desc": "Pet the Grassimp.",
-                            "action": "%PLAYER% pets the Grassimp! It's satisfied.",
-                            "convince": 100
-                        }
-                    ],
-                    "negotiateDefs": {
-                        "required": 4,
-                        "qualities": {
-                            "atk": 1,
-                            "mag": 7,
-                            "end": 1,
-                            "skill": "Hanama"
-                        }
-                    },
-                    "name": "Grassimp",
-                    "mainElement": "almighty",
-                    "xp": 1252,
+                    "journal": "The Luminosity aged over time, and lost some of her power due to the fact that everybody stopped worshipping her. Her elder ancestor would step in if provoked. This is her at full power, while everyone still worshipped her, and gave strength. This battle will be a lengthy one. **Good luck**.",
+                    "dreams": [],
+                    "name": "ElderLuminosity",
+                    "image": "Luminosity",
+                    "mainElement": "strike",
+                    "xp": 200000,
                     "stats": {
-                        "atk": 18,
-                        "mag": 18,
-                        "prc": 16,
-                        "end": 19,
-                        "chr": 11,
-                        "int": 12,
-                        "agl": 12,
-                        "luk": 17
+                        "atk": 81,
+                        "mag": 81,
+                        "prc": 75,
+                        "end": 22,
+                        "chr": 58,
+                        "int": 51,
+                        "agl": 21,
+                        "luk": 32
                     },
                     "affinities": {
-                        "weak": [
-                            "fire"
-                        ],
-                        "resist": [
-                            "grass"
-                        ],
+                        "weak": [],
+                        "resist": [],
                         "block": [],
                         "repel": [],
-                        "drain": [
-                            "water"
-                        ]
+                        "drain": []
                     },
                     "quotes": {},
                     "lb": null,
-                    "type": "none",
-                    "statusaffinities": {
-                        "block": [
-                            "ego"
-                        ]
-                    },
+                    "type": "deity",
+                    "difficulty": "legacy",
                     "enemy": true,
-                    "truename": "Grassimp",
-                    "maxhp": 200,
-                    "maxmp": 100,
-                    "id": 4,
+                    "truename": "ElderLuminosity",
+                    "maxhp": 7000,
+                    "maxmp": 6000,
+                    "id": 1,
                     "memory": {},
                     "pacify": 0,
                     "buffs": {
-                        "atk": 0,
-                        "mag": 0,
-                        "end": 0,
-                        "prc": 0,
-                        "agl": 0,
+                        "atk": -1,
+                        "mag": -1,
+                        "end": -1,
+                        "prc": -1,
+                        "agl": -1,
                         "crit": 0
                     },
-                    "lbp": 0,
+                    "lbp": 77.5,
                     "donetc": false,
                     "team": "1",
                     "pos": "0",
-                    "lastdmg": [
-                        191
-                    ],
-                    "custom": {
-                        "healverse": {
-                            "name": "EncasedPsyche",
-                            "infname": "Valoria",
-                            "heal": 87,
-                            "turns": 3,
-                            "type": "hp"
+                    "affinitycheck": {
+                        "0": {
+                            "superweak": [],
+                            "weak": [],
+                            "resist": [],
+                            "block": [],
+                            "repel": [],
+                            "drain": []
                         }
                     }
                 }
@@ -1757,7 +462,8 @@
             "pets": {}
         }
     ],
-    "curturn": 2,
+    "bossbattle": true,
+    "curturn": 0,
     "action": {
         "move": "melee",
         "index": 0,
@@ -1766,5 +472,5 @@
             0
         ]
     },
-    "forcemessage": "1004678061993775254"
+    "forcemessage": "1004774484240252978"
 }

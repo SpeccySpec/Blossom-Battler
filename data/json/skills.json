@@ -71315,5 +71315,33 @@
                 -15
             ]
         }
+    },
+    "Corrupt": {
+        "name": "Corrupt",
+        "type": "status",
+        "cost": 20,
+        "costtype": "mppercent",
+        "target": "one",
+        "originalAuthor": "621307633718132746",
+        "statusses": {
+            "corrupt": [
+                "mag"
+            ]
+        },
+        "desc": "The user tries to corrupt a foe, and bend their will to the user's."
+    },
+    "Corrupted": {
+        "name": "Corrupted",
+        "type": "passive",
+        "originalAuthor": "621307633718132746",
+        "passive": {
+            "pinchmode": [
+                100,
+                -30,
+                30,
+                25
+            ]
+        },
+        "desc": "The foe has been corrupted and will now work for the party for a short time."
     }
 }
