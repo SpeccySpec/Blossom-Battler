@@ -1042,7 +1042,7 @@ passiveList = {
 
 	pinchmode: new Extra({
 		name: "Pinch Mode",
-		desc: "Once the user is downed, they will be revived at <Revive HP%>% max HP and their skills will have <Damage Boost>% more power, but they will get <Defence Lost>% more damage and every turn they will lose <Lost HP%>% of their max HP. Heals will have no effect on them.",
+		desc: "Once the user is downed, they will be revived at <Revive HP%>% max HP and their skills will have <Damage Boost>% more power, but skills that attack them will have <Defence Lost>% more power and every turn they will lose <Lost HP%>% of their max HP. Heals will have no effect on them.",
 		args: [
 			{
 				name: "Revive HP%",
@@ -1091,18 +1091,16 @@ passiveList = {
 		},
 		statmod(btl, char, skill, vars) {
 			if (char.custom?.pinch) {
-				skill.pow *= (vars[1] / 100) + 1;
+				skill.pow *= (vars[1] / 100) + 1
 			}
 		},
-		dmgmod(char, targ, dmg, skill, btl, vars) {
-			console.log(char.name, targ.name, "idiots here")
-			if (targ.custom?.pinch) {
-				skill.pow *= (vars[2] / 100) + 1;
-				console.log(skill.name, "is pain")
+		onaffinitycheck(char, inf, skill, passive, affinity, btl, vars) {
+			if (char.custom?.pinch) {
+				skill.pow *= (vars[2] / 100) + 1
 			}
 		},
 		getinfo(vars, skill) {
-			return `When downed, the user is revived with **${vars[0]}% of their max HP** and their skills will have **${vars[1]}%** more power, but they will lose **${vars[3]}%** HP every turn, take **${vars[2]}%** more damage and heals will not work`
+			return `When downed, the user is revived with **${vars[0]}% of their max HP** and their skills will have **${vars[1]}%** more power, but they will lose **${vars[3]}%** HP every turn, skills that attack them will have **${vars[2]}%** more power and heals will not work`
 		},
 	}),
 
