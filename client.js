@@ -607,6 +607,7 @@ function resetDailies() {
 	dailyChar = {};
 	dailyEnemy = {};
 	dailyEnemyQuote = {};
+	dailyShip = {};
 
 	fs.writeFileSync(dataPath+'/dailyquote.txt', '');
 	fs.writeFileSync(dataPath+'/dailyskill.txt', '');
@@ -616,6 +617,7 @@ function resetDailies() {
 	fs.writeFileSync(dataPath+'/dailycharacter.txt', '');
 	fs.writeFileSync(dataPath+'/dailyenemy.txt', '');
 	fs.writeFileSync(dataPath+'/dailyenemyquote.txt', '');
+	fs.writeFileSync(dataPath+'/dailyship.txt', '');
 }
 
 // reset if the last day isnt... well, the last day.
