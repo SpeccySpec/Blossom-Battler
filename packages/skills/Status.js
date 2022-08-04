@@ -731,7 +731,6 @@ statusList = {
 		onuse(char, targ, skill, btl, vars) {
 			const stat = vars[0]
 			const chance = ((targ.maxhp / targ.hp) / 10) * (char.stats[stat] / targ.stats[stat]) * (char.stats.luk / targ.stats.luk)
-			console.log(chance)
 			if (Math.random() * 100 <= chance) {
 				if (isBoss(targ)) {
 					extrasList.buff.buffChange(targ, skill, btl, ["target", "all", -1, 100, 3])
