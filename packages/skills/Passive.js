@@ -509,9 +509,9 @@ passiveList = {
 			let accuracy = args[4];
 			let critChance = Math.max((args[5] ?? 0), 0);
 			let hits = args[6];
-			let element = args[7]?.toLowerCase();
-			let atype = args[8]?.toLowerCase();
-			let targets = args[9]?.toLowerCase();
+			let element = args[7].toLowerCase();
+			let atype = args[8].toLowerCase();
+			let targets = args[9].toLowerCase();
 			let status = args[10] || "none";
 			let statusChance = Math.min(Math.max((args[11] ?? 0), 0), 100);
 
@@ -537,7 +537,7 @@ passiveList = {
 
 			if (atype != 'physical' && atype != 'magic' && atype != 'ranged') return void message.channel.send(`${atype} is an invalid form of contact! Try physical, magic or ranged.`);
 
-			if (Targets.includes(targets)) return void message.channel.send('Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n-SpreadOpposing\n- SpreadAllies```')
+			if (!Targets.includes(targets)) return void message.channel.send('Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n-SpreadOpposing\n- SpreadAllies```')
 
 			if (status != 'none') {
 				if (!utilityFuncs.inArray(status, statusEffects)) {
