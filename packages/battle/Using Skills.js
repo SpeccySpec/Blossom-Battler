@@ -545,6 +545,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			for (let i = 0; i < totalHits; i++) {
 				let dmg = genDmg(char, targ, btl, skill);
 				
+				// Sustain Extra
 				if (i > 0 && !skill.extras?.sustain) {
 					if (skill.extras?.reverse) {
 						let lowestpow = divideBy(dmg, 9, 10, totalHits-1);
@@ -553,6 +554,16 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 						dmg -= (diff/i);
 					} else {
 						dmg = divideBy(dmg, 9, 10, i-1);
+					}
+				}
+				// Extrahit Passive
+				if (skill?.custom?.multipower) {
+					if (i >= skill.custom.multipower[0] && i <= skill.custom.multipower[1]) {
+						dmg *= skill.custom.multipower[2]/100;
+					}
+
+					if (i == skill.custom.multipower[1]) {
+						killVar(skill, 'multipower');
 					}
 				}
 

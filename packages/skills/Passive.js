@@ -759,10 +759,13 @@ passiveList = {
 			makePassive(skill, "extrahit", [hits, chance, powerMult]);
 			return true;
 		},
+		hardcoded: true,
 		statmod(btl, char, skill, vars) {
 			let txt = false;
+			let firstHit = false
+			
 			for (let i = 0; i < skill.hits; i++) {
-				let c = vars[1]-((vars[1]/10)*i);
+				let c = vars[1]-((vars[1]/(10+(vars[1]/15*(i+1))))*i);
 
 				if (randNum(1, 100) <= c) {
 					if (!txt) {
@@ -772,13 +775,17 @@ passiveList = {
 
 					if (!skill.hits) skill.hits = 1;
 					skill.hits++;
+					if (!firstHit) firstHit = skill.hits - 1;
 				} else {
 					break;
 				}
 			}
+			if (firstHit) {
+				addCusVal(skill, "multipower", [firstHit, skill.hits, vars[2]]);
+			}
 		},
 		getinfo(vars, skill) {
-			return `Has a **${vars[1]}%** chance to **hit ${vars[0]} more time${vars[0] > 1 ? 's' : ''}** from a single hit skill with **${vars[2]}%** power`
+			return `Has a **${vars[1]}%** chance to **hit up to ${vars[0]} more time${vars[0] > 1 ? 's' : ''}** from a single hit skill with **${vars[2]}%** power`
 		}
 	}),
 
