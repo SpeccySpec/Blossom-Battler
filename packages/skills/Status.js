@@ -104,6 +104,8 @@ statusList = {
 				return void message.channel.send("That's not a valid stat!");
 			if (stages == 0)
 				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
+			if (Math.abs(stages) > 3) 
+				return void message.channel.send("The maximum amount of stages is 3!");
 			if (chance <= 0)
 				return void message.channel.send("You can't have a percentage less than 0, as then it would never happen!");
 			if (turns && turns <= 0)
@@ -567,6 +569,8 @@ statusList = {
 				let chance = (args[5] && parseFloat(args[4])) ? parseFloat(args[4]) : 100
 
 				if (!stats.includes(stat)) return void message.channel.send("That's not a valid stat!");
+				if (stages == 0) return void message.channel.send("You can't set a trap to have 0 stages!");
+				if (Math.abs(stages) > 3) return void message.channel.send("The maximum amount of stages is 3!");
 				if (chance <= 0) return void message.channel.send("The trap would be useless if it had a chance of 0%!");
 
 				makeStatus(skill, "trap", [trapName, powerMult, type, stat, stages, chance]);

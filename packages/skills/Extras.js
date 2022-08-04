@@ -471,6 +471,8 @@ extrasList = {
 				return void message.channel.send("That's not a valid stat!");
 			if (stages == 0)
 				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
+			if (Math.abs(stages) > 3) 
+				return void message.channel.send("The maximum amount of stages is 3!");
 			if (chance <= 0)
 				return void message.channel.send("You can't have a percentage less than 0, as then it would never happen!");
 			if (turns && turns <= 0)
