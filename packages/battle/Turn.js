@@ -347,8 +347,11 @@ const menuStates = {
 					if (!skill) continue;
 					if (members[i].pacified) continue;
 
-					if (skill.type === 'heal' && skill.heal.revive) {
-						if (members[i].hp > 0) continue;
+					if (skill.type === 'heal') {
+						if (skill.heal.revive) {
+							if (members[i].hp > 0) continue;
+						}
+						if (members[i]?.status === 'ego') continue;
 					} else if (skill.type === 'status' && skill.statusses.mimic) {
 						if (members[i].hp <= 0) continue;
 						if (members[i].id === char.id) continue;

@@ -2191,7 +2191,7 @@ commands.liststatus = new Command({
 			fear: '<:mental:973077052053921792>50% chance to be immobilized but cured from the status.',
 			rage: '<:mental:973077052053921792>Forced to use stronger melee attack on a random target for 2 turns.',
 			ego: '<:mental:973077052053921792>Unnable to use heal skills for 3 turns.',
-			silence: '<:mental:973077052053921792>Unable to use any magical skills for 2 turns.',
+			silence: '<:mental:973077052053921792>Unable to use any magical skills and be healed for 2 turns.',
 			infatuation: '<:mental:973077052053921792>50% chance to hault attack. Stacks with other status effects.',
 			confusion: '<:mental:973077052053921792>50% chance to damage self when attacking. Stacks with other status effects.',
 			sensitive: '<:mental:973077052053921792>Debuff a random stat once hit a single time per opponent for 3 turns.',

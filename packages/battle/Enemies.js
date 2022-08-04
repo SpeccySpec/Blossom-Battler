@@ -80,7 +80,7 @@ function legacyAi(char, btl) {
 	
 	// Heal if under 1/5 hp
 	if (!isBoss(char) && Math.random() < 0.5) {
-		let healSkills = objClone(possibleSkills).filter(s => (!skillFile[s] || skillFile[s].type != "heal"));
+		let healSkills = objClone(possibleSkills).filter(s => (skillFile[s] && skillFile[s].type == "heal"));
 
 		if (healSkills.length > 0 && char.hp < Math.round(char.maxhp/3)) {
 			let healSkill = healSkills[randNum(healSkills.length-1)];
@@ -97,7 +97,7 @@ function legacyAi(char, btl) {
 			
 			let i = randNum(allySide.length-1);
 			if (allySide[i]) {
-				while (allySide[i].hp <= 0) i = randNum(allySide.length-1);
+				while (allySide[i].hp <= 0 || allySide[i]?.status == 'ego') i = randNum(allySide.length-1);
 			}
 
 			return {
