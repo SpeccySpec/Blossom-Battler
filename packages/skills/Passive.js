@@ -579,7 +579,7 @@ passiveList = {
 			}
 			return true;
 		},
-		onaffinitycheck(char, inf, skill, passive, affinity, btl, vars) {
+		onaffinitycheck(char, inf, skill, passive, affinity, btl, vars, result) {
 			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic')) {
 				if (randNum(1, 100) <= vars[1]) {
 					// Run this function again... but with the COUNTER. Ban repelling to avoid infinite loops, and avoid taking damage ourselves.
