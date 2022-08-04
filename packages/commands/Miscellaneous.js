@@ -300,3 +300,139 @@ commands.invite = new Command({
 	func: (message, args) => {
 	}
 })
+
+credits = [
+	{
+		userID: '516359709779820544',
+		role: "Creator",
+		description: "The self-doubting individual who created Blossom Battler to begin with."
+	},
+	{
+		userID: '441198920668938260',
+		role: "Co-Creator",
+		description: "The chill and talented person responsible for a lot of features and many custom emojis."
+	},
+	{
+		userID: '621307633718132746',
+		role: "Co-Creator",
+		description: "The one with the most efficient code and optimizations, bringing Blossom Battler to the righteous speed it deserves."
+	},
+	{
+		userID: '363363984390356993',
+		role: "Beta Tester",
+		description: "A chill and levelheaded individual person who figured out many bugs with his ability to push skills to the limit."
+	},
+	{
+		userID: '313972298992451585',
+		role: "Beta Tester",
+		description: "A funny guy who always liked to push the limits of things and experiment, for the benefit of it."
+	},
+	{
+		userID: '798092550392381450',
+		role: "Beta Tester",
+		description: "A genuinely sweet guy with a horrendous amount of forks that he made, figuring out issues with the code."
+	},
+	{
+		userID: '412328234198237189',
+		role: "Beta Tester",
+		description: "A guy with a great sense of humor, suggesting ideas and ideas for new features."
+	},
+	{
+		name: "Everyone at the Blossom Battler Discord",
+		description: "You have been very helpful with bug reports and feature suggestions, and you have been a great help to the development of Blossom Battler.",
+		thumbnail: `https://cdn.discordapp.com/attachments/958747864970981376/1004818067953553618/Help.png`
+	},
+	{
+		name: "You",
+		description: "For enjoying Blossom Battler."
+	}
+]
+
+//credits command, with it being a collector with buttons to flip to the next page and previous page.
+commands.credits = new Command({
+	desc: "Shows who created Blossom Battler, beta tested by, and thanks to.",
+	section: "misc",
+	func: (message, args) => {
+		creditsEmbed(message)
+	}
+})
+
+let users = []
+
+creditsEmbed = async (message) => {
+	let index = 0
+	if (users.length < 1) {
+		for (let i = 0; i < credits.length; i++) {
+			if (credits[i].userID) {
+				users.push(await client.users.fetch(credits[i].userID))
+			} else {
+				users.push(null)
+			}
+		}
+	}
+
+	const generateEmbed = async () => {
+		let embed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle('Credits')
+			.setDescription(`This is a list of people who have helped make Blossom Battler, and who have been beta tested by.`)
+			.setFooter(`Page ${index + 1}/${credits.length}`)
+
+		if (credits[index].userID) {
+			if (users[index] != null) {
+				embed.setThumbnail(users[index].displayAvatarURL())
+				embed.addField(`Name`, `${users[index].username}#${users[index].discriminator}`, false)
+			}
+			embed.addField(`Role`, credits[index].role, false)
+			embed.addField(`Description`, credits[index].description, false)
+		} else { 
+			embed.addField(`Name`, credits[index].name, false)
+			embed.addField(`Description`, credits[index].description, false)
+		}
+
+		if (credits[index].thumbnail) {
+			embed.setThumbnail(credits[index].thumbnail)
+		}
+		
+		return embed
+	}
+
+	let embedMessage = ''
+	embedMessage = await message.channel.send({
+		embeds: [await generateEmbed(0)],
+		components: [new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]})]
+	})
+
+	const collector = embedMessage.createMessageComponentCollector({
+		filter: ({user}) => user.id === message.author.id
+	})
+
+	collector.on('collect', async interaction => {
+		if (interaction.component.customId != 'cancel' && interaction.component.customId != 'select') {
+			if (interaction.customId === 'forward') {
+				index++
+
+				if (index > credits.length - 1) {
+					index = 0
+				}
+			} else if (interaction.customId === 'back') {
+				index--
+
+				if (index < 0) {
+					index = credits.length - 1
+				}
+			}
+
+			await interaction.update({
+				embeds: [await generateEmbed(0)],
+				components: [new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]})]
+			})
+		} else if (interaction.customId === 'cancel') {
+			collector.stop()
+			await interaction.update({
+			embeds: [await generateEmbed(0)],
+			components: []
+			})
+		}
+	})
+}
