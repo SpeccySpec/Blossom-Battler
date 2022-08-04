@@ -71381,32 +71381,5 @@
             ]
         },
         "desc": "The foe has been corrupted and will now work for the party for a short time."
-    },
-    "TestYourSkill": {
-        "name": "TestYourSkill",
-        "type": "passive",
-        "originalAuthor": "441198920668938260",
-        "passive": {
-            "counter": [
-                "mag",
-                100,
-                {
-                    "name": "I want to die",
-                    "pow": 420,
-                    "acc": 100,
-                    "crit": 0,
-                    "type": "slash",
-                    "atktype": "physical",
-                    "target": "a",
-                    "hits": 1,
-                    "extras": {
-                        "affinitypow": [
-                            5
-                        ]
-                    }
-                }
-            ]
-        },
-        "desc": "..."
     }
 }
