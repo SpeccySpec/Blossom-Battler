@@ -320,7 +320,7 @@ credits = [
 	{
 		userID: '363363984390356993',
 		role: "Beta Tester",
-		description: "A chill and levelheaded individual person who figured out many bugs with his ability to push skills to the limit."
+		description: "A chill and levelheaded individual who figured out many bugs with his ability to push skills to the limit."
 	},
 	{
 		userID: '313972298992451585',
