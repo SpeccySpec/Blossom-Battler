@@ -11960,7 +11960,7 @@
         "melee": {
             "name": "LightStab",
             "type": "pierce",
-            "pow": 37,
+            "pow": 42,
             "acc": 90,
             "crit": 10,
             "status": "bleed",
@@ -12094,6 +12094,7 @@
         "autolearn": {
             "0": true,
             "1": true,
+            "2": true,
             "3": true,
             "4": true,
             "6": true,
@@ -17890,7 +17891,7 @@
             "dislikes": "Crowds, arguments, and heat.",
             "fears": "Acrophobia (Fear of heights), and Medium level Anxiety.",
             "voice": "",
-            "theme": "",
+            "theme": "https://youtu.be/iaTJBLz_T14",
             "gender": "male",
             "\"to": "To put this somewhat lightly, they’re an odd kid, they ride around on what seems to be a shooting star (they usually end up crashing with it), they hold onto what they think is a broken pocket watch, and they have an old knife. That probably seems bad, definitely. But they only really use that to get some apple slices, or to cut open some other fruit like mangos. but they’re generally nice to most people they pass by and wouldn’t threaten somebody with it.”",
             "height": [
@@ -24403,7 +24404,7 @@
             "acc": 95,
             "crit": 15,
             "status": "dizzy",
-            "statuschance": 5
+            "statuschance": 10
         },
         "stats": {
             "atk": 7,

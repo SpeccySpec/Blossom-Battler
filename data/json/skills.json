@@ -67711,7 +67711,7 @@
         "costtype": "mp",
         "target": "allopposing",
         "originalAuthor": "363363984390356993",
-        "desc": "The user randomly selects between <:fire:962465467845464214><:water:962465470533996586><:ice:962465468042575922><:electric:962465467400851518><:wind:962465470466883705><:earth:962465467455373443><:grass:962465467799310366> elements and casts a tier-2 elemental spell on all enemies",
+        "desc": "The user casts a tier-2 spell among<:fire:962465467845464214> <:water:962465470533996586><:ice:962465468042575922><:electric:962465467400851518><:wind:962465470466883705><:earth:962465467455373443><:grass:962465467799310366> elements on all enemies",
         "extras": {
             "metronome": [
                 "Maragion",
@@ -67722,7 +67722,20 @@
                 "Materazi",
                 "Mahanama"
             ]
-        }
+        },
+        "preskills": [
+            [
+                "ElementalSpell",
+                39
+            ]
+        ],
+        "evoskills": [
+            [
+                "ElementalSorcery",
+                70
+            ]
+        ],
+        "levellock": 40
     },
     "Choma": {
         "name": "Choma",
@@ -71393,5 +71406,129 @@
             ]
         },
         "desc": "The foe has been corrupted and will now work for the party for a short time."
+    },
+    "ElementalSorcery": {
+        "name": "Elemental Sorcery",
+        "type": "almighty",
+        "atktype": "magic",
+        "pow": 350,
+        "hits": 1,
+        "acc": 90,
+        "cost": 24,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "desc": "The user casts a tier-3 spell among <:fire:962465467845464214><:water:962465470533996586><:ice:962465468042575922><:electric:962465467400851518><:wind:962465470466883705><:earth:962465467455373443><:grass:962465467799310366> elements on all enemies",
+        "preskills": [
+            [
+                "ElementalMagic",
+                69
+            ]
+        ],
+        "levellock": 70
+    },
+    "Observe": {
+        "name": "Observe",
+        "type": "status",
+        "cost": 17,
+        "costtype": "mp",
+        "target": "ally",
+        "originalAuthor": "621307633718132746",
+        "statusses": {
+            "buff": [
+                [
+                    "target",
+                    "prc",
+                    1,
+                    100,
+                    null
+                ],
+                [
+                    "user",
+                    "prc",
+                    1,
+                    100,
+                    null
+                ]
+            ]
+        },
+        "desc": "The user observes the battle and tells valuable information to an ally.",
+        "done": true,
+        "levellock": 20,
+        "evoskills": [
+            [
+                "GatherIntel",
+                35
+            ]
+        ]
+    },
+    "GatherIntel": {
+        "name": "GatherIntel",
+        "type": "status",
+        "cost": 32,
+        "costtype": "mp",
+        "target": "allallies",
+        "originalAuthor": "621307633718132746",
+        "statusses": {
+            "buff": [
+                [
+                    "target",
+                    "prc",
+                    1,
+                    100,
+                    null
+                ]
+            ]
+        },
+        "desc": "The user examines the battle and tells valuable information to the entire party.",
+        "levellock": 33,
+        "preskills": [
+            [
+                "Observe",
+                34
+            ]
+        ]
+    },
+    "ElementalSpell": {
+        "name": "Elemental Spell",
+        "type": "almighty",
+        "atktype": "magic",
+        "pow": 60,
+        "hits": 1,
+        "acc": 90,
+        "cost": 6,
+        "costtype": "mp",
+        "target": "allopposing",
+        "originalAuthor": "363363984390356993",
+        "desc": "The user casts a tier-1 spell among <:fire:962465467845464214><:water:962465470533996586><:ice:962465468042575922><:electric:962465467400851518><:wind:962465470466883705><:earth:962465467455373443><:grass:962465467799310366> elements on all enemies",
+        "extras": {
+            "metronome": [
+                "Maragi",
+                "Malaqua",
+                "Mabufu",
+                "Mazio",
+                "Magaru",
+                "Matera",
+                "Mahana"
+            ]
+        },
+        "evoskills": [
+            [
+                "ElementalMagic",
+                40
+            ]
+        ]
+    },
+    "CrueltyPunishment": {
+        "name": "Cruelty Punishment",
+        "type": "passive",
+        "originalAuthor": "363363984390356993",
+        "passive": {
+            "koboost": [
+                "end",
+                -1
+            ]
+        },
+        "desc": "You are not free to decide who shall live and who shall die..."
     }
 }

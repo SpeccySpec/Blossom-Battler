@@ -3,7 +3,4 @@ node_modules/
 package-lock.json
 package.json
 *.zip
-*.json
-*.json
-*.txt
-data/json/957671131446398999/
+data/
