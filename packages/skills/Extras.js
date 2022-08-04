@@ -1739,6 +1739,7 @@ customVariables = {
 	},
 
 	healverse: {
+		toembed: "<:healverse:1004676931117129749>",
 		onturn(btl, char, vars) {
 			vars.turns--;
 			if (vars.turns <= 0) {
@@ -1763,6 +1764,7 @@ customVariables = {
 	},
 
 	powerverse: {
+		toembed: ":powerverse:1004676933109428294",
 		onturn(btl, char, vars) {
 			vars.turns--;
 			if (vars.turns <= 0) {
@@ -1785,6 +1787,7 @@ customVariables = {
 	},
 
 	spreadverse: {
+		toembed: ":spreadverse:1004676935126892574",
 		onturn(btl, char, vars) {
 			vars.turns--;
 			if (vars.turns <= 0) {
@@ -1869,6 +1872,9 @@ customVariables = {
 	},
 
 	shield: {
+		toembed(shield) {
+			return statusEmojis[shield.type ?? "reduce"]
+		},
 		hardcoded: true
 	},
 
@@ -2004,11 +2010,16 @@ customVariables = {
 	},
 
 	charge: {
+		toembed: "<:physical:973077052129423411>",
 		statmod(btl, char, stats, vars) {
 			if (stats[vars.stat]) stats[vars.stat] *= vars.mult;
 			return stats;
 		},
 		endturn(btl, char, vars) {
+			if (!vars.toggle) {
+				vars.toggle = true
+				return
+			}
 			killVar(char, 'charge');
 		}
 	},
@@ -2059,4 +2070,8 @@ customVariables = {
 			}
 		}
 	},
+
+	pinch: {
+		toembed: "<:pinch:1004506376036429924>"
+	}
 }

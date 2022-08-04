@@ -419,13 +419,16 @@ function GetCharStatus(char) {
 		amount = Math.abs(amount)
 		str += (amount == 2 ? "²" : (amount == 3 ? "³" : ""))
 	}
-	const shield = char.custom?.shield
-	if (shield)
-		str += statusEmojis[shield.type ?? "reduce"]
+	const custom = char.custom
+	if (custom)
+		for (let val in custom) {
+			const toembed = customVariables[val]?.toembed
+			if (toembed) {
+				str += typeof toembed == "string" ? toembed : toembed(custom[val])
+			}
+		}
 	if (char.status)
 		str += statusEmojis[char.status]
-	if (char.custom?.pinch)
-		str += statusEmojis.pinch
 	return str
 }
 

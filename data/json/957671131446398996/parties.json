@@ -418,7 +418,8 @@
         "currency": 0,
         "members": [
             "Ramia",
-            "Euphorica"
+            "Euphorica",
+            "Valoria"
         ],
         "backup": [
             "Dusk"
@@ -427,7 +428,8 @@
         "weapons": {},
         "armors": {},
         "negotiates": {},
-        "negotiateAllies": {}
+        "negotiateAllies": {},
+        "discoveries": {}
     },
     "TrueTeamIg": {
         "name": "TrueTeamIg",
