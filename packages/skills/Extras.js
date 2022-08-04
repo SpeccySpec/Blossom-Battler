@@ -274,6 +274,9 @@ extrasList = {
 		targetchange(target, vars, skill) {
 			if (!target.affinities) target.affinities = [];
 
+			// Fail on bosses
+			if (isBoss(target) && skill.type === "status") return "...but it failed!";
+
 			let setAffinities = [];
 			let wasChanged = false;
 
