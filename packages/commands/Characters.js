@@ -1663,7 +1663,7 @@ commands.setlb = new Command({
 			forced: true
 		},
 		{
-			name: "Limit Break Type",
+			name: "Limit Break Class",
 			type: "Word",
 			forced: true
 		},
@@ -1734,17 +1734,19 @@ commands.setlb = new Command({
 		let powerBounds = [450, 600, 750, 900];
 		let percentBounds = [100, 200, 300, 400];
 		let levelLocks = [20, 48, 69, 85];
-		if (thingDefs[args[0]].lb) {
-			if (!thingDefs[args[0]][args[2]-1].lb) return message.channel.send(`Please enter Limit Breaks chronologically! You do not have a level ${args[2]-1} Limit Break.`);
-		} else {
-			if (args[2] > 1) return message.channel.send('Please enter Limit Breaks chronologically, starting from Level 1.');
+
+		if (args[2] < 1) return message.channel.send('Please enter Limit Breaks chronologically, starting from Level 1.');
+		else {
+			if (thingDefs[args[0]].lb && args[2] > 1) {
+				if (!thingDefs[args[0]]?.lb?.[args[2]-1]) return message.channel.send(`Please enter Limit Breaks chronologically! You do not have a level ${args[2]-1} Limit Break.`);
+			}
 		}
 	
 		if (thingDefs[args[0]].level < levelLocks[args[2]-1]) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but they must be at level ${levelLocks[args[2]-1]} to obtain a level ${args[2]} limit break.`);
 
-		if (args[3].toLowerCase() != 'atk' && args[3].toLowerCase() != 'heal') return message.channel.send('Invalid Limit Break Type! Please enter either "Atk" or "Heal".');
-		if (thingDefs[args[0]].lb) {
-			if (thingDefs[args[0]][args[2]-1].type != args[3].toLowerCase()) return message.channel.send(`Please enter limit breaks within the same type! You already have a ${thingDefs[args[0]][args[2]-1].type} Limit Break.`);
+		if (args[3].toLowerCase() != 'atk' && args[3].toLowerCase() != 'heal') return message.channel.send('Invalid Limit Break Class! Please enter either "Atk" or "Heal".');
+		if (thingDefs[args[0]].lb && args[2] > 1) {
+			if (thingDefs[args[0]]?.lb?.[args[2]-1]?.class != args[3].toLowerCase()) return message.channel.send(`Please enter limit breaks within the same class! You already have a ${thingDefs[args[0]].lb[args[2]-1].class} Limit Break.`);
 		}
 	
 		if (args[4] < percentBounds[args[2]-1]) return message.channel.send(`Level ${args[2]} Limit Breaks costs cannot be lower than ${percentBounds[args[2]-1]} LB%.`);
