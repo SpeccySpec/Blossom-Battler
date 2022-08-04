@@ -723,6 +723,8 @@ extrasList = {
 		onuse(char, targ, skill, btl, vars) {
 			let num = randNum(100)
 			let stealTxt = ''
+			
+			if (isBoss(targ)) return '';
 
 			if (targ?.loot && num <= vars[0]) {
 				let weaponFile = setUpFile(`${dataPath}/json/${btl.guild.id}/weapons.json`);
@@ -802,7 +804,7 @@ extrasList = {
 					return stealTxt;
 				}
 			}
-			return `__${char.name}__ failed to steal anything.`
+			return '';
 		},
 		getinfo(vars, skill) {
 			let txt = `Has a ` 
