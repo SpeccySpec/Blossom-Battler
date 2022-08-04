@@ -1404,7 +1404,7 @@ passiveList = {
 			return `Defeating __${targ.name}__ let __${char.name}'s__ _${passive.name}_ ${vars[1] > 0 ? 'buff' : 'debuff'} **${vars[0].toUpperCase()} ${Math.abs(vars[1])} times**.`;
 		},
 		getinfo(vars, skill) {
-			return `Upon foe defeat, buffs ${vars[0].toUpperCase()} **${vars[1]}** times.`
+			return `Upon foe defeat, buffs **${vars[0].toUpperCase()} ${vars[1]}** times.`
 		}
 	}),
 
