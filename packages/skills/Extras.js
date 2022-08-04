@@ -26,6 +26,33 @@ Extra = class extends ArgList {
 	}
 }
 
+/*
+	[[[Hook Documentation - EXTRAS hooks in order of appearance.]]]
+
+	- onuseoverride(char, targ, skill, btl, vars)
+	Overrides the turn, including all damage calculations, and does something else. Should return
+	a string.
+	
+	- onuse(char, targ, skill, btl, vars)
+	If the skill lands, this should do something extra. Should return a string.
+
+	- canuse(char, skill, btl, vars)
+	Can this skill be used? Return a string if not, otherwise, return true. This is calculated when the skill
+	is selected through button. This also affects enemies, as they will ignore this skill in
+	the ai if it cannot be used.
+
+	- onselect(char, skill, btl, vars)
+	onuse but it is ran before all of the damage functions. Should return a string.
+	
+	- statmod(char, skill, vars, btl)
+	Lets you freely modify the stats of a character or skill before use. Don't worry, this is reverted
+	after the damage for this particular skill on this particular target! Should not return anything.
+	
+	- ondamage(char, targ, dmg, skill, btl, vars)
+	onuse but it's done AFTER damage is dealt. Also lets you use the damage we've taken freely, like in
+	drain. Should return a string.
+*/
+
 extrasList = {
 	ohko: new Extra({
 		name: "One Hit KO",
