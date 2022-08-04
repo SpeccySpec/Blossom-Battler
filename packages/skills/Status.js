@@ -11,6 +11,19 @@ forceSingleTarget = (skill) => {
 	return skill;
 }
 
+/*
+	[[[HOOK DOCUMENTATION - STATUS hooks in order of appearance]]]
+
+	- onuse(char, targ, skill, btl, vars)
+	If the skill lands, this should do something extra. Should return a string.
+
+	- onselect(char, skill, btl, vars)
+	onuse but it is ran before all of the damage functions. Should return a string.
+
+	- aithinker(char, targ, act, skill, btl, vars)
+	Modify the points for this action (act) for ai.
+*/
+
 statusList = {
 	status: new Extra({
 		name: 'Status',
