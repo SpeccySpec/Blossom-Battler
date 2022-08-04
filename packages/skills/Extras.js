@@ -681,7 +681,7 @@ extrasList = {
 		},
 		onuseoverride(char, targ, skill, btl, vars) {
 			if (targ.mp <= 0) return `But it failed!`;
-			let mpStolen = Math.max(1, skill.pow+randNum(-10, 10));
+			let mpStolen = Math.floor(Math.max(1, skill.pow+randNum(-10, 10)));
 			if (targ.mp < mpStolen) mpStolen = targ.mp;
 			
 			targ.mp = Math.max(0, targ.mp-mpStolen)
