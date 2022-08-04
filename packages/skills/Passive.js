@@ -1372,6 +1372,40 @@ passiveList = {
 		}
 	})
 */
+
+	koboost: new Extra({
+		name: "KO Boost",
+		desc: "Upon foe defeat, buff a stat.",
+		args: [
+			{
+				name: "Stat",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Stages",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let stat = args[0].toLowerCase();
+			let stages = args[1];
+
+			if (!stats.includes(stat)) return void message.channel.send("That's not a valid stat!");
+			if (stages == 0) return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
+			
+			makePassive(skill, "koboost", [stat, stages]);
+			return true
+		},
+		onkill(char, targ, skill, dmg, passive, btl, vars) {
+			buffStat(char, vars[0], vars[1]);
+			return `Defeating __${targ.name}__ let __${char.name}'s__ _${passive.name}_ buff **${vars[0].toUpperCase()} ${vars[1]} times**.`;
+		},
+		getinfo(vars, skill) {
+			return `Upon foe defeat, buffs ${vars[0]} **${vars[1]}** times.`
+		}
+	})
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.
