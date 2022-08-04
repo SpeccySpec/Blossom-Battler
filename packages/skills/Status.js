@@ -100,7 +100,7 @@ statusList = {
 
 			if (target != 'user' && target != 'target') 
 				return void message.channel.send(`You typed ${target} as the target. It must be either \`user\` or \`target\`.`)
-			if (!stats.includes(stat))
+			if (![...stats, 'crit'].includes(stat))
 				return void message.channel.send("That's not a valid stat!");
 			if (stages == 0)
 				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
@@ -568,7 +568,7 @@ statusList = {
 				let stages = (args[4] && parseInt(args[4])) ? parseInt(args[4]) : -1
 				let chance = (args[5] && parseFloat(args[4])) ? parseFloat(args[4]) : 100
 
-				if (!stats.includes(stat)) return void message.channel.send("That's not a valid stat!");
+				if (![...stats, 'crit'].includes(stat)) return void message.channel.send("That's not a valid stat!");
 				if (stages == 0) return void message.channel.send("You can't set a trap to have 0 stages!");
 				if (Math.abs(stages) > 3) return void message.channel.send("The maximum amount of stages is 3!");
 				if (chance <= 0) return void message.channel.send("The trap would be useless if it had a chance of 0%!");

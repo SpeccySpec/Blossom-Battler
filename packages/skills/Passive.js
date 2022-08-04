@@ -1392,7 +1392,7 @@ passiveList = {
 			let stat = args[0].toLowerCase();
 			let stages = args[1];
 
-			if (!stats.includes(stat)) return void message.channel.send("That's not a valid stat!");
+			if (![...stats, 'crit'].includes(stat)) return void message.channel.send("That's not a valid stat!");
 			if (stages == 0) return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
 			if (Math.abs(stages) > 3) return void message.channel.send("The maximum amount of stages is 3!");
 			

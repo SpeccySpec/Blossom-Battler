@@ -467,7 +467,7 @@ extrasList = {
 
 			if (target != 'user' && target != 'target') 
 				return void message.channel.send(`You typed ${target} as the target. It must be either \`user\` or \`target\`.`)
-			if (!stats.includes(stat))
+			if (![...stats, 'crit'].includes(stat))
 				return void message.channel.send("That's not a valid stat!");
 			if (stages == 0)
 				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
@@ -502,7 +502,8 @@ extrasList = {
 					buffChange(targ, skill, btl, [target, "mag", amount, chance, turns]) + "\n" +
 					buffChange(targ, skill, btl, [target, "end", amount, chance, turns]) + "\n" +
 					buffChange(targ, skill, btl, [target, "agl", amount, chance, turns]) + "\n" +
-					buffChange(targ, skill, btl, [target, "prc", amount, chance, turns])
+					buffChange(targ, skill, btl, [target, "prc", amount, chance, turns]) + "\n" +
+					buffChange(targ, skill, btl, [target, "crit", amount, chance, turns])
 			} else if (typeof stat == "object") {
 				const buffChange = extrasList.buff.buffChange
 				const target = vars[0]
@@ -601,7 +602,7 @@ extrasList = {
 			const stat = args[0].toLowerCase()
 			const trueFa = (args[3] == 'true' || args[3] == 'yes' || args[3] == 'y' || args[3] == '1')
 			const upto = (args[2] == 'true' || args[2] == 'yes' || args[2] == 'y' || args[2] == '1')
-			if (!stats.includes(stat))
+			if (![...stats, 'crit'].includes(stat))
 				return void message.channel.send("That's not a valid stat!");
 			makeExtra(skill, "powerbuff", [stat, args[1], upto, trueFa]);
 			return true
@@ -618,23 +619,19 @@ extrasList = {
 			if (!vars[2]) skill.pow += lmao * 3
 		},
 		getinfo(vars, skill) {
-			let powBuffs = vars.sort((a, b) => {
-				return (stats.indexOf(a[0])*10000 + a[1]*10 + a[2] ? 0 : 1) - (stats.indexOf(b[0])*10000 + b[1]*10 + b[2] ? 0 : 1)
-			})
-
 			let txt = `Increases in power with`
 
 			let curPB = []
-			for (let i in powBuffs) {
+			for (let i in vars) {
 				txt += ` **${powBuffs[i][0].toUpperCase()}** buffs`;
 
-				curPB = powBuffs[i]
+				curPB = vars[i]
 
 				txt += ` by **${curPB[2] ? 'up to' : ''} ${curPB[1] + ((curPB[2] && curPB[3]) ? 100 : 0) }${curPB[3] ? '% of' : ''} power**`
 
-				if (i < powBuffs.length - 2) {
+				if (i < vars.length - 2) {
 					txt += `, `
-				} else if (i == powBuffs.length - 2) {
+				} else if (i == vars.length - 2) {
 					txt += ` and `
 				}
 			}
