@@ -781,7 +781,7 @@ passiveList = {
 				}
 			}
 			if (firstHit) {
-				addCusVal(skill, "multipower", [firstHit, skill.hits, vars[2]]);
+				addCusVal(skill, "multipower", [firstHit, skill.hits-1, vars[2]]);
 			}
 		},
 		getinfo(vars, skill) {
