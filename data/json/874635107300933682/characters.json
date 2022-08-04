@@ -197,7 +197,9 @@
                 "spirit"
             ]
         },
-        "skills": [],
+        "skills": [
+            "DX-Buster"
+        ],
         "autolearn": [],
         "quotes": {
             "meleequote": [],

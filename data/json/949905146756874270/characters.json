@@ -2472,5 +2472,125 @@
                 "brainwash"
             ]
         }
+    },
+    "Mawanoa": {
+        "name": "Mawanoa",
+        "mainElement": "gravity",
+        "weaponclass": "none",
+        "armorclass": "none",
+        "weapons": {},
+        "armors": {},
+        "curweapon": {},
+        "curarmor": {},
+        "owner": "544290248734015488",
+        "level": 65,
+        "hp": 303,
+        "mp": 497,
+        "maxhp": 303,
+        "maxmp": 497,
+        "basehp": 28,
+        "basemp": 37,
+        "mpMeter": [
+            "Magic Points",
+            "MP"
+        ],
+        "melee": {
+            "name": "Peck",
+            "type": "pierce",
+            "pow": 50,
+            "acc": 70,
+            "crit": 15
+        },
+        "stats": {
+            "atk": 22,
+            "mag": 73,
+            "prc": 37,
+            "end": 24,
+            "chr": 36,
+            "int": 71,
+            "agl": 38,
+            "luk": 72
+        },
+        "basestats": {
+            "baseatk": 1,
+            "basemag": 9,
+            "baseprc": 5,
+            "baseend": 3,
+            "basechr": 4,
+            "baseint": 7,
+            "baseagl": 6,
+            "baseluk": 8
+        },
+        "lb": 0,
+        "xp": 0,
+        "maxxp": 4741253,
+        "affinities": {
+            "superweak": [],
+            "weak": [],
+            "resist": [],
+            "block": [],
+            "repel": [],
+            "drain": []
+        },
+        "skills": [
+            "Grydyne",
+            "Magryva",
+            "Lunalok",
+            "Starstrike",
+            "Lunablast",
+            "StarryRain",
+            "GravityAmp"
+        ],
+        "autolearn": [],
+        "quotes": {
+            "meleequote": [],
+            "physquote": [],
+            "magquote": [],
+            "allyatkquote": [],
+            "lbquote": [],
+            "tcquote": [],
+            "strongquote": [],
+            "badatkquote": [],
+            "landedquote": [],
+            "missquote": [],
+            "superweakquote": [],
+            "weakquote": [],
+            "hurtquote": [],
+            "resistquote": [],
+            "blockquote": [],
+            "repelquote": [],
+            "drainquote": [],
+            "dodgequote": [],
+            "deathquote": [],
+            "killquote": [],
+            "pacifyquote": [],
+            "allydeathquote": [],
+            "healquote": [],
+            "helpedquote": [],
+            "consolequote": [],
+            "imfinequote": [],
+            "lvlquote": []
+        },
+        "bio": {
+            "fullname": "",
+            "nickname": "",
+            "species": "Owl",
+            "gender": "other",
+            "height": [
+                1,
+                11
+            ],
+            "weight": 0,
+            "age": 24,
+            "info": "A small, agender owl who's surprisingly great in magic for their size. While they normally have a serious personality, they can be a little quick to panic at times. They came here from another dimension, and is unsure what to expect from this dimension.\n**<Appearance>** They have white feathers overall, but there are some lavender stripes of feathers on their back.",
+            "backstory": "Mawanoa used to be an ordinary 3 foot 4 inch owl without any magic or dimension hopping abilities. They lived peacefully in their dimension for several years. They then met someone who said they would grant them special abilities. Mawa was gonna deny at first, but they let curiosity get the best of them, so they said yes to the offer. The result was a shrunken Mawanoa with magic abilities as well as the ability to hop between dimensions. However, the dimension hopping ability is unstable, as sometimes the ability will break and cause them to not be able to hop between dimensions forever, causing them to be stuck in the dimension they last hopped to. It can even cause them to get stuck between dimensions. While this is always temporary, they will end up going to a random dimension instead of the one they wanted to go to. The rest appears to be shrouded in mystery...",
+            "likes": "Dimension hopping, themself",
+            "dislikes": "Their dimension hopping ability breaking, people who are jerks on purpose.",
+            "fears": "Getting stuck between dimensions",
+            "voice": "",
+            "theme": "",
+            "custom": {}
+        },
+        "trust": {}
     }
 }
