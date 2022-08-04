@@ -509,9 +509,9 @@ passiveList = {
 			let accuracy = args[4];
 			let critChance = Math.max((args[5] ?? 0), 0);
 			let hits = args[6];
-			let element = args[7]?.toLowerCase();
-			let atype = args[8]?.toLowerCase();
-			let targets = args[9]?.toLowerCase();
+			let element = args[7].toLowerCase();
+			let atype = args[8].toLowerCase();
+			let targets = args[9].toLowerCase();
 			let status = args[10] || "none";
 			let statusChance = Math.min(Math.max((args[11] ?? 0), 0), 100);
 
