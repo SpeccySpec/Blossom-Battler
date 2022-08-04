@@ -1202,7 +1202,8 @@ statusList = {
 		onuse(char, targ, skill, btl, vars) {
 			addCusVal(char, 'charge', {
 				stat: (vars[0] == 'phys') ? 'atk' : 'mag',
-				mult: vars[1]
+				mult: vars[1],
+				toggle: false
 			});
 
 			return `__${char.name}__'s ${(vars[0] == 'phys') ? 'atk' : 'mag'} was boosted for one turn!`;
