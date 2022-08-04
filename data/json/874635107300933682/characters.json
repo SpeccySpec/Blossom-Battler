@@ -63,7 +63,7 @@
         "skills": [
             "UltimateHit",
             "Dragon Rage",
-            "CuriosityKilledTheBloomBattler"
+            "TestYourSkill"
         ],
         "autolearn": [],
         "quotes": {
@@ -306,10 +306,13 @@
         "affinities": {
             "superweak": [],
             "weak": [
-                "explode"
+                "explode",
+                "metal",
+                "pierce"
             ],
             "resist": [
-                "earth"
+                "earth",
+                "grass"
             ],
             "block": [],
             "repel": [],
