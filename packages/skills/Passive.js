@@ -1405,6 +1405,62 @@ passiveList = {
 		getinfo(vars, skill) {
 			return `Upon foe defeat, buffs ${vars[0]} **${vars[1]}** times.`
 		}
+	}),
+
+	finalpush: new Extra({
+		name: "Final Push",
+		desc: "Boosts the powers of skills of a specific element by <Percentage> when HP is below <HPPercent>",
+		args: [
+			{
+				name: "Element",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Percentage",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "HPPercent",
+				type: "Decimal",
+				forced: true
+			},
+		],
+		multiple: true,
+		diffflag: 0,
+		applyfunc(message, skill, args) {
+			let element = args[0]?.toLowerCase();
+			let percentage = args[1];
+			let hppercentage = args[2];
+
+			if ((!Elements.includes(element) && element != 'all' && element != 'magic' && element != 'physical') || element === 'almighty') return void message.channel.send("You entered an invalid element!");
+			if (hppercentage > 100 && hppercentage < 0) return void message.channel.send(`Please enter a value for <HPPercent> above 0 and below 100.`);
+
+			makePassive(skill, "finalpush", [element, percentage, hppercentage]);
+			return true;
+		},
+		statmod(btl, char, skill, vars) {
+			if (char.hp <= (char.maxhp/100)*vars[2]) {
+				return passiveList.boost.statmod(btl, char, skill, vars);
+			}
+		},
+		getinfo(vars, skill) {
+			let txt = `Boosts `
+
+			for (let i in vars) {
+				if (!vars[i]) continue;
+
+				txt += `${elementEmoji[vars[i][0]] ?? ''}**${vars[i][0].charAt(0).toUpperCase() + vars[i][0].slice(1)}** attacks by ${vars[i][1]}%`
+
+				if (i < vars.length - 2) 
+					txt += `, `
+				else if (i == vars.length - 2) 
+					txt += ` and `
+			}
+
+			return `${txt} when HP is below **${vars[2]}%**`;
+		}
 	})
 }
 
