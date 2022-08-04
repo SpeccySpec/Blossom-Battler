@@ -264,18 +264,18 @@ extrasList = {
 		onselect(char, skill, btl, vars) {
 			if (vars[0].toLowerCase() != 'user') return '';
 
-			return extrasList.changeaffinity.targetchange(char, vars, skill)
+			return extrasList.changeaffinity.targetchange(char, char, vars, skill)
 		},
 		onuse(char, targ, skill, btl, vars) {
 			if (vars[0].toLowerCase() != 'target') return '';
 
-			return extrasList.changeaffinity.targetchange(targ, vars, skill)
+			return extrasList.changeaffinity.targetchange(char, targ, vars, skill)
 		},
-		targetchange(target, vars, skill) {
+		targetchange(char, target, vars, skill) {
 			if (!target.affinities) target.affinities = [];
 
 			// Fail on bosses
-			if (isBoss(target) && skill.type === "status") return "...but it failed!";
+			if (char.team != target.team && isBoss(target) && skill.type === "status") return "...but it failed!";
 
 			let setAffinities = [];
 			let wasChanged = false;
