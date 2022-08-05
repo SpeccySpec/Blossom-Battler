@@ -115,10 +115,14 @@ statusList = {
 			return true
 		},
 		onselect(char, skill, btl, vars) {
-			return extrasList.buff.onselect(char, skill, btl, vars);
+			if (vars[0].toLowerCase() != 'user') return '';
+
+			return extrasList.changeaffinity.targetchange(char, char, vars, skill)
 		},
 		onuse(char, targ, skill, btl, vars) {
-			return extrasList.buff.onuse(char, targ, skill, btl, vars);
+			if (vars[0].toLowerCase() != 'target') return '';
+
+			return extrasList.changeaffinity.targetchange(char, targ, vars, skill)
 		},
 		aithinker(char, targ, act, skill, btl, vars) {
 			if (vars[0] === 'user') {
