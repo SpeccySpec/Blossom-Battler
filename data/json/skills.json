@@ -71205,8 +71205,7 @@
         "costtype": "mp",
         "target": "one",
         "originalAuthor": "516359709779820544",
-        "statusses": {},
-        "extras": {
+        "statusses": {
             "psychoshift": [
                 true
             ]
@@ -71516,5 +71515,17 @@
             ]
         },
         "desc": "The user tries to corrupt a foe, and bend their will to the user's."
+    },
+    "Self Inflict": {
+        "name": "Self Inflict",
+        "type": "status",
+        "cost": 2,
+        "costtype": "mp",
+        "target": "caster",
+        "originalAuthor": "516359709779820544",
+        "statusses": {},
+        "status": "bleed",
+        "statuschance": 100,
+        "desc": "The user pierces themselves in order to cause bleeding, for strategic purposes or not..."
     }
 }

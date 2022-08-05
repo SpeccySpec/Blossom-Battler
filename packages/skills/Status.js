@@ -735,6 +735,8 @@ statusList = {
 			return true
 		},
 		onuse(char, targ, skill, btl, vars) {
+			if (btl.pvp) return "...But it failed!";
+
 			const stat = vars[0]
 			const chance = ((targ.maxhp / targ.hp) / 10) * (char.stats[stat] / targ.stats[stat]) * (char.stats.luk / targ.stats.luk)
 			if (Math.random() * 100 <= chance) {
@@ -1331,12 +1333,15 @@ statusList = {
 		name: "Psycho Shift",
 		args: [],
 		desc: extrasList.psychoshift.desc,
-		applyfunc: extrasList.psychoshift.applyfunc,
+		applyfunc(message, skill, args) {
+			makeStatus(skill, "psychoshift", [true]);
+			return true;
+		},
 		onuse(char, targ, skill, btl, vars) {
 			if (char.status && char.statusturns) {
 				targ.status = char.status;
 				targ.statusturns = char.status;
-				statusEffectFuncs[targ.status].oninflict(targ);
+				if (statusEffectFuncs[targ.status].oninflict) statusEffectFuncs[targ.status].oninflict(targ);
 
 				delete char.status;
 				delete char.statusturns;
