@@ -361,12 +361,17 @@ statusList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
+			for (let ally of btl.teams[char.team].members) {
+				if (ally.clone) return "...but it failed!";
+			}
+
 			let newchar = objClone(char);
 			let hpPercent = vars[0];
 			let mpPercent = vars[1];
 			let percent = vars[2];
 
 			newchar.clone = true;
+			newchar.enemy = true;
 			newchar.maxhp *= hpPercent/100;
 			newchar.maxmp *= mpPercent/100;
 			for (let i in newchar.stats)
