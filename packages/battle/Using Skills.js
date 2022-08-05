@@ -197,16 +197,20 @@ genDmg = (char, targ, btl, skill) => {
 	if (skill.limitbreak) {
 		return Math.round((((skill.pow+(atkStat*2)-endStat)*2) + Math.round(Math.random() * 30))/2);
 	} else {
+		let dmg = 0;
 		switch(damageformula) {
 			case 'persona':
-				return Math.round(5 * Math.sqrt(def * skill.pow))+randNum(-7, 7);
+				dmg = Math.round(5 * Math.sqrt(def * skill.pow))+randNum(-7, 7);
 			case 'pokemon':
-				return Math.round((((2*char.level)/5+2)*skill.pow*def)/50+2)+randNum(-7, 7);
+				dmg = Math.round((((2*char.level)/5+2)*skill.pow*def)/50+2)+randNum(-7, 7);
 			case 'lamonka':
-				return Math.ceil(((skill.pow+char.level)*(def/4)))*(0.95+(Math.random()/20));
+				dmg = Math.ceil(((skill.pow+char.level)*(def/4)))*(0.95+(Math.random()/20));
 			case 'beta':
-				return randNum(char.level+35)+randNum(skill.pow/1.75)+randNum(-7, 7);
+				dmg = randNum(char.level+35)+randNum(skill.pow/1.75)+randNum(-7, 7);
 		}
+		
+		if (isNaN(dmg) || dmg <= 0) dmg = 1;
+		return dmg;
 	}
 }
 
