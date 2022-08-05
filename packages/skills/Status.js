@@ -380,6 +380,7 @@ statusList = {
 			if (newchar.leader) delete newchar.leader;
 
 			btl.teams[char.team].members.push(newchar);
+			btl.turnorder = getTurnOrder(btl)
 			return `__${char.name}__ created a clone of themselves.`;
 		},
 		getinfo(vars, skill) {
