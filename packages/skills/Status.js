@@ -1333,7 +1333,10 @@ statusList = {
 		name: "Psycho Shift",
 		args: [],
 		desc: extrasList.psychoshift.desc,
-		applyfunc: extrasList.psychoshift.applyfunc,
+		applyfunc(message, skill, args) {
+			makeStatus(skill, "psychoshift", [true]);
+			return true;
+		},
 		onuse(char, targ, skill, btl, vars) {
 			if (char.status && char.statusturns) {
 				targ.status = char.status;

@@ -493,11 +493,11 @@
     "DJ": {
         "name": "DJ",
         "owner": "532291526634635285",
-        "level": 99,
-        "hp": 932,
-        "mp": 608,
-        "maxhp": 932,
-        "maxmp": 608,
+        "level": 125,
+        "hp": 1166,
+        "mp": 764,
+        "maxhp": 1166,
+        "maxmp": 764,
         "basehp": 50,
         "basemp": 20,
         "melee": {
@@ -507,8 +507,8 @@
             "acc": 95,
             "crit": 15
         },
-        "xp": 106579641,
-        "maxxp": 615066353,
+        "xp": 0,
+        "maxxp": 25396130197,
         "skills": [
             "BlazingHell",
             "IceAge",
@@ -588,14 +588,14 @@
             "OldSky": "AbyssalDarkness"
         },
         "stats": {
-            "atk": 41,
-            "mag": 41,
-            "prc": 57,
-            "end": 57,
-            "chr": 57,
-            "int": 106,
-            "agl": 106,
-            "luk": 106
+            "atk": 49,
+            "mag": 49,
+            "prc": 70,
+            "end": 70,
+            "chr": 70,
+            "int": 99,
+            "agl": 99,
+            "luk": 99
         },
         "basestats": {
             "baseatk": 8,
