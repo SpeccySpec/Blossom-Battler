@@ -487,11 +487,11 @@ extrasList = {
 			return true
 		},
 		onselect(char, skill, btl, vars) {
-			if (vars[0] != 'user') return;
+			if (vars[0] != 'user') return '';
 			return extrasList.buff.buffChange(char, skill, btl, vars);
 		},
 		onuse(char, targ, skill, btl, vars) {
-			if (vars[0] != 'target') return;
+			if (vars[0] != 'target') return '';
 			return extrasList.buff.buffChange(targ, skill, btl, vars);
 		},
 		buffChange(targ, skill, btl, vars) {
