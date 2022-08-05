@@ -238,19 +238,19 @@ const menuStates = {
 		if (btl.pvp) {
 			comps[0] = [
 				makeButton('Forfeit', '<:boot:995268449154629699>', 'grey', true, 'run'),
-				makeButton('Backup', '<:mental:973077052053921792>', 'blue')
+				makeButton('Backup', '<:mental:1004855144745291887>', 'blue')
 			]
 		} else if (btl.trial) {
 			comps[0] = [
 				makeButton('Save Trial', '📖', 'green', true, 'run'),
-				makeButton('Backup', '<:mental:973077052053921792>', 'blue'),
+				makeButton('Backup', '<:mental:1004855144745291887>', 'blue'),
 				makeButton('Pacify', itemTypeEmoji.pacify, 'green', null, null, true), // No Pacifying
 				makeButton('Enemy Info', statusEmojis.silence, 'red', true, 'enemyinfo', true) // No Enemy Info
 			]
 		} else {
 			comps[0] = [
 				makeButton('Run!', '<:boot:995268449154629699>', 'grey', true, 'run'),
-				makeButton('Backup', '<:mental:973077052053921792>', 'blue'),
+				makeButton('Backup', '<:mental:1004855144745291887>', 'blue'),
 				makeButton('Pacify', itemTypeEmoji.pacify, 'green'),
 				makeButton('Enemy Info', statusEmojis.silence, 'red', true, 'enemyinfo')
 			]
