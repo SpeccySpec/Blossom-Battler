@@ -735,6 +735,8 @@ statusList = {
 			return true
 		},
 		onuse(char, targ, skill, btl, vars) {
+			if (btl.pvp) return "...But it failed!";
+
 			const stat = vars[0]
 			const chance = ((targ.maxhp / targ.hp) / 10) * (char.stats[stat] / targ.stats[stat]) * (char.stats.luk / targ.stats.luk)
 			if (Math.random() * 100 <= chance) {
