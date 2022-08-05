@@ -272,6 +272,11 @@ extrasList = {
 			return extrasList.changeaffinity.targetchange(char, targ, vars, skill)
 		},
 		targetchange(char, target, vars, skill) {
+			let element = vars[1].toLowerCase()
+			let affinity = vars[2].toLowerCase()
+			let side = vars[3].toLowerCase()
+			let turns = vars[4]
+
 			if (!target.affinities) target.affinities = [];
 
 			// Fail on bosses
@@ -280,13 +285,13 @@ extrasList = {
 			let setAffinities = [];
 			let wasChanged = false;
 
-			if (vars[3] != 'normal') {
-				if (target.affinities[vars[2]] && target.affinities[vars[2]].includes(vars[1])) {
+			if (affinity != 'normal') {
+				if (target.affinities[affinity] && target.affinities[affinity].includes(element)) {
 					return `__${target.name}__ wasn't affected by __${skill.name}__!`;
 				}
 			}
 
-			if (vars[4] && vars[4] != null) {
+			if (turns && !isNaN(turns) && isFinite(turns)) {
 				if (!target?.custom?.oldAffinities) 
 					addCusVal(target, "oldAffinities", {});
 			}
@@ -294,20 +299,20 @@ extrasList = {
 			for (let i in target.affinities) {
 				setAffinities.push(...target.affinities[i])
 
-				if (target?.custom?.oldAffinities?.[i] && Object.keys(target?.custom?.oldAffinities?.[i]).includes(vars[1])) continue;
+				if (target?.custom?.oldAffinities?.[i] && Object.keys(target?.custom?.oldAffinities?.[i]).includes(element)) continue;
 
-				if (vars[4] && vars[4] != null) {
+				if (turns && !isNaN(turns) && isFinite(turns)) {
 					if (!target?.custom?.oldAffinities[i]) target.custom.oldAffinities[i] = {};
 				}
 
-				if (vars[3] == 'resist' && !resistSide.includes(i)) continue
-				if (vars[3] == 'weak' && !weakSide.includes(i)) continue
+				if (side == 'resist' && !resistSide.includes(i)) continue
+				if (side == 'weak' && !weakSide.includes(i)) continue
 
-				if (target.affinities[i].includes(vars[1])) {
-					target.affinities[i].splice(target.affinities[i].indexOf(vars[1]), 1);
+				if (target.affinities[i].includes(element)) {
+					target.affinities[i].splice(target.affinities[i].indexOf(element), 1);
 					wasChanged = true;
-					if (vars[4] && vars[4] != null) {
-						if (!target?.custom?.oldAffinities[i][vars[1]]) target.custom.oldAffinities[i][vars[1]] = vars[4];
+					if (turns && !isNaN(turns) && isFinite(turns)) {
+						if (!target?.custom?.oldAffinities[i][element]) target.custom.oldAffinities[i][element] = turns;
 					}
 					break;
 				}
@@ -315,21 +320,21 @@ extrasList = {
 
 			let normalAffinities = Elements.filter(e => !setAffinities.includes(e));
 
-			if (!wasChanged && ((!normalAffinities.includes(vars[1]) && vars[2] != 'normal') || (vars[2] == 'normal' && normalAffinities.includes(vars[1])))) {
+			if (!wasChanged && ((!normalAffinities.includes(element) && affinity != 'normal') || (affinity == 'normal' && normalAffinities.includes(element)))) {
 				return `__${target.name}__ wasn't affected by __${skill.name}__!`;
 			}
 
-			if (vars[3] != 'normal') {
-				if (normalAffinities.includes(vars[1])) {
+			if (affinity != 'normal') {
+				if (normalAffinities.includes(element) && turns && !isNaN(turns) && isFinite(turns)) {
 					if (!target?.custom?.oldAffinities['normal']) target.custom.oldAffinities['normal'] = {};
-					if (!target?.custom?.oldAffinities['normal'][vars[1]]) target.custom.oldAffinities['normal'][vars[1]] = vars[4];
+					if (!target?.custom?.oldAffinities['normal'][element]) target.custom.oldAffinities['normal'][element] = turns;
 				}
 
-				if (!target.affinities[vars[2]]) target.affinities[vars[2]] = [];
-				target.affinities[vars[2]].push(vars[1]);
+				if (!target.affinities[affinity]) target.affinities[affinity] = [];
+				target.affinities[affinity].push(element);
 			}
 
-			return `__${target.name}__'s affinity for ${elementEmoji[vars[1]]}**${vars[1]}** was changed to ${affinityEmoji[vars[2]]}**${vars[2]}**!`;
+			return `__${target.name}__'s affinity for ${elementEmoji[element]}**${element}** was changed to ${affinityEmoji[affinity]}**${affinity}**!`;
 		},
 		getinfo(vars, skill) {
 			let finalText = ""
@@ -1841,8 +1846,10 @@ customVariables = {
 					vars[i][j]--;
 
 					if (vars[i][j] <= 0) {
+						let thyAffinity 
 						for (aff in char.affinities) {
 							if (char.affinities[aff].includes(j)) {
+								thyAffinity = aff;
 								char.affinities[aff].splice(char.affinities[aff].indexOf(j), 1);
 							}
 						}
@@ -1853,7 +1860,7 @@ customVariables = {
 							char.affinities[i].push(j);
 						}
 
-						text += `${char.name}'s ${affinityEmoji[aff]}**${aff}** affinity to ${elementEmoji[j]}**${j}** was restored to ${affinityEmoji[i]}**${i}**!\n`;
+						text += `${char.name}'s ${affinityEmoji[thyAffinity]}**${thyAffinity}** affinity to ${elementEmoji[j]}**${j}** was restored to ${affinityEmoji[i]}**${i}**!\n`;
 
 						delete vars[i][j];
 					}
