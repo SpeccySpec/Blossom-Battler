@@ -432,6 +432,10 @@ function GetCharStatus(char) {
 		}
 	if (char.status)
 		str += statusEmojis[char.status]
+	if (char.confusion)
+		str += statusEmojis.confusion
+	if (char.infatuation)
+		str += statusEmojis.confusion
 	return str
 }
 
