@@ -208,7 +208,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 
 	if (skillDefs.levellock) finalText += skillDefs.levellock != 'unobtainable' ? `🔒 *Skill Locked until level **${skillDefs.levellock}***\n` : '🔒 *Skill Unobtainable*\n';
 
-	if (skillDefs?.desc.trim() != '') DiscordEmbed.fields.push({name: 'Description:', value: skillDefs.desc, inline: false})
+	if (skillDefs.desc && skillDefs.desc.trim() != '') DiscordEmbed.fields.push({name: 'Description:', value: skillDefs.desc, inline: false})
 
 	var charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
 	var enmFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
