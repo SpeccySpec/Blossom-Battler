@@ -1666,8 +1666,19 @@ extrasList = {
 			makeExtra(skill, "dragonrage", [args[0]]);
 			return true
 		},
-		dmgmod(char, targ, dmg, skill, btl, vars) {
-			dmg = vars[0];
+		onuseoverride(char, targ, skill, btl, vars) {
+			let c = randNum(1, 100);
+			if (c <= skill.acc+((char.stats.prc-targ.stats.agl)/2)) {
+				let dmg = Math.round(vars[0]);
+				targ.hp -= dmg;
+
+				let txt = `__${targ.name}__ took **${dmg} forced** damage`;
+				if (targ.hp <= 0) txt += " and was defeated!";
+
+				return txt;
+			} else {
+				return dodgeTxt(targ);
+			}
 		},
 		getinfo(vars, skill) {
 			return `Deals EXACTLY **${vars[0]}** damage.`;
