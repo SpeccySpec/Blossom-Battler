@@ -10,7 +10,7 @@ passiveList = {
 	// On Attack.
 	boost: new Extra({
 		name: "Boost",
-		desc: "Boosts the powers of skills of a specific element. Values for <Percentage> that are less than 100% will actually have negative effects! Negative values may even heal the foe... somehow.",
+		desc: "Boosts the powers of skills of a specific element.",
 		args: [
 			{
 				name: "Element",
@@ -45,7 +45,7 @@ passiveList = {
 			for (let i in vars) {
 				if (!vars[i]) continue;
 
-				txt += `${elementEmoji[vars[i][0]] ?? ''}**${vars[i][0].charAt(0).toUpperCase() + vars[i][0].slice(1)}** attacks by ${vars[i][1]}%`
+				txt += `${elementEmoji[vars[i][0]] ?? ''}**${vars[i][0].charAt(0).toUpperCase() + vars[i][0].slice(1)}** attacks by **${vars[i][1]}%**`
 
 				if (i < vars.length - 2) 
 					txt += `, `
@@ -54,6 +54,47 @@ passiveList = {
 			}
 
 			return txt;
+		}
+	}),
+
+	earlybird: new Extra({
+		name: "Early Bird",
+		desc: "For the first <Turns> turns the user's skills gain <Percentage Boost>% more power. Additionally the skills can lose <Accuracy Lost> in these turns, if set.",
+		args: [
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Percentage Boost",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Accuracy Lost",
+				type: "Decimal"
+			}
+		],
+		applyfunc(message, skill, args) {
+			const turns = args[0]
+			const boost = args[1]
+			const acclost = args[2] ?? 0
+			if (turns <= 0)
+				return void message.channel.send("The extra must last at least 1 turn!")
+			makePassive(skill, "earlybird", [turns, boost, acclost]);
+			return true;
+		},
+		statmod(btl, char, skill, vars) {
+			if (btl.turn <= vars[0]) {
+				skill.pow *= (vars[1]/100) + 1;
+				skill.acc -= vars[2]
+			}
+		},
+		getinfo(vars, skill) {
+			const turns = vars[1]
+			const acclost = vars[2]
+			return `Boosts power by **${vars[0]}%** for ${turns == 1 ? "**the first turn**" : `the first **${turns}** turns`}${acclost ? `, but accuracy will decrease by **${acclost}**` : ""}`
 		}
 	}),
 
