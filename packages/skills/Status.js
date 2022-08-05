@@ -750,11 +750,11 @@ statusList = {
 			if (btl.pvp) return "...But it failed!";
 
 			const stat = vars[0]
-			const chance = ((targ.maxhp / targ.hp) / 10) * (char.stats[stat] / targ.stats[stat]) * (char.stats.luk / targ.stats.luk)
-			if (Math.random() * 100 <= chance) {
+			const chance = ((targ.maxhp / targ.hp) / 5) * (char.stats[stat] / targ.stats[stat]) * (char.stats.luk / targ.stats.luk)
+			if (Math.random() * 100 <= Math.min(chance, 20)) {
 				if (isBoss(targ)) {
 					extrasList.buff.buffChange(targ, skill, btl, ["target", "all", -1, 100, 3])
-					return `...but __${targ.name}__ is too strong to be corrupted completely, they are weakened instead!`
+					return `...but __${targ.name}__ is too strong to be corrupted completely, they are weakened instead!${chance < 1 ? "\n**Extremely lucky!**" : ""}`
 				}
 				targ.hp = 0
 				const corrupted = objClone(targ)
@@ -762,7 +762,7 @@ statusList = {
 				addCusVal(corrupted, "pinch", true)
 				corrupted.skills.push("Corrupted")
 				btl.teams[char.team].members.push(corrupted)
-				return `__${targ.name}__ was defeated and corrupted!`
+				return `__${targ.name}__ was defeated and corrupted!${chance < 1 ? "\n**Extremely lucky!**" : ""}`
 			}
 			return "...but it failed!"
 		},
