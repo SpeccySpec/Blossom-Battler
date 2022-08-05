@@ -81,7 +81,7 @@ extrasList = {
 			return true
 		},
 		onuseoverride(char, targ, skill, btl, vars) {
-			if (vars[1] && vars[1] != null && targ.status != vars[1]) return dodgeTxt(targ);
+			if (vars[1] && vars[1] != null && targ.status != vars[1] && !targ[vars[1]]) return dodgeTxt(targ);
 			if (isBoss(targ)) return "...But it failed!";
 
 			let chance = randNum(100);
