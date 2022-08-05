@@ -360,6 +360,12 @@ statusList = {
 			makeStatus(skill, "clone", [hpPercent, mpPercent, percent]);
 			return true;
 		},
+		canuse(char, skill, btl, vars) {
+			let members = btl.teams[char.team].members
+			
+			if (members.some(member => member.clone)) return 'You cannot have more than one clone at a time!'
+			return true;
+		},
 		onuse(char, targ, skill, btl, vars) {
 			for (let ally of btl.teams[char.team].members) {
 				if (ally.clone) return "...but it failed!";
@@ -385,6 +391,7 @@ statusList = {
 			if (newchar.leader) delete newchar.leader;
 
 			btl.teams[char.team].members.push(newchar);
+			btl.turnorder = getTurnOrder(btl)
 			return `__${char.name}__ created a clone of themselves.`;
 		},
 		getinfo(vars, skill) {
@@ -831,7 +838,7 @@ statusList = {
 			return true;
 		},
 		canuse(char, skill, btl, vars) {
-			let members = btl.teams[0].members
+			let members = btl.teams[char.team].members
 			
 			if (members.some(member => member.reincarnate)) return 'You cannot have more than one reincarnate at a time!'
 			return true;
