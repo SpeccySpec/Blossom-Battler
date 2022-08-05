@@ -936,7 +936,7 @@ doPacify = (char, btl, action) => {
 				targ.pacified = true;
 				finaltxt += `\n${targ.name} is fully pacified `;
 
-				if (targ.negotiateDefs) {
+				if (targ.negotiateDefs && !btl.testing) {
 					let parties = setUpFile(`${dataPath}/json/${btl.guild.id}/parties.json`, true);
 
 					if (parties[btl.teams[char.team].id]) {
