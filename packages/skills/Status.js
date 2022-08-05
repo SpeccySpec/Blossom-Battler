@@ -360,6 +360,12 @@ statusList = {
 			makeStatus(skill, "clone", [hpPercent, mpPercent, percent]);
 			return true;
 		},
+		canuse(char, skill, btl, vars) {
+			let members = btl.teams[char.team].members
+			
+			if (members.some(member => member.clone)) return 'You cannot have more than one clone at a time!'
+			return true;
+		},
 		onuse(char, targ, skill, btl, vars) {
 			let newchar = objClone(char);
 			let hpPercent = vars[0];
@@ -827,7 +833,7 @@ statusList = {
 			return true;
 		},
 		canuse(char, skill, btl, vars) {
-			let members = btl.teams[0].members
+			let members = btl.teams[char.team].members
 			
 			if (members.some(member => member.reincarnate)) return 'You cannot have more than one reincarnate at a time!'
 			return true;
