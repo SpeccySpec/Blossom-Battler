@@ -1244,7 +1244,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 				let DiscordEmbed = new Discord.MessageEmbed()
 					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 					.setTitle(targTxt)
-					.setDescription(finalText.replace(/\n{3,}/, () => "\n\n"))
+					.setDescription(finalText.replace(/\n{3,}/g, () => "\n\n"))
 				return btl.channel.send({embeds: [DiscordEmbed]});
 			}
 		}
@@ -1343,7 +1343,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 		.setTitle(targTxt)
-		.setDescription(finalText.replace(/\n{2,}/, () => "\n\n"))
+		.setDescription(finalText.replace(/\n{3,}/g, () => "\n\n"))
 	btl.channel.send({embeds: [DiscordEmbed]});
 
 	// return true or something
