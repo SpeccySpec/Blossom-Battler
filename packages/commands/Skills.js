@@ -1420,9 +1420,9 @@ commands.editskill = new Command({
 					for (directory in directoryList) {
 						let charFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/characters.json`);
 						for (character in charFile) {
-							if (charFile[character].skills[args[0]]) {
+							if (charFile[character].skills.includes(args[0])) {
 								if (skillFile[args[0]].levellock == 'unobtainable' || skillFile[args[0]].levellock > charFile[character].level) {
-									delete charFile[character].skills[args[0]];
+									charFile[character].skills.splice(charFile[character].skills.indexOf(args[0]), 1);
 								}
 							}
 							if (charFile[character].transformations) {
@@ -1494,9 +1494,9 @@ commands.levellock = new Command({
 			for (directory in directoryList) {
 				let charFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/characters.json`);
 				for (character in charFile) {
-					if (charFile[character].skills[args[0]]) {
+					if (charFile[character].skills.includes(args[0])) {
 						if (skillFile[args[0]].levellock == 'unobtainable' || skillFile[args[0]].levellock > charFile[character].level) {
-							delete charFile[character].skills[args[0]];
+							charFile[character].skills.splice(charFile[character].skills.indexOf(args[0]), 1);
 						}
 					}
 					if (charFile[character].transformations) {
