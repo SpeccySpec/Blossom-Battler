@@ -201,12 +201,16 @@ genDmg = (char, targ, btl, skill) => {
 		switch(damageformula) {
 			case 'persona':
 				dmg = Math.round(5 * Math.sqrt(def * skill.pow))+randNum(-7, 7);
+				break;
 			case 'pokemon':
 				dmg = Math.round((((2*char.level)/5+2)*skill.pow*def)/50+2)+randNum(-7, 7);
+				break;
 			case 'lamonka':
 				dmg = Math.ceil(((skill.pow+char.level)*(def/4)))*(0.95+(Math.random()/20));
+				break;
 			case 'beta':
 				dmg = randNum(char.level+35)+randNum(skill.pow/1.75)+randNum(-7, 7);
+				break;
 		}
 		
 		if (isNaN(dmg) || dmg <= 0) dmg = 1;
