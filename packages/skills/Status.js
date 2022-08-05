@@ -1341,7 +1341,7 @@ statusList = {
 			if (char.status && char.statusturns) {
 				targ.status = char.status;
 				targ.statusturns = char.status;
-				statusEffectFuncs[targ.status].oninflict(targ);
+				if (statusEffectFuncs[targ.status].oninflict) statusEffectFuncs[targ.status].oninflict(targ);
 
 				delete char.status;
 				delete char.statusturns;
