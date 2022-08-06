@@ -1519,6 +1519,98 @@ passiveList = {
 		getinfo(vars, skill) {
 			return "Neutralises all passives in battle.";
 		}
+	}),
+
+	forceweather: new Extra({
+		name: "Force Weather",
+		desc: "Forces the specified weather on battle start for <Turns> turns.",
+		args: [
+			{
+				name: "Weather",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (!weathers.includes(args[0].toLowerCase())) return void message.channel.send("That's an invalid weather!");
+			if (args[1] == 0 || args[1] < -1 || args[1] > 100) return void message.channel.send("Please enter a value for <Turns> that is between -1 (Permanent) and 100.");
+
+			makePassive(skill, "forceweather", [args[0].toLowerCase(), args[1]]);
+			return true;
+		},
+		battlestart(char, skill, btl, vars) {
+			if (vars[1] <= -1) {
+				btl.weather = {
+					type: vars[0],
+					turns: -1,
+					force: vars[0],
+				}
+			} else {
+				if (btl.weather) {
+					btl.weather.type = vars[0];
+					btl.weather.turns = vars[1];
+				} else {
+					btl.weather = {
+						type: vars[0],
+						turns: vars[1],
+					}
+				}
+			}
+		},
+		getinfo(vars, skill) {
+			return `Forces the weather to **${vars[0]}** on battle start ${(vars[1] <= 1) ? "**indefinitely**" : `for **${vars[1]} turns**`}`;
+		}
+	}),
+
+	forceterrain: new Extra({
+		name: "Force Terrain",
+		desc: "Forces the specified terrain on battle start for <Turns> turns.",
+		args: [
+			{
+				name: "Terrain",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (!terrains.includes(args[0].toLowerCase())) return void message.channel.send("That's an invalid terrain!");
+			if (args[1] == 0 || args[1] < -1 || args[1] > 100) return void message.channel.send("Please enter a value for <Turns> that is between -1 (Permanent) and 100.");
+
+			makePassive(skill, "forceterrain", [args[0].toLowerCase(), args[1]]);
+			return true;
+		},
+		battlestart(char, skill, btl, vars) {
+			if (vars[1] <= -1) {
+				btl.terrain = {
+					type: vars[0],
+					turns: -1,
+					force: vars[0],
+				}
+			} else {
+				if (btl.terrain) {
+					btl.terrain.type = vars[0];
+					btl.terrain.turns = vars[1];
+				} else {
+					btl.terrain = {
+						type: vars[0],
+						turns: vars[1],
+					}
+				}
+			}
+		},
+		getinfo(vars, skill) {
+			return `Forces the terrain to **${vars[0]}** on battle start ${(vars[1] <= 1) ? "**indefinitely**" : `for **${vars[1]} turns**`}`;
+		}
 	})
 }
 
