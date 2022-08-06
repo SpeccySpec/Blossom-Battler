@@ -100,7 +100,7 @@ statusList = {
 
 			if (target != 'user' && target != 'target') 
 				return void message.channel.send(`You typed ${target} as the target. It must be either \`user\` or \`target\`.`)
-			if (![...stats, 'crit'].includes(stat))
+			if (![...stats, "crit", "all"].includes(stat))
 				return void message.channel.send("That's not a valid stat!");
 			if (stages == 0)
 				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
