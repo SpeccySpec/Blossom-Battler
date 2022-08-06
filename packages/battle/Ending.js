@@ -157,6 +157,7 @@ winBattle = (btl, i) => {
 	// Alright, let's award XP!
 	let charFile = setUpFile(`${dataPath}/json/${btl.guild.id}/characters.json`);
 
+	let users = [];
 	for (let char of btl.teams[i].members) {
 		if (charFile[char.truename]) {
 			if (enemyxp > 0) gainXp(btl.channel, charFile[char.truename], enemyxp, true);
@@ -172,6 +173,57 @@ winBattle = (btl, i) => {
 				charFile[char.truename].trust = char.trust;
 				charFile[char2.truename].trust = char2.trust;
 			}
+
+			// Also, get the USERS that participated in this battle
+			if (!users.includes(char.owner)) users.push(char.owner);
+		}
+	}
+
+	// Save user data.
+	for (let user of users) {
+		try {
+			let u = message.guild.members.cache.get(user).user;
+
+			// Enemy Kills
+			let userdata = addData(u, "enemykills", maxcount-pacifycount);
+
+			if (userdata.vars.enemykills >= 1)
+				winAchievement(u, 2);
+			else if (userdata.vars.enemykills >= 50)
+				winAchievement(u, 3);
+			else if (userdata.vars.enemykills >= 100)
+				winAchievement(u, 4);
+			else if (userdata.vars.enemykills >= 200)
+				winAchievement(u, 5);
+			else if (userdata.vars.enemykills >= 350)
+				winAchievement(u, 6);
+			else if (userdata.vars.enemykills >= 500)
+				winAchievement(u, 7);
+			else if (userdata.vars.enemykills >= 1000)
+				winAchievement(u, 8);
+
+			// Pacifying
+			if (!userdata.vars.pacifycount) 
+				userdata.vars.pacifycount = pacifycount;
+			else
+				userdata.vars.pacifycount += pacifycount;
+
+			if (userdata.vars.pacifycount >= 1)
+				winAchievement(u, 9);
+			else if (userdata.vars.pacifycount >= 50)
+				winAchievement(u, 10);
+			else if (userdata.vars.pacifycount >= 100)
+				winAchievement(u, 11);
+			else if (userdata.vars.pacifycount >= 200)
+				winAchievement(u, 12);
+			else if (userdata.vars.pacifycount >= 350)
+				winAchievement(u, 13);
+			else if (userdata.vars.pacifycount >= 500)
+				winAchievement(u, 14);
+			else if (userdata.vars.pacifycount >= 1000)
+				winAchievement(u, 15);
+		} catch(err) {
+			console.log(`This user (${user}) is unknown...`);
 		}
 	}
 

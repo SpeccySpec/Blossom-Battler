@@ -638,3 +638,31 @@ commands.dailyall = new Command({
 		}
 	}
 })
+
+// Achievements
+commands.listachievements = new Command({
+	desc: "List all the achievements that I have to offer! Completed achievements will be crossed out.",
+	section: "fun",
+	func: (message) => {
+		let array = [];
+
+		let user = setUpUserData(message.author.id);
+		if (!user.vars) user.vars = {};
+		if (!user.achievements) user.achievements = [];
+
+		for (const i in bbAchievements) {
+			let a = bbAchievements[i];
+			if (user.achievements[i]) {
+				array.push({title: `<:tick:973077052372701294>${a.stars}<:golden:973077051751940138> ~~${a.name}~~`, desc: a.desc});
+			} else {
+				if (a.hidden) 
+					array.push({title: `This achievement is hidden... (${a.stars}<:golden:973077051751940138>)`, desc: "???"});
+				else
+					array.push({title: `${a.name} (${a.stars}<:golden:973077051751940138>)`, desc: a.desc});
+			}
+		}
+
+		if (array.length == 0) return message.channel.send('No achievements found!');
+		listArray(message.channel, array, message.author.id);
+	}
+})

@@ -178,12 +178,12 @@ statusList = {
 		getinfo: buffText
 	}),
 
-	dekunda: new Extra({
-		name: "Dekunda",
+	dekaja: new Extra({
+		name: "Dekaja",
 		desc: "Removes the target's positive buffs.",
 		args: [],
 		applyfunc(message, skill, args) {
-			makeStatus(skill, "dekunda", [true]);
+			makeStatus(skill, "dekaja", [true]);
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
@@ -216,6 +216,26 @@ statusList = {
 		},
 		getinfo(vars, skill) {
 			return "Removes the target's buffs"
+		}
+	}),
+
+	dekunda: new Extra({
+		name: "Dekunda",
+		desc: "Removes the target's negative buffs, or debuffs.",
+		args: [],
+		applyfunc(message, skill, args) {
+			makeStatus(skill, "dekunda", [true]);
+			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			for (let i in targ.buffs) {
+				if (targ.buffs[i] > 0) targ.buffs[i] = 0;
+			}
+
+			return `__${targ.name}__'s debuffs were nullified!`;
+		},
+		getinfo(vars, skill) {
+			return "Removes the target's debuffs"
 		}
 	}),
 

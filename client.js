@@ -820,11 +820,16 @@ setUpSettings = (guild) => {
 }
 
 setUpUserData = (user) => {
+	if (typeof(user) != 'string') user = user.id;
+
 	let userdata = setUpFile(`${dataPath}/userdata/${user}.json`)
 
 	if (Object.keys(userdata).length === 0) {
 		userdata = {
-			exports: {}
+			stars: 0,
+			exports: {},
+			vars: {},
+			achievements: {}
 		}
 
 		fs.writeFileSync(`${dataPath}/userdata/${user}.json`, JSON.stringify(userdata, '	', 4))
@@ -1082,7 +1087,7 @@ for (const file of commandFiles) {
 }
 
 // Run this shit
-let folders = ['skills', 'characters', 'enemies', 'party', 'battle', 'items'] // i TOLD YOU there WILL EEEVEN be moreee
+let folders = ['skills', 'characters', 'enemies', 'party', 'battle', 'items', 'campaign'] // i TOLD YOU there WILL EEEVEN be moreee
 
 for (const i in folders) {
 	let files = fs.readdirSync(`${packPath}/${folders[i]}`).filter(file => file.endsWith('.js'));

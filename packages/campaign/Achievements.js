@@ -5,12 +5,12 @@ bbAchievements = [
 
 	// Murder achievements
 	{name: "Murder, murder!", stars: 1, desc: "Defeat 1 enemy.", section: "battle"},
-	{name: "That was tough...", stars: 1, desc: "Defeat 50 enemies", section: "battle"},
-	{name: "Getting better!", stars: 1, desc: "Defeat 100 enemies", section: "battle"},
-	{name: "Onslaught!", stars: 1, desc: "Defeat 200 enemies", section: "battle"},
-	{name: "There's no escape!", stars: 1, desc: "Defeat 350 enemies", section: "battle"},
-	{name: "Stabby stabby!", stars: 1, desc: "Defeat 500 enemies", section: "battle"},
-	{name: "Die.", stars: 1, desc: "Defeat 1000 enemies", section: "battle"},
+	{name: "That was tough...", stars: 2, desc: "Defeat 50 enemies", section: "battle"},
+	{name: "Getting better!", stars: 3, desc: "Defeat 100 enemies", section: "battle"},
+	{name: "Onslaught!", stars: 5, desc: "Defeat 200 enemies", section: "battle"},
+	{name: "There's no escape!", stars: 7, desc: "Defeat 350 enemies", section: "battle"},
+	{name: "Stabby stabby!", stars: 8, desc: "Defeat 500 enemies", section: "battle"},
+	{name: "Die.", stars: 10, desc: "Defeat 1000 enemies", section: "battle"},
 
 	// Friendship achievements
 	{name: "My first friend!", stars: 1, desc: "Pacify 1 enemy.", section: "battle"},
@@ -21,3 +21,63 @@ bbAchievements = [
 	{name: "Good friends!", stars: 8, desc: "Pacify 500 enemies", section: "battle"},
 	{name: "Best friends!", stars: 10, desc: "Pacify 1000 enemies", section: "battle"},
 ]
+
+winAchievement = (user, id) => {
+	// Get achievement data
+	let gain;
+	if (bbAchievements[id]) {
+		gain = objClone(bbAchievements[id]);
+	} else {
+		for (let i in bbAchievements) {
+			let achievement = bbAchievements[i];
+			if (id.toLowerCase() === achievement.name.toLowerCase()) {
+				gain = objClone(achievement);
+				id = i;
+				break;
+			}
+		}
+	}
+
+	// Set up user file
+	let userdata = setUpUserData(user.id);
+	if (!userdata.vars) userdata.vars = {};
+	if (!userdata.achievements) userdata.achievements = {};
+
+	if (!userdata.achievements[id]) {
+		// Award Stars
+		if (!userdata.stars) {
+			userdata.stars = gain.stars;
+		} else {
+			userdata.stars += gain.stars;
+		}
+
+		// Achievement complete!
+		userdata.achievements[id] = true;
+
+		// Tell the user the achievement in DMs.
+		const DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#4b02c9')
+			.setTitle(`You obtained __${gain.stars}<:golden:973077051751940138>!__`)
+			.setDescription(`You completed the achievement _**"${gain.name}"**_!\n_"${gain.desc}"_`)
+		user.send({embeds: [DiscordEmbed]});
+
+		// Save Data
+		fs.writeFileSync(`${dataPath}/userdata/${user.id}.json`, JSON.stringify(userdata, '	', 4))
+	}
+}
+
+addData = (user, variable, value) => {
+	// Set up user file
+	let userdata = setUpUserData(user.id);
+	if (!userdata.vars) userdata.vars = {};
+
+	// Apply Data
+	if (!userdata.vars[variable])
+		userdata.vars[variable] = value;
+	else
+		userdata.vars[variable] += value;
+
+	fs.writeFileSync(`${dataPath}/userdata/${user.id}.json`, JSON.stringify(userdata, '	', 4))
+
+	return userdata;
+}

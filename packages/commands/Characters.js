@@ -103,6 +103,9 @@ commands.registerchar = new Command({
 
 		let charDefs = writeChar(message.author, message.guild, args[0], args[1].toLowerCase(), args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11]);
 		message.channel.send({content: `${args[0]} has been registered!`, embeds: [briefDescription(charDefs)]})
+
+		// Get "New Beginings" achievement.
+		winAchievement(message.author, 0);
 	}
 })
 
