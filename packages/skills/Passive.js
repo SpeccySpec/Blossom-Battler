@@ -796,6 +796,8 @@ passiveList = {
 
 			if (parseInt(hits) == 0) return void message.channel.send("Why bother if it doesn't add any hits?");
 			if (parseInt(chance) < 1) return void message.channel.send("What's the point if it never happens?");
+			if (parseInt(chance) > 100) return void message.channel.send("Please enter a chance below 100%!");
+//			if (hits > 8) return void message.channel.send(`${hits} is too many hits!`);
 
 			makePassive(skill, "extrahit", [hits, chance, powerMult]);
 			return true;

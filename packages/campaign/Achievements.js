@@ -22,7 +22,7 @@ bbAchievements = [
 	{name: "Best friends!", stars: 10, desc: "Pacify 1000 enemies", section: "battle"},
 ]
 
-winAchievement = (user, id) => {
+winAchievement = async(user, id) => {
 	// Get achievement data
 	let gain;
 	if (bbAchievements[id]) {
@@ -39,6 +39,12 @@ winAchievement = (user, id) => {
 	}
 
 	// Set up user file
+	if (typeof user === "string" || !user.id) {
+		user = await client.users.fetch(user).catch(console.error);
+
+		if (!user) return;
+	}
+
 	let userdata = setUpUserData(user.id);
 	if (!userdata.vars) userdata.vars = {};
 	if (!userdata.achievements) userdata.achievements = {};
@@ -68,7 +74,7 @@ winAchievement = (user, id) => {
 
 addData = (user, variable, value) => {
 	// Set up user file
-	let userdata = setUpUserData(user.id);
+	let userdata = setUpUserData(user);
 	if (!userdata.vars) userdata.vars = {};
 
 	// Apply Data
