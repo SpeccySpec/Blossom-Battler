@@ -807,7 +807,7 @@ commands.startpvp = new Command({
 							char.maxmp = 150 + randNum(250);
 							char.hp = char.maxhp
 							char.mp = char.maxmp
-							for (const k in char.stats) char.stats[i] = randNum(1, 99);
+							for (const k in char.stats) char.stats[k] = randNum(1, 99);
 						}
 					}
 					break;
@@ -842,9 +842,9 @@ commands.startpvp = new Command({
 							// CharFuck Stats
 							char.maxhp = 200 + randNum(400);
 							char.maxmp = 150 + randNum(250);
-							char.hp = char.maxhp
-							char.mp = char.maxmp
-							for (const k in char.stats) char.stats[i] = randNum(1, 99);
+							char.hp = char.maxhp;
+							char.mp = char.maxmp;
+							for (const k in char.stats) char.stats[k] = randNum(1, 99);
 
 							// CharFuck Affinities
 							if (!char.affinities) char.affinities = {};
