@@ -54,8 +54,8 @@ statusList = {
 			return true;
 		},
 		inflictStatus(char, targ, skill, status, btl) {
-			if (hasStatusAffinity(char, status, 'block')) return `__${targ.name}__ blocked it!\n${selectQuote(char, 'badatk')}\n${selectQuote(targ, 'block')}`;
-			if (char.status && skill.type === 'status') return "...But it failed!";
+			if (hasStatusAffinity(targ, status, 'block')) return `__${targ.name}__ blocked it!\n${selectQuote(char, 'badatk')}\n${selectQuote(targ, 'block')}`;
+			if (targ.status && skill.type === 'status') return "...But it failed!";
 
 			let chance = 100
 			if (skill.statuschance < 100) {
