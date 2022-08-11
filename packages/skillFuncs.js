@@ -13,7 +13,7 @@ buffText = (buffArray) => {
 		const stats = typeof stat == "object"
 			? stat.map(stat => stat.toUpperCase()).join(" and ")
 			: stat.toUpperCase()
-		const stagestext = stages != 0 ? "" : ` by **${Math.abs(stages)}** stages`
+		const stagestext = Math.abs(stages) == 1 ? "" : ` by **${Math.abs(stages)}** stages`
 		const turnstext = turns ? ` for **${turns}** turns` : ""
 		const end = i < buffArray.length ? ".\n" : ""
 		finaltext += `${start} ${type} the **${target}'s ${stats}**${stagestext}${turnstext}${end}`
