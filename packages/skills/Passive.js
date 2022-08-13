@@ -482,7 +482,7 @@ passiveList = {
 
 	counter: new Extra({
 		name: "Counter",
-		desc: "Has a <Chance>% chance to counter <Phys/Mag> attacks with an <Attack Type> skill named <Counter Name> with <Power> power, <Accuracy>% accuracy, {Critical Hit Chance}% crit chance, and such. *Treat it like a regular skill, but without cost.*",
+		desc: "Has a <Chance>% chance to counter <Phys/Mag> attacks with an <Attack Type> skill named <Counter Name> with <Power> power, <Accuracy>% accuracy, {Critical Hit Chance}% crit chance, like a regular skill but the cost is optional and usually not necessary.",
 		args: [
 			{
 				name: "Phys/Mag",
@@ -540,46 +540,56 @@ passiveList = {
 			{
 				name: "Status Chance",
 				type: "Decimal",
+			},
+			{
+				name: "Cost",
+				type: "Num"
+			},
+			{
+				name: "Cost Type",
+				type: "Word"
 			}
 		],
 		applyfunc(message, skill, args) {
-			let physmag = args[0]?.toLowerCase();
-			let chance = args[1];
-			let counterName = args[2];
-			let power = args[3];
-			let accuracy = args[4];
-			let critChance = Math.max((args[5] ?? 0), 0);
-			let hits = args[6];
-			let element = args[7].toLowerCase();
-			let atype = args[8].toLowerCase();
-			let targets = args[9].toLowerCase();
-			let status = args[10] || "none";
-			let statusChance = Math.min(Math.max((args[11] ?? 0), 0), 100);
+			const physmag = args[0]?.toLowerCase();
+			const chance = args[1];
+			const counterName = args[2];
+			const power = args[3];
+			const accuracy = args[4];
+			const critChance = Math.max((args[5] ?? 0), 0);
+			const hits = args[6];
+			const element = args[7].toLowerCase();
+			const atype = args[8].toLowerCase();
+			const targets = args[9].toLowerCase();
+			const status = args[10] || "none";
+			const statusChance = Math.min(Math.max((args[11] ?? 0), 0), 100);
+			const cost = args[12] ?? 0
+			const costtype = args[13]?.toLowerCase() ?? "mp"
 
 			if (physmag != 'phys' && physmag != 'mag')
 				return void message.channel.send("You entered an invalid value for <Phys/Mag>! It can be either PHYS or MAG.");
-
-			if (chance < 1) return void message.channel.send("What's the point if it never happens?");
-
-			if (message.mentions.users.size > 0) return void message.channel.send("You're mean for trying to mention someone!");
-			if (counterName.length > 50) return void message.channel.send(`${counterName} is too long of a counter name.`);
-
-			if (power < 1) return void message.channel.send('Counters with 0 power or less will not function!');
-
-			if (accuracy < 1) return void message.channel.send('Counters with 0% accuracy or less will not function!');
-
-			if (hits < 1) return void message.channel.send('Counters with 0 hits or less will not function!');
-
-			if (!Elements.includes(element)) {
+			if (chance < 1)
+				return void message.channel.send("What's the point if it never happens?");
+			if (message.mentions.users.size > 0)
+				return void message.channel.send("You're mean for trying to mention someone!");
+			if (counterName.length > 50)
+				return void message.channel.send(`${counterName} is too long of a counter name.`);
+			if (power < 1)
+				return void message.channel.send('Counters with 0 power or less will not function!');
+			if (accuracy < 1)
+				return void message.channel.send('Counters with 0% accuracy or less will not function!');
+			if (hits < 1)
+				return void message.channel.send('Counters with 0 hits or less will not function!');
+			if (!Elements.includes(element))
 				return void message.channel.send({content: 'Please enter a valid element for **Element!**', embeds: [elementList()]})
-			}
 			if (element == 'passive' || element == 'heal' || element == 'status')
 				return void message.channel.send("The counter must be an attack!");
-
-			if (atype != 'physical' && atype != 'magic' && atype != 'ranged') return void message.channel.send(`${atype} is an invalid form of contact! Try physical, magic or ranged.`);
-
-			if (!Targets.includes(targets)) return void message.channel.send(`${targets} is an invalid target!\n` + 'Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n- SpreadOpposing\n- SpreadAllies```')
-
+			if (atype != 'physical' && atype != 'magic' && atype != 'ranged')
+				return void message.channel.send(`${atype} is an invalid form of contact! Try physical, magic or ranged.`);
+			if (!Targets.includes(targets))
+				return void message.channel.send(`${targets} is an invalid target!\n` + 'Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n- SpreadOpposing\n- SpreadAllies```')
+			if (!costTypeNames[costtype])
+				return void message.channel.send(`${costtype} is not a valid cost type!`)
 			if (status != 'none') {
 				if (!utilityFuncs.inArray(status, statusEffects)) {
 					let str = `${status} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
@@ -590,6 +600,8 @@ passiveList = {
 				}
 				makePassive(skill, "counter", [physmag, chance, {
 					name: counterName,
+					cost: cost,
+					costtype: costtype,
 					pow: power,
 					acc: accuracy,
 					crit: critChance,
@@ -606,6 +618,8 @@ passiveList = {
 			} else {
 				makePassive(skill, "counter", [physmag, chance, {
 					name: counterName,
+					cost: cost,
+					costtype: costtype,
 					pow: power,
 					acc: accuracy,
 					crit: critChance,
@@ -623,6 +637,37 @@ passiveList = {
 		onaffinitycheck(char, inf, skill, passive, affinity, btl, vars, result) {
 			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic')) {
 				if (randNum(1, 100) <= vars[1]) {
+					let cost = vars[2].cost
+					if (cost > 0) {
+						switch (vars[2].costtype) {
+							case "mp": {
+								if (char.mp < cost)
+									return
+								char.mp -= cost
+								break
+							}
+							case "hp": {
+								if (char.hp <= cost)
+									return
+								char.hp -= cost
+								break
+							}
+							case "mppercent": {
+								cost = (char.maxmp * cost) / 100
+								if (char.mp < cost)
+									return
+								char.mp -= cost
+								break
+							}
+							case "hppercent": {
+								cost = (char.maxhp * cost) / 100
+								if (char.hp <= cost)
+									return
+								char.hp -= cost
+								break
+							}
+						}
+					}
 					// Run this function again... but with the COUNTER. Ban repelling to avoid infinite loops, and avoid taking damage ourselves.
 					let newResults = attackWithSkill(char, inf, objClone(vars[2]), btl, true);
 					result.oneMore = newResults.oneMore;
