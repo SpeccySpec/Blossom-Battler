@@ -877,14 +877,14 @@ enemyThinker = (char, btl) => {
 						ai.push({
 							move: 'melee',
 							target: [i, targ.pos],
-							points: 0
+							points: randNum(1, 20000)
 						})
 					} else {
 						ai.push({
 							move: 'skills',
 							index: skill,
 							target: [i, targ.pos],
-							points: 0
+							points: randNum(1, 20000)
 						})
 					}
 				}
