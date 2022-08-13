@@ -653,14 +653,14 @@ passiveList = {
 								break
 							}
 							case "mppercent": {
-								cost = (char.maxmp * cost) / 100
+								cost = Math.floor((char.maxmp * cost) / 100)
 								if (char.mp < cost)
 									return
 								char.mp -= cost
 								break
 							}
 							case "hppercent": {
-								cost = (char.maxhp * cost) / 100
+								cost = Math.floor((char.maxhp * cost) / 100)
 								if (char.hp <= cost)
 									return
 								char.hp -= cost
@@ -1172,7 +1172,7 @@ passiveList = {
 		},
 		onturn(btl, char, vars) {
 			if (char.custom?.pinch) {
-				const damage = (char.maxhp * vars[3]) / 100
+				const damage = Math.floor((char.maxhp * vars[3]) / 100)
 				char.hp -= damage
 				return `__${char.name}__ took ${statusEmojis.pinch}**${damage}** damage${char.hp <= 0 ? " and was defeated" : ""}!`
 			}
