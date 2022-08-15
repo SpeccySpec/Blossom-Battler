@@ -1,3 +1,5 @@
+const { stdout, stderr } = require("process");
+
 const categories = {
 	misc: "Other things that don't fit into the other sections.",
 	moderation: "Every bot needs something to moderate the server.",
@@ -436,3 +438,51 @@ creditsEmbed = async (message) => {
 		}
 	})
 }
+
+const {exec, spawn} = require("child_process")
+
+commands.git = new Command({
+	desc: "SUPERADMIN ONLY.",
+	section: "misc",
+	args: [
+		{
+			name: "Command",
+			type: "Word",
+			forced: true
+		}
+	],
+	async func(message, args) {
+		if (!utilityFuncs.RPGBotAdmin(message.author.id))
+			return void message.channel.send("Only a super admin can use this.")
+		message.channel.send("Loading...")
+		switch (args[0].toLowerCase()) {
+			case "status": {
+				exec("git fetch; git status;", (error, stdout, stderr) => {
+					if (error)
+						return void message.channel.send(stderr)
+					message.channel.send(`\`\`\`\n${stdout}\`\`\``)
+				})
+				break
+			}
+			case "pull": {
+				exec("git pull", async (error, stdout, stderr) => {
+					if (error)
+						return void message.channel.send(stderr)
+					await message.channel.send(`\`\`\`\n${stdout}\`\`\``)
+					await message.channel.send("Restarting bot...")
+					spawn(process.argv.shift(), process.argv, {
+						cwd: process.cwd(),
+						detached : true,
+						stdio: "inherit"
+					})
+					await message.channel.send("Restarted successfully!")
+					process.exit(0)
+				})
+				break
+			}
+			default: {
+				message.channel.send("`<Command>` can only be `pull` and `status`")
+			}
+		}
+	}
+})
