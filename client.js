@@ -460,7 +460,7 @@ leaderSkillTxt = {
 	status: 'Increased chance to land the specified status effect.',
 	crit: 'Increased crit chance to the specified element.',
 	money: 'Increased money gain after battle.',
-	items: 'Increased items gain after battle.',
+	items: 'Increased item gain after battle.',
 	pacify: 'Pacify Enemies by the specified percentage at the start of battle.',
 	endure: 'One character in your team can endure one fatal attack.',
 }
