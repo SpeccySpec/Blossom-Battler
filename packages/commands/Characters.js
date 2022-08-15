@@ -295,7 +295,6 @@ commands.getchar = new Command({
 		}
 	],
 	func: (message, args) => {
-		return message.channel.send("Let's try something dumb today.");
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
