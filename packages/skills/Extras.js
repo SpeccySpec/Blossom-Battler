@@ -1492,7 +1492,7 @@ extrasList = {
 		},
 		statmod(char, skill, vars, btl) {
 			if (!char.status) return;
-			if (vars.inlcludes(char.status)) skill.pow *= vars[0];
+			if (vars.includes(char.status)) skill.pow *= vars[0];
 		},
 		getinfo(vars, skill) { //SOMEONE HAS TO TEST IF THIS WORKS PROPERLY
 			let txt = `**${vars[0]}x** power boost when inflicted with `;
