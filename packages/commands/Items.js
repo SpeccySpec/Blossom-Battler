@@ -108,7 +108,7 @@ function weaponDesc(weaponDefs, weaponName, message) {
     let userTxt = getServerUser(weaponDefs.originalAuthor, message);
     let color = elementColors[weaponDefs.element];
 
-	let classTxt = weaponDefs.class ? `[${weaponDefs.class.toUpperCase()}]` : '';
+	let classTxt = weaponDefs.class ? ( classEmoji?.weapon?.[weaponDefs.class] ?? `[${weaponDefs.class.toUpperCase()}]`) : '';
     const DiscordEmbed = new Discord.MessageEmbed()
         .setColor(color)
         .setTitle(`${classTxt} ${elementEmoji[weaponDefs.element]} ${weaponDefs.name ? weaponDefs.name : weaponDefs} *(${userTxt})*`)
@@ -148,7 +148,7 @@ function armorDesc(armorDefs, armorName, message) {
 
     let color = elementColors[armorDefs.element];
 
-	let classTxt = armorDefs.class ? `[${armorDefs.class.toUpperCase()}]` : '';
+    let classTxt = armorDefs.class ? ( classEmoji?.armor?.[armorDefs.class] ?? `[${armorDefs.class.toUpperCase()}]`) : '';
     const DiscordEmbed = new Discord.MessageEmbed()
         .setColor(color)
         .setTitle(`${classTxt} ${elementEmoji[armorDefs.element]} ${armorDefs.name ? armorDefs.name : armorDefs} *(${userTxt})*`)

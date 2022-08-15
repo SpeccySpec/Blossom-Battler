@@ -452,6 +452,23 @@ armorClasses = {
 	magic: "Magical pieces of armor, like barriers."
 }
 
+classEmoji = {
+	weapon: {
+		bludgeon: "<:bludgeon:1008794352706932817>",
+		bladed: "<:bladed:1008794351591239842>",
+		longbladed: "<:longbladed:1008794360676110457>",
+		pierce: "<:pierce:1008794365231104052>",
+		ranged: "<:ranged:1008794366648791161>",
+		books: "<:books:1008794354959269938>",
+		staff: "<:staff:1008794368750141540>"
+	},
+	armor: {
+		light: "<:light:1008794358637662338>",
+		heavy: "<:heavy:1008794356620214433>",
+		magic: "<:magic:1008794362307674204>"
+	}
+}
+
 leaderSkillTxt = {
 	boost: 'Boosts the specified type.',
 	discount: 'Takes away the amount of cost specified to the specified type.',
