@@ -1496,12 +1496,12 @@ extrasList = {
 		},
 		getinfo(vars, skill) { //SOMEONE HAS TO TEST IF THIS WORKS PROPERLY
 			let txt = `**${vars[0]}x** power boost when inflicted with `;
-			vars.shift();
-			for (const i in vars) {
-				txt += `**${statusEmojis[vars[i]]}${vars[i]}**`
-				if (i == vars.length-2)
+			let statusses = [...vars].slice(1);
+			for (const i in statusses) {
+				txt += `**${statusEmojis[statusses[i]]}${statusses[i]}**`
+				if (i == statusses.length-2)
 					txt += ' or ';
-				else if (i < vars.length-1)
+				else if (i < statusses.length-1)
 					txt += ', ';
 			}
 
