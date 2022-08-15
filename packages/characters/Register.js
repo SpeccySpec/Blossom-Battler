@@ -207,7 +207,7 @@ longDescription = (charDefs, level, server, message) => {
 			if (char.weaponclass && char.weaponclass != "none") desc += `_Can wield ${classEmoji.weapon[char.weaponclass]}${char.weaponclass} weapons._\n`;
 		}
 	}
-	if (char.armorclass && char.armorclass != "none") desc += `_Can wear ${classEmoji.weapon[char.armorclass]}${char.armorclass} armor._\n`;
+	if (char.armorclass && char.armorclass != "none") desc += `_Can wear ${classEmoji.armor[char.armorclass]}${char.armorclass} armor._\n`;
 	desc += '\n';
 
 	if (char.leaderskill && settings.mechanics.leaderskills) desc += `**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} ${char.leaderskill.var1 ? `toward ${elementEmoji[char.leaderskill.var1] ?? ''}${char.leaderskill.var1.toUpperCase()}` : ''}`;
