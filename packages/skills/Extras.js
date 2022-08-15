@@ -1484,7 +1484,7 @@ extrasList = {
 		],
 		applyfunc(message, skill, args) {
 			let statusses = args.slice(1);
-			statusses.filter(status => statusEffects.includes(status));
+			statusses = statusses.filter(status => statusEffects.includes(status));
 			if (statusses.length == 0) return void message.channel.send("You didn't specify any valid statuses!");
 
 			makeExtra(skill, "guts", [args[0], ...statusses]);
