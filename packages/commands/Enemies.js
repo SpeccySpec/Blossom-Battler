@@ -986,7 +986,7 @@ commands.setweight = new Command({
         },
         {
             name: "Weight",
-            type: "Num",
+            type: "Decimal",
             forced: true
         }
     ],
@@ -1021,7 +1021,7 @@ commands.setheight = new Command({
         },
         {
             name: "Height",
-            type: "Num",
+            type: "Decimal",
             forced: true
         }
     ],
