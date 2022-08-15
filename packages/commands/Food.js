@@ -695,19 +695,31 @@ commands.registerfood = new Command({
 
 
 commands.renamefood = new Command({
-	desc: `*Args: <Word: Main Category> <Word: Sub-category> <Word: Name> <Word: New Name>*\nRename a food item.`,
+	desc: `Rename a food item.`,
 	section: "food",
-	func: (message, args) => {
-		
-		if (args.length < 4) {
-			let embed = new Discord.MessageEmbed()
-			.setColor('#0099ff')
-			.setTitle(`${getPrefix(message.guild.id)}renamefood`)
-			.setDescription(`To rename a food item, try:\n*${getPrefix(message.guild.id)}renamefood <Word: Main Category> <Word: Sub-category> <Word: Name> <Word: New Name>*`)
-		
-			return message.channel.send({embeds: [embed]})
+	args: [
+		{
+			name: "Main Category",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Sub Category",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "New Name",
+			type: "Word",
+			forced: true
 		}
-
+	],
+	func: (message, args) => {
 		if (!checkCategories(args)) return setInvalidEmbed(message)
 
 		setupFileProfile(message.author.id, args[0].toLowerCase(), foodFiles[args[0].toLowerCase()])
@@ -738,19 +750,26 @@ commands.renamefood = new Command({
 
 
 commands.removefood = new Command({
-	desc: `*Args: <Word: Main Category> <Word: Sub-category> <Word: Name>*\nRemove a food item.`,
+	desc: `Remove a food item.`,
 	section: "food",
-	func: (message, args) => {
-		
-		if (args.length < 3) {
-			let embed = new Discord.MessageEmbed()
-			.setColor('#0099ff')
-			.setTitle(`${getPrefix(message.guild.id)}removefood`)
-			.setDescription(`To remove a food item, try:\n*${getPrefix(message.guild.id)}removefood <Word: Main Category> <Word: Sub-category> <Word: Name>*`)
-		
-			return message.channel.send({embeds: [embed]})
+	args: [
+		{
+			name: "Main Category",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Sub Category",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Name",
+			type: "Word",
+			forced: true
 		}
-
+	],
+	func: (message, args) => {
 		if (!checkCategories(args)) return setInvalidEmbed(message)
 
 		setupFileProfile(message.author.id, args[0].toLowerCase(), foodFiles[args[0].toLowerCase()])
@@ -771,19 +790,21 @@ commands.removefood = new Command({
 
 
 commands.foodtemplate = new Command({
-	desc: `*Args: <Word: Main Category> <Word: Sub-category>*\nGet a template for a food item.`,
+	desc: `Get a template for a food item.`,
 	section: "food",
-	func: (message, args) => {
-		
-		if (args.length < 2) {
-			let embed = new Discord.MessageEmbed()
-			.setColor('#0099ff')
-			.setTitle(`${getPrefix(message.guild.id)}foodtemplate`)
-			.setDescription(`To get a template for a food item, try:\n*${getPrefix(message.guild.id)}foodtemplate <Word: Main Category> <Word: Sub-category>*`)
-		
-			return message.channel.send({embeds: [embed]})
+	args: [
+		{
+			name: "Main Category",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Sub Category",
+			type: "Word",
+			forced: true
 		}
-
+	],
+	func: (message, args) => {
 		if (!checkCategories(args)) return setInvalidEmbed(message)
 
 		setupFileProfile(message.author.id, args[0].toLowerCase(), foodFiles[args[0].toLowerCase()])
@@ -803,19 +824,32 @@ commands.foodtemplate = new Command({
 
 
 commands.foodimage = new Command({
-	desc: `*Args: <Word: Main Category> <Word: Sub-category> <Word: Name> <Attachment: Image>*\nChange the image of a food item.`,
+	desc: `Change the image of a food item.`,
 	section: "food",
-	func: (message, args) => {
-		
-		if (args.length < 3) {
-			let embed = new Discord.MessageEmbed()
-			.setColor('#0099ff')
-			.setTitle(`${getPrefix(message.guild.id)}foodimage`)
-			.setDescription(`To change the image of a food item, try:\n*${getPrefix(message.guild.id)}foodimage <Word: Main Category> <Word: Sub-category> <Word: Name> <Attachment: Image>*`)
-		
-			return message.channel.send({embeds: [embed]})
+	args: [
+		{
+			name: "Main Category",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Sub Category",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Image",
+			type: "Attachment",
+			forced: true,
+			multiple: true
 		}
-
+	],
+	func: (message, args) => {
 		if (!checkCategories(args)) return setInvalidEmbed(message)
 
 		setupFileProfile(message.author.id, args[0].toLowerCase(), foodFiles[args[0].toLowerCase()])
@@ -848,9 +882,6 @@ commands.foodimage = new Command({
 		message.channel.send(`The ${args[0].toLowerCase()} ${singularVerb[args[1].toLowerCase()]} item **${args[2].toLowerCase()}** has been updated.`)
 	}
 })
-
-
-
 
 commands.food = new Command({
 	desc: `Make yourself food based on items.`,

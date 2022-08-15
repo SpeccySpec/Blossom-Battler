@@ -175,8 +175,11 @@ itemTypeEmoji = {
 	skill: '<:physical:973077052129423411>',
 	
 	heal: "<:healhp:973078508123328522>",
+	healall: "<:healall:1008718601718616115>",
 	healmp: "<:healmp:973078513827606589>",
+	healallmp: "<:healallmp:1008718604772061307>",
 	healhpmp: "<:healhpmp:973078513747902504>",
+	healallhpmp: "<:healallhpmp:1008718603463438366>",
 
 	revive: '<:revive:973078509868183572>',
 	material: '<:material:973078509595537459>',
@@ -472,27 +475,27 @@ enemyTypeColors = {
 
 barEmojis = {
 	hp: {
-		left: '<:hpbarleft:974742791643090984>',
-		middle: '<:hpbarmidl:974742791768920065>',
-		right: '<:hpbarrigh:974742791722782780>'
+		left: '<:hpbarleft:1008737386546606171>',
+		middle: '<:hpbarmidl:1008737388442431640>',
+		right: '<:hpbarrigh:1008737390501838978>'
 	},
 
 	mp: {
-		left: '<:mpbarleft:974742791857012736>',
-		middle: '<:mpbarmidl:974742791760531506>',
-		right: '<:mpbarrigh:974742791865380885>'
+		left: '<:mpbarleft:1008737392322162688>',
+		middle: '<:mpbarmidl:1008737394440290394>',
+		right: '<:mpbarrigh:1008737396449362041>'
 	},
 
 	xp: {
-		left: '<:xpbarleft:974742791861207041>',
-		middle: '<:xpbarmidl:974742791777316924>',
-		right: '<:xpbarrigh:974742791609544725>'
+		left: '<:xpbarleft:1008737404242382909>',
+		middle: '<:xpbarmidl:1008737405731340309>',
+		right: '<:xpbarrigh:1008737407811727460>'
 	},
 
 	none: {
-		left: '<:nobarleft:974743873249243248>',
-		middle: '<:nobarmidl:974743873760923678>',
-		right: '<:nobarrigh:974743874390089778>'
+		left: '<:nobarleft:1008737398424862830>',
+		middle: '<:nobarmidl:1008737400169697280>',
+		right: '<:nobarrigh:1008737402199748689>'
 	}
 }
 

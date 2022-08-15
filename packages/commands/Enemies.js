@@ -950,7 +950,7 @@ commands.setimage = new Command({
 		{
 			name: "Attachment",
 			type: "Image or URL",
-			forced: true
+			forced: false
 		}
 	],
 	checkban: true,
@@ -959,13 +959,13 @@ commands.setimage = new Command({
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy name.`);
 
-		if (args[1].toLowerCase() != 'none')
-			if (!checkImage(message, args[1], message.attachments.first())) return message.channel.send(`${args[1]} is not a valid image.`);
-		else {
+		if (args[1] && args[1].toLowerCase() == 'none') {
 			enemyFile[args[0]].image = '';
 			message.channel.send(`${args[0]}'s image has been removed.`);
 			return fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, 4));
 		}
+
+		if (!checkImage(message, args[1], message.attachments.first())) return message.channel.send(`You did not supply a valid image.`);
 
 		enemyFile[args[0]].image = checkImage(message, args[1], message.attachments.first());
 
@@ -986,7 +986,7 @@ commands.setweight = new Command({
         },
         {
             name: "Weight",
-            type: "Num",
+            type: "Decimal",
             forced: true
         }
     ],
@@ -1021,7 +1021,7 @@ commands.setheight = new Command({
         },
         {
             name: "Height",
-            type: "Num",
+            type: "Decimal",
             forced: true
         }
     ],
