@@ -175,8 +175,11 @@ itemTypeEmoji = {
 	skill: '<:physical:973077052129423411>',
 	
 	heal: "<:healhp:973078508123328522>",
+	healall: "<:healall:1008718601718616115>",
 	healmp: "<:healmp:973078513827606589>",
+	healallmp: "<:healallmp:1008718604772061307>",
 	healhpmp: "<:healhpmp:973078513747902504>",
+	healallhpmp: "<:healallhpmp:1008718603463438366>",
 
 	revive: '<:revive:973078509868183572>',
 	material: '<:material:973078509595537459>',
