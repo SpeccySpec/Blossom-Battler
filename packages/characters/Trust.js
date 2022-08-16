@@ -14,38 +14,6 @@ setUpTrust = (char, char2) => {
 	return a;
 }
 
-changeTrust = (char, char2, i, send, channel) => {
-	setUpTrust(char, char2);
-
-	char.trust[char2.truename].amount += i;
-
-	while (char.trust[char2.truename].amount >= char.trust[char2.truename].maximum) {
-		char.trust[char2.truename].level++;
-		char.trust[char2.truename].amount -= char.trust[char2.truename].maximum;
-		char.trust[char2.truename].maximum = 100+((char.trust[char2.truename].level-1)*15);
-	}
-
-	let trustemoji = (char.trust[char2.truename].level >= 10) ? '❤️' : '✨';
-	
-	if (send) {
-		let DiscordEmbed = new Discord.MessageEmbed()
-			.setColor(elementColors[char.mainElement] ?? elementColors.strike)
-			.setTitle(`${trustemoji} ${char.name} & ${char2.name} grow closer... ${trustemoji}`)
-			.setDescription(`${char.name} & ${char2.name} reached _Trust Level __${char.trust[char2.truename].level}___!`)
-		return void channel.send({embeds: [DiscordEmbed]});
-	} else {
-		return `\n${trustemoji} ${char.name} & ${char2.name} grow closer, reaching _Trust Level __${char.trust[char2.truename].level}___! ${trustemoji}`;
-	}
-
-	return send ? undefined : '';
-}
-
-trustLevel = (char, char2) => {
-	if (!char.trust) return 0;
-	if (!char.trust[char2.truename ?? char2.name]) return 0;
-	return char.trust[char2.truename ?? char2.name].level;
-}
-
 trustEmojis = {
 	'Loves': '❤️',
 	'Likes': '👍',
@@ -60,6 +28,92 @@ trustRanges = { //minumum to maximum trust levels
 	'Is neutral to': [-4, 4],
 	'Dislikes': [-14, -5],
 	'Hates': [-999, -15]
+}
+
+changeTrust = (char, char2, i, send, channel, char1Name, char2Name) => {
+	if (char1Name) {
+		char.truename = char1Name;
+		char2.truename = char2Name;
+	}
+	setUpTrust(char, char2);
+
+	let detectedLevelUp = false;
+
+	char.trust[char2.truename].amount += i;
+
+	if (char.trust[char2.truename].level < 20 && i > 0) {
+		while (char.trust[char2.truename].amount >= char.trust[char2.truename].maximum) {
+			detectedLevelUp = true;
+			char.trust[char2.truename].level++;
+			char.trust[char2.truename].amount -= char.trust[char2.truename].maximum;
+			char.trust[char2.truename].maximum = 100+((char.trust[char2.truename].level-1)*15);
+		}
+	}
+	if (char.trust[char2.truename].level == 20 & char.trust[char2.truename].amount >= char.trust[char2.truename].maximum) {
+		char.trust[char2.truename].amount = char.trust[char2.truename].maximum;
+	}
+
+	//now for the negatives
+	if (char.trust[char2.truename].level > 1 && i <= 0) {
+		while (char.trust[char2.truename].amount <= 0) {
+			detectedLevelUp = true;
+			char.trust[char2.truename].level--;
+			char.trust[char2.truename].amount += char.trust[char2.truename].maximum;
+			char.trust[char2.truename].maximum = 100+((char.trust[char2.truename].level-1)*15);
+		}
+	}
+	if (char.trust[char2.truename].level == 1 && char.trust[char2.truename].amount <= 0) {
+		char.trust[char2.truename].amount = 0;
+	}
+
+	char2.trust[char.truename] = { //this is for consistency's sake
+		amount: char.trust[char2.truename].amount,
+		maximum: char.trust[char2.truename].maximum,
+		level: char.trust[char2.truename].level
+	}
+
+	let trustemoji;
+	if (detectedLevelUp) {
+		if (i > 0) {
+			trustemoji = (char.trust[char2.truename].level >= 10) ? '❤️' : '✨';
+			if (char.trust[char2.truename].level < 0) trustemoji = '😐';
+			
+			if (send) {
+				let DiscordEmbed = new Discord.MessageEmbed()
+					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setTitle(`${trustemoji} ${char.name} & ${char2.name} grow closer... ${trustemoji}`)
+					.setDescription(`${char.name} & ${char2.name} reached _Trust Level __${char.trust[char2.truename].level}___!`)
+				return void channel.send({embeds: [DiscordEmbed]});
+			} else {
+				return `\n${trustemoji} ${char.name} & ${char2.name} grow closer, reaching _Trust Level __${char.trust[char2.truename].level}___! ${trustemoji}`;
+			}
+		} else {
+			trustemoji = (char.trust[char2.truename].level <= -10) ? '🤬' : '💀';
+			if (char.trust[char2.truename].level > 0) trustemoji = '😔';
+
+			if (send) {
+				let DiscordEmbed = new Discord.MessageEmbed()
+					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setTitle(`${trustemoji} ${char.name} & ${char2.name} draw farther away... ${trustemoji}`)
+					.setDescription(`${char.name} & ${char2.name} reached _Trust Level __${char.trust[char2.truename].level}___!`)
+				return void channel.send({embeds: [DiscordEmbed]});
+			} else {
+				return `\n${trustemoji} ${char.name} & ${char2.name} draw farther away, reaching _Trust Level __${char.trust[char2.truename].level}___! ${trustemoji}`;
+			}
+		}
+	} else {
+		if (send) {
+			return void channel.send(`${getBar('mp', char.trust[char2.truename].amount, char.trust[char2.truename].maximum)} ${char.trust[char2.truename].amount}/${char.trust[char2.truename].maximum}\n*${char.name} got ${i} trust XP with ${char2.name}.*`);
+		}
+	}
+
+	return send ? undefined : '';
+}
+
+trustLevel = (char, char2) => {
+	if (!char.trust) return 0;
+	if (!char.trust[char2.truename ?? char2.name]) return 0;
+	return char.trust[char2.truename ?? char2.name].level;
 }
 
 trustBio = async (char, channel, author) => {

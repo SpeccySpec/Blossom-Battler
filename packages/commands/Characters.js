@@ -1141,12 +1141,58 @@ commands.trustxp = new Command({
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]] || !charFile[args[1]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
-		if (args[2] <= 0) return message.channel.send("Don't even try it.");
+		if (args[0] == args[1]) return message.channel.send("It won't do anything in battle if you try giving yourself Trust XP.");
+		if (args[2] == 0) return message.channel.send("It won't do anything when you add or subtract nothing from something");
 
 		// changeTrust function handles everything.
-		changeTrust(charFile[args[0]], charFile[args[1]], Math.round(args[2]*(settings.rates.trustrate ?? 1)), true, message.channel)
+		changeTrust(charFile[args[0]], charFile[args[1]], Math.round(args[2]*(settings.rates.trustrate ?? 1)), true, message.channel, args[0], args[1]);
+		delete charFile[args[0]].truename;
+		delete charFile[args[1]].truename;
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 		message.react('👍');
+	}
+})
+
+commands.cleartrust = new Command({
+	desc: "Clears all Trust XP from a character with another character. You can remove a character's Trust XP in general if you want to.\n**Removing all trust of all characters will require an Administrator permission.**",
+	aliases: ['cleartrust', 'removetrust', 'removetrustxp', 'removetrustxpup', 'removetrustxpup'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Character #2 Name",
+			type: "Word",
+			forced: false
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		if (args[0].toLowerCase() == 'all') {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send("You don't have permission to do that.");
+			for (let char in charFile) {
+				delete charFile[char].trust;
+			}
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+			message.channel.send("All Trust XP has been removed.");
+		} else {
+			if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+			if (args[1] && !charFile[args[1]]) return message.channel.send('Nonexistant Character.');
+			if (args[1]) {
+				delete charFile[args[0]].trust[args[1]];
+				delete charFile[args[1]].trust[args[0]];
+			} else {
+				delete charFile[args[0]].trust;
+			}
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+			message.channel.send("Trust has been removed.");
+		}
 	}
 })
 
