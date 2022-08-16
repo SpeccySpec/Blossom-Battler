@@ -36,7 +36,7 @@ passiveList = {
 			return true;
 		},
 		statmod(btl, char, skill, vars) {
-			if ((vars[0] == 'all' && (typeof(skill.type) === 'object' && skill.type.includes('almighty')) || (typeof(skill.type) === 'string' && skill.type == 'almighty')) 
+			if ((vars[0] == 'all' && ((typeof(skill.type) === 'object' && !skill.type.includes('almighty')) || (typeof(skill.type) === 'string' && skill.type != 'almighty'))) 
 			|| (typeof(skill.type) === 'object' && skill.type.includes(vars[0])) 
 			|| (typeof(skill.type) === 'string' && skill.type == vars[0]) 
 			|| vars[0] == skill?.atktype) {
