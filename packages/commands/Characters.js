@@ -1188,7 +1188,10 @@ commands.cleartrust = new Command({
 				delete charFile[args[0]].trust[args[1]];
 				delete charFile[args[1]].trust[args[0]];
 			} else {
-				delete charFile[args[0]].trust;
+				for (let char in charFile[args[0]].trust) {
+					delete charFile[char].trust[args[0]];
+					delete charFile[args[0]].trust[char];
+				}
 			}
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 			message.channel.send("Trust has been removed.");
