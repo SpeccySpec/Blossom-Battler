@@ -356,8 +356,8 @@ passiveList = {
 
 			if (damage == 0) return void message.channel.send("What's the point if it's dealing no damage?");
 
-			if (!Elements.includes(element.toLowerCase())) return void message.channel.send("You entered an invalid value for <Element>!");
-			if (skill.type == 'status' || skill.type == 'heal' || skill.type == 'passive') return void message.channel.send("You can't use this element!");
+			if (!Elements.includes(element)) return void message.channel.send("You entered an invalid value for <Element>!");
+			if (element == 'status' || element == 'heal' || element == 'passive') return void message.channel.send("You can't use this element!");
 			
 			makePassive(skill, "damage", [physmag, damage, element]);
 			return true;
