@@ -42,7 +42,7 @@ changeTrust = (char, char2, i, send, channel, char1Name, char2Name) => {
 
 	char.trust[char2.truename].amount += i;
 
-	if (Math.abs(char.trust[char2.truename].level == 20) && char.trust[char2.truename].amount >= char.trust[char2.truename].maximum) {
+	if ((char.trust[char2.truename].level == 20 && char.trust[char2.truename].amount >= char.trust[char2.truename].maximum) || (char.trust[char2.truename].level == -20 && char.trust[char2.truename].amount <= char.trust[char2.truename].maximum)) {
 		char.trust[char2.truename].amount = char.trust[char2.truename].maximum;
 	} else {
 		if ((char.trust[char2.truename].amount <= 0 && char.trust[char2.truename].level >= 1) || (char.trust[char2.truename].amount <= char.trust[char2.truename].maximum && char.trust[char2.truename].level < 1)) {
