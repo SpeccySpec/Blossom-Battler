@@ -120,10 +120,10 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 				finalText += `Costs **${skillDefs.cost}% of the user's Max MP**.\n`;
 				break;
 			case "money":
-				finalText += `Costs **${skillDefs.cost} of the team's money**.\n`;
+				finalText += `Costs **${skillDefs.cost} of the team's ${getCurrency(message.guild.id)}s**.\n`;
 				break;
 			case "moneypercent":
-				finalText += `Costs **${skillDefs.cost}% of the team's money**.\n`;
+				finalText += `Costs **${skillDefs.cost}% of the team's ${getCurrency(message.guild.id)}s**.\n`;
 				break;
 			case "lb":
 				if (settings.mechanics.limitbreaks) finalText += `Costs **${skillDefs.cost}LB**.\n`;
