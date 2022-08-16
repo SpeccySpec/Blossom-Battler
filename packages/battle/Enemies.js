@@ -969,6 +969,8 @@ doPacify = (char, btl, action) => {
 								// Although there wouldn't be no real punishment, maybe just a boost in damage output.
 								// Things like being forced to tank Makarakarn and Tetrakarn before would now lower happiness or mood ect
 							}
+							
+							if (targ.golden) party.negotiateAllies[targ.name].golden = true;
 						} else {
 							finaltxt += `and is satisfied!\n\n_(**${party.negotiates[targ.name]}/${targ.negotiateDefs.required}** ${targ.name}s pacified.)_`;
 						}

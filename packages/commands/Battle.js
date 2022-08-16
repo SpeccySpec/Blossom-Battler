@@ -537,6 +537,7 @@ commands.startbattle = new Command({
 		let lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`, true);
 
 		let enmDesc = '';
+		let goldenChance = settings?.rates?.goldchance ?? 0.01;
 		for (let i in encounter) {
 			let enemy = objClone(enmFile[encounter[i]]);
 			enemy.enemy = true;
@@ -555,7 +556,10 @@ commands.startbattle = new Command({
 			enemy.pacify = 0;
 			
 			// Does this battle pass as a boss
-			if (enemy.type.includes('boss') || enemy.type.includes('deity')) battle.bossbattle = true;
+			if (enemy.type.includes('boss') || enemy.type.includes('bigboss') || enemy.type.includes('deity')) battle.bossbattle = true;
+
+			//check for golden chance
+			if (Math.random() <= (goldenChance / 100)) enemy.golden = true;
 
 			setupBattleStats(enemy);
 

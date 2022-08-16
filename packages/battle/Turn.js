@@ -411,9 +411,10 @@ setUpComponents = (char, btl, menustate) => {
 }
 
 function GetCharStatus(char) {
-	if (char.pacified)
-		return itemTypeEmoji.pacify
 	let str = ""
+	if (char.golden) str += goldenEmoji;
+	if (char.pacified)
+		return str + itemTypeEmoji.pacify
 	for (const buff in char.buffs) {
 		let amount = char.buffs[buff]
 		if (amount == 0)
