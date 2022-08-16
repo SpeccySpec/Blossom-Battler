@@ -1490,7 +1490,7 @@ commands.autolearn = new Command({
 })
 
 let disallowedLeaderSkillElelemts = {
-	boost: ['passive', 'status'],
+	boost: ['passive', 'almighty'],
 	discount: ['passive'],
 	crit: ['status', 'heal', 'passive'],
 	endure: ['status', 'heal', 'passive']

@@ -990,6 +990,19 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	// Failsafe
 	if (!skill.hits) skill.hits = 1;
 
+	// Main Elements
+	let mainElementRate = settings?.rates?.mainelement ?? 1.2;
+
+	if (typeof skill.type === 'string') {
+		if (char.mainElement === skill.type) {
+			skill.pow *= mainElementRate;
+		}
+	} else {
+		if (skill.type.includes(char.mainElement)) {
+			skill.pow *= mainElementRate;
+		}
+	}
+
 	// Passives
 	if (doPassives(btl)) {
 		for (let skillName of char.skills) {
