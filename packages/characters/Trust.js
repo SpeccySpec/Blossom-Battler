@@ -23,11 +23,11 @@ trustEmojis = {
 }
 
 trustRanges = { //minumum to maximum trust levels
-	'Loves': [15, 999],
+	'Loves': [15, 20],
 	'Likes': [5, 14],
 	'Is neutral to': [-4, 4],
 	'Dislikes': [-14, -5],
-	'Hates': [-999, -15]
+	'Hates': [-20, -15]
 }
 
 changeTrust = (char, char2, i, send, channel, char1Name, char2Name) => {
@@ -38,32 +38,54 @@ changeTrust = (char, char2, i, send, channel, char1Name, char2Name) => {
 	setUpTrust(char, char2);
 
 	let detectedLevelUp = false;
+	let previousLevel = char.trust[char2.truename].level;
 
 	char.trust[char2.truename].amount += i;
 
-	if (char.trust[char2.truename].level < 20 && i > 0) {
-		while (char.trust[char2.truename].amount >= char.trust[char2.truename].maximum) {
-			detectedLevelUp = true;
-			char.trust[char2.truename].level++;
-			char.trust[char2.truename].amount -= char.trust[char2.truename].maximum;
-			char.trust[char2.truename].maximum = 100+((char.trust[char2.truename].level-1)*15);
-		}
-	}
-	if (char.trust[char2.truename].level == 20 & char.trust[char2.truename].amount >= char.trust[char2.truename].maximum) {
+	if (Math.abs(char.trust[char2.truename].level == 20) && char.trust[char2.truename].amount >= char.trust[char2.truename].maximum) {
 		char.trust[char2.truename].amount = char.trust[char2.truename].maximum;
-	}
+	} else {
+		if ((char.trust[char2.truename].amount <= 0 && char.trust[char2.truename].level >= 1) || (char.trust[char2.truename].amount <= char.trust[char2.truename].maximum && char.trust[char2.truename].level < 1)) {
+			while (((char.trust[char2.truename].amount <= 0 && char.trust[char2.truename].level >= 1) || (char.trust[char2.truename].amount <= char.trust[char2.truename].maximum && char.trust[char2.truename].level < 1)) && Math.abs(char.trust[char2.truename].level) < 20) {
+				detectedLevelUp = true;
+				
+				previousLevel = char.trust[char2.truename].level;
+				char.trust[char2.truename].level--;
+				if (char.trust[char2.truename].level == 0) char.trust[char2.truename].level = -1;
 
-	//now for the negatives
-	if (char.trust[char2.truename].level > 1 && i <= 0) {
-		while (char.trust[char2.truename].amount <= 0) {
-			detectedLevelUp = true;
-			char.trust[char2.truename].level--;
-			char.trust[char2.truename].amount += char.trust[char2.truename].maximum;
-			char.trust[char2.truename].maximum = 100+((char.trust[char2.truename].level-1)*15);
+				if (char.trust[char2.truename].level >= -1) {
+					if (previousLevel <= 1) char.trust[char2.truename].amount -= Math.abs(char.trust[char2.truename].maximum);
+					char.trust[char2.truename].maximum = (100+((Math.abs(char.trust[char2.truename].level)-1)*15)) * (char.trust[char2.truename].level > 0 ? 1 : -1);
+					if (previousLevel > 1) char.trust[char2.truename].amount += Math.abs(char.trust[char2.truename].maximum);
+				} else {
+					if (previousLevel <= 1) char.trust[char2.truename].amount += Math.abs(char.trust[char2.truename].maximum);
+					char.trust[char2.truename].maximum = (100+((Math.abs(char.trust[char2.truename].level)-1)*15)) * (char.trust[char2.truename].level > 0 ? 1 : -1);
+					if (previousLevel > 1) char.trust[char2.truename].amount -= Math.abs(char.trust[char2.truename].maximum);
+				}
+
+				if (char.trust[char2.truename].level == -1) char.trust[char2.truename].amount += Math.abs(char.trust[char2.truename].maximum);
+			}
+		} else if ((char.trust[char2.truename].amount >= char.trust[char2.truename].maximum && char.trust[char2.truename].level >= 0) || (char.trust[char2.truename].amount >= 0 && char.trust[char2.truename].level < 0)) {
+			while (((char.trust[char2.truename].amount >= char.trust[char2.truename].maximum && char.trust[char2.truename].level >= 0) || (char.trust[char2.truename].amount >= 0 && char.trust[char2.truename].level < 0)) && Math.abs(char.trust[char2.truename].level) < 20) {
+				detectedLevelUp = true;
+				
+				previousLevel = char.trust[char2.truename].level;
+				char.trust[char2.truename].level++;
+				if (char.trust[char2.truename].level == 0) char.trust[char2.truename].level = 1;
+
+				if (char.trust[char2.truename].level == 1) char.trust[char2.truename].amount += Math.abs(char.trust[char2.truename].maximum);
+
+				if (char.trust[char2.truename].level >= -1) {
+					if (previousLevel >= -1) char.trust[char2.truename].amount -= Math.abs(char.trust[char2.truename].maximum);
+					char.trust[char2.truename].maximum = (100+((Math.abs(char.trust[char2.truename].level)-1)*15)) * (char.trust[char2.truename].level > 0 ? 1 : -1);
+					if (previousLevel < -1) char.trust[char2.truename].amount += Math.abs(char.trust[char2.truename].maximum);
+				} else {
+					if (previousLevel >= -1) char.trust[char2.truename].amount += Math.abs(char.trust[char2.truename].maximum);
+					char.trust[char2.truename].maximum = (100+((Math.abs(char.trust[char2.truename].level)-1)*15)) * (char.trust[char2.truename].level > 0 ? 1 : -1);
+					if (previousLevel < -1) char.trust[char2.truename].amount -= Math.abs(char.trust[char2.truename].maximum);
+				}
+			}
 		}
-	}
-	if (char.trust[char2.truename].level == 1 && char.trust[char2.truename].amount <= 0) {
-		char.trust[char2.truename].amount = 0;
 	}
 
 	char2.trust[char.truename] = { //this is for consistency's sake
@@ -88,7 +110,7 @@ changeTrust = (char, char2, i, send, channel, char1Name, char2Name) => {
 				return `\n${trustemoji} ${char.name} & ${char2.name} grow closer, reaching _Trust Level __${char.trust[char2.truename].level}___! ${trustemoji}`;
 			}
 		} else {
-			trustemoji = (char.trust[char2.truename].level <= -10) ? '🤬' : '💀';
+			trustemoji = (char.trust[char2.truename].level >= -10) ? '🤬' : '💀';
 			if (char.trust[char2.truename].level > 0) trustemoji = '😔';
 
 			if (send) {
@@ -168,7 +190,7 @@ trustBio = async (char, channel, author) => {
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 			.setTitle(`${char.name}'s Trust`)
-			.setDescription(`**${trustEmojis[Object.keys(trustGroups)[currentCategory]]} ${Object.keys(trustGroups)[currentCategory]} (lv ${trustRanges[Object.keys(trustGroups)[currentCategory]][0]}${Math.abs(trustRanges[Object.keys(trustGroups)[currentCategory]][1]) == 999 ? `${trustRanges[Object.keys(trustGroups)[currentCategory]][1]/999 == 1 ? '>=' : '<='}` : ` - ${trustRanges[Object.keys(trustGroups)[currentCategory]][1]}`})**:\n\n${current.join('\n')}`);
+			.setDescription(`**${trustEmojis[Object.keys(trustGroups)[currentCategory]]} ${Object.keys(trustGroups)[currentCategory]} (lv ${trustRanges[Object.keys(trustGroups)[currentCategory]][0]} - ${trustRanges[Object.keys(trustGroups)[currentCategory]][1]})**:\n\n${current.join('\n')}`);
 
 		return DiscordEmbed;
 	}
