@@ -483,8 +483,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 			if (repel) {
 				if (skill.type === 'almighty') {
+					addAtkMsg(btl, `${skill.name} broke through __${targ.name}__'s ${targ.custom.shield.name ?? 'Shield'}!`);
 					delete targ.custom.shield;
-					addAtkMsg(`${skill.name} broke through __${targ.name}__'s ${targ.custom.skill.name ?? 'Shield'}!`);
 				} else if (!skill.extras?.feint) {
 					skill.acc = 999; // Never miss a repel - just to be flashy :D
 
