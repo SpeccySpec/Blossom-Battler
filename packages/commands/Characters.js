@@ -2541,6 +2541,29 @@ commands.getbio = new Command({
 	}
 })
 
+commands.gettrust = new Command({
+	desc: "[NOT YET FINISHED] Lists how much a character trusts other characters.",
+	aliases: ['trust', 'chartrust', 'charactertrust'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+		
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+
+		if (!charFile[args[0]]?.trust || Object.keys(charFile[args[0]]?.trust).length == 0) return message.channel.send(`This character has not been given any trust yet.`);
+
+		trustBio(charFile[args[0]], message.guild.id);
+	}
+})
+
 commands.setbioinfo = new Command({
 	desc: "Sets a character's information, backstory, age, ect",
 	section: "characters",
