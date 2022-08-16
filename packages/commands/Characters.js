@@ -1183,6 +1183,7 @@ commands.cleartrust = new Command({
 		} else {
 			if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+			if (!charFile[args[0]]?.trust?.[args[1]]) return message.channel.send("That character doesn't have any Trust XP with that character.");
 			if (args[1] && !charFile[args[1]]) return message.channel.send('Nonexistant Character.');
 			if (args[1]) {
 				delete charFile[args[0]].trust[args[1]];
@@ -1196,6 +1197,58 @@ commands.cleartrust = new Command({
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 			message.channel.send("Trust has been removed.");
 		}
+	}
+})
+
+commands.trustlevel = new Command({
+	desc: "Sets the Trust Level of a character with another character.",
+	aliases: ['trustlevel', 'trustlevelup', 'trustlevelup'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Character #2 Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Trust Level",
+			type: "Num",
+			forced: true
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]] || !charFile[args[1]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (args[2] < 1 || args[2] > 20) return message.channel.send("Trust Level must be between 1 and 20.");
+
+		let char1 = charFile[args[0]];
+		let char2 = charFile[args[1]];
+
+		if (!char1?.trust?.[args[1]]) {
+			char1.truename = args[0];
+			char2.truename = args[1];
+
+			setUpTrust(char1, char2);
+
+			delete char1.truename;
+			delete char2.truename;
+		}
+
+		char1.trust[args[1]].level = args[2];
+		char1.trust[args[1]].amount = 0;
+		char1.trust[args[1]].maximum = 100+((char1.trust[args[1]].level-1)*15);
+
+		char2.trust[args[0]] = char1.trust[args[1]];
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		message.channel.send("Trust Level has been set.");
 	}
 })
 
