@@ -1146,6 +1146,7 @@ commands.trustxp = new Command({
 		// changeTrust function handles everything.
 		changeTrust(charFile[args[0]], charFile[args[1]], Math.round(args[2]*(settings.rates.trustrate ?? 1)), true, message.channel)
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		message.react('👍');
 	}
 })
 
@@ -2060,13 +2061,33 @@ commands.updatecharacters = new Command({
 			}
 
 			// Bio Info
-			newFile[i].bio.height = [4, 0]
-			newFile[i].bio.weight = 0
-			newFile[i].bio.age = 10
-			newFile[i].bio.custom = {}
+			if (typeof charFile[i].bio.age != typeof newFile[i].bio.height) newFile[i].bio.height = [4, 0]
+			if (typeof charFile[i].bio.age != typeof newFile[i].bio.weight) newFile[i].bio.weight = 0
+			if (typeof charFile[i].bio.age != typeof newFile[i].bio.age) newFile[i].bio.age = 10
+			if (!charFile[i].bio.custom) newFile[i].bio.custom = {}
 
 			// Update Stats, for certain changes in new BB.
 			updateStats(newFile[i], message.guild.id, true);
+
+			// Update Trust
+			if (charFile[i].trust) {
+				for (let k in charFile[i].trust) {
+					if (charFile[i]?.trust[k]?.nextLevel) {
+						newFile[i].trust[k] = {
+							amount: charFile[i].trust[k].value,
+							level: charFile[i].trust[k].level,
+						}
+					}
+					newFile[i].trust[k].maximum = 100+((charFile[i].trust[k].level-1)*15)
+					delete newFile[i].trust[k].nextLevel;
+
+					while (newFile[i].trust[k].amount >= newFile[i].trust[k].maximum) {
+						newFile[i].trust[k].level++;
+						newFile[i].trust[k].amount -= newFile[i].trust[k].maximum;
+						newFile[i].trust[k].maximum = 100+((newFile[i].trust[k].level-1)*15);
+					}
+				}
+			}
 		}
 		
 		// delete old shit
@@ -2555,12 +2576,12 @@ commands.gettrust = new Command({
 	func: (message, args) => {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 		
-		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 
 		if (!charFile[args[0]]?.trust || Object.keys(charFile[args[0]]?.trust).length == 0) return message.channel.send(`This character has not been given any trust yet.`);
 
-		trustBio(charFile[args[0]], message.guild.id);
+		trustBio(charFile[args[0]], message.channel, message.author.id);
 	}
 })
 

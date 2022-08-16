@@ -46,5 +46,129 @@ trustLevel = (char, char2) => {
 	return char.trust[char2.truename ?? char2.name].level;
 }
 
-trustBio = async (char, guild) => {
+trustEmojis = {
+	'Loves': '❤️',
+	'Likes': '👍',
+	'Is neutral to': '😐',
+	'Dislikes': '👎',
+	'Hates': '🤬'
+}
+
+trustRanges = { //minumum to maximum trust levels
+	'Loves': [15, 999],
+	'Likes': [5, 14],
+	'Is neutral to': [-4, 4],
+	'Dislikes': [-14, -5],
+	'Hates': [-999, -15]
+}
+
+trustBio = async (char, channel, author) => {
+	let trust = char.trust;
+
+	//sort it based on trust level and value
+	//the higher the trust level
+	let sortedTrust = Object.keys(trust).sort((a, b) => {
+		return (trust[b].level*100000 + ((trust[b]?.amount ?? trust[b].value) / (trust[b]?.maximum ?? trust[b].nextLevel))) - (trust[a].level*100000 + ((trust[a]?.amount ?? trust[a].value) / (trust[a]?.maximum ?? trust[a].nextLevel)));
+	}).map(key => {
+		return {
+			name: key,
+			level: trust[key].level,
+			amount: trust[key].amount ?? trust[key].value,
+			maximum: trust[key].maximum ?? trust[key].nextLevel
+		}
+	})
+	
+	//split it into groups depending on trustRanges
+	let trustGroups = {};
+	for (let i = 0; i < sortedTrust.length; i++) {
+		let trust = sortedTrust[i];
+		for (let j = 0; j < Object.keys(trustRanges).length; j++) {
+			let range = trustRanges[Object.keys(trustRanges)[j]];
+			if (trust.level >= range[0] && trust.level <= range[1]) {
+				if (!trustGroups[Object.keys(trustRanges)[j]]) trustGroups[Object.keys(trustRanges)[j]] = [];
+				trustGroups[Object.keys(trustRanges)[j]].push(trust);
+			}
+		}
+	}
+
+	//now rearrange all entries of each group into text
+	for (i in trustGroups) {
+		for (l in trustGroups[i]) {
+			trustGroups[i][l] = `**${trustGroups[i][l].name}** (lv ${trustGroups[i][l].level})      ${getBar('mp', trustGroups[i][l].amount, trustGroups[i][l].maximum)} ${trustGroups[i][l].amount}/${trustGroups[i][l].maximum}`;
+		}
+
+		//split it into chunks of 10
+		let chunks = [];
+		for (let l = 0; l < trustGroups[i].length; l += 10) {
+			chunks.push(trustGroups[i].slice(l, l+10));
+		}
+		trustGroups[i] = chunks;
+	}
+
+	//now create the embed with buttons
+	let index = 0;
+	let currentCategory = 0;
+
+	const generateEmbed = async => {
+		const current = trustGroups[Object.keys(trustGroups)[currentCategory]][index];
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+			.setTitle(`${char.name}'s Trust`)
+			.setDescription(`**${trustEmojis[Object.keys(trustGroups)[currentCategory]]} ${Object.keys(trustGroups)[currentCategory]} (lv ${trustRanges[Object.keys(trustGroups)[currentCategory]][0]}${Math.abs(trustRanges[Object.keys(trustGroups)[currentCategory]][1]) == 999 ? `${trustRanges[Object.keys(trustGroups)[currentCategory]][1]/999 == 1 ? '>=' : '<='}` : ` - ${trustRanges[Object.keys(trustGroups)[currentCategory]][1]}`})**:\n\n${current.join('\n')}`);
+
+		return DiscordEmbed;
+	}
+
+	//check if it has more than one category, or more than one chunk
+	let canFit = (Object.keys(trustGroups).length == 1 && trustGroups[Object.keys(trustGroups)[0]].length == 1)
+	let embedMessage;
+
+	if (canFit) {
+		embedMessage = await channel.send({embeds: [await generateEmbed()]});
+		return;
+	}
+	
+	embedMessage = await channel.send({
+		embeds: [await generateEmbed()],
+		components: [new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]})]
+	});
+
+	const collector = embedMessage.createMessageComponentCollector({
+		filter: ({user}) => user.id == author
+	});
+
+	collector.on('collect', async interaction => {
+		if (interaction.component.customId == 'cancel') {
+			collector.stop()
+			await interaction.update({
+			embeds: [await generateEmbed()],
+			components: []
+			})
+		} else {
+			if (interaction.customId === 'back') {
+				if (index == 0) {
+					currentCategory--;
+					if (currentCategory < 0) currentCategory = Object.keys(trustGroups).length - 1;
+					index = trustGroups[Object.keys(trustGroups)[currentCategory]].length - 1;
+				} else {
+					index--;
+				}
+			} else if (interaction.customId === 'forward') {
+				if (index == trustGroups[Object.keys(trustGroups)[currentCategory]].length - 1) {
+					currentCategory++;
+					if (currentCategory >= Object.keys(trustGroups).length) currentCategory = 0;
+					index = 0;
+				} else {
+					index++;
+				}
+			}
+
+			await interaction.update({
+				embeds: [await generateEmbed()],
+				components: [
+					new Discord.MessageActionRow({components: [backButton, forwardButton, pageButton, cancelButton]}),
+				]
+			})
+		}
+	});
 }
