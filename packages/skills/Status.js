@@ -467,7 +467,7 @@ statusList = {
 			}
 		},
 		getinfo(vars, skill) {
-			return `Surrounds the target with a **shield named ${elementEmoji[vars[1]]}${vars[0]}**`
+			return `Surrounds the target with a **shield named ${elementEmoji[vars[1]]}${vars[0]}** that will take **${vars[2]} hit${vars[2] == 1 ? '' : 's'}** to destroy`
 		}
 	}),
 
