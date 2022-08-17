@@ -1285,6 +1285,8 @@ process.on('uncaughtException', err => {
 	saveError(err);
 });
 
+const path = require("path")
+
 saveError = async (err) => {
 	console.log(`Uh oh... We got an error. Logging now.\n\n${err.stack}`);
 	let errorText = `${err.stack}`;
@@ -1303,7 +1305,12 @@ saveError = async (err) => {
 		}
 	}
 
-	await client.channels.cache.get("979841088988807168").send(`${(new Date()).toUTCString()}\n\`\`\`\n${err.stack}\`\`\``)
+	await client.channels.cache	//please never break
+		.get("979841088988807168")
+		.send(`${(new Date())
+			.toUTCString()}\n\`\`\`\n${
+				err.stack.replace(/\((.+?:\d+:\d+)\)\s*$/gm, (_match, filepath) =>
+					`(${path.basename(filepath)})`)}\`\`\``)
 
 	process.exit(1);
 }
@@ -1392,3 +1399,9 @@ async function sendError(btl) {
 		})
 	})
 }
+
+commands.error = new Command({
+	func() {
+		throw Error("TEST")
+	}
+})
