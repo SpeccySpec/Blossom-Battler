@@ -1154,7 +1154,7 @@ commands.trustxp = new Command({
 })
 
 commands.cleartrust = new Command({
-	desc: "Clears all Trust XP from a character with another character. You can remove a character's Trust XP in general if you want to.\n**Removing all trust of all characters will require an Administrator permission.**",
+	desc: "Clears all Trust XP from a character with another character. You can remove a character's Trust XP in general if you want to by not specifying the 2nd character, or typing 'all' in that place.\n**Removing all trust of all characters will require an Administrator permission.**",
 	aliases: ['cleartrust', 'removetrust', 'removetrustxp', 'removetrustxpup', 'removetrustxpup'],
 	section: "characters",
 	args: [
@@ -1183,15 +1183,14 @@ commands.cleartrust = new Command({
 		} else {
 			if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
-			if (args[1] && !charFile[args[1]]) return message.channel.send('Nonexistant Character.');
-			if (args[1] && !charFile[args[0]]?.trust?.[args[1]]) return message.channel.send("That character doesn't have any Trust XP with that character.");
 			if (!args[1] && !charFile[args[0]]?.trust) return message.channel.send("That character doesn't have any Trust XP.");
-			if (args[1]) {
+			if (args[1] && !charFile[args[0]]?.trust?.[args[1]] && args[1].toLowerCase() != 'all') return message.channel.send("That character doesn't have any Trust XP with that character.");
+			if (args[1] && args[1].toLowerCase() != 'all') {
 				delete charFile[args[0]].trust[args[1]];
-				delete charFile[args[1]].trust[args[0]];
+				if (charFile?.[args[1]]?.trust?.[args[0]]) delete charFile[args[1]].trust[args[0]];
 			} else {
 				for (let char in charFile[args[0]].trust) {
-					delete charFile[char].trust[args[0]];
+					if (charFile?.[char]?.trust?.[args[0]]) delete charFile[char].trust[args[0]];
 					delete charFile[args[0]].trust[char];
 				}
 			}
