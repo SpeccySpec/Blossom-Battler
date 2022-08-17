@@ -704,7 +704,7 @@ passiveList = {
 			let status = args[0].toLowerCase();
 			let chance = args[1];
 
-			if (!Status.includes(status)) return void message.channel.send("You entered an invalid value for <Status Effect>!");
+			if (!statusEffects.includes(status)) return void message.channel.send("You entered an invalid value for <Status Effect>!");
 			if (chance < 1) return void message.channel.send("What's the point if it never happens?");
 
 			makePassive(skill, "status", [status, chance]);
