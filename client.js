@@ -1399,9 +1399,3 @@ async function sendError(btl) {
 		})
 	})
 }
-
-commands.error = new Command({
-	func() {
-		throw Error("TEST")
-	}
-})
