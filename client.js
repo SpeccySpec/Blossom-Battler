@@ -1285,7 +1285,7 @@ process.on('uncaughtException', err => {
 	saveError(err);
 });
 
-saveError = (err) => {
+saveError = async (err) => {
 	console.log(`Uh oh... We got an error. Logging now.\n\n${err.stack}`);
 	let errorText = `${err.stack}`;
 	//don't render it on one line
@@ -1302,6 +1302,8 @@ saveError = (err) => {
 			console.log('Written backup of battles');
 		}
 	}
+
+	await client.channels.cache.get("979841088988807168").send(`${(new Date()).toUTCString()}\n\`\`\`\n${err.stack}\`\`\``)
 
 	process.exit(1);
 }
