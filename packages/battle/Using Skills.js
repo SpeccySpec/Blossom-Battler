@@ -473,7 +473,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			return result;
 		// reminder that physical shields repel physical/ranged and magic ones repel magic.
 		} else if (shieldtype && !noRepel) {
-			let repel = false;
+			let repel = shieldtype == "reduce";
 			if (shieldtype === 'repelmag' && skill.atktype === 'magic')
 				repel = true;
 			else if (shieldtype === 'repelphys' && (skill.atktype === 'physical' || skill.atktype === 'ranged'))
