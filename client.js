@@ -1305,12 +1305,7 @@ saveError = async (err) => {
 		}
 	}
 
-	await client.channels.cache	//please never break
-		.get("979841088988807168")
-		.send(`${(new Date())
-			.toUTCString()}\n\`\`\`\n${
-				err.stack.replace(/\((.+?:\d+:\d+)\)\s*$/gm, (_match, filepath) =>
-					`(${path.basename(filepath)})`)}\`\`\``)
+	await client.channels.cache.get("979841088988807168")?.send(`${(new Date()).toUTCString()}\n\`\`\`\n${err.stack.replace(/\((.+?:\d+:\d+)\)\s*$/gm, (_match, filepath) =>`(${path.basename(filepath)})`)}\`\`\``)
 
 	process.exit(1);
 }
