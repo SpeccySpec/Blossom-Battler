@@ -2667,7 +2667,7 @@ commands.getbio = new Command({
 })
 
 commands.gettrust = new Command({
-	desc: "[NOT YET FINISHED] Lists how much a character trusts other characters.",
+	desc: "Lists how much a character trusts other characters.",
 	aliases: ['trust', 'chartrust', 'charactertrust'],
 	section: "characters",
 	args: [
