@@ -23,10 +23,12 @@ healList = {
 			makeHeal(skill, "healstat", [args[0], args[1].toLowerCase()]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (targ.custom?.pinch)
 				return `__${targ.name}__ cannot be healed while they are in a pinch!`
 			if (!vars[0] || vars[0] == null || vars[0] == 0) return '';
+
+			vars[0] = Math.round(vars[0] * multiplier);
 
 			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
 				settings = setUpSettings(btl.guild.id);
@@ -112,11 +114,11 @@ healList = {
 			makeHeal(skill, "regenerate", [hp, turns]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			addCusVal(targ, "regenheal", {
 				name: skill.name,
 				username: char.name,
-				heal: vars[0],
+				heal: Math.round(vars[0] * multiplier),
 				turns: vars[1],
 				type: "hp",
 				user: char.id
@@ -157,11 +159,11 @@ healList = {
 			makeHeal(skill, "invigorate", [mp, turns]);
 			return true;
 		},
-		onuse: function(char, targ, skill, btl, vars) {
+		onuse: function(char, targ, skill, btl, vars, multiplier) {
 			addCusVal(targ, "regenheal", {
 				name: skill.name,
 				username: char.name,
-				heal: vars[0],
+				heal: Math.round(vars[0] * multiplier),
 				turns: vars[1],
 				type: "mp",
 				user: char.id
@@ -193,10 +195,10 @@ healList = {
 			makeHeal(skill, "revive", [args[0]]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (targ.hp > 0) return 'But it failed!';
 
-			targ.hp = targ.maxhp/vars[0];
+			targ.hp = math.round(targ.maxhp/vars[0] * multiplier);
 
 			if (targ.team == char.team) {
 				settings = setUpSettings(btl.guild.id);
@@ -256,7 +258,7 @@ healList = {
 			makeHeal(skill, "statusheal", [status]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (targ.team == char.team && targ.id != char.id) {
 				settings = setUpSettings(btl.guild.id);
 				changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl.channel);
@@ -349,11 +351,11 @@ healList = {
 			}
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (!vars[0])
 				char.hp = 0;
 			else
-				char.hp = vars[0];
+				char.hp = Math.round(vars[0] * multiplier);
 
 			if (char.hp > char.maxhp) char.hp = char.maxhp;
 			if (char.hp < 0) char.hp = 0;
@@ -390,9 +392,9 @@ healList = {
 			if (!hasHeal) makeHeal(skill, "healstat", [60, 'hp']);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			addCusVal(targ, "wishheal", {
-				turns: vars[0],
+				turns: Math.round(vars[0] * multiplier),
 				vars: vars
 			})
 

@@ -1141,11 +1141,116 @@ commands.trustxp = new Command({
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]] || !charFile[args[1]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
-		if (args[2] <= 0) return message.channel.send("Don't even try it.");
+		if (args[0] == args[1]) return message.channel.send("It won't do anything in battle if you try giving yourself Trust XP.");
+		if (args[2] == 0) return message.channel.send("It won't do anything when you add or subtract nothing from something");
 
 		// changeTrust function handles everything.
-		changeTrust(charFile[args[0]], charFile[args[1]], Math.round(args[2]*(settings.rates.trustrate ?? 1)), true, message.channel)
+		changeTrust(charFile[args[0]], charFile[args[1]], Math.round(args[2]*(settings.rates.trustrate ?? 1)), true, message.channel, args[0], args[1]);
+		delete charFile[args[0]].truename;
+		delete charFile[args[1]].truename;
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		message.react('👍');
+	}
+})
+
+commands.cleartrust = new Command({
+	desc: "Clears all Trust XP from a character with another character. You can remove a character's Trust XP in general if you want to.\n**Removing all trust of all characters will require an Administrator permission.**",
+	aliases: ['cleartrust', 'removetrust', 'removetrustxp', 'removetrustxpup', 'removetrustxpup'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Character #2 Name",
+			type: "Word",
+			forced: false
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		if (args[0].toLowerCase() == 'all') {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send("You don't have permission to do that.");
+			for (let char in charFile) {
+				delete charFile[char].trust;
+			}
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+			message.channel.send("All Trust XP has been removed.");
+		} else {
+			if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+			if (args[1] && !charFile[args[1]]) return message.channel.send('Nonexistant Character.');
+			if (args[1] && !charFile[args[0]]?.trust?.[args[1]]) return message.channel.send("That character doesn't have any Trust XP with that character.");
+			if (!args[1] && !charFile[args[0]]?.trust) return message.channel.send("That character doesn't have any Trust XP.");
+			if (args[1]) {
+				delete charFile[args[0]].trust[args[1]];
+				delete charFile[args[1]].trust[args[0]];
+			} else {
+				for (let char in charFile[args[0]].trust) {
+					delete charFile[char].trust[args[0]];
+					delete charFile[args[0]].trust[char];
+				}
+			}
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+			message.channel.send("Trust has been removed.");
+		}
+	}
+})
+
+commands.trustlevel = new Command({
+	desc: "Sets the Trust Level of a character with another character.",
+	aliases: ['trustlevel', 'trustlevelup', 'trustlevelup'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Character #2 Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Trust Level",
+			type: "Num",
+			forced: true
+		}
+	],
+	checkban: true,
+	func: (message, args) => {
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		if (!charFile[args[0]] || !charFile[args[1]]) return message.channel.send('Nonexistant Character.');
+		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
+		if (args[2] < -20 || args[2] > 20) return message.channel.send("Trust Level must be between -20 and 20.");
+		if (args[2] == 0) return message.channel.send("This level will not do anything.");
+
+		let char1 = charFile[args[0]];
+		let char2 = charFile[args[1]];
+
+		if (!char1?.trust?.[args[1]]) {
+			char1.truename = args[0];
+			char2.truename = args[1];
+
+			setUpTrust(char1, char2);
+
+			delete char1.truename;
+			delete char2.truename;
+		}
+
+		char1.trust[args[1]].level = args[2];
+		char1.trust[args[1]].amount = 0;
+		char1.trust[args[1]].maximum = (100+((Math.abs(char1.trust[args[1]].level)-1)*15)) * (char1.trust[args[1]].level > 0 ? 1 : -1);
+
+		char2.trust[args[0]] = char1.trust[args[1]];
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		message.channel.send("Trust Level has been set.");
 	}
 })
 
@@ -1490,7 +1595,7 @@ commands.autolearn = new Command({
 })
 
 let disallowedLeaderSkillElelemts = {
-	boost: ['passive', 'status'],
+	boost: ['passive', 'almighty'],
 	discount: ['passive'],
 	crit: ['status', 'heal', 'passive'],
 	endure: ['status', 'heal', 'passive']
@@ -2060,13 +2165,33 @@ commands.updatecharacters = new Command({
 			}
 
 			// Bio Info
-			newFile[i].bio.height = [4, 0]
-			newFile[i].bio.weight = 0
-			newFile[i].bio.age = 10
-			newFile[i].bio.custom = {}
+			if (typeof charFile[i].bio.age != typeof newFile[i].bio.height) newFile[i].bio.height = [4, 0]
+			if (typeof charFile[i].bio.age != typeof newFile[i].bio.weight) newFile[i].bio.weight = 0
+			if (typeof charFile[i].bio.age != typeof newFile[i].bio.age) newFile[i].bio.age = 10
+			if (!charFile[i].bio.custom) newFile[i].bio.custom = {}
 
 			// Update Stats, for certain changes in new BB.
 			updateStats(newFile[i], message.guild.id, true);
+
+			// Update Trust
+			if (charFile[i].trust) {
+				for (let k in charFile[i].trust) {
+					if (charFile[i]?.trust[k]?.nextLevel) {
+						newFile[i].trust[k] = {
+							amount: charFile[i].trust[k].value,
+							level: charFile[i].trust[k].level,
+						}
+					}
+					newFile[i].trust[k].maximum = 100+((charFile[i].trust[k].level-1)*15)
+					delete newFile[i].trust[k].nextLevel;
+
+					while (newFile[i].trust[k].amount >= newFile[i].trust[k].maximum) {
+						newFile[i].trust[k].level++;
+						newFile[i].trust[k].amount -= newFile[i].trust[k].maximum;
+						newFile[i].trust[k].maximum = 100+((newFile[i].trust[k].level-1)*15);
+					}
+				}
+			}
 		}
 		
 		// delete old shit
@@ -2538,6 +2663,29 @@ commands.getbio = new Command({
 		}
 
 		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
+commands.gettrust = new Command({
+	desc: "[NOT YET FINISHED] Lists how much a character trusts other characters.",
+	aliases: ['trust', 'chartrust', 'charactertrust'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func: (message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+		
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
+		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+
+		if (!charFile[args[0]]?.trust || Object.keys(charFile[args[0]]?.trust).length == 0) return message.channel.send(`This character has not been given any trust yet.`);
+
+		trustBio(charFile[args[0]], message.channel, message.author.id);
 	}
 })
 

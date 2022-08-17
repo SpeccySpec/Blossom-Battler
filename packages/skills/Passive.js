@@ -29,13 +29,17 @@ passiveList = {
 			let element = args[0]?.toLowerCase();
 			let percentage = args[1];
 
-			if ((!utilityFuncs.inArray(element, Elements) && element != 'all' && element != 'magic' && element != 'physical') || element === 'almighty') return void message.channel.send("You entered an invalid element!");
+			if ((!utilityFuncs.inArray(element, Elements) && element != 'all' && element != 'magic' && element != 'ranged' && element != 'physical')) return void message.channel.send("You entered an invalid element!");
+			if (element == 'almighty' || element == 'passive') return void message.channel.send("You cannot boost the powers of almighty or passive skills!");
 
 			makePassive(skill, "boost", [element, percentage]);
 			return true;
 		},
 		statmod(btl, char, skill, vars) {
-			if ((typeof(skill.type) === 'object' && skill.type.includes(vars[0])) || (typeof(skill.type) === 'string' && skill.type == vars[0])) {
+			if ((vars[0] == 'all' && ((typeof(skill.type) === 'object' && !skill.type.includes('almighty')) || (typeof(skill.type) === 'string' && skill.type != 'almighty'))) 
+			|| (typeof(skill.type) === 'object' && skill.type.includes(vars[0])) 
+			|| (typeof(skill.type) === 'string' && skill.type == vars[0]) 
+			|| vars[0] == skill?.atktype) {
 				skill.pow *= (vars[1]/100) + 1;
 			}
 		},

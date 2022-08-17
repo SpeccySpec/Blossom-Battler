@@ -319,18 +319,16 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 			if (char.mimic || char.clone || char.reincarnate) skill.pow *= 1/3;
 
-			skill.pow = Math.round(skill.pow);
-
 			for (let i in skill.heal) {
 				if (!healList[i]) continue;
 				if (!healList[i].onuse) continue;
 
 				if (healList[i].multiple) {
 					for (let k in skill.heal[i]) {
-						result.txt += `\n${healList[i].onuse(char, targ, skill, btl, skill.heal[i][k]) ?? ''}`;
+						result.txt += `\n${healList[i].onuse(char, targ, skill, btl, skill.heal[i][k], skill.pow) ?? ''}`;
 					}
 				} else {
-					result.txt += `\n${healList[i].onuse(char, targ, skill, btl, skill.heal[i]) ?? ''}`;
+					result.txt += `\n${healList[i].onuse(char, targ, skill, btl, skill.heal[i], skill.pow) ?? ''}`;
 				}
 			}
 
@@ -987,9 +985,23 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	}
 
 	// First, we modify stats via passives n shit. This isn't the actual character anyway so we don't care.
+	if (skill.type === 'heal') skill.pow = 1; //this is to make sure healing skills can be modified by passives
 
 	// Failsafe
 	if (!skill.hits) skill.hits = 1;
+
+	// Main Elements
+	let mainElementRate = settings?.rates?.mainelement ?? 1.2;
+
+	if (typeof skill.type === 'string') {
+		if (char.mainElement === skill.type) {
+			skill.pow *= mainElementRate;
+		}
+	} else {
+		if (skill.type.includes(char.mainElement)) {
+			skill.pow *= mainElementRate;
+		}
+	}
 
 	// Passives
 	if (doPassives(btl)) {

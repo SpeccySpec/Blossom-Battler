@@ -519,6 +519,7 @@ barEmojis = {
 // Misc. Emojis
 critEmoji = '<:crit:973077052083286056>';
 leaderEmoji = '<:leader:993557760581058610>';
+goldenEmoji = `<:golden:973077051751940138>`;
 
 specialDates = {
 	"24 12": "Christmas Eve",
