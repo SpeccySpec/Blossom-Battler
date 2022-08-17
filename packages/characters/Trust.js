@@ -242,7 +242,7 @@ trustBio = async (char, channel, author) => {
 			await interaction.update({
 				embeds: [await generateEmbed()],
 				components: [
-					new Discord.MessageActionRow({components: [backButton, forwardButton, pageButton, cancelButton]}),
+					new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]}),
 				]
 			})
 		}
