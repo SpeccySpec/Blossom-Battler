@@ -716,11 +716,11 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 							targ.custom.shield.hp--;
 							if (targ.custom.shield.hp <= 0) {
 								addAtkMsg(btl, `__${targ.name}__'s __${targ.custom.shield.name}__ has broken!`);
-								delete targ.custom.shield.hp;
+								delete targ.custom.shield;
 							}
 						} else {
 							addAtkMsg(btl, `__${targ.name}__'s __${targ.custom.shield.name}__ has broken!`);
-							delete targ.custom.shield.hp;
+							delete targ.custom.shield;
 						}
 					}
 				}
