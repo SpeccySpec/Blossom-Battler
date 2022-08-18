@@ -1437,9 +1437,9 @@ passiveList = {
 			return true;
 		},
 		onheal(char, ally, skill, heal, btl, vars) {
-			if (!char.custom.affinitypoint) addCusVal(char, 'affinitypoint', 0);
+			if (!char.custom?.affinitypoint) addCusVal(char, 'affinitypoint', 0);
 
-			if (char.custom.affinitypoint < vars[0]) {
+			if (char.custom?.affinitypoint < vars[0]) {
 				char.custom.affinitypoint++;
 				return `${char.name} obtained a __${vars[1]}__. _(${char.custom.affinitypoint}/${vars[0]})_`;
 			}

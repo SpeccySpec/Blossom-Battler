@@ -198,7 +198,7 @@ healList = {
 		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (targ.hp > 0) return 'But it failed!';
 
-			targ.hp = math.round(targ.maxhp/vars[0] * multiplier);
+			targ.hp = Math.round(targ.maxhp/vars[0] * multiplier);
 
 			if (targ.team == char.team) {
 				settings = setUpSettings(btl.guild.id);

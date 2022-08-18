@@ -1333,6 +1333,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 						crit: char2.melee.crit,
 						atktype: atkType,
 						target: 'one',
+						melee: true,
 						noassistance: true
 					}
 
@@ -1342,7 +1343,8 @@ useSkill = (char, btl, act, forceskill, ally) => {
 					}
 
 					finalText += `\n${char2.name} wants to assist in attacking!\n`;
-					let result = attackWithSkill(char2, targ, meleeAtk, btl);
+					console.log(meleeAtk);
+					let result = attackWithSkill(char2, targ, meleeAtk, btl, true);
 					finalText += `${result.txt}\n`;
 					if (result.teamCombo) btl.canteamcombo = true;
 				}
