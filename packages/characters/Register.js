@@ -195,9 +195,10 @@ longDescription = (charDefs, level, server, message) => {
 
 	let userTxt = getServerUser(char.owner, message);
 
+	let tick = verifiedChar(char) ? '<:tick:973077052372701294>' : '';
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(!char.type ? elementColors[char.mainElement] : enemyTypeColors[char.type])
-		.setTitle(`${elementEmoji[char.mainElement]}${char.name} ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
+		.setTitle(`${elementEmoji[char.mainElement]}${tick}${char.name} ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
 
 	let desc = ''
 	if (char.weaponclass) {

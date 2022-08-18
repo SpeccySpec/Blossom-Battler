@@ -550,7 +550,8 @@ commands.listchars = new Command({
 
 			let descTxt = `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}MP`;
 
-			array.push({title: `${elementEmoji[charFile[i].mainElement]}${charFile[i].name} (${i})`, desc: descTxt});
+			let tick = verifiedChar(charFile[i]) ? '<:tick:973077052372701294>' : '';
+			array.push({title: `${elementEmoji[charFile[i].mainElement]}${tick}${charFile[i].name} (${i})`, desc: descTxt});
 		}
 		if (array.length == 0) return message.channel.send('No characters found!');
 
