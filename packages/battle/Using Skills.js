@@ -1110,16 +1110,16 @@ useSkill = (char, btl, act, forceskill, ally) => {
 
 	// Trust
 	for (let i in party.members) {
-		let char2 = party.members[i];
-		if (char.id === char2.id) continue;
+		let friennn = party.members[i];
+		if (char.id === friennn.id) continue;
 
-		if (trustLevel(char, char2) >= 6 && randNum(1, 100) <= 7) {
+		if (trustLevel(char, friennn) >= 6 && randNum(1, 100) <= 7) {
 			let a = trustQuotes[randNum(trustQuotes.length-1)];
-			a = replaceTxt(a, '%PLAYER1%', char.name, '%PLAYER2%', char2.name);
+			a = replaceTxt(a, '%PLAYER1%', char.name, '%PLAYER2%', friennn.name);
 
 			finalText += `\n_${a}_\n`;
 
-			skill.pow *= 1.5+(trustLevel(char, char2)/40)
+			skill.pow *= 1.5+(trustLevel(char, friennn)/40)
 		}
 	}
 
