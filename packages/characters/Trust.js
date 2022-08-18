@@ -46,7 +46,7 @@ changeTrust = (char, char2, i, send, channel, char1Name, char2Name) => {
 		char.trust[char2.truename].amount = char.trust[char2.truename].maximum;
 	} else {
 		if ((char.trust[char2.truename].amount <= 0 && char.trust[char2.truename].level >= 1) || (char.trust[char2.truename].amount <= char.trust[char2.truename].maximum && char.trust[char2.truename].level < 1)) {
-			while (((char.trust[char2.truename].amount <= 0 && char.trust[char2.truename].level >= 1) || (char.trust[char2.truename].amount <= char.trust[char2.truename].maximum && char.trust[char2.truename].level < 1)) && Math.abs(char.trust[char2.truename].level) < 20) {
+			while (((char.trust[char2.truename].amount <= 0 && char.trust[char2.truename].level >= 1) || (char.trust[char2.truename].amount <= char.trust[char2.truename].maximum && char.trust[char2.truename].level < 1)) && Math.abs(char.trust[char2.truename].level) > -20) {
 				detectedLevelUp = true;
 				
 				previousLevel = char.trust[char2.truename].level;
@@ -86,6 +86,9 @@ changeTrust = (char, char2, i, send, channel, char1Name, char2Name) => {
 				}
 			}
 		}
+	}
+	if ((char.trust[char2.truename].level == 20 && char.trust[char2.truename].amount >= char.trust[char2.truename].maximum) || (char.trust[char2.truename].level == -20 && char.trust[char2.truename].amount <= char.trust[char2.truename].maximum)) {
+		char.trust[char2.truename].amount = char.trust[char2.truename].maximum;
 	}
 
 	char2.trust[char.truename] = { //this is for consistency's sake
