@@ -19,7 +19,10 @@ trustEmojis = {
 	'Likes': '👍',
 	'Is neutral to': '😐',
 	'Dislikes': '👎',
-	'Hates': '🤬'
+	'Hates': '🤬',
+
+	'Raising': '😐',
+	'Lowering': '😔',
 }
 
 trustRanges = { //minumum to maximum trust levels
@@ -100,8 +103,8 @@ changeTrust = (char, char2, i, send, channel, char1Name, char2Name) => {
 	let trustemoji;
 	if (detectedLevelUp) {
 		if (i > 0) {
-			trustemoji = (char.trust[char2.truename].level >= 10) ? '❤️' : '✨';
-			if (char.trust[char2.truename].level < 0) trustemoji = '😐';
+			trustemoji = (char.trust[char2.truename].level >= 15) ? trustEmojis['Loves'] : (char.trust[char2.truename].level >= 5) ? trustEmojis['Likes'] : trustEmojis['Is neutral to'];
+			if (char.trust[char2.truename].level < 0) trustemoji = trustEmojis['Raising'];
 			
 			if (send) {
 				let DiscordEmbed = new Discord.MessageEmbed()
@@ -113,8 +116,8 @@ changeTrust = (char, char2, i, send, channel, char1Name, char2Name) => {
 				return `\n${trustemoji} ${char.name} & ${char2.name} grow closer, reaching _Trust Level __${char.trust[char2.truename].level}___! ${trustemoji}`;
 			}
 		} else {
-			trustemoji = (char.trust[char2.truename].level >= -10) ? '🤬' : '💀';
-			if (char.trust[char2.truename].level > 0) trustemoji = '😔';
+			trustemoji = (char.trust[char2.truename].level <= -15) ? trustEmojis['Hates'] : (char.trust[char2.truename].level <= -5) ? trustEmojis['Dislikes'] : trustEmojis['Is neutral to'];
+			if (char.trust[char2.truename].level > 0) trustemoji = trustEmojis['Lowering'];
 
 			if (send) {
 				let DiscordEmbed = new Discord.MessageEmbed()
@@ -128,7 +131,8 @@ changeTrust = (char, char2, i, send, channel, char1Name, char2Name) => {
 		}
 	} else {
 		if (send) {
-			return void channel.send(`${getBar('mp', char.trust[char2.truename].amount, char.trust[char2.truename].maximum)} ${char.trust[char2.truename].amount}/${char.trust[char2.truename].maximum}\n*${char.name} got ${i} trust XP with ${char2.name}.*`);
+			let bar = char.trust[char2.truename].level > 0 ? 'angel' : 'devil';
+			return void channel.send(`${getBar(bar, char.trust[char2.truename].amount, char.trust[char2.truename].maximum)} ${char.trust[char2.truename].amount}/${char.trust[char2.truename].maximum}\n*${char.name} got ${i} trust XP with ${char2.name}.*`);
 		}
 	}
 
@@ -171,9 +175,11 @@ trustBio = async (char, channel, author) => {
 	}
 
 	//now rearrange all entries of each group into text
+	let bar;
 	for (i in trustGroups) {
 		for (l in trustGroups[i]) {
-			trustGroups[i][l] = `**${trustGroups[i][l].name}** (lv ${trustGroups[i][l].level})      ${getBar('mp', trustGroups[i][l].amount, trustGroups[i][l].maximum)} ${trustGroups[i][l].amount}/${trustGroups[i][l].maximum}`;
+			bar = trustGroups[i][l].level > 0 ? 'angel' : 'devil';
+			trustGroups[i][l] = `**${trustGroups[i][l].name}** (lv ${trustGroups[i][l].level})      ${getBar(bar, trustGroups[i][l].amount, trustGroups[i][l].maximum)} ${trustGroups[i][l].amount}/${trustGroups[i][l].maximum}`;
 		}
 
 		//split it into chunks of 10

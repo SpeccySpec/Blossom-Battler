@@ -513,7 +513,44 @@ barEmojis = {
 		left: '<:nobarleft:1008737398424862830>',
 		middle: '<:nobarmidl:1008737400169697280>',
 		right: '<:nobarrigh:1008737402199748689>'
+	},
+
+	angel: {
+		lefter: '<:angelbarlefter:1009835845362122863>',
+		left: '<:angelbarleft:1009835843722158211>',
+		middle: '<:angelbarmidl:1009835847123734672>',
+		right: '<:angelbarright:1009835849061503067>',
+		righter: '<:angelbarrighter:1009835850919592076>'
+	},
+
+	devil: {
+		lefter: '<:devilbarlefter:1009835854400852029>',
+		left: '<:devilbarleft:1009835852484067500>',
+		middle: '<:devilbarmidl:1009835856376365076>',
+		right: '<:devilbarright:1009835858377064529>',
+		righter: '<:devilbarrighter:1009835860159635609>'
+	},
+
+	none_angel: {
+		lefter: '<:angelbarlefter:1009835845362122863>',
+		left: '<:noangelbarleft:1009835862185488474>',
+		middle: '<:nobarmidl:1008737400169697280>',
+		right: '<:noangelbarright:1009835864190361754>',
+		righter: '<:angelbarrighter:1009835850919592076>'
+	},
+
+	none_devil: {
+		lefter: '<:devilbarlefter:1009835854400852029>',
+		left: '<:nodevilbarleft:1009835866518196244>',
+		middle: '<:nobarmidl:1008737400169697280>',
+		right: '<:nodevilbarright:1009835868443385948>',
+		righter: '<:devilbarrighter:1009835850919592076>'
 	}
+}
+
+noneBars = {
+	angel: 'none_angel',
+	devil: 'none_devil'
 }
 
 // Misc. Emojis
@@ -861,18 +898,27 @@ setUpUserData = (user) => {
 
 getBar = (type, value, maxvalue, len) => {
 	let barType = barEmojis[type.toLowerCase()] ?? barEmojis.none;
+	let noneBar = barEmojis[noneBars[type.toLowerCase()] ?? 'none']
 
 	let p = Math.floor((parseInt(value)/parseInt(maxvalue))*10);
 
-	let firstOne = barType.left;
-	if (p < 1) firstOne = barEmojis.none.left;
+	let firstOne = barType.left
+	if (p < 1) firstOne = noneBar.left;
+	if (barType.lefter) {
+		if (typeof barType.lefter == 'object') barType.lefter = barType.lefter.join('');
+		firstOne = barType.lefter + firstOne;
+	}
 
 	let lastOne = barType.right;
-	if (p < (len ?? 10)) lastOne = barEmojis.none.right;
+	if (p < (len ?? 10)) lastOne = noneBar.right;
+	if (barType.righter) {
+		if (typeof barType.righter == 'object') barType.righter = barType.righter.join('');
+		lastOne = lastOne + barType.righter;
+	}
 
 	let middleOnes = '';
 	for (let i = 2; i < ((len ?? 10)-1); i++) {
-		middleOnes += (p >= i) ? barType.middle : barEmojis.none.middle;
+		middleOnes += (p >= i) ? barType.middle : noneBar.middle;
 	}
 
 	return `${firstOne}${middleOnes}${lastOne}`;
