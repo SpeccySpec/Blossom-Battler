@@ -639,9 +639,15 @@ commands.listparty = new Command({
 
 			let members = '';
 			
-			for (const k in parties[i].members) {
-				members += parties[i].members[k];
-				if (k <= parties[i].members.length) members += ', ';
+			if (parties[i]?.members.length > 0) {
+				members = `*Members:* ${parties[i].members.join(', ')}`;
+			}
+			if (parties[i]?.backup.length > 0) {
+				if (members != '') members += `\n`;
+				members += `*Backup:* ${parties[i].backup.join(', ')}`;
+			}
+			if (members.length == 0) {
+				members = 'No members';
 			}
 
 			array.push({title: i, desc: members});
