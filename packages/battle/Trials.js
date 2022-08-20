@@ -49,6 +49,10 @@ nextWave = (btl) => {
 
 			// Boss Wave txt
 			if (enemy.type.includes('boss') || enemy.type.includes('deity')) bosswave = true;
+			
+			// Just to be sure...
+			enemy.team = 1;
+			enemy.pos = i;
 
 			setupBattleStats(enemy);
 			enemy.team = 1;

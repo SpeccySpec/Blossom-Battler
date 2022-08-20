@@ -1552,6 +1552,7 @@ doTurn = async(btl, noTurnEmbed) => {
 		}
 	}
 
+	console.log(`Can we team combo? ${btl.canteamcombo ? "Yes." : "No."}`);
 
 	// Now send the embed
 	if (statusTxt != '') {
