@@ -273,37 +273,45 @@ passiveList = {
 		onturn(btl, char, vars) {
 			let finalTxt = '';
 			let settings = setUpSettings(btl.guild.id);
+			let amount = vars[0]
 
 			switch(vars[1].toLowerCase()) {
-				case 'mp':
-					char.mp += parseInt(vars[0]);
-					finalTxt = `__${char.name}__'s MP was restored by **${vars[0]}**!`;
+				case 'mp': {
+					char.mp = Math.max(char.mp + amount, 0)
+					finalTxt = `__${char.name}__'s MP was restored by **${amount}**!`;
 					break;
+				}
 
-				case 'lb':
+				case 'lb': {
 					if (settings.mechanics.limitbreaks) {
-						char.lbpercent += parseInt(vars[0]);
-						finalTxt = `__${char.name}__'s LB% was increased by **${vars[0]}%**!`;
+						char.lbpercent = Math.max(char.lbpercent + amount, 0)
+						finalTxt = `__${char.name}__'s LB% was increased by **${amount}%**!`;
 					} else {
-						char.mp += (char.maxmp/100)*parseInt(vars[0]);
-						finalTxt = `__${char.name}__'s MP was restored by **${(char.maxmp/100)*parseInt(vars[0])}**!`;
+						amount = Math.round((char.maxmp/100)*amount)
+						char.mp = Math.max(char.mp + amount, 0)
+						finalTxt = `__${char.name}__'s MP was restored by **${amount}**!`;
 					}
 
 					break;
+				}
 
-				case 'hppercent':
-					char.hp += Math.round((char.maxhp/100)*parseInt(vars[0]));
-					finalTxt = `__${char.name}__'s HP was restored by **${Math.round((char.maxhp/100)*parseInt(vars[0]))}**!`;
+				case 'hppercent': {
+					amount = Math.round((char.maxhp/100)*amount)
+					char.hp = Math.max(char.hp + amount, 0)
+					finalTxt = `__${char.name}__'s HP was restored by **${amount}**!`;
 					break;
+				}
 
-				case 'mppercent':
-					char.mp += Math.round((char.maxmp/100)*parseInt(vars[0]));
-					finalTxt = `__${char.name}__'s MP was restored by **${Math.round((char.maxmp/100)*parseInt(vars[0]))}**!`;
+				case 'mppercent': {
+					amount = Math.round((char.maxmp/100)*amount)
+					char.mp = Math.max(char.mp + amount, 0)
+					finalTxt = `__${char.name}__'s MP was restored by **${amount}**!`;
 					break;
+				}
 
 				default:
-					char.hp += parseInt(vars[0]);
-					finalTxt = `__${char.name}__'s HP was restored by **${vars[0]}**!`;
+					char.hp = Math.max(char.hp + amount, 0)
+					finalTxt = `__${char.name}__'s HP was restored by **${amount}**!`;
 					break;
 			}
 
