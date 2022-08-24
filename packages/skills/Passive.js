@@ -1177,9 +1177,13 @@ passiveList = {
 		},
 		ondamage(char, inf, skill, dmg, passive, btl, vars) {
 			if (char.hp <= 0 && !char.custom?.pinch) {
-				addCusVal(char, "pinch", true)
-				char.hp = Math.floor((char.maxhp * vars[0]) / 100)
-				return "...but they refuse to die just yet, and become enraged!"
+				if (char.custom?.pinch) {
+					delete char.custom.pinch
+				} else {
+					addCusVal(char, "pinch", true)
+					char.hp = Math.floor((char.maxhp * vars[0]) / 100)
+					return "...but they refuse to die just yet, and become enraged!"
+				}
 			}
 		},
 		onturn(btl, char, vars) {
