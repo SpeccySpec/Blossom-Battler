@@ -151,16 +151,17 @@ extrasList = {
 		canuse(char, skill, btl, vars) {
 			const charges = vars[0]
 			if (!char.custom?.charges)
-				char.custom.charges = {}
+				addCusVal(char, "charges", {})
 			const allcharges = char.custom.charges
 			const name = skill.name
 			if (!allcharges[name])
 				allcharges[name] = [charges, vars[1], name]
-			return allcharges[name] < 1 ? `${name} ran out of charges!` : true
+			return allcharges[name][0] < 1 ? `${name} ran out of charges!` : true
 		},
 		onuse(char, targ, skill, btl, vars) {
-			char.custom.charges[skill.name] -= 1;
-			return `*(${char.custom.charges[skill.name]}/${vars[1]}) charges left.*`
+			let charges = char.custom.charges[skill.name]
+			charges[0] -= 1;
+			return `*(${charges[0]}/${vars[0]}) charges left.*`
 		},
 		getinfo(vars, skill) {
 			return `Has **${vars[0]}** charges`
@@ -2168,10 +2169,17 @@ customVariables = {
 
 	charges: {
 		onturn(btl, char, vars) {
-			const icharges = vars[0]
-			vars[0] += vars[1]
-			if (Math.floor(vars[0]) > icharges)
-				return `${vars[3]} was recharged by ${Math.floor(vars[0]) - icharges}`
+			let txt = ""
+			for (const skill in vars) {
+				const skillvars = vars[skill]
+				const icharges = skillvars[0]
+				if (icharges == skillvars[1])
+					continue
+				skillvars[0] += skillvars[1]
+				if (Math.floor(skillvars[0]) > icharges)
+					txt += `${skillvars[3]} was recharged by ${Math.floor(skillvars[0]) - icharges}`
+			}
+			return txt
 		}
 	}
 }
