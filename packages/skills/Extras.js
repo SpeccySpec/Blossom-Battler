@@ -126,6 +126,47 @@ extrasList = {
 		}
 	}),
 
+	charges: new Extra({
+		name: "Charges",
+		desc: "The skill will consume a charge when used, and cannot be used when it runs out of charges, the skill will recharge if <Recharge Rate> is set.",
+		args: [
+			{
+				name: "Charges",
+				type: "Num",
+				forced: true,
+			},
+			{
+				name: "Recharge Rate",
+				type: "Decimal",
+			}
+		],
+		applyfunc(message, skill, args) {
+			let charges = args[0]
+			let rate = args[1] ?? 0
+			if (charges < 1)
+				return void message.channel.send("What's the point of a skill that you can never use?")
+			makeExtra(skill, "need", [charges, rate]);
+			return true
+		},
+		canuse(char, skill, btl, vars) {
+			const charges = vars[0]
+			if (!char.custom?.charges)
+				char.custom.charges = {}
+			const allcharges = char.custom.charges
+			const name = skill.name
+			if (!allcharges[name])
+				allcharges[name] = [charges, vars[1], name]
+			return allcharges[name] < 1 ? `${name} ran out of charges!` : true
+		},
+		onuse(char, targ, skill, btl, vars) {
+			char.custom.charges[skill.name] -= 1;
+			return `*(${char.custom.charges[skill.name]}/${vars[1]}) charges left.*`
+		},
+		getinfo(vars, skill) {
+			return `Has **${vars[0]}** charges.`
+		}
+	}),
+
 	need: new Extra({
 		name: "Need",
 		desc: 'Will make the skill require <Less/More> than <Percent>% of <Cost Type> for it to work.',
@@ -2123,5 +2164,14 @@ customVariables = {
 
 	pinch: {
 		toembed: "<:pinch:1004506376036429924>"
+	},
+
+	charges: {
+		onturn(btl, char, vars) {
+			const icharges = vars[0]
+			vars[0] += vars[1]
+			if (Math.floor(vars[0]) > icharges)
+				return `${vars[3]} was recharged by ${Math.floor(vars[0]) - icharges}`
+		}
 	}
 }
