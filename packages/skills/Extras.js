@@ -163,7 +163,7 @@ extrasList = {
 			return `*(${char.custom.charges[skill.name]}/${vars[1]}) charges left.*`
 		},
 		getinfo(vars, skill) {
-			return `Has **${vars[0]}** charges.`
+			return `Has **${vars[0]}** charges`
 		}
 	}),
 
