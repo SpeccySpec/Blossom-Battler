@@ -145,7 +145,7 @@ extrasList = {
 			let rate = args[1] ?? 0
 			if (charges < 1)
 				return void message.channel.send("What's the point of a skill that you can never use?")
-			makeExtra(skill, "need", [charges, rate]);
+			makeExtra(skill, "charges", [charges, rate]);
 			return true
 		},
 		canuse(char, skill, btl, vars) {
