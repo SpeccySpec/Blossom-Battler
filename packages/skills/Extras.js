@@ -155,13 +155,14 @@ extrasList = {
 			const allcharges = char.custom.charges
 			const name = skill.name
 			if (!allcharges[name])
-				allcharges[name] = [charges, vars[1], name]
+				allcharges[name] = [charges, vars[1], name, charges]
 			return allcharges[name][0] < 1 ? `${name} ran out of charges!` : true
 		},
 		onuse(char, targ, skill, btl, vars) {
 			let charges = char.custom.charges[skill.name]
 			charges[0] -= 1;
-			return `*(${charges[0]}/${vars[0]}) charges left.*`
+			charges[0] = parseFloat(charges[0].toFixed(2))
+			return `*(${Math.floor(charges[0])}/${vars[0]}) charges left.*`
 		},
 		getinfo(vars, skill) {
 			return `Has **${vars[0]}** charges`
@@ -2173,11 +2174,13 @@ customVariables = {
 			for (const skill in vars) {
 				const skillvars = vars[skill]
 				const icharges = skillvars[0]
-				if (icharges == skillvars[1])
+				if (icharges == skillvars[3])
 					continue
 				skillvars[0] += skillvars[1]
+				skillvars[0] = Math.min(parseFloat(skillvars[0].toFixed(2)), skillvars[3])
+				console.log(skill, skillvars[0], icharges)
 				if (Math.floor(skillvars[0]) > icharges)
-					txt += `${skillvars[3]} was recharged by ${Math.floor(skillvars[0]) - icharges}`
+					txt += `${txt == "" ? "" : "\n"}${skillvars[2]} was recharged!`
 			}
 			return txt
 		}
