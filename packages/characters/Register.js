@@ -1,4 +1,4 @@
-writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, perception, endurance, charisma, inteligence, agility, luck) => {
+ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, perception, endurance, charisma, inteligence, agility, luck) => {
     let charFile = setUpFile(`${dataPath}/json/${guild.id}/characters.json`);
 
     charFile[name] = {
@@ -423,7 +423,7 @@ longDescription = (charDefs, level, server, message) => {
 			if (!skillFile[enmQualities.skill]) {
 				specialskill += `🛑 Invalid Skill (${enmQualities.skill})\n`;
 			} else {
-				let type = typeof skillFile[enmQualities.skill].type == 'object' ? elementEmojis[skillFile[enmQualities.skill].type[0]] : elementEmoji[skillFile[enmQualities.skill].type];
+				let type = typeof skillFile[enmQualities.skill].type == 'object' ? elementEmoji[skillFile[enmQualities.skill].type[0]] : elementEmoji[skillFile[enmQualities.skill].type];
 				specialskill += `${type}${skillFile[enmQualities.skill].name}\n`;
 			}
 			qualityString += `\n**Special**\n${specialskill}`
