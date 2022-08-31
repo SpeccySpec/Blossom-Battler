@@ -1,10 +1,10 @@
 /*
 	[[[Hook Documentation - NEGOTIATION SPECIAL hooks in order of appearance.]]]
 
-	- canuse(char, targ, btl, vars)
+	- canproceed(char, targ, btl, vars)
 	Can this proceed fully? Return a string if not, otherwise, return true. This is calculated right when the option is selected.
 
-	- postapply(char, targ, amount, btl, vars)
+	- preapply(char, targ, amount, btl, vars)
 	This will do things before the pacify amount gets added to the target. Should return a string.
 	
 	- postapply(char, targ, btl, vars)
@@ -65,7 +65,7 @@ specialList = {
 
 	requiredvar: new Extra({
 		name: "Required Variable",
-		desc: "Requires a <Variable> variable requirement with a specified option to pacify. Can also execute a special if the user doesn't meet requirements.\n\n[NOT YET USABLE]",
+		desc: "Requires a <Variable> variable to be or not to be present to pacify with a specified option. Will prompt with a {Failure Message} message, and can execute a special if the user doesn't meet requirements.\n\n[SPECIAL EXECUTION USABLE]",
         multiple: true,
 		args: [
 			{
@@ -74,11 +74,15 @@ specialList = {
                 forced: true
 			},
 			{
-				name: "Failure Message",
-				type: "Word",
+				name: "Must be present?",
+				type: "YesNo",
                 forced: true
 			},
 			{
+				name: "Failure Message",
+				type: "Word",
+			},
+			/*{
 				name: "Special",
 				type: 'Word'
 			},
@@ -86,8 +90,28 @@ specialList = {
 				name: "Variables",
 				type: 'Word',
 				multiple: true
-			}
+			}*/
 		],
+		applyfunc(message, option, args) {
+			let variable = args.shift();
+			let present = args.shift();
+			let failure = args.shift() ?? null;
+			//let special = args.shift() ?? null;
+
+			if (variable.trim().length <= 0) return void message.channel.send(`You didn't specify any valid variables.`);
+			if (failure && failure.trim().length == 0) return void message.channel.send(`You can't have an empty message.`);
+
+			makeSpecial(option, "requiredvar", [variable, present, failure]);
+			return true
+		},
+		canproceed(char, targ, btl, vars) {
+			let variable = vars[0];
+			let present = vars[1];
+			let failure = replaceTxt(vars[2] ?? '%PLAYER% tried to pacify %ENEMY%.\n...But %ENEMY% does not pass the %VARIABLE% check.', '%VARIABLE%', variable);
+
+			let failTxt = ((present && targ?.custom?.pacifyVars?.[variable]) || (!present && !targ?.custom?.pacifyVars?.[variable])) ? true : failure; 
+			return failTxt
+		}
 	}),
 
 	clearvar: new Extra({
