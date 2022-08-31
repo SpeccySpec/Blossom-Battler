@@ -1394,7 +1394,9 @@ statusList = {
 		getinfo(vars, skill) {
 			return extrasList.psychoshift.getinfo(vars, skill);
 		}
-	})
+	}),
+
+	charges: extrasList.charges
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.
