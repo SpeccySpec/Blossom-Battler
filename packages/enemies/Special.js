@@ -65,7 +65,7 @@ specialList = {
 
 	requiredvar: new Extra({
 		name: "Required Variable",
-		desc: "Requires a <Variable> variable to be or not to be present to pacify with a specified option. Will prompt with a {Failure Message} message, and can execute a special if the user doesn't meet requirements.\n\n[SPECIAL EXECUTION USABLE]",
+		desc: "Requires a <Variable> variable to be or not to be present to pacify with a specified option. Will prompt with a <Failure Message> message, and can execute a special if the user doesn't meet requirements.\n\n[SPECIAL EXECUTION UNUSABLE]",
         multiple: true,
 		args: [
 			{
