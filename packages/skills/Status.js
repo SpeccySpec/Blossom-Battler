@@ -825,6 +825,9 @@ statusList = {
 				type: "Word"
 			},
 			{
+				name: "Reincarnate Name"
+			},
+			{
 				name: "Skill #1",
 				type: "Word",
 				forced: true,
@@ -838,7 +841,8 @@ statusList = {
 			let hp = args[3]
 			let mp = args[4]
 			let deploy = (args[5] && args[5].toLowerCase() != 'none') ? args[5] : "%PLAYER% has summoned an undead %UNDEAD%"
-			let skills = args.slice(6)
+			let name = args[6] ?? "Reincarnate"
+			let skills = args.slice(7)
 			
 			let settings = setUpSettings(message.guild.id)
 
@@ -854,7 +858,7 @@ statusList = {
 
 			if (skills.length < 1) return void message.channel.send("None of the skills you entered are valid! They either don't exist or their level lock is higher than the level chosen.");
 
-			makeStatus(skill, "reincarnate", [min, max, hp, mp, deploy, skills]);
+			makeStatus(skill, "reincarnate", [min, max, hp, mp, deploy, skills, name]);
 			return true;
 		},
 		canuse(char, skill, btl, vars) {
@@ -865,10 +869,11 @@ statusList = {
 		},
 		onuse(char, targ, skill, btl, vars) {
 			let newchar = objClone(char);
+			const name = vars[7]
 
 			newchar.reincarnate = true;
-			newchar.name = 'Reincarnate';
-			newchar.truename = 'Reincarnate';
+			newchar.name = name;
+			newchar.truename = name;
 
 			newchar.maxhp = Math.round(newchar.maxhp * vars[2]/100);
 			newchar.maxmp = Math.round(newchar.maxmp * vars[3]/100);
