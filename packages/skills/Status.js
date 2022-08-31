@@ -870,7 +870,7 @@ statusList = {
 		},
 		onuse(char, targ, skill, btl, vars) {
 			let newchar = objClone(char);
-			const name = vars[7]
+			const name = vars[6];
 
 			newchar.reincarnate = true;
 			newchar.name = name;
@@ -949,7 +949,7 @@ statusList = {
 
 			btl.teams[char.team].members.push(newchar);
 			btl.turnorder = getTurnOrder(btl)
-			return replaceTxt(vars[4], '%PLAYER%', `__${char.name}__`, '%UNDEAD%', newchar.name);
+			return replaceTxt(vars[4], '%PLAYER%', `__${char.name}__`, '%UNDEAD%', name);
 		},
 		getinfo(vars, skill) {
 			return "Summons **an undead ally**"
