@@ -1396,7 +1396,22 @@ statusList = {
 		}
 	}),
 
-	charges: extrasList.charges
+	charges: new Extra({
+		name: extrasList.charges.name,
+		desc: extrasList.charges.desc,
+		args: extrasList.charges.args,
+		applyfunc(message, skill, args) {
+			let charges = args[0]
+			let rate = args[1] ?? 0
+			if (charges < 1)
+				return void message.channel.send("What's the point of a skill that you can never use?")
+			makeStatus(skill, "charges", [charges, rate]);
+			return true
+		},
+		canuse: extrasList.charges.canuse,
+		onuse: extrasList.charges.onuse,
+		getinfo: extrasList.charges.getinfo,
+	})
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.
