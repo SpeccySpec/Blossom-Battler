@@ -825,7 +825,8 @@ statusList = {
 				type: "Word"
 			},
 			{
-				name: "Reincarnate Name"
+				name: "Reincarnate Name",
+				type: "Word"
 			},
 			{
 				name: "Skill #1",
