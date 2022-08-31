@@ -1113,7 +1113,7 @@ setTimeout(function() {
 typeParsers = {
 	Num: ({arg}) => {return (!isNaN(arg) && isFinite(parseInt(arg))) ? parseInt(arg) : undefined},
 	Decimal: ({arg}) => {return (!isNaN(arg) && isFinite(parseFloat(arg))) ? parseFloat(arg) : undefined},
-	YesNo: ({arg}) => {return (arg.toLowerCase() === 'yes' || arg.toLowerCase() === 'true' || arg.toLowerCase() === 'ok') ?? undefined},
+	YesNo: ({arg}) => {return (arg) ? (/^\s*(true|yes|ok|y|1|okay)\s*$/i).test(arg.toLowerCase()) : undefined},
 	Ping: ({message}) => {return message.mentions.users.first()},
 	Channel: ({message, arg}) => {return message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')) ? message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')).id : undefined},
 	RealChannel: ({message, arg}) => {return message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')) ?? undefined},
