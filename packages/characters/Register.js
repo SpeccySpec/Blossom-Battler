@@ -436,7 +436,7 @@ longDescription = (charDefs, level, server, message) => {
 		let negDefs = char.negotiate
 		let negString = ''
 		for (const i in char.negotiate)
-			negString += `\n**${i}**: **${negDefs[i].name}**\n*${negDefs[i].desc}*\n*+${negDefs[i].convince ? negDefs[i].convince : 0}%*`;
+			negString += `\n**${i}**: **${negDefs[i].name}**\n*${negDefs[i]?.desc ?? 'No description.'}*\n${(negDefs[i]?.specials && Object.keys(negDefs[i]?.specials).length != 0) ? '_Specials used: **'+Object.keys(negDefs[i].specials).join(', ')+'**_\n' : ''}*${negDefs[i].convince ? (negDefs[i].convince < 0 ? '' : '+') + negDefs[i].convince : 0}%*`;
 		
 		if (negString != '') DiscordEmbed.fields.push({ name: `Pacifying Tactics`, value: negString, inline: true });
 	}

@@ -906,12 +906,12 @@ commands.updateskills = new Command({
 	SKILL EXTRAS GO HERE
 							*/
 			
-async function listExtras(message, extras, title, desc, color) {
+listExtras = async (message, extras, title, desc, color) => {
 	const generateEmbed = async start => {
 		const current = extras.slice(start, start + 6)
 		return new Discord.MessageEmbed({
 			title: title,
-			desc: desc,
+			description: desc,
 			color: color,
 			fields: await Promise.all(
 				current.map(async extraDefs => ({

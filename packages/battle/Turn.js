@@ -987,7 +987,7 @@ sendCurTurnEmbed = (char, btl) => {
 									.addFields()
 
 								for (let k in targ.negotiate)
-									DiscordEmbed.fields.push({name: `**[${k}]** __${targ.negotiate[k].name}__`, value: targ.negotiate[k].desc, inline: true});
+									DiscordEmbed.fields.push({name: `**[${k}]** __${targ.negotiate[k].name}__`, value: targ.negotiate[k].desc ?? 'No description.', inline: true});
 
 								menustate = MENU_PACIFY;
 								alreadyResponded = true;

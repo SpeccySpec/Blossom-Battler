@@ -2184,5 +2184,27 @@ customVariables = {
 			}
 			return txt
 		}
+	},
+
+	pacifyVars: {
+		onturn(btl, char, vars) {
+			let txt = ""
+
+			for (pacify in vars) {
+				let pacifyVar = vars[pacify];
+
+				if (pacifyVar.turns !== true) pacifyVar.turns -= 1;
+
+				if (pacifyVar.turns <= 0) {
+					txt += `${txt == "" ? "" : "\n"}`
+					txt += pacifyVar.revert ?? '';
+					delete vars[pacify];
+				}
+			}
+
+			if (Object.keys(vars).length == 0) delete char.custom.pacifyVars;
+
+			return txt;
+		}
 	}
 }
