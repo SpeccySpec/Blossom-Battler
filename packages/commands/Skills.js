@@ -946,7 +946,7 @@ listExtras = async (message, extras, title, desc, color) => {
 		if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
 			if (interaction.customId === 'back') {
 				if (currentIndex - 6 < 0) {
-					currentIndex = extras.length - 6 + (extras.length % 6)
+					currentIndex = extras.length - (extras.length % 6)
 				} else {
 					currentIndex -= 6
 				}
