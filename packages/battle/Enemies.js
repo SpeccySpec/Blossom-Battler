@@ -912,7 +912,11 @@ doPacify = (char, btl, action) => {
 	let negotiation = targ.negotiate[i];
 	let finaltxt = true
 
-	let convince = negotiation.convince;
+	var result = {
+		text: '', //this will be used for preapply hook texts to prevent unnecessary newlines
+		convince: negotiation.convince
+	};
+
 	let specials = negotiation?.specials
 
 	//canproceed hook
@@ -926,6 +930,11 @@ doPacify = (char, btl, action) => {
 			if (specialList[i].multiple) {
 				for (let k in specials[i]) {
 					finaltxt = specialList[i].canproceed(char, targ, btl, specials[i][k]) ?? true;
+
+					if (finaltxt !== true) {
+						result.failed = i;
+						break;
+					}
 				}
 			} else {
 				finaltxt = specialList[i].canproceed(char, targ, btl, specials[i]) ?? true;
@@ -937,12 +946,14 @@ doPacify = (char, btl, action) => {
 		finaltxt = negotiation.action ?? `%PLAYER% tries to pacify ${targ.name}`; //set text for when it can proceed
 
 		//kindheart passive
-		for (let s of char.skills) {
-			let skill = skillFile[s]
-			if (skill.type != 'passive') continue;
+		if (!specials?.stagnant) {
+			for (let s of char.skills) {
+				let skill = skillFile[s]
+				if (skill.type != 'passive') continue;
 
-			if (skill.passive.kindheart) {
-				convince += Math.trunc(((convince/100)*skill.passive.kindheart)*100)/100; // trunc to 2 decimal places
+				if (skill.passive.kindheart) {
+					result.convince += Math.trunc(((result.convince/100)*skill.passive.kindheart)*100)/100; // trunc to 2 decimal places
+				}
 			}
 		}
 
@@ -954,16 +965,20 @@ doPacify = (char, btl, action) => {
 
 				if (specialList[i].multiple) {
 					for (let k in specials[i]) {
-						finaltxt += `\n${(specialList[i].preapply(char, targ, convince, btl, specials[i][k] ) ?? '')}`;
+						result.text = '';
+						specialList[i].preapply(char, targ, result, btl, specials[i][k]);
+						if (result.text != '') finaltxt += `\n${result.text}`;
 					}
 				} else {
-					finaltxt += `\n${(specialList[i].preapply(char, targ, convince, btl, specials[i]) ?? '')}`;
+					result.text = '';
+					specialList[i].preapply(char, targ, result, btl, specials[i]);
+					if (result.text != '') finaltxt += `\n${result.text}`;
 				}
 			}
 		}
 
 		//real shit
-		convince = Math.min(convince, 100);
+		var convince = Math.min(result.convince, 100);
 		targ.pacify += convince;
 		finaltxt += convince != 0 ? `\n_(Pacified by ${convince}%!)_\n` : `\n_(No pacification done.)_\n`;
 
@@ -1035,6 +1050,20 @@ doPacify = (char, btl, action) => {
 		}
 	} else {
 		finaltxt += `\n_(No pacification done.)_\n`;
+
+		if (specials?.failurespecial) {
+			neededSpecial = specials.failurespecial;
+			
+			for (let k in neededSpecial) {
+				let failure_requirement = neededSpecial[k][0];
+
+				if (result?.failed != failure_requirement) continue;
+
+				let failure_special = neededSpecial[k][1];
+
+				finaltxt += `\n${(specialList[failure_special].postapply(char, targ, btl, neededSpecial[k][2]) ?? '')}`;
+			}
+		}
 	}
 
 	//quote replacement
