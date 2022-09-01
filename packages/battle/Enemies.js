@@ -981,7 +981,24 @@ doPacify = (char, btl, action) => {
 		var convince = Math.min(result.convince, 100);
 		targ.pacify += convince;
 		if (targ.pacify < 0) targ.pacify == 0;
-		finaltxt += !targ.pacify <= 0 ? (convince != 0 ? `\n_(Pacified by ${convince}%!)_\n` : `\n_(No pacification done.)_\n`) : `\n_(Progress reset.)_\n`
+
+		//postapply hook
+		if (specials) {
+			for (let i in specials) {
+				if (!specialList[i]) continue;
+				if (!specialList[i].postapply) continue;
+
+				if (specialList[i].multiple) {
+					for (let k in specials[i]) {
+						finaltxt += `\n${(specialList[i].postapply(char, targ, btl, specials[i][k] ) ?? '')}`;
+					}
+				} else {
+					finaltxt += `\n${(specialList[i].postapply(char, targ, btl, specials[i]) ?? '')}`;
+				}
+			}
+		}
+
+		finaltxt += targ.pacify >= 0 ? (convince != 0 ? `\n_(Pacified by ${convince}%!)_\n` : `\n_(No pacification done.)_\n`) : `\n_(Progress reset.)_\n`
 
 		if (targ.pacify >= 100) {
 			targ.pacified = true;
@@ -1032,23 +1049,6 @@ doPacify = (char, btl, action) => {
 				finaltxt += 'and stops attacking!';
 			}
 		}
-
-		//postapply hook
-		if (specials) {
-			for (let i in specials) {
-				if (!specialList[i]) continue;
-				if (!specialList[i].postapply) continue;
-				if (targ.pacify >= 100) continue;
-
-				if (specialList[i].multiple) {
-					for (let k in specials[i]) {
-						finaltxt += `\n${(specialList[i].postapply(char, targ, btl, specials[i][k] ) ?? '')}`;
-					}
-				} else {
-					finaltxt += `\n${(specialList[i].postapply(char, targ, btl, specials[i]) ?? '')}`;
-				}
-			}
-		}
 	} else {
 		finaltxt += `\n_(No pacification done.)_\n`;
 
@@ -1080,6 +1080,6 @@ doPacify = (char, btl, action) => {
 	DiscordEmbed = new Discord.MessageEmbed()
 		.setColor('#d613cc')
 		.setTitle(`${char.name} => ${targ.name}`)
-		.setDescription(finaltxt)
+		.setDescription(finaltxt.replace(/\n{3,}/, () => "\n\n"))
 	btl.channel.send({embeds: [DiscordEmbed]})
 }

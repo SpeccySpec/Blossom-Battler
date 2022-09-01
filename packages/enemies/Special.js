@@ -342,6 +342,60 @@ specialList = {
 			targ.pacify = 0;
 		}
 	}),
+
+	status: new Extra({
+		name: 'Status',
+		desc: '<Chance>% to inflict one of multiple <Status Effect>s on the target or the user.',
+		multiple: true,
+		args: [
+			{
+				name: 'Target / User',
+				type: 'Word',
+				forced: true,
+			},
+			{
+				name: 'Status Effect #1',
+				type: 'Word',
+				forced: true,
+				multiple: true,
+			},
+			{
+				name: 'Chance',
+				type: 'Decimal'
+			}
+		],
+		applyfunc(message, option, args) {
+			let targetUser = args.shift();
+			if (targetUser.toLowerCase() != 'target' && targetUser.toLowerCase() != 'user') return void message.channel.send("You entered an invalid value for <Target/User>! It can be either Target or User.")
+			
+			let statusEffect = args.filter(x => statusEffects.includes(x.toLowerCase()))
+			if (statusEffect.length === 0) return void message.channel.send("You're not adding any valid status effects! Use the ''liststatus'' command to list all status effects.");
+			statusEffect = statusEffect.map(x => x.toLowerCase())
+
+			let chance = args[args.length - 1] > 0 ? args[args.length - 1] : 100;
+			if (statusEffect.length === 1) statusEffect = statusEffect[0];
+
+			makeSpecial(option, "status", [targetUser.toLowerCase(), statusEffect, chance]);
+			return true;
+		},
+		postapply(char, targ, btl, vars) {
+			let targetUser = vars[0];
+			let statusses = vars[1];
+			let chance = vars[2];
+
+			target = targetUser == 'target' ? targ : char;
+			user = targetUser == 'target' ? char : targ;
+
+			let status;
+			if (typeof(statusses) === 'object') {
+				status = statusses[randNum(statusses.length-1)];
+			} else {
+				status = statusses;
+			}
+
+			return statusList.status.inflictStatus(user, target, {type: 'status', statuschane: chance}, status, btl);
+		}
+	})
 }
 
 function makeSpecial(option, special, func) {
