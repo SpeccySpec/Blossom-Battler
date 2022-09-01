@@ -1307,9 +1307,9 @@ commands.clearspecials = new Command({
 		}
 
 		if (!negotiation.specials) return message.channel.send(`${negotiation.name} has no specials!`);
-		if (!negotiation.specials[args[1].toLowerCase()]) return message.channel.send(`${negotiation.name} has no ${args[1]} specials!`);
+		if (!negotiation.specials[args[2].toLowerCase()]) return message.channel.send(`${negotiation.name} has no ${args[2]} specials!`);
 
-		delete negotiation.specials[args[1].toLowerCase()];
+		delete negotiation.specials[args[2].toLowerCase()];
 
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
 		message.react('👍');

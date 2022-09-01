@@ -184,7 +184,7 @@ specialList = {
 			if (!specialList[requirement]) return void message.channel.send(`${requirement} doesn't exist in the negotiation specials list.`);
 			if (!specialList[requirement].canproceed) return void message.channel.send(`${requirement} is not a requirement special. The valid ones present are: ${Object.keys(specialList).filter(x => specialList[x].canproceed).join(', ')}.`);
 			if (!specialList[special]) return void message.channel.send(`${special} doesn't exist in the negotiation specials list.`);
-			if (!specialList[special].postapply) return void message.channel.send(`${special} is not a valid special for this. The valid ones present are: ${Object.keys(specialList).filter(x => specialList[x].postapply).join(', ')}.`);
+			if (!specialList[special].postapply && !specialList[special].useonfail ) return void message.channel.send(`${special} is not a valid special for this. The valid ones present are: ${Object.keys(specialList).filter(x => specialList[x].postapply || specialList[x].useonfail).join(', ')}.`);
 
 			let specialObject = {}
 			if (applySpecial(message, specialObject, special, args)) {
@@ -299,7 +299,49 @@ specialList = {
 			return true
 		},
 		hardcoded: true
-	})
+	}),
+
+	variance: new Extra({
+		name: "Variance",
+		desc: "Pacify amount can vary by an amount between the <Minimum Range>-<Maximum Range> range.",
+		args: [
+			{
+				name: "Minimum Range",
+				type: "Decimal",
+                forced: true,
+			},
+			{
+				name: "Maximum Range",
+				type: "Decimal",
+                forced: true,
+			}
+		],
+		applyfunc(message, option, args) {
+			if (args[0] == args[1]) return void message.channel.send(`If you want the variance to be the same all the time, you can change the option pacify amount instead.`);
+			if (args[0] > args[1]) return void message.channel.send(`Minimum has to be below the maximum.`);
+
+			makeSpecial(option, "variance", [args[0], args[1]]);
+			return true
+		},
+		preapply(char, targ, result, btl, vars) {
+			result.convince += Math.trunc((Math.random()*(vars[1]-vars[0])+vars[0])*100) / 100;
+		}
+	}),
+
+	reset: new Extra({
+		name: "Reset",
+		desc: `Resets pacify progress to 0%.`,
+		applyfunc(message, option, args) {
+			makeSpecial(option, "reset", [true]);
+			return true
+		},
+		useonfail: true,
+		preapply(char, targ, result, btl, vars) {
+			result.convince = 0;
+			result.reset = true;
+			targ.pacify = 0;
+		}
+	}),
 }
 
 function makeSpecial(option, special, func) {

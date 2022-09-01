@@ -16,6 +16,8 @@ Extra = class extends ArgList {
 				continue
 			this[i] = func
 		}
+
+		this.useonfail = object.useonfail //used for negotiation specials cause I use this exact same class.
 	}
 
 	apply(message, skill, rawargs) {

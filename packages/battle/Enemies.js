@@ -980,7 +980,8 @@ doPacify = (char, btl, action) => {
 		//real shit
 		var convince = Math.min(result.convince, 100);
 		targ.pacify += convince;
-		finaltxt += convince != 0 ? `\n_(Pacified by ${convince}%!)_\n` : `\n_(No pacification done.)_\n`;
+		if (targ.pacify < 0) targ.pacify == 0;
+		finaltxt += !targ.pacify <= 0 ? (convince != 0 ? `\n_(Pacified by ${convince}%!)_\n` : `\n_(No pacification done.)_\n`) : `\n_(Progress reset.)_\n`
 
 		if (targ.pacify >= 100) {
 			targ.pacified = true;
@@ -1037,7 +1038,7 @@ doPacify = (char, btl, action) => {
 			for (let i in specials) {
 				if (!specialList[i]) continue;
 				if (!specialList[i].postapply) continue;
-				if (targ.pacify >= 100 && !specialList[i].activeAt100Percent) continue;
+				if (targ.pacify >= 100) continue;
 
 				if (specialList[i].multiple) {
 					for (let k in specials[i]) {
@@ -1061,8 +1062,14 @@ doPacify = (char, btl, action) => {
 
 				let failure_special = neededSpecial[k][1];
 
-				finaltxt += `\n${(specialList[failure_special].postapply(char, targ, btl, neededSpecial[k][2]) ?? '')}`;
+				if (!specialList[failure_special]?.useonfail) {
+					finaltxt += `\n${(specialList[failure_special].postapply(char, targ, btl, neededSpecial[k][2]) ?? '')}`;
+				} else {
+					specialList[failure_special].preapply(char, targ, result, btl, neededSpecial[k][2])
+				}
 			}
+
+			if (result.reset) finaltxt = finaltxt.replace('No pacification done.', 'Progress reset.');
 		}
 	}
 
