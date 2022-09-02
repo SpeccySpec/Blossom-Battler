@@ -176,8 +176,9 @@ genDmg = (char, targ, btl, skill) => {
 		}
 	}
 
-	let atkStat = (skill.atktype === 'phys') ? statWithBuff(charStats.atk, char.buffs.atk) : statWithBuff(charStats.mag, char.buffs.mag);
+	let atkStat = (skill.atktype === 'physical') ? statWithBuff(charStats.atk, char.buffs.atk ?? 0) : statWithBuff(charStats.mag, char.buffs.mag ?? 0);
 	let endStat = statWithBuff(targStats.end, targ.buffs.end);
+	console.log(`Atk Checkpoint: ${atkStat}`);
 
 	if (skill.extras?.statcalc) {
 		atkStat = statWithBuff(charStats[skill.extras.statcalc[0].toLowerCase()], char.buffs[skill.extras.statcalc[0].toLowerCase()] ?? 1);
@@ -201,6 +202,7 @@ genDmg = (char, targ, btl, skill) => {
 		switch(damageformula) {
 			case 'persona':
 				dmg = Math.round(5 * Math.sqrt(def * skill.pow))+randNum(-7, 7);
+				console.log(`Attack Stat: ${atkStat}, Endurance Stat: ${endStat}, Base Dmg: ${Math.round(5 * Math.sqrt(def * skill.pow))}, Real Dmg: ${dmg}`);
 				break;
 			case 'pokemon':
 				dmg = Math.round((((2*char.level)/5+2)*skill.pow*def)/50+2)+randNum(-7, 7);
@@ -556,16 +558,19 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				let dmg = genDmg(char, targ, btl, skill);
 				
 				// Sustain Extra
-				if (i > 0 && !skill.extras?.sustain) {
-					if (skill.extras?.reverse) {
-						let lowestpow = divideBy(dmg, 9, 10, totalHits-1);
-						let diff = dmg-lowestpow;
+				if (totalHits > 1) {
+					if (i > 0 && !skill.extras?.sustain) {
+						if (skill.extras?.reverse) {
+							let lowestpow = divideBy(dmg, 9, 10, totalHits-1);
+							let diff = dmg-lowestpow;
 
-						dmg -= (diff/i);
-					} else {
-						dmg = divideBy(dmg, 9, 10, i-1);
+							dmg -= (diff/i);
+						} else {
+							dmg = divideBy(dmg, 9, 10, i-1);
+						}
 					}
 				}
+
 				// Extrahit Passive
 				if (skill?.custom?.multipower) {
 					if (i >= skill.custom.multipower[0] && i <= skill.custom.multipower[1]) {

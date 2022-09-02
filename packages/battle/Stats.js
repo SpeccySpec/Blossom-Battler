@@ -65,6 +65,8 @@ setupBattleStats = (f) => {
 }
 
 statWithBuff = (stat, buff) => {
+	if (!buff || buff == 0) return stat;
+
 	return Math.round(stat + (buff*(stat/4.5)));
 }
 
