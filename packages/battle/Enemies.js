@@ -1013,7 +1013,7 @@ doPacify = (char, btl, action) => {
 					if (!party.negotiates) party.negotiates = {};
 					party.negotiates[targ.name] = party.negotiates[targ.name] ? party.negotiates[targ.name]+1 : 1;
 
-					if (party.negotiates[targ.name] == targ.negotiateDefs.required) {
+					if (party.negotiates[targ.name] == targ.negotiateDefs.required && targ.negotiateDefs?.qualities) {
 						finaltxt += 'and wants to join your team!';
 
 						party.negotiateAllies[targ.name] = {
