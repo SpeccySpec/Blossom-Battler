@@ -55,7 +55,7 @@ weatherFuncs = {
 
 	sandstorm: {
 		statmod(char, stats, btl) {
-			if (char.mainElement != "earth")
+			if (!isMainElement("earth", char))
 				stats.prc *= 2/3;
 
 			return stats;
@@ -64,7 +64,7 @@ weatherFuncs = {
 
 	hail: {
 		onturn(char, btl) {
-			if (char.mainElement != "ice") {
+			if (!isMainElement("ice", char)) {
 				let dmg = 10;
 				let affinity = '';
 
@@ -107,7 +107,7 @@ terrainFuncs = {
 				txt += `${char.name} is thawed out by the __Flaming Terrain__!\n`;
 			}
 
-			if (char.mainElement != "fire") {
+			if (!isMainElement("fire", char)) {
 				let dmg = 10;
 				let affinity = '';
 
@@ -154,7 +154,7 @@ terrainFuncs = {
 
 	grassy: {
 		onturn(char, btl) {
-			let heal = (char.mainElement == "grass") ? char.maxhp*0.17 : char.maxhp*0.1;
+			let heal = (isMainElement("grass", char)) ? char.maxhp*0.17 : char.maxhp*0.1;
 			char.hp = Math.min(char.maxhp, char.hp+heal);
 
 			if (char.hp >= char.maxhp) {
@@ -197,7 +197,7 @@ terrainFuncs = {
 
 	sky: {
 		statmod(char, stats, btl) {
-			if (char.mainElement === "wind") {
+			if (isMainElement("wind", char)) {
 				stats.agl *= 1.4;
 			} else {
 				stats.agl *= 1.25;
@@ -216,7 +216,7 @@ terrainFuncs = {
 
 	muddy: {
 		statmod(char, stats, btl) {
-			if (char.mainElement != "earth") stats.agl *= 2/3;
+			if (!isMainElement("earth", char)) stats.agl *= 2/3;
 			return stats;
 		},
 		onselect(char, skill, btl) {

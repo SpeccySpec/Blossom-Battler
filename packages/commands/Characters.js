@@ -2955,13 +2955,13 @@ commands.settransformation = new Command({
 			if (args[i] > settings.caps.transformations.basestatmaxcap) return message.channel.send(`${args[i]} cannot be greater than ${settings.caps.transformations.statbuff}!`);
 			if (args[i] < settings.caps.transformations.basestatmincap) return message.channel.send(`${args[i]} cannot be less than ${settings.caps.transformations.basestatmincap}!`);
 
-			if (args[i] < 0)
-				allowedMore = -args[i]/2
-
-			if (args[i] > 0)
-				BST += args[i];
+			if (args[i] < 0) allowedMore = -args[i]/2
+			BST += args[i];
 		}
-		if (BST > Math.round(Math.min(settings.caps.transformations.bstcap, settings.caps.transformations.bstcap+allowedMore))) return message.channel.send(`BST cannot be greater than ${Math.min(settings.caps.transformations.bstcap, settings.caps.transformations.bstcap+allowedMore)}! Maximum BST is ${settings.caps.transformations.bstcap}, but that modifies with negative stats.`);
+
+		let normalbst = settings.caps.transformations.bstcap;
+		let maxbst = settings.caps.transformations.bstcap+allowedMore;
+		if (BST > Math.round(Math.max(normalbst, maxbst))) return message.channel.send(`BST cannot be greater than ${maxbst}! Maximum BST is ${normalbst}, but that modifies with negative stats, it has been modified by ${allowedMore}.`);
 
 		newTransformation(charFile[args[0]], args[1], args[2].toLowerCase(), args[3].toLowerCase(), args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], args[12], args[13]);
 		

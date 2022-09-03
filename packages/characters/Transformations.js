@@ -99,3 +99,131 @@ transformationDesc = (char, name, server, message) => {
 
 	return DiscordEmbed;
 }
+
+canTransform = (char, btl, force) => {
+	if (!char) return false;
+	if (char.transformed) return false;
+	if (char.mimic) return false;
+	if (char.ragesoul) return false;
+	if (char.custom?.orgiamode) return false;
+
+	if (!char.transformations) return false;
+
+	let party = btl.teams[char.team];
+
+	if (force) {
+		let tname = force;
+		let trans = char.transformations[tname];
+
+		switch(trans.requirement) {
+			case 'allydown':
+				for (let ally of party.members) {
+					if (ally.hp <= 0 && char.id != ally.id) return tname;
+				}
+				break;
+
+			case 'onlystanding':
+				let left = 0;
+				for (let ally of party.members) {
+					if (ally.hp > 0) left++;
+				}
+				if (left == 1) return tname;
+
+			case 'belowhalfhp':
+				if (char.hp <= char.maxhp/2) return tname;
+
+			case 'outofmp':
+				if (char.mp <= 0) return tname;
+
+			case 'leaderdown':
+				for (let ally of party.members) {
+					if (!ally.leader) continue;
+					if (ally.hp <= 0) return tname;
+				}
+				break;
+
+			case 'trusteddown':
+				for (let ally of party.members) {
+					if (ally.hp <= 0  && char.id != ally.id && trustLevel(char, ally) > 5) return tname;
+				}
+				break;
+		}
+	} else {
+		for (let tname in char.transformations) {
+			let trans = char.transformations[tname]
+
+			switch(trans.requirement) {
+				case 'allydown':
+					for (let ally of party.members) {
+						if (ally.hp <= 0 && char.id != ally.id) return tname;
+					}
+					break;
+
+				case 'onlystanding':
+					let left = 0;
+					for (let ally of party.members) {
+						if (ally.hp > 0) left++;
+					}
+					if (left == 1) return tname;
+
+				case 'belowhalfhp':
+					if (char.hp <= char.maxhp/2) return tname;
+
+				case 'outofmp':
+					if (char.mp <= 0) return tname;
+
+				case 'leaderdown':
+					for (let ally of party.members) {
+						if (!ally.leader) continue;
+						if (ally.hp <= 0) return tname;
+					}
+					break;
+
+				case 'trusteddown':
+					for (let ally of party.members) {
+						if (ally.hp <= 0  && char.id != ally.id && trustLevel(char, ally) > 5) return tname;
+					}
+					break;
+			}
+		}
+	}
+
+	return false;
+}
+
+doTransformation = (char, tname, btl) => {
+	let store = [
+		"stats",
+		"maxhp",
+		"maxmp",
+		"skills",
+		"affinities",
+		"statusaffinities"
+	];
+
+	addCusVal(char, 'revert', [6, {}, `__${char.name}__'s **${tname}** transformation wore off...`]);
+
+	for (let s of store) {
+		char.custom.revert[1][s] = (typeof char[s] == 'object') ? objClone(char[s]) : char[s];
+
+		if (char.transformations[tname][s]) {
+			char[s] = char.transformations[tname][s];
+		} else {
+			if (s === "maxhp") {
+				char.hp += char.transformations[tname].hp;
+				char.maxhp += char.transformations[tname].hp;
+			} else if (s === "maxmp") {
+				char.mp += char.transformations[tname].mp;
+				char.maxmp += char.transformations[tname].mp;
+			}
+		}
+	}
+
+	char.custom.revert[1].mainElement = char.mainElement;
+
+	if (char.transformations[tname].skill) char.skills.push(char.transformations[tname].skill);
+	if (char.transformations[tname].mainElement != char.mainElement) char.mainElement = [char.mainElement, char.transformations[tname].mainElement];
+
+	char.transformed = tname;
+	return true;
+}

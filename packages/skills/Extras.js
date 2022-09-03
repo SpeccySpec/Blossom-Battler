@@ -1977,16 +1977,17 @@ customVariables = {
 			if (char.custom?.revert) {
 				char.custom.revert[0]--;
 
-				if (char.custom.revert[0] == 0) {
-					delete char.mimic;
+				let rev = char.custom.revert;
+				if (rev[0] == 0) {
+					if (char.mimic) delete char.mimic;
+					if (char.transformed) delete char.transformed;
 
-					char.stats = objClone(char.custom.revert[1].stats);
-					char.skills = char.custom.revert[1].skills;
-					char.name = char.custom.revert[1].name;
+					for (let i in rev[1]) {
+						if (char[i]) char[i] = rev[1][i];
+					}
 
-					let sotrue = char.custom.revert[2];
+					let sotrue = rev[2];
 					delete char.custom.revert;
-
 					return sotrue;
 				}
 			}

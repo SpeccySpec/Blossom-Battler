@@ -1262,6 +1262,8 @@ statusList = {
 			char.melee.pow *= vars[0];
 			char.stats.atk *= vars[1];
 
+			char.ragesoul = true;
+
 			if (btl.pvp) {
 				return `__${char.name}__ is preparing something...`;
 			} else {
