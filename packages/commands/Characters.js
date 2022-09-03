@@ -2860,12 +2860,22 @@ commands.settransformation = new Command({
 			forced: true
 		},
 		{
+			name: "Main Element",
+			type: "Word",
+			forced: true
+		},
+		{
 			name: "Requirement",
 			type: "Word",
 			forced: true
 		},
 		{
 			name: "HP Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "MP Buff",
 			type: "Num",
 			forced: true
 		},
@@ -2930,14 +2940,18 @@ commands.settransformation = new Command({
 
 		if (charFile[args[0]].transformations && ! charFile[args[0]].transformations[args[1]] && Object.keys(charFile[args[0]].transformations).length >= settings.caps.transformations.transformationlimit) return message.channel.send(`You have reached the maximum number of transformations for this character!`);
 
-		let reqTable = ['allydown', 'onlystanding', 'belowhalfhp', 'outofmp', 'leaderdown', 'trusteddown']
-		if (!reqTable.includes(args[2])) return message.channel.send(`Invalid requirement! Please enter one of the following: ${reqTable.join(', ')}`);
+		if (!Elements.includes(args[2].toLowerCase())) return message.channel.send(args[2] + " is an invalid Main Element! Try one of the following: " + Elements.join(', '));
+		if (args[2].toLowerCase() === 'passive' || args[2].toLowerCase() === 'almighty') return message.channel.send("You cannot set **Passive** or **Almighty** as Transformation Elements.");
 
-		if (args[3] > settings.caps.transformations.hpbuff) return message.channel.send(`HP Buff cannot be greater than ${settings.caps.transformations.hpbuff}!`);
+		let reqTable = ['allydown', 'onlystanding', 'belowhalfhp', 'outofmp', 'leaderdown', 'trusteddown']
+		if (!reqTable.includes(args[3].toLowerCase())) return message.channel.send(`Invalid requirement! Please enter one of the following: ${reqTable.join(', ')}`);
+
+		if (args[4] > settings.caps.transformations.hpbuff) return message.channel.send(`HP Buff cannot be greater than ${settings.caps.transformations.hpbuff}!`);
+		if (args[5] > settings.caps.transformations.mpbuff) return message.channel.send(`HP Buff cannot be greater than ${settings.caps.transformations.mpbuff}!`);
 
 		let BST = 0;
 		let allowedMore = 0;
-		for (let i = 4; i < 12; i++) {
+		for (let i = 6; i < 14; i++) {
 			if (args[i] > settings.caps.transformations.basestatmaxcap) return message.channel.send(`${args[i]} cannot be greater than ${settings.caps.transformations.statbuff}!`);
 			if (args[i] < settings.caps.transformations.basestatmincap) return message.channel.send(`${args[i]} cannot be less than ${settings.caps.transformations.basestatmincap}!`);
 
@@ -2949,11 +2963,11 @@ commands.settransformation = new Command({
 		}
 		if (BST > Math.round(Math.min(settings.caps.transformations.bstcap, settings.caps.transformations.bstcap+allowedMore))) return message.channel.send(`BST cannot be greater than ${Math.min(settings.caps.transformations.bstcap, settings.caps.transformations.bstcap+allowedMore)}! Maximum BST is ${settings.caps.transformations.bstcap}, but that modifies with negative stats.`);
 
-		charFuncs.makeTransformation(charFile[args[0]], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11]);
+		newTransformation(charFile[args[0]], args[1], args[2].toLowerCase(), args[3].toLowerCase(), args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], args[12], args[13]);
 		
-		if (args[12] != '') {
-			if (args[12].length > 128) return message.channel.send('Short description cannot be longer than 128 characters!');
-			charFile[args[0]].transformations[args[1]].desc = args[12];
+		if (args[14] != '') {
+			if (args[14].length > 128) return message.channel.send('Short description cannot be longer than 128 characters!');
+			charFile[args[0]].transformations[args[1]].desc = args[14];
 		}
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 
@@ -2961,8 +2975,8 @@ commands.settransformation = new Command({
 
         const DiscordEmbed = new Discord.MessageEmbed()
             .setColor('#f2c055')
-			.setTitle(`${charFile[args[0]].name}'s ${transDefs.name} Transformation's Stats:`)
-            .setDescription(`${transDefs.desc ? `*` + transDefs.desc + '*\n\n' : ''}**Stats:**\n${transDefs.hp}HP%++\n\n${transDefs.atk}ATK%++\n${transDefs.mag}MAG%++\n${transDefs.prc}PRC%++\n${transDefs.end}END%++\n${transDefs.chr}CHR%++\n${transDefs.int}INT%++\n${transDefs.agl}AGL%++\n${transDefs.luk}LUK%++`)
+			.setTitle(`${charFile[args[0]].name}'s __${elementEmoji[transDefs.mainElement]}${transDefs.name}__  Transformation's Stats:`)
+            .setDescription(`${transDefs.desc ? `*` + transDefs.desc + '*\n\n' : ''}**Stats:**\n${transDefs.hp}HP++\n${transDefs.mp}MP++\n\n${transDefs.atk}ATK++\n${transDefs.mag}MAG++\n${transDefs.prc}PRC++\n${transDefs.end}END++\n${transDefs.chr}CHR++\n${transDefs.int}INT++\n${transDefs.agl}AGL++\n${transDefs.luk}LUK++`)
         message.channel.send({content: `👍 ${charFile[args[0]].name}'s ${transDefs.name} transformation has been registered!`, embeds: [DiscordEmbed]});
 	}
 })
@@ -3023,6 +3037,11 @@ commands.edittransformation = new Command({
 		},
 		{
 			name: "HP Buff",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "MP Buff",
 			type: "Num",
 			forced: true
 		},
@@ -3103,18 +3122,19 @@ commands.edittransformation = new Command({
 
 		charFile[args[0]].transformations[args[1]].requirement = args[2];
 		charFile[args[0]].transformations[args[1]].hp = args[3]
-		charFile[args[0]].transformations[args[1]].atk = args[4]
-		charFile[args[0]].transformations[args[1]].mag = args[5]
-		charFile[args[0]].transformations[args[1]].prc = args[6]
-		charFile[args[0]].transformations[args[1]].end = args[7]
-		charFile[args[0]].transformations[args[1]].chr = args[8]
-		charFile[args[0]].transformations[args[1]].int = args[9]
-		charFile[args[0]].transformations[args[1]].agl = args[10]
-		charFile[args[0]].transformations[args[1]].luk = args[11]
+		charFile[args[0]].transformations[args[1]].mp = args[4]
+		charFile[args[0]].transformations[args[1]].atk = args[5]
+		charFile[args[0]].transformations[args[1]].mag = args[6]
+		charFile[args[0]].transformations[args[1]].prc = args[7]
+		charFile[args[0]].transformations[args[1]].end = args[8]
+		charFile[args[0]].transformations[args[1]].chr = args[9]
+		charFile[args[0]].transformations[args[1]].int = args[10]
+		charFile[args[0]].transformations[args[1]].agl = args[11]
+		charFile[args[0]].transformations[args[1]].luk = args[12]
 
-		if (args[12] != '') {
-			if (args[12].length > 128) return message.channel.send('Short description cannot be longer than 128 characters!');
-			charFile[args[0]].transformations[args[1]].desc = args[12];
+		if (args[13] != '') {
+			if (args[13].length > 128) return message.channel.send('Short description cannot be longer than 128 characters!');
+			charFile[args[0]].transformations[args[1]].desc = args[13];
 		}
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 
@@ -3122,8 +3142,8 @@ commands.edittransformation = new Command({
 
         const DiscordEmbed = new Discord.MessageEmbed()
             .setColor('#f2c055')
-			.setTitle(`${charFile[args[0]].name}'s ${transDefs.name} Transformation's Stats:`)
-            .setDescription(`${transDefs.desc ? `*` + transDefs.desc + '*\n\n' : ''}**Stats:**\n${transDefs.hp}HP%++\n\n${transDefs.atk}ATK%++\n${transDefs.mag}MAG%++\n${transDefs.prc}PRC%++\n${transDefs.end}END%++\n${transDefs.chr}CHR%++\n${transDefs.int}INT%++\n${transDefs.agl}AGL%++\n${transDefs.luk}LUK%++`)
+			.setTitle(`${charFile[args[0]].name}'s __${elementEmoji[transDefs.mainElement]}${transDefs.name}__ Transformation's Stats:`)
+            .setDescription(`${transDefs.desc ? `*` + transDefs.desc + '*\n\n' : ''}**Stats:**\n${transDefs.hp}HP++\n${transDefs.mp}MP++\n\n${transDefs.atk}ATK++\n${transDefs.mag}MAG++\n${transDefs.prc}PRC++\n${transDefs.end}END++\n${transDefs.chr}CHR++\n${transDefs.int}INT++\n${transDefs.agl}AGL++\n${transDefs.luk}LUK++`)
         message.channel.send({content: `👍 ${charFile[args[0]].name}'s ${transDefs.name} transformation has been changed!`, embeds: [DiscordEmbed]});
 	}
 })
@@ -4579,79 +4599,6 @@ commands.edittc = new Command({
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
-
-/*
-commands.registertransformation = new Command({
-	desc: `Register a transformation for a character to use in-battle! This can buff stats, change skills and more.`,
-	aliases: ['maketransformation', 'newtransformation', 'registertransform'],
-	section: "characters",
-	args: [
-		{
-			name: "Character Name",
-			type: "Word",
-			forced: true
-		},
-		{
-			name: "Main Element",
-			type: "Word",
-			forced: false
-		},
-		{
-			name: "Base HP",
-			type: "Num",
-			forced: true
-		},
-		{
-			name: "Base MP",
-			type: "Num",
-			forced: true
-		},
-		{
-			name: "Base Strength",
-			type: "Num",
-			forced: true
-		},
-		{
-			name: "Base Magic",
-			type: "Num",
-			forced: true
-		},
-		{
-			name: "Base Perception",
-			type: "Num",
-			forced: true
-		},
-		{
-			name: "Base Endurance",
-			type: "Num",
-			forced: true
-		},
-		{
-			name: "Base Charisma",
-			type: "Num",
-			forced: true
-		},
-		{
-			name: "Base Intelligence",
-			type: "Num",
-			forced: true
-		},
-		{
-			name: "Base Agility",
-			type: "Num",
-			forced: true
-		},
-		{
-			name: "Base Luck",
-			type: "Num",
-			forced: true
-		},
-	],
-	checkban: true,
-	func: (message, args) => {
-	}
-})
-*/
 
 /*
 	UTILITY COMMANDS
