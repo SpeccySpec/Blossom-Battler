@@ -103,6 +103,7 @@ transformationDesc = (char, name, server, message) => {
 canTransform = (char, btl, force) => {
 	if (!char) return false;
 	if (char.transformed) return false;
+	if (char.notransform) return false;
 	if (char.mimic) return false;
 	if (char.ragesoul) return false;
 	if (char.custom?.orgiamode) return false;
@@ -225,5 +226,6 @@ doTransformation = (char, tname, btl) => {
 	if (char.transformations[tname].mainElement != char.mainElement) char.mainElement = [char.mainElement, char.transformations[tname].mainElement];
 
 	char.transformed = tname;
+	char.notransform = true;
 	return true;
 }
