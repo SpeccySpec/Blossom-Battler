@@ -96,9 +96,9 @@ passiveList = {
 			}
 		},
 		getinfo(vars, skill) {
-			const turns = vars[1]
+			const turns = vars[0]
 			const acclost = vars[2]
-			return `Boosts power by **${vars[0]}%** for ${turns == 1 ? "**the first turn**" : `the first **${turns}** turns`}${acclost ? `, but accuracy will decrease by **${acclost}**` : ""}`
+			return `Boosts power by **${vars[1]}%** for ${turns == 1 ? "**the first turn**" : `the first **${turns}** turns`}${acclost ? `, but accuracy will decrease by **${acclost}**` : ""}`
 		}
 	}),
 
