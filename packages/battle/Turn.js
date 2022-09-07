@@ -118,9 +118,10 @@ MENU_PACIFY = 6;
 MENU_BACKUP = 7;
 
 // Extra States (Misc. Shit like PVP)
-MENU_ENEMYINFO = 8;
-MENU_FORFEIT = 9;
-MENU_ANYSEL = 10;
+MENU_TRANSFORMATIONS = 8;
+MENU_ENEMYINFO = 9;
+MENU_FORFEIT = 10;
+MENU_ANYSEL = 11;
 
 function CalcCompins(comps, i) {
 	const compins = Math.min(Math.floor(Math.max(i - 0.1, 0) / 4), 3)
@@ -166,6 +167,17 @@ const menuStates = {
 			if (canUseLb(char, btl)) {
 				if (!comps[1]) comps[1] = [];
 				comps[1].push(makeButton('Limit Break', elementEmoji.almighty, 'blue', true, 'lb'));
+			}
+
+			// Transformations
+			if (canTransform(char, btl)) {
+				let transformations = [];
+				for (let i in char.transformations) {
+					if (canTransform(char, btl, i)) transformations.push(i);
+				}
+
+				if (!comps[1]) comps[1] = [];
+				comps[1].push(makeButton(transformations.length > 1 ? `Transform! (${transformations.length})` : transformations[0], elementEmoji.spirit, 'blue', true, 'transform'));
 			}
 		}
 	},
@@ -366,7 +378,15 @@ const menuStates = {
 				}
 		}
 	},
-	
+
+	[MENU_TRANSFORMATIONS]: ({char, btl, comps}) => {
+		if (canTransform(char, btl)) {
+			for (let i in char.transformations) {
+				let k = Object.keys(char.transformations).indexOf(i);
+				if (canTransform(char, btl, i)) comps[CalcCompins(comps, k)].push(makeButton(i, elementEmoji.spirit, 'blue', true, i));
+			}
+		}
+	},
 	[MENU_FORFEIT]: ({comps}) => {
 		comps[0] = [makeButton('Yes!', elementEmoji.wind, 'red', true, 'forfeit')]
 	},
@@ -432,12 +452,19 @@ function GetCharStatus(char) {
 			}
 		}
 	if (char.status)
-		str += statusEmojis[char.status]
+		str += statusEmojis[char.status];
 	if (char.confusion)
-		str += statusEmojis.confusion
+		str += statusEmojis.confusion;
 	if (char.infatuation)
-		str += statusEmojis.confusion
+		str += statusEmojis.infatuation;
 	return str
+}
+
+function GetCharName(char) {
+	let str = char.name;
+	if (char.transformed) str = `${elementEmoji[char.transformations[char.transformed].mainElement]}**__${char.name}__**`;
+
+	return str;
 }
 
 sendCurTurnEmbed = (char, btl) => {
@@ -485,8 +512,10 @@ sendCurTurnEmbed = (char, btl) => {
 			if (c.hp <= 0) {
 				teamDesc += `~~${l}: ${c.name} _(DOWN)_~~\n`;
 			} else {
-				let s = GetCharStatus(c)
-				teamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;			}
+				let s = GetCharStatus(c);
+				let n = GetCharName(c);
+				teamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+			}
 		}
 	}
 
@@ -499,7 +528,8 @@ sendCurTurnEmbed = (char, btl) => {
 			myTeamDesc += `~~${l}: ${c.name} _(DOWN)_~~\n`;
 		} else {
 			let s = GetCharStatus(c)
-			myTeamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+			let n = GetCharName(c);
+			myTeamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
 		}
 	}
 	
@@ -716,6 +746,32 @@ sendCurTurnEmbed = (char, btl) => {
 				btl.action.move = 'tc';
 				btl.action.target[0] = char.team;
 				menustate = MENU_TARGET;
+				break;
+
+			case 'transform':
+				btl.action.move = 'transform';
+				btl.action.target = [char.team, char.pos];
+
+				let transformations = [];
+				for (let i in char.transformations) {
+					if (canTransform(char, btl, i)) transformations.push(i);
+				}
+
+				if (transformations.length > 1)
+					menustate = MENU_TRANSFORMATIONS;
+				else {
+					btl.action.index = transformations[0];
+					alreadyResponded = true;
+
+					doAction(char, btl, btl.action);
+					collector.stop();
+
+					return i.update({
+						content: `<@${char.owner}>`,
+						embeds: [DiscordEmbed],
+					});
+				}
+
 				break;
 
 			case 'back':
@@ -987,7 +1043,7 @@ sendCurTurnEmbed = (char, btl) => {
 									.addFields()
 
 								for (let k in targ.negotiate)
-									DiscordEmbed.fields.push({name: `**[${k}]** __${targ.negotiate[k].name}__`, value: targ.negotiate[k].desc, inline: true});
+									DiscordEmbed.fields.push({name: `**[${k}]** __${targ.negotiate[k].name}__`, value: targ.negotiate[k].desc ?? 'No description.', inline: true});
 
 								menustate = MENU_PACIFY;
 								alreadyResponded = true;
@@ -1134,6 +1190,18 @@ sendCurTurnEmbed = (char, btl) => {
 						content: `<@${char.owner}>`,
 						embeds: [DiscordEmbed],
 					});
+				} else if (menustate == MENU_TRANSFORMATIONS && char.transformations[i.customId]) {
+					if (canTransform(char, btl, i.customId)) {
+						btl.action.index = i.customId;
+						alreadyResponded = true;
+						doAction(char, btl, btl.action);
+						collector.stop();
+
+						await i.update({
+							content: `<@${char.owner}>`,
+							embeds: [DiscordEmbed],
+						});
+					}
 				}
 		}
 
@@ -1339,6 +1407,16 @@ doAction = (char, btl, action) => {
 
 				char.donetc = true;
 			}
+			break;
+
+		case 'transform':
+			doTransformation(char, btl.action.index, btl);
+
+			DiscordEmbed = new Discord.MessageEmbed()
+				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+				.setTitle(`${char.name} => Self`)
+				.setDescription(`${char.name} undergoes a transformation, taking their ${btl.action.index} form!`)
+			btl.channel.send({embeds: [DiscordEmbed]});
 			break;
 
 		case 'save':

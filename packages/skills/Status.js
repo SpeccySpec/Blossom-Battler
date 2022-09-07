@@ -42,7 +42,7 @@ statusList = {
 		],
 		applyfunc(message, skill, args) {
 			let statusEffect = args.filter(x => statusEffects.includes(x.toLowerCase()))
-			if (statusEffect.length === 0) return message.channel.send("You're not adding any valid status effects! Use the ''liststatus'' command to list all status effects.");
+			if (statusEffect.length === 0) return void message.channel.send("You're not adding any valid status effects! Use the ''liststatus'' command to list all status effects.");
 			statusEffect = statusEffect.map(x => x.toLowerCase())
 
 			let chance = args[args.length - 1] > 0 ? args[args.length - 1] : 100;
@@ -1261,6 +1261,8 @@ statusList = {
 
 			char.melee.pow *= vars[0];
 			char.stats.atk *= vars[1];
+
+			char.ragesoul = true;
 
 			if (btl.pvp) {
 				return `__${char.name}__ is preparing something...`;

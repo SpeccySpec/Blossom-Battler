@@ -909,83 +909,177 @@ doEnemyTurn = (char, btl) => {
 doPacify = (char, btl, action) => {
 	let i = action.index;
 	let targ = btl.teams[action.target[0]].members[action.target[1]];
-	let finaltxt = targ.negotiate[i].action ?? `%PLAYER% tries to pacify ${targ.name}`;
+	let negotiation = targ.negotiate[i];
+	let finaltxt = true
 
-	while (finaltxt.includes('%PLAYER%')) finaltxt = finaltxt.replace('%PLAYER%', char.name);
-	while (finaltxt.includes('%ENEMY%')) finaltxt = finaltxt.replace('%ENEMY%', targ.name);
+	var result = {
+		text: '', //this will be used for preapply hook texts to prevent unnecessary newlines
+		convince: negotiation.convince
+	};
 
-	let convince = targ.negotiate[i].convince;
-	let specialType = targ.negotiate[i].special ?? 'none';
+	let specials = negotiation?.specials
 
-	for (let s of char.skills) {
-		let skill = skillFile[s]
-		if (skill.type != 'passive') continue;
+	//canproceed hook
+	if (specials) {
+		for (let i in specials) {
+			if (finaltxt !== true) break;
 
-		if (skill.passive.kindheart) {
-			convince += Math.trunc(((convince/100)*skill.passive.kindheart)*100)/100; // trunc to 2 decimal places
+			if (!specialList[i]) continue;
+			if (!specialList[i].canproceed) continue;
+
+			if (specialList[i].multiple) {
+				for (let k in specials[i]) {
+					finaltxt = specialList[i].canproceed(char, targ, btl, specials[i][k]) ?? true;
+
+					if (finaltxt !== true) {
+						result.failed = i;
+						break;
+					}
+				}
+			} else {
+				finaltxt = specialList[i].canproceed(char, targ, btl, specials[i]) ?? true;
+			}
 		}
 	}
-	convince = Math.min(convince, 100);
 
-	switch(specialType) {
-		default:
-			targ.pacify += convince;
-			finaltxt += `\n_(Pacified by ${convince}%!)_\n`;
+	if (finaltxt === true) {
+		finaltxt = negotiation.action ?? `%PLAYER% tries to pacify ${targ.name}`; //set text for when it can proceed
 
-			if (targ.pacify >= 100) {
-				targ.pacified = true;
-				finaltxt += `\n${targ.name} is fully pacified `;
+		//kindheart passive
+		if (!specials?.stagnant) {
+			for (let s of char.skills) {
+				let skill = skillFile[s]
+				if (skill.type != 'passive') continue;
 
-				if (targ.negotiateDefs && !btl.testing) {
-					let parties = setUpFile(`${dataPath}/json/${btl.guild.id}/parties.json`, true);
-
-					if (parties[btl.teams[char.team].id]) {
-						let party = parties[btl.teams[char.team].id];
-
-						if (!party.negotiates) party.negotiates = {};
-						party.negotiates[targ.name] = party.negotiates[targ.name] ? party.negotiates[targ.name]+1 : 1;
-
-						if (party.negotiates[targ.name] == targ.negotiateDefs.required) {
-							finaltxt += 'and wants to join your team!';
-
-							party.negotiateAllies[targ.name] = {
-								nickname: targ.name,
-								hp: Math.round(targ.hp/2),
-								mp: Math.round(targ.mp/2),
-								maxhp: Math.round(targ.maxhp/2),
-								maxmp: Math.round(targ.maxmp/2),
-
-								melee: targ.melee,
-								stats: targ.stats,
-
-								skill: targ.negotiateDefs.qualities.skill,
-								atkbuff: targ.negotiateDefs.qualities.atk,
-								magbuff: targ.negotiateDefs.qualities.mag,
-								endbuff: targ.negotiateDefs.qualities.end,
-
-								happines: 255, // OKAY BUT WHAT IF WE COULD DO THIS TAMAGOCHI THING WITH PETS THATD BE SO SICK
-								mood: 'happy', // YOU'D GET TO SEE THEIR MOOD AND SHIT
-								food: 100, // AND FEED THEM
-								// Although there wouldn't be no real punishment, maybe just a boost in damage output.
-								// Things like being forced to tank Makarakarn and Tetrakarn before would now lower happiness or mood ect
-							}
-							
-							if (targ.golden) party.negotiateAllies[targ.name].golden = true;
-						} else {
-							finaltxt += `and is satisfied!\n\n_(**${party.negotiates[targ.name]}/${targ.negotiateDefs.required}** ${targ.name}s pacified.)_`;
-						}
-
-						fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
-					}
-				} else {
-					finaltxt += 'and stops attacking!';
+				if (skill.passive.kindheart) {
+					result.convince += Math.trunc(((result.convince/100)*skill.passive.kindheart)*100)/100; // trunc to 2 decimal places
 				}
 			}
+		}
+
+		//preapply hook
+		if (specials) {
+			for (let i in specials) {
+				if (!specialList[i]) continue;
+				if (!specialList[i].preapply) continue;
+
+				if (specialList[i].multiple) {
+					for (let k in specials[i]) {
+						result.text = '';
+						specialList[i].preapply(char, targ, result, btl, specials[i][k]);
+						if (result.text != '') finaltxt += `\n${result.text}`;
+					}
+				} else {
+					result.text = '';
+					specialList[i].preapply(char, targ, result, btl, specials[i]);
+					if (result.text != '') finaltxt += `\n${result.text}`;
+				}
+			}
+		}
+
+		//real shit
+		var convince = Math.min(result.convince, 100);
+		targ.pacify += convince;
+		if (targ.pacify < 0) targ.pacify == 0;
+
+		//postapply hook
+		if (specials) {
+			for (let i in specials) {
+				if (!specialList[i]) continue;
+				if (!specialList[i].postapply) continue;
+
+				if (specialList[i].multiple) {
+					for (let k in specials[i]) {
+						finaltxt += `\n${(specialList[i].postapply(char, targ, btl, specials[i][k] ) ?? '')}`;
+					}
+				} else {
+					finaltxt += `\n${(specialList[i].postapply(char, targ, btl, specials[i]) ?? '')}`;
+				}
+			}
+		}
+
+		finaltxt += targ.pacify >= 0 ? (convince != 0 ? `\n_(Pacified by ${convince}%!)_\n` : `\n_(No pacification done.)_\n`) : `\n_(Progress reset.)_\n`
+
+		if (targ.pacify >= 100) {
+			targ.pacified = true;
+			finaltxt += `\n${targ.name} is fully pacified `;
+
+			if (targ.negotiateDefs && !btl.testing) {
+				let parties = setUpFile(`${dataPath}/json/${btl.guild.id}/parties.json`, true);
+
+				if (parties[btl.teams[char.team].id]) {
+					let party = parties[btl.teams[char.team].id];
+
+					if (!party.negotiates) party.negotiates = {};
+					party.negotiates[targ.name] = party.negotiates[targ.name] ? party.negotiates[targ.name]+1 : 1;
+
+					if (party.negotiates[targ.name] == targ.negotiateDefs.required && targ.negotiateDefs?.qualities) {
+						finaltxt += 'and wants to join your team!';
+
+						party.negotiateAllies[targ.name] = {
+							nickname: targ.name,
+							hp: Math.round(targ.hp/2),
+							mp: Math.round(targ.mp/2),
+							maxhp: Math.round(targ.maxhp/2),
+							maxmp: Math.round(targ.maxmp/2),
+
+							melee: targ.melee,
+							stats: targ.stats,
+
+							skill: targ.negotiateDefs.qualities.skill,
+							atkbuff: targ.negotiateDefs.qualities.atk,
+							magbuff: targ.negotiateDefs.qualities.mag,
+							endbuff: targ.negotiateDefs.qualities.end,
+
+							happines: 255, // OKAY BUT WHAT IF WE COULD DO THIS TAMAGOCHI THING WITH PETS THATD BE SO SICK
+							mood: 'happy', // YOU'D GET TO SEE THEIR MOOD AND SHIT
+							food: 100, // AND FEED THEM
+							// Although there wouldn't be no real punishment, maybe just a boost in damage output.
+							// Things like being forced to tank Makarakarn and Tetrakarn before would now lower happiness or mood ect
+						}
+
+						if (targ.golden) party.negotiateAllies[targ.name].golden = true;
+					} else {
+						finaltxt += `and is satisfied!\n\n_(**${party.negotiates[targ.name]}/${targ.negotiateDefs.required}** ${targ.name}s pacified.)_`;
+					}
+
+					fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
+				}
+			} else {
+				finaltxt += 'and stops attacking!';
+			}
+		}
+	} else {
+		finaltxt += `\n_(No pacification done.)_\n`;
+
+		if (specials?.failurespecial) {
+			neededSpecial = specials.failurespecial;
+			
+			for (let k in neededSpecial) {
+				let failure_requirement = neededSpecial[k][0];
+
+				if (result?.failed != failure_requirement) continue;
+
+				let failure_special = neededSpecial[k][1];
+
+				if (!specialList[failure_special]?.useonfail) {
+					finaltxt += `\n${(specialList[failure_special].postapply(char, targ, btl, neededSpecial[k][2]) ?? '')}`;
+				} else {
+					specialList[failure_special].preapply(char, targ, result, btl, neededSpecial[k][2])
+				}
+			}
+
+			if (result.reset) finaltxt = finaltxt.replace('No pacification done.', 'Progress reset.');
+		}
 	}
+
+	//quote replacement
+	while (finaltxt.includes('%PLAYER%')) finaltxt = finaltxt.replace('%PLAYER%', char.name);
+	while (finaltxt.includes('%ENEMY%')) finaltxt = finaltxt.replace('%ENEMY%', targ.name);
 
 	DiscordEmbed = new Discord.MessageEmbed()
 		.setColor('#d613cc')
 		.setTitle(`${char.name} => ${targ.name}`)
-		.setDescription(finaltxt)
+		.setDescription(finaltxt.replace(/\n{3,}/, () => "\n\n"))
 	btl.channel.send({embeds: [DiscordEmbed]})
 }

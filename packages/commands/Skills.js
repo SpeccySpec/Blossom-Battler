@@ -906,12 +906,12 @@ commands.updateskills = new Command({
 	SKILL EXTRAS GO HERE
 							*/
 			
-async function listExtras(message, extras, title, desc, color) {
+listExtras = async (message, extras, title, desc, color) => {
 	const generateEmbed = async start => {
 		const current = extras.slice(start, start + 6)
 		return new Discord.MessageEmbed({
 			title: title,
-			desc: desc,
+			description: desc,
 			color: color,
 			fields: await Promise.all(
 				current.map(async extraDefs => ({
@@ -946,7 +946,7 @@ async function listExtras(message, extras, title, desc, color) {
 		if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
 			if (interaction.customId === 'back') {
 				if (currentIndex - 6 < 0) {
-					currentIndex = extras.length - 6 + (extras.length % 6)
+					currentIndex = extras.length - (extras.length % 6 == 0 ? 6 : extras.length % 6);
 				} else {
 					currentIndex -= 6
 				}

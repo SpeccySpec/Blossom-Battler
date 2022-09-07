@@ -27,3 +27,23 @@ makeMelee = (char) => {
 	
 	return meleeAtk;
 }
+
+isMainElement = (skill, char) => {
+	if (typeof char.mainElement === 'string') {
+		if (typeof skill.type === 'string') {
+			if (char.mainElement === skill.type) return true;
+		} else {
+			if (skill.type.includes(char.mainElement)) return true;
+		}
+	} else {
+		if (typeof skill.type === 'string') {
+			if (char.mainElement.includes(skill.type)) return true;
+		} else {
+			for (let e of char.mainElement) {
+				if (skill.type.includes(e)) return true;
+			}
+		}
+	}
+
+	return false;
+}

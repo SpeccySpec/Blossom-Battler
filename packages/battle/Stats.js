@@ -65,6 +65,8 @@ setupBattleStats = (f) => {
 }
 
 statWithBuff = (stat, buff) => {
+	if (!buff || buff == 0) return stat;
+
 	return Math.round(stat + (buff*(stat/4.5)));
 }
 
@@ -123,18 +125,20 @@ nextAvaliableId = (btl) => {
 }
 
 resetEffects = (char) => {
-	if (char?.custom?.orgiamode) {
+	if (char.ragesoul) delete char.ragesoul;
+
+	if (char.custom?.orgiamode) {
 		char.stats = objClone(char.custom.orgiamode.revert);
 		killVar(char, 'orgiamode');
 	}
 
-	if (char?.custom?.revert) {
+	if (char.custom?.revert) {
 		if (char.mimic) delete char.mimic;
 
-		char.stats = objClone(char.custom.revert[1].stats);
-		char.skills = char.custom.revert[1].skills;
-		char.name = char.custom.revert[1].name;
+		for (let i in char.custom.revert[1]) {
+			if (char[i]) char[i] = char.custom.revert[1][i];
+		}
 
-		delete char.custom.revert;
+		killVar(char, 'revert');
 	}
 }

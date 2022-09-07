@@ -16,6 +16,8 @@ Extra = class extends ArgList {
 				continue
 			this[i] = func
 		}
+
+		this.useonfail = object.useonfail; //used for negotiation specials cause I use this exact same class.
 	}
 
 	apply(message, skill, rawargs) {
@@ -1975,16 +1977,17 @@ customVariables = {
 			if (char.custom?.revert) {
 				char.custom.revert[0]--;
 
-				if (char.custom.revert[0] == 0) {
-					delete char.mimic;
+				let rev = char.custom.revert;
+				if (rev[0] == 0) {
+					if (char.mimic) delete char.mimic;
+					if (char.transformed) delete char.transformed;
 
-					char.stats = objClone(char.custom.revert[1].stats);
-					char.skills = char.custom.revert[1].skills;
-					char.name = char.custom.revert[1].name;
+					for (let i in rev[1]) {
+						if (char[i]) char[i] = rev[1][i];
+					}
 
-					let sotrue = char.custom.revert[2];
+					let sotrue = rev[2];
 					delete char.custom.revert;
-
 					return sotrue;
 				}
 			}
@@ -2183,6 +2186,28 @@ customVariables = {
 					txt += `${txt == "" ? "" : "\n"}${skillvars[2]} was recharged!`
 			}
 			return txt
+		}
+	},
+
+	pacifyVars: {
+		onturn(btl, char, vars) {
+			let txt = ""
+
+			for (pacify in vars) {
+				let pacifyVar = vars[pacify];
+
+				if (pacifyVar.turns !== true) pacifyVar.turns -= 1;
+
+				if (pacifyVar.turns <= 0) {
+					txt += `${txt == "" ? "" : "\n"}`
+					txt += pacifyVar.revert ?? '';
+					delete vars[pacify];
+				}
+			}
+
+			if (Object.keys(vars).length == 0) delete char.custom.pacifyVars;
+
+			return txt;
 		}
 	}
 }

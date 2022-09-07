@@ -1138,24 +1138,28 @@ commands.setnegotiation = new Command({
 			forced: true
 		},
 		{
-			name: "Special",
-			type: "Word",
-			forced: true
-		},
-		{
 			name: "Amount",
-			type: "Num",
+			type: "Decimal",
 			forced: true
 		},
 		{
 			name: "Description",
-			type: "Word",
-			forced: true
+			type: "Word"
 		},
 		{
 			name: "Action",
 			type: "Word",
 			forced: true
+		},
+		{
+			name: "Special",
+			type: "Word",
+		},
+		{
+			name: "Variables",
+			type: "Any",
+			forced: false,
+			multiple: true
 		}
 	],
 	checkban: true,
@@ -1167,32 +1171,148 @@ commands.setnegotiation = new Command({
 		if (!enemyFile[args[0]].negotiate)
 			enemyFile[args[0]].negotiate = [];
 
+		let negotiation = buildNegotiation(message, args[5], args)
+		if (!negotiation) return;
+
 		let isExistent = false;
-		//check if there is a negotiation with the same name
+
 		for (const i in enemyFile[args[0]].negotiate) {
-			if (enemyFile[args[0]].negotiate[i].name == args[1]) {
+			if (enemyFile[args[0]].negotiate[i].name == negotiation.name) {
 				isExistent = true;
-				enemyFile[args[0]].negotiate[i].desc = args[4];
-				enemyFile[args[0]].negotiate[i].action = args[5];
-				enemyFile[args[0]].negotiate[i].convince = parseFloat(args[3]);
-				if (args[3] != 'none')
-					enemyFile[args[0]].negotiate[i].special = args[2].toLowerCase();
+				enemyFile[args[0]].negotiate[i] = negotiation;
+				break;
 			}
 		}
 
 		if (!isExistent) {
-			enemyFile[args[0]].negotiate.push({
-				name: args[1],
-				desc: args[4],
-				action: args[5],
-				convince: parseFloat(args[3])
-			})
-
-			if (args[3] != 'none') enemyFile[args[0]].negotiate.special = args[2].toLowerCase();
+			enemyFile[args[0]].negotiate.push(negotiation)
 		}
 
 		message.channel.send(`${args[0]}'s negotiation named ${args[1]} has been set.`);
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+	}
+})
+
+commands.listnegotiationspecials = new Command({
+	desc: 'List the possible specials you can give a __negotiation__.',
+	aliases: ['passiveextras', 'extraspassive', 'listextraspassive'],
+	section: "skills",
+	args: [],
+	func: (message, args) => {
+		let title = 'List of Negotiation Specials'
+		let desc = 'When trying to pacify your target, options presented can have extra effects! These are called specials, and can be added with the "applyspecial" command.'
+
+		let extras = []
+		for (let i in specialList) {
+			if (!extrasList[i]?.unregsiterable) extras.push({name: `${specialList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${specialList[i].getFullDesc()}${specialList[i].multiple ? '\n\n**CAN BE APPLIED MULTIPLE TIMES!**' : ''}`, inline: true});
+		}
+
+		listExtras(message, extras, title, desc, 'FF1174')
+	}
+})
+
+commands.applyspecial = new Command({
+	desc: 'A negotiation of an enemy may have extra effects. These are called "specials". Apply a special with this command, list all the ones possible with "listnegotiationspecials".',
+	aliases: ['specialapply'],
+	section: "skills",
+	args: [
+		{
+			name: "Enemy Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Negotiation Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Special",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Variables",
+			type: "Any",
+			forced: false,
+			multiple: true
+		}
+	],
+	checkban: true,
+	admin: 'You do not have permission to assign an enemy\'s negotiation a special.',
+	func: (message, args) => {
+		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+
+		let enemyName = args.shift()
+		let negotiationName = args.shift()
+		let extra = args.shift().toLowerCase()
+
+		const enemy = enemyFile[enemyName]
+		if (!enemy) return message.channel.send(`${enemyName} is not a valid enemy.`);
+		if (!enemy.negotiate || enemy.negotiate == []) return message.channel.send(`${enemyName} has no negotiations.`);
+		if (!enemy.negotiate.some(neg => (neg.name == negotiationName))) {
+			return message.channel.send(`${enemyName} doesn't have a negotiation named ${negotiationName}.`);
+		}
+		let negotiation
+		for (const i in enemy.negotiate) {
+			if (enemy.negotiate[i].name == negotiationName) {
+				negotiation = enemy.negotiate[i];
+				break;
+			}
+		}
+
+		applySpecial(message, negotiation, extra, args);
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+	}
+})
+
+commands.clearspecials = new Command({
+	desc: 'Clears all specials of a specific enemy\'s negotiation.',
+	aliases: ['specialsclear'],
+	section: "skills",
+	args: [
+		{
+			name: "Enemy Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Negotiation Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Special",
+			type: "Word",
+			forced: true
+		},
+	],
+	checkban: true,
+	admin: 'You do not have permission to clear an enemy\'s negotiation specials.',
+	func: (message, args) => {
+		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+
+		const enemy = enemyFile[args[0]]
+		if (!enemy) return message.channel.send(`${args[0]} is not a valid enemy.`);
+		if (!enemy.negotiate || enemy.negotiate == []) return message.channel.send(`${args[0]} has no negotiations.`);
+		if (!enemy.negotiate.some(neg => (neg.name == args[1]))) {
+			return message.channel.send(`${args[0]} doesn't have a negotiation named ${args[1]}.`);
+		}
+		let negotiation
+		for (const i in enemy.negotiate) {
+			if (enemy.negotiate[i].name == args[1]) {
+				negotiation = enemy.negotiate[i];
+				break;
+			}
+		}
+
+		if (!negotiation.specials) return message.channel.send(`${negotiation.name} has no specials!`);
+		if (!negotiation.specials[args[2].toLowerCase()]) return message.channel.send(`${negotiation.name} has no ${args[2]} specials!`);
+
+		delete negotiation.specials[args[2].toLowerCase()];
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		message.react('👍');
 	}
 })
 
@@ -1225,6 +1345,9 @@ commands.clearnegotiation = new Command({
 			message.channel.send(`${args[0]}'s negotiations have been cleared.`);
 		}
 		else {
+			if (!enemyFile[args[0]].negotiate.some(neg => (neg.name == args[1]))) {
+				return message.channel.send(`${args[0]} doesn't have a negotiation named ${args[1]}.`);
+			}
 			for (const i in enemyFile[args[0]].negotiate) {
 				if (enemyFile[args[0]].negotiate[i].name == args[1]) {
 					enemyFile[args[0]].negotiate.splice(i, 1);
