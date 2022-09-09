@@ -97,6 +97,9 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 			case "randomopposing":
 				finalText += "Targets a **random opponent** in-battle.\n";
 				break;
+			case "randomallies":
+				finalText += "Targets a **random ally** in-battle.\n";
+				break;
 			case "spreadopposing":
 				finalText += "Targets **one opponent and spreads to two surrounding**.\n";
 				break;
