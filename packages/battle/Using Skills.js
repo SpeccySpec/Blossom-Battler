@@ -997,16 +997,9 @@ useSkill = (char, btl, act, forceskill, ally) => {
 
 	// Main Elements
 	let mainElementRate = settings?.rates?.mainelement ?? 1.2;
+	if (char.transformed) mainElementRate+0.2;
 
-	if (typeof skill.type === 'string') {
-		if (char.mainElement === skill.type) {
-			skill.pow *= mainElementRate;
-		}
-	} else {
-		if (skill.type.includes(char.mainElement)) {
-			skill.pow *= mainElementRate;
-		}
-	}
+	if (isMainElement(skill, char)) skill.pow *= mainElementRate;
 
 	// Passives
 	if (doPassives(btl)) {
