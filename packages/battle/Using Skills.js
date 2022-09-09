@@ -690,10 +690,28 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) {
-								extrasList[i].dmgmod(char, targ, dmg, skill, btl, skill.extras[i][k]);
+								dmg = extrasList[i].dmgmod(char, targ, dmg, skill, btl, skill.extras[i][k]) ?? dmg;
 							}
 						} else {
-							extrasList[i].dmgmod(char, targ, dmg, skill, btl, skill.extras[i]);
+							dmg = extrasList[i].dmgmod(char, targ, dmg, skill, btl, skill.extras[i]) ?? dmg;
+						}
+					}
+				}
+
+				if (doPassives(btl)) {
+					for (let skillName of char.skills) {
+						if (!skillFile[skillName]) continue;
+			
+						let psv = skillFile[skillName];
+						if (psv.type != 'passive' || !psv.passive) continue;
+			
+						for (let i in psv.passive) {
+							if (passiveList[i] && passiveList[i].dmgmod) {
+								if (passiveList[i].multiple) {
+									for (let k in psv.passive[i]) dmg = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i][k]) ?? dmg;
+								} else
+								dmg = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i][k]) ?? dmg;
+							}
 						}
 					}
 				}

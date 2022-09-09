@@ -42,6 +42,10 @@ passiveList = {
 				name: "Use percentages?",
 				type: "YesNo"
 			},
+			{
+				name: "Boost damage instead?",
+				type: "YesNo"
+			},
 		],
 		multiple: true,
 		diffflag: 0,
@@ -49,15 +53,18 @@ passiveList = {
 			let element = args[0].toLowerCase();
 			let amount = args[1];
 			let usePercent = args[2] ?? true;
+			let boostDamage = args[3] ?? false;
 
 			if (![...Elements, ...Targets, 'all', 'magic', 'ranged', 'physical', 'multi-hit'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
 			if (element == 'almighty' || element == 'passive') return void message.channel.send("You cannot boost the powers of almighty or passive skills!");
 			if (amount == 0) return void message.channel.send('With the amount being 0, it wouldn\'t change power at all.');
 
-			makePassive(skill, "boost", [element, amount, usePercent]);
+			makePassive(skill, "boost", [element, amount, usePercent, boostDamage]);
 			return true;
 		},
 		statmod(btl, char, skill, vars) {
+			if (vars[3]) return;
+
 			if ((vars[0] == 'all' && ((typeof(skill.type) === 'object' && !skill.type.includes('almighty')) || (typeof(skill.type) === 'string' && skill.type != 'almighty'))) 
 			|| (typeof(skill.type) === 'object' && skill.type.includes(vars[0])) 
 			|| (typeof(skill.type) === 'string' && skill.type == vars[0]) 
@@ -68,6 +75,22 @@ passiveList = {
 				if (vars[2]) skill.pow *= (vars[1]/100) + 1;
 				else skill.pow += vars[1];
 			}
+		},
+		dmgmod(char, targ, dmg, skill, btl, vars) {
+			if (!vars[3]) return;
+
+			if ((vars[0] == 'all' && ((typeof(skill.type) === 'object' && !skill.type.includes('almighty')) || (typeof(skill.type) === 'string' && skill.type != 'almighty'))) 
+			|| (typeof(skill.type) === 'object' && skill.type.includes(vars[0])) 
+			|| (typeof(skill.type) === 'string' && skill.type == vars[0]) 
+			|| vars[0] == skill?.atktype
+			|| (vars[0] == 'multi-hit' && skill?.hits > 1)
+			|| vars[0] == skill?.costtype
+			|| vars[0] == skill?.target) {
+				if (vars[2]) dmg *= (vars[1]/100) + 1;
+				else dmg += vars[1];
+			}
+			
+			return dmg;
 		},
 		getinfo(vars, skill) {
 			let txt = `Boosts `
@@ -84,7 +107,7 @@ passiveList = {
 				if (Targets.includes(type)) suffixText = ' targetting';
 				if (costTypeNames[type]) suffixText = ' costing';
 
-				txt += `${elementEmoji[type] ?? ''}**${midText.charAt(0).toUpperCase() + midText.slice(1) + suffixText}** attacks by **${vars[i][1]}${vars[i][2] ? '%' : ''}**`
+				txt += `${elementEmoji[type] ?? ''}**${midText.charAt(0).toUpperCase() + midText.slice(1) + suffixText}** attack ${vars[i][3] ? 'damage' : 'power'} by **${vars[i][1]}${vars[i][2] ? '%' : ''}**`
 
 				if (i < vars.length - 2) 
 					txt += `, `

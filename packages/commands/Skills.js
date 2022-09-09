@@ -312,7 +312,8 @@ commands.updateskills = new Command({
 		for (skill in skillFile) {
 			if (skillFile[skill]?.passive?.boost) {
 				for (boost of skillFile[skill]?.passive?.boost) {
-					if (!boost[2]) boost[2] = true;
+					if (!boost[2]) boost[2] = true; //Use Percentages?
+					if (!boost[3]) boost[3] = false; //Boost Damage Instead?
 				}
 			}
 		}
