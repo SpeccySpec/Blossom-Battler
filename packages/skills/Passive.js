@@ -64,16 +64,18 @@ passiveList = {
 		},
 		statmod(btl, char, skill, vars) {
 			if (vars[3]) return;
+			if ((typeof(skill.type) === 'object' && skill.type.includes('almighty')) || (typeof(skill.type) === 'string' && skill.type == 'almighty')) return;
 
 			let type = vars[0];
-			if ((type == 'all' && ((typeof(skill.type) === 'object' && !skill.type.includes('almighty')) || (typeof(skill.type) === 'string' && skill.type != 'almighty'))) 
+
+			if (type == 'all' 
 			|| ((typeof(skill.type) === 'object' && skill.type.includes(type)) || (typeof(skill.type) === 'string' && skill.type == type))
 			|| type == skill?.atktype
 			|| (type == 'multi-hit' && skill?.hits > 1)
 			|| type == skill?.costtype
 			|| type == skill?.target
 			|| (type == 'nostatus' && !skill?.status)
-			|| ((typeof(skill.type) === 'string' && skill?.status == type) || (typeof(skill.status) === 'object' && skill?.status.includes(type)))
+			|| ((typeof(skill.status) === 'string' && skill?.status == type) || (typeof(skill.status) === 'object' && skill?.status.includes(type)))
 			|| (type == 'mainelement' && ((typeof(skill.type) === 'object' && skill.type.includes(char.mainElement)) || (typeof(skill.type) === 'string' && skill.type == char.mainElement)))) {
 				if (vars[2]) skill.pow *= (vars[1]/100) + 1;
 				else skill.pow += vars[1];
@@ -81,17 +83,18 @@ passiveList = {
 		},
 		dmgmod(char, targ, dmg, skill, btl, vars) {
 			if (!vars[3]) return;
+			if ((typeof(skill.type) === 'object' && skill.type.includes('almighty')) || (typeof(skill.type) === 'string' && skill.type == 'almighty')) return;
 
 			let type = vars[0];
 
-			if ((type == 'all' && ((typeof(skill.type) === 'object' && !skill.type.includes('almighty')) || (typeof(skill.type) === 'string' && skill.type != 'almighty'))) 
+			if (type == 'all' 
 			|| ((typeof(skill.type) === 'object' && skill.type.includes(type)) || (typeof(skill.type) === 'string' && skill.type == type))
 			|| type == skill?.atktype
 			|| (type == 'multi-hit' && skill?.hits > 1)
 			|| type == skill?.costtype
 			|| type == skill?.target
 			|| (type == 'nostatus' && !skill?.status)
-			|| ((typeof(skill.type) === 'string' && skill?.status == type) || (typeof(skill.status) === 'object' && skill?.status.includes(type)))
+			|| ((typeof(skill.status) === 'string' && skill?.status == type) || (typeof(skill.status) === 'object' && skill?.status.includes(type)))
 			|| (type == 'mainelement' && ((typeof(skill.type) === 'object' && skill.type.includes(char.mainElement)) || (typeof(skill.type) === 'string' && skill.type == char.mainElement)))) {
 				if (vars[2]) dmg *= (vars[1]/100) + 1;
 				else dmg += vars[1];
