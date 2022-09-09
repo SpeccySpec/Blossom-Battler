@@ -128,29 +128,25 @@ passiveList = {
 			return true;
 		},
 		onturn(btl, char, vars) {
-			if (char.custom?.angry) {
-				char.custom.angry--;
+			if (!char.custom?.moodswing) addCusVal(char, 'moodswing', {
+				isAngry: false,
+				turns: vars[1],
+			});
+			char.custom.moodswing.turns++;
 
-				if (char.custom.angry <= 0) {
-					killVar(char, 'angry');
-					return `__${char.name}__ calmed themselves down...`;
-				}
-			} else {
-				if (!char.custom?.calmturns) addCusVal(char, 'calmturns', vars[1]);
-				char.custom.calmturns++;
-
-				if (!char.custom.calmturns >= vars[1]) {
-					killVar(char, 'calmturns');
-					addCusVal(char, 'angry', vars[1]);
-					return `__${char.name}__ becomes enraged, with burning fury!`;
-				}
+			if (char.custom.moodswing.turns >= vars[1]) {
+				char.custom.moodswing.turns = 0;
+				char.custom.moodswing.isAngry = !char.custom.moodswing.isAngry;
+				return !char.custom.moodswing.isAngry ? `__${char.name}__ calmed themselves down...` : `__${char.name}__ becomes enraged, with burning fury!`;
 			}
 		},
 		statmod(btl, char, skill, vars) {
-			if (char.custom?.angry) {
-				skill.pow *= (vars[0]/100) + 1;
+			let result = (vars[0]/100) + 1
+
+			if (char.custom?.moodswing?.isAngry) {
+				skill.pow *= result;
 			} else {
-				skill.pow *= 1-(100-vars[0])/100;
+				skill.pow /= result;
 			}
 		},
 		getinfo(vars, skill) {
