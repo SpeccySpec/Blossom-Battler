@@ -26,10 +26,10 @@ passiveList = {
 	// On Attack.
 	boost: new Extra({
 		name: "Boost",
-		desc: "Boosts the powers/damage of skills of a specific element/attack type/cost type/target, multi-hit skills, skills that inflict or don't inflict a status effect, or all skills in general.",
+		desc: "Boosts the powers/damage of skills of a specific element/attack type/cost type/target, of user's main element, multi-hit skills, skills that inflict or don't inflict a status effect, or all skills in general.",
 		args: [
 			{
-				name: "Element / 'All' / Attack Type / 'Multi-hit' / Cost Type / Target / Status Effect / 'NoStatus'",
+				name: "Element / 'All' / Attack Type / 'Multi-hit' / Cost Type / Target / Status Effect / 'NoStatus' / 'MainElement'",
 				type: "Word",
 				forced: true
 			},
@@ -55,7 +55,7 @@ passiveList = {
 			let usePercent = args[2] ?? true;
 			let boostDamage = args[3] ?? false;
 
-			if (![...Elements, ...Targets, ...statusEffects, 'all', 'magic', 'ranged', 'physical', 'multi-hit', 'nostatus'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
+			if (![...Elements, ...Targets, ...statusEffects, 'all', 'magic', 'ranged', 'physical', 'multi-hit', 'nostatus', 'mainelement'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
 			if (element == 'almighty' || element == 'passive') return void message.channel.send("You cannot boost the powers of almighty or passive skills!");
 			if (amount == 0) return void message.channel.send('With the amount being 0, it wouldn\'t change power at all.');
 
@@ -73,7 +73,8 @@ passiveList = {
 			|| type == skill?.costtype
 			|| type == skill?.target
 			|| (type == 'nostatus' && !skill?.status)
-			|| ((typeof(skill.type) === 'string' && skill?.status == type) || (typeof(skill.status) === 'object' && skill?.status.includes(type)))) {
+			|| ((typeof(skill.type) === 'string' && skill?.status == type) || (typeof(skill.status) === 'object' && skill?.status.includes(type)))
+			|| (type == 'mainelement' && ((typeof(skill.type) === 'object' && skill.type.includes(char.mainElement)) || (typeof(skill.type) === 'string' && skill.type == char.mainElement)))) {
 				if (vars[2]) skill.pow *= (vars[1]/100) + 1;
 				else skill.pow += vars[1];
 			}
@@ -90,7 +91,8 @@ passiveList = {
 			|| type == skill?.costtype
 			|| type == skill?.target
 			|| (type == 'nostatus' && !skill?.status)
-			|| ((typeof(skill.type) === 'string' && skill?.status == type) || (typeof(skill.status) === 'object' && skill?.status.includes(type)))) {
+			|| ((typeof(skill.type) === 'string' && skill?.status == type) || (typeof(skill.status) === 'object' && skill?.status.includes(type)))
+			|| (type == 'mainelement' && ((typeof(skill.type) === 'object' && skill.type.includes(char.mainElement)) || (typeof(skill.type) === 'string' && skill.type == char.mainElement)))) {
 				if (vars[2]) dmg *= (vars[1]/100) + 1;
 				else dmg += vars[1];
 			}
@@ -98,7 +100,7 @@ passiveList = {
 			return dmg;
 		},
 		getinfo(vars, skill) {
-			let txt = `Boosts `
+			let txt = `Boosts `;
 
 			for (let i in vars) {
 				if (!vars[i]) continue;
@@ -107,9 +109,10 @@ passiveList = {
 				let midText = type;
 				if (costTypeNames[midText]) midText = costTypeNames[midText];
 				if (Targets.includes(midText)) midText = targetNames[midText];
-				if (midText == 'nostatus') midText = 'non-status effect'
+				if (midText == 'nostatus') midText = 'non-status effect';
+				if (midText == 'mainelement') midText = 'user\'s main element';
 
-				let suffixText = ''
+				let suffixText = '';
 				if (Targets.includes(type)) suffixText = ' targetting';
 				if (costTypeNames[type]) suffixText = ' costing';
 				if (statusEffects.includes(type)) suffixText = ' inflictable';
