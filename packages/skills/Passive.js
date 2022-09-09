@@ -152,6 +152,9 @@ passiveList = {
 			} else {
 				skill.pow *= 1-(100-vars[0])/100;
 			}
+		},
+		getinfo(vars, skill) {
+			return `Changes the user's mood **per${vars[1] > 1 ? ` ${vars[1]}` : ''} turn${vars[1] > 1 ? 's' : ''}** with a positive or negative skill power change of **${vars[0]}%**`;
 		}
 	}),
 
