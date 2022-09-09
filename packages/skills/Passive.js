@@ -1,46 +1,72 @@
 let costTypeNames = {
-	hp: " HP",
-	mp: " MP",
-	lb: " LB",
+	hp: "HP",
+	mp: "MP",
+	lb: "LB",
 	hppercent: "% of user's Max HP",
 	mppercent: "% of user's Max MP"
+}
+let targetNames = {
+	one: 'opponent',
+	ally: 'ally',
+	caster: 'caster',
+
+	allopposing: 'all opponent',
+	allallies: 'all ally',
+	randomopposing: 'random opponent',
+	randomallies: 'random ally',
+
+	random: 'random fighter',
+	everyone: 'everyone',
+	
+	spreadopposing: 'opponent spread',
+	spreadallies: 'ally spread'
 }
 
 passiveList = {
 	// On Attack.
 	boost: new Extra({
 		name: "Boost",
-		desc: "Boosts the powers of skills of a specific element.",
+		desc: "Boosts the powers of skills of a specific element/attack type/cost type/target, multi-hit skills, or all skills in general.",
 		args: [
 			{
-				name: "Element",
+				name: "Element / 'All' / Attack Type / 'Multi-hit' / Cost Type / Target",
 				type: "Word",
 				forced: true
 			},
 			{
-				name: "Percentage",
+				name: "Amount",
 				type: "Decimal",
 				forced: true
-			}
+			},
+			{
+				name: "Use percentages?",
+				type: "YesNo"
+			},
 		],
 		multiple: true,
 		diffflag: 0,
 		applyfunc(message, skill, args) {
-			let element = args[0]?.toLowerCase();
-			let percentage = args[1];
+			let element = args[0].toLowerCase();
+			let amount = args[1];
+			let usePercent = args[2] ?? true;
 
-			if ((!utilityFuncs.inArray(element, Elements) && element != 'all' && element != 'magic' && element != 'ranged' && element != 'physical')) return void message.channel.send("You entered an invalid element!");
+			if (![...Elements, ...Targets, 'all', 'magic', 'ranged', 'physical', 'multi-hit'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
 			if (element == 'almighty' || element == 'passive') return void message.channel.send("You cannot boost the powers of almighty or passive skills!");
+			if (amount == 0) return void message.channel.send('With the amount being 0, it wouldn\'t change power at all.');
 
-			makePassive(skill, "boost", [element, percentage]);
+			makePassive(skill, "boost", [element, amount, usePercent]);
 			return true;
 		},
 		statmod(btl, char, skill, vars) {
 			if ((vars[0] == 'all' && ((typeof(skill.type) === 'object' && !skill.type.includes('almighty')) || (typeof(skill.type) === 'string' && skill.type != 'almighty'))) 
 			|| (typeof(skill.type) === 'object' && skill.type.includes(vars[0])) 
 			|| (typeof(skill.type) === 'string' && skill.type == vars[0]) 
-			|| vars[0] == skill?.atktype) {
-				skill.pow *= (vars[1]/100) + 1;
+			|| vars[0] == skill?.atktype
+			|| (vars[0] == 'multi-hit' && skill?.hits > 1)
+			|| vars[0] == skill?.costtype
+			|| vars[0] == skill?.target) {
+				if (vars[2]) skill.pow *= (vars[1]/100) + 1;
+				else skill.pow += vars[1];
 			}
 		},
 		getinfo(vars, skill) {
@@ -49,7 +75,16 @@ passiveList = {
 			for (let i in vars) {
 				if (!vars[i]) continue;
 
-				txt += `${elementEmoji[vars[i][0]] ?? ''}**${vars[i][0].charAt(0).toUpperCase() + vars[i][0].slice(1)}** attacks by **${vars[i][1]}%**`
+				let type = vars[i][0];
+				let midText = type;
+				if (costTypeNames[midText]) midText = costTypeNames[midText];
+				if (Targets.includes(midText)) midText = targetNames[midText];
+
+				let suffixText = ''
+				if (Targets.includes(type)) suffixText = ' targetting';
+				if (costTypeNames[type]) suffixText = ' costing';
+
+				txt += `${elementEmoji[type] ?? ''}**${midText.charAt(0).toUpperCase() + midText.slice(1) + suffixText}** attacks by **${vars[i][1]}${vars[i][2] ? '%' : ''}**`
 
 				if (i < vars.length - 2) 
 					txt += `, `
@@ -322,7 +357,7 @@ passiveList = {
 			let txt = 'Heals **'
 
 			for (i in vars) {
-				txt += `${vars[i][0]}${costTypeNames[vars[i][1]]}`;
+				txt += `${vars[i][0]}${costTypeNames[vars[i][1]].length == 2 ? ' ' : ''}${costTypeNames[vars[i][1]]}`;
 
 				if (i < vars.length - 2) {
 					txt += ', ';
