@@ -26,10 +26,10 @@ passiveList = {
 	// On Attack.
 	boost: new Extra({
 		name: "Boost",
-		desc: "Boosts the powers of skills of a specific element/attack type/cost type/target, multi-hit skills, or all skills in general.",
+		desc: "Boosts the powers/damage of skills of a specific element/attack type/cost type/target, multi-hit skills, skills that inflict or don't inflict a status effect, or all skills in general.",
 		args: [
 			{
-				name: "Element / 'All' / Attack Type / 'Multi-hit' / Cost Type / Target",
+				name: "Element / 'All' / Attack Type / 'Multi-hit' / Cost Type / Target / Status Effect / 'NoStatus'",
 				type: "Word",
 				forced: true
 			},
@@ -55,7 +55,7 @@ passiveList = {
 			let usePercent = args[2] ?? true;
 			let boostDamage = args[3] ?? false;
 
-			if (![...Elements, ...Targets, 'all', 'magic', 'ranged', 'physical', 'multi-hit'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
+			if (![...Elements, ...Targets, ...statusEffects, 'all', 'magic', 'ranged', 'physical', 'multi-hit', 'nostatus'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
 			if (element == 'almighty' || element == 'passive') return void message.channel.send("You cannot boost the powers of almighty or passive skills!");
 			if (amount == 0) return void message.channel.send('With the amount being 0, it wouldn\'t change power at all.');
 
@@ -65,13 +65,15 @@ passiveList = {
 		statmod(btl, char, skill, vars) {
 			if (vars[3]) return;
 
-			if ((vars[0] == 'all' && ((typeof(skill.type) === 'object' && !skill.type.includes('almighty')) || (typeof(skill.type) === 'string' && skill.type != 'almighty'))) 
-			|| (typeof(skill.type) === 'object' && skill.type.includes(vars[0])) 
-			|| (typeof(skill.type) === 'string' && skill.type == vars[0]) 
-			|| vars[0] == skill?.atktype
-			|| (vars[0] == 'multi-hit' && skill?.hits > 1)
-			|| vars[0] == skill?.costtype
-			|| vars[0] == skill?.target) {
+			let type = vars[0];
+			if ((type == 'all' && ((typeof(skill.type) === 'object' && !skill.type.includes('almighty')) || (typeof(skill.type) === 'string' && skill.type != 'almighty'))) 
+			|| ((typeof(skill.type) === 'object' && skill.type.includes(type)) || (typeof(skill.type) === 'string' && skill.type == type))
+			|| type == skill?.atktype
+			|| (type == 'multi-hit' && skill?.hits > 1)
+			|| type == skill?.costtype
+			|| type == skill?.target
+			|| (type == 'nostatus' && !skill?.status)
+			|| ((typeof(skill.type) === 'string' && skill?.status == type) || (typeof(skill.status) === 'object' && skill?.status.includes(type)))) {
 				if (vars[2]) skill.pow *= (vars[1]/100) + 1;
 				else skill.pow += vars[1];
 			}
@@ -79,13 +81,16 @@ passiveList = {
 		dmgmod(char, targ, dmg, skill, btl, vars) {
 			if (!vars[3]) return;
 
-			if ((vars[0] == 'all' && ((typeof(skill.type) === 'object' && !skill.type.includes('almighty')) || (typeof(skill.type) === 'string' && skill.type != 'almighty'))) 
-			|| (typeof(skill.type) === 'object' && skill.type.includes(vars[0])) 
-			|| (typeof(skill.type) === 'string' && skill.type == vars[0]) 
-			|| vars[0] == skill?.atktype
-			|| (vars[0] == 'multi-hit' && skill?.hits > 1)
-			|| vars[0] == skill?.costtype
-			|| vars[0] == skill?.target) {
+			let type = vars[0];
+
+			if ((type == 'all' && ((typeof(skill.type) === 'object' && !skill.type.includes('almighty')) || (typeof(skill.type) === 'string' && skill.type != 'almighty'))) 
+			|| ((typeof(skill.type) === 'object' && skill.type.includes(type)) || (typeof(skill.type) === 'string' && skill.type == type))
+			|| type == skill?.atktype
+			|| (type == 'multi-hit' && skill?.hits > 1)
+			|| type == skill?.costtype
+			|| type == skill?.target
+			|| (type == 'nostatus' && !skill?.status)
+			|| ((typeof(skill.type) === 'string' && skill?.status == type) || (typeof(skill.status) === 'object' && skill?.status.includes(type)))) {
 				if (vars[2]) dmg *= (vars[1]/100) + 1;
 				else dmg += vars[1];
 			}
@@ -102,12 +107,14 @@ passiveList = {
 				let midText = type;
 				if (costTypeNames[midText]) midText = costTypeNames[midText];
 				if (Targets.includes(midText)) midText = targetNames[midText];
+				if (midText == 'nostatus') midText = 'non-status effect'
 
 				let suffixText = ''
 				if (Targets.includes(type)) suffixText = ' targetting';
 				if (costTypeNames[type]) suffixText = ' costing';
+				if (statusEffects.includes(type)) suffixText = ' inflictable';
 
-				txt += `${elementEmoji[type] ?? ''}**${midText.charAt(0).toUpperCase() + midText.slice(1) + suffixText}** attack ${vars[i][3] ? 'damage' : 'power'} by **${vars[i][1]}${vars[i][2] ? '%' : ''}**`
+				txt += `${elementEmoji[type] ?? statusEmojis[type] ?? ''}**${midText.charAt(0).toUpperCase() + midText.slice(1) + suffixText}** attack ${vars[i][3] ? 'damage' : 'power'} by **${vars[i][1]}${vars[i][2] ? '%' : ''}**`
 
 				if (i < vars.length - 2) 
 					txt += `, `
