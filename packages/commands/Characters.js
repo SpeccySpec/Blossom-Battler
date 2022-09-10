@@ -2947,16 +2947,16 @@ commands.settransformation = new Command({
 		if (!reqTable.includes(args[3].toLowerCase())) return message.channel.send(`Invalid requirement! Please enter one of the following: ${reqTable.join(', ')}`);
 
 		if (args[4] > settings.caps.transformations.hpbuff) return message.channel.send(`HP Buff cannot be greater than ${settings.caps.transformations.hpbuff}!`);
-		if (args[5] > settings.caps.transformations.mpbuff) return message.channel.send(`HP Buff cannot be greater than ${settings.caps.transformations.mpbuff}!`);
+		if (args[5] > settings.caps.transformations.mpbuff) return message.channel.send(`MP Buff cannot be greater than ${settings.caps.transformations.mpbuff}!`);
 
 		let BST = 0;
 		let allowedMore = 0;
-		for (let i = 6; i < 14; i++) {
+		for (let i = 6; i < 13; i++) {
 			if (args[i] > settings.caps.transformations.basestatmaxcap) return message.channel.send(`${args[i]} cannot be greater than ${settings.caps.transformations.statbuff}!`);
 			if (args[i] < settings.caps.transformations.basestatmincap) return message.channel.send(`${args[i]} cannot be less than ${settings.caps.transformations.basestatmincap}!`);
 
-			if (args[i] < 0) allowedMore = -args[i]/2
-			BST += args[i];
+			if (args[i] < 0) allowedMore = -args[i]/2;
+			else BST += args[i];
 		}
 
 		let normalbst = settings.caps.transformations.bstcap;
@@ -3031,6 +3031,11 @@ commands.edittransformation = new Command({
 			forced: true
 		},
 		{
+			name: "Main Element",
+			type: "Word",
+			forced: true
+		},
+		{
 			name: "Requirement",
 			type: "Word",
 			forced: true
@@ -3101,40 +3106,44 @@ commands.edittransformation = new Command({
 
 		if (!charFile[args[0]].transformations[args[1]]) return message.channel.send(`${args[0]} does not have a transformation named ${args[1]}!`);
 
-		let reqTable = ['allydown', 'onlystanding', 'belowhalfhp', 'outofmp', 'leaderdown', 'trusteddown']
-		if (!reqTable.includes(args[2])) return message.channel.send(`Invalid requirement! Please enter one of the following: ${reqTable.join(', ')}`);
+		if (!Elements.includes(args[2].toLowerCase())) return message.channel.send(args[2] + " is an invalid Main Element! Try one of the following: " + Elements.join(', '));
+		if (args[2].toLowerCase() === 'passive' || args[2].toLowerCase() === 'almighty') return message.channel.send("You cannot set **Passive** or **Almighty** as Transformation Elements.");
 
-		if (args[3] > settings.caps.transformations.hpbuff) return message.channel.send(`HP Buff cannot be greater than ${settings.caps.transformations.hpbuff}!`);
+		let reqTable = ['allydown', 'onlystanding', 'belowhalfhp', 'outofmp', 'leaderdown', 'trusteddown']
+		if (!reqTable.includes(args[3])) return message.channel.send(`Invalid requirement! Please enter one of the following: ${reqTable.join(', ')}`);
+
+		if (args[4] > settings.caps.transformations.hpbuff) return message.channel.send(`HP Buff cannot be greater than ${settings.caps.transformations.hpbuff}!`);
+		if (args[5] > settings.caps.transformations.mpbuff) return message.channel.send(`MP Buff cannot be greater than ${settings.caps.transformations.mpbuff}!`);
 
 		let BST = 0;
 		let allowedMore = 0;
-		for (let i = 4; i < 12; i++) {
+		for (let i = 6; i < 13; i++) {
 			if (args[i] > settings.caps.transformations.basestatmaxcap) return message.channel.send(`${args[i]} cannot be greater than ${settings.caps.transformations.statbuff}!`);
 			if (args[i] < settings.caps.transformations.basestatmincap) return message.channel.send(`${args[i]} cannot be less than ${settings.caps.transformations.basestatmincap}!`);
 
-			if (args[i] < 0)
-				allowedMore = -args[i]/2
-
-			if (args[i] > 0)
-				BST += args[i];
+			if (args[i] < 0) allowedMore = -args[i]/2;
+			else BST += args[i];
 		}
-		if (BST > Math.round(Math.min(settings.caps.transformations.bstcap, settings.caps.transformations.bstcap+allowedMore))) return message.channel.send(`BST cannot be greater than ${Math.min(settings.caps.transformations.bstcap, settings.caps.transformations.bstcap+allowedMore)}! Maximum BST is ${settings.caps.transformations.bstcap}, but that modifies with negative stats.`);
+		let normalbst = settings.caps.transformations.bstcap;
+		let maxbst = settings.caps.transformations.bstcap+allowedMore;
+		if (BST > Math.round(Math.max(normalbst, maxbst))) return message.channel.send(`BST cannot be greater than ${maxbst}! Maximum BST is ${normalbst}, but that modifies with negative stats, it has been modified by ${allowedMore}.`);
 
-		charFile[args[0]].transformations[args[1]].requirement = args[2];
-		charFile[args[0]].transformations[args[1]].hp = args[3]
-		charFile[args[0]].transformations[args[1]].mp = args[4]
-		charFile[args[0]].transformations[args[1]].atk = args[5]
-		charFile[args[0]].transformations[args[1]].mag = args[6]
-		charFile[args[0]].transformations[args[1]].prc = args[7]
-		charFile[args[0]].transformations[args[1]].end = args[8]
-		charFile[args[0]].transformations[args[1]].chr = args[9]
-		charFile[args[0]].transformations[args[1]].int = args[10]
-		charFile[args[0]].transformations[args[1]].agl = args[11]
-		charFile[args[0]].transformations[args[1]].luk = args[12]
+		charFile[args[0]].transformations[args[1]].mainElement = args[2].toLowerCase();
+		charFile[args[0]].transformations[args[1]].requirement = args[3];
+		charFile[args[0]].transformations[args[1]].hp = args[4]
+		charFile[args[0]].transformations[args[1]].mp = args[5]
+		charFile[args[0]].transformations[args[1]].atk = args[6]
+		charFile[args[0]].transformations[args[1]].mag = args[7]
+		charFile[args[0]].transformations[args[1]].prc = args[8]
+		charFile[args[0]].transformations[args[1]].end = args[9]
+		charFile[args[0]].transformations[args[1]].chr = args[10]
+		charFile[args[0]].transformations[args[1]].int = args[11]
+		charFile[args[0]].transformations[args[1]].agl = args[12]
+		charFile[args[0]].transformations[args[1]].luk = args[13]
 
-		if (args[13] && args[13] != '') {
-			if (args[13].length > 128) return message.channel.send('Short description cannot be longer than 128 characters!');
-			charFile[args[0]].transformations[args[1]].desc = args[13];
+		if (args[14] && args[14].trim() != '') {
+			if (args[14].length > 128) return message.channel.send('Short description cannot be longer than 128 characters!');
+			charFile[args[0]].transformations[args[1]].desc = args[14];
 		}
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 
