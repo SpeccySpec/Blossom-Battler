@@ -1081,17 +1081,58 @@ passiveList = {
 		}
 	}),
 
-	attackall: new Extra({
-		name: "Attack All",
-		desc: "Melee Attack targets all foes.",
-		args: [],
+	meleetarget: new Extra({
+		name: "Melee Target",
+		desc: "Melee Attack to have a different target to choose between to attack.",
+		args: [
+			{
+				name: "Targets",
+				type: "Word",
+				forced: true,
+				multiple: true
+			}
+		],
 		applyfunc(message, skill, args) {
-			makePassive(skill, "attackall", [true]);
+			args = args.map(x => {return x.toLowerCase()});
+			if (args.includes('one')) {
+				message.channel.send('You have put \'one\', which will be filtered out due to melee attacks already atttacking one foe to begin with.');
+				args = args.filter(x => x != 'one');
+			}
+			if (args.length == 0) return void message.channel.send("You haven't put any valid targets.")
+
+			makePassive(skill, "meleetarget", [args]);
 			return true;
 		},
 		hardcoded: true,
 		getinfo(vars, skill) {
-			return `Melee Attack **targets all foes**`
+			let txt = `Melee Attack **targets ${vars[0].length > 1 ? 'either' : ''}`
+
+			for (i in vars[0]) {
+				switch (vars[0][i]) {
+					case 'ally': txt += 'an ally'; break;
+					case 'caster': txt += 'the caster'; break;
+
+					case 'allopposing': txt += 'all foes'; break;
+					case 'allallies': txt += 'all allies'; break;
+					case 'randomopposing': txt += 'a random foe'; break;
+					case 'randomallies': txt += 'a random ally'; break;
+
+					case 'random': txt += 'a random fighter'; break;
+					case 'everyone': txt += 'all fighters'; break;
+
+					case 'spreadopposing': txt += 'foes with spreading'; break;
+					case 'spreadallies': txt += 'allies with spreading'; break;
+				}
+
+				if (i < vars.length - 2) {
+					txt += `, `
+				} else if (i == vars.length - 2) {
+					txt += ` or `
+				}
+			}
+			
+			txt += `**`
+			return txt
 		}
 	}),
 

@@ -6,7 +6,7 @@ makeMelee = (char) => {
 		if (psv.type != 'passive' || !psv.passive) continue;
 
 		if (psv.passive.magicmelee) atkType = 'magic';
-		if (psv.passive.attackall) targType = 'allopposing';
+		if (psv.passive.meleetarget) targType = psv.passive.meleetarget[0][randNum(0, psv.passive.meleetarget[0].length - 1)]
 	}
 
 	let meleeAtk = {
@@ -16,7 +16,7 @@ makeMelee = (char) => {
 		acc: Math.min(100, char.melee.acc),
 		crit: char.melee.crit,
 		atktype: atkType,
-		target: 'one',
+		target: targType,
 		melee: true
 	}
 

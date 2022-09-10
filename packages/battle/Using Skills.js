@@ -1341,7 +1341,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 						if (psv.type != 'passive' || !psv.passive) continue;
 
 						if (psv.passive.magicmelee) atkType = 'magic';
-						if (psv.passive.attackall) targType = 'allopposing';
+						if (psv.passive.meleetarget) targType = psv.passive.meleetarget[0][randNum(0, psv.passive.meleetarget[0].length - 1)];
 					}
 
 					let meleeAtk = {
@@ -1351,7 +1351,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 						acc: 100,
 						crit: char2.melee.crit,
 						atktype: atkType,
-						target: 'one',
+						target: targType,
 						melee: true,
 						noassistance: true
 					}

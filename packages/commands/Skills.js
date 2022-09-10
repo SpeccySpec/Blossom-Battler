@@ -317,6 +317,11 @@ commands.updateskills = new Command({
 						if (!boost[3]) boost[3] = false; //Boost Damage Instead?
 					}
 				}
+
+				if (skillFile[skill].passive?.attackall) {
+					delete skillFile[skill].passive.attackall
+					skillFile[skill].passive.meleetarget = [['allopposing']]
+				}
 			}
 
 			if (skillFile[skill]?.statusses) {
