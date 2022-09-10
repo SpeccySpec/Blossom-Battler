@@ -114,7 +114,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 							if (a < affinityOHKO.length - 2) finalText += ', ';
 							else if (a == affinityOHKO.length - 2) finalText += ' or ';
 						}
-						finalText += ` affinit${affinityOHKO.length > 0 ? 'ies' : 'y'} to the skill**`
+						finalText += ` affinit${affinityOHKO.length > 1 ? 'ies' : 'y'} to the skill**`
 					}
 				}
 
