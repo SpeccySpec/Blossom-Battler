@@ -115,8 +115,10 @@ extrasList = {
 		onuse(char, targ, skill, btl, vars) {
 			if (!vars[0])
 				char.hp = 0;
-			else
+			else {
+				if (char.hp <= vars[0]) return '';
 				char.hp = vars[0];
+			}
 
 			if (char.hp > char.maxhp) char.hp = char.maxhp;
 			if (char.hp < 0) char.hp = 0;
