@@ -934,7 +934,7 @@ passiveList = {
 			let txt = false;
 			let firstHit = false
 			
-			for (let i = 0; i < skill.hits; i++) {
+			for (let i = 0; i < vars[0]-1; i++) {
 				let c = vars[1]-((vars[1]/(10+(vars[1]/15*(i+1))))*i);
 
 				if (randNum(1, 100) <= c) {

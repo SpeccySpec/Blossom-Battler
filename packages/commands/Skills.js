@@ -310,10 +310,24 @@ commands.updateskills = new Command({
 		skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
 
 		for (skill in skillFile) {
-			if (skillFile[skill]?.passive?.boost) {
-				for (boost of skillFile[skill]?.passive?.boost) {
-					if (!boost[2]) boost[2] = true; //Use Percentages?
-					if (!boost[3]) boost[3] = false; //Boost Damage Instead?
+			if (skillFile[skill]?.passive) {
+				if (skillFile[skill].passive?.boost) {
+					for (boost of skillFile[skill].passive.boost) {
+						if (!boost[2]) boost[2] = true; //Use Percentages?
+						if (!boost[3]) boost[3] = false; //Boost Damage Instead?
+					}
+				}
+			}
+
+			if (skillFile[skill]?.statusses) {
+			}
+
+			if (skillFile[skill]?.heal) {
+			}
+
+			if (skillFile[skill]?.extras) {
+				if (skillFile[skill].extras?.ohko && typeof skillFile[skill].extras.ohko[0] != 'object') {
+					skillFile[skill].extras.ohko = [[skillFile[skill].extras.ohko[0], 'luk', skillFile[skill].extras.ohko[1] ? [skillFile[skill].extras.ohko[1]] : []]]
 				}
 			}
 		}

@@ -61,9 +61,68 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 	let settings = setUpSettings(message.guild.id);
 	var finalText = ``;
 	if (skillDefs.type != "status" && skillDefs.type != "passive") {
-		if (hasExtra(skillDefs, 'ohko'))
-			finalText += `Defeats the target ${skillDefs.extras.ohko[1] && skillDefs.extras.ohko[1] != null ? `inflicted with ${statusEmojis[skillDefs.extras.ohko[1]]}${skillDefs.extras.ohko[1]}` : ''} in **one shot**!`;
-		else {
+		if (hasExtra(skillDefs, 'ohko')) {
+			for (i in skillDefs.extras.ohko) {
+				let curOHKO = skillDefs.extras.ohko[i];
+
+				if (curOHKO[0] < 100) {
+					if (i == 0) finalText += 'Has';
+
+					finalText += ` a **${curOHKO[1] != 'none' ? `${curOHKO[1].toUpperCase()} stat modifiable` : ''} ${curOHKO[0]}%** chance to defeat the target`;
+				} else {
+					if (i == 0) finalText += '**Defeats the target**';
+					else finalText += '**defeats the target**'
+				}
+
+				if (curOHKO[2].length > 0) {
+					let statusOHKO = curOHKO[2].filter(x => statusEffects.includes(x));
+					let elementOHKO = curOHKO[2].filter(x => Elements.includes(x));
+					let affinityOHKO = curOHKO[2].filter(x => affinityEmoji[x]);
+
+					if (statusOHKO.length > 0) {
+						finalText += ` inflicted with ${statusOHKO.length > 1 ? 'either' : ''} **`
+						for (a in statusOHKO) {
+							finalText += `${statusEmojis[statusOHKO[a]]}${statusOHKO[a]}`
+
+							if (a < statusOHKO.length - 2) finalText += ', ';
+							else if (a == statusOHKO.length - 2) finalText += ' or ';
+						}
+						finalText += '**';
+					}
+
+					if (elementOHKO.length > 0) {
+						if (statusOHKO.length > 0) finalText += ','
+						if (elementOHKO.length <= 0) finalText += ' and'
+
+						finalText += ` with main elements of ${elementOHKO.length > 1 ? 'either' : ''} **`
+						for (a in elementOHKO) {
+							finalText += `${elementEmoji[elementOHKO[a]]}${elementOHKO[a]}`
+
+							if (a < elementOHKO.length - 2) finalText += ', ';
+							else if (a == elementOHKO.length - 2) finalText += ' or ';
+						}
+						finalText += '**';
+					}
+
+					if (affinityOHKO.length > 0) {
+						if (statusOHKO.length > 0 || elementOHKO.length > 0) finalText += '**, and'
+
+						finalText += ` that have ${affinityOHKO.length > 1 ? 'either' : 'a'} **`
+						for (a in affinityOHKO) {
+							finalText += `${affinityEmoji[affinityOHKO[a]]}${affinityOHKO[a]}`
+
+							if (a < affinityOHKO.length - 2) finalText += ', ';
+							else if (a == affinityOHKO.length - 2) finalText += ' or ';
+						}
+						finalText += ` affinit${affinityOHKO.length > 0 ? 'ies' : 'y'} to the skill**`
+					}
+				}
+
+				if (i < skillDefs.extras.ohko.length - 2) finalText += ', ';
+				else if (i == skillDefs.extras.ohko.length - 2) finalText += ' and ';
+			}
+			finalText += ' in **one shot**!';
+		} else {
 			if (skillDefs.type != "heal")
 				finalText += `Has **${skillDefs.pow}** Power${skillDefs?.hits == 1 ? '.' : ''}`;
 		}
