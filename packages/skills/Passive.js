@@ -78,7 +78,7 @@ passiveList = {
 			|| ((typeof(skill.status) === 'string' && skill?.status == type) || (typeof(skill.status) === 'object' && skill?.status.includes(type)))
 			|| (type == 'mainelement' && ((typeof(skill.type) === 'object' && skill.type.includes(char.mainElement)) || (typeof(skill.type) === 'string' && skill.type == char.mainElement)))) {
 				if (vars[2]) skill.pow *= (vars[1]/100) + 1;
-				else skill.pow += vars[1];
+				else skill.pow += vars[1] / (type == 'heal' || type == 'status' ? 100 : 1);
 			}
 		},
 		dmgmod(char, targ, dmg, skill, btl, vars) {
@@ -120,7 +120,7 @@ passiveList = {
 				if (costTypeNames[type]) suffixText = ' costing';
 				if (statusEffects.includes(type)) suffixText = ' inflictable';
 
-				txt += `${elementEmoji[type] ?? statusEmojis[type] ?? ''}**${midText.charAt(0).toUpperCase() + midText.slice(1) + suffixText}** attack ${vars[i][3] ? 'damage' : 'power'} by **${vars[i][1]}${vars[i][2] ? '%' : ''}**`
+				txt += `${elementEmoji[type] ?? statusEmojis[type] ?? ''}**${midText.charAt(0).toUpperCase() + midText.slice(1) + suffixText}** ${type == 'heal' || type == 'status' ? 'skill' : 'attack'} ${type == 'heal' || type == 'status' ? `${vars[i][3] ? 'result' : 'effectiveness'}` : `${vars[i][3] ? 'damage' : 'power'}`} by **${vars[i][1] / (!vars[i][3] && !vars[i][2] && (type == 'heal' || type == 'status') ? 100 : 1)}${vars[i][2] ? '%' : (!vars[i][3] && (type == 'heal' || type == 'status') ? 'x' : '')}**`
 
 				if (i < vars.length - 2) 
 					txt += `, `

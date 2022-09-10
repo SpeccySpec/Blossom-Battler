@@ -28,6 +28,7 @@ healList = {
 				return `__${targ.name}__ cannot be healed while they are in a pinch!`
 			if (!vars[0] || vars[0] == null || vars[0] == 0) return '';
 
+			vars[0] = healMod(char, targ, vars[0], skill, btl);
 			vars[0] = Math.round(vars[0] * multiplier);
 
 			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
@@ -115,6 +116,8 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
+			vars[0] = healMod(char, targ, vars[0], skill, btl);
+
 			addCusVal(targ, "regenheal", {
 				name: skill.name,
 				username: char.name,
@@ -160,6 +163,8 @@ healList = {
 			return true;
 		},
 		onuse: function(char, targ, skill, btl, vars, multiplier) {
+			vars[0] = healMod(char, targ, vars[0], skill, btl);
+
 			addCusVal(targ, "regenheal", {
 				name: skill.name,
 				username: char.name,
@@ -196,6 +201,8 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
+			vars[0] = healMod(char, targ, vars[0], skill, btl);
+
 			if (targ.hp > 0) return 'But it failed!';
 
 			targ.hp = Math.round(targ.maxhp/vars[0] * multiplier);
@@ -354,8 +361,10 @@ healList = {
 		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (!vars[0])
 				char.hp = 0;
-			else
+			else {
+				vars[0] = healMod(char, targ, vars[0], skill, btl);
 				char.hp = Math.round(vars[0] * multiplier);
+			}
 
 			if (char.hp > char.maxhp) char.hp = char.maxhp;
 			if (char.hp < 0) char.hp = 0;
@@ -393,8 +402,10 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
+			vars[0] = healMod(char, targ, vars[0], skill, btl);
+			vars[0] = ~~(vars[0] / multiplier);
 			addCusVal(targ, "wishheal", {
-				turns: Math.round(vars[0] * multiplier),
+				turns: vars[0],
 				vars: vars
 			})
 
@@ -404,6 +415,28 @@ healList = {
 			return `Heals after **${vars[0]} turns**`;
 		}
 	})
+}
+
+function healMod(char, targ, result, skill, btl) {
+	if (doPassives(btl)) {
+		for (let skillName of char.skills) {
+			if (!skillFile[skillName]) continue;
+
+			let psv = skillFile[skillName];
+			if (psv.type != 'passive' || !psv.passive) continue;
+
+			for (let i in psv.passive) {
+				if (passiveList[i] && passiveList[i].dmgmod) {
+					if (passiveList[i].multiple) {
+						for (let k in psv.passive[i]) result = passiveList[i].dmgmod(char, targ, result, skill, btl, psv.passive[i][k]) ?? result;
+					} else
+					result = passiveList[i].dmgmod(char, targ, result, skill, btl, psv.passive[i][k]) ?? result;
+				}
+			}
+		}
+	}
+
+	return result
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.
