@@ -2965,7 +2965,7 @@ commands.settransformation = new Command({
 
 		newTransformation(charFile[args[0]], args[1], args[2].toLowerCase(), args[3].toLowerCase(), args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], args[12], args[13]);
 		
-		if (args[14] != '') {
+		if (args[14] && args[14].trim() != '') {
 			if (args[14].length > 128) return message.channel.send('Short description cannot be longer than 128 characters!');
 			charFile[args[0]].transformations[args[1]].desc = args[14];
 		}
@@ -3132,7 +3132,7 @@ commands.edittransformation = new Command({
 		charFile[args[0]].transformations[args[1]].agl = args[11]
 		charFile[args[0]].transformations[args[1]].luk = args[12]
 
-		if (args[13] != '') {
+		if (args[13] && args[13] != '') {
 			if (args[13].length > 128) return message.channel.send('Short description cannot be longer than 128 characters!');
 			charFile[args[0]].transformations[args[1]].desc = args[13];
 		}
