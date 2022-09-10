@@ -1098,7 +1098,7 @@ passiveList = {
 				args = args.filter(x => x != 'one');
 			}
 			if (args.length <= 0) return void message.channel.send("You haven't put any valid targets.")
-			if (args.length == 1 && args[0] == 'one') return void message.channel.send("Melee attacks already attack a single foe. No point changing it witohut any RNG involved.")
+			if ([...new Set(args)].length == 1 && args[0] == 'one') return void message.channel.send("Melee attacks already attack a single foe. No point changing it witohut any RNG involved.")
 
 			makePassive(skill, "meleetarget", [args]);
 			return true;
