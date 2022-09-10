@@ -593,34 +593,71 @@ sendCurTurnEmbed = (char, btl) => {
 		switch(i.customId) {
 			case 'melee':
 				btl.action.move = 'melee';
+				btl.action.melee = makeMelee(char);
 
-				let alivecount = 0;
-				let alivenum = [0, 0];
+				if ((btl.action.melee.target === "one" || btl.action.melee.target === "spreadopposing")) {
+					let alivecount = 0;
+					let alivenum = [0, 0];
 
-				for (let k in btl.teams) {
-					if (k == char.team) continue;
+					for (let k in btl.teams) {
+						if (k == char.team) continue;
 
-					for (let j in btl.teams[k].members) {
-						if (btl.teams[k].members[j].hp > 0) {
-							alivenum = [k, j];
-							alivecount++;
+						for (let j in btl.teams[k].members) {
+							if (btl.teams[k].members[j].hp > 0) {
+								alivenum = [k, j];
+								alivecount++;
+							}
 						}
 					}
-				}
 
-				if (alivecount == 1) {
-					btl.action.target = alivenum;
+					if (alivecount == 1) {
+						btl.action.target = alivenum;
+						alreadyResponded = true;
+
+						doAction(char, btl, btl.action);
+						collector.stop();
+
+						return i.update({
+							content: `<@${char.owner}>`,
+							embeds: [DiscordEmbed],
+						});
+					} else {
+						menustate = MENU_TEAMSEL;
+					}
+				} else if (btl.action.melee.target === "ally" || btl.action.melee.target === "spreadallies") {
+					btl.action.target[0] = char.team;
+					if (btl.teams[char.team].members.length == 1) {
+						alreadyResponded = true;
+
+						doAction(char, btl, btl.action);
+						collector.stop();
+
+						return i.update({
+							content: `<@${char.owner}>`,
+							embeds: [DiscordEmbed],
+						});
+					} else
+						menustate = MENU_TARGET;
+				} else if (btl.action.melee.target === "caster") {
+					btl.action.target = [char.team, char.pos];
 					alreadyResponded = true;
-
 					doAction(char, btl, btl.action);
 					collector.stop();
 
-					return i.update({
+					await i.update({
 						content: `<@${char.owner}>`,
 						embeds: [DiscordEmbed],
 					});
 				} else {
-					menustate = MENU_TEAMSEL;
+					btl.action.target = [undefined, undefined];
+					doAction(char, btl, btl.action);
+					collector.stop();
+					alreadyResponded = true;
+
+					await i.update({
+						content: `<@${char.owner}>`,
+						embeds: [DiscordEmbed],
+					});
 				}
 				break;
 
@@ -1240,7 +1277,7 @@ doAction = (char, btl, action) => {
 
 	switch(action.move) {
 		case 'melee':
-			useSkill(char, btl, action, makeMelee(char));
+			useSkill(char, btl, action, action.melee);
 			break;
 
 		case 'skill':

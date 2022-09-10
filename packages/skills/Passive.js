@@ -1093,12 +1093,12 @@ passiveList = {
 			}
 		],
 		applyfunc(message, skill, args) {
-			args = args.map(x => {return x.toLowerCase()});
+			args = args.map(x => {return x.toLowerCase()}).filter(x => Targets.includes(x));
 			if (args.includes('one')) {
 				message.channel.send('You have put \'one\', which will be filtered out due to melee attacks already atttacking one foe to begin with.');
 				args = args.filter(x => x != 'one');
 			}
-			if (args.length == 0) return void message.channel.send("You haven't put any valid targets.")
+			if (args.length <= 0) return void message.channel.send("You haven't put any valid targets.")
 
 			makePassive(skill, "meleetarget", [args]);
 			return true;
