@@ -70,12 +70,14 @@ statWithBuff = (stat, buff) => {
 	return Math.round(stat + (buff*(stat/4.5)));
 }
 
-buffStat = (f, stat, amount) => {
+buffStat = (f, stat, amount, boosted) => {
 	let statBuff = stat.toLowerCase();
 	f.buffs[statBuff] += amount;
 
-	if (f.buffs[statBuff] > 3) f.buffs[statBuff] = 3;
-	if (f.buffs[statBuff] < -3) f.buffs[statBuff] = -3;
+	console.log(boosted + f.buffs[statBuff])
+
+	if (boosted || Math.abs(f.buffs[statBuff]) == 4) f.buffs[statBuff] = Math.max(Math.min(f.buffs[statBuff], 4), -4);
+	else f.buffs[statBuff] = Math.max(Math.min(f.buffs[statBuff], 3), -3);
 }
 
 inflictStatus = (char, status, notxt) => {

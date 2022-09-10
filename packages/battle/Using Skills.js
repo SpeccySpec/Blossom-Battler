@@ -356,10 +356,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 				if (statusList[i].multiple) {
 					for (let k in skill.statusses[i]) {
-						result.txt += `\n${statusList[i].onuse(char, targ, skill, btl, skill.statusses[i][k])}`;
+						result.txt += `\n${statusList[i].onuse(char, targ, skill, btl, skill.statusses[i][k], skill.pow)}`;
 					}
 				} else {
-					result.txt += `\n${statusList[i].onuse(char, targ, skill, btl, skill.statusses[i])}`;
+					result.txt += `\n${statusList[i].onuse(char, targ, skill, btl, skill.statusses[i], skill.pow)}`;
 				}
 			}
 		}
@@ -373,7 +373,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 				status = skill.status;
 			}
 
-			result.txt += statusList.status.inflictStatus(char, targ, skill, status, btl);
+			result.txt += statusList.status.inflictStatus(char, targ, skill, status, btl, skill.pow);
 		}
 	// Attacking Skills
 	} else {
@@ -494,10 +494,13 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					result.teamCombo = newResults.teamCombo;
 
 					// done.
-					result.txt += `${selectQuote(targ, 'repel', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}__${targ.name}__'s _${targ.custom.shield.name ?? 'Shield'}_ repelled the attack!\n${newResults.txt}\n_${targ.custom.shield.name ?? 'Shield'}_ has broken.`;
+					result.txt += `${selectQuote(targ, 'repel', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}__${targ.name}__'s _${targ.custom.shield.name ?? 'Shield'}_ repelled the attack!\n${newResults.txt}`;
 
 					// Let's get rid of this shield
-					delete targ.custom.shield;
+					if (!targ.custom.shield.hp) {
+						result.txt += `\n_${targ.custom.shield.name ?? 'Shield'}_ has broken.`;
+						delete targ.custom.shield;
+					} else delete targ.custom.shield.hp
 
 					// Return this text.
 					return result;
@@ -929,7 +932,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 						status = skill.status;
 					}
 
-					result.txt += statusList.status.inflictStatus(char, targ, skill, status, btl);
+					result.txt += statusList.status.inflictStatus(char, targ, skill, status, btl, skill.pow);
 				}
 			}
 		}
@@ -1008,7 +1011,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	}
 
 	// First, we modify stats via passives n shit. This isn't the actual character anyway so we don't care.
-	if (skill.type === 'heal') skill.pow = 1; //this is to make sure healing skills can be modified by passives
+	if (skill.type === 'heal' || skill.type === 'status') skill.pow = 1; //this is to make sure healing and status skills can be modified by passives
 
 	// Failsafe
 	if (!skill.hits) skill.hits = 1;
@@ -1304,9 +1307,9 @@ useSkill = (char, btl, act, forceskill, ally) => {
 				if (!selectcheck[j][i].onselect) continue;
 
 				if (selectcheck[j][i].multiple) {
-					for (let k in skill[j][i]) finalText += `\n${(selectcheck[j][i].onselect(char, skill, btl, skill[j][i][k]) ?? '')}`;
+					for (let k in skill[j][i]) finalText += `\n${(selectcheck[j][i].onselect(char, skill, btl, skill[j][i][k], skill.pow) ?? '')}`;
 				} else {
-					finalText += `\n${(selectcheck[j][i].onselect(char, skill, btl, skill[j][i]) ?? '')}`;
+					finalText += `\n${(selectcheck[j][i].onselect(char, skill, btl, skill[j][i], skill.pow) ?? '')}`;
 				}
 			}
 		}

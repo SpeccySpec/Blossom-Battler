@@ -53,7 +53,8 @@ statusList = {
 			skill.statuschance = chance;
 			return true;
 		},
-		inflictStatus(char, targ, skill, status, btl) {
+		inflictStatus(char, targ, skill, status, btl, multiplier) {
+			console.log(skill.type);
 			if (hasStatusAffinity(targ, status, 'block')) return `__${targ.name}__ blocked it!\n${selectQuote(char, 'badatk')}\n${selectQuote(targ, 'block')}`;
 			if (targ.status && skill.type === 'status') return "...But it failed!";
 
@@ -70,6 +71,11 @@ statusList = {
 				if (status == party.leaderskill.var1.toLowerCase()) {
 					chance += party.leaderskill.var2;
 				}
+			}
+
+			if (skill.type === 'status') {
+				chance = modSkillResult(char, targ, chance, skill, btl);
+				chance = Math.round(chance * multiplier);
 			}
 
 			let randChance = randNum(1, 100)
@@ -114,13 +120,13 @@ statusList = {
 			makeStatus(skill, "buff", [target, stat, stages, chance, turns])
 			return true
 		},
-		onselect(char, skill, btl, vars) {
+		onselect(char, skill, btl, vars, multiplier) {
 			if (vars[0] != 'user') return '';
-			return extrasList.buff.buffChange(char, skill, btl, vars);
+			return extrasList.buff.buffChange(char, char, skill, btl, vars, multiplier);
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (vars[0] != 'target') return '';
-			return extrasList.buff.buffChange(targ, skill, btl, vars);
+			return extrasList.buff.buffChange(char, targ, skill, btl, vars, multiplier);
 		},
 		aithinker(char, targ, act, skill, btl, vars) {
 			if (vars[0] === 'user') {
@@ -186,12 +192,32 @@ statusList = {
 			makeStatus(skill, "dekaja", [true]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
-			for (let i in targ.buffs) {
-				if (targ.buffs[i] > 0) targ.buffs[i] = 0;
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			let change = 0;
+			if (multiplier != 1) {
+				let extraBuffChance = 10;
+				extraBuffChance = Math.round(modSkillResult(char, targ, extraBuffChance, skill, btl) * multiplier);
+
+				if (randNum(1, 100) <= extraBuffChance) {
+					change = -1;
+				}
 			}
 
-			return `__${targ.name}__'s positive buffs were nullified!`;
+			for (let i in targ.buffs) {
+				if (targ.buffs[i] > 0) targ.buffs[i] = change;
+			}
+			if(targ?.custom?.buffTurns) {
+				for (i in targ.custom.buffTurns) {
+					if (targ.custom.buffTurns[i][1] >= 0) targ.custom.buffTurns[i] = ''
+				}
+				targ.custom.buffTurns = targ.custom.buffTurns.filter(x => x.length != 0);
+
+				if (targ.custom.buffTurns.length == 0) {
+					killVar(targ, "buffTurns");
+				}
+			}
+
+			return `__${targ.name}__'s positive buffs were nullified${change == -1 ? ' and debuffed 1 time' : ''}!`;
 		},
 		aithinker(char, targ, act, skill, btl) {
 			switch(skill.target) {
@@ -227,12 +253,32 @@ statusList = {
 			makeStatus(skill, "dekunda", [true]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			let change = 0;
+			if (multiplier != 1) {
+				let extraBuffChance = 10;
+				extraBuffChance = Math.round(modSkillResult(char, targ, extraBuffChance, skill, btl) * multiplier);
+
+				if (randNum(1, 100) <= extraBuffChance) {
+					change = 1;
+				}
+			}
+			
 			for (let i in targ.buffs) {
-				if (targ.buffs[i] > 0) targ.buffs[i] = 0;
+				if (targ.buffs[i] > 0) targ.buffs[i] = change;
+			}
+			if(targ?.custom?.buffTurns) {
+				for (i in targ.custom.buffTurns) {
+					if (targ.custom.buffTurns[i][1] <= 0) targ.custom.buffTurns[i] = ''
+				}
+				targ.custom.buffTurns = targ.custom.buffTurns.filter(x => x.length != 0);
+
+				if (targ.custom.buffTurns.length == 0) {
+					killVar(targ, "buffTurns");
+				}
 			}
 
-			return `__${targ.name}__'s debuffs were nullified!`;
+			return `__${targ.name}__'s debuffs were nullified${change == 1 ? ' and buffed 1 time' : ''}!`;
 		},
 		getinfo(vars, skill) {
 			return "Removes the target's debuffs"
@@ -248,13 +294,40 @@ statusList = {
 			makeStatus(skill, "heartswap", [true]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			let charbuffs = objClone(char.buffs);
 			let targbuffs = objClone(targ.buffs);
 			char.buffs = objClone(targbuffs);
 			targ.buffs = objClone(charbuffs);
 
-			return `__${char.name}__'s buffs were switched with __${targ.name}__!`;
+			let charTurns = char?.custom?.buffTurns;
+			let targTurns = char?.custom?.buffTurns;
+			if (charTurns) {
+				if (!targ.custom) targ.custom = {};
+				targ.custom.buffTurns = charTurns;
+			}
+			if (targTurns) {
+				if (!char.custom) char.custom = {};
+				char.custom.buffTurns = targTurns;
+			}
+
+			let addText = ''
+			if (multiplier != 1) {
+				let extraBuffChance = 10;
+				extraBuffChance = Math.round(modSkillResult(char, targ, extraBuffChance, skill, btl) * multiplier);
+
+				if (randNum(1, 100) <= extraBuffChance) {
+					addText = 'and altered by 1 stage'
+					for (i in char.buffs) { 
+						buffStat(char, i, 1, true);
+					}
+					for (i in targ.buffs) { 
+						buffStat(targ, i, char.team == targ.team ? 1 : -1, true);
+					}
+				}
+			}
+
+			return `__${char.name}__'s buffs were switched ${addText} with __${targ.name}__!`;
 		},
 		aithinker(char, targ, act, skill, btl) {
 			for (let i in targ.buffs) {
@@ -292,7 +365,7 @@ statusList = {
 			makeStatus(skill, "mimic", [turns, skillName ?? null]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (char.id === targ.id) return '...But you cannot transform into yourself!';
 			if (isBoss(targ)) return '...But it failed!';
 			if (char.mimic || char.custom?.revert) return '...But it failed!';
@@ -309,6 +382,10 @@ statusList = {
 				char.stats = objClone(targ.stats);
 				char.skills = targ.skills;
 				if (vars[1]) char.skills.push(vars[1]);
+
+				for (i in char.stats) {
+					char.stats[i] = Math.round(modSkillResult(char, targ, char.stats[i], skill, btl) * multiplier);
+				}
 
 				return `__${char.name}__ begun mimicking __${targ.name}__, copying _stats and skills_.`
 			} else {
@@ -328,7 +405,7 @@ statusList = {
 			makeStatus(skill, "unmimic", [true]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			delete char.mimic;
 			if (char.custom?.revert) {
 				char.stats = objClone(char.custom.revert[1].stats);
@@ -336,6 +413,9 @@ statusList = {
 				char.name = char.custom.revert[1].name;
 				let sotrue = char.custom.revert[2];
 				delete char.custom.revert;
+
+				char.hp = Math.round(modSkillResult(char, targ, char.hp, skill, btl) * multiplier);
+				char.mp = Math.round(modSkillResult(char, targ, char.mp, skill, btl) * multiplier);
 
 				return sotrue;
 			} else {
@@ -386,7 +466,7 @@ statusList = {
 			if (members.some(member => member.clone)) return 'You cannot have more than one clone at a time!'
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			for (let ally of btl.teams[char.team].members) {
 				if (ally.clone) return "...but it failed!";
 			}
@@ -400,8 +480,10 @@ statusList = {
 			newchar.enemy = true;
 			newchar.maxhp *= hpPercent/100;
 			newchar.maxmp *= mpPercent/100;
-			for (let i in newchar.stats)
+			for (let i in newchar.stats) {
 				newchar.stats[i] *= percent/100;
+				newchar.stats[i] = Math.round(modSkillResult(char, targ, newchar.stats[i], skill, btl) * multiplier);
+			}
 
 			newchar.maxhp = Math.round(newchar.maxhp);
 			newchar.maxmp = Math.round(newchar.maxmp);
@@ -453,7 +535,16 @@ statusList = {
 			makeStatus(skill, "shield", [shieldName, element, hits]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			if (multiplier != 1) {
+				let extraBuffChance = 10;
+				extraBuffChance = Math.round(modSkillResult(char, targ, extraBuffChance, skill, btl) * multiplier);
+
+				if (randNum(1, 100) <= extraBuffChance) {
+					vars[2] += 1;
+				}
+			}
+
 			addCusVal(targ, 'shield', {
 				name: vars[0],
 				element: vars[1],
@@ -489,11 +580,20 @@ statusList = {
 			makeStatus(skill, "karn", [phys]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			addCusVal(targ, 'shield', {
 				name: skill.name,
 				type: `repel${vars[0]}`
 			});
+
+			if (multiplier != 1) {
+				let extraBuffChance = 10;
+				extraBuffChance = Math.round(modSkillResult(char, targ, extraBuffChance, skill, btl) * multiplier);
+
+				if (randNum(1, 100) <= extraBuffChance) {
+					targ.custom.shield.hp = 1;
+				}
+			}
 
 			if (btl.pvp) {
 				return `__${char.name}__ protected __${targ.name}__ with something...`;
@@ -549,8 +649,10 @@ statusList = {
 			makeStatus(skill, "shieldbreak", [type, chance]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (!targ.custom?.shield) return 'But it failed!';
+
+			vars[1] = modSkillResult(char, targ, vars[1], skill, btl) * multiplier;
 
 			if (randNum(1, 100) <= vars[1]) {
 				delete targ.custom.shield;
@@ -633,8 +735,8 @@ statusList = {
 			}
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
-			addCusVal(targ, 'trap', vars);
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			addCusVal(targ, 'trap', vars, multiplier);
 
 			if (btl.pvp) {
 				return `__${char.name}__ protected __${targ.name}__ with something...`;
@@ -674,11 +776,11 @@ statusList = {
 			makeStatus(skill, "changeaffinity", [target, element, affinity, side, turns]);
 			return true
 		},
-		onselect(char, skill, btl, vars) {
-			return extrasList.changeaffinity.onselect(char, skill, btl, vars);
+		onselect(char, skill, btl, vars, multiplier) {
+			return extrasList.changeaffinity.onselect(char, skill, btl, vars, multiplier);
 		},
-		onuse(char, targ, skill, btl, vars) {
-			return extrasList.changeaffinity.onuse(char, targ, skill, btl, vars);
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			return extrasList.changeaffinity.onuse(char, targ, skill, btl, vars, multiplier);
 		},
 		getinfo: extrasList.changeaffinity.getinfo
 	}),
@@ -699,14 +801,14 @@ statusList = {
 			makeStatus(skill, "weather", [args[0].toLowerCase()]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (btl?.weather?.type) {
 				btl.weather.type = vars[0];
-				btl.weather.turns = randNum(8, 16);
+				btl.weather.turns = Math.round(modSkillResult(char, targ, randNum(8, 16), skill, btl) * multiplier);
 			} else {
 				btl.weather = {
 					type: vars[0],
-					turns: randNum(8, 16)
+					turns: Math.round(modSkillResult(char, targ, randNum(8, 16), skill, btl) * multiplier)
 				}
 			}
 			return `The weather has been changed to __${vars[0]}__!`;
@@ -735,11 +837,11 @@ statusList = {
 		onuse(char, targ, skill, btl, vars) {
 			if (btl?.terrain?.type) {
 				btl.terrain.type = vars[0];
-				btl.terrain.turns = randNum(8, 16);
+				btl.terrain.turns = Math.round(modSkillResult(char, targ, randNum(8, 16), skill, btl) * multiplier);
 			} else {
 				btl.terrain = {
 					type: vars[0],
-					turns: randNum(8, 16)
+					turns: Math.round(modSkillResult(char, targ, randNum(8, 16), skill, btl) * multiplier)
 				}
 			}
 			return `The terrain has been changed to __${vars[0]}__!`;
@@ -766,12 +868,24 @@ statusList = {
 			makeStatus(skill, "corrupt", [stat])
 			return true
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (btl.pvp) return "...But it failed!";
 
 			const stat = vars[0]
-			const chance = ((targ.maxhp / targ.hp) / 5) * (char.stats[stat] / targ.stats[stat]) * (char.stats.luk / targ.stats.luk)
-			if (Math.random() * 100 <= Math.min(chance, 20)) {
+			let chance = ((targ.maxhp / targ.hp) / 5) * (char.stats[stat] / targ.stats[stat]) * (char.stats.luk / targ.stats.luk)
+			chance = modSkillResult(char, targ, chance, skill, btl) * multiplier;
+			let maxChance = 20;
+			
+			if (multiplier != 1) {
+				let extraBuffChance = 10;
+				extraBuffChance = Math.round(modSkillResult(char, targ, extraBuffChance, skill, btl) * multiplier);
+
+				if (randNum(1, 100) <= extraBuffChance) {
+					maxChance = 40;
+				}
+			}
+
+			if (Math.random() * 100 <= Math.min(chance, maxChance)) {
 				if (isBoss(targ)) {
 					extrasList.buff.buffChange(targ, skill, btl, ["target", "all", -1, 100, 3])
 					return `...but __${targ.name}__ is too strong to be corrupted completely, they are weakened instead!${chance < 1 ? "\n**Extremely lucky!**" : ""}`
@@ -868,7 +982,7 @@ statusList = {
 			if (members.some(member => member.reincarnate)) return 'You cannot have more than one reincarnate at a time!'
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			let newchar = objClone(char);
 			const name = vars[6];
 
@@ -880,7 +994,9 @@ statusList = {
 			newchar.maxmp = Math.round(newchar.maxmp * vars[3]/100);
 			newchar.hp = newchar.maxhp;
 			newchar.mp = newchar.maxmp;
-			for (let i in newchar.stats) newchar.stats[i] = randNum(vars[0], vars[1]);
+			for (let i in newchar.stats) { 
+				newchar.stats[i] = Math.round(modSkillResult(char, targ, randNum(vars[0], vars[1]), skill, btl) * multiplier);
+			}
 
 			newchar.id = nextAvaliableId(btl);
 			newchar.melee.name = 'Strike Attack'
@@ -1058,10 +1174,13 @@ statusList = {
 			makeStatus(skill, "futuresight", [definition]);
 			return true
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			let a = objClone(vars[0]);
 			a.user = char.id;
 			a.futuresight = true;
+
+			a.pow = Math.round(modSkillResult(char, targ, a.pow, skill, btl) * multiplier);
+			a.acc = modSkillResult(char, targ, a.acc, skill, btl) * multiplier;
 
 			addCusVal(targ, 'futuresight', a);
 
@@ -1103,8 +1222,8 @@ statusList = {
 			makeStatus(skill, "chaosstir", [power, accuracy]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
-			addCusVal(targ, 'chaosstir', true);
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			addCusVal(targ, 'chaosstir', [...vars, multiplier]);
 
 			if (btl.pvp) {
 				return `__${char.name}__ is preparing something...`;
@@ -1147,8 +1266,10 @@ statusList = {
 			makeStatus(skill, "pacifystatus", [status, amount]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (!targ.enemy) return 'But it failed!';
+
+			vars[1] = Math.round(modSkillResult(char, targ, vars[1], skill, btl) * multiplier);
 
 			if ((vars[0] === 'all' && char.status) || 
 				(char.status && vars[0] === 'mental' && !isPhysicalStatus(char.status)) ||
@@ -1227,7 +1348,7 @@ statusList = {
 
 	ragesoul: new Extra({
 		name: "Rage Soul",
-		desc: "Multiplies the user's Melee Attack Power by <Melee Power Multiplier> and their Attack Stat by <ATK Stat Multiplier>, but locks them into using Melee Attacks. If <Turns> is set to -1, this will be indefinite.",
+		desc: "Multiplies the user's Melee Attack Power by <Melee Power Multiplier> and their Attack Stat by <ATK Stat Multiplier>, but locks them into using Melee Attacks. If <Turns> is set to 0 or below, this will be indefinite.",
 		args: [
 			{
 				name: "Melee Power Multiplier",
@@ -1246,21 +1367,23 @@ statusList = {
 			}
 		],
 		applyfunc(message, skill, args) {
-			makeStatus(skill, "ragesoul", [args[0], args[1], args[2] ?? -1]);
+			makeStatus(skill, "ragesoul", [args[0], args[1], Math.max(args[2], 0) ?? 0]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
-			addCusVal(targ, 'revert', [vars[2], {
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			addCusVal(targ, 'revert', [vars[2] == 0 ? -1 : vars[2], {
 				stats: char.stats,
 				melee: char.melee
 			}]);
-			addCusVal(char, 'forcemove', [vars[2], {
+			addCusVal(char, 'forcemove', [vars[2] == 0 ? -1 : vars[2], {
 				move: 'melee',
 				target: [targ.team, targ.pos],
 			}]);
 
-			char.melee.pow *= vars[0];
+			char.melee.pow *= vars[1];
 			char.stats.atk *= vars[1];
+			char.melee.pow = modSkillResult(char, targ, char.melee.pow, skill, btl) * multiplier;
+			char.stats.atk = modSkillResult(char, targ, char.stats.atk, skill, btl) * multiplier;
 
 			char.ragesoul = true;
 
@@ -1271,7 +1394,7 @@ statusList = {
 			}
 		},
 		getinfo(vars, skill) {
-			return `Locks the user into using Melee Attacks with **${vars[0]}x Melee Power** and **x${vars[1]} ATK Stat Multiplier** ${vars[2] < 0 ? '**indefinitely**' : `for **${vars[2]}** turns`}`
+			return `Locks the user into using Melee Attacks with **${vars[0]}x Melee Power** and **x${vars[1]} ATK Stat Multiplier** ${vars[2] <= 0 ? '**indefinitely**' : `for **${vars[2]}** turns`}`
 		}
 	}),
 
@@ -1301,7 +1424,9 @@ statusList = {
 			makeStatus(skill, "charge", [type, power]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			vars[1] = modSkillResult(char, targ, vars[1], skill, btl) * multiplier;
+
 			addCusVal(char, 'charge', {
 				stat: (vars[0] == 'phys') ? 'atk' : 'mag',
 				mult: vars[1],
@@ -1350,7 +1475,7 @@ statusList = {
 			makeStatus(skill, "orgiamode", [args[0], args[1], args[2]]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (char.custom?.orgiamode) return 'But it failed!';
 
 			addCusVal(char, 'orgiamode', {
@@ -1358,9 +1483,9 @@ statusList = {
 				revert: objClone(char.stats)
 			});
 
-			char.stats.atk = Math.round(char.stats.atk*vars[0]);
-			char.stats.mag = Math.round(char.stats.mag*vars[0]);
-			char.stats.end = Math.round(char.stats.end*vars[1]);
+			char.stats.atk = Math.round(modSkillResult(char, targ, Math.round(char.stats.atk*vars[0]), skill, btl) * multiplier);
+			char.stats.mag = Math.round(modSkillResult(char, targ, Math.round(char.stats.mag*vars[0]), skill, btl) * multiplier);
+			char.stats.end = Math.round(modSkillResult(char, targ, Math.round(char.stats.end*vars[1]), skill, btl) * multiplier);
 
 			return `__${char.name}__'s attack and magic was multiplied by ${vars[0]}, however, their endurance was multiplied by ${vars[1]}.`;
 		},
@@ -1377,11 +1502,20 @@ statusList = {
 			makeStatus(skill, "psychoshift", [true]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (char.status && char.statusturns) {
 				targ.status = char.status;
-				targ.statusturns = char.status;
+				targ.statusturns = char.statusturns;
 				if (statusEffectFuncs[targ.status].oninflict) statusEffectFuncs[targ.status].oninflict(targ);
+
+				if (multiplier != 1) {
+					let extraBuffChance = 30;
+					extraBuffChance = Math.round(modSkillResult(char, targ, extraBuffChance, skill, btl) * multiplier);
+
+					if (randNum(1, 100) <= extraBuffChance) {
+						targ.statusturns += 1;
+					}
+				}
 
 				delete char.status;
 				delete char.statusturns;

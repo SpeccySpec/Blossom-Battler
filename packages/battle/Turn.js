@@ -441,7 +441,7 @@ function GetCharStatus(char) {
 			continue
 		str += statusEmojis[buff + (amount > 0 ? "up" : "down")]
 		amount = Math.abs(amount)
-		str += (amount == 2 ? "²" : (amount == 3 ? "³" : ""))
+		str += (amount >= 2 ? superscriptDictionary[amount] : '')
 	}
 	const custom = char.custom
 	if (custom)

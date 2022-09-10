@@ -232,6 +232,19 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 	return true
 }
 
+operators = ['+', '-', '*', '/'];
+superscriptDictionary = {'-': '⁻', 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹'};
+
+nthroot = (x, nun) => {
+    ng = nun % 2;
+    if ((ng == 1) || x < 0) x = -x;
+    var r = Math.pow(x, 1 / nun);
+    nun = Math.pow(r, nun);
+
+    if(Math.abs(x - nun) < 1 && (x > 0 === nun > 0)) return ng ? -r : r;
+	return r;
+}
+
 // Export Functions
 module.exports = {	
 	inArray: function(val, arr) {

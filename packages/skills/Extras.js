@@ -157,13 +157,15 @@ extrasList = {
 			const allcharges = char.custom.charges
 			const name = skill.name
 			if (!allcharges[name])
-				allcharges[name] = [charges, vars[1], name, charges]
+				allcharges[name] = [charges, vars[1], name, charges, 1]
 			return allcharges[name][0] < 1 ? `${name} ran out of charges!` : true
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			let charges = char.custom.charges[skill.name]
 			charges[0] -= 1;
 			charges[0] = parseFloat(charges[0].toFixed(2))
+			
+			if (skill.type == 'status' && multiplier && multiplier != 1 && charges[4] == 1) charges[4] = multiplier
 			return `*(${Math.floor(charges[0])}/${vars[0]}) charges left.*`
 		},
 		getinfo(vars, skill) {
@@ -306,58 +308,69 @@ extrasList = {
 			makeExtra(skill, "changeaffinity", [target, element, affinity, side, turns]);
 			return true
 		},
-		onselect(char, skill, btl, vars) {
+		onselect(char, skill, btl, vars, multiplier) {
 			if (vars[0].toLowerCase() != 'user') return '';
 
-			return extrasList.changeaffinity.targetchange(char, char, vars, skill)
+			return extrasList.changeaffinity.targetchange(char, char, skill, btl, vars, multiplier)
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (vars[0].toLowerCase() != 'target') return '';
 
-			return extrasList.changeaffinity.targetchange(char, targ, vars, skill)
+			return extrasList.changeaffinity.targetchange(char, targ, skill, btl, vars, multiplier)
 		},
-		targetchange(char, target, vars, skill) {
+		targetchange(char, targ, skill, btl, vars, multiplier) {
 			let element = vars[1].toLowerCase()
 			let affinity = vars[2].toLowerCase()
 			let side = vars[3].toLowerCase()
 			let turns = vars[4]
 
-			if (!target.affinities) target.affinities = [];
+			if (skill.type == 'status' && multiplier) {
+				if (multiplier != 1) {
+					let extraBuffChance = 10;
+					extraBuffChance = Math.round(modSkillResult(char, targ, extraBuffChance, skill, btl) * multiplier);
+
+					if (randNum(1, 100) <= extraBuffChance) {
+						turns = null;
+					}
+				}
+			}
+
+			if (!targ.affinities) targ.affinities = [];
 
 			// Fail on bosses
-			if (char.team != target.team && isBoss(target) && skill.type === "status") return "...but it failed!";
+			if (char.team != targ.team && isBoss(targ) && skill.type === "status") return "...but it failed!";
 
 			let setAffinities = [];
 			let wasChanged = false;
 
 			if (affinity != 'normal') {
-				if (target.affinities[affinity] && target.affinities[affinity].includes(element)) {
-					return `__${target.name}__ wasn't affected by __${skill.name}__!`;
+				if (targ.affinities[affinity] && targ.affinities[affinity].includes(element)) {
+					return `__${targ.name}__ wasn't affected by __${skill.name}__!`;
 				}
 			}
 
 			if (turns && !isNaN(turns) && isFinite(turns)) {
-				if (!target?.custom?.oldAffinities) 
-					addCusVal(target, "oldAffinities", {});
+				if (!targ?.custom?.oldAffinities) 
+					addCusVal(targ, "oldAffinities", {});
 			}
 
-			for (let i in target.affinities) {
-				setAffinities.push(...target.affinities[i])
+			for (let i in targ.affinities) {
+				setAffinities.push(...targ.affinities[i])
 
-				if (target?.custom?.oldAffinities?.[i] && Object.keys(target?.custom?.oldAffinities?.[i]).includes(element)) continue;
+				if (targ?.custom?.oldAffinities?.[i] && Object.keys(targ?.custom?.oldAffinities?.[i]).includes(element)) continue;
 
 				if (turns && !isNaN(turns) && isFinite(turns)) {
-					if (!target?.custom?.oldAffinities[i]) target.custom.oldAffinities[i] = {};
+					if (!targ?.custom?.oldAffinities[i]) targ.custom.oldAffinities[i] = {};
 				}
 
 				if (side == 'resist' && !resistSide.includes(i)) continue
 				if (side == 'weak' && !weakSide.includes(i)) continue
 
-				if (target.affinities[i].includes(element)) {
-					target.affinities[i].splice(target.affinities[i].indexOf(element), 1);
+				if (targ.affinities[i].includes(element)) {
+					targ.affinities[i].splice(targ.affinities[i].indexOf(element), 1);
 					wasChanged = true;
 					if (turns && !isNaN(turns) && isFinite(turns)) {
-						if (!target?.custom?.oldAffinities[i][element]) target.custom.oldAffinities[i][element] = turns;
+						if (!targ?.custom?.oldAffinities[i][element]) targ.custom.oldAffinities[i][element] = turns;
 					}
 					break;
 				}
@@ -366,20 +379,20 @@ extrasList = {
 			let normalAffinities = Elements.filter(e => !setAffinities.includes(e));
 
 			if (!wasChanged && ((!normalAffinities.includes(element) && affinity != 'normal') || (affinity == 'normal' && normalAffinities.includes(element)))) {
-				return `__${target.name}__ wasn't affected by __${skill.name}__!`;
+				return `__${targ.name}__ wasn't affected by __${skill.name}__!`;
 			}
 
 			if (affinity != 'normal') {
 				if (normalAffinities.includes(element) && turns && !isNaN(turns) && isFinite(turns)) {
-					if (!target?.custom?.oldAffinities['normal']) target.custom.oldAffinities['normal'] = {};
-					if (!target?.custom?.oldAffinities['normal'][element]) target.custom.oldAffinities['normal'][element] = turns;
+					if (!targ?.custom?.oldAffinities['normal']) targ.custom.oldAffinities['normal'] = {};
+					if (!targ?.custom?.oldAffinities['normal'][element]) targ.custom.oldAffinities['normal'][element] = turns;
 				}
 
-				if (!target.affinities[affinity]) target.affinities[affinity] = [];
-				target.affinities[affinity].push(element);
+				if (!targ.affinities[affinity]) targ.affinities[affinity] = [];
+				targ.affinities[affinity].push(element);
 			}
 
-			return `__${target.name}__'s affinity for ${elementEmoji[element]}**${element}** was changed to ${affinityEmoji[affinity]}**${affinity}**!`;
+			return `__${targ.name}__'s affinity for ${elementEmoji[element]}**${element}** was changed to ${affinityEmoji[affinity]}**${affinity}**!`;
 		},
 		getinfo(vars, skill) {
 			let finalText = ""
@@ -533,27 +546,45 @@ extrasList = {
 		},
 		onselect(char, skill, btl, vars) {
 			if (vars[0] != 'user') return '';
-			return extrasList.buff.buffChange(char, skill, btl, vars);
+			return extrasList.buff.buffChange(char, char, skill, btl, vars);
 		},
 		onuse(char, targ, skill, btl, vars) {
 			if (vars[0] != 'target') return '';
-			return extrasList.buff.buffChange(targ, skill, btl, vars);
+			return extrasList.buff.buffChange(char, targ, skill, btl, vars);
 		},
-		buffChange(targ, skill, btl, vars) {
+		buffChange(char, targ, skill, btl, vars, multiplier, boosted) {
 			const stat = vars[1] ?? 'atk';
-			const amount = !isNaN(vars[2]) ? vars[2] : 1;
-			const absamount = Math.abs(amount);
-			const chance = vars[3] ?? 100;
+			let amount = !isNaN(vars[2]) ? vars[2] : 1;
+			let absamount = Math.abs(amount);
+			let chance = vars[3] ?? 100;
 			const turns = vars[4];
+			let boostedAmount = boosted ?? false;
+
+			if (skill.type == 'status' && multiplier && !boostedAmount) {
+				chance = modSkillResult(char, targ, chance, skill, btl);
+				chance = Math.round(chance * multiplier);
+
+				if (multiplier != 1) {
+					let extraBuffChance = 10;
+					extraBuffChance = Math.round(modSkillResult(char, targ, extraBuffChance, skill, btl) * multiplier);
+
+					if (randNum(1, 100) <= extraBuffChance) {
+						amount += vars[2] <= 0 ? -1 : 1;
+						absamount++;
+						boostedAmount = true;
+					}
+				}
+			}
+
 			if (stat == "all") {
 				const buffChange = extrasList.buff.buffChange
 				const target = vars[0]
-				return buffChange(targ, skill, btl, [target, "atk", amount, chance, turns]) + "\n" +
-					buffChange(targ, skill, btl, [target, "mag", amount, chance, turns]) + "\n" +
-					buffChange(targ, skill, btl, [target, "end", amount, chance, turns]) + "\n" +
-					buffChange(targ, skill, btl, [target, "agl", amount, chance, turns]) + "\n" +
-					buffChange(targ, skill, btl, [target, "prc", amount, chance, turns]) + "\n" +
-					buffChange(targ, skill, btl, [target, "crit", amount, chance, turns])
+				return buffChange(char, targ, skill, btl, [target, "atk", amount, chance, turns], null, boostedAmount) + "\n" +
+					buffChange(char, targ, skill, btl, [target, "mag", amount, chance, turns], null, boostedAmount) + "\n" +
+					buffChange(char, targ, skill, btl, [target, "end", amount, chance, turns], null, boostedAmount) + "\n" +
+					buffChange(char, targ, skill, btl, [target, "agl", amount, chance, turns], null, boostedAmount) + "\n" +
+					buffChange(char, targ, skill, btl, [target, "prc", amount, chance, turns], null, boostedAmount) + "\n" +
+					buffChange(char, targ, skill, btl, [target, "crit", amount, chance, turns], null, boostedAmount)
 			} else if (typeof stat == "object") {
 				const buffChange = extrasList.buff.buffChange
 				const target = vars[0]
@@ -562,7 +593,7 @@ extrasList = {
 				let i = 0
 				for (const stat of stats) {
 					i++
-					finaltext += buffChange(targ, skill, btl, [target, stat, amount, chance, turns])
+					finaltext += buffChange(char, targ, skill, btl, [target, stat, amount, chance, turns], null, boostedAmount)
 					if (i < stats.length)
 						finaltext += "\n"
 				}
@@ -576,7 +607,7 @@ extrasList = {
 				const rchance = randNum(1, 100);
 
 				if (rchance <= chance) {
-					buffStat(targ, stat, amount);
+					buffStat(targ, stat, amount, boostedAmount);
 
 					if (turns && typeof(turns) == "number") {
 						if (!targ?.custom?.buffTurns) 
@@ -601,7 +632,7 @@ extrasList = {
 						return '';
 				}
 			} else {
-				buffStat(targ, stat, amount);
+				buffStat(targ, stat, amount, boostedAmount);
 
 				if (turns && typeof(turns) == "number") {
 					if (!targ?.custom?.buffTurns) 
@@ -1067,7 +1098,7 @@ extrasList = {
 		desc: "Skill Power boosted by <Multiplier>x when alone, or all allies are down.",
 		args: [
 			{
-				name: "Mulitplier",
+				name: "Multiplier",
 				type: "Decimal"
 			}
 		],
@@ -1093,7 +1124,7 @@ extrasList = {
 		desc: "Skill Power boosted by <Multiplier>x when not alone, and all allies are alive.",
 		args: [
 			{
-				name: "Mulitplier",
+				name: "Multiplier",
 				type: "Decimal"
 			}
 		],
@@ -1676,7 +1707,7 @@ extrasList = {
 		onuse(char, targ, skill, btl, vars) {
 			if (char.status && char.statusturns) {
 				targ.status = char.status;
-				targ.statusturns = char.status;
+				targ.statusturns = char.statusturns;
 				statusEffectFuncs[targ.status].oninflict(targ);
 
 				delete char.status;
@@ -2013,16 +2044,19 @@ customVariables = {
 	},
 
 	trap: {
-		dmgmod(btl, char, inf, dmg, skill, vars) {
+		dmgmod(btl, char, inf, dmg, skill, vars, multiplier) {
 			dmg = Math.round(dmg*vars[1]);
+			dmg = Math.round(modSkillResult(char, targ, dmg, skill, btl) / multiplier);
 			let txt
 			switch(vars[2].toLowerCase()) {
 				case 'buff':
-					addAtkMsg(btl, `${inf.name} set off the ${vars[0]}!\n${extrasList.buff.onuse(char, inf, skill, btl, ['target', vars[3], vars[4], vars[5], null])}`);
+					addAtkMsg(btl, `${inf.name} set off the ${vars[0]}!\n${extrasList.buff.onuse(char, inf, skill, btl, ['target', vars[3], vars[4], vars[5], null], multiplier)}`);
 					break;
 
 				case 'status':
 					txt = `${inf.name} set off the ${vars[0]}`;
+
+					vars[4] = Math.round(modSkillResult(char, targ, vars[4], skill, btl) * multiplier);
 
 					if (randNum(1, 100) <= vars[4]) {
 						txt += `!\n${inflictStatus(inf, vars[3])}`;
@@ -2036,6 +2070,8 @@ customVariables = {
 				case 'damage':
 					txt = `${inf.name} set off the ${vars[0]}!`;
 					let d = vars[3];
+
+					d = Math.round(modSkillResult(char, targ, d, skill, btl) * multiplier);
 
 					if (randNum(1, 100) <= vars[4]) {
 						let affinity = getAffinity(inf, vars[5]);
@@ -2128,6 +2164,8 @@ customVariables = {
 			skill.pow *= vars[0];
 			skill.acc = vars[1];
 
+			skill.pow = Math.round(modSkillResult(char, char, skill.pow, skill, btl) * vars[2]);
+
 			let attack = attackWithSkill(char, inf, skill, btl, true);
 			return `__${char.name}__ struck back, with a stronger __${skill.name}__!\n${attack.txt}`;
 		}
@@ -2179,8 +2217,8 @@ customVariables = {
 				const icharges = skillvars[0]
 				if (icharges == skillvars[3])
 					continue
-				skillvars[0] += skillvars[1]
-				skillvars[0] = Math.min(parseFloat(skillvars[0].toFixed(2)), skillvars[3])
+				skillvars[0] += skillvars[1];
+				skillvars[0] = Math.min((modSkillResult(char, char, parseFloat(skillvars[0]), skill, btl) * skillvars[4]).toFixed(2), skillvars[3])
 				console.log(skill, skillvars[0], icharges)
 				if (Math.floor(skillvars[0]) > icharges)
 					txt += `${txt == "" ? "" : "\n"}${skillvars[2]} was recharged!`

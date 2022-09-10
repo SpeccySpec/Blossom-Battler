@@ -395,6 +395,98 @@ specialList = {
 
 			return statusList.status.inflictStatus(user, target, {type: 'status', statuschane: chance}, status, btl);
 		}
+	}),
+
+	math: new Extra({
+		name: 'Math',
+		desc: `The target will present the user with a math equation with a <Expression Amount> expression amount to answer in {Timer} seconds.\n\n[NOT YET USABLE]`,
+		args: [
+			{
+				name: 'Include addition?',
+				type: 'YesNo',
+				forced: true,
+			},
+			{
+				name: 'Include subtraction?',
+				type: 'YesNo',
+				forced: true,
+			},
+			{
+				name: 'Include multiplication?',
+				type: 'YesNo',
+				forced: true,
+			},
+			{
+				name: 'Include division?',
+				type: 'YesNo',
+				forced: true,
+			},
+			{
+				name: 'Include remainders?',
+				type: 'YesNo',
+			},
+			{
+				name: 'Include exponents?',
+				type: 'YesNo',
+			},
+			{
+				name: 'Include roots?',
+				type: 'YesNo',
+			},
+			{
+				name: 'Include negative numbers?',
+				type: 'YesNo',
+			},
+			{
+				name: 'Include parenthesis?',
+				type: 'YesNo',
+			},
+			{
+				name: 'Maximum decimals (0-5)',
+				type: 'Num',
+			},
+			{
+				name: 'Expression Amount (1-10)',
+				type: 'Num',
+				forced: true,
+			},
+			{
+				name: 'Timer (5-360)',
+				type: 'Num',
+			},
+			{
+				name: 'Success Message',
+				type: 'Word',
+			},
+			{
+				name: 'Failure Message',
+				type: 'Word',
+			}
+		],
+		applyfunc(message, option, args) {
+			let essentials = args.slice(0, 3);
+			let optionals = args.slice(0, 5);
+			args = args.slice(10, 0);
+
+			console.log(args);
+
+			let expressions = args[0];
+			let timer = args[1] ?? 60;
+			let success = args[2] ?? 'You succeeded!';
+			let failure = args[3] ?? 'You failed!';
+
+			if (!essentials.some(x => x == true)) return message.channel.send('You have to include one thing of the essentials');
+			if (expressions < 1 || expressions > 10) return message.channel.send('That\'s not a valid expression amount. It should be between 1 and 10.');
+			if (timer < 5) return void message.channel.send('Give people time to think of a solution.');
+			if (timer > 360) return void message.channel.send('That\'s too much time given. The maximum I can allow is 5 minutes.');
+			if (success.trim().length == 0) return void message.channel.send(`You can't have an empty success message.`);
+			if (failure.trim().length == 0) return void message.channel.send(`You can't have an empty failure message.`);
+
+			makeSpecial(option, "math", [{addition: essentials[0],subtraction: essentials[1],multiplication: essentials[2],division: essentials[3]}, 
+			{remainders: optionals[0],exponents: optionals[1],roots: optionals[2],negativeNumbers: optionals[3],parenthesis: optionals[4],decimals:Math.max(Math.min(optionals[5], 5), 0)}, 
+			expressions, timer, success, failure]);
+			return true;
+		}
 	})
 }
 

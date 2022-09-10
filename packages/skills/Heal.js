@@ -28,7 +28,7 @@ healList = {
 				return `__${targ.name}__ cannot be healed while they are in a pinch!`
 			if (!vars[0] || vars[0] == null || vars[0] == 0) return '';
 
-			vars[0] = healMod(char, targ, vars[0], skill, btl);
+			vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
 			vars[0] = Math.round(vars[0] * multiplier);
 
 			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
@@ -116,7 +116,7 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
-			vars[0] = healMod(char, targ, vars[0], skill, btl);
+			vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
 
 			addCusVal(targ, "regenheal", {
 				name: skill.name,
@@ -163,7 +163,7 @@ healList = {
 			return true;
 		},
 		onuse: function(char, targ, skill, btl, vars, multiplier) {
-			vars[0] = healMod(char, targ, vars[0], skill, btl);
+			vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
 
 			addCusVal(targ, "regenheal", {
 				name: skill.name,
@@ -201,7 +201,7 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
-			vars[0] = healMod(char, targ, vars[0], skill, btl);
+			vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
 
 			if (targ.hp > 0) return 'But it failed!';
 
@@ -362,7 +362,7 @@ healList = {
 			if (!vars[0])
 				char.hp = 0;
 			else {
-				vars[0] = healMod(char, targ, vars[0], skill, btl);
+				vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
 				char.hp = Math.round(vars[0] * multiplier);
 			}
 
@@ -402,7 +402,7 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
-			vars[0] = healMod(char, targ, vars[0], skill, btl);
+			vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
 			vars[0] = ~~(vars[0] / multiplier);
 			addCusVal(targ, "wishheal", {
 				turns: vars[0],
@@ -417,7 +417,7 @@ healList = {
 	})
 }
 
-function healMod(char, targ, result, skill, btl) {
+modSkillResult = (char, targ, result, skill, btl) => {
 	if (doPassives(btl)) {
 		for (let skillName of char.skills) {
 			if (!skillFile[skillName]) continue;
