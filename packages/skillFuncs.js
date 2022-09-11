@@ -105,7 +105,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 					}
 
 					if (affinityOHKO.length > 0) {
-						if (statusOHKO.length > 0 || elementOHKO.length > 0) finalText += '**, and'
+						if (statusOHKO.length > 0 || elementOHKO.length > 0) finalText += ', and'
 
 						finalText += ` that have ${affinityOHKO.length > 1 ? 'either' : 'a'} **`
 						for (a in affinityOHKO) {
@@ -119,7 +119,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 				}
 
 				if (i < skillDefs.extras.ohko.length - 2) finalText += ', ';
-				else if (i == skillDefs.extras.ohko.length - 2) finalText += ' and ';
+				else if (i == skillDefs.extras.ohko.length - 2) finalText += ', and ';
 			}
 			finalText += ' in **one shot**!';
 		} else {
