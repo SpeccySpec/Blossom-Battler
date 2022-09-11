@@ -58,13 +58,17 @@ Extra = class extends ArgList {
 extrasList = {
 	ohko: new Extra({
 		name: "One Hit KO",
-		desc: 'Instantly defeats the foe at a <Chance>% chance. Can be only affected for foes with specific statuses, or specific main element, or specific affinity to the skill by choice. Can also use the {Calculated Stat} stat for calculating chance, or \'none\' to use raw chance.',
+		desc: 'Instantly defeats the foe at a <Chance>% chance. Can be only affected for foes with specific statuses, and/or specific main element, and/or specific affinity to the skill by choice. Can also use the {Calculated Stat} stat for calculating chance, or \'none\' to use raw chance.',
 		multiple: true,
 		args: [
 			{
 				name: "Chance",
 				type: "Decimal",
 				forced: true
+			},
+			{
+				name: "Must pass all conditions?",
+				type: "YesNo",
 			},
 			{
 				name: "Calculated Stat / 'None'",
@@ -78,6 +82,7 @@ extrasList = {
 		],
 		applyfunc(message, skill, args) {
 			let chance = args.shift()
+			let passAll = args?.shift() ?? false;
 			let stat = args?.shift()?.toLowerCase() ?? 'luk';
 			let statuses = [...new Set(args.map(element => {
 				return element.toLowerCase();
@@ -105,29 +110,44 @@ extrasList = {
 				}
 			}
 
-			makeExtra(skill, "ohko", [chance, stat, statuses]);
+			makeExtra(skill, "ohko", [chance, passAll, stat, statuses]);
 			return true
 		},
 		onuseoverride(char, targ, skill, btl, vars) {
+			let change = vars[0];
+			let passAll = vars[1];
+			let stat = vars[2];
+			let conditions = vars[3];
+
 			if (targ.hp <= 0) return '';
 
 			let affinity = getAffinity(targ, skill.type);
 			if (['block', 'repel', 'drain'].includes(affinity)) return `${targ.name} blocked it!\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'block', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 
-			if (vars[2] && vars[2] != null) {
-				let statusOHKO = vars[2].filter(x => statusEffects.includes(x));
-				let elementOHKO = vars[2].filter(x => Elements.includes(x));
-				let affinityOHKO = vars[2].filter(x => affinityEmoji[x]);
+			if (conditions && conditions != null) {
+				let statusOHKO = conditions.filter(x => statusEffects.includes(x));
+				let elementOHKO = conditions.filter(x => Elements.includes(x));
+				let affinityOHKO = conditions.filter(x => affinityEmoji[x]);
 
-				if ((elementOHKO.length > 0 && !elementOHKO.includes(targ.mainElement))
-				|| (statusOHKO.length > 0 && !statusOHKO.includes(targ.status) && (statusOHKO.includes('infatuation') && !targ.infatuation) && (statusOHKO.includes('confusion') && !targ.confusion))
-				|| (affinityOHKO.length > 0 && !affinityOHKO.includes(affinity))) return dodgeTxt(targ);
+				if (passAll) {
+					if ((elementOHKO.length > 0 && !elementOHKO.includes(targ.mainElement))
+					|| (statusOHKO.length > 0 && !statusOHKO.includes(targ.status) && (statusOHKO.includes('infatuation') && !targ.infatuation) && (statusOHKO.includes('confusion') && !targ.confusion))
+					|| (affinityOHKO.length > 0 && !affinityOHKO.includes(affinity))) return dodgeTxt(targ);
+				} else {
+					let hasFailed = true;
+
+					if (hasFailed && elementOHKO.length > 0 && elementOHKO.includes(targ.mainElement)) hasFailed = false
+					if (hasFailed && statusOHKO.length > 0 && (statusOHKO.includes(targ.status) || (statusOHKO.includes('infatuation') && targ.infatuation) || (statusOHKO.includes('confusion') && targ.confusion))) hasFailed = false
+					if (hasFailed && affinityOHKO.length > 0 && affinityOHKO.includes(affinity)) hasFailed = false
+
+					if (hasFailed) return dodgeTxt(targ);
+				}
 			}
 			if (isBoss(targ)) return "...But it failed!";
 
 			let chance = randNum(100);
-			let target = vars[0];
-			if (vars[1] != 'none' && target < 100) target += ((char.stats[vars[1]]-targ.stats[vars[1]])/2);
+			let target = change;
+			if (stat != 'none' && target < 100) target += ((char.stats[stat]-targ.stats[stat])/2);
 
 			if (chance <= target) {
 				targ.hp = 0;

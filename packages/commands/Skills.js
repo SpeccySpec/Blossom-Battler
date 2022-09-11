@@ -311,17 +311,6 @@ commands.updateskills = new Command({
 
 		for (skill in skillFile) {
 			if (skillFile[skill]?.passive) {
-				if (skillFile[skill].passive?.boost) {
-					for (boost of skillFile[skill].passive.boost) {
-						if (!boost[2]) boost[2] = true; //Use Percentages?
-						if (!boost[3]) boost[3] = false; //Boost Damage Instead?
-					}
-				}
-
-				if (skillFile[skill].passive?.attackall) {
-					delete skillFile[skill].passive.attackall
-					skillFile[skill].passive.meleetarget = [['allopposing']]
-				}
 			}
 
 			if (skillFile[skill]?.statusses) {
@@ -331,8 +320,11 @@ commands.updateskills = new Command({
 			}
 
 			if (skillFile[skill]?.extras) {
-				if (skillFile[skill].extras?.ohko && typeof skillFile[skill].extras.ohko[0] != 'object') {
-					skillFile[skill].extras.ohko = [[skillFile[skill].extras.ohko[0], 'luk', skillFile[skill].extras.ohko[1] ? [skillFile[skill].extras.ohko[1]] : []]]
+				if (skillFile[skill].extras?.ohko) {
+					for (i in skillFile[skill].extras.ohko) {
+						let curOHKO = skillFile[skill].extras.ohko[i];
+						skillFile[skill].extras.ohko[i] = [curOHKO[0], false, curOHKO[1], curOHKO[2]]
+					}
 				}
 			}
 		}

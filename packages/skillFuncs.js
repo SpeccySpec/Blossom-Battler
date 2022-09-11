@@ -68,16 +68,16 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 				if (curOHKO[0] < 100) {
 					if (i == 0) finalText += 'Has';
 
-					finalText += ` a **${curOHKO[1] != 'none' ? `${curOHKO[1].toUpperCase()} stat modifiable` : ''} ${curOHKO[0]}%** chance to defeat the target`;
+					finalText += ` a **${curOHKO[2] != 'none' ? `${curOHKO[2].toUpperCase()} stat modifiable` : ''} ${curOHKO[0]}%** chance to defeat the target`;
 				} else {
 					if (i == 0) finalText += '**Defeats the target**';
 					else finalText += '**defeats the target**'
 				}
 
-				if (curOHKO[2].length > 0) {
-					let statusOHKO = curOHKO[2].filter(x => statusEffects.includes(x));
-					let elementOHKO = curOHKO[2].filter(x => Elements.includes(x));
-					let affinityOHKO = curOHKO[2].filter(x => affinityEmoji[x]);
+				if (curOHKO[3].length > 0) {
+					let statusOHKO = curOHKO[3].filter(x => statusEffects.includes(x));
+					let elementOHKO = curOHKO[3].filter(x => Elements.includes(x));
+					let affinityOHKO = curOHKO[3].filter(x => affinityEmoji[x]);
 
 					if (statusOHKO.length > 0) {
 						finalText += ` inflicted with ${statusOHKO.length > 1 ? 'either' : ''} **`
@@ -92,7 +92,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 
 					if (elementOHKO.length > 0) {
 						if (statusOHKO.length > 0) finalText += ','
-						if (elementOHKO.length <= 0) finalText += ' and'
+						if (elementOHKO.length <= 0) finalText += ` ${curOHKO[1] ? 'and' : 'or'}`;
 
 						finalText += ` with main elements of ${elementOHKO.length > 1 ? 'either' : ''} **`
 						for (a in elementOHKO) {
@@ -105,7 +105,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 					}
 
 					if (affinityOHKO.length > 0) {
-						if (statusOHKO.length > 0 || elementOHKO.length > 0) finalText += ', and'
+						if (statusOHKO.length > 0 || elementOHKO.length > 0) finalText += `, ${curOHKO[1] ? 'and' : 'or'}`;
 
 						finalText += ` that have ${affinityOHKO.length > 1 ? 'either' : 'a'} **`
 						for (a in affinityOHKO) {
