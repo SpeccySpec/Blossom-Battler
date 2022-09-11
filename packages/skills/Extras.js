@@ -137,7 +137,7 @@ extrasList = {
 			let affinity = getAffinity(targ, skill.type);
 			if (['block', 'repel', 'drain'].includes(affinity)) return !failDamage ? `${targ.name} blocked it!\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'block', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}` : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
 
-			if (conditions && conditions != null) {
+			if (conditions && conditions.length != 0) {
 				let statusOHKO = conditions.filter(x => statusEffects.includes(x));
 				let elementOHKO = conditions.filter(x => Elements.includes(x));
 				let affinityOHKO = conditions.filter(x => affinityEmoji[x]);
