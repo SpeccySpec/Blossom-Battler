@@ -58,7 +58,7 @@ Extra = class extends ArgList {
 extrasList = {
 	ohko: new Extra({
 		name: "One Hit KO",
-		desc: 'Instantly defeats the foe at a <Chance>% chance. Can be only affected for foes with specific statuses, and/or specific main element, and/or specific affinity to the skill by choice. Can use the {Calculated Stat} stat for calculating chance, or \'none\' to use raw chance, and can damage upon failure.',
+		desc: 'Instantly defeats the foe at a <Chance>% chance. Can be only affected for foes with specific statuses, and/or specific main element, and/or specific affinity to the skill by choice. Can use the {Calculated Stat} stat for calculating chance, or \'none\' to use raw chance, and can attack upon failure.',
 		multiple: true,
 		args: [
 			{
