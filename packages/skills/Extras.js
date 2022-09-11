@@ -145,7 +145,7 @@ extrasList = {
 				if (passAll) {
 					if ((elementOHKO.length > 0 && !elementOHKO.includes(targ.mainElement))
 					|| (statusOHKO.length > 0 && !statusOHKO.includes(targ.status) && (statusOHKO.includes('infatuation') && !targ.infatuation) && (statusOHKO.includes('confusion') && !targ.confusion))
-					|| (affinityOHKO.length > 0 && !affinityOHKO.includes(affinity))) return dodgeTxt(targ);
+					|| (affinityOHKO.length > 0 && !affinityOHKO.includes(affinity))) return !failDamage ? dodgeTxt(targ) : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
 				} else {
 					let hasFailed = true;
 

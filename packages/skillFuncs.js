@@ -124,7 +124,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 					}
 				}
 
-				finalText += (OHKOfailDamage && OHKOchance < 100) ? `, that **attacks on failure with ${skillDefs.pow} power${skillDefs?.hits > 1 ? ` and hits ${skillDefs.hits} times**${i > skillDefs.extras.ohko.length - 2 ? ',' : ''}` : ''}` : ''
+				finalText += (OHKOfailDamage && ((OHKOchance < 100 && OHKOconditions.length == 0) || OHKOconditions.length > 0)) ? `, that **attacks on failure with ${skillDefs.pow} power${skillDefs?.hits > 1 ? ` and hits ${skillDefs.hits} times` : ''}**${i > skillDefs.extras.ohko.length - 2 ? ',' : ''}` : ''
 
 				if (i < skillDefs.extras.ohko.length - 2) finalText += ', ';
 				else if (i == skillDefs.extras.ohko.length - 2) finalText += ', and ';
