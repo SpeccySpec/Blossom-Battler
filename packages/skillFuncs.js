@@ -65,19 +65,25 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 			for (i in skillDefs.extras.ohko) {
 				let curOHKO = skillDefs.extras.ohko[i];
 
-				if (curOHKO[0] < 100) {
+				let OHKOchance = curOHKO[0];
+				let OHKOstat = curOHKO[1];
+				let OHKOfailDamage = curOHKO[2];
+				let OHKOpassAll = curOHKO[3];
+				let OHKOconditions = curOHKO[4];
+
+				if (OHKOchance < 100) {
 					if (i == 0) finalText += 'Has';
 
-					finalText += ` a **${curOHKO[2] != 'none' ? `${curOHKO[2].toUpperCase()} stat modifiable` : ''} ${curOHKO[0]}%** chance to defeat the target`;
+					finalText += ` a **${OHKOstat != 'none' ? `${OHKOstat.toUpperCase()} stat modifiable` : ''} ${OHKOchance}%** chance to defeat the target`;
 				} else {
 					if (i == 0) finalText += '**Defeats the target**';
 					else finalText += '**defeats the target**'
 				}
 
-				if (curOHKO[3].length > 0) {
-					let statusOHKO = curOHKO[3].filter(x => statusEffects.includes(x));
-					let elementOHKO = curOHKO[3].filter(x => Elements.includes(x));
-					let affinityOHKO = curOHKO[3].filter(x => affinityEmoji[x]);
+				if (OHKOconditions.length > 0) {
+					let statusOHKO = OHKOconditions.filter(x => statusEffects.includes(x));
+					let elementOHKO = OHKOconditions.filter(x => Elements.includes(x));
+					let affinityOHKO = OHKOconditions.filter(x => affinityEmoji[x]);
 
 					if (statusOHKO.length > 0) {
 						finalText += ` inflicted with ${statusOHKO.length > 1 ? 'either' : ''} **`
@@ -92,7 +98,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 
 					if (elementOHKO.length > 0) {
 						if (statusOHKO.length > 0) finalText += ','
-						if (elementOHKO.length <= 0) finalText += ` ${curOHKO[1] ? 'and' : 'or'}`;
+						if (elementOHKO.length <= 0) finalText += ` ${OHKOpassAll ? 'and' : 'or'}`;
 
 						finalText += ` with main elements of ${elementOHKO.length > 1 ? 'either' : ''} **`
 						for (a in elementOHKO) {
@@ -105,7 +111,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 					}
 
 					if (affinityOHKO.length > 0) {
-						if (statusOHKO.length > 0 || elementOHKO.length > 0) finalText += `, ${curOHKO[1] ? 'and' : 'or'}`;
+						if (statusOHKO.length > 0 || elementOHKO.length > 0) finalText += `, ${OHKOpassAll ? 'and' : 'or'}`;
 
 						finalText += ` that have ${affinityOHKO.length > 1 ? 'either' : 'a'} **`
 						for (a in affinityOHKO) {
@@ -118,10 +124,12 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 					}
 				}
 
+				finalText += (OHKOfailDamage && OHKOchance < 100) ? `, that **damages on failure with ${skillDefs.pow} power${skillDefs?.hits > 1 ? ` and hits ${skillDefs.hits} times**${i > skillDefs.extras.ohko.length - 2 ? ',' : ''}` : ''}` : ''
+
 				if (i < skillDefs.extras.ohko.length - 2) finalText += ', ';
 				else if (i == skillDefs.extras.ohko.length - 2) finalText += ', and ';
 			}
-			finalText += ' in **one shot**!';
+			finalText += ` in **one shot**!`;
 		} else {
 			if (skillDefs.type != "heal")
 				finalText += `Has **${skillDefs.pow}** Power${skillDefs?.hits == 1 ? '.' : ''}`;

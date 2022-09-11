@@ -323,7 +323,7 @@ commands.updateskills = new Command({
 				if (skillFile[skill].extras?.ohko) {
 					for (i in skillFile[skill].extras.ohko) {
 						let curOHKO = skillFile[skill].extras.ohko[i];
-						skillFile[skill].extras.ohko[i] = [curOHKO[0], false, curOHKO[1], curOHKO[2]]
+						skillFile[skill].extras.ohko[i] = [curOHKO[0], curOHKO[2], false, curOHKO[1], curOHKO[3]]
 					}
 				}
 			}

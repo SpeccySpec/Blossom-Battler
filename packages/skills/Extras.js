@@ -31,7 +31,7 @@ Extra = class extends ArgList {
 /*
 	[[[Hook Documentation - EXTRAS hooks in order of appearance.]]]
 
-	- onuseoverride(char, targ, skill, btl, vars)
+	- onuseoverride(char, targ, skill, result, btl, vars)
 	Overrides the turn, including all damage calculations, and does something else. Should return
 	a string.
 	
@@ -58,7 +58,7 @@ Extra = class extends ArgList {
 extrasList = {
 	ohko: new Extra({
 		name: "One Hit KO",
-		desc: 'Instantly defeats the foe at a <Chance>% chance. Can be only affected for foes with specific statuses, and/or specific main element, and/or specific affinity to the skill by choice. Can also use the {Calculated Stat} stat for calculating chance, or \'none\' to use raw chance.',
+		desc: 'Instantly defeats the foe at a <Chance>% chance. Can be only affected for foes with specific statuses, and/or specific main element, and/or specific affinity to the skill by choice. Can use the {Calculated Stat} stat for calculating chance, or \'none\' to use raw chance, and can damage upon failure.',
 		multiple: true,
 		args: [
 			{
@@ -67,12 +67,16 @@ extrasList = {
 				forced: true
 			},
 			{
-				name: "Must pass all conditions?",
+				name: "Calculated Stat / 'None'",
+				type: "Word",
+			},
+			{
+				name: "Damage upon failure?",
 				type: "YesNo",
 			},
 			{
-				name: "Calculated Stat / 'None'",
-				type: "Word",
+				name: "Must pass all conditions?",
+				type: "YesNo",
 			},
 			{
 				name: "Statuses / Main Elements / Affinities",
@@ -82,8 +86,9 @@ extrasList = {
 		],
 		applyfunc(message, skill, args) {
 			let chance = args.shift()
-			let passAll = args?.shift() ?? false;
 			let stat = args?.shift()?.toLowerCase() ?? 'luk';
+			let failDamage = args?.shift() ?? false;
+			let passAll = args?.shift() ?? false;
 			let statuses = [...new Set(args.map(element => {
 				return element.toLowerCase();
 			}).filter(x => ['deadly', 'normal', ...Affinities, ...Elements, ...statusEffects].includes(x)))];
@@ -110,19 +115,27 @@ extrasList = {
 				}
 			}
 
-			makeExtra(skill, "ohko", [chance, passAll, stat, statuses]);
+			makeExtra(skill, "ohko", [chance, stat, failDamage, passAll, statuses]);
 			return true
 		},
-		onuseoverride(char, targ, skill, btl, vars) {
-			let change = vars[0];
-			let passAll = vars[1];
-			let stat = vars[2];
-			let conditions = vars[3];
+		attackSkill(char, inf, skill, result, btl) {
+			let newResults = attackWithSkill(char, inf, skill, btl, true, ['ohko']);
+			result.oneMore = newResults.oneMore;
+			result.teamCombo = newResults.teamCombo;
+
+			return `..But it failed!\n`+newResults.txt;
+		},
+		onuseoverride(char, targ, skill, result, btl, vars) {
+			let OHKOchance = vars[0];
+			let stat = vars[1];
+			let failDamage = vars[2];
+			let passAll = vars[3];
+			let conditions = vars[4];
 
 			if (targ.hp <= 0) return '';
 
 			let affinity = getAffinity(targ, skill.type);
-			if (['block', 'repel', 'drain'].includes(affinity)) return `${targ.name} blocked it!\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'block', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
+			if (['block', 'repel', 'drain'].includes(affinity)) return !failDamage ? `${targ.name} blocked it!\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'block', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}` : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
 
 			if (conditions && conditions != null) {
 				let statusOHKO = conditions.filter(x => statusEffects.includes(x));
@@ -140,20 +153,20 @@ extrasList = {
 					if (hasFailed && statusOHKO.length > 0 && (statusOHKO.includes(targ.status) || (statusOHKO.includes('infatuation') && targ.infatuation) || (statusOHKO.includes('confusion') && targ.confusion))) hasFailed = false
 					if (hasFailed && affinityOHKO.length > 0 && affinityOHKO.includes(affinity)) hasFailed = false
 
-					if (hasFailed) return dodgeTxt(targ);
+					if (hasFailed) return !failDamage ? dodgeTxt(targ) : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
 				}
 			}
-			if (isBoss(targ)) return "...But it failed!";
+			if (isBoss(targ)) return !failDamage ? "...But it failed!" : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
 
 			let chance = randNum(100);
-			let target = change;
+			let target = OHKOchance;
 			if (stat != 'none' && target < 100) target += ((char.stats[stat]-targ.stats[stat])/2);
 
 			if (chance <= target) {
 				targ.hp = 0;
 				return `__${char.name}__ instantly KO'd __${targ.name}__!`;
 			} else {
-				return dodgeTxt(targ);
+				return !failDamage ? dodgeTxt(targ) : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
 			}
 		},
 		hardcodedinfo: true
@@ -821,7 +834,7 @@ extrasList = {
 			makeExtra(skill, "stealmp", [true]);
 			return true
 		},
-		onuseoverride(char, targ, skill, btl, vars) {
+		onuseoverride(char, targ, skill, result, btl, vars) {
 			if (targ.mp <= 0) return `But it failed!`;
 			let mpStolen = Math.floor(Math.max(1, skill.pow+randNum(-10, 10)));
 			if (targ.mp < mpStolen) mpStolen = targ.mp;
@@ -1718,7 +1731,7 @@ extrasList = {
 			makeExtra(skill, "endeavor", [true]);
 			return true
 		},
-		onuseoverride(char, targ, skill, btl, vars) {
+		onuseoverride(char, targ, skill, result, btl, vars) {
 			if (targ.hp <= char.hp) return 'But it failed!';
 
 			let c = randNum(1, 100);
@@ -1743,7 +1756,7 @@ extrasList = {
 			makeExtra(skill, "superfang", [true]);
 			return true
 		},
-		onuseoverride(char, targ, skill, btl, vars) {
+		onuseoverride(char, targ, skill, result, btl, vars) {
 			let c = randNum(1, 100);
 			if (c <= skill.acc+((char.stats.prc-targ.stats.agl)/2)) {
 				let dmg = Math.round(targ.hp/2);
@@ -1804,7 +1817,7 @@ extrasList = {
 			makeExtra(skill, "dragonrage", [args[0]]);
 			return true
 		},
-		onuseoverride(char, targ, skill, btl, vars) {
+		onuseoverride(char, targ, skill, result, btl, vars) {
 			let c = randNum(1, 100);
 			if (c <= skill.acc+((char.stats.prc-targ.stats.agl)/2)) {
 				let dmg = Math.round(vars[0]);

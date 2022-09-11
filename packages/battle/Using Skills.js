@@ -301,8 +301,8 @@ function divideBy(val, nominator, denominator, times) {
 	return newval;
 }
 
-// Attack targ with skill using char's stats. noRepel disables repel affinities.
-attackWithSkill = (char, targ, skill, btl, noRepel) => {
+// Attack targ with skill using char's stats. noRepel disables repel affinities. noExtraArray disables certain extras.
+attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray) => {
 	let settings = setUpSettings(btl.guild.id);
 
 	const result = {
@@ -324,6 +324,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			for (let i in skill.heal) {
 				if (!healList[i]) continue;
 				if (!healList[i].onuse) continue;
+				if (noExtraArray && noExtraArray.includes(i)) continue;
 
 				if (healList[i].multiple) {
 					for (let k in skill.heal[i]) {
@@ -341,6 +342,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 					for (let k in skillFile[targ.skills[i]].passive) {
 						if (passiveList[k] && passiveList[k].onheal) {
+							if (noExtraArray && noExtraArray.includes(k)) continue;
 							result.txt += `\n${passiveList[k].onheal(targ, char, skill, skill.pow, btl, skillFile[targ.skills[i]].passive[k]) ?? ''}`;
 						}
 					}
@@ -353,6 +355,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			for (let i in skill.statusses) {
 				if (!statusList[i]) continue;
 				if (!statusList[i].onuse) continue;
+				if (noExtraArray && noExtraArray.includes(i)) continue;
 
 				if (statusList[i].multiple) {
 					for (let k in skill.statusses[i]) {
@@ -384,14 +387,15 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			for (let i in skill.extras) {
 				if (!extrasList[i]) continue;
 				if (!extrasList[i].onuseoverride) continue;
+				if (noExtraArray && noExtraArray.includes(i)) continue;
 
 				if (extrasList[i].multiple) {
 					for (let k in skill.extras[i]) {
-						result.txt += `\n${extrasList[i].onuseoverride(char, targ, skill, btl, skill.extras[i][k])}`;
+						result.txt += `\n${extrasList[i].onuseoverride(char, targ, skill, result, btl, skill.extras[i][k])}`;
 						returnThis = true;
 					}
 				} else {
-					result.txt += `\n${extrasList[i].onuseoverride(char, targ, skill, btl, skill.extras[i])}`;
+					result.txt += `\n${extrasList[i].onuseoverride(char, targ, skill, result, btl, skill.extras[i])}`;
 					returnThis = true;
 				}
 			}
@@ -410,6 +414,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 				for (let k in skillFile[targ.skills[i]].passive) {
 					if (passiveList[k] && passiveList[k].forcedodge) {
+						if (noExtraArray && noExtraArray.includes(k)) continue;
 						const psv = passiveList[k];
 						const passive = skillFile[targ.skills[i]];
 						let dodge = false;
@@ -430,6 +435,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 							return result
 						}
 					} else if (passiveList[k] && passiveList[k].onaffinitycheck && !noRepel) {
+						if (noExtraArray && noExtraArray.includes(k)) continue;
 						const psv = passiveList[k];
 						const passive = skillFile[targ.skills[i]];
 						let endfunc = false;
@@ -467,7 +473,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			skill.acc = 999; // Never miss a repel - just to be flashy :D
 
 			// Run this function again. Ban repelling to avoid infinite loops.
-			let newResults = attackWithSkill(char, char, skill, btl, true);
+			let newResults = attackWithSkill(char, char, skill, btl, true, noExtraArray);
 			result.oneMore = newResults.oneMore;
 			result.teamCombo = newResults.teamCombo;
 
@@ -489,7 +495,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					skill.acc = 999; // Never miss a repel - just to be flashy :D
 
 					// Run this function again. Ban repelling to avoid infinite loops.
-					let newResults = attackWithSkill(char, char, skill, btl, true);
+					let newResults = attackWithSkill(char, char, skill, btl, true, noExtraArray);
 					result.oneMore = newResults.oneMore;
 					result.teamCombo = newResults.teamCombo;
 
@@ -543,6 +549,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			if (skill.extras) {
 				for (let i in skill.extras) {
 					if (extrasList[i] && extrasList[i].skillmod) {
+						if (noExtraArray && noExtraArray.includes(i)) continue;
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) extrasList[i].skillmod(char, targ, skill, btl, skill.extras[i][k]);
 						} else
@@ -599,6 +606,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 							for (let k in skillFile[char.skills[i]].passive) {
 								if (passiveList[k] && passiveList[k].affinitymod) {
+									if (noExtraArray && noExtraArray.includes(k)) continue;
 									let a = passiveList[k].affinitymod(targ, char, skill, btl, skillFile[char.skills[i]].passive[k])
 
 									if (a && a != null && a != false) {
@@ -619,6 +627,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 							for (let k in skillFile[targ.skills[i]].passive) {
 								if (passiveList[k] && passiveList[k].affinitymodoninf) {
+									if (noExtraArray && noExtraArray.includes(k)) continue;
 									let a = passiveList[k].affinitymodoninf(targ, char, skill, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k])
 									
 									if (a && a != null && a != false) {
@@ -690,6 +699,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					for (let i in skill.extras) {
 						if (!extrasList[i]) continue;
 						if (!extrasList[i].dmgmod) continue;
+						if (noExtraArray && noExtraArray.includes(i)) continue;
 
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) {
@@ -710,6 +720,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 			
 						for (let i in psv.passive) {
 							if (passiveList[i] && passiveList[i].dmgmod) {
+								if (noExtraArray && noExtraArray.includes(i)) continue;
 								if (passiveList[i].multiple) {
 									for (let k in psv.passive[i]) dmg = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i][k]) ?? dmg;
 								} else
@@ -833,6 +844,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 							for (let k in skillFile[char.skills[i]].passive) {
 								if (passiveList[k] && passiveList[k].onkill) {
+									if (noExtraArray && noExtraArray.includes(i)) continue;
 									result.txt += `\n${passiveList[k].onkill(char, targ, skill, total, skillFile[char.skills[i]], btl, skillFile[char.skills[i]].passive[k])}`;
 								}
 							}
@@ -856,6 +868,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					for (let i in skill.extras) {
 						if (!extrasList[i]) continue;
 						if (!extrasList[i].onuse) continue;
+						if (noExtraArray && noExtraArray.includes(i)) continue;
 
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) {
@@ -880,6 +893,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 					for (let i in skill.extras) {
 						if (!extrasList[i]) continue;
 						if (!extrasList[i].ondamage) continue;
+						if (noExtraArray && noExtraArray.includes(i)) continue;
 
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) {
@@ -898,6 +912,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel) => {
 
 						for (let k in skillFile[targ.skills[i]].passive) {
 							if (passiveList[k] && passiveList[k].ondamage) {
+								if (noExtraArray && noExtraArray.includes(k)) continue;
 								if (passiveList[k].multiple) {
 									for (let l in skillFile[targ.skills[i]].passive[k]) {
 										result.txt += '\n' + (passiveList[k].ondamage(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k][l]) ?? '');
@@ -947,7 +962,7 @@ let trustQuotes = [
 	"%PLAYER1%'s eyes connect with %PLAYER2%'s.",
 ];
 
-useSkill = (char, btl, act, forceskill, ally) => {
+useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	let settings = setUpSettings(btl.guild.id);
 	let skill = objClone(forceskill) ?? objClone(skillFile[act.index]);
 
@@ -1032,6 +1047,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 
 			for (let i in psv.passive) {
 				if (passiveList[i] && passiveList[i].statmod) {
+					if (noExtraArray && noExtraArray.includes(i)) continue;
 					if (passiveList[i].multiple) {
 						for (let k in psv.passive[i]) passiveList[i].statmod(btl, char, skill, psv.passive[i][k]);
 					} else
@@ -1045,6 +1061,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	if (skill.extras) {
 		for (let i in skill.extras) {
 			if (extrasList[i] && extrasList[i].statmod) {
+				if (noExtraArray && noExtraArray.includes(i)) continue;
 				if (extrasList[i].multiple) {
 					for (let k in skill.extras[i]) extrasList[i].statmod(char, skill, skill.extras[i][k], btl)
 				} else
@@ -1260,6 +1277,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 	if (skill.heal) {
 		for (let i in skill.heal) {
 			if (healList[i] && healList[i].override) {
+				if (noExtraArray && noExtraArray.includes(i)) continue;
 				if (healList[i].multiple) {
 					for (let k in skill.heal[i]) {
 						finalText += healList[i].override(char, skill, btl, skill.heal[i][k]);
@@ -1286,7 +1304,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 		let skillDefs = objClone(skill);
 		skillDefs.pow *= targets[i][1];
 
-		let result = attackWithSkill(char, targ, skillDefs, btl);
+		let result = attackWithSkill(char, targ, skillDefs, btl, noExtraArray);
 		finalText += `${result.txt}`;
 
 		if (result.oneMore) btl.doonemore = true;
@@ -1305,6 +1323,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 			for (let i in skill[j]) {
 				if (!selectcheck[j][i]) continue;
 				if (!selectcheck[j][i].onselect) continue;
+				if (noExtraArray && noExtraArray.includes(i)) continue;
 
 				if (selectcheck[j][i].multiple) {
 					for (let k in skill[j][i]) finalText += `\n${(selectcheck[j][i].onselect(char, skill, btl, skill[j][i][k], skill.pow) ?? '')}`;
@@ -1363,7 +1382,7 @@ useSkill = (char, btl, act, forceskill, ally) => {
 
 					finalText += `\n${char2.name} wants to assist in attacking!\n`;
 					console.log(meleeAtk);
-					let result = attackWithSkill(char2, targ, meleeAtk, btl, true);
+					let result = attackWithSkill(char2, targ, meleeAtk, btl, true, noExtraArray);
 					finalText += `${result.txt}\n`;
 					if (result.teamCombo) btl.canteamcombo = true;
 				}
