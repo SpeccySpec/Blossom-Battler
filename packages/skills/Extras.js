@@ -86,15 +86,23 @@ extrasList = {
 			if (chance <= 0)
 				return void message.channel.send("What's the point of using this skill if it never lands?");
 
-			if (![...stats, 'none'].includes(stat)) return void message.channel.send(`${stat} is not a valid stat that can be used.`)
+			if (![...stats, 'none'].includes(stat)) return void message.channel.send(`${stat} is not a valid stat that can be used.`);
 
 			if (statuses.includes('almighty') || statuses.includes('passive')) {
 				statuses = statuses.filter(x => x != 'almighty' && x != 'passive');
-				message.channel.send('You have entered either almighty or passive, which aren\'t possible main elements. These will be filtered out.')
+				message.channel.send('You have entered either almighty or passive, which aren\'t possible main elements. These will be filtered out.');
 			}
-			if (statuses.includes('repel') || statuses.includes('block') || statuses.includes('drain')) {
-				statuses = statuses.filter(x => x != 'repel' && x != 'block' && x != 'drain');
-				message.channel.send('You have entered either repel, block or drain, which are treated for one hit KOs as blocks. These will be filtered out.')
+
+			if (skill.type != 'almighty') {
+				if (statuses.includes('repel') || statuses.includes('block') || statuses.includes('drain')) {
+					statuses = statuses.filter(x => x != 'repel' && x != 'block' && x != 'drain');
+					message.channel.send('You have entered either repel, block or drain, which are treated for one hit KOs as blocks. These will be filtered out.');
+				}
+			} else {
+				if (statuses.includes('repel') || statuses.includes('block') || statuses.includes('drain') || statuses.includes('resist') || statuses.includes('normal') || statuses.includes('weak') || statuses.includes('superweak') || statuses.includes('deadly')) {
+					statuses = statuses.filter(x => !['deadly', 'superweak', 'weak', 'normal', 'resist', 'block', 'repel', 'drain'].includes(x));
+					message.channel.send('Since affinities don\'t work with almighty, these types of one hit KOs are to be treated as normal. These will be filtered out.');
+				}
 			}
 
 			makeExtra(skill, "ohko", [chance, stat, statuses]);
