@@ -109,6 +109,8 @@ extrasList = {
 			return true
 		},
 		onuseoverride(char, targ, skill, btl, vars) {
+			if (target.hp <= 0) return '';
+
 			let affinity = getAffinity(targ, skill.type);
 			if (['block', 'repel', 'drain'].includes(affinity)) return `${targ.name} blocked it!\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'block', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 
