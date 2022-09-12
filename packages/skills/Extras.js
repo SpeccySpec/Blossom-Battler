@@ -123,7 +123,7 @@ extrasList = {
 			result.oneMore = newResults.oneMore;
 			result.teamCombo = newResults.teamCombo;
 
-			return `..But it failed!\n`+newResults.txt;
+			return `...But it failed!\n`+newResults.txt;
 		},
 		onuseoverride(char, targ, skill, result, btl, vars) {
 			let failDamage = vars[2];
@@ -1733,8 +1733,7 @@ extrasList = {
 			return true
 		},
 		onuseoverride(char, targ, skill, result, btl, vars) {
-			if (targ.hp <= char.hp) return 'But it failed...!';
-			if (isBoss(targ)) return 'But it failed...!';
+			if (targ.hp <= char.hp || isBoss(targ)) return 'But it failed...!';
 
 			let c = randNum(1, 100);
 			if (c <= skill.acc+((char.stats.prc-targ.stats.agl)/2)) {
