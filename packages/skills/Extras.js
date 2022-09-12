@@ -1048,8 +1048,7 @@ extrasList = {
 					name: skill.name,
 					infname: char.name,
 					heal: vars[0],
-					turns: vars[1],
-					type: 'hp'
+					turns: vars[1]
 				});
 
 				if (vars[2]) {
@@ -1065,6 +1064,58 @@ extrasList = {
 		},
 		getinfo(vars, skill) {
 			return `Surrounds the target with a **healing aura** for **${vars[1]}** turns`;
+		}
+	}),
+
+	revitaverse: new Extra({
+		name: "Revitaverse",
+		desc: "After the foe is hit with this skill, each hit done to it will give the attacker <Damage Percent>% of damage dealt MP. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
+		args: [
+			{
+				name: "Damage Percent",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Deploy Message",
+				type: "Word"
+			}
+		],
+		applyfunc(message, skill, args) {
+			const turns = args[1]
+			if (turns < 1)
+				return void message.channel.send("You can't have less than 1 turn for this skill.");
+			makeExtra(skill, "revitaverse", [args[0], turns, args[2]]);
+			return true
+		},
+		onuse(char, targ, skill, btl, vars) {
+			if (targ.hp > 0) {
+				addCusVal(targ, "revitaverse", {
+					name: skill.name,
+					infname: char.name,
+					heal: vars[0],
+					turns: vars[1],
+					type: 'hp'
+				});
+
+				if (vars[2]) {
+					let txt = vars[2];
+					while (txt.includes('%SKILL%')) txt = txt.replace('%SKILL%', skill.name);
+					while (txt.includes('%USER%')) txt = txt.replace('%USER%', char.name);
+					while (txt.includes('%ENEMY%')) txt = txt.replace('%ENEMY%', targ.name);
+					return txt;
+				} else {
+					return `A purple aura is deployed around __${targ.name}__!`;
+				}
+			}
+		},
+		getinfo(vars, skill) {
+			return `Surrounds the target with a **revitalising aura** for **${vars[1]}** turns`;
 		}
 	}),
 
@@ -1952,15 +2003,28 @@ customVariables = {
 		},
 		onhit(btl, char, inf, dmg, vars) {
 			let heal = Math.round((dmg/100)*vars.heal);
-			switch(vars.type) {
-				case 'mp':
-					inf.mp = Math.min(inf.maxmp, inf.mp+heal);
+			inf.hp = Math.min(inf.maxhp, inf.hp+heal);
 
-				default:
-					inf.hp = Math.min(inf.maxhp, inf.hp+heal);
+			return `__${vars.infname}__'s _${vars.name}_ allowed __${inf.name}__ to restore **${heal}**HP!`;
+		}
+	},
+
+	revitaverse: {
+		toembed: "<:healverse:1004676931117129749>",
+		onturn(btl, char, vars) {
+			vars.turns--;
+			if (vars.turns <= 0) {
+				killVar(char, "revitaverse");
+				return `${vars.infname}'s ${vars.name} has worn off for ${char.name}!`;
 			}
 
-			return `${vars.infname}'s ${vars.name} allowed ${inf.name} to restore ${heal}${vars.type.toUpperCase()}`;
+			return null;
+		},
+		onhit(btl, char, inf, dmg, vars) {
+			let heal = Math.round((dmg/100)*vars.heal);
+			inf.mp = Math.min(inf.maxmp, inf.mp+heal);
+
+			return `__${vars.infname}__'s _${vars.name}_ allowed __${inf.name}__ to restore **${heal}**MP!`;
 		}
 	},
 
