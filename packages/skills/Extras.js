@@ -2456,7 +2456,7 @@ customVariables = {
 				let vars = v[i];
 
 				vars.turns--;
-				if (vars.turns <= 0) {
+				if (vars.turns == 0) {
 					delete char.custom.link[i];
 					txt += `${vars.username}'s ${vars.skilldefs.name} has worn off for ${char.name}!\n`;
 				}
@@ -2478,7 +2478,7 @@ customVariables = {
 			delete char.attacked;
 			return txt;
 		},
-		onhit(btl, char, inf, dmg, v) {
+		onhit(btl, char, inf, dmg, v, skill) {
 			let txt = '';
 			for (let i in v) {
 				let vars = v[i];
@@ -2488,8 +2488,10 @@ customVariables = {
 					continue;
 				}
 
-				let linkatk = attackWithSkill(inf, char, vars.skilldefs, btl, null, ["link"], ["link"]);
-				txt += `__${vars.username}__'s _${vars.skilldefs.name}_ strikes! ${linkatk.txt}\n`;
+				if (skill.target === 'one' || skill.target === 'ally' || skill.target === 'caster') {
+					let linkatk = attackWithSkill(inf, char, vars.skilldefs, btl, null, ["link"], ["link"]);
+					txt += `__${vars.username}__'s _${vars.skilldefs.name}_ strikes! ${linkatk.txt}\n`;
+				}
 			}
 
 			char.attacked = true;
