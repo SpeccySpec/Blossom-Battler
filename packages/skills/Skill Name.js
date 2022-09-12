@@ -10,3 +10,15 @@ getFullName = (skillDefs) => {
 	fullName += skillDefs.name ?? '[No Name?]'
 	return fullName;
 }
+
+getSkillID = (skill) => {
+	skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+
+	for (let i in skillFile) {
+		if (skill === skillFile[i]) {
+			return i;
+		}
+	}
+
+	return skill.name;
+}

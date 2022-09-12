@@ -301,8 +301,8 @@ function divideBy(val, nominator, denominator, times) {
 	return newval;
 }
 
-// Attack targ with skill using char's stats. noRepel disables repel affinities. noExtraArray disables certain extras.
-attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray) => {
+// Attack targ with skill using char's stats. noRepel disables repel affinities. noExtraArray disables certain extras. noVarsArray disables certain vars.
+attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) => {
 	let settings = setUpSettings(btl.guild.id);
 
 	const result = {
@@ -732,6 +732,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray) => {
 
 				if (targ.hp > 0 && targ.custom) {
 					for (let i in targ.custom) {
+						if (noVarsArray && noVarsArray.includes(i)) continue;
+
 						if (customVariables[i] && customVariables[i].dmgmod) {
 							result.txt += '\n' + (customVariables[i].dmgmod(btl, targ, char, dmg, skill, targ.custom[i]) ?? '');
 						}
@@ -883,6 +885,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray) => {
 				// On hit
 				if (targ.hp > 0 && targ.custom) {
 					for (let i in targ.custom) {
+						if (noVarsArray && noVarsArray.includes(i)) continue;
+
 						if (customVariables[i] && customVariables[i].onhit) {
 							result.txt += '\n' + (customVariables[i].onhit(btl, targ, char, total, targ.custom[i], skill) ?? '');
 						}

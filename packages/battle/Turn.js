@@ -1716,6 +1716,7 @@ advanceTurn = (btl, firstturn) => {
 
 	// We should check for death first. While we're here, let's reset some things.
 	let teamsleft = [];
+	let onturntxt = ''; // can you shove me in here pweeeaaase <3
 
 	for (let i in btl.teams) {
 		let pLeft = btl.teams[i].members.length;
@@ -1746,6 +1747,26 @@ advanceTurn = (btl, firstturn) => {
 
 				// moving on...
 				continue;
+			}
+
+			// Custom Variables.
+			onturntxt = '';
+			if (char.hp > 0 && char.custom) {
+				for (let i in char.custom) {
+					if (customVariables[i] && customVariables[i].nextmove) {
+						onturntxt += (customVariables[i].nextmove(btl, char, char.custom[i]) ?? '');
+						if (onturntxt != '') onturntxt += '\n';
+					}
+				}
+			}
+
+			if (onturntxt != '') {
+				let DiscordEmbed = new Discord.MessageEmbed()
+					.setColor('#ff1fa9')
+					.setTitle(`${char.name}'s status!`)
+					.setDescription(onturntxt.replace(/\n{3,}/, () => "\n\n"))
+
+				btl.channel.send({embeds: [DiscordEmbed]});
 			}
 		}
 

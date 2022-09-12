@@ -1889,6 +1889,64 @@ extrasList = {
 			return `Deals EXACTLY **${vars[0]}** damage.`;
 		}
 	}),
+
+	link: new Extra({
+		name: "Link",
+		desc: "After use, if the same enemy is attacked with a single target skill, this skill with a <Power Boost per hit> multiplier is used after. Lasts until <Turns> turns pass, or the enemy is not hit. Stackable.",
+		args: [
+			{
+				name: "Power Boost Per Hit",
+				type: "Decimal",
+				forced: false
+			},
+			{
+				name: "Turns",
+				type: "Num",
+				forced: false
+			}
+		],
+		applyfunc(message, skill, args) {
+			// Check Power Boost Per Hit
+			if (args[0]) {
+				if (args[0] <= 0) return void message.channel.send("Please enter a value over 0 for ''Power Boost Per Hit''!");
+			}
+
+			// Check Turns
+			if (args[1]) {
+				if (args[1] < -1 || args[1] == 0) return void message.channel.send("Please enter a value over 0 for ''Turns'', or enter -1 for this to be done indefinitely!");
+			}
+
+			makeExtra(skill, "link", [args[0] ?? null, args[1] ?? null]);
+			return true
+		},
+		onuse(char, targ, skill, btl, vars) {
+			let id = getSkillID(skill);
+			let pb = vars[0] ?? 1;
+			let t = vars[1] ?? 3;
+
+			if (targ.hp > 0) {
+				if (!targ.custom?.link) addCusVal(targ, "link", {});
+
+				if (!targ.custom.link[id]) {
+					targ.custom.link[id] = {
+						turns: t,
+						powerboost: pb,
+						username: char.name,
+						notthisskill: true,
+						skilldefs: objClone(skill)
+					}
+
+					return `__${char.name}__'s _${skill.name}_ was deployed on __${targ.name}__!`;
+				}
+			}
+		},
+		getinfo(vars, skill) {
+			let txt = "Starts a link chain";
+			if (vars[0] && vars[0] != 1) txt += ` with a **${vars[0]}x** multiplier`;
+			if (vars[1] && vars[1] != 3) txt += ` that lasts **${vars[1]} turns**`;
+			return txt;
+		}
+	}),
 }
 
 // Make an Extra for a skill. "func" should be an array of 1-5 values indicating what the extra does.
@@ -2389,5 +2447,53 @@ customVariables = {
 
 			return txt;
 		}
-	}
+	},
+
+	link: {
+		onturn(btl, char, v) {
+			let txt = '';
+			for (let i in v) {
+				let vars = v[i];
+
+				vars.turns--;
+				if (vars.turns <= 0) {
+					delete char.custom.link[i];
+					txt += `${vars.username}'s ${vars.skilldefs.name} has worn off for ${char.name}!\n`;
+				}
+			}
+
+			return txt;
+		},
+		nextmove(btl, char, v) {
+			let txt = '';
+			for (let i in v) {
+				let vars = v[i];
+
+				if (!char.attacked) {
+					delete char.custom.link[i];
+					txt += `${vars.username}'s ${vars.skilldefs.name} has worn off for ${char.name}!\n`;
+				}
+			}
+
+			delete char.attacked;
+			return txt;
+		},
+		onhit(btl, char, inf, dmg, v) {
+			let txt = '';
+			for (let i in v) {
+				let vars = v[i];
+
+				if (vars.notthisskill) {
+					delete vars.notthisskill;
+					continue;
+				}
+
+				let linkatk = attackWithSkill(inf, char, vars.skilldefs, btl, null, ["link"], ["link"]);
+				txt += `__${vars.username}__'s _${vars.skilldefs.name}_ strikes! ${linkatk.txt}\n`;
+			}
+
+			char.attacked = true;
+			return txt;
+		}
+	},
 }
