@@ -126,9 +126,11 @@ extrasList = {
 			return `..But it failed!\n`+newResults.txt;
 		},
 		onuseoverride(char, targ, skill, result, btl, vars) {
+			let failDamage = vars[2];
+			if (isBoss(targ)) return !failDamage ? "...But it failed!" : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
+
 			let OHKOchance = vars[0];
 			let stat = vars[1];
-			let failDamage = vars[2];
 			let passAll = vars[3];
 			let conditions = vars[4];
 
@@ -156,7 +158,6 @@ extrasList = {
 					if (hasFailed) return !failDamage ? dodgeTxt(targ) : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
 				}
 			}
-			if (isBoss(targ)) return !failDamage ? "...But it failed!" : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
 
 			let chance = randNum(100);
 			let target = OHKOchance;
@@ -1725,14 +1726,15 @@ extrasList = {
 
 	endeavor: new Extra({
 		name: "Endeavor",
-		desc: 'Brings the target to your HP. Fails if you have equal to or more HP than the target.',
+		desc: 'Brings the target to your HP. Fails if you have equal to or more HP than the target. Does not work on bosses.',
 		args: [],
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "endeavor", [true]);
 			return true
 		},
 		onuseoverride(char, targ, skill, result, btl, vars) {
-			if (targ.hp <= char.hp) return 'But it failed!';
+			if (targ.hp <= char.hp) return 'But it failed...!';
+			if (isBoss(targ)) return 'But it failed...!';
 
 			let c = randNum(1, 100);
 			if (c <= skill.acc+((char.stats.prc-targ.stats.agl)/2)) {
@@ -1750,13 +1752,15 @@ extrasList = {
 
 	superfang: new Extra({
 		name: "Super Fang",
-		desc: "Halves the target's current HP.",
+		desc: "Halves the target's current HP. Does not work on bosses.",
 		args: [],
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "superfang", [true]);
 			return true
 		},
 		onuseoverride(char, targ, skill, result, btl, vars) {
+			if (isBoss(targ)) return 'But it failed...!';
+
 			let c = randNum(1, 100);
 			if (c <= skill.acc+((char.stats.prc-targ.stats.agl)/2)) {
 				let dmg = Math.round(targ.hp/2);
