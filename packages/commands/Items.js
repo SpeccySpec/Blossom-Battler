@@ -458,8 +458,8 @@ commands.purgeitem = new Command({
                                     itemFile[item].recipe.recipe[i-1] = ''
                                 }
                             }
+                            itemFile[item].recipe.recipe.filter(a => (a != ''))
                         }
-                        itemFile[item].recipe.recipe.filter(a => (a != ''))
                     }
                     weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
                     armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armor.json`)
@@ -476,8 +476,8 @@ commands.purgeitem = new Command({
                                     weaponFile[item].recipe.recipe[i-1] = ''
                                 }
                             }
+                            weaponFile[item].recipe.recipe.filter(a => (a != ''))
                         }
-                        weaponFile[item].recipe.recipe.filter(a => (a != ''))
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile))
 
@@ -493,8 +493,8 @@ commands.purgeitem = new Command({
                                     armorFile[item].recipe.recipe[i-1] = ''
                                 }
                             }
+                            armorFile[item].recipe.recipe.filter(a => (a != ''))
                         }
-                        armorFile[item].recipe.recipe.filter(a => (a != ''))
                     }
                     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/armor.json`, JSON.stringify(armorFile))
 
