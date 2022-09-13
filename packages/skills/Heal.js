@@ -1,12 +1,20 @@
+let targetColors = {
+	hp: 'lime',
+	hppercent: 'lime',
+	mp: 'violet',
+	mppercent: 'violet',
+	lb: 'silver'
+}
+
 healList = {
 	healstat: new Extra({
 		name: "Heal Stat",
-		desc: "The default heal type. Restores <Meter> by <Heal Amount>. _Negative values for <Heal Amount> will damage the target!_",
+		desc: "The default heal type. Restores <Meter> by <Amount>. _Negative values for <Heal Amount> will damage the target!_",
 		multiple: true,
 		diffflag: 0,
 		args: [
 			{
-				name: "Heal Amount",
+				name: "Amount",
 				type: "Num",
 				forced: true
 			},
@@ -40,7 +48,7 @@ healList = {
 				case 'hp':
 				case 'mp':
 					let heal = vars[0] + (-8+randNum(16));
-					targ[vars[1]] = Math.min(targ[`max${vars[1]}`], targ[vars[1]]+heal);
+					targ[vars[1]] = Math.max(Math.min(targ[`max${vars[1]}`], targ[vars[1]]+heal), 0);
 					return `__${targ.name}__'s **${vars[1].toUpperCase()}** was restored by **${heal}**!`;
 
 				case 'hppercent':
@@ -50,7 +58,7 @@ healList = {
 					} else {
 						let amount = Math.round((targ.maxhp/100)*vars[0]);
 
-						targ.hp = Math.min(targ.maxhp, targ.hp+amount);
+						targ.hp = Math.max(Math.min(targ.maxhp, targ.hp+amount), 0);
 						return `__${targ.name}__'s HP was restored by **${amount}**!`;
 					}
 
@@ -61,12 +69,12 @@ healList = {
 					} else {
 						let amountm = Math.round((targ.maxmp/100)*vars[0]);
 
-						targ.mp = Math.min(targ.maxmp, targ.mp+amountm);
+						targ.mp = Math.max(Math.min(targ.maxmp, targ.mp+amountm), 0);
 						return `__${targ.name}__'s MP was restored by **${amountm}**!`;
 					}
 
 				case 'lb':
-					targ.lbp += vars[0];
+					targ.lbp = Math.max(targ.lbp + vars[0], 0);
 					return `__${targ.name}__'s LB% was boosted by **${vars[0]}%**!`;
 			}
 
@@ -93,95 +101,78 @@ healList = {
 
 	regenerate: new Extra({
 		name: "Regenerate",
-		desc: "Restores HP by <HP> over time for <Turns> turns. _Negative values for <HP> will damage the target!_",
+		desc: "Restores <Meter> by <Amount> over time for <Turns> turns. _Negative values for <Amount> will damage the target!_",
+		multiple: true,
 		args: [
 			{
-				name: "HP",
+				name: "Amount",
 				type: "Num",
+				forced: true
+			},
+			{
+				name: "Meter",
+				type: "Word",
 				forced: true
 			},
 			{
 				name: "Turns",
 				type: "Num",
 				forced: true
+			},
+			{
+				name: "Activate after last regeneration?",
+				type: "YesNo"
 			}
 		],
 		applyfunc(message, skill, args) {
 			let hp = args[0];
-			let turns = args[1];
+			let meter = args[1].toLowerCase();
+			let turns = args[2];
+			let lastActivate = args[3] ?? false;
 
 			if (hp == 0) hp = 20;
+			if (!['hp', 'mp', 'hppercent', 'mppercent', 'lb'].includes(meter)) return void message.channel.send(`${args[1]} is an invalid meter to heal! Enter either HP, MP, HPPercent, MPPercent or LB.`);
 			if (turns <= 0) return void message.channel.send(`${turns} is an invalid number of turns! Enter a number greater than 0.`);
-			makeHeal(skill, "regenerate", [hp, turns]);
+			makeHeal(skill, "regenerate", [hp, meter, turns, lastActivate]);
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
 			vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
 
-			addCusVal(targ, "regenheal", {
+			if (!targ.custom?.regenheal) addCusVal(targ, "regenheal", {});
+			if (!targ.custom.regenheal[char.name]) targ.custom.regenheal[char.name] = [] //to not fuck up regens from multiple ppl to the same char with each other with any waiting ones
+
+			targ.custom.regenheal[char.name].push({
 				name: skill.name,
 				username: char.name,
 				heal: Math.round(vars[0] * multiplier),
-				turns: vars[1],
-				type: "hp",
+				turns: vars[2],
+				type: vars[1],
+				wait: vars[3],
 				user: char.id
-			})
+			});
 
 			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
 				settings = setUpSettings(btl.guild.id);
 				changeTrust(targ, char, Math.round(5*(settings.rates.trustrate ?? 1)), true, btl.channel);
 			}
-			return `__${targ.name}__ is surrounded in a lime coloured aura!`;
+			return `__${targ.name}__ is surrounded in a ${targetColors[vars[1]]} coloured aura!`;
 		},
 		getinfo(vars, skill) {
-			return `Regenerates **around ${vars[0]} HP** for **${vars[1]} turns**`
-		}
-	}),
+			let txt = `Regenerates ` 
+			for (i in vars) {
+				let healType = vars[i][1];
 
-	invigorate: new Extra({
-		name: "Invigorate",
-		desc: "Restores MP by <MP> over time for <Turns> turns. _Negative values for <MP> will drain the target!_",
-		args: [
-			{
-				name: "HP",
-				type: "Num",
-				forced: true
-			},
-			{
-				name: "Turns",
-				type: "Num",
-				forced: true
+				if (healType.includes('percent')) healType = '% of target\'s ' + healType.replace('percent', '').toUpperCase();
+				else if (healType.includes('lb')) healType = '% LB';
+				else healType = ` ${healType.toUpperCase()}`;
+
+				txt += `**around ${vars[i][0]}${healType}** for **${vars[i][2]} turns**${vars[i][3] && i != 0 ? ' **after** last regeneration finishes' : ''}`
+
+				if (i < vars.length - 2) txt += ', ';
+				else if (i == vars.length - 2) txt += ' and ';
 			}
-		],
-		applyfunc(message, skill, args) {
-			let mp = args[0];
-			let turns = args[1];
-
-			if (mp == 0) mp = 20;
-			if (turns <= 0) return void message.channel.send(`${turns} is an invalid number of turns! Enter a number greater than 0.`);
-			makeHeal(skill, "invigorate", [mp, turns]);
-			return true;
-		},
-		onuse: function(char, targ, skill, btl, vars, multiplier) {
-			vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
-
-			addCusVal(targ, "regenheal", {
-				name: skill.name,
-				username: char.name,
-				heal: Math.round(vars[0] * multiplier),
-				turns: vars[1],
-				type: "mp",
-				user: char.id
-			})
-
-			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
-				settings = setUpSettings(btl.guild.id);
-				changeTrust(targ, char, Math.round(5*(settings.rates.trustrate ?? 1)), true, btl.channel);
-			}
-			return `__${targ.name}__ is surrounded in a violet coloured aura!`;
-		},
-		getinfo(vars, skill) {
-			return `Regenerates **around ${vars[0]} MP** for **${vars[1]} turns**`
+			return txt;
 		}
 	}),
 

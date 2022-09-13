@@ -2068,7 +2068,7 @@ customVariables = {
 	},
 
 	revitaverse: {
-		toembed: "<:healverse:1004676931117129749>",
+		toembed: "<:revitaverse:1019325299067998260>",
 		onturn(btl, char, vars) {
 			vars.turns--;
 			if (vars.turns <= 0) {
@@ -2087,7 +2087,7 @@ customVariables = {
 	},
 
 	powerverse: {
-		toembed: ":powerverse:1004676933109428294",
+		toembed: "<:powerverse:1004676933109428294>",
 		onturn(btl, char, vars) {
 			vars.turns--;
 			if (vars.turns <= 0) {
@@ -2110,7 +2110,7 @@ customVariables = {
 	},
 
 	spreadverse: {
-		toembed: ":spreadverse:1004676935126892574",
+		toembed: "<:spreadverse:1004676935126892574>",
 		onturn(btl, char, vars) {
 			vars.turns--;
 			if (vars.turns <= 0) {
@@ -2372,19 +2372,103 @@ customVariables = {
 	},
 
 	regenheal: {
-		toembed: "<:revive:973078509868183572>",
+		toembed(heal) { 
+			let emojiTxt = ''
+
+			for (user in heal) {
+				for (i in heal[user]) {
+					let curRegen = heal[user][i];
+
+					if (curRegen.wait && i != 0) break;
+
+					let regenType = curRegen.type;
+
+					switch(regenType) {
+						case 'hp':
+						case 'hppercent':
+							emojiTxt += !emojiTxt.includes('<:hpregen:1019329492549902436>') ? '<:hpregen:1019329492549902436>' : '';
+							break;
+						case 'mp':
+						case 'mppercent':
+							emojiTxt += !emojiTxt.includes('<:mpregen:1019329489890713692>') ? '<:mpregen:1019329489890713692>' : '';
+							break;
+						case 'lb':
+							emojiTxt += !emojiTxt.includes('<:lbregen:1019329487856488528>') ? '<:lbregen:1019329487856488528>' : '';
+							break;
+					}
+				}
+			}
+
+			return emojiTxt
+		},
 		onturn(btl, char, vars) {
 			if (char.custom?.regenheal) {
 				let txt = '';
-				let rh = char.custom.regenheal;
-				char[rh.type] = Math.min(char[`max${rh.type}`], char[rh.type]+rh.heal);
-				txt += `__${char.name}__'s ${rh.type.toUpperCase()} was restored by **${rh.heal}**!`;
 
-				char.custom.regenheal.turns--;
-				if (char.custom.regenheal.turns <= 0) {
-					txt += `\n__${rh.username}__'s _${rh.name}_ wore off for __${char.name}__.`;
-					killVar(char, 'regenheal');
+				for (heal in char.custom.regenheal) {
+					for (i in char.custom.regenheal[heal]) {
+						let curRegen = char.custom.regenheal[heal][i];
+
+						if (curRegen.wait && i != 0 && (char.custom.regenheal[heal][i - 1].turns > 0 || char.custom.regenheal[heal][i - 1] != '')) break;
+
+						if (curRegen.wait && i != 0) txt += `\n__${curRegen.username}__'s _${curRegen.name}_ started to take effect.`;
+						delete curRegen.wait; //in case if more than one regen exists and one of the previous ones lasts shorter than the others
+
+						let regenType = curRegen.type;
+						let regenAmount = curRegen.heal;
+
+						if (i != 0) txt += '\n';
+
+						switch(regenType) {
+							case 'hp':
+							case 'mp':
+								let heal = regenAmount + (-8+randNum(16));
+								char[regenType] =  Math.max(Math.min(char[`max${regenType}`], char[regenType]+heal), 0);;
+								txt += `__${char.name}__'s **${regenType.toUpperCase()}** was restored by **${heal}**!`;
+								break;
+			
+							case 'hppercent':
+								if (regenAmount >= 100) {
+									char.hp = char.maxhp;
+									txt += `__${char.name}__'s HP was _fully restored_!`;
+								} else {
+									let amount = Math.round((char.maxhp/100)*regenAmount);
+			
+									char.hp =  Math.max(Math.min(char.maxhp, char.hp+amount), 0);;
+									txt += `__${char.name}__'s HP was restored by **${amount}**!`;
+								}
+								break;
+			
+							case 'mppercent':
+								if (regenAmount >= 100) {
+									char.mp = char.maxmp;
+									txt += `__${char.name}__'s MP was _fully restored_!`;
+								} else {
+									let amountm = Math.round((char.maxmp/100)*regenAmount);
+			
+									char.mp =  Math.max(Math.min(char.maxmp, char.mp+amountm), 0);;
+									txt += `__${char.name}__'s MP was restored by **${amountm}**!`;
+								}
+								break;
+			
+							case 'lb':
+								targ.lbp = Math.max(targ.lbp + regenAmount, 0);
+								txt += `__${char.name}__'s LB% was boosted by **${regenAmount}%**!`;
+								break;
+						}
+
+						curRegen.turns--;
+						if (curRegen.turns <= 0) {
+							txt += `\n__${curRegen.username}__'s _${curRegen.name}_ wore off for __${char.name}__.\n`;
+							char.custom.regenheal[heal][i] = ''
+						}
+					}
+
+					char.custom.regenheal[heal] = char.custom.regenheal[heal].filter(x => x != '');
+					if (char.custom.regenheal[heal].length == 0) delete char.custom.regenheal[heal]
 				}
+				
+				if (Object.keys(char.custom.regenheal).length == 0) killVar(char, 'regenheal');
 
 				return txt;
 			}

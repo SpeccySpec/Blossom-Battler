@@ -311,21 +311,33 @@ commands.updateskills = new Command({
 
 		for (skill in skillFile) {
 			if (skillFile[skill]?.passive) {
+
 			}
 
 			if (skillFile[skill]?.statusses) {
+
 			}
 
 			if (skillFile[skill]?.heal) {
+				if (skillFile[skill].heal?.regenerate) {
+					if (typeof skillFile[skill].heal.regenerate[0] != 'object') {
+						skillFile[skill].heal.regenerate = [[skillFile[skill].heal.regenerate[0], 'hp', skillFile[skill].heal.regenerate[1], false]]
+					}
+				}
+
+				if (skillFile[skill].heal?.invigorate) {
+					if (!skillFile[skill].heal?.regenerate) {
+						skillFile[skill].heal.regenerate = [[skillFile[skill].heal.invigorate[0], 'mp', skillFile[skill].heal.invigorate[1], false]]
+					} else {
+						skillFile[skill].heal.regenerate.push([skillFile[skill].heal.invigorate[0], 'mp', skillFile[skill].heal.invigorate[1], false])
+					}
+
+					delete skillFile[skill].heal.invigorate
+				}
 			}
 
 			if (skillFile[skill]?.extras) {
-				if (skillFile[skill].extras?.ohko) {
-					for (i in skillFile[skill].extras.ohko) {
-						let curOHKO = skillFile[skill].extras.ohko[i];
-						skillFile[skill].extras.ohko[i] = [curOHKO[0], curOHKO[2], false, curOHKO[1], curOHKO[3]]
-					}
-				}
+				
 			}
 		}
 		fs.writeFileSync(dataPath+'/json/skills.json', JSON.stringify(skillFile, null, '    '));
