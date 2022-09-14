@@ -179,7 +179,7 @@ healList = {
 				else if (healType.includes('lb')) healType = '% LB';
 				else healType = ` ${healType.toUpperCase()}`;
 
-				txt += `**around ${vars[i][0]}${healType}** for **${vars[i][2]} turns**${vars[i][3] ? ' **after** last regeneration finishes' : ''}${vars[i][4] > 0 ? ` after **${vars[i][4]} turn${vars[i][4] > 1 ? 's' : ''}**` : ''}${vars[i][5] ? ` pausing each turn for **${vars[i][5]} turn${vars[i][5] > 1 ? 's' : ''}**` : ''}`
+				txt += `**around ${vars[i][0]}${healType}** for **${vars[i][2]} turns**${vars[i][3] ? ' when last regeneration finishes' : ''}${vars[i][4] > 0 ? `, after **${vars[i][4]} turn${vars[i][4] > 1 ? 's' : ''}**` : ''}${vars[i][5] ? `, pausing each turn for **${vars[i][5]} turn${vars[i][5] > 1 ? 's' : ''}**` : ''}`
 
 				if (i < vars.length - 2) txt += ', ';
 				else if (i == vars.length - 2) txt += ' and ';
