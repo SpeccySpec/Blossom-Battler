@@ -101,7 +101,7 @@ healList = {
 
 	regenerate: new Extra({
 		name: "Regenerate",
-		desc: "Restores <Meter> by <Amount> over time for <Turns> turns. Can be inactive before last regeneration finishes, and be inactive before or between it for some time. _Negative values for <Amount> will damage the target!_",
+		desc: "Restores <Meter> by <Amount> over time for <Turns> turns. Can be inactive before last regeneration finishes, wait before start, and pause each turn for an amount of turns optionally. _Negative values for <Amount> will damage the target!_",
 		multiple: true,
 		args: [
 			{
@@ -128,7 +128,7 @@ healList = {
 				type: "Num"
 			},
 			{
-				name: "Turns between heals",
+				name: "Pause turns",
 				type: "Num"
 			}
 		],
@@ -179,7 +179,7 @@ healList = {
 				else if (healType.includes('lb')) healType = '% LB';
 				else healType = ` ${healType.toUpperCase()}`;
 
-				txt += `**around ${vars[i][0]}${healType}** for **${vars[i][2]} turns**${vars[i][3] ? ' **after** last regeneration finishes' : ''}${vars[i][4] > 0 ? ` after **${vars[i][4]} turn${vars[i][4] > 1 ? 's' : ''}**` : ''}${vars[i][5] ? ` pausing between for **${vars[i][5]} turn${vars[i][5] > 1 ? 's' : ''}**` : ''}`
+				txt += `**around ${vars[i][0]}${healType}** for **${vars[i][2]} turns**${vars[i][3] ? ' **after** last regeneration finishes' : ''}${vars[i][4] > 0 ? ` after **${vars[i][4]} turn${vars[i][4] > 1 ? 's' : ''}**` : ''}${vars[i][5] ? ` pausing each turn for **${vars[i][5]} turn${vars[i][5] > 1 ? 's' : ''}**` : ''}`
 
 				if (i < vars.length - 2) txt += ', ';
 				else if (i == vars.length - 2) txt += ' and ';
