@@ -320,19 +320,7 @@ commands.updateskills = new Command({
 
 			if (skillFile[skill]?.heal) {
 				if (skillFile[skill].heal?.regenerate) {
-					if (typeof skillFile[skill].heal.regenerate[0] != 'object') {
-						skillFile[skill].heal.regenerate = [[skillFile[skill].heal.regenerate[0], 'hp', skillFile[skill].heal.regenerate[1], false]]
-					}
-				}
-
-				if (skillFile[skill].heal?.invigorate) {
-					if (!skillFile[skill].heal?.regenerate) {
-						skillFile[skill].heal.regenerate = [[skillFile[skill].heal.invigorate[0], 'mp', skillFile[skill].heal.invigorate[1], false]]
-					} else {
-						skillFile[skill].heal.regenerate.push([skillFile[skill].heal.invigorate[0], 'mp', skillFile[skill].heal.invigorate[1], false])
-					}
-
-					delete skillFile[skill].heal.invigorate
+					for (i in skillFile[skill].heal.regenerate) skillFile[skill].heal.regenerate[i].push(0, 0);
 				}
 			}
 
