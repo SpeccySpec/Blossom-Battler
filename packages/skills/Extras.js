@@ -2409,10 +2409,22 @@ customVariables = {
 					for (i in char.custom.regenheal[heal]) {
 						let curRegen = char.custom.regenheal[heal][i];
 
-						if (curRegen.wait && i != 0 && (char.custom.regenheal[heal][i - 1].turns > 0 || char.custom.regenheal[heal][i - 1] != '')) break;
+						if (curRegen.wait) {
+							let prevHeal = char.custom.regenheal[heal][i-1];
+							if (curRegen.first && i != 0 && (prevHeal.turns > 0 || prevHeal != '')) break;
 
-						if (curRegen.wait && i != 0) txt += `\n__${curRegen.username}__'s _${curRegen.name}_ started to take effect.`;
-						delete curRegen.wait; //in case if more than one regen exists and one of the previous ones lasts shorter than the others
+							if (curRegen.wait && i != 0 && curRegen.first) {
+								txt += `\n__${curRegen.username}__'s _${curRegen.name}_ started to take effect.`;
+								delete curRegen.first;
+							}
+
+							if (isFinite(curRegen.wait) && ((i != 0 && !curRegen.first) || i == 0)) curRegen.wait--;
+
+							if (isFinite(curRegen.wait) && curRegen.wait > 0 && ((i != 0 && !curRegen.first) || i == 0)) break;
+
+							if (curRegen.wait === true || curRegen.wait == 0) delete curRegen.wait
+							else break;
+						}
 
 						let regenType = curRegen.type;
 						let regenAmount = curRegen.heal;
@@ -2462,6 +2474,8 @@ customVariables = {
 							txt += `\n__${curRegen.username}__'s _${curRegen.name}_ wore off for __${char.name}__.\n`;
 							char.custom.regenheal[heal][i] = ''
 						}
+
+						if (curRegen.pause > 0) curRegen.wait = curRegen.pause
 					}
 
 					char.custom.regenheal[heal] = char.custom.regenheal[heal].filter(x => x != '');

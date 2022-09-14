@@ -101,7 +101,7 @@ healList = {
 
 	regenerate: new Extra({
 		name: "Regenerate",
-		desc: "Restores <Meter> by <Amount> over time for <Turns> turns. _Negative values for <Amount> will damage the target!_",
+		desc: "Restores <Meter> by <Amount> over time for <Turns> turns. Can be inactive before last regeneration finishes, and be inactive before or between it for some time. _Negative values for <Amount> will damage the target!_",
 		multiple: true,
 		args: [
 			{
@@ -122,6 +122,14 @@ healList = {
 			{
 				name: "Activate after last regeneration?",
 				type: "YesNo"
+			},
+			{
+				name: "Turns before start",
+				type: "Num"
+			},
+			{
+				name: "Turns between heals",
+				type: "Num"
 			}
 		],
 		applyfunc(message, skill, args) {
@@ -129,11 +137,13 @@ healList = {
 			let meter = args[1].toLowerCase();
 			let turns = args[2];
 			let lastActivate = args[3] ?? false;
+			let startTurns = Math.max(args[4] ?? 0, 0);
+			let pauseTurns = Math.max(args[5] ?? 0, 0);
 
 			if (hp == 0) hp = 20;
 			if (!['hp', 'mp', 'hppercent', 'mppercent', 'lb'].includes(meter)) return void message.channel.send(`${args[1]} is an invalid meter to heal! Enter either HP, MP, HPPercent, MPPercent or LB.`);
 			if (turns <= 0) return void message.channel.send(`${turns} is an invalid number of turns! Enter a number greater than 0.`);
-			makeHeal(skill, "regenerate", [hp, meter, turns, lastActivate]);
+			makeHeal(skill, "regenerate", [hp, meter, turns, lastActivate, startTurns, pauseTurns]);
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
@@ -148,7 +158,9 @@ healList = {
 				heal: Math.round(vars[0] * multiplier),
 				turns: vars[2],
 				type: vars[1],
-				wait: vars[3],
+				wait: vars[3] ? (vars[4] > 0 ? vars[4] : true) : false,
+				pause: vars[5],
+				first: vars[2],
 				user: char.id
 			});
 
@@ -167,7 +179,7 @@ healList = {
 				else if (healType.includes('lb')) healType = '% LB';
 				else healType = ` ${healType.toUpperCase()}`;
 
-				txt += `**around ${vars[i][0]}${healType}** for **${vars[i][2]} turns**${vars[i][3] && i != 0 ? ' **after** last regeneration finishes' : ''}`
+				txt += `**around ${vars[i][0]}${healType}** for **${vars[i][2]} turns**${vars[i][3] ? ' **after** last regeneration finishes' : ''}${vars[i][4] > 0 ? ` after **${vars[i][4]} turn${vars[i][4] > 1 ? 's' : ''}**` : ''}${vars[i][5] ? ` pausing between for **${vars[i][5]} turn${vars[i][5] > 1 ? 's' : ''}**` : ''}`
 
 				if (i < vars.length - 2) txt += ', ';
 				else if (i == vars.length - 2) txt += ' and ';
