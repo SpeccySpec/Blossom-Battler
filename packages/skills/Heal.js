@@ -158,9 +158,9 @@ healList = {
 				heal: Math.round(vars[0] * multiplier),
 				turns: vars[2],
 				type: vars[1],
-				wait: vars[3] ? (vars[4] > 0 ? vars[4] : true) : false,
+				wait: vars[4] > 0 ? vars[4]+1 : vars[3],
 				pause: vars[5]+1,
-				first: vars[2],
+				first: vars[3],
 				user: char.id
 			});
 
@@ -179,7 +179,7 @@ healList = {
 				else if (healType.includes('lb')) healType = '% LB';
 				else healType = ` ${healType.toUpperCase()}`;
 
-				txt += `**around ${vars[i][0]}${healType}** for **${vars[i][2]} turns**${vars[i][3] ? ' when last regeneration finishes' : ''}${vars[i][4] > 0 ? `, after **${vars[i][4]} turn${vars[i][4] > 1 ? 's' : ''}**` : ''}${vars[i][5] > 0 ? `, pausing each turn for **${vars[i][5]+1} turn${vars[i][5]+1 > 1 ? 's' : ''}**` : ''}`
+				txt += `**around ${vars[i][0]}${healType}** for **${vars[i][2]} turns**${vars[i][3] ? ' when last regeneration finishes' : ''}${vars[i][4] > 0 ? `, after **${vars[i][4]} turn${vars[i][4] > 1 ? 's' : ''}**` : ''}${vars[i][5] > 0 ? `, pausing each turn for **${vars[i][5]} turn${vars[i][5] > 1 ? 's' : ''}**` : ''}`
 
 				if (i < vars.length - 2) txt += ', ';
 				else if (i == vars.length - 2) txt += ' and ';

@@ -2379,7 +2379,7 @@ customVariables = {
 				for (i in heal[user]) {
 					let curRegen = heal[user][i];
 
-					if (curRegen.wait && i != 0) break;
+					if (curRegen.first && i != 0) break;
 
 					let regenType = curRegen.type;
 
@@ -2413,17 +2413,17 @@ customVariables = {
 							let prevHeal = char.custom.regenheal[heal][i-1];
 							if (curRegen.first && i != 0 && (prevHeal.turns > 0 || prevHeal != '')) break;
 
-							if (curRegen.wait && i != 0 && curRegen.first) {
+							if (i != 0 && curRegen.first) {
 								txt += `\n__${curRegen.username}__'s _${curRegen.name}_ started to take effect.`;
 								delete curRegen.first;
 							}
 
-							if (isFinite(curRegen.wait) && ((i != 0 && !curRegen.first) || i == 0)) curRegen.wait--;
+							if (isFinite(curRegen.wait)) curRegen.wait--;
 
-							if (isFinite(curRegen.wait) && curRegen.wait > 0 && ((i != 0 && !curRegen.first) || i == 0)) break;
+							if (isFinite(curRegen.wait) && curRegen.wait > 0) continue;
 
+							if (curRegen.wait > 0) continue;
 							if (curRegen.wait === true || curRegen.wait == 0) delete curRegen.wait
-							else continue;
 						}
 
 						let regenType = curRegen.type;
