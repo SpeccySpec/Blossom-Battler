@@ -2452,7 +2452,7 @@ customVariables = {
 								break;
 			
 							case 'lb':
-								targ.lbp = Math.max(targ.lbp + regenAmount, 0);
+								char.lbp = Math.max(char.lbp + regenAmount, 0);
 								txt += `__${char.name}__'s LB% was boosted by **${regenAmount}%**!`;
 								break;
 						}
