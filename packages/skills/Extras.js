@@ -2423,7 +2423,7 @@ customVariables = {
 							if (isFinite(curRegen.wait) && curRegen.wait > 0 && ((i != 0 && !curRegen.first) || i == 0)) break;
 
 							if (curRegen.wait === true || curRegen.wait == 0) delete curRegen.wait
-							else break;
+							else continue;
 						}
 
 						let regenType = curRegen.type;
