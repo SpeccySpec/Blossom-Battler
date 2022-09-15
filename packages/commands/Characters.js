@@ -1358,14 +1358,8 @@ commands.setmelee = new Command({
 
 // Skill stuff!
 knowsSkill = (charDefs, skill) => {
-	if (!charDefs.skills) return null;
-	if (charDefs.skills.length <= 0) return null;
-
-	for (const i in charDefs.skills) {
-		if (charDefs.skills[i] === skill) return i;
-	}
-
-	return null;
+	let index = charDefs?.skills?.indexOf(skill);
+	return index >= 0 ? index : null;
 }
 
 commands.learnskill = new Command({
@@ -1481,6 +1475,7 @@ commands.replaceskill = new Command({
 		// Do we know the skill
 		if (!skillFile[args[2]]) return message.channel.send('Invalid skill to replace with! Remember that these are case sensitive.');
 		if (!knowsSkill(thingDefs[args[0]], args[1])) return message.channel.send(`${thingDefs[args[0]].name} doesn't know ${args[1]}!`);
+		if (knowsSkill(thingDefs[args[0]], args[2])) return message.channel.send(`${thingDefs[args[0]].name} already knows ${args[2]}!`);
 
 		// Level Lock
 		if (skillFile[args[2]].levellock) {

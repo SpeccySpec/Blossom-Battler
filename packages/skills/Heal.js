@@ -150,9 +150,9 @@ healList = {
 			vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
 
 			if (!targ.custom?.regenheal) addCusVal(targ, "regenheal", {});
-			if (!targ.custom.regenheal[char.name]) targ.custom.regenheal[char.name] = [] //to not fuck up regens from multiple ppl to the same char with each other with any waiting ones
+			if (!targ.custom.regenheal[char.name]) targ.custom.regenheal[char.name + '-' + skill.name] = [] //to not fuck up regens from multiple ppl to the same char with each other with any waiting ones
 
-			targ.custom.regenheal[char.name].push({
+			targ.custom.regenheal[char.name + '-' + skill.name].push({
 				name: skill.name,
 				username: char.name,
 				heal: Math.round(vars[0] * multiplier),
