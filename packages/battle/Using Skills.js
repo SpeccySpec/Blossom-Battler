@@ -614,7 +614,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 											curAffinity = a;
 										} else {
 											curAffinity = a[0];
-											results.txt += a[1];
+											result.txt += a[1];
 										}
 									}
 								}
@@ -635,7 +635,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 											curAffinity = a;
 										} else {
 											curAffinity = a[0];
-											results.txt += a[1];
+											result.txt += a[1];
 										}
 									}
 								}
