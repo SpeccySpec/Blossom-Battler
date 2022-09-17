@@ -1860,7 +1860,7 @@ statusEffectFuncs = {
 			
 			let usableskills = [];
 			for (let i in char.skills) {
-				if (canUseSkill(skillFile[char.skills[i]])) usableskills.push(char.skills[i]);
+				if (canUseSkill(char, skillFile[char.skills[i]])) usableskills.push(char.skills[i]);
 			}
 			
 			if (usableskills.length <= 0) {

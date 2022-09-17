@@ -1115,6 +1115,7 @@ sendCurTurnEmbed = (char, btl) => {
 								embeds: [DiscordEmbed],
 								components: setUpComponents(char, btl, menustate)
 							});
+							break;
 						
 						case 'enemyinfo':
 							targ = btl.teams[btl.action.target[0]].members[i.customId];

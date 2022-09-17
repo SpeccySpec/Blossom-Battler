@@ -53,11 +53,14 @@ Extra = class extends ArgList {
 	- ondamage(char, targ, dmg, skill, btl, vars)
 	onuse but it's done AFTER damage is dealt. Also lets you use the damage we've taken freely, like in
 	drain. Should return a string.
+
+	- onuseatendoffunc(char, targ, skill, btl, vars)
+	onuse but it's the VERY LAST THING THAT IS RAN.
 */
 
 extrasList = {
 	ohko: new Extra({
-		name: "One Hit KO",
+		name: "One Hit KO (Persona)",
 		desc: 'Instantly defeats the foe at a <Chance>% chance. Can be only affected for foes with specific statuses, and/or specific main element, and/or specific affinity to the skill by choice. Can use the {Calculated Stat} stat for calculating chance, or \'none\' to use raw chance, and can attack upon failure.',
 		multiple: true,
 		args: [
@@ -174,7 +177,7 @@ extrasList = {
 	}),
 
 	sacrifice: new Extra({
-		name: "Sacrifice",
+		name: "Sacrifice (Original)",
 		desc: "Will reduce the user's HP to a {HP}.",
 		args: [
 			{
@@ -205,7 +208,7 @@ extrasList = {
 	}),
 
 	charges: new Extra({
-		name: "Charges",
+		name: "Charges (Pixel Dungeon)",
 		desc: "The skill will consume a charge when used, and cannot be used when it runs out of charges, the skill will recharge if <Recharge Rate> is set.",
 		args: [
 			{
@@ -334,7 +337,7 @@ extrasList = {
 	}),
 
 	changeaffinity: new Extra({
-		name: "Change Affinity",
+		name: "Change Affinity (Pokémon)",
 		desc: "Will change <Target/User>'s affinity from the <Weak/Resist/Both> side of <Element> to <Affinity>. *Keep in mind that if you want it to last {Turns} turns, it can't be overwritten by a different affinity until then.*",
 		multiple: true,
 		args: [
@@ -554,7 +557,7 @@ extrasList = {
 	}),
 
 	rest: new Extra({
-		name: "Rest",
+		name: "Rest (Pokémon)",
 		desc: "Forces the user to rest for one turn.",
 		applyfunc(message, skill) {
 			makeExtra(skill, "rest", [true]);
@@ -570,7 +573,7 @@ extrasList = {
 	}),
 
 	buff: new Extra({
-		name: "Stat Buff",
+		name: "Stat Buff (Most Series)",
 		desc: "Will buff or debuff the <Target/User>'s <Stat> at a <Chance>% chance. Positive values for <Stages> indicate a buff while negative values for <Stages> indicate a debuff. You can also make a buff/debuff last {Turns} turns.",
 		multiple: true,
 		args: [
@@ -732,7 +735,7 @@ extrasList = {
 	}),
 
 	powerbuff: new Extra({
-		name: "Power Buff",
+		name: "Power Buff (Original)",
 		desc: "Boosts skill power with <Stat> buffs by, or by up to <Number>, or <Number>% of skill's power.",
 		multiple: true,
 		args: [
@@ -797,7 +800,7 @@ extrasList = {
 	}),
 
 	takemp: new Extra({
-		name: "Take MP",
+		name: "Take MP (Original)",
 		desc: "Will take <MP> MP from the foe each hit.",
 		args: [
 			{
@@ -829,7 +832,7 @@ extrasList = {
 	}),
 
 	stealmp: new Extra({
-		name: "Steal MP",
+		name: "Steal MP (Persona)",
 		desc: "Turns the skill into a skill that takes <Power> MP from the foe.",
 		applyfunc(message, skill) {
 			makeExtra(skill, "stealmp", [true]);
@@ -851,7 +854,7 @@ extrasList = {
 	}),
 
 	steal: new Extra({
-		name: "Steal",
+		name: "Steal (Original)",
 		desc: "Has a <Chance>% chance to steal {Amount} of the foe team's items.",
 		multiple: true,
 		args: [
@@ -980,7 +983,7 @@ extrasList = {
 	}),
 
 	drain: new Extra({
-		name: "Drain",
+		name: "Drain (Original)",
 		desc: "Heals the user for 1/<Amount> of the damage dealt.",
 		args: [
 			{
@@ -1004,7 +1007,7 @@ extrasList = {
 	}),
 
 	feint: new Extra({
-		name: "Feint",
+		name: "Feint (Pokémon)",
 		desc: "Bypasses shielding skills like Makarakarn and Tetrakarn.",
 		applyfunc(message, skill) {
 			makeExtra(skill, "feint", [true]);
@@ -1017,7 +1020,7 @@ extrasList = {
 	}),
 
 	healverse: new Extra({
-		name: "Healverse",
+		name: "Healverse (Sonic Robo Blast 2 Persona)",
 		desc: "After the foe is hit with this skill, each hit done to it will heal <Damage Percent>% of damage dealt to the attacker. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
 		args: [
 			{
@@ -1068,7 +1071,7 @@ extrasList = {
 	}),
 
 	revitaverse: new Extra({
-		name: "Revitaverse",
+		name: "Revitaverse (Original)",
 		desc: "After the foe is hit with this skill, each hit done to it will give the attacker <Damage Percent>% of damage dealt MP. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
 		args: [
 			{
@@ -1120,7 +1123,7 @@ extrasList = {
 	}),
 
 	powerverse: new Extra({
-		name: "Powerverse",
+		name: "Powerverse (Original)",
 		desc: "After the foe is hit with this skill, each hit done to it will boost LB% by <Damage Percent>%. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
 		args: [
 			{
@@ -1171,7 +1174,7 @@ extrasList = {
 	}),
 
 	spreadverse: new Extra({
-		name: "Spreadverse",
+		name: "Spreadverse (Sonic Robo Blast 2 Persona)",
 		desc: "After the foe is hit with this skill, each hit done to it will spread <Damage Percent>% of damage to other foes. This lasts for <Turns> turns. You can add flair to this skill with a {Deploy Message}.",
 		args: [
 			{
@@ -1221,7 +1224,7 @@ extrasList = {
 	}),
 
 	lonewolf: new Extra({
-		name: "Lone Wolf",
+		name: "Lone Wolf (Original)",
 		desc: "Skill Power boosted by <Multiplier>x when alone, or all allies are down.",
 		args: [
 			{
@@ -1247,7 +1250,7 @@ extrasList = {
 	}),
 
 	heavenwrath: new Extra({
-		name: "Heaven's Wrath",
+		name: "Heaven's Wrath (Original)",
 		desc: "Skill Power boosted by <Multiplier>x when not alone, and all allies are alive.",
 		args: [
 			{
@@ -1273,7 +1276,7 @@ extrasList = {
 	}),
 
 	statcalc: new Extra({
-		name: "Stat Calculation",
+		name: "Stat Calculation (Original)",
 		desc: "Uses the user's <Stat> for calculating damage.",
 		args: [
 			{
@@ -1296,7 +1299,7 @@ extrasList = {
 	}),
 
 	hitcalc: new Extra({
-		name: "Hit Calculation",
+		name: "Hit Calculation (Original)",
 		desc: "Uses the opponent's <Stat> for calculating damage.",
 		args: [
 			{
@@ -1319,7 +1322,7 @@ extrasList = {
 	}),
 
 	hpcalc: new Extra({
-		name: "HP Calculation",
+		name: "HP Calculation (Original)",
 		desc: "Current HP can boost or decrease damage by up to <Percent>%.",
 		args: [
 			{
@@ -1337,7 +1340,7 @@ extrasList = {
 	}),
 
 	mpcalc: new Extra({
-		name: "MP Calculation",
+		name: "MP Calculation (Original)",
 		desc: "Current MP can boost or decrease damage by up to <Percent>%.",
 		args: [
 			{
@@ -1355,7 +1358,7 @@ extrasList = {
 	}),
 
 	multistatus: new Extra({
-		name: "Multistatus",
+		name: "Multistatus (Pokémon)",
 		desc: "This skill becomes a status skill that will inflict one of multiple statuses.",
 		args: [
 			{
@@ -1389,7 +1392,7 @@ extrasList = {
 	}),
 
 	dualelement: new Extra({
-		name: "Dual Element",
+		name: "Dual Element (Original)",
 		desc: "The skill may use the 2nd element in addition to the first.",
 		args: [
 			{
@@ -1411,7 +1414,7 @@ extrasList = {
 	}),
 
 	affinitypow: new Extra({
-		name: "Affinity Power",
+		name: "Affinity Power (Original)",
 		desc: "Power boosted by <Damage> per affinity point. Works only for <:passive:963413845253193758>affinitypoint passives.",
 		args: [
 			{
@@ -1433,7 +1436,7 @@ extrasList = {
 	}),
 
 	forcetech: new Extra({
-		name: "Force Technical",
+		name: "Force Technical (Persona)",
 		desc: "Forces a skill to tech off of different status effects instead of the preset ones.",
 		args: [
 			{
@@ -1476,7 +1479,7 @@ extrasList = {
 	}),
 
 	forceformula: new Extra({
-		name: "Force Formula",
+		name: "Force Formula (Original)",
 		desc: "Forces a skill to use a different damage formula.",
 		args: [
 			{
@@ -1499,7 +1502,7 @@ extrasList = {
 	}),
 
 	rollout: new Extra({
-		name: "Rollout",
+		name: "Rollout (Pokémon)",
 		desc: "Boost the skill's power by <Boost> every consecutive use, but the user is locked to using it until power reaches <Max Boost>x or skill is used <Times> times in a row.",
 		args: [
 			{
@@ -1559,7 +1562,7 @@ extrasList = {
 	}),
 
 	sustain: new Extra({
-		name: "Sustain",
+		name: "Sustain (Original)",
 		desc: "Multi-Hits do not have power altered as hits go on.",
 		args: [],
 		applyfunc(message, skill, args) {
@@ -1576,7 +1579,7 @@ extrasList = {
 	}),
 
 	reverse: new Extra({
-		name: "Reverse",
+		name: "Reverse (Original)",
 		desc: "Multi-Hits gradually increase in power instead of decreasing.",
 		args: [],
 		applyfunc(message, skill, args) {
@@ -1593,7 +1596,7 @@ extrasList = {
 	}),
 
 	powhit: new Extra({
-		name: "Power Hit",
+		name: "Power Hit (Original)",
 		desc: "With multi-hits, specific hits will have their power increased.",
 		args: [
 			{
@@ -1630,7 +1633,7 @@ extrasList = {
 	}),
 
 	multihit: new Extra({
-		name: "Multi",
+		name: "Multi (Original)",
 		desc: "A <Chance>% chance to add <Number of Hits> extra hit(s) to the skill, multi-hit already or not.",
 		args: [
 			{
@@ -1670,7 +1673,7 @@ extrasList = {
 	}),
 
 	guts: new Extra({
-		name: "Guts",
+		name: "Guts (Pokémon)",
 		desc: "When inflicted with <Status>, skills' power will be boosted by <Multiplier>x.",
 		args: [
 			{
@@ -1713,7 +1716,7 @@ extrasList = {
 	}),
 
 	metronome: new Extra({
-		name: "Metronome",
+		name: "Metronome (Pokémon)",
 		desc: "Uses a random skill... or chooses from a set of <Skills>.",
 		args: [
 			{
@@ -1736,7 +1739,7 @@ extrasList = {
 	}),
 
 	copyskill: new Extra({
-		name: "Copy Skill",
+		name: "Copy Skill (Original)",
 		unregsiterable: true,
 		hardcoded: true,
 		applyfunc(message, skill, args) {
@@ -1749,7 +1752,7 @@ extrasList = {
 	}),
 
 	brickbreak: new Extra({
-		name: "Brick Break",
+		name: "Brick Break (Pokémon)",
 		desc: "Breaks any kind of shield the foe may have, but reduces damage when doing so.",
 		args: [
 			{
@@ -1776,7 +1779,7 @@ extrasList = {
 	}),
 
 	endeavor: new Extra({
-		name: "Endeavor",
+		name: "Endeavor (Pokémon)",
 		desc: 'Brings the target to your HP. Fails if you have equal to or more HP than the target. Does not work on bosses.',
 		args: [],
 		applyfunc(message, skill, args) {
@@ -1801,7 +1804,7 @@ extrasList = {
 	}),
 
 	superfang: new Extra({
-		name: "Super Fang",
+		name: "Super Fang (Pokémon)",
 		desc: "Halves the target's current HP. Does not work on bosses.",
 		args: [],
 		applyfunc(message, skill, args) {
@@ -1826,7 +1829,7 @@ extrasList = {
 	}),
 
 	psychoshift: new Extra({
-		name: "Psycho Shift",
+		name: "Psycho Shift (Pokémon)",
 		desc: "Transfers the user's status to the target. Cannot transfer stackable statusses.",
 		args: [],
 		applyfunc(message, skill, args) {
@@ -1855,7 +1858,7 @@ extrasList = {
 	}),
 
 	dragonrage: new Extra({
-		name: "Dragon Rage",
+		name: "Dragon Rage (Pokémon)",
 		desc: "Deals an exact number of damage to the target.",
 		args: [
 			{
@@ -1891,7 +1894,7 @@ extrasList = {
 	}),
 
 	link: new Extra({
-		name: "Link",
+		name: "Link (Sonic Robo Blast 2 Persona)",
 		desc: "After use, if the same enemy is attacked with a single target skill, this skill with a <Power Boost per hit> multiplier is used after. Lasts until <Turns> turns pass, or the enemy is not hit. Stackable.",
 		args: [
 			{
@@ -1945,6 +1948,92 @@ extrasList = {
 			if (vars[0] && vars[0] != 1) txt += ` with a **${vars[0]}x** multiplier`;
 			if (vars[1] && vars[1] != 3) txt += ` that lasts **${vars[1]} turns**`;
 			return txt;
+		}
+	}),
+
+	roar: new Extra({
+		name: "Roar (Pokémon)",
+		desc: "<Chance>% chance to send the foe into backup, or debuff <Fail Stat> by <Fail Stages> if they cannot be sent into backup.",
+		args: [
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Fail Stat",
+				type: "Word"
+			},
+			{
+				name: "Fail Stages",
+				type: "Num"
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (args[0] <= 0 || args[0] > 100) return message.channel.send(`${args[0]} is an invalid number! Please enter a value between 0 and 100.`);
+			let roar = [args[0]];
+
+			if (![...stats, "crit", "all"].includes(args[1]))
+				return void message.channel.send("That's not a valid stat!");
+			else
+				roar.push(args[1]);
+
+			if (args[2] == 0)
+				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
+			else if (args[2] > 3 || args[2] < -3)
+				return void message.channel.send("Too many/little stages! The minimum is -3, whilst the maximum is 3.");
+			else
+				roar.push(args[2]);
+
+			makeExtra(skill, "roar", [args[0]]);
+			return true
+		},
+		onuseatendoffunc(char, targ, skill, btl, vars) {
+			if (targ.hp > 0) {
+				let canSwitch = true;
+				let party = btl.teams[targ.team];
+				let possiblebackup = [];
+
+				if (party.backup.length <= 0)
+					canSwitch = false;
+				else {
+					for (let i in party.backup) {
+						if (party.backup[i].hp > 0) possiblebackup.push(i);
+					}
+				}
+
+				if (isBoss(targ)) canSwitch = false;
+
+				if (canSwitch) {
+					if (vars[0] >= 100 || randNum(1, 100) <= vars[0]) {
+						let k = randNum(possiblebackup.length-1);
+						let char1 = objClone(targ);
+						let char2 = objClone(party.backup[k]);
+						party.members[targ.pos] = objClone(char2);
+						party.backup[k] = objClone(char1);
+
+						return `${char1.name} was blown out of battle and replaced with ${char2.name}!`;
+					}
+				} else {
+					if (vars[1]) {
+						let stat = vars[1] ?? 'agl';
+						let stages = vars[2] ?? -1;
+
+						buffStat(targ, stat, stages);
+						return `${targ.name} felt winded from that last attack...\nTheir ${(stat == 'all') ? 'STATS' : stat.toUpperCase()} was decreased!`;
+					} else {
+						return `${targ.name} felt winded from that last attack...\n...but it had no effect.`;
+					}
+				}
+			}
+		},
+		getinfo(vars, skill) {
+			let str = `**${vars[0]}%** chance to **switch the target out of battle**`;
+
+			if (vars[1]) str += `. If it fails, debuff the foe's **${vars[1]}**`;
+			if (vars[1] && vars[2]) str += ` by **${-vars[2]}**`;
+
+			return str;
 		}
 	}),
 }

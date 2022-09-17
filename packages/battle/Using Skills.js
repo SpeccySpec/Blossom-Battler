@@ -61,89 +61,6 @@ dodgeTxt = (char, targ) => {
 	}
 }
 
-// Can char afford to use skill? If so, return true.
-canAfford = (char, skill) => {
-	let cost = parseInt(skill.cost);
-	let costtype = skill.costtype;
-	if (!costtype) costtype = 'mp';
-
-	switch(costtype.toLowerCase()) {
-		case 'hppercent':
-			if (isBoss(char)) return true;
-			if (char.hp <= Math.round((char.maxhp/100) * cost)) return false;
-			break;
-
-		case 'mppercent':
-			if (isBoss(char)) return true;
-			if (char.mp < Math.round((char.maxmp/100) * cost)) return false;
-			break;
-
-		case 'mp':
-			if (char.mp < cost) return false;
-			break;
-		
-		case 'lb':
-			if (char.lbp < cost) return false;
-			break;
-
-		default:
-			if (char.hp <= cost) return false;
-	}
-
-	return true
-}
-
-// Can we use this skill?
-canUseSkill = (char, skill) => {
-	// Can't use passives.
-	if (skill.type === "passive") return false;
-
-	// Statusses
-	if (char.status) {
-		switch(char.status) {
-			case 'silence':
-				if (skill.atktype === "magic") return false;
-				break;
-
-			case 'dazed':
-				if (skill.atktype === "physical" || skill.atktype === "ranged") return false;
-				break;
-
-			case 'ego':
-				if (skill.type === "heal") return false;
-				break;
-		}
-	}
-
-	return canAfford(char, skill);
-}
-
-// Use cost costtype with char.
-useCost = (char, cost, costtype) => {
-	if (!costtype) costtype === 'mp';
-
-	switch(costtype.toLowerCase()) {
-		case 'hppercent':
-			if (!isBoss(char)) char.hp = Math.max(1, char.hp - Math.round((char.maxhp/100) * cost));
-			break;
-
-		case 'mppercent':
-			if (!isBoss(char)) char.mp = Math.max(0, char.mp - Math.round((char.maxmp/100) * cost));
-			break;
-
-		case 'mp':
-			char.mp = Math.max(0, char.mp - cost);
-			break;
-		
-		case 'lb':
-			char.lbp = Math.max(0, char.lbp - cost);
-			break;
-
-		default:
-			char.hp = Math.max(1, char.hp - cost);
-	}
-}
-
 // Generate Damage dealt to targ with skill using char's stats.
 genDmg = (char, targ, btl, skill) => {
 	let settings = setUpSettings(btl.guild.id);
@@ -952,6 +869,23 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 					}
 
 					result.txt += statusList.status.inflictStatus(char, targ, skill, status, btl, skill.pow);
+				}
+
+				// OnUseAtEndOfFunc
+				if (skill.extras) {
+					for (let i in skill.extras) {
+						if (!extrasList[i]) continue;
+						if (!extrasList[i].onuseatendoffunc) continue;
+						if (noExtraArray && noExtraArray.includes(i)) continue;
+
+						if (extrasList[i].multiple) {
+							for (let k in skill.extras[i]) {
+								result.txt += `\n${(extrasList[i].onuseatendoffunc(char, targ, skill, btl, skill.extras[i][k] ) ?? '')}`;
+							}
+						} else {
+							result.txt += `\n${(extrasList[i].onuseatendoffunc(char, targ, skill, btl, skill.extras[i]) ?? '')}`;
+						}
+					}
 				}
 			}
 		}

@@ -72,12 +72,31 @@ statWithBuff = (stat, buff) => {
 
 buffStat = (f, stat, amount, boosted) => {
 	let statBuff = stat.toLowerCase();
-	f.buffs[statBuff] += amount;
 
-	console.log(boosted + f.buffs[statBuff])
+	switch(statBuff) {
+		case 'all':
+			for (let stat of f.buffs) {
+				stat += amount;
 
-	if (boosted || Math.abs(f.buffs[statBuff]) == 4) f.buffs[statBuff] = Math.max(Math.min(f.buffs[statBuff], 4), -4);
-	else f.buffs[statBuff] = Math.max(Math.min(f.buffs[statBuff], 3), -3);
+				console.log(boosted + stat)
+
+				if (boosted || Math.abs(stat) == 4) 
+					stat = Math.max(Math.min(stat, 4), -4);
+				else 
+					stat = Math.max(Math.min(stat, 3), -3);
+			}
+			break;
+
+		default:
+			f.buffs[statBuff] += amount;
+
+			console.log(boosted + f.buffs[statBuff])
+
+			if (boosted || Math.abs(f.buffs[statBuff]) == 4) 
+				f.buffs[statBuff] = Math.max(Math.min(f.buffs[statBuff], 4), -4);
+			else 
+				f.buffs[statBuff] = Math.max(Math.min(f.buffs[statBuff], 3), -3);
+	}
 }
 
 inflictStatus = (char, status, notxt) => {

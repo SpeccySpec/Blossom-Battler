@@ -1,3 +1,4 @@
+// Get full name of skill including elements.
 getFullName = (skillDefs) => {
 	let fullName = '';
 	
@@ -11,6 +12,7 @@ getFullName = (skillDefs) => {
 	return fullName;
 }
 
+// Get skill ID
 getSkillID = (skill) => {
 	skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
 
@@ -21,4 +23,90 @@ getSkillID = (skill) => {
 	}
 
 	return skill.name;
+}
+
+// Can char afford to use skill? If so, return true.
+canAfford = (char, skill) => {
+	let cost = parseInt(skill.cost);
+	let costtype = skill.costtype;
+	if (!costtype) costtype = 'mp';
+
+	switch(costtype.toLowerCase()) {
+		case 'hppercent':
+			if (isBoss(char)) return true;
+			if (char.hp <= Math.round((char.maxhp/100) * cost)) return false;
+			break;
+
+		case 'mppercent':
+			if (isBoss(char)) return true;
+			if (char.mp < Math.round((char.maxmp/100) * cost)) return false;
+			break;
+
+		case 'mp':
+			if (char.mp < cost) return false;
+			break;
+		
+		case 'lb':
+			if (char.lbp < cost) return false;
+			break;
+
+		default:
+			if (char.hp <= cost) return false;
+	}
+
+	return true
+}
+
+// Can we use this skill?
+canUseSkill = (char, skill) => {
+	if (!skill) return false;
+	if (!skill.type) return false;
+
+	// Can't use passives.
+	if (skill.type === "passive") return false;
+
+	// Statusses
+	if (char.status) {
+		switch(char.status) {
+			case 'silence':
+				if (skill.atktype === "magic") return false;
+				break;
+
+			case 'dazed':
+				if (skill.atktype === "physical" || skill.atktype === "ranged") return false;
+				break;
+
+			case 'ego':
+				if (skill.type === "heal") return false;
+				break;
+		}
+	}
+
+	return canAfford(char, skill);
+}
+
+// Use cost costtype with char.
+useCost = (char, cost, costtype) => {
+	if (!costtype) costtype === 'mp';
+
+	switch(costtype.toLowerCase()) {
+		case 'hppercent':
+			if (!isBoss(char)) char.hp = Math.max(1, char.hp - Math.round((char.maxhp/100) * cost));
+			break;
+
+		case 'mppercent':
+			if (!isBoss(char)) char.mp = Math.max(0, char.mp - Math.round((char.maxmp/100) * cost));
+			break;
+
+		case 'mp':
+			char.mp = Math.max(0, char.mp - cost);
+			break;
+		
+		case 'lb':
+			char.lbp = Math.max(0, char.lbp - cost);
+			break;
+
+		default:
+			char.hp = Math.max(1, char.hp - cost);
+	}
 }
