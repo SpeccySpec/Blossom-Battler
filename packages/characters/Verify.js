@@ -22,6 +22,7 @@ verifiedChar = (char) => {
 	let statusses = 0;
 	for (let i of char.skills) {
 		let skill = skillFile[i];
+		if (!skill) return false;
 		if (skill.pow*(skill.hits ?? 1) > 1000) return false;
 
 		if (typeof(skill.type) == 'object') {
