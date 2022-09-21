@@ -779,15 +779,13 @@ extrasList = {
 			if (!vars[2]) skill.pow += lmao * 3
 		},
 		getinfo(vars, skill) {
-			let txt = `Increases in power with`
+			let txt = `Increases in power with `
 
 			let curPB = []
 			for (let i in vars) {
-				txt += ` **${powBuffs[i][0].toUpperCase()}** buffs`;
-
 				curPB = vars[i]
-
-				txt += ` by **${curPB[2] ? 'up to' : ''} ${curPB[1] + ((curPB[2] && curPB[3]) ? 100 : 0) }${curPB[3] ? '% of' : ''} power**`
+				
+				txt += `**${curPB[0].toUpperCase()}** buffs by **${curPB[2] ? 'up to' : ''} ${curPB[1] + ((curPB[2] && curPB[3]) ? 100 : 0) }${curPB[3] ? '% of' : ''} power**`
 
 				if (i < vars.length - 2) {
 					txt += `, `
