@@ -1281,7 +1281,7 @@ commands.editweapon = new Command({
                 weaponFile[args[0]].cost = Math.max(0, parseInt(args[2]));
                 break;
             case 'skill':
-                if (!skillFile[arg[2]]) return message.channel.send(`${args[2]} is not a valid skill.`);
+                if (!skillFile[args[2]]) return message.channel.send(`${args[2]} is not a valid skill.`);
                 weaponFile[args[0]].skill = args[2];
                 break;
             case 'element':
@@ -1803,7 +1803,7 @@ commands.editarmor = new Command({
                 armorFile[args[0]][editField] = parseInt(args[2])
                 break;
             case 'skill':
-                if (!skillFile[arg[2]]) return message.channel.send(`${args[2]} is not a valid skill.`);
+                if (!skillFile[args[2]]) return message.channel.send(`${args[2]} is not a valid skill.`);
                 armorFile[args[0]].skill = args[2];
                 break;
             case 'image':
