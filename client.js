@@ -1072,9 +1072,10 @@ replaceTxt = (str, ...txt) => {
 }
 
 // Global JSONs
-skillFile = setUpFile(`${dataPath}/json/skills.json`);
-shipFile = setUpFile(`${dataPath}/json/ships.json`);
-pmdFile = setUpFile(`${dataPath}/json/pmdquestions.json`);
+skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+shipFile = setUpFile(`${dataPath}/json/ships.json`, true);
+pmdFile = setUpFile(`${dataPath}/json/pmdquestions.json`, true);
+trialGlobals = setUpFile(`${dataPath}/json/globaltrials.json`, true)
 
 function getDateAfterTwoWeeks() {
 	const date = new Date();

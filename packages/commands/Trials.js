@@ -516,3 +516,26 @@ commands.triallevel = new Command({
         longtrialdesc(trialFile[args[0]], trialFile[args[0]].name, message)
     }
 })
+
+commands.uploadtrial = new Command({
+    desc: "Uploads the trial for all to see! You can force all users to use this server's current settings, or you can let them use their own.",
+    section: 'trials',
+    aliases: ['globaltrial', 'setglobaltrial'],
+    args: [
+        {
+            name: "Name",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Use Server Settings",
+            type: "YesNo",
+            forced: true
+        }
+    ],
+    checkban: true,
+    func: async(message, args) => {
+        trialFile = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`, true)
+        trialGlobals = setUpFile(`${dataPath}/json/globaltrials.json`, true)
+    }
+})
