@@ -392,7 +392,7 @@ healList = {
 		applyfunc(message, skill, args) {
 			const turns = args[0];
 
-			if (turns <= 0) return void message.channel.send("You can't wish for 0 or less!");
+			if (turns <= 0) return void message.channel.send("You can't wish for 0 turns or less!");
 			makeHeal(skill, "wish", [turns]);
 			let hasHeal = false
 			for (var i in skill.heal) {
@@ -456,7 +456,7 @@ healList = {
 			if (stat != 'hp' && stat != 'mp' && stat != 'hppercent' && stat != 'mppercent' && stat != 'lb')
 				return void message.channel.send("You entered an invalid value for <Cost Type>! It can be either HP, HPPercent, MP, MPPercent, or LB.");
 			
-			makeExtra(skill, "need", [less, equal, percent, stat]);
+			makeHeal(skill, "need", [less, equal, percent, stat]);
 			return true
 		},
 		canuse(char, skill, btl, vars) {
