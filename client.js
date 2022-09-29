@@ -803,7 +803,7 @@ getServerUser = (user, message) => {
 }
 
 setUpSettings = (guild) => {
-	let settings = setUpFile(`${dataPath}/json/${guild}/settings.json`)
+	let settings = setUpFile(`${dataPath}/json/${guild}/settings.json`);
 
 	if (Object.keys(settings).length === 0) {
 		settings = {

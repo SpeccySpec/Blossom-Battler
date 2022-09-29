@@ -518,7 +518,7 @@ commands.triallevel = new Command({
 })
 
 commands.uploadtrial = new Command({
-    desc: "Uploads the trial for all to see! You can force all users to use this server's current settings, or you can let them use their own.",
+    desc: "Uploads the trial for all to see! You can force all users to use this server's current settings, or you can let them use their own. There is a criteria however!```diff\n- Be as sensible as possible please!\n-Don't make your trial impossible.\n- Do not copy another's trial!```",
     section: 'trials',
     aliases: ['globaltrial', 'setglobaltrial'],
     args: [
@@ -530,12 +530,89 @@ commands.uploadtrial = new Command({
         {
             name: "Use Server Settings",
             type: "YesNo",
-            forced: true
+            forced: false
         }
     ],
     checkban: true,
-    func: async(message, args) => {
-        trialFile = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`, true)
+    func: (message, args) => {
+		enemies = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`, true)
+        trials = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`, true)
         trialGlobals = setUpFile(`${dataPath}/json/globaltrials.json`, true)
+
+		if (!trials[args[0]]) return void message.channel.send("This trial does not exist in this server!");
+		if (!trials[args[0]].waves || trials[args[0]].waves.length <= 0) return void message.channel.send("This trial does not have any waves! Try adding some before uploading them!");
+
+		// Let's get this trial up and out there!
+		let gTrial = objClone(trials[args[0]]);
+
+		// Send all enemies to the challengers.
+		gTrial.enemydata = {};
+		for (let i in gTrial.waves) {
+			for (let k in gTrial.waves[i]) {
+				if (!enemies[gTrial.waves[i][k]]) return void message.channel.send(`There was a problem uploading this trial! Please see the following:\nThe enemey ${gTrial.waves[i][k]} does not exist.`);
+
+				if (!gTrial.enemydata[gTrial.waves[i][k]]) {
+					gTrial.enemydata[gTrial.waves[i][k]] = objClone(enemies[gTrial.waves[i][k]]);
+				}
+			}
+		}
+
+		// Send server settings.
+		if (args[1]) gTrial.forcesettings = objClone(setUpSettings(message.guild.id));
+
+		// Online stats
+		gTrial.online = {
+			likes: 0,
+			dislikes: 0,
+			plays: 0,
+			completions: 0
+		}
+
+		// Calculate stars (number of waves/2)
+		gTrial.stars = Math.max(1, Math.floor(trials[args[0]].waves.length/2));
+
+		// Nothing went wrong! Let's save this trial.
+		message.channel.send(`The trial of ${trials[args[0]].name} has been uploaded as ID ${Object.keys(trialGlobals).length}!`);
+
+		trialGlobals[Object.keys(trialGlobals).length] = objClone(gTrial);
+		fs.writeFileSync(`${dataPath}/json/globaltrials.json`, JSON.stringify(trialGlobals, null, 4));
+	}
+})
+
+commands.globaltrials = new Command({
+    desc: "Gets all currently uploaded global trials. Can be sorted by different methods:```diff\n+ Newest\n+ Oldest\n+ MostLiked\n+ MostDisliked\n+ MostPlayed\n+ MostCompleted```",
+    section: 'trials',
+    aliases: ['seeglobaltrials', 'listglobaltrials'],
+    args: [
+        {
+            name: "Sort By",
+            type: "Word",
+            forced: false
+        }
+    ],
+    func: (message, args) => {
+		trialGlobals = setUpFile(`${dataPath}/json/globaltrials.json`, true);
+
+		let valid = ['newest', 'oldest', 'mostliked', 'mostdisliked', 'mostplayed', 'mostcompleted'];
+		let search = (args[0] && valid.includes(args[0].toLowerCase())) ? args[0].toLowerCase() : 'mostliked';
+		let array = [];
+
+		for (let i in trialGlobals) {
+			let canadd = false;
+
+			// Will do search types later.
+			canadd = true;
+
+			// If we can't add, skip the rest of this.
+			if (!canadd) continue;
+
+			// Title of the trial + stars.
+			let titlet = `__<:golden:973077051751940138>${trialGlobals[i].stars ?? 1}__ ${trialGlobals[i].name ?? `Public Trial #${i}`}`;
+			let desct = `ID: ${i}\n${trialGlobals[i].online.likes}<:effective:963413917038694401>, ${trialGlobals[i].online.dislikes}<:resist:963413917185491014>, ${trialGlobals[i].online.plays}${statusEmojis.fear}, ${trialGlobals[i].online.completions}${elementEmoji.slash}`;
+			array.push({title: titlet, desc: desct});
+		}
+
+		if (array.length < 1) return void message.channel.send("No online trials found! Why not be the first to make one? That ID of 0 would look pretty sweet...");
+		listArray(message.channel, array, message.author.id);
     }
 })
