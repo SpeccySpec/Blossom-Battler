@@ -539,8 +539,10 @@ commands.uploadtrial = new Command({
         trials = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`, true)
         trialGlobals = setUpFile(`${dataPath}/json/globaltrials.json`, true)
 
-		if (!trials[args[0]]) return void message.channel.send("This trial does not exist in this server!");
-		if (!trials[args[0]].waves || trials[args[0]].waves.length <= 0) return void message.channel.send("This trial does not have any waves! Try adding some before uploading them!");
+		if (!trials[args[0]]) return void message.channel.send("There was a problem uploading this trial! Please see the following:\nThis trial does not exist in this server!");
+		if (!trials[args[0]].waves || trials[args[0]].waves.length <= 0) return void message.channel.send("There was a problem uploading this trial! Please see the following:\nThis trial does not have any waves! Try adding some before uploading them!");
+		if (trials[args[0]].uploaded) return void message.channel.send(`There was a problem uploading this trial! Please see the following:\nThis trial has already been uploaded! Check ID **${trials[args[0]].uploaded}**.`);
+		if (!trials[args[0]].verified) return void message.channel.send("There was a problem uploading this trial! Please see the following:\nThis trial has not been verified. To verify the trial, complete it atleast once!");
 
 		// Let's get this trial up and out there!
 		let gTrial = objClone(trials[args[0]]);
@@ -549,7 +551,7 @@ commands.uploadtrial = new Command({
 		gTrial.enemydata = {};
 		for (let i in gTrial.waves) {
 			for (let k in gTrial.waves[i]) {
-				if (!enemies[gTrial.waves[i][k]]) return void message.channel.send(`There was a problem uploading this trial! Please see the following:\nThe enemey ${gTrial.waves[i][k]} does not exist.`);
+				if (!enemies[gTrial.waves[i][k]]) return void message.channel.send(`There was a problem uploading this trial! Please see the following:\nThe enemy ${gTrial.waves[i][k]} does not exist.`);
 
 				if (!gTrial.enemydata[gTrial.waves[i][k]]) {
 					gTrial.enemydata[gTrial.waves[i][k]] = objClone(enemies[gTrial.waves[i][k]]);
@@ -568,14 +570,18 @@ commands.uploadtrial = new Command({
 			completions: 0
 		}
 
+		gTrial.author = [message.author.username, message.author.id];
+
 		// Calculate stars (number of waves/2)
 		gTrial.stars = Math.max(1, Math.floor(trials[args[0]].waves.length/2));
 
 		// Nothing went wrong! Let's save this trial.
 		message.channel.send(`The trial of ${trials[args[0]].name} has been uploaded as ID ${Object.keys(trialGlobals).length}!`);
+		trials[args[0]].uploaded = Object.keys(trialGlobals).length;
 
 		trialGlobals[Object.keys(trialGlobals).length] = objClone(gTrial);
 		fs.writeFileSync(`${dataPath}/json/globaltrials.json`, JSON.stringify(trialGlobals, null, 4));
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trials, null, 4));
 	}
 })
 
@@ -607,8 +613,8 @@ commands.globaltrials = new Command({
 			if (!canadd) continue;
 
 			// Title of the trial + stars.
-			let titlet = `__<:golden:973077051751940138>${trialGlobals[i].stars ?? 1}__ ${trialGlobals[i].name ?? `Public Trial #${i}`}`;
-			let desct = `ID: ${i}\n${trialGlobals[i].online.likes}<:effective:963413917038694401>, ${trialGlobals[i].online.dislikes}<:resist:963413917185491014>, ${trialGlobals[i].online.plays}${statusEmojis.fear}, ${trialGlobals[i].online.completions}${elementEmoji.slash}`;
+			let titlet = `__<:golden:973077051751940138>${trialGlobals[i].stars ?? 1}__ ${trialGlobals[i].name ?? `Public Trial #${i}`} _(${trialGlobals[i].author[0]})_`;
+			let desct = `**ID: ${i}\n${trialGlobals[i].online.likes}<:effective:963413917038694401>, ${trialGlobals[i].online.dislikes}<:resist:963413917185491014>, ${trialGlobals[i].online.plays}${statusEmojis.fear}, ${trialGlobals[i].online.completions}${elementEmoji.slash}**`;
 			array.push({title: titlet, desc: desct});
 		}
 

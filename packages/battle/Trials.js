@@ -13,7 +13,23 @@ nextWave = (btl) => {
 		.setTitle(`Wave #${btl.trialwave+1} completed!`)
 
 	if (!btl.trial.waves[btl.trialwave+1]) {
-		DiscordEmbed.setDescription(`Team **${btl.teams[0].name}** is _victorious_ in the trial of **${btl.trial.name}**!`);
+		let str = `Team **${btl.teams[0].name}** is _victorious_ in the trial of **${btl.trial.name}**!`;
+
+		if (btl.trial.stars) {
+			str += `\n**All participants earned __${btl.trial.stars}<:golden:973077051751940138>__!**`;
+		}
+
+		if (!btl.trial.online) {
+			let trials = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`, true);
+
+			if (trials[btl.trial.id]) {
+				trials[btl.trial.id].verified = true;
+				str += "\n_The trial is now been verified! Why not try uploading it with ''rpg!uploadtrial''?_";
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trials, null, 4));
+			}
+		}
+
+		DiscordEmbed.setDescription(str);
 		btl.channel.send({embeds: [DiscordEmbed]});
 
 		fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, '{}');
