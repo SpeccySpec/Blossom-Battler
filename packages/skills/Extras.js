@@ -56,6 +56,9 @@ Extra = class extends ArgList {
 
 	- onuseatendoffunc(char, targ, skill, btl, vars)
 	onuse but it's the VERY LAST THING THAT IS RAN.
+
+	- skillfailonuse(char, targ, skill, btl, vars)
+	On the skill's use, the skill will fail if the function returns true.
 */
 
 extrasList = {
@@ -1696,7 +1699,11 @@ extrasList = {
 		},
 		statmod(char, skill, vars, btl) {
 			if (!char.status) return;
-			if (vars.includes(char.status)) skill.pow *= vars[0];
+
+			if (vars.includes(char.status)) {
+				console.log(`Guts activate for ${char.status}, ${skill.pow} => ${skill.pow*vars[0]}`);
+				skill.pow *= vars[0];
+			}
 		},
 		getinfo(vars, skill) { //SOMEONE HAS TO TEST IF THIS WORKS PROPERLY
 			let txt = `**${vars[0]}x** power boost when inflicted with `;
@@ -2034,6 +2041,31 @@ extrasList = {
 			return str;
 		}
 	}),
+
+	dreameater: new Extra({
+		name: "Dream Eater (Pokémon)",
+		desc: "The skill will fail if the target is not inflicted with <Status Effect>",
+		multiple: true,
+		args: [
+			{
+				name: "Status Effect",
+				type: "Word",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (!statusEffects.includes(args[0].toLowerCase())) return void message.channel.send(`${args[0]} is not a valid status effect.`);
+			
+			makeExtra(skill, "dreameater", [args[0].toLowerCase()]);
+			return true
+		},
+		skillfailonuse(char, targ, skill, btl, vars) {
+			return (targ.status != vars[0].toLowerCase());
+		},
+		getinfo(vars, skill) {
+			return `Fails if the **target** is not afflicted with ${statusEmojis[vars[0]] ?? '<:burn:963413989688213524>'}**${statusNames[vars[0]] ?? 'Burning'}**.`
+		}
+	})
 }
 
 // Make an Extra for a skill. "func" should be an array of 1-5 values indicating what the extra does.

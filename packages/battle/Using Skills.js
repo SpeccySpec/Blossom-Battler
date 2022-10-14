@@ -119,7 +119,7 @@ genDmg = (char, targ, btl, skill) => {
 		switch(damageformula) {
 			case 'persona':
 				dmg = Math.round(5 * Math.sqrt(def * skill.pow))+randNum(-7, 7);
-				console.log(`Attack Stat: ${atkStat}, Endurance Stat: ${endStat}, Base Dmg: ${Math.round(5 * Math.sqrt(def * skill.pow))}, Real Dmg: ${dmg}`);
+				console.log(`Attack Stat: ${atkStat}, Endurance Stat: ${endStat}, Skill Pow: ${skill.pow}, Base Dmg: ${Math.round(5 * Math.sqrt(def * skill.pow))}, Real Dmg: ${dmg}`);
 				break;
 			case 'pokemon':
 				dmg = Math.round((((2*char.level)/5+2)*skill.pow*def)/50+2)+randNum(-7, 7);
@@ -318,8 +318,28 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 			}
 
 			if (returnThis) return result;
+
+			// SkillFailOnUse
+			for (let i in skill.extras) {
+				if (extrasList[i] && extrasList[i].skillfailonuse) {
+					if (noExtraArray && noExtraArray.includes(i)) continue;
+					if (extrasList[i].multiple) {
+						for (let k in skill.extras[i]) {
+							if (extrasList[i].skillfailonuse(char, targ, skill, btl, skill.extras[i][k])) {
+								result.txt = `...But it failed on ${targ.name}.`;
+								return result;
+							}
+						}
+					} else {
+						if (extrasList[i].skillfailonuse(char, targ, skill, btl, skill.extras[i])) {
+							result.txt = `...But it failed on ${targ.name}.`;
+							return result;
+						}
+					}
+				}
+			}
 		}
-		
+
 		let affinity = getAffinity(targ, skill.type);
 		let shieldtype = targ.custom?.shield?.type ?? undefined;
 

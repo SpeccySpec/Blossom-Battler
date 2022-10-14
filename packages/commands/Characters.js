@@ -1095,7 +1095,7 @@ commands.forcelevel = new Command({
 
 		//check every skill. if skill exists, check its level lock. If level lock is lower, set it to '', and then filter later
 		for (let skill in charFile[args[0]].skills) {
-			if (charFile[args[0]].skills[skill].levelLock > args[1]) charFile[args[0]].skills[skill] = '';
+			if (skillFile[charFile[args[0]].skills[skill]].levelLock > args[1]) charFile[args[0]].skills[skill] = '';
 		}
 		charFile[args[0]].skills = charFile[args[0]].skills.filter(skill => skill != '');
 		charFile[args[0]].xp = 0;

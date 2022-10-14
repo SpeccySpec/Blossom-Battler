@@ -174,7 +174,10 @@ commands.registertrial = new Command({
             waves: [],
         }
 
-        if (args[2]) trialFile[args[0]].desc = args[2];
+        if (args[2]) {
+			if (args[2].length > 100) return void message.channel.send("This trial's description is too long!");
+			trialFile[args[0]].desc = args[2];
+		}
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trialFile, null, 4));
         const embed = trialDesc(trialFile[args[0]], trialFile[args[0]].name, message)
@@ -603,6 +606,7 @@ commands.globaltrials = new Command({
 		let search = (args[0] && valid.includes(args[0].toLowerCase())) ? args[0].toLowerCase() : 'mostliked';
 		let array = [];
 
+		let t = {}
 		for (let i in trialGlobals) {
 			let canadd = false;
 
@@ -612,13 +616,55 @@ commands.globaltrials = new Command({
 			// If we can't add, skip the rest of this.
 			if (!canadd) continue;
 
+			// The trial.
+			t = trialGlobals[i];
+
 			// Title of the trial + stars.
-			let titlet = `__<:golden:973077051751940138>${trialGlobals[i].stars ?? 1}__ ${trialGlobals[i].name ?? `Public Trial #${i}`} _(${trialGlobals[i].author[0]})_`;
-			let desct = `**ID: ${i}\n${trialGlobals[i].online.likes}<:effective:963413917038694401>, ${trialGlobals[i].online.dislikes}<:resist:963413917185491014>, ${trialGlobals[i].online.plays}${statusEmojis.fear}, ${trialGlobals[i].online.completions}${elementEmoji.slash}**`;
-			array.push({title: titlet, desc: desct});
+			let titlet = `__<:golden:973077051751940138>${t.stars ?? 1}__ ${t.name ?? `Public Trial #${i}`} ${t.author ? `_(${t.author[0]})_` : ''}`;
+			let desct = `**ID: ${i}\n${t.online.likes}<:effective:963413917038694401>, ${t.online.dislikes}<:resist:963413917185491014>, ${t.online.plays}${statusEmojis.fear}, ${t.online.completions}${elementEmoji.slash}**`;
+
+			// Level Locks
+			if (t.levellock) desct += `\n🔒 _Trial locked behind **Level ${t.levellock}**_`;
+
+			// Add this one to the display!
+			array.push({
+				display: {title: titlet, desc: desct},
+				trialdata: t,
+				id: i
+			});
 		}
 
 		if (array.length < 1) return void message.channel.send("No online trials found! Why not be the first to make one? That ID of 0 would look pretty sweet...");
-		listArray(message.channel, array, message.author.id);
+		listGlobalTrials(message.channel, array, message.author.id);
+    }
+})
+
+commands.playglobaltrial = new Command({
+    desc: "Begins a global trial in this channel denoted by the <ID> with <Party>",
+    section: 'trials',
+    aliases: ['enterglobaltrial'],
+    args: [
+        {
+            name: "ID",
+            type: "Num",
+            forced: true
+        },
+        {
+            name: "Party",
+            type: "Word",
+            forced: true
+        }
+    ],
+    func: (message, args) => {
+		trialGlobals = setUpFile(`${dataPath}/json/globaltrials.json`, true);
+		parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
+
+		if (trialGlobals[args[0]] && parties[args[1]]) {
+			trialGlobals[args[0]].online.plays++;
+			fs.writeFileSync(`${dataPath}/json/globaltrials.json`, JSON.stringify(trialGlobals, null, 4));
+			beginGlobalTrial(trialGlobals[args[0]], args[0], parties[args[1]], args[1], message.channel);
+		} else {
+			message.channel.send("Either the trial or party you entered does not exist!");
+		}
     }
 })
