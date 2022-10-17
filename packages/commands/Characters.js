@@ -1358,8 +1358,11 @@ commands.setmelee = new Command({
 
 // Skill stuff!
 knowsSkill = (charDefs, skill) => {
-	let index = charDefs?.skills?.indexOf(skill);
-	return index >= 0 ? index : null;
+	for (let i in charDefs.skills) {
+		if (charDefs.skills[i] == skill) return i;
+	}
+
+	return null;
 }
 
 commands.learnskill = new Command({
