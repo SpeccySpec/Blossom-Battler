@@ -56,7 +56,7 @@ nextWave = (btl) => {
 	} else {
 		btl.trialwave++;
 
-		let enmFile = btl.trial.enemydata ?? setUpFile(`${dataPath}/json/${btl.guild.id}/enemies.json`, true);
+		let enmFile = btl.trial?.enemydata ?? setUpFile(`${dataPath}/json/${btl.guild.id}/enemies.json`, true);
 
 		btl.teams[1].members = [];
 		btl.teams[1].backup = [];

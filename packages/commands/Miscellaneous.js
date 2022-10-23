@@ -187,6 +187,7 @@ async function sendHelp(message, commandsInCategories) {
 commands.help = new Command({
 	desc: "Lists all of Blossom Battler's commands.",
 	section: "misc",
+	noslash: true,
 	args: [
 		{
 			name: "Category",
@@ -227,11 +228,12 @@ commands.help = new Command({
 					DiscordEmbed.addField(commandsList[i][0], commandsList[i][2], true)
 				}
 			}
+			DiscordEmbed.setFooter(`${commandsList.length} total commands found.`);
 		} else {
 			const file = new Discord.MessageAttachment(`${dataPath}/images/Help.png`);
 			DiscordEmbed.setDescription(`If you want to check commands in which categories, we have a list of them below!\n\nIf you want to see all commands at once, type ${getPrefix(message.guild.id)}help all.\n\nArguments in <> or {} should be substituted in with other values. If they're in {}, then they're optional.`)
 			for (let i in categories) {
-				if (i == 'all') continue
+				if (i == 'all') break;
 
 				let aliasName = i
 				for (const a in aliases) {
@@ -255,6 +257,7 @@ commands.searchcommands = new Command({
 	desc: "Searches for commands based on a given word.",
 	section: "misc",
 	aliases: ["searchcommand"],
+	noslash: true,
 	args: [
 		{
 			name: "Word",
@@ -277,6 +280,7 @@ commands.searchcommands = new Command({
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
 			.setTitle('List of Commands')
+			.setFooter(`${commandsList.length} total commands found.`);
 
 		if (commandsList.length > 12) {
 			let commandsByCategory = {}
@@ -299,6 +303,7 @@ let inviteLink = 'https://discord.com/oauth2/authorize?client_id=776480348757557
 commands.invite = new Command({
 	desc: "Invite Blossom Battler to another server!",
 	section: "misc",
+	noslash: true,
 	func: (message, args) => {
 	}
 })
@@ -354,6 +359,7 @@ credits = [
 commands.credits = new Command({
 	desc: "Shows who created Blossom Battler, beta tested by, and thanks to.",
 	section: "misc",
+	noslash: true,
 	func: (message, args) => {
 		creditsEmbed(message)
 	}
@@ -444,6 +450,7 @@ const {exec, spawn} = require("child_process")
 commands.git = new Command({
 	desc: "SUPERADMIN ONLY.",
 	section: "misc",
+	noslash: true,
 	args: [
 		{
 			name: "Command",

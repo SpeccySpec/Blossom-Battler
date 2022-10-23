@@ -6,6 +6,8 @@
 //Discord.JS initiation.
 Discord = require('discord.js');
 Builders = require('@discordjs/builders');
+Rest = require('@discordjs/rest');
+ApiTypes = require('discord-api-types/v9');
 client = new Discord.Client({
 	intents: [
 		Discord.Intents.FLAGS.GUILDS,
@@ -50,7 +52,20 @@ request = require('request');
 hastebin = require('hastebin-gen');
 
 //ArgList class, for the Command class
-const ArgList = require(packPath + "/arglist.js")
+const ArgList = require(packPath + "/arglist.js");
+
+// Command types
+SUB_COMMAND = 1
+SUB_COMMAND_GROUP = 2
+STRING = 3
+INTEGER = 4
+BOOLEAN = 5
+USER = 6
+CHANNEL = 7
+ROLE = 8
+MENTIONABLE = 9
+NUMBER = 10
+ATTACHMENT = 11
 
 // Elements
 Elements = [
@@ -1133,8 +1148,10 @@ Command = class extends ArgList {
 			const aliases = object.aliases
 			object.section = "aliases"
 			object.aliases = null
-			for (const alias of aliases)
+			for (const alias of aliases) {
 				commands[alias] = new Command(object)
+				commands[alias].alias = true;
+			}
 		}
 	}
 
@@ -1155,6 +1172,103 @@ const commandFiles = fs.readdirSync(`${packPath}/commands`).filter(file => file.
 for (const file of commandFiles) {
 	let command = require(`${packPath}/commands/${file}`);
 }
+
+// Slash Commands
+let cmds = [];
+
+let datatypetoconst = {
+	Num: INTEGER,
+	Decimal: NUMBER,
+	YesNo: BOOLEAN,
+	Ping: MENTIONABLE,
+	Channel: INTEGER,
+	RealChannel: CHANNEL,
+	ID: INTEGER,
+	Image: ATTACHMENT
+}
+
+for (let i in commands) {
+	if (cmds.length >= 100) break;
+
+	let c = commands[i];
+	if (c.alias) continue;
+	if (c.noslash) continue;
+
+	let str = c.desc;
+	if (str.length > 100) str = `${str.slice(0, 97)}...`;
+
+	let cmd = new Builders.SlashCommandBuilder()
+		.setName(i)
+		.setDescription(str);
+
+	// Create a new command
+	if (c.args && c.args.length > 0) {
+		for (let o of c.args) {
+			switch(o.type ?? "Word") {
+				default:
+					cmd.addStringOption(option =>
+						option.setName(o.name.replace(/[ #,%'/()123467890]/g,'').toLowerCase())
+							.setDescription(o.desc ?? '???')
+							.setRequired(o.forced ?? false)
+					)
+			}
+		}
+	}
+
+	cmds.push(cmd);
+}
+
+/*
+for (let i in commands) {
+	if (cmds.length >= 100) break;
+
+	let c = commands[i];
+	if (c.alias) continue;
+	if (c.noslash) continue;
+
+	let str = c.desc;
+	if (str.length > 100) str = `${str.slice(0, 97)}...`;
+
+	let cmd = {
+		name: i,
+		description: str
+	}
+
+	// Create a new command
+	if (c.args && c.args.length > 0) {
+		cmd.options = [];
+
+		for (let o of c.args) {
+			cmd.options.push({
+				name: o.name,
+				type: datatypetoconst[o.type] ?? STRING,
+				required: o.forced ?? false
+			});
+		}
+	}
+
+	client.application.commands.create(cmd)
+//	cmds.push(cmd);
+}
+*/
+
+
+const rest = new Rest.REST({ version: '9' }).setToken(process.env.TOKEN);
+
+(async () => {
+	try {
+		console.log('Started refreshing application (/) commands.');
+
+		await rest.put(
+			ApiTypes.Routes.applicationCommands(process.env.CLIENTID),
+			{ body: cmds },
+		);
+
+		console.log('Successfully reloaded application (/) commands.');
+	} catch (error) {
+		console.error(error);
+	}
+})();
 
 // Run this shit
 let folders = ['skills', 'characters', 'enemies', 'party', 'battle', 'items', 'campaign'] // i TOLD YOU there WILL EEEVEN be moreee
@@ -1307,6 +1421,24 @@ client.on("messageCreate", (message) => {
 		command.call(message, args);
 	}
 })
+
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isCommand()) return;
+
+	const command = commands[interaction.commandName];
+
+	if (!command) return;
+
+	try {
+		let message = {};
+		let args = [];
+
+		await interaction.reply({ content: 'This is a test!', ephemeral: true });
+	} catch (error) {
+		console.error(error);
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+	}
+});
 
 //last ditch things
 makeDirectory(`${dataPath}/userdata`)
