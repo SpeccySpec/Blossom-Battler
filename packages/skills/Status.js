@@ -1792,12 +1792,6 @@ statusEffectFuncs = {
 				return `${char.name} woke up!`;
 			}
 
-			if (isBoss(char)) {
-				delete char.status;
-				delete char.statusturns;
-				return `${char.name} woke up!`;
-			}
-
 			let hp = Math.round(char.maxhp/20);
 			let mp = Math.round(char.maxmp/20);
 			if (hasStatusAffinity(char, 'sleep', 'resist')) {
@@ -1805,12 +1799,16 @@ statusEffectFuncs = {
 				mp *= 2
 			}
 
-			if (!hasStatusAffinity(char, 'sleep', 'weak')) {
-				char.hp = Math.min(char.maxhp, char.hp+hp);
-				char.mp = Math.min(char.maxmp, char.mp+mp);
-				return [`${char.name} is asleep. They are able to restore ${hp}HP and ${mp}MP!`, false];
+			if (!isBoss(char)) {
+				if (!hasStatusAffinity(char, 'sleep', 'weak')) {
+					char.hp = Math.min(char.maxhp, char.hp+hp);
+					char.mp = Math.min(char.maxmp, char.mp+mp);
+					return [`${char.name} is asleep. They are able to restore ${hp}HP and ${mp}MP!`, false];
+				} else {
+					return [`${char.name} is in a deep sleep...`, false];
+				}
 			} else {
-				return [`${char.name} is in a deep sleep...`, false];
+				return `${char.name} is a little drowsy...`;
 			}
 		}
 	},

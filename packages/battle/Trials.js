@@ -62,7 +62,7 @@ nextWave = (btl) => {
 		btl.teams[1].backup = [];
 
 		let encounter = btl.trial.waves[btl.trialwave];
-		let battleid = (btl.teams[0].members.length+btl.teams[0].backup.length)-1;
+		let battleid = btl.teams[0].members.length+btl.teams[0].backup.length;
 		let bosswave = false;
 
 		for (let i in encounter) {

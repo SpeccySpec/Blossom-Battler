@@ -1347,8 +1347,8 @@ doAction = (char, btl, action) => {
 		case 'guard':
 			char.guard = 0.45;
 
-			let mpget = randNum(1, Math.round(char.level/10));
-			char.mp = Math.min(char.maxmp, char.mp+mpget)
+			let mpget = Math.max(1, Math.round((char.maxmp/100*5)-5+randNum(1,10)));
+			char.mp = Math.min(char.maxmp, Math.round(char.mp+mpget));
 
 			DiscordEmbed = new Discord.MessageEmbed()
 				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
