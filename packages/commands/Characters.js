@@ -2033,7 +2033,7 @@ commands.changestats = new Command({
 		if ((args[1] + args[2]) > settings.caps.hpmpcap) return message.channel.send(`The maximum total points for HP and MP is ${settings.caps.hpmpcap}! Currently, you have ${args[1]+args[2]}.`);
 	
 		let bst = 0;
-		for (let i = 3; i < args.length-1; i++) {
+		for (let i = 3; i < args.length; i++) {
 			if (args[i]) {
 				if (args[i] <= 0) return message.channel.send("You can't have a stat that is less than 0!");
 				if (args[i] > settings.caps.basestatcap) return message.channel.send("You can't have a stat that is more than 10!");
