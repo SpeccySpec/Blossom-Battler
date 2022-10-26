@@ -1556,6 +1556,8 @@ if (battleFiles.length > 0) {
 }
 
 async function sendError(btl) {
+	if (!client.guilds.cache.get(btl.channel.guildId)) return;
+
 	//get server from btl.channel.guildId
 	await client.guilds.fetch(btl.channel.guildId).then(guild => {
 		//then channel from btl.channel.id

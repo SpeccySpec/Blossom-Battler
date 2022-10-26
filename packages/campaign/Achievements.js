@@ -87,3 +87,19 @@ addData = (user, variable, value) => {
 
 	return userdata;
 }
+
+giveStars = (user, amount) => {
+	let userdata = setUpUserData(user);
+	if (!userdata.vars) userdata.vars = {};
+	if (!userdata.achievements) userdata.achievements = {};
+
+	// Award Stars
+	if (!userdata.stars) {
+		userdata.stars = amount;
+	} else {
+		userdata.stars += amount;
+	}
+
+	// Save Data
+	fs.writeFileSync(`${dataPath}/userdata/${user}.json`, JSON.stringify(userdata, '	', 4))
+}
