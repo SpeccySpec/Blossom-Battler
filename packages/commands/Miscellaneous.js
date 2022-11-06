@@ -305,6 +305,11 @@ commands.invite = new Command({
 	section: "misc",
 	noslash: true,
 	func: (message, args) => {
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#4b02c9')
+			.setTitle("Invite me to your server!")
+			.setDescription(`_I'm Blossom Battler, a discord bot that will add Turn-Based RPG Battling to your Discord Server! With me, you can create characters, skills, items, enemies and more! I also have a few other fun things that I can do, that may not be so RPG focused._\n\nSound interesting? [Why not give it a shot?](${inviteLink})`)
+		message.channel.send({embeds: [DiscordEmbed]});
 	}
 })
 

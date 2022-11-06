@@ -66,6 +66,11 @@ nextWave = (btl) => {
 		let bosswave = false;
 
 		for (let i in encounter) {
+			if (!enmFile[encounter[i]]) {
+				message.channel.send(`There was something wrong with this trial! ${encounter[i]} does not exist.`);
+				continue;
+			}
+
 			let enemy = objClone(enmFile[encounter[i]]);
 			enemy.enemy = true;
 

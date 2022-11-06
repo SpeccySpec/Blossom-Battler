@@ -536,6 +536,9 @@ sendCurTurnEmbed = (char, btl) => {
 	let testtxt = '';
 	if (btl.testing) testtxt = ` (__${btl.testing} test turns left__)`;
 
+	if (teamDesc == '') teamDesc = "No opponents.";
+	if (myTeamDesc == '') myTeamDesc = "No allies.";
+
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 		.setTitle(`Turn #${btl.turn} - ${char.name}'s turn${testtxt}`)
