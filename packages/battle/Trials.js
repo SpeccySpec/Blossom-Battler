@@ -12,8 +12,6 @@ nextWave = (btl) => {
 		.setColor('#cc3b69')
 		.setTitle(`Wave #${btl.trialwave+1} completed!`)
 
-	var enmFile = btl.trial?.enemydata ?? setUpFile(`${dataPath}/json/${btl.guild.id}/enemies.json`, true);
-
 	if (!btl.trial.waves[btl.trialwave+1]) {
 		let str = `Team **${btl.teams[0].name}** is _victorious_ in the trial of **${btl.trial.name}**!`;
 
@@ -60,6 +58,8 @@ nextWave = (btl) => {
 
 		btl.teams[1].members = [];
 		btl.teams[1].backup = [];
+
+		var enmFile = btl.trial?.enemydata? ?? setUpFile(`${dataPath}/json/${btl.guild.id}/enemies.json`, true);
 
 		let encounter = btl.trial.waves[btl.trialwave];
 		let battleid = btl.teams[0].members.length+btl.teams[0].backup.length;
