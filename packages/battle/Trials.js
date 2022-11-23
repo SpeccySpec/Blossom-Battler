@@ -12,6 +12,8 @@ nextWave = (btl) => {
 		.setColor('#cc3b69')
 		.setTitle(`Wave #${btl.trialwave+1} completed!`)
 
+	var enmFile = btl.trial?.enemydata ?? setUpFile(`${dataPath}/json/${btl.guild.id}/enemies.json`, true);
+
 	if (!btl.trial.waves[btl.trialwave+1]) {
 		let str = `Team **${btl.teams[0].name}** is _victorious_ in the trial of **${btl.trial.name}**!`;
 
@@ -56,8 +58,6 @@ nextWave = (btl) => {
 	} else {
 		btl.trialwave++;
 
-		let enmFile = btl.trial?.enemydata ?? setUpFile(`${dataPath}/json/${btl.guild.id}/enemies.json`, true);
-
 		btl.teams[1].members = [];
 		btl.teams[1].backup = [];
 
@@ -66,6 +66,11 @@ nextWave = (btl) => {
 		let bosswave = false;
 
 		for (let i in encounter) {
+			if (!enmFile[encounter[i]]) {
+				btl.channel.send(`There was something wrong with this trial! ${encounter[i]} does not exist.`);
+				continue;
+			}
+
 			let enemy = objClone(enmFile[encounter[i]]);
 			enemy.enemy = true;
 
