@@ -25,5 +25,8 @@ process.on('unhandledRejection', err => {
 	*/
 });
 
+const {SaveBackup} = require("./packages/backups.js")
+setInterval(SaveBackup, 86400000)
+
 // Spawn your shards
 manager.spawn();

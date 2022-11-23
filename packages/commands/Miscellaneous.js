@@ -503,3 +503,18 @@ commands.git = new Command({
 		}
 	}
 })
+
+const {SaveBackup} = require("../backups.js")
+commands.databackup = new Command({
+	desc: "SUPERADMIN ONLY.",
+	section: "misc",
+	noslash: true,
+	async func(message) {
+		if (message) {
+			if (!utilityFuncs.RPGBotAdmin(message.author.id))
+				return void message.channel.send("Only a super admin can use this.")
+			message.react('👍');
+		}
+		SaveBackup()
+	}
+})
