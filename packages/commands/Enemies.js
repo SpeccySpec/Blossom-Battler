@@ -1722,6 +1722,6 @@ commands.exportenemies = new Command({
 		let link = await hastebin(JSON.stringify(enemyFile, '	', 4), {extension: "json"});
 
 		message.channel.send(`👍 ${message.author}, check your DMs!`);
-		message.author.send(`Here is the character data for ${charFile[args[0]].name}!\n${link}`);
+		message.author.send(`Here is the character data you requested!\n${link}`);
 	}
 })
