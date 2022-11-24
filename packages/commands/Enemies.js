@@ -1711,3 +1711,19 @@ commands.removepet = new Command({
 	}
 })
 
+commands.exportenemies = new Command({
+	desc: "Exports an enemy file... for what use? I'm not sure.",
+	aliases: ['exportenemyfile', 'realexportenemy'],
+	section: "enemies",
+	args: [],
+	checkban: true,
+	func: async(message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let link = await hastebin(JSON.stringify(enemyFile, '	', 4), {extension: "json"});
+
+		message.channel.send(`👍 ${message.author}, check your DMs!`);
+		message.author.send(`Here is the character data for ${charFile[args[0]].name}!\n${link}`);
+	}
+})
