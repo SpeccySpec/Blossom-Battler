@@ -10,12 +10,14 @@ trialDesc = (trial, name, message) => {
     return embed
 }
 
-async function longtrialdesc(trial, name, message){
-    enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
-    const newtrial = trial.waves
+async function longtrialdesc(trialDefs, name, message) {
+    enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+
+	let trial = objClone(trialDefs);
+    let newtrial = trial.waves;
 
     const generateEmbed = async start => {
-        const current = newtrial.slice(start, start + 15)
+        const current = newtrial.slice(start, start + 15);
 
         for (let i = 0; i < current.length; i++) {
             for (let j = 0; j < current[i].length; j++) {
