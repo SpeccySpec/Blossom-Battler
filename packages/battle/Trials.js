@@ -59,7 +59,7 @@ nextWave = (btl) => {
 		btl.teams[1].members = [];
 		btl.teams[1].backup = [];
 
-		let enmFile = btl.trial?.enemydata ?? setUpFile(`${dataPath}/json/${btl.guild.id}/enemies.json`, true);
+		let enmFile = (btl.trial?.enemydata && btl.trial?.enemydata.length > 0) ? btl.trial.enemydata : setUpFile(`${dataPath}/json/${btl.guild.id}/enemies.json`, true);
 
 		let encounter = btl.trial.waves[btl.trialwave];
 		let battleid = btl.teams[0].members.length+btl.teams[0].backup.length;

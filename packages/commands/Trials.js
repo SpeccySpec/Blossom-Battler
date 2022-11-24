@@ -668,3 +668,28 @@ commands.playglobaltrial = new Command({
 		}
     }
 })
+
+commands.exporttrialjson = new Command({
+	desc: "Exports a trial json file. I don't know why you'd want it but... sure.",
+	aliases: ['exporttrialfile', 'realexporttrial'],
+	section: "characters",
+	args: [
+		{
+			name: "Trial Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	func: async(message, args) => {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid trial name! Please enter an actual name.');
+
+		let trials = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`, true)
+		if (!trials[args[0]]) return message.channel.send(`${args[0]} is a nonexistant trial!`);
+
+		let link = await hastebin(JSON.stringify(trials[args[0]], '	', 4), {extension: "json"});
+
+		message.channel.send(`👍 ${message.author}, check your DMs!`);
+		message.author.send(`Here is the trial data for ${trials[args[0]].name}!\n${link}`);
+	}
+})
