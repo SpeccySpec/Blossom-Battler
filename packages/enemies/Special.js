@@ -1,8 +1,8 @@
 /*
 	[[[Hook Documentation - NEGOTIATION SPECIAL hooks in order of appearance.]]]
 
-	- canproceed(char, targ, btl, vars)
-	Can this proceed fully? Return a string if not, otherwise, return true. This is calculated right when the option is selected.
+	- canproceed(char, targ, btl, vars, result)
+	Can this proceed fully? Return a string, failure is decided by "result.failed". This is calculated right when the option is selected.
 
 	- preapply(char, targ, result, btl, vars)
 	This will do things before the pacify amount gets added to the target. Shouldn't return anything.
@@ -94,13 +94,14 @@ specialList = {
 			makeSpecial(option, "requiredvar", [variable, present, failure]);
 			return true
 		},
-		canproceed(char, targ, btl, vars) {
+		canproceed(char, targ, btl, vars, result) {
 			let variable = vars[0];
 			let present = vars[1];
 			let failure = replaceTxt(vars[2] ?? '%PLAYER% tried to pacify %ENEMY%.\n...But %ENEMY% does not pass the %VARIABLE% check.', '%VARIABLE%', variable);
 
-			let failTxt = ((present && targ?.custom?.pacifyVars?.[variable]) || (!present && !targ?.custom?.pacifyVars?.[variable])) ? true : failure; 
-			return failTxt
+			let failTxt = ((present && targ?.custom?.pacifyVars?.[variable]) || (!present && !targ?.custom?.pacifyVars?.[variable])) ? '' : failure; 
+			if (failTxt != '') result.failed = true;
+			return failTxt;
 		}
 	}),
 
@@ -442,7 +443,7 @@ specialList = {
 				type: 'YesNo',
 			},
 			{
-				name: 'Maximum decimals (0-5)',
+				name: 'Maximum decimals (0-3)',
 				type: 'Num',
 			},
 			{
@@ -464,11 +465,10 @@ specialList = {
 			}
 		],
 		applyfunc(message, option, args) {
-			let essentials = args.slice(0, 3);
-			let optionals = args.slice(0, 5);
-			args = args.slice(10, 0);
-
-			console.log(args);
+			let essentials = args.slice(0, 4);
+			args.splice(0, 4);
+			let optionals = args.slice(0, 6);
+			args.splice(0, 6);
 
 			let expressions = args[0];
 			let timer = args[1] ?? 60;
@@ -483,9 +483,20 @@ specialList = {
 			if (failure.trim().length == 0) return void message.channel.send(`You can't have an empty failure message.`);
 
 			makeSpecial(option, "math", [{addition: essentials[0],subtraction: essentials[1],multiplication: essentials[2],division: essentials[3]}, 
-			{remainders: optionals[0],exponents: optionals[1],roots: optionals[2],negativeNumbers: optionals[3],parenthesis: optionals[4],decimals:Math.max(Math.min(optionals[5], 5), 0)}, 
+			{remainders: optionals[0],exponents: optionals[1],roots: optionals[2],negativeNumbers: optionals[3],parenthesis: optionals[4],decimals:Math.max(Math.min(optionals[5], 3), 0)}, 
 			expressions, timer, success, failure]);
 			return true;
+		},
+		canproceed(char, targ, btl, vars, result) {
+			if (!btl?.action?.question) return '';
+
+			delete btl.intendedstate;
+
+			if (btl.action.question.correctAnswer == btl.action.question.chosenAnswer) return vars[4];
+			else {
+				result.failed = true;
+				return vars[5];
+			}
 		}
 	})
 }

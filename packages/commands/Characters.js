@@ -3999,7 +3999,7 @@ commands.equipweapon = new Command({
 		}
 	],
 	func: (message, args) => {
-       let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+    	let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
 

@@ -123,11 +123,24 @@ MENU_ENEMYINFO = 9;
 MENU_FORFEIT = 10;
 MENU_ANYSEL = 11;
 
+// States that require ne embeds
+MENU_QUESTION = 12;
+
 function CalcCompins(comps, i) {
 	const compins = Math.min(Math.floor(Math.max(i - 0.1, 0) / 4), 3)
 	if (!comps[compins])
 		comps[compins] = [];
 	return compins
+}
+
+const menuEmbeds = {
+	[MENU_QUESTION]: ({char, btl, DiscordEmbed}) => {
+		DiscordEmbed.title = btl.action.question.title;
+		DiscordEmbed.description = btl.action.question.desc;
+		DiscordEmbed.color = `#d613cc`;
+
+		return DiscordEmbed
+	}
 }
 
 const menuStates = {
@@ -397,29 +410,36 @@ const menuStates = {
 		for (const i in btl.teams) {
 			comps[CalcCompins(comps, i)].push(makeButton(`Team ${btl.teams[i].name}`, '#️⃣', (char.team == i) ? 'green' : 'red', true, i.toString()))
 		}
-	}
+	},
+	[MENU_QUESTION]: ({char, btl, comps}) => {
+		for (const i in btl.action.question.answers) {
+			comps[CalcCompins(comps, i)].push(makeButton(btl.action.question.answers[i], '#️⃣', 'blue', true, i.toString()))
+		}
+	},
 }
 
-setUpComponents = (char, btl, menustate) => {
+setUpComponents = (char, btl, menustate, nobackbutton) => {
 	let comps = [];
 	menuStates[parseInt(menustate)]({char, btl, comps});
 
-	if (menustate != MENU_ACT && menustate != MENU_ENEMYINFO) {
-		if (!comps[0] || !comps[0][0]) {
-			comps[0] = [makeButton('Nothing Here :/', '◀️', 'grey', true, 'back')];
-		} else {
-			let didadd = false;
+	if (!nobackbutton) {
+		if (menustate != MENU_ACT && menustate != MENU_ENEMYINFO) {
+			if (!comps[0] || !comps[0][0]) {
+				comps[0] = [makeButton('Nothing Here :/', '◀️', 'grey', true, 'back')];
+			} else {
+				let didadd = false;
 
-			for (let i in comps) {
-				if (comps[i].length < 5) {
-					comps[i].push(makeButton('Back', '◀️', 'grey'));
-					didadd = true;
-					break;
+				for (let i in comps) {
+					if (comps[i].length < 5) {
+						comps[i].push(makeButton('Back', '◀️', 'grey'));
+						didadd = true;
+						break;
+					}
 				}
-			}
 
-			if (!didadd) {
-				comps[comps.length] = [makeButton('Back', '◀️', 'grey')];
+				if (!didadd) {
+					comps[comps.length] = [makeButton('Back', '◀️', 'grey')];
+				}
 			}
 		}
 	}
@@ -467,7 +487,82 @@ function GetCharName(char) {
 	return str;
 }
 
+sendStateEmbed = (char, btl) => {
+	let settings = setUpSettings(btl.guild.id);
+
+	let menustate = btl.intendedstate;
+
+	let DiscordEmbed = new Discord.MessageEmbed()
+		.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+		.setTitle(`PLACEHOLDER`)
+		.setDescription('PLACEHOLDER')
+
+	DiscordEmbed = menuEmbeds[parseInt(menustate)]({char, btl, DiscordEmbed});
+		
+	let message = {
+		content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+		embeds: [DiscordEmbed],
+		components: setUpComponents(char, btl, menustate, [MENU_QUESTION].includes(menustate))
+	};
+
+	btl.channel.send(message).then(msg => {
+		btl.forcemessage = msg.id;
+		fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, '	', 4));
+	});
+
+	let collector = makeCollector(btl.channel, {
+		filter: ({user}) => (user.id == char.owner || utilityFuncs.RPGBotAdmin(user.id) || user.id == btl?.initiator)
+	})
+
+	collector.on('collect', async i => {
+		btl.action.laststate = menustate;
+		let alreadyResponded = false;
+
+		let testbtl = setUpFile(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, true);
+		if (testbtl.forcemessage && i.message.id != testbtl.forcemessage) {
+			collector.stop();
+			alreadyResponded = true;
+
+			await i.update({
+				content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+				embeds: [DiscordEmbed],
+				components: setUpComponents(char, btl, menustate, [MENU_QUESTION].includes(menustate))
+			});
+
+			return;
+		}
+
+		switch (menustate) {
+			case MENU_QUESTION:
+				alreadyResponded = true;
+
+				btl.action.question.chosenAnswer = i.customId;
+				doAction(char, btl, btl.action);
+				break;
+		}
+
+		if (alreadyResponded) {
+			collector.stop();
+
+			await i.update({
+				content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+				embeds: [DiscordEmbed],
+				components: []
+			}); 
+			return;
+		}
+
+		await i.update({
+			content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+			embeds: [DiscordEmbed],
+			components: setUpComponents(char, btl, menustate, [MENU_QUESTION].includes(menustate))
+		})
+	})
+}
+
 sendCurTurnEmbed = (char, btl) => {
+	if (btl.intendedstate) return sendStateEmbed(char, btl);
+
 	let settings = setUpSettings(btl.guild.id);
 
 	let menustate = MENU_ACT;
@@ -579,7 +674,7 @@ sendCurTurnEmbed = (char, btl) => {
 			alreadyResponded = true;
 
 			await i.update({
-				content: `<@${char.owner}>`,
+				content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 				embeds: [DiscordEmbed],
 				components: setUpComponents(char, testbtl, menustate)
 			});
@@ -621,8 +716,9 @@ sendCurTurnEmbed = (char, btl) => {
 						collector.stop();
 
 						return i.update({
-							content: `<@${char.owner}>`,
+							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
+							components: []
 						});
 					} else {
 						menustate = MENU_TEAMSEL;
@@ -636,8 +732,9 @@ sendCurTurnEmbed = (char, btl) => {
 						collector.stop();
 
 						return i.update({
-							content: `<@${char.owner}>`,
+							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
+							components: []
 						});
 					} else
 						menustate = MENU_TARGET;
@@ -648,8 +745,9 @@ sendCurTurnEmbed = (char, btl) => {
 					collector.stop();
 
 					await i.update({
-						content: `<@${char.owner}>`,
+						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 						embeds: [DiscordEmbed],
+						components: []
 					});
 				} else {
 					btl.action.target = [undefined, undefined];
@@ -658,8 +756,9 @@ sendCurTurnEmbed = (char, btl) => {
 					alreadyResponded = true;
 
 					await i.update({
-						content: `<@${char.owner}>`,
+						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 						embeds: [DiscordEmbed],
+						components: []
 					});
 				}
 				break;
@@ -696,8 +795,9 @@ sendCurTurnEmbed = (char, btl) => {
 				collector.stop();
 
 				return i.update({
-					content: `<@${char.owner}>`,
-					embeds: [DiscordEmbed]
+					content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+					embeds: [DiscordEmbed],
+					components: []
 				});
 
 			case 'run':
@@ -726,7 +826,7 @@ sendCurTurnEmbed = (char, btl) => {
 
 				alreadyResponded = true;
 				return i.update({
-					content: `<@${char.owner}>`,
+					content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 					embeds: [DiscordEmbed],
 					components: setUpComponents(char, btl, menustate)
 				});
@@ -742,7 +842,7 @@ sendCurTurnEmbed = (char, btl) => {
 					alreadyResponded = true;
 
 					await i.update({
-						content: `<@${char.owner}>`,
+						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 						embeds: [DiscordEmbed],
 						components: setUpComponents(char, btl, menustate)
 					});
@@ -772,8 +872,9 @@ sendCurTurnEmbed = (char, btl) => {
 							collector.stop();
 
 							await i.update({
-								content: `<@${char.owner}>`,
+								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 								embeds: [DiscordEmbed],
+								components: []
 							});
 						}
 					}
@@ -807,8 +908,9 @@ sendCurTurnEmbed = (char, btl) => {
 					collector.stop();
 
 					return i.update({
-						content: `<@${char.owner}>`,
+						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 						embeds: [DiscordEmbed],
+						components: []
 					});
 				}
 
@@ -836,8 +938,9 @@ sendCurTurnEmbed = (char, btl) => {
 										alreadyResponded = true;
 
 										return i.update({
-											content: `<@${char.owner}>`,
+											content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 											embeds: [DiscordEmbed],
+											components: []
 										});
 									}
 								}
@@ -848,7 +951,7 @@ sendCurTurnEmbed = (char, btl) => {
 									alreadyResponded = true;
 
 									return i.update({
-										content: `<@${char.owner}>`,
+										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 										embeds: [DiscordEmbed],
 										components: setUpComponents(char, btl, menustate)
 									});
@@ -868,7 +971,7 @@ sendCurTurnEmbed = (char, btl) => {
 										alreadyResponded = true;
 
 										return i.update({
-											content: `<@${char.owner}>`,
+											content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 											embeds: [DiscordEmbed],
 										});
 									}
@@ -880,7 +983,7 @@ sendCurTurnEmbed = (char, btl) => {
 									alreadyResponded = true;
 
 									return i.update({
-										content: `<@${char.owner}>`,
+										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 										embeds: [DiscordEmbed],
 										components: setUpComponents(char, btl, menustate)
 									});
@@ -894,7 +997,7 @@ sendCurTurnEmbed = (char, btl) => {
 						alreadyResponded = true;
 
 						return i.update({
-							content: `<@${char.owner}>`,
+							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
 							components: setUpComponents(char, btl, menustate)
 						});
@@ -903,7 +1006,7 @@ sendCurTurnEmbed = (char, btl) => {
 						alreadyResponded = true;
 
 						return i.update({
-							content: `<@${char.owner}>`,
+							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
 							components: setUpComponents(char, btl, menustate)
 						});
@@ -913,11 +1016,11 @@ sendCurTurnEmbed = (char, btl) => {
 						let canUse = statusEffectFuncs[char.status.toLowerCase()].canuse(char, skill, btl)
 
 						if (canUse && canUse[1] != true) {
-							DiscordEmbed.title = canUse[0];
-							alreadyResponded = true;
+						DiscordEmbed.title = canUse[0];
+						alreadyResponded = true;
 
 							await i.update({
-								content: `<@${char.owner}>`,
+								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 								embeds: [DiscordEmbed],
 								components: setUpComponents(char, btl, menustate)
 							});
@@ -937,8 +1040,9 @@ sendCurTurnEmbed = (char, btl) => {
 										alreadyResponded = true;
 
 										return i.update({
-											content: `<@${char.owner}>`,
+											content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 											embeds: [DiscordEmbed],
+											components: []
 										});
 									}
 								}
@@ -949,7 +1053,7 @@ sendCurTurnEmbed = (char, btl) => {
 									alreadyResponded = true;
 
 									return i.update({
-										content: `<@${char.owner}>`,
+										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 										embeds: [DiscordEmbed],
 										components: setUpComponents(char, btl, menustate)
 									});
@@ -965,7 +1069,7 @@ sendCurTurnEmbed = (char, btl) => {
 								alreadyResponded = true;
 
 								await i.update({
-									content: `<@${char.owner}>`,
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
 								});
@@ -993,13 +1097,13 @@ sendCurTurnEmbed = (char, btl) => {
 						if (alivecount == 1) {
 							btl.action.target = alivenum;
 							alreadyResponded = true;
-
 							doAction(char, btl, btl.action);
-							collector.stop();
 
+							collector.stop();
 							return i.update({
-								content: `<@${char.owner}>`,
+								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 								embeds: [DiscordEmbed],
+								components: []
 							});
 						} else {
 							menustate = MENU_TEAMSEL;
@@ -1013,8 +1117,9 @@ sendCurTurnEmbed = (char, btl) => {
 							collector.stop();
 
 							return i.update({
-								content: `<@${char.owner}>`,
+								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 								embeds: [DiscordEmbed],
+								components: []
 							});
 						} else
 							menustate = MENU_TARGET;
@@ -1025,8 +1130,9 @@ sendCurTurnEmbed = (char, btl) => {
 						collector.stop();
 
 						await i.update({
-							content: `<@${char.owner}>`,
+							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
+							components: []
 						});
 					} else {
 						btl.action.target = [undefined, undefined];
@@ -1035,8 +1141,9 @@ sendCurTurnEmbed = (char, btl) => {
 						alreadyResponded = true;
 
 						await i.update({
-							content: `<@${char.owner}>`,
+							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
+							components: []
 						});
 					}
 				} else if (menustate == MENU_ITEM && itemFile[i.customId]) {
@@ -1056,8 +1163,9 @@ sendCurTurnEmbed = (char, btl) => {
 						collector.stop();
 
 						await i.update({
-							content: `<@${char.owner}>`,
+							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
+							components: []
 						});
 					} else {
 						btl.action.target = [undefined, undefined];
@@ -1066,8 +1174,9 @@ sendCurTurnEmbed = (char, btl) => {
 						collector.stop();
 
 						await i.update({
-							content: `<@${char.owner}>`,
+							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
+							components: []
 						});
 					}
 				} else if ((menustate == MENU_TEAMSEL || menustate == MENU_ANYSEL) && btl.teams[i.customId]) {
@@ -1103,7 +1212,7 @@ sendCurTurnEmbed = (char, btl) => {
 								alreadyResponded = true;
 
 								await i.update({
-									content: `<@${char.owner}>`,
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
 								})
@@ -1121,7 +1230,7 @@ sendCurTurnEmbed = (char, btl) => {
 								alreadyResponded = true;
 
 								await i.update({
-									content: `<@${char.owner}>`,
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
 								})
@@ -1146,7 +1255,7 @@ sendCurTurnEmbed = (char, btl) => {
 							alreadyResponded = true;
 
 							await i.update({
-								content: `<@${char.owner}>`,
+								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 								embeds: [DiscordEmbed],
 								components: setUpComponents(char, btl, menustate)
 							});
@@ -1160,7 +1269,7 @@ sendCurTurnEmbed = (char, btl) => {
 								alreadyResponded = true;
 
 								await i.update({
-									content: `<@${char.owner}>`,
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
 								});
@@ -1169,7 +1278,7 @@ sendCurTurnEmbed = (char, btl) => {
 								alreadyResponded = true;
 
 								await i.update({
-									content: `<@${char.owner}>`,
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
 								})
@@ -1179,7 +1288,7 @@ sendCurTurnEmbed = (char, btl) => {
 								menustate = MENU_ENEMYINFO;
 
 								await i.update({
-									content: `<@${char.owner}>`,
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [longDescription(enemyFile[targ.truename], enemyFile[targ.truename].level, btl.guild.id, i)],
 									components: setUpComponents(char, btl, menustate)
 								})
@@ -1199,7 +1308,7 @@ sendCurTurnEmbed = (char, btl) => {
 								}
 
 								await i.update({
-									content: `<@${char.owner}>`,
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
 								});
@@ -1211,8 +1320,9 @@ sendCurTurnEmbed = (char, btl) => {
 								collector.stop();
 
 								await i.update({
-									content: `<@${char.owner}>`,
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
+									components: []
 								});
 							}
 							break;
@@ -1223,8 +1333,9 @@ sendCurTurnEmbed = (char, btl) => {
 							collector.stop();
 
 							await i.update({
-								content: `<@${char.owner}>`,
+								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 								embeds: [DiscordEmbed],
+								components: []
 							});
 					}
 				} else if (menustate == MENU_FORFEIT) {
@@ -1239,19 +1350,185 @@ sendCurTurnEmbed = (char, btl) => {
 						collector.stop();
 
 						await i.update({
-							content: `<@${char.owner}>`,
+							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
+							components: []
 						});
 					}
 				} else if (menustate == MENU_PACIFY) {
 					btl.action.index = parseInt(i.customId);
 					alreadyResponded = true;
-					doAction(char, btl, btl.action);
-					collector.stop();
 
+					console.log(btl.action);
+					let targ = btl.teams[btl.action.target[0]].members[btl.action.target[1]];
+					let negotiation = targ.negotiate[btl.action.index];
+
+					if (!negotiation.specials?.math) { 
+						doAction(char, btl, btl.action);
+					} else {
+						btl.action.negotiation = negotiation.specials.math;
+						let special = btl.action.negotiation;
+
+						let essentials = special[0];
+						let optionals = special[1];
+						
+						let bracketals = [];
+						let expressionAmount = special[2];
+						
+						let possibleOperators = operators.filter(x => essentials[Object.keys(essentials)[operators.indexOf(x)]] == true);
+						if (optionals.remainders) possibleOperators.push('%');
+						
+						if (optionals.parenthesis) bracketals.push('parenthesis');
+						if (optionals.roots) bracketals.push('roots');
+						
+						let equation;
+						let result;
+						
+						function makeEquation() {
+							let curFloats = possibleMathFloats.filter(f => f.length - 2 <= optionals.decimals)
+							equation = [utilityFuncs.randBetweenNums(optionals.negativeNumbers ? -10 : 0, 10)];
+							if (optionals.decimals >= 1 && Math.random()*100 <= 30) equation[0] += Math.min(Math.max(parseFloat(curFloats[Math.floor(Math.random() * curFloats.length)]), optionals.negativeNumbers ? -10 : 0), 10);
+							equation[0] = equation[0].toString();
+							if (equation[0] < 0) equation[0] = `(${equation[0]})`;
+						
+							let currentOperator;
+							let currentNumber;
+						
+							for (let i = 0; i < expressionAmount; i++) {
+								currentOperator = possibleOperators[utilityFuncs.randNum(possibleOperators.length - 1)];
+						
+								currentNumber = [utilityFuncs.randBetweenNums(optionals.negativeNumbers ? -10 : 0, 10)];
+								if (optionals.decimals >= 1 && Math.random()*100 <= 40) currentNumber += Math.min(Math.max(parseFloat(curFloats[Math.floor(Math.random() * curFloats.length)]), optionals.negativeNumbers ? -10 : 0), 10);
+								
+								if (currentOperator == '/' || currentOperator == '%') {
+									currentNumber = Math.trunc(currentNumber);
+									while (currentNumber == 0 || currentNumber == NaN) currentNumber = [utilityFuncs.randBetweenNums(optionals.negativeNumbers ? -10 : 0, 10)];
+								}
+								if (currentNumber < 0) currentNumber = `(${currentNumber})`
+						
+								if (Math.random() * 100 <= 80 - (30 / expressionAmount)) {
+									currentNumber = Math.trunc(parseFloat(currentNumber));
+						
+									if (currentNumber < 0) currentNumber = `(${currentNumber})`
+						
+									let expoNum = utilityFuncs.randBetweenNums(optionals.negativeNumbers ? -5 : 0, 5)
+						
+									if (expoNum < 0) expoNum = `(${expoNum})`
+						
+									currentNumber += '**' + expoNum;
+								}
+						
+								equation.push(currentOperator, currentNumber.toString())
+							}
+						
+							let randomChance = 90;
+							if (optionals.roots || optionals.parenthesis) {
+								while (Math.random() * 100 <= randomChance) {
+									currentOptional = bracketals[utilityFuncs.randNum(bracketals.length - 1)]
+									if (currentOptional == 'parenthesis' && equation.length <= 3) { 
+										currentOptional.slice(0);
+										continue;
+									}
+						
+									let i = utilityFuncs.randNum(equation.length - 1);
+									if (i % 2 != 0) i--;
+									while (currentOptional == 'parenthesis' && i > equation.length - 1) { 
+										i = utilityFuncs.randNum(equation.length - 1);
+										if (i % 2 != 0) i--;
+									}
+						
+									let i2 = utilityFuncs.randBetweenNums(i + (currentOptional == 'parenthesis' ? 2 : 0), equation.length - 1);
+									if (i2 % 2 != 0) i2 += currentOptional == 'parenthesis' ? 1 : (Math.random() <= 0.5) ? -1 : 1;
+									while (currentOptional == 'parenthesis' && (i == 0 && i2 == equation.length - 1 && equation.length > 3)) {
+										i2 = utilityFuncs.randBetweenNums(i + 2, equation.length - 1);
+										if (i2 % 2 != 0) i2 += 1;
+									}
+						
+									let specifiedList = []
+									let backupEquation = equation;
+									for (let index = i; index <= i2; index++) specifiedList.push(equation[index]);
+									equation.splice(i, i2, [...specifiedList].flat(Infinity));
+						
+									equation[i].push((currentOptional == 'roots' ? (specifiedList.length == 1 ? '' : ')')+` )` : ')') + ((optionals.exponents && Math.random()*100 <= 30) ? '**'+utilityFuncs.randBetweenNums(optionals.negativeNumbers ? -10 : 0, 10) : ''));
+									equation[i].unshift((currentOptional == 'roots' ? ('nthroot('+utilityFuncs.randBetweenNums(2, 3)+','+(specifiedList.length == 1 ? '' : ' (')) : '('));
+						
+									try { //sometimes this errors out
+										if (currentOptional == 'roots' && (isNaN(eval(equation[i].flat(Infinity).join(' '))) || Math.abs(eval(equation[i].flat(Infinity).join(' '))) === Infinity || Math.abs(eval(equation[i].flat(Infinity).join(' '))) <= 0)) { 
+											equation = backupEquation;
+											continue;
+										}
+									} catch (e) {
+										equation = backupEquation;
+										continue;
+									}
+									if (currentOptional == 'parenthesis' && equation.length <= 3) currentOptional.slice(0);
+									if (equation.length <= 1) break;
+						
+									randomChance -= 45 / (currentOptional == 'parenthesis' ? 1.3 : 1) / (expressionAmount / 1.6);
+								}
+							}
+						
+							equation = equation.flat(Infinity).join(' ');
+							try { //sometimes this errors out
+								result = Math.trunc(eval(equation)*100)/100;
+							} catch (e) {
+								result = NaN
+							}
+						
+							if (result == -0) result = 0;
+						}
+						
+						while (Math.abs(result) == Infinity || isNaN(result) || Math.abs(result) > 2000) makeEquation();
+						
+						equation = equation.replace(/\*+\(?\-?\d+\)?/g, function(x) {
+							return x.replace(/[^\d\-?]/g, '').replace(/[\d|\-]/g, function(x2) {return superscriptDictionary[x2]});
+						}).replace(/nthroot\(\d+,+[' '|\(\)\+-\/\*%|a-z|A-Z|0-9|⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+\)/g, function(x) {
+							return x.replace(/nthroot\(\d+,/g, function(x2) {
+								x2 = x2.replace(',', '');
+								let x3 = x2.replace(/nthroot\(2?/, '');
+								let exponi = ''
+								for (a of x3) exponi += superscriptDictionary[a];
+						
+								return exponi+'√(';
+							}).replace(/\(\([' '|\(\)\+-\/\*%|a-z|A-Z|0-9|⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+\)/g, function(x) {
+								return x.slice(1, -1);
+							});
+						}).replace(/ {2,}/g, ' ')
+						console.log(equation, '=', result);
+						if (result % 1 != 0) console.log('It rounded to the nearest intenger is:',Math.round(result));
+						
+						let roundedResult = Math.round(result);
+
+						let answers = [0]
+						while (answers.length < 5) {
+							let range = 2 * roundedResult + 5 + (roundedResult * (100 / (answers.length * 0.7)) / 100);
+							let num = Math.round(utilityFuncs.randBetweenNums(range * -1, range));
+
+							if (answers.some(x => x == num) || isNaN(num) || num == roundedResult) continue;
+
+							answers.push(num.toString());
+						}
+						answers.shift();
+						answers.splice(utilityFuncs.randNum(answers.length), 0, roundedResult.toString());
+
+						btl.action.question = {
+							title: `${char.name} => ${targ.name}`,
+							desc: (negotiation.action ?? `%PLAYER% tries to pacify ${targ.name}\nbut they are presented with a math equation.`) + `\n\n_Solve: **${equation}**. What is the answer${result % 1 != 0 ? ', rounded to the nearest intenger' :''}?_`,
+							answers: answers,
+							correctAnswer: answers.indexOf(roundedResult.toString())
+						}
+
+						menustate = MENU_QUESTION;
+						btl.intendedstate = menustate;
+						sendStateEmbed(char, btl);
+					}
+
+					alreadyResponded = true;
+					collector.stop();
 					await i.update({
-						content: `<@${char.owner}>`,
+						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 						embeds: [DiscordEmbed],
+						components: []
 					});
 				} else if (menustate == MENU_BACKUP) {
 					btl.action.index = parseInt(i.customId);
@@ -1260,8 +1537,9 @@ sendCurTurnEmbed = (char, btl) => {
 					collector.stop();
 
 					await i.update({
-						content: `<@${char.owner}>`,
+						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 						embeds: [DiscordEmbed],
+						components: []
 					});
 				} else if (menustate == MENU_TRANSFORMATIONS && char.transformations[i.customId]) {
 					if (canTransform(char, btl, i.customId)) {
@@ -1271,8 +1549,9 @@ sendCurTurnEmbed = (char, btl) => {
 						collector.stop();
 
 						await i.update({
-							content: `<@${char.owner}>`,
+							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
+							components: []
 						});
 					}
 				}
@@ -1298,7 +1577,7 @@ sendCurTurnEmbed = (char, btl) => {
 		if (alreadyResponded) return;
 
 		await i.update({
-			content: `<@${char.owner}>`,
+			content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 			embeds: [DiscordEmbed],
 			components: setUpComponents(char, btl, menustate)
 		})

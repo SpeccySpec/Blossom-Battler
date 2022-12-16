@@ -1506,7 +1506,7 @@ commands.resendembed = new Command({
 		message.react('👍');
 
 		// bruh
-		if (btl.action) delete btl.action;
+		if (btl.action && !btl.intendedstate) delete btl.action;
 
 		// Resend the Embed.
 		let char = getCharFromTurn(btl);

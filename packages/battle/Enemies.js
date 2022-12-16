@@ -910,40 +910,55 @@ doPacify = (char, btl, action) => {
 	let i = action.index;
 	let targ = btl.teams[action.target[0]].members[action.target[1]];
 	let negotiation = targ.negotiate[i];
-	let finaltxt = true
+	let finaltxt = '';
 
 	var result = {
 		text: '', //this will be used for preapply hook texts to prevent unnecessary newlines
-		convince: negotiation.convince
+		convince: negotiation.convince,
+		failed: false,
 	};
 
 	let specials = negotiation?.specials
 
 	//canproceed hook
 	if (specials) {
+		let input = '';
 		for (let i in specials) {
-			if (finaltxt !== true) break;
-
 			if (!specialList[i]) continue;
 			if (!specialList[i].canproceed) continue;
 
 			if (specialList[i].multiple) {
 				for (let k in specials[i]) {
-					finaltxt = specialList[i].canproceed(char, targ, btl, specials[i][k]) ?? true;
+					input = specialList[i].canproceed(char, targ, btl, specials[i][k], result) ?? '';
 
-					if (finaltxt !== true) {
-						result.failed = i;
+					if (input != '') {
+						finaltxt += `${finaltxt != '' ? '\n' : ''}${input}`;
+						input = '';
+					}
+
+					if (result.failed) {
+						result.failedSpecial = i;
 						break;
 					}
 				}
 			} else {
-				finaltxt = specialList[i].canproceed(char, targ, btl, specials[i]) ?? true;
+				input = specialList[i].canproceed(char, targ, btl, specials[i], result) ?? '';
+			}
+
+			if (input != '') {
+				finaltxt += `${finaltxt != '' ? '\n' : ''}${input}`;
+				input = '';
+			}
+
+			if (result.failed) {
+				result.failedSpecial = i;
+				break;
 			}
 		}
 	}
 
-	if (finaltxt === true) {
-		finaltxt = negotiation.action ?? `%PLAYER% tries to pacify ${targ.name}`; //set text for when it can proceed
+	if (!result.failed) {
+		finaltxt = finaltxt != '' ? finaltxt : (negotiation.action ?? `%PLAYER% tries to pacify ${targ.name}`); //set text for when it can proceed
 
 		//kindheart passive
 		if (!specials?.stagnant) {
@@ -1058,7 +1073,7 @@ doPacify = (char, btl, action) => {
 			for (let k in neededSpecial) {
 				let failure_requirement = neededSpecial[k][0];
 
-				if (result?.failed != failure_requirement) continue;
+				if (result?.failedSpecial != failure_requirement) continue;
 
 				let failure_special = neededSpecial[k][1];
 
