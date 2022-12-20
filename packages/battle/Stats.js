@@ -131,6 +131,11 @@ getCharFromId = (id, btl) => {
 		for (const k in btl.teams[i].members) {
 			if (btl.teams[i].members[k].id && btl.teams[i].members[k].id == id) return btl.teams[i].members[k];
 		}
+
+		// If they're in backup then return "backup"
+		for (const k in btl.teams[i].backup) {
+			if (btl.teams[i].backup[k].id && btl.teams[i].backup[k].id == id) return "backup";
+		}
 	}
 
 	return btl.teams[0].members[0];

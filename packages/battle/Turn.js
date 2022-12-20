@@ -15,6 +15,13 @@ getTurnOrder = (btl) => {
 			turnorder.push(objClone(f));
 			if (f.type && (f.type.includes('boss') || f.type.includes('deity'))) turnorder.push(objClone(f));
 		}
+
+		for (const k in btl.teams[i].backup) {
+			let f = btl.teams[i].backup[k];
+
+			turnorder.push(objClone(f));
+			if (f.type && (f.type.includes('boss') || f.type.includes('deity'))) turnorder.push(objClone(f));
+		}
 	}
 
 	if (btl?.terrain?.type === 'psychic') {
@@ -1821,8 +1828,8 @@ doTurn = async(btl, noTurnEmbed) => {
 	let char = getCharFromTurn(btl);
 	let settings = setUpSettings(btl.guild.id);
 	
-	// Skip this turn if we're dead or pacified.
-	if (char.hp <= 0 || char.pacified) return advanceTurn(btl);
+	// Skip this turn if we're dead or pacified or in backup
+	if (char == "backup" || char.hp <= 0 || char.pacified) return advanceTurn(btl);
 
 	// a
 	let statusTxt = '';
