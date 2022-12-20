@@ -2118,7 +2118,7 @@ extrasList = {
 		],
 		applyfunc(message, skill, args) {
 			let turns = parseInt(args[0]);
-			if (turns > 0) return void message.channel.send("Please set turns above 0.");
+			if (turns <= 0) return void message.channel.send("Please set turns above 0.");
 			makeExtra(skill, "fakeout", [turns]);
 			return true
 		},
