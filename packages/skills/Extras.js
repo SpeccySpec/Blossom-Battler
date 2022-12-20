@@ -2078,15 +2078,23 @@ extrasList = {
 			}
 		],
 		applyfunc(message, skill, args) {
-			let chance = parseFloat(args[1]);
-			if (chance < 0 || chance > 100) return void message.channel.send("Please set a chance above or below 100.");
+			let chance = parseFloat(args[0]);
+			if (chance < 0 || chance > 100) return void message.channel.send("Please set a chance above 0 and below 100.");
 			makeExtra(skill, "flinch", [chance]);
 			return true
 		},
 		onuse(char, targ, skill, btl, vars) {
 			if (targ.hp <= 0) return;
 			if (targ.custom?.flinch) return;
-			if (isBoss(targ)) return;
+			if (statWithBuff(char.stats.agl, char.buffs.agl) < statWithBuff(targ.stats.agl, targ.buffs.agl)) return;
+
+			if (isBoss(targ)) {
+				if (skill.extras.fakeout && skill.extras.fakeout[0] <= 1) {
+					// do nothing - we let this slide.
+				} else {
+					return;
+				}
+			}
 
 			if (vars[0] >= 100 || randNum(1, 100) <= vars[0]) {
 				addCusVal(targ, "flinch", true);
@@ -2095,6 +2103,41 @@ extrasList = {
 		},
 		getinfo(vars, skill) {
 			return `**${vars[0]}%** chance to make the target flinch.`;
+		}
+	}),
+
+	fakeout: new Extra({
+		name: "Fake Out (Pokémon)",
+		desc: "This move only works on the first <Turn Count> turn(s). If paired with **Flinch (Pokémon)**, and <Turn Count> is 1, it may bypass bosses.",
+		args: [
+			{
+				name: "Turn Count",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let turns = parseInt(args[0]);
+			if (turns > 0) return void message.channel.send("Please set turns above 0.");
+			makeExtra(skill, "fakeout", [turns]);
+			return true
+		},
+		canuse(char, skill, btl, vars) {
+			if (btl.turn <= vars[0]) {
+				if (vars[0] <= 1)
+					return "This skill can only be used on the first turn!";
+				else if (vars[0] <= 2)
+					return "This skill can only be used before the second turn has passed!";
+				else if (vars[0] <= 3)
+					return "This skill can only be used before the third turn has passed!";
+
+				return `This skill can only be used before turn #${vars[0]} has passed!`;
+			}
+
+			return true;
+		},
+		getinfo(vars, skill) {
+			return `Only usable before **turn #${vars[0]}** has passed`;
 		}
 	}),
 }
