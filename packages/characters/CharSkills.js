@@ -29,6 +29,8 @@ makeMelee = (char) => {
 }
 
 isMainElement = (skill, char) => {
+	if (!skill.type) return false;
+
 	if (typeof char.mainElement === 'string') {
 		if (typeof skill.type === 'string') {
 			if (char.mainElement === skill.type) return true;

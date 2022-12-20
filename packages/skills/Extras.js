@@ -243,7 +243,7 @@ extrasList = {
 			return allcharges[name][0] < 1 ? `${name} ran out of charges!` : true
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
-			let charges = char.custom.charges[skill.name]
+			let charges = char.custom.charges[skill.name] ?? 0;
 			charges[0] -= 1;
 			charges[0] = parseFloat(charges[0].toFixed(2))
 			
@@ -2065,7 +2065,38 @@ extrasList = {
 		getinfo(vars, skill) {
 			return `Fails if the **target** is not afflicted with ${statusEmojis[vars[0]] ?? '<:burn:963413989688213524>'}**${statusNames[vars[0]] ?? 'Burning'}**.`
 		}
-	})
+	}),
+
+	flinch: new Extra({
+		name: "Flinch (Pokémon)",
+		desc: "If the user is faster than the target, the target may lose their next turn. Does not work on bosses.",
+		args: [
+			{
+				name: "Turn Skip %",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let chance = parseFloat(args[1]);
+			if (chance < 0 || chance > 100) return void message.channel.send("Please set a chance above or below 100.");
+			makeExtra(skill, "flinch", [chance]);
+			return true
+		},
+		onuse(char, targ, skill, btl, vars) {
+			if (targ.hp <= 0) return;
+			if (targ.custom?.flinch) return;
+			if (isBoss(targ)) return;
+
+			if (vars[0] >= 100 || randNum(1, 100) <= vars[0]) {
+				addCusVal(targ, "flinch", true);
+				return `__${targ.name}__ flinched!`;
+			}
+		},
+		getinfo(vars, skill) {
+			return `**${vars[0]}%** chance to make the target flinch.`;
+		}
+	}),
 }
 
 // Make an Extra for a skill. "func" should be an array of 1-5 values indicating what the extra does.
@@ -2713,6 +2744,13 @@ customVariables = {
 
 			char.attacked = true;
 			return txt;
+		}
+	},
+
+	flinch: {
+		toembed: "<:warning:878094052208296007>",
+		onturn(btl, char, vars) {
+			return `__${char.name}__ flinched and was unable to move!`;
 		}
 	},
 }

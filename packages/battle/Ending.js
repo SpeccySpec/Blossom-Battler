@@ -169,6 +169,10 @@ winBattle = (btl, i) => {
 
 			for (let char2 of btl.teams[i].members) {
 				if (char2.id  == char.id) continue;
+
+				if (!charFile[char.truename].trust) charFile[char.truename].trust = {};
+				if (!charFile[char2.truename].trust) charFile[char2.truename].trust = {};
+
 				embedtxt += `${changeTrust(char, char2, Math.round(35*settings.rates.trustrate), false)}`;
 				charFile[char.truename].trust = char.trust;
 				charFile[char2.truename].trust = char2.trust;
