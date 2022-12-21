@@ -503,6 +503,7 @@ commands.startbattle = new Command({
 			let char = objClone(charFile[party.backup[i]]);
 			if (!char.name) char.name = party.backup[i];
 
+			char.truename = party.backup[i];
 			char.id = battleid;
 			battleid++;
 
@@ -765,6 +766,7 @@ commands.startpvp = new Command({
 				let char = objClone(charFile[party.backup[k]]);
 				if (!char.name) char.name = party.backup[k];
 
+				char.truename = party.backup[i];
 				char.id = battleid;
 				battleid++;
 
@@ -1016,6 +1018,7 @@ commands.starttrial = new Command({
 			let char = objClone(charFile[party.backup[i]]);
 			if (!char.name) char.name = party.backup[i];
 
+			char.truename = party.backup[i];
 			if (char.level < levellock) return message.channel.send(`${char.name} (who is in backup) is not strong enough to attmept this trial! They must be level ${levellock} to do this trial.`);
 
 			char.id = battleid;
@@ -1264,6 +1267,7 @@ commands.testbattle = new Command({
 			let char = objClone(charFile[party.backup[i]]);
 			if (!char.name) char.name = party.backup[i];
 
+			char.truename = party.backup[i];
 			char.id = battleid;
 			battleid++;
 

@@ -411,6 +411,7 @@ beginGlobalTrial = (trial, trialid, party, partyid, channel) => {
 			char.xp = 0;
 		}
 
+		char.truename = party.backup[i];
 		char.id = battleid;
 		battleid++;
 
