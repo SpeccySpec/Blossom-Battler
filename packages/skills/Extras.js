@@ -2439,7 +2439,8 @@ customVariables = {
 	trap: {
 		dmgmod(btl, char, inf, dmg, skill, vars, multiplier) {
 			dmg = Math.round(dmg*vars[1]);
-			dmg = Math.round(modSkillResult(char, targ, dmg, skill, btl) / multiplier);
+			dmg = Math.round(modSkillResult(char, inf, dmg, skill, btl) / multiplier);
+
 			let txt
 			switch(vars[2].toLowerCase()) {
 				case 'buff':
