@@ -837,13 +837,15 @@ statusList = {
 		onuse(char, targ, skill, btl, vars) {
 			if (btl?.terrain?.type) {
 				btl.terrain.type = vars[0];
-				btl.terrain.turns = Math.round(modSkillResult(char, targ, randNum(8, 16), skill, btl) * multiplier);
+				btl.terrain.turns = randNum(8, 16);
 			} else {
 				btl.terrain = {
 					type: vars[0],
-					turns: Math.round(modSkillResult(char, targ, randNum(8, 16), skill, btl) * multiplier)
+					turns: randNum(8, 16)
+//					turns: Math.round(modSkillResult(char, targ, randNum(8, 16), skill, btl) * multiplier)
 				}
 			}
+
 			return `The terrain has been changed to __${vars[0]}__!`;
 		},
 		getinfo(vars, skill) {
