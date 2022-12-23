@@ -518,7 +518,8 @@ sendStateEmbed = (char, btl) => {
 	});
 
 	let collector = makeCollector(btl.channel, {
-		filter: ({user}) => (user.id == char.owner || utilityFuncs.RPGBotAdmin(user.id) || user.id == btl?.initiator)
+		filter: (({user}) => (user.id == char.owner || utilityFuncs.RPGBotAdmin(user.id) || user.id == btl?.initiator)),
+		time: btl?.action?.timer
 	})
 
 	collector.on('collect', async i => {
@@ -564,7 +565,19 @@ sendStateEmbed = (char, btl) => {
 			embeds: [DiscordEmbed],
 			components: setUpComponents(char, btl, menustate, [MENU_QUESTION].includes(menustate))
 		})
-	})
+	});
+
+	collector.on('end', async i => {
+		if (i.size < 1) {
+			switch (menustate) {
+				case MENU_QUESTION:
+					doAction(char, btl, btl.action);
+					break;
+			}
+
+			collector.stop();
+		}
+	});
 }
 
 sendCurTurnEmbed = (char, btl) => {
@@ -1524,6 +1537,7 @@ sendCurTurnEmbed = (char, btl) => {
 							answers: answers,
 							correctAnswer: answers.indexOf(roundedResult.toString())
 						}
+						btl.action.timer = special[3]*1000;
 
 						menustate = MENU_QUESTION;
 						btl.intendedstate = menustate;
