@@ -834,7 +834,7 @@ statusList = {
 			makeStatus(skill, "terrain", [args[0].toLowerCase()]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars) {
+		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (btl?.terrain?.type) {
 				btl.terrain.type = vars[0];
 				btl.terrain.turns = Math.round(modSkillResult(char, targ, randNum(8, 16), skill, btl) * multiplier);
