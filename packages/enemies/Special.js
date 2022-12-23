@@ -400,7 +400,7 @@ specialList = {
 
 	math: new Extra({
 		name: 'Math',
-		desc: `The target will present the user with a math equation with a <Expression Amount> expression amount to answer in {Timer} seconds.\n\n[NOT YET USABLE]`,
+		desc: `The target will present the user with a math equation with a <Expression Amount> expression amount to answer in {Timer} seconds.`,
 		args: [
 			{
 				name: 'Include addition?',
