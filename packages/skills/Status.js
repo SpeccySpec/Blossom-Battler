@@ -841,8 +841,7 @@ statusList = {
 			} else {
 				btl.terrain = {
 					type: vars[0],
-					turns: randNum(8, 16)
-//					turns: Math.round(modSkillResult(char, targ, randNum(8, 16), skill, btl) * multiplier)
+					turns: Math.round(modSkillResult(char, targ, randNum(8, 16), skill, btl) * multiplier)
 				}
 			}
 
