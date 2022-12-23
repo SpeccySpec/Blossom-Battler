@@ -2450,7 +2450,7 @@ customVariables = {
 				case 'status':
 					txt = `${inf.name} set off the ${vars[0]}`;
 
-					vars[4] = Math.round(modSkillResult(char, targ, vars[4], skill, btl) * multiplier);
+					vars[4] = Math.round(modSkillResult(char, inf, vars[4], skill, btl) * multiplier);
 
 					if (randNum(1, 100) <= vars[4]) {
 						txt += `!\n${inflictStatus(inf, vars[3])}`;
@@ -2465,7 +2465,7 @@ customVariables = {
 					txt = `${inf.name} set off the ${vars[0]}!`;
 					let d = vars[3];
 
-					d = Math.round(modSkillResult(char, targ, d, skill, btl) * multiplier);
+					d = Math.round(modSkillResult(char, inf, d, skill, btl) * multiplier);
 
 					if (randNum(1, 100) <= vars[4]) {
 						let affinity = getAffinity(inf, vars[5]);
