@@ -384,7 +384,7 @@ const menuStates = {
 							if (members[i].hp > 0) continue;
 						}
 						if (members[i]?.status === 'ego') continue;
-					} else if (skill.type === 'status' && skill.statusses.mimic) {
+					} else if (skill.type === 'status' && skill.statusses?.mimic) {
 						if (members[i].hp <= 0) continue;
 						if (members[i].id === char.id) continue;
 						if (isBoss(members[i])) continue;
