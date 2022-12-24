@@ -929,7 +929,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 			.setTitle(`__${char.name}__ => ???`)
-			.setDescription(`${char.name} tried to use a skill ...but nothing happened...?\n_(Something went wrong with the skill. Does it exist?)_`))
+			.setDescription(`${char.name} tried to use a skill ...but nothing happened...?\n_(Something went wrong with the skill. Does it exist?)_`)
 		btl.channel.send({embeds: [DiscordEmbed]});
 
 		// return true or something
