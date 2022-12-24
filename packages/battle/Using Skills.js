@@ -924,6 +924,19 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	let settings = setUpSettings(btl.guild.id);
 	let skill = objClone(forceskill) ?? objClone(skillFile[act.index]);
 
+	// Does this skill exist...?
+	if (!skill) {
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+			.setTitle(`__${char.name}__ => ???`)
+			.setDescription(`${char.name} tried to use a skill ...but nothing happened...?\n_(Something went wrong with the skill. Does it exist?)_`))
+		btl.channel.send({embeds: [DiscordEmbed]});
+
+		// return true or something
+		fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, null, '    '));
+		return;
+	}
+
 	// Enemies should learn the skills we use.
 	for (let i in btl.teams) {
 		for (let k in btl.teams[i].members) {
@@ -1349,7 +1362,6 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// Now, send the embed!
-
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 		.setTitle(targTxt)

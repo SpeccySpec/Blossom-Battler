@@ -1,3 +1,11 @@
+let damageFormulas = {
+	'persona': '5*√(Attack/Endurance * Skill Power) + (-7 to 7)',
+	'pokemon': '(((2*level)/5+2)*Power*Attack/Endurance)/50+2',
+	'lamonka': '((Power+Level)*((Attack/Endurance)/4))*(0.95 to 1.05)',
+	'beta': '(0 to Level+35) + (0 to Power/1.75) + (-7 to 7)',
+	'custom': 'uhhhh Spectra you handle this'
+}
+
 commands.settings = new Command({
 	desc: 'View this server\'s settings here.',
 	section: 'moderation',
@@ -66,14 +74,7 @@ commands.settings = new Command({
 			affinityRateText += `**${affinityEmoji[i]} ${i.charAt(0).toUpperCase() + i.slice(1)} Affinity Rate**: ${settings['rates']['affinities'][i]}x\n`
 		}
 
-		let formulaText = ''
-		let damageFormulas = {
-			'persona': '5*√(Attack/Endurance * Skill Power) + (-7 to 7)',
-			'pokemon': '(((2*level)/5+2)*Power*Attack/Endurance)/50+2',
-			'lamonka': '((Power+Level)*((Attack/Endurance)/4))*(0.95 to 1.05)',
-			'beta': '(0 to Level+35) + (0 to Power/1.75) + (-7 to 7)'
-		}
-
+		let formulaText = '';
 		formulaText += `**Damage Formula:**\n${settings['formulas']['damageFormula'].charAt(0).toUpperCase() + settings['formulas']['damageFormula'].slice(1)}\n\`${damageFormulas[settings['formulas']['damageFormula']]}\``
 
 		let levelUpFormulas = {
@@ -394,21 +395,15 @@ commands.damageformula = new Command({
 	func: (message, args) => {
 		let settings = setUpSettings(message.guild.id)
 
-		let damageFormulas = {
-			'persona': '5*√(Attack/Endurance * Skill Power)',
-			'pokemon': '(((2*level)/5+2)*Power*Attack/Endurance)/50+2',
-			'custom': 'uhhhh Spectra you handle this'
-		}
-
-		if (args[0].toLowerCase() != 'persona' && args[0].toLowerCase() != 'pokemon' && args[0].toLowerCase() != 'custom') {
-			return message.channel.send('Invalid damage formula! Valid formulas are: persona, pokemon, custom')
+		if (args[0].toLowerCase() != 'persona' && args[0].toLowerCase() != 'pokemon' && args[0].toLowerCase() != 'lamonka' && args[0].toLowerCase() != 'beta' && args[0].toLowerCase() != 'custom') {
+			return message.channel.send('Invalid damage formula! Valid formulas are: persona, pokemon, lamonka, beta')
 		}
 
 		if (args[0].toLowerCase() == 'custom') {
 			return message.channel.send('Custom damage formulas are not yet supported!')
 		}
 
-		settings['formulas']['damageFormula'] = damageFormulas[args[0].toLowerCase()]
+		settings['formulas']['damageFormula'] = args[0].toLowerCase();
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 		message.channel.send('Damage formula set to ' + args[0].charAt(0).toUpperCase() + args[0].slice(1) + '\n\`' + damageFormulas[args[0].toLowerCase()] + '\`')
 	}
