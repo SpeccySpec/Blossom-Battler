@@ -1,5 +1,37 @@
-pvpWin = (btl, i) => {
-	btl.channel.send(`**[DEBUG]**\nTeam #${i} won`);
+pvpWin = async(btl, i) => {
+	let DiscordEmbed = new Discord.MessageEmbed()
+		.setColor(elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike)
+		.setTitle("__Battle Results__")
+		.setDescription(`**[BATTLE RESULTS]**\nThe winner is **Team #${i}**!\nCongratulations, each member recieves 1<:golden:973077051751940138>!`)
+	btl.channel.send({embeds: [DiscordEmbed]}).then(message => {
+		// Award stars
+		let users = [];
+
+		let char = {};
+		for (let k in btl.teams[i].members) {
+			char = btl.teams[i].members[k]; 
+			if (!users.includes(char.owner)) users.push(char.owner);
+		}
+
+		for (let user of users) giveStars(user, 1);
+
+		// Charfuck
+		if (btl.pvpmode == 'charfuck' || btl.pvpmode == 'characterscramble' || btl.pvpmode == 'charscramble') {
+			let user;
+			for (let team of btl.teams) {
+				for (let k in team.members) {
+					let char2 = team.members[k];
+					let DiscordEmbed2 = longDescription(char2, char2.level, btl.guild.id, btl.guild, true);
+
+					user = client.users.fetch(char2.owner);
+					user.then(userobj => {
+						userobj.send({content: `Here were ${char2.name}'s stats during that Character Scramble match.`, embeds: [DiscordEmbed2]});
+					})
+				}
+			}
+		}
+	})
+
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, '{}');
 }
 

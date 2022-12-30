@@ -156,7 +156,7 @@ const menuStates = {
 			const skillinfo = skillFile[char.pet.skill];
 
 			comps[0] = [
-				makeButton('Melee', elementEmoji.strike, 'red'),
+				makeButton('Melee', elementEmoji[char.melee.type] ?? elementEmoji.strike, 'red'),
 				makeButton(skillinfo ? skillinfo.name : '...?', elementEmoji[skillinfo.type] ?? itemTypeEmoji.skill, 'blue', true, 'skills', !skillinfo),
 				makeButton('Pacify', itemTypeEmoji.pacify, 'green'),
 				makeButton('Enemy Info', statusEmojis.silence, 'red', true, 'enemyinfo')
@@ -165,7 +165,7 @@ const menuStates = {
 			if (btl.action && btl.action.ally) delete btl.action.ally;
 
 			comps[0] = [
-				makeButton('Melee', elementEmoji.strike, 'red'),
+				makeButton('Melee', elementEmoji[char.melee.type] ?? elementEmoji.strike, 'red'),
 				makeButton('Skills', elementEmoji.bless, 'blue'),
 				makeButton('Items', itemTypeEmoji.healhpmp, 'green'),
 				makeButton('Tactics', critEmoji, 'grey'),

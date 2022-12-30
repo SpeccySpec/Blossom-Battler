@@ -790,6 +790,11 @@ commands.startpvp = new Command({
 		}
 
 		// Is this battle a specific gamemode
+
+		// Optimize code
+		let skillkeys = Object.keys(skillFile);
+		let skilllen = skillkeys.length;
+
 		if (args[1].toLowerCase() != 'none' || args[1].toLowerCase() != 'normal') {
 			switch(args[1].toLowerCase()) {
 				case 'anyskill':
@@ -827,7 +832,7 @@ commands.startpvp = new Command({
 	
 							// SkillFuck Skills
 							for (let k = 0; k < 8; k++) {
-								char.skills[k] = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
+								char.skills[k] = skillkeys[Math.floor(Math.random() * skilllen)];
 							}
 						}
 					}
@@ -842,7 +847,7 @@ commands.startpvp = new Command({
 	
 							// CharFuck Skills
 							for (let k = 0; k < 8; k++) {
-								char.skills[k] = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
+								char.skills[k] = skillkeys[Math.floor(Math.random() * skilllen)];
 							}
 
 							// CharFuck Stats
@@ -851,6 +856,12 @@ commands.startpvp = new Command({
 							char.hp = char.maxhp;
 							char.mp = char.maxmp;
 							for (const k in char.stats) char.stats[k] = randNum(1, 99);
+
+							// CharFuck Melee Attack
+							char.melee.type = Elements[Math.floor(Math.random() * Elements.length)];
+							char.melee.pow = randNum(1, 60);
+							char.melee.acc = randNum(0, 100);
+							char.melee.crit = randNum(0, 100);
 
 							// CharFuck Affinities
 							if (!char.affinities) char.affinities = {};

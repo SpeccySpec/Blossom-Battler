@@ -180,7 +180,7 @@ const affinityScores = {
 	[30]: "Oh I get it now, you like creating almighty invincible gods."
 }
 
-longDescription = (charDefs, level, server, message) => {
+longDescription = (charDefs, level, server, message, useguild) => {
 	let char = objClone(charDefs);
 
 	let dispLevel = '';
@@ -193,7 +193,12 @@ longDescription = (charDefs, level, server, message) => {
 		dispLevel = `(At Level ${level})`;
 	}
 
-	let userTxt = getServerUser(char.owner, message);
+	let userTxt;
+	
+	if (useguild)
+		getServerUserFromGuild(char.owner, message);
+	else
+		getServerUser(char.owner, message);
 
 	let tick = verifiedChar(char) ? '<:tick:973077052372701294>' : '';
 	let DiscordEmbed = new Discord.MessageEmbed()

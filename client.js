@@ -817,6 +817,20 @@ getServerUser = (user, message) => {
     return userTxt;
 }
 
+getServerUserFromGuild = (user, guild) => {
+    let userTxt = ''
+	if (user) {
+		if (user === 'Default')
+			userTxt = 'Default/Official';
+		else {
+			try { userTxt = guild.members.cache.get(user).user.username } catch (e) { userTxt = user }
+		}
+	} else
+		userTxt = 'Default/Official';
+
+    return userTxt;
+}
+
 setUpSettings = (guild) => {
 	let settings = setUpFile(`${dataPath}/json/${guild}/settings.json`);
 
