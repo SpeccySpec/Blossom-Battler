@@ -430,6 +430,7 @@ beginGlobalTrial = (trial, trialid, party, partyid, channel) => {
 	let encounter = trial.waves[0];
 
 	battle.trial = trial;
+	battle.trial.id = trialid;
 	battle.onlineid = trialid;
 
 	let enmDesc = '';

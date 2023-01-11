@@ -1050,6 +1050,7 @@ commands.starttrial = new Command({
 		let encounter = trial.waves[0];
 
 		battle.trial = trial;
+		battle.trial.id = args[1];
 
 		let enmDesc = '';
 		for (let i in encounter) {

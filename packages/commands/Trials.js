@@ -172,6 +172,7 @@ commands.registertrial = new Command({
 
         trialFile[args[0]] = {
             name: args[0],
+			id: args[0],
             endless: args[1] ? (args[1].toLowerCase() == 'true' || args[1].toLowerCase() == 'yes' || args[1].toLowerCase() == 'y' || args[1].toLowerCase() == '1') : false,
             waves: [],
         }
@@ -225,6 +226,32 @@ commands.trialendless = new Command({
         if (!trialFile[args[0]]) return message.channel.send(`No trial with the name ${args[0]} was found.`)
 
         trialFile[args[0]].endless = !trialFile[args[0]].endless
+        fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trialFile, null, 4))
+        message.channel.send(`${trialFile[args[0]].name} is now ${trialFile[args[0]].endless ? 'endless' : 'not endless'}.`)
+    }
+})
+
+commands.verifytrial = new Command({
+    desc: "**[SUPER ADMIN ONLY]**\nVerifies a trial.",
+    section: 'trials',
+    aliases: ['trialverify', 'verifyt'],
+    args: [
+        {
+            name: "Name",
+            type: "Word",
+            forced: true
+        }
+    ],
+    admin: 'You don\'t have permission to change a trial\'s endless status.',
+    checkban: true,
+    func: async(message, args) => {
+		if (!utilityFuncs.RPGBotAdmin(message.author.id)) return void message.channel.send("Only a super admin can use this.");
+
+        trialFile = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`)
+
+        if (!trialFile[args[0]]) return message.channel.send(`No trial with the name ${args[0]} was found.`)
+
+        trialFile[args[0]].verified = !trialFile[args[0]].verified
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trialFile, null, 4))
         message.channel.send(`${trialFile[args[0]].name} is now ${trialFile[args[0]].endless ? 'endless' : 'not endless'}.`)
     }
