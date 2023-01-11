@@ -1171,6 +1171,16 @@ sendCurTurnEmbed = (char, btl) => {
 					let item = itemFile[i.customId];
 					let itemdta = itemData[item.type];
 
+					if (!itemdta) {
+						DiscordEmbed.title = "Something went wrong... Please try something else!";
+
+						return i.update({
+							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+							embeds: [DiscordEmbed],
+							components: []
+						});
+					}
+
 					if (!itemdta.target || itemdta.target === "one" || itemdta.target === "spreadopposing") {
 						menustate = MENU_TEAMSEL;
 					} else if (itemdta.target === "ally" || itemdta.target === "spreadallies") {

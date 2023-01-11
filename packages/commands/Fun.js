@@ -192,7 +192,7 @@ commands.quote = new Command({
         let DiscordEmbed = new Discord.MessageEmbed()
             .setColor('#ffffff')
             .setDescription(`${quoteText}`)
-            .setFooter(`${prefix}${command}`);
+			.setFooter(`${getPrefix(message.guild.id)}randquote`);
         message.channel.send({embeds: [DiscordEmbed]})
 	}
 })

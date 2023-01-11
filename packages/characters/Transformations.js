@@ -101,6 +101,9 @@ transformationDesc = (char, name, server, message) => {
 }
 
 canTransform = (char, btl, force) => {
+	let settings = setUpSettings(btl.guild.id);
+	if (!settings.mechanics.transformations) return false;
+
 	if (!char) return false;
 	if (char.transformed) return false;
 	if (char.notransform) return false;

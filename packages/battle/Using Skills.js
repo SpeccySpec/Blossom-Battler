@@ -293,7 +293,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 				status = skill.status;
 			}
 
-			result.txt += statusList.status.inflictStatus(char, targ, skill, status, btl, skill.pow);
+			result.txt += statusList.status.inflictStatus(char, targ, skill, status ?? 'burn', btl, skill.pow);
 		}
 	// Attacking Skills
 	} else {

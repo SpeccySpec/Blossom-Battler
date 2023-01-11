@@ -839,6 +839,7 @@ hasAffinity = (charDefs, element, affinity) => {
 }
 
 hasStatusAffinity = (charDefs, element, affinity) => {
+	if (!element) return;
 	if (element.toLowerCase() == 'almighty') return false;
 
 	if (!charDefs.statusaffinities) return false;
