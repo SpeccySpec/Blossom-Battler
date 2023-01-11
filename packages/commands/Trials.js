@@ -253,7 +253,7 @@ commands.verifytrial = new Command({
 
         trialFile[args[0]].verified = !trialFile[args[0]].verified
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/trials.json`, JSON.stringify(trialFile, null, 4))
-        message.channel.send(`${trialFile[args[0]].name} is now ${trialFile[args[0]].endless ? 'endless' : 'not endless'}.`)
+        message.channel.send(`${trialFile[args[0]].name} is now ${trialFile[args[0]].verified ? 'verified' : 'not verified'}.`)
     }
 })
 
