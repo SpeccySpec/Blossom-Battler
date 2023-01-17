@@ -87,7 +87,7 @@ weatherFuncs = {
 				char.hp = Math.max(0, char.hp-dmg);
 
 				if (char.hp <= 0) {
-					return `__${char.name}__ was ___defeated${affinity}___ by the __Hail__!`;
+					return `__${char.name}__ was ___defeated${affinity}___ by the __Hail__!\n${selectQuote(char, 'death', null)}`;
 				} else {
 					return `__${char.name}__ took ___${dmg}${affinity}___ damage from the __Hail__!`;
 				}
@@ -130,7 +130,7 @@ terrainFuncs = {
 				char.hp = Math.max(0, char.hp-dmg);
 
 				if (char.hp <= 0) {
-					txt += `__${char.name}__ was ___defeated${affinity}___ by the __Flaming Terrain__!`;
+					txt += `__${char.name}__ was ___defeated${affinity}___ by the __Flaming Terrain__!\n${selectQuote(char, 'death', null)}`;
 				} else {
 					txt += `__${char.name}__ took ___${dmg}${affinity}___ damage from the __Flaming Terrain__!`;
 					if (randNum(1, 100) <= 10) txt += `\n${inflictStatus(char, "burn")}`;

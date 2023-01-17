@@ -153,7 +153,7 @@ extrasList = {
 				if (passAll) {
 					if ((elementOHKO.length > 0 && !elementOHKO.includes(targ.mainElement))
 					|| (statusOHKO.length > 0 && !statusOHKO.includes(targ.status) && (statusOHKO.includes('infatuation') && !targ.infatuation) && (statusOHKO.includes('confusion') && !targ.confusion))
-					|| (affinityOHKO.length > 0 && !affinityOHKO.includes(affinity))) return !failDamage ? dodgeTxt(targ) : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
+					|| (affinityOHKO.length > 0 && !affinityOHKO.includes(affinity))) return !failDamage ? dodgeTxt(targ, char) : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
 				} else {
 					let hasFailed = true;
 
@@ -161,7 +161,7 @@ extrasList = {
 					if (hasFailed && statusOHKO.length > 0 && (statusOHKO.includes(targ.status) || (statusOHKO.includes('infatuation') && targ.infatuation) || (statusOHKO.includes('confusion') && targ.confusion))) hasFailed = false
 					if (hasFailed && affinityOHKO.length > 0 && affinityOHKO.includes(affinity)) hasFailed = false
 
-					if (hasFailed) return !failDamage ? dodgeTxt(targ) : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
+					if (hasFailed) return !failDamage ? dodgeTxt(targ, char) : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
 				}
 			}
 
@@ -171,9 +171,9 @@ extrasList = {
 
 			if (chance <= target) {
 				targ.hp = 0;
-				return `__${char.name}__ instantly KO'd __${targ.name}__!`;
+				return `__${char.name}__ instantly KO'd __${targ.name}__!\n${selectQuote(char, 'kill', null, '%ENEMY%', targ.name, '%SKILL%', skill.name)}${selectQuote(targ, 'death', null, '%ENEMY%', char.name, '%SKILL%', skill.name)}`;
 			} else {
-				return !failDamage ? dodgeTxt(targ) : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
+				return !failDamage ? dodgeTxt(targ, char) : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
 			}
 		},
 		hardcodedinfo: true
@@ -1800,7 +1800,7 @@ extrasList = {
 				targ.hp = char.hp;
 				return `__${char.name}__'s _${skill.name}_ dealt **${dmg}** damage to __${targ.name}__, cutting their health to theirs!`;
 			} else {
-				return dodgeTxt(targ);
+				return dodgeTxt(targ, char);
 			}
 		},
 		getinfo(vars, skill) {
@@ -1825,7 +1825,7 @@ extrasList = {
 				targ.hp -= dmg;
 				return `__${targ.name}__ had their HP halved, taking **${dmg}** damage!`;
 			} else {
-				return dodgeTxt(targ);
+				return dodgeTxt(targ, char);
 			}
 		},
 		getinfo(vars, skill) {
@@ -1886,11 +1886,11 @@ extrasList = {
 				targ.hp -= dmg;
 
 				let txt = `__${targ.name}__ took **${dmg} forced** damage`;
-				if (targ.hp <= 0) txt += " and was defeated!";
+				if (targ.hp <= 0) txt += ` and was defeated!\n${selectQuote(char, 'kill', null, '%ENEMY%', targ.name, '%SKILL%', skill.name)}${selectQuote(targ, 'death', null, '%ENEMY%', char.name, '%SKILL%', skill.name)}`;
 
 				return txt;
 			} else {
-				return dodgeTxt(targ);
+				return dodgeTxt(targ, char);
 			}
 		},
 		getinfo(vars, skill) {
@@ -2503,7 +2503,7 @@ customVariables = {
 						inf.hp = Math.max(0, inf.hp-d);
 						txt += `\n${inf.name} took ${d}${affinityTxt} damage from the trap!`;
 					} else {
-						txt += `\nBut ${inf.name} was able to evade the trap!\n${selectQuote(inf, 'dodge', null, "%ENEMY%", char.name)}`
+						txt += `\nBut ${inf.name} was able to evade the trap!\n${dodgeTxt(targ, char)}`
 					}
 
 					addAtkMsg(btl, txt);
