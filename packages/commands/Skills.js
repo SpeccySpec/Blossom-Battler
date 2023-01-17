@@ -996,22 +996,22 @@ commands.preskill = new Command({
 				return message.channel.send(`${skillFile[args[0]].name} already has a pre-skill for ${args[1]}!`)
 			}
 
-			if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
-				if (skillFile[args[0]].originalAuthor != message.author.id && (!skillFile[args[1]] || skillFile[args[1]].originalAuthor != message.author.id)) {
-					return message.channel.send(`You don't own ${skillFile[args[0]].name} or ${skillFile[args[1]].name}.`);
+			//if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
+				if (skillFile[args[0]].originalAuthor != message.author.id && (args[1].toLowerCase() !== "remove" && (!skillFile[args[1]] || skillFile[args[1]].originalAuthor != message.author.id))) {
+					return message.channel.send(`You don't own ${skillFile[args[0]].name} or ${skillFile[args[1]] ? skillFile[args[1]].name : args[1]}.`);
 				}
 
 				if (skillFile[args[0]].originalAuthor != message.author.id && skillFile[args[1]]) {
 					return preSkillRequest(message, args, skillFile[args[0]], skillFile[args[1]], skillFile[args[0]].originalAuthor);
 				}
 
-				if (skillFile[args[1]].originalAuthor != message.author.id && skillFile[args[1]]) {
+				if (skillFile[args[1]] && skillFile[args[1]].originalAuthor != message.author.id) {
 					return preSkillRequest(message, args, skillFile[args[0]], skillFile[args[1]], skillFile[args[1]].originalAuthor);
 				}
-			}
+			//}
 
 			setPreSkill(skillFile[args[0]], args[1], args[2]);
-			if (args[3] && (args[3].toLowerCase() == 'y' || args[3].toLowerCase() == 'yes')) {
+			if (args[1].toLowerCase() !== "remove" && args[3] && (args[3].toLowerCase() == 'y' || args[3].toLowerCase() == 'yes')) {
 				if (!hasEvoSkill(skillFile[args[1]], args[0])) {
 					setEvoSkill(skillFile[args[1]], args[0], args[2]-1);
 				}
