@@ -340,6 +340,7 @@ commands.backup = new Command({
 		}
 	],
 	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
@@ -355,6 +356,8 @@ commands.backup = new Command({
 			parties[args[0]].members.splice(pnum, 1);
 			parties[args[0]].backup.push(args[1]);
 		} else if (bnum) {
+			if (parties[args[0]].members.length >= settings['caps']['teamsize']) return message.channel.send(`You can only have ${settings['caps']['teamsize']} characters fighting at a time.`);
+
 			parties[args[0]].backup.splice(bnum, 1);
 			parties[args[0]].members.push(args[1]);
 		} else {
