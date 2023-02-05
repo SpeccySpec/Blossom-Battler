@@ -22,10 +22,14 @@ setPreSkill = (skill, preskill, lvl) => {
 preSkillRequest = async(message, args, skill, preskill, id) => {
 	let user = await client.users.fetch(id);
 
-	if (preskill.originalAuthor == id) {
-		message.channel.send(`${user}, ${message.author} desires to make your skill, ${preskill.name}, the Pre-Skill for ${skill.name}. Will you accept?`);
+	if (preskill !== 'remove') {
+		if (preskill.originalAuthor == id) {
+			message.channel.send(`${user}, ${message.author} desires to make your skill, ${preskill.name}, the Pre-Skill for ${skill.name}. Will you accept?`);
+		} else {
+			message.channel.send(`${user}, ${message.author} desires to make your skill, ${skill.name}, have a Pre-Skill to ${preskill.name}. Will you accept?`);
+		}
 	} else {
-		message.channel.send(`${user}, ${message.author} desires to make your skill, ${skill.name}, have a Pre-Skill to ${preskill.name}. Will you accept?`);
+		message.channel.send(`${user}, ${message.author} desires to make your skill, ${skill.name}, removable when a character is below specified level. Will you accept?`);
 	}
 
 	let givenResponce = false;

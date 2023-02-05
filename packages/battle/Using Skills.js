@@ -479,7 +479,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 		}
 
 		if (totalHits <= 0) {
-			result.txt += dodgeTxt(targ);
+			result.txt += dodgeTxt(char, targ);
 			return result;
 		} else {
 			// SkillMod
@@ -763,7 +763,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 
 				// Death.
 				if (targ.hp <= 0) {
-					result.txt += `${dmgTxt} damage and was defeated!_`;
+					result.txt += `${dmgTxt} damage and was defeated!_\n${selectQuote(char, 'kill', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'death', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 
 					// Endure Leader Skills
 					let party = btl.teams[targ.team];
