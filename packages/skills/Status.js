@@ -1930,17 +1930,20 @@ statusEffectFuncs = {
 			killVar(char, 'forcemove');
 		},
 		turnoverride(btl, char) {
-			let randteam = randNum(btl.teams.length-1);
-			while (randteam == char.team) randteam = randNum(btl.teams.length-1);
-
-			let randchar = randNum(btl.teams[randteam].members.length-1);
-			while (btl.teams[randteam].members[randchar].hp <= 0) randchar = randNum(btl.teams[randteam].members.length-1);
-
-			let result = {
-				move: 'melee',
-				index: 0,
-				target: [randteam, randchar],
+			let targs = [];
+			let team = {};
+			let targ = {};
+			for (let i in btl.teams) {
+				team = btl.teams[i];
+				for (let k in team.members) {
+					targ = team.members[k];
+					if (targ.hp > 0 && targ.id != char.id) targs.push([i, k]);
+				}
 			}
+
+			let randnum = randNum(0, targs.length-1)
+
+			let result = {move: 'melee', index: 0, target: [randnum[0], randnum[1]]};
 			addCusVal(char, 'forcemove', [char.statusturns, result]);
 		}
 	},
