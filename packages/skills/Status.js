@@ -1608,7 +1608,7 @@ statusList = {
 			return `__${char.name}__ has burst, curing their status effects, and is regenerating their **HP** by **${vars[0]}%** for **3 turns**!`;
 		},
 		getinfo(vars, skill) {
-			return `**Cures status effects**, and causes regeneration by **${vars[0]}%**, for 3 turns.`;
+			return `**Cures status effects**, and causes regeneration by **${vars[0]}%**, for 3 turns`;
 		}
 	}),
 }
