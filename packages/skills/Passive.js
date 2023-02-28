@@ -353,8 +353,8 @@ passiveList = {
 			if (!Elements.includes(targtype))
 				return void message.channel.send(`${args[1]} is an invalid element!`);
 
-			if (targtype == 'almighty')
-				return void message.channel.send(`You can't change skills to Almighty type!`);
+			if (targtype == 'almighty' || targtype == 'status' || targtype == 'passive')
+				return void message.channel.send(`You can't change skills to ${args[1]} type!`);
 
 			if (dmgmod && (dmgmod <= 0 || dmgmod >= 500))
 				return void message.channel.send("Please enter a power modifier above 0% and below 500%!");
