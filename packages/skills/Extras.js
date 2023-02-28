@@ -2586,13 +2586,23 @@ customVariables = {
 
 	charge: {
 		toembed: "<:physical:973077052129423411>",
-		statmod(btl, char, stats, vars) {
-			if (stats[vars.stat]) stats[vars.stat] *= vars.mult;
-			return stats;
+		statmod(btl, char, skill, vars) {
+			if (vars.mult >= 100)
+				skill.crit = 9999;
+			else
+				skill.crit *= vars.mult;
+		},
+		dmgmod(btl, char, inf, dmg, skill, vars, multiplier) {
+			dmg = Math.round(modSkillResult(char, inf, dmg, skill, btl) / multiplier);
+			if (vars.stat == 'phys' && skill.atktype == 'physical') {
+				dmg = Math.round(dmg*vars.mult);
+			} else if (vars.stat == 'mag' && skill.atktype == 'magic') {
+				dmg = Math.round(dmg*vars.mult);
+			}
 		},
 		endturn(btl, char, vars) {
 			if (!vars.toggle) {
-				vars.toggle = true
+				vars.toggle = true;
 				return
 			}
 			killVar(char, 'charge');

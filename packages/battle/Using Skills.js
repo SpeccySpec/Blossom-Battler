@@ -1083,6 +1083,17 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		}
 	}
 
+	// Attack Extras
+	if (char.custom) {
+		for (let i in char.custom) {
+			if (noExtraArray && noExtraArray.includes(i)) continue;
+
+			if (customVariables[i] && customVariables[i].statmod) {
+				customVariables[i].statmod(btl, char, skill, char.custom[i]);
+			}
+		}
+	}
+
 	// Status Effects
 	if (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].skillmod) {
 		statusEffectFuncs[char.status].skillmod(char, char.stats, btl);

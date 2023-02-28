@@ -1401,10 +1401,10 @@ statusList = {
 
 	charge: new Extra({
 		name: "Charge",
-		desc: "Boosts <Phys/Mag> damage by <Power Multiplier>x for one turn. Removed whether attacked or not.",
+		desc: "Boosts <Phys/Mag/Crit> damage by <Power Multiplier>x for one turn. Removed whether attacked or not.",
 		args: [
 			{
-				name: "Phys/Mag",
+				name: "Phys/Mag/Crit",
 				type: "Word",
 				forced: true
 			},
@@ -1418,9 +1418,9 @@ statusList = {
 		diffflag: 0,
 		applyfunc(message, skill, args) {
 			let type = args[0].toLowerCase();
-			let power = args[1];
+			let power = Math.min(100, parseFloat(args[1]));
 
-			if (type != "phys" && type != "mag") return void message.channel.send("That's not a valid type! Try phys or mag.");
+			if (type != "phys" && type != "mag" && type != "crit") return void message.channel.send("That's not a valid type! Try Phys, Mag or Crit.");
 
 			makeStatus(skill, "charge", [type, power]);
 			return true;
@@ -1429,17 +1429,39 @@ statusList = {
 			vars[1] = modSkillResult(char, targ, vars[1], skill, btl) * multiplier;
 
 			addCusVal(char, 'charge', {
-				stat: (vars[0] == 'phys') ? 'atk' : 'mag',
+				stat: vars[0],
 				mult: vars[1],
 				toggle: false
 			});
 
-			return `__${char.name}__'s ${(vars[0] == 'phys') ? 'atk' : 'mag'} was boosted for one turn!`;
+			if (vars[0] == 'crit') {
+				if (vars[1] >= 100) {
+					return `A **critical hit** from __${char.name}__ is **guaranteed** for one turn!`;
+				} else {
+					return `The **crit rate** of __${char.name}__'s skills were boosted by **${vars[1]}%** for one turn!`;
+				}
+			} else if (vars[0] == 'mag') {
+				return `The power of __${char.name}__'s **magic skills** was boosted by **${vars[1]}%** for one turn!`;
+			} else {
+				return `The power of __${char.name}__'s **physical skills** was boosted by **${vars[1]}%** for one turn!`;
+			}
 		},
 		getinfo(vars, skill) {
-			let finalText = "Boosts"
+			let finalText = "Boosts "
 			for (let i in vars) {
-				finalText += ` **${vars[i][0] == 'phys' ? 'physical' : 'magic'}** damage by ${vars[i][1]}x`
+				let type = 'physical';
+				if (vars[i][0] == 'mag') {
+					type = 'magic';
+				} else if (vars[i][0] == 'crit') {
+					type = 'critical';
+				}
+
+				if (vars[i][1] >= 100 && type == 'critical') {
+					finalText += `**${type}** damage by ∞×`
+				} else {
+					finalText += `**${type}** damage by ${vars[i][1]}×`
+				}
+
 				if (i < vars.length - 1) {
 					finalText += ` and `
 				} else {
@@ -1548,7 +1570,47 @@ statusList = {
 		canuse: extrasList.charges.canuse,
 		onuse: extrasList.charges.onuse,
 		getinfo: extrasList.charges.getinfo,
-	})
+	}),
+
+	burst: new Extra({
+		name: "Burst (Original)",
+		desc: "Cures the user's status effects, and gives a healverse-like effect. (HP regeneration)\nThis skill __should__ cost a decent amount.",
+		args: [
+			{
+				name: "HPPercent",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			skill.target = 'caster';
+			makeStatus(skill, "burst", [parseFloat(args[0])]);
+			return true;
+		},
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			if (!char.custom?.regenheal) addCusVal(char, "regenheal", {});
+			if (!char.custom.regenheal[char.name]) char.custom.regenheal[char.name + '-' + skill.name] = [] //to not fuck up regens from multiple ppl to the same char with each other with any waiting ones
+
+			delete char.status;
+			delete char.statusturns;
+			char.custom.regenheal[char.name + '-' + skill.name].push({
+				name: skill.name,
+				username: char.name,
+				heal: Math.round((char.maxhp/100*vars[0]) * multiplier),
+				turns: 4,
+				type: 'hp',
+				wait: false,
+				pause: 0,
+				first: false,
+				user: char.id
+			});
+
+			return `__${char.name}__ has burst, curing their status effects, and is regenerating their **HP** by **${vars[0]}%** for **3 turns**!`;
+		},
+		getinfo(vars, skill) {
+			return `**Cures status effects**, and causes regeneration by **${vars[0]}%**, for 3 turns.`;
+		}
+	}),
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.
