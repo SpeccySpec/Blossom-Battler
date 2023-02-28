@@ -2587,10 +2587,12 @@ customVariables = {
 	charge: {
 		toembed: "<:physical:973077052129423411>",
 		statmod(btl, char, skill, vars) {
-			if (vars.mult >= 100)
-				skill.crit = 9999;
-			else
-				skill.crit *= vars.mult;
+			if (vars.stat == 'crit' && skill.crit) {
+				if (vars.mult >= 100)
+					skill.crit = 9999;
+				else
+					skill.crit *= vars.mult;
+			}
 		},
 		dmgmod(btl, char, inf, dmg, skill, vars, multiplier) {
 			dmg = Math.round(modSkillResult(char, inf, dmg, skill, btl) / multiplier);

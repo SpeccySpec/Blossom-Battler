@@ -1457,7 +1457,9 @@ statusList = {
 				}
 
 				if (vars[i][1] >= 100 && type == 'critical') {
-					finalText += `**${type}** damage by ∞×`
+					finalText += `**${type}** chance by ∞%`
+				} else if (type == 'critical') {
+					finalText += `**${type}** chance by ${vars[i][1]}%`
 				} else {
 					finalText += `**${type}** damage by ${vars[i][1]}×`
 				}
