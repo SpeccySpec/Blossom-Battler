@@ -350,6 +350,9 @@ passiveList = {
 			if (!Elements.includes(usertype))
 				return void message.channel.send(`${args[0]} is an invalid element!`);
 
+			if (usertype == 'status' || usertype == 'passive' || usertype == 'heal')
+				return void message.channel.send(`You can't change skills from ${args[1]} type!`);
+
 			if (!Elements.includes(targtype))
 				return void message.channel.send(`${args[1]} is an invalid element!`);
 
