@@ -1400,8 +1400,8 @@ statusList = {
 	}),
 
 	charge: new Extra({
-		name: "Charge",
-		desc: "Boosts <Phys/Mag/Crit> damage by <Power Multiplier>x for one turn. Removed whether attacked or not.",
+		name: "Charge (SMT)",
+		desc: "_(Not to be confused with Charges)_\nBoosts <Phys/Mag/Crit> damage by <Power Multiplier>x for one turn. Removed whether attacked or not.",
 		args: [
 			{
 				name: "Phys/Mag/Crit",
