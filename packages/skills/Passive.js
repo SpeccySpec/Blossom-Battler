@@ -374,7 +374,7 @@ passiveList = {
 			let str = `Changes ${symbol1}**${type1}** skills to ${symbol2}**${type2}**`;
 
 			if (vars[2] && vars[2] != 100)
-				str += `, along with retaining ${vars[2]} of it's original strength`;
+				str += `, along with retaining **${vars[2]}%** of it's original strength`;
 
 			return str
 		}

@@ -2187,7 +2187,7 @@ extrasList = {
 			}
 		},
 		getinfo(vars, skill) {
-			return `Deals damage equal to the ${vars[0]}'s level, with a ${vars[1]}% modifier.`;
+			return `Deals damage **equal to the __${vars[0]}'s level__**, with a **${vars[1]}**% modifier`;
 		}
 	}),
 }
