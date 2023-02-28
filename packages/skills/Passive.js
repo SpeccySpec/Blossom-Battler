@@ -353,7 +353,7 @@ passiveList = {
 			if (!Elements.includes(targtype))
 				return void message.channel.send(`${args[1]} is an invalid element!`);
 
-			if (targtype == 'almighty' || targtype == 'status' || targtype == 'passive')
+			if (targtype == 'almighty' || targtype == 'status' || targtype == 'passive' || targtype == 'heal')
 				return void message.channel.send(`You can't change skills to ${args[1]} type!`);
 
 			if (dmgmod && (dmgmod <= 0 || dmgmod >= 500))
