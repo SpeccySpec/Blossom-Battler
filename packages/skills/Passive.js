@@ -29,7 +29,7 @@ passiveList = {
 		desc: "Boosts the powers/damage of skills of a specific element/attack type/cost type/target, of user's main element, multi-hit skills, skills that inflict or don't inflict a status effect, or all skills in general.",
 		args: [
 			{
-				name: "Element / 'All' / Attack Type / 'Multi-hit' / Cost Type / Target / Status Effect / 'NoStatus' / 'MainElement'",
+				name: "Element / 'All' / Attack Type / 'Multi-hit' / Cost Type / Target / Status Effect / 'NoStatus' / 'MainElement' / 'Crit'",
 				type: "Word",
 				forced: true
 			},
@@ -55,7 +55,7 @@ passiveList = {
 			let usePercent = args[2] ?? true;
 			let boostDamage = args[3] ?? false;
 
-			if (![...Elements, ...Targets, ...statusEffects, 'all', 'magic', 'ranged', 'physical', 'multi-hit', 'nostatus', 'mainelement'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
+			if (![...Elements, ...Targets, ...statusEffects, 'all', 'magic', 'ranged', 'physical', 'multi-hit', 'nostatus', 'mainelement', 'crit'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
 			if (element == 'almighty' || element == 'passive') return void message.channel.send("You cannot boost the powers of almighty or passive skills!");
 			if (amount == 0) return void message.channel.send('With the amount being 0, it wouldn\'t change power at all.');
 
@@ -102,8 +102,13 @@ passiveList = {
 			
 			return dmg;
 		},
+		critmod(char, targ, dmg, crit, skill, btl, vars) {
+			let type = vars[0];
+			if (type == 'crit') crit += vars[1];
+		},
 		getinfo(vars, skill) {
 			let txt = `Boosts `;
+			let symbol = '';
 
 			for (let i in vars) {
 				if (!vars[i]) continue;
@@ -120,7 +125,13 @@ passiveList = {
 				if (costTypeNames[type]) suffixText = ' costing';
 				if (statusEffects.includes(type)) suffixText = ' inflictable';
 
-				txt += `${elementEmoji[type] ?? statusEmojis[type] ?? ''}**${midText.charAt(0).toUpperCase() + midText.slice(1) + suffixText}** ${type == 'heal' || type == 'status' ? 'skill' : 'attack'} ${type == 'heal' || type == 'status' ? `${vars[i][3] ? 'result' : 'effectiveness'}` : `${vars[i][3] ? 'damage' : 'power'}`} by **${vars[i][1] / (!vars[i][3] && !vars[i][2] && (type == 'heal' || type == 'status') ? 100 : 1)}${vars[i][2] ? '%' : (!vars[i][3] && (type == 'heal' || type == 'status') ? 'x' : '')}**`
+				if (type == 'crit') {
+					symbol = statusEmojis.critup;
+				} else {
+					symbol = elementEmoji[type] ?? statusEmojis[type] ?? '';
+				}
+
+				txt += `${symbol}**${midText.charAt(0).toUpperCase() + midText.slice(1) + suffixText}** ${type == 'heal' || type == 'status' ? 'skill' : 'attack'} ${type == 'heal' || type == 'status' ? `${vars[i][3] ? 'result' : 'effectiveness'}` : `${vars[i][3] ? 'damage' : 'power'}`} by **${vars[i][1] / (!vars[i][3] && !vars[i][2] && (type == 'heal' || type == 'status') ? 100 : 1)}${vars[i][2] ? '%' : (!vars[i][3] && (type == 'heal' || type == 'status') ? 'x' : '')}**`
 
 				if (i < vars.length - 2) 
 					txt += `, `
@@ -308,6 +319,64 @@ passiveList = {
 		},
 		getinfo(vars, skill) {
 			return `Boosts magic attacks by up to **${vars[0]-100}%** with less HP down to **${vars[1]}% of user's max HP**`;
+		}
+	}),
+
+	typemod: new Extra({
+		name: "Type Mod (Pokémon)",
+		desc: "Changes a move's element from one to another, along with boosting power slightly. Only works with single type skills.",
+		args: [
+			{
+				name: "Target Type",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Type to change to",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Power Modifier in Percent",
+				type: "Num",
+				forced: false
+			}
+		],
+		applyfunc(message, skill, args) {
+			let usertype = args[0].toLowerCase();
+			let targtype = args[1].toLowerCase();
+			let dmgmod = parseInt(args[2]);
+
+			if (!Elements.includes(usertype))
+				return void message.channel.send(`${args[0]} is an invalid element!`);
+
+			if (!Elements.includes(targtype))
+				return void message.channel.send(`${args[1]} is an invalid element!`);
+
+			if (dmgmod && (dmgmod <= 0 || dmgmod >= 500))
+				return void message.channel.send("Please enter a power modifier above 0% and below 500%!");
+
+			makePassive(skill, "typemod", [usertype, targtype, dmgmod ?? 100]);
+			return true;
+		},
+		statmod(btl, char, skill, vars) {
+			if (skill.type == vars[0]) {
+				skill.type = vars[1];
+				if (vars[2]) skill.pow *= vars[2]/100;
+			}
+		},
+		getinfo(vars, skill) {
+			let symbol1 = elementEmoji[vars[0]] ?? '';
+			let symbol2 = elementEmoji[vars[1]] ?? '';
+			let type1 = vars[0].charAt(0).toUpperCase() + vars[0].slice(1);
+			let type2 = vars[1].charAt(0).toUpperCase() + vars[1].slice(1);
+
+			let str = `Changes ${symbol1}**${type1}** skills to ${symbol2}**${type2}**`;
+
+			if (vars[2] && vars[2] != 100)
+				str += `, along with retaining ${vars[2]} of it's original strength`;
+
+			return str
 		}
 	}),
 

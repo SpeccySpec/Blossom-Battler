@@ -1899,7 +1899,7 @@ extrasList = {
 	}),
 
 	link: new Extra({
-		name: "Link (Sonic Robo Blast 2 Persona)",
+		name: "Link (Persona Q: Shadow of the Labyrinth)",
 		desc: "After use, if the same enemy is attacked with a single target skill, this skill with a <Power Boost per hit> multiplier is used after. Lasts until <Turns> turns pass, or the enemy is not hit. Stackable.",
 		args: [
 			{
@@ -2138,6 +2138,56 @@ extrasList = {
 		},
 		getinfo(vars, skill) {
 			return `Only usable before **turn #${vars[0]}** has passed`;
+		}
+	}),
+
+	nightshade: new Extra({
+		name: "Night Shade (Pokémon)",
+		desc: "Deals damage equal to the user's or opponent's level, with a multiplier.",
+		args: [
+			{
+				name: "User/Target",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Multiplier in Percent",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			const target = args[0].toLowerCase();
+			const multiplier = parseFloat(args[1]);
+
+			if (target != 'target' && target != 'user')
+				return void message.channel.send("You entered an invalid value for <User/Target>! It can be either Target or User.");
+
+			if (multiplier <= 0 || multiplier >= 500) 
+				return void message.channel.send("Please set a multiplier between 0 and 500%.");
+
+			makeExtra(skill, "nightshade", [target, multiplier]);
+			return true
+		},
+		onuseoverride(char, targ, skill, result, btl, vars) {
+			let c = randNum(1, 100);
+			if (c <= skill.acc+((char.stats.prc-targ.stats.agl)/2)) {
+				let level = char.level;
+				if (vars[0] == 'target') level = targ.level;
+
+				let dmg = Math.round(level*vars[1]/100);
+				targ.hp -= dmg;
+
+				let txt = `__${targ.name}__ took **${dmg} forced** damage`;
+				if (targ.hp <= 0) txt += ` and was defeated!\n${selectQuote(char, 'kill', null, '%ENEMY%', targ.name, '%SKILL%', skill.name)}${selectQuote(targ, 'death', null, '%ENEMY%', char.name, '%SKILL%', skill.name)}`;
+
+				return txt;
+			} else {
+				return dodgeTxt(targ, char);
+			}
+		},
+		getinfo(vars, skill) {
+			return `Deals damage equal to the ${vars[0]}'s level, with a ${vars[1]}% modifier.`;
 		}
 	}),
 }

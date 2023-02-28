@@ -614,6 +614,48 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 							}
 						}
 
+						// Critical rate extras
+						if (skill.extras) {
+							for (let i in skill.extras) {
+								if (!extrasList[i]) continue;
+								if (!extrasList[i].critmod) continue;
+								if (noExtraArray && noExtraArray.includes(i)) continue;
+
+								if (extrasList[i].multiple) {
+									for (let k in skill.extras[i]) {
+										extrasList[i].critmod(char, targ, dmg, critRate, skill, btl, skill.extras[i][k]);
+									}
+								} else {
+									extrasList[i].critmod(char, targ, dmg, critRate, skill, btl, skill.extras[i]);
+								}
+							}
+						}
+						
+						// Critical rate passives
+						if (doPassives(btl)) {
+							for (let skillName of char.skills) {
+								if (!skillFile[skillName]) continue;
+					
+								let psv = skillFile[skillName];
+								if (psv.type != 'passive' || !psv.passive) continue;
+					
+								for (let i in psv.passive) {
+									if (passiveList[i] && passiveList[i].critmod) {
+										if (noExtraArray && noExtraArray.includes(i)) continue;
+
+										if (passiveList[i].multiple) {
+											for (let k in psv.passive[i]) {
+												passiveList[i].critmod(char, targ, dmg, critRate, skill, btl, psv.passive[i][k]);
+											}
+										} else {
+											passiveList[i].critmod(char, targ, dmg, critRate, skill, btl, psv.passive[i][k]);
+										}
+									}
+								}
+							}
+						}
+
+
 						dmg *= critRate;
 					}
 				}
