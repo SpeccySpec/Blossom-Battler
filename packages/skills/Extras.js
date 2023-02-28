@@ -212,7 +212,7 @@ extrasList = {
 
 	charges: new Extra({
 		name: "Charges (Pixel Dungeon)",
-		desc: "The skill will consume a charge when used, and cannot be used when it runs out of charges, the skill will recharge if <Recharge Rate> is set.",
+		desc: "_(Not to be confused with Charge)_\nThe skill will consume a charge when used, and cannot be used when it runs out of charges, the skill will recharge if <Recharge Rate> is set.",
 		args: [
 			{
 				name: "Charges",
