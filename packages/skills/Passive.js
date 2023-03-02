@@ -170,7 +170,7 @@ passiveList = {
 			if (amount == 0)
 				return void message.channel.send('With the amount being 0, it wouldn\'t change power at all.');
 
-			makePassive(skill, "statusboost", [element, amount]);
+			makePassive(skill, "statusboost", [status, amount]);
 			return true;
 		},
 		statmod(btl, char, skill, vars) {
