@@ -164,7 +164,7 @@ passiveList = {
 			let status = args[0].toLowerCase();
 			let amount = args[1];
 
-			if (![...statusEffects, 'physical', 'mental', 'all'].includes(element)) 
+			if (![...statusEffects, 'physical', 'mental', 'all'].includes(status)) 
 				return void message.channel.send("That status effect does not exist!");
 
 			if (amount == 0)
