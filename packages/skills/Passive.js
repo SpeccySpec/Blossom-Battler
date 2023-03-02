@@ -29,7 +29,7 @@ passiveList = {
 		desc: "Boosts the powers/damage of skills of a specific element/attack type/cost type/target, of user's main element, multi-hit skills, skills that inflict or don't inflict a status effect, or all skills in general.",
 		args: [
 			{
-				name: "Element / 'All' / Attack Type / 'Multi-hit' / Cost Type / Target / Status Effect / 'NoStatus' / 'MainElement' / 'Crit'",
+				name: "Element / 'All' / Attack Type / 'Multi-hit' / Cost Type / Target / Status Effect / 'NoStatus' / 'MainElement' / 'Crit' / StatusChance",
 				type: "Word",
 				forced: true
 			},
@@ -55,7 +55,7 @@ passiveList = {
 			let usePercent = args[2] ?? true;
 			let boostDamage = args[3] ?? false;
 
-			if (![...Elements, ...Targets, ...statusEffects, 'all', 'magic', 'ranged', 'physical', 'multi-hit', 'nostatus', 'mainelement', 'crit'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
+			if (![...Elements, ...Targets, ...statusEffects, 'all', 'magic', 'ranged', 'physical', 'multi-hit', 'nostatus', 'mainelement', 'crit', 'statuschance'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
 			if (element == 'almighty' || element == 'passive') return void message.channel.send("You cannot boost the powers of almighty or passive skills!");
 			if (amount == 0) return void message.channel.send('With the amount being 0, it wouldn\'t change power at all.');
 
@@ -133,6 +133,82 @@ passiveList = {
 
 				txt += `${symbol}**${midText.charAt(0).toUpperCase() + midText.slice(1) + suffixText}** ${type == 'heal' || type == 'status' ? 'skill' : 'attack'} ${type == 'heal' || type == 'status' ? `${vars[i][3] ? 'result' : 'effectiveness'}` : `${vars[i][3] ? 'damage' : 'power'}`} by **${vars[i][1] / (!vars[i][3] && !vars[i][2] && (type == 'heal' || type == 'status') ? 100 : 1)}${vars[i][2] ? '%' : (!vars[i][3] && (type == 'heal' || type == 'status') ? 'x' : '')}**`
 
+				if (i < vars.length - 2) 
+					txt += `, `
+				else if (i == vars.length - 2) 
+					txt += ` and `
+			}
+
+			return txt;
+		}
+	}),
+
+	statusboost: new Extra({
+		name: "Status Boost",
+		desc: "Boosts the chance of inflicting <Status Effect> by <Percentage>.",
+		args: [
+			{
+				name: "Status Effect / Physical / Mental / All",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Percentage",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		multiple: true,
+		diffflag: 0,
+		applyfunc(message, skill, args) {
+			let status = args[0].toLowerCase();
+			let amount = args[1];
+
+			if (![...statusEffects, 'physical', 'mental', 'all'].includes(element)) 
+				return void message.channel.send("That status effect does not exist!");
+
+			if (amount == 0)
+				return void message.channel.send('With the amount being 0, it wouldn\'t change power at all.');
+
+			makePassive(skill, "statusboost", [element, amount]);
+			return true;
+		},
+		statmod(btl, char, skill, vars) {
+			let type = vars[0];
+			let phys = isPhysicalStatus(type);
+
+			if (skill.status && (type == 'all' || (type == 'physical' && phys) || (type == 'mental' && !phys) || skill.status == type) && skill.statuschance) {
+				if (vars[2]) {
+					skill.statuschance *= (vars[1]/100)+1;
+				} else { 
+					skill.statuschance += vars[1];
+				}
+
+				return;
+			}
+		},
+		getinfo(vars, skill) {
+			let txt = `Increases the chance of inflicting `;
+			let type = '';
+			let symbol = '';
+
+			for (let i in vars) {
+				if (!vars[i]) continue;
+
+				type = vars[i][0];
+				symbol = statusEmojis[type] ?? '';
+
+				if (type == 'all') {
+					txt += "**All status effects**"
+				} else if (type == 'physical') {
+					txt += "<:physical:973077052129423411>**Physical status effects**"
+				} else if (type == 'mental') {
+					txt += "<:mental:1004855144745291887>**Mental status effects**"
+				} else {
+					txt += `${symbol}**${statusNames[type]}**`
+				}
+
+				txt += ` by **${vars[i][1]}%**`
 				if (i < vars.length - 2) 
 					txt += `, `
 				else if (i == vars.length - 2) 

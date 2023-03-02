@@ -283,18 +283,6 @@ function isTech(charDefs, element) {
 	return false;
 }
 
-
-// Is the status effect physical?
-function isPhysicalStatus(status) {
-	if (!status) return false;
-
-	let statusName = status.toLowerCase()
-	if (statusName === 'burn' || statusName === 'bleed' || statusName === 'freeze' || statusName === 'paralyze' || statusName === 'toxin' || statusName === 'hunger' || statusName === 'dazed' || statusName === 'illness' || statusName === 'mirror' || statusName === 'blind')
-		return true;
-
-	return false;
-}
-
 // Knows enemy?
 function knowsEnemy(oppDefs, server) {
 	if (!oppDefs.enemy)

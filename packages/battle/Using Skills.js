@@ -44,14 +44,6 @@ isTech = (char, element) => {
 	return false;
 }
 
-// Is the status effect physical?
-isPhysicalStatus = (status) => {
-	if (!status) return false;
-	let statusName = status.toLowerCase();
-
-	return (statusName === 'burn' || statusName === 'bleed' || statusName === 'freeze' || statusName === 'paralyze' || statusName === 'toxin' || statusName === 'hunger' || statusName === 'dazed' || statusName === 'irradiated' || statusName === 'mirror' || statusName === 'blind');
-}
-
 // im lazy
 dodgeTxt = (char, targ) => {
 	if (targ) {

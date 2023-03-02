@@ -1100,6 +1100,13 @@ replaceTxt = (str, ...txt) => {
 	return str;
 }
 
+let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror'];
+isPhysicalStatus = (status) => {
+	if (!status) return false;
+
+	return phys.includes(status.toLowerCase());
+}
+
 // Global JSONs
 skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
 shipFile = setUpFile(`${dataPath}/json/ships.json`, true);
