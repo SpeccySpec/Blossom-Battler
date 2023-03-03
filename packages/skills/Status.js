@@ -1613,6 +1613,66 @@ statusList = {
 			return `**Cures status effects**, and causes regeneration by **${vars[0]}%**, for 3 turns`;
 		}
 	}),
+
+	evasionboost: new Extra({
+		name: "Evasion Boost (Original)",
+		desc: "When this skill is used you have a <Chance%> to dodge <Atk Type> skills <Activation Limit> times for <Turns> turns. Additionally, you <Can [not] act during evasion state>.",
+		args: [
+			{
+				name: "Atk Type",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Chance%",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Activation Limit",
+				type: "Num"
+			},
+			{
+				name: "Turns",
+				type: "Num"
+			},
+			{
+				name: "Can act during evasion state",
+				type: "YesNo"
+			},
+		],
+		applyfunc(message, skill, args) {
+			let element = args[0].toLowerCase();
+			let chance = args[1] ?? 100;
+			let activation = args[2] ?? 1;
+			let turns = args[3] ?? 1;
+			let canact = args[4] ?? false;
+
+			if (![...Elements, 'all', 'physical', 'magic', 'ranged'].includes(element)) return void message.channel.send("You entered an invalid type for <Atk Type>.");
+			if (chance <= 0 || chance > 100) return void message.channel.send("You entered an invalid value for <Chance%>. This should be a value above 0 and below 100.");
+			if (activation <= 0) return void message.channel.send("You entered an invalid value for <Activation Limit>.");
+			if (turns <= 0) return void message.channel.send("You entered an invalid value for <Turns>.");
+
+			skill.target = 'caster';
+			makeStatus(skill, "evasionboost", [element, chance, activation, turns, canact]);
+			return true;
+		},
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			addCusVal(char, 'evasionstate', {
+				name: skill.name,
+				element: vars[0],
+				chance: vars[1],
+				activation: vars[2],
+				turns: vars[3],
+				canact: vars[4],
+			});
+
+			return `__${char.name}__ has entered an evasive state!`;
+		},
+		getinfo(vars, skill) {
+			return `Enters evasive state for **${vars[3]} turns**, **${vars[1]}% chance to dodge ${vars[0]} skills ${vars[2]} time(s)**`
+		}
+	}),
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.

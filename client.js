@@ -1107,6 +1107,13 @@ isPhysicalStatus = (status) => {
 	return phys.includes(status.toLowerCase());
 }
 
+let stackable = ['confusion', 'infatuation'];
+isStackableStatus = (status) => {
+	if (!status) return false;
+
+	return stackable.includes(status.toLowerCase());
+}
+
 // Global JSONs
 skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
 shipFile = setUpFile(`${dataPath}/json/ships.json`, true);

@@ -1936,6 +1936,75 @@ passiveList = {
 		getinfo(vars, skill) {
 			return `Forces the terrain to **${vars[0]}** on battle start ${(vars[1] <= 1) ? "**indefinitely**" : `for **${vars[1]} turns**`}`;
 		}
+	}),
+
+	slayer: new Extra({
+		name: "Slayer (Sonic Robo Blast 2 Persona)",
+		desc: "Boosts the powers/damage of skills when the opponent is afflicted with <Status Effect>.",
+		args: [
+			{
+				name: "Target Status Effect",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Boost in Percent",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		multiple: true,
+		diffflag: 0,
+		applyfunc(message, skill, args) {
+			let status = args[0].toLowerCase();
+			let amount = args[1];
+
+			if (![...statusEffects, 'physical', 'mental', 'all'].includes(status)) return void message.channel.send("You entered an invalid status for the boost!");
+			if (isStackableStatus(status)) return void message.channel.send("You cannot boost the power on stackable statusses.");
+			if (amount == 0) return void message.channel.send('With the amount being 0, it wouldn\'t change power at all.');
+
+			makePassive(skill, "slayer", [status, amount]);
+			return true;
+		},
+		dmgmod(char, targ, dmg, skill, btl, vars) {
+			let type = vars[0];
+			let phys = isPhysicalStatus(targ.status);
+
+			if (targ.status && (type == 'all' || (type == 'physical' && phys) || (type == 'mental' && !phys) || targ.status == type))
+				dmg = Math.round(dmg*vars[0]/100);
+
+			return dmg;
+		},
+		getinfo(vars, skill) {
+			let txt = `Boosts the power of skills used on those inflicted with `;
+			let type = '';
+			let symbol = '';
+
+			for (let i in vars) {
+				if (!vars[i]) continue;
+
+				type = vars[i][0];
+				symbol = statusEmojis[type] ?? '';
+
+				if (type == 'all') {
+					txt += "**any status effect**"
+				} else if (type == 'physical') {
+					txt += "a <:physical:973077052129423411>**physical status effect**"
+				} else if (type == 'mental') {
+					txt += "a <:mental:1004855144745291887>**mental status effect**"
+				} else {
+					txt += `${symbol}**${statusNames[type]}**`
+				}
+
+				txt += ` by **${vars[i][1]}%**`
+				if (i < vars.length - 2) 
+					txt += `, `
+				else if (i == vars.length - 2) 
+					txt += ` and `
+			}
+
+			return txt;
+		}
 	})
 }
 

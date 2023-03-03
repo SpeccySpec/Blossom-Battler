@@ -2859,4 +2859,18 @@ customVariables = {
 			return `__${char.name}__ flinched and was unable to move!`;
 		}
 	},
+
+	evasionstate: {
+		hardcoded: true,
+		toembed: "<:boot:995268449154629699>",
+		onturn(btl, char, vars) {
+			if (char.custom?.evasionstate) {
+				char.custom.evasionstate.turns--;
+				if (char.custom.evasionstate.turns <= 0) {
+					killVar(char, 'evasionstate');
+					return "";
+				}
+			}
+		}
+	},
 }

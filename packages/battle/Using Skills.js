@@ -394,6 +394,45 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 			}
 		}
 
+		// Evasive State
+		if (targ.custom?.evasionstate) {
+			let evade = targ.custom.evasionstate;
+
+			let canevade = false;
+			switch(evade.element) {
+				case 'all':
+					canevade = true;
+					break;
+
+				case 'physical':
+					canevade = (skill.atktype == 'physical');
+					break;
+
+				case 'magic':
+					canevade = (skill.atktype == 'magic');
+					break;
+
+				case 'ranged':
+					canevade = (skill.atktype == 'ranged');
+					break;
+
+				default:
+					canevade = (skill.type == evade.element);
+			}
+
+			if (canevade && evade.chance < 100) canevade = (randNum(1, 100) <= evade.chance);
+
+			if (canevade) {
+				result.txt += `_${evade.name}_ allowed __${targ.name}__ to dodge __${char.name}__'s _${skill.name}_!`;
+
+				targ.custom.evasionstate.activation--;
+				if (targ.custom.evasionstate.activation <= 0)
+					killVar(targ, 'evasionstate');
+
+				return result
+			}
+		}
+
 		// noRepel used here to change repelled attacks into a block.
 		if (affinity == 'block' || (affinity == 'repel' && noRepel)) {
 			result.txt += `${targ.name} blocked it!\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'block', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
