@@ -2865,11 +2865,15 @@ customVariables = {
 		toembed: "<:boot:995268449154629699>",
 		onturn(btl, char, vars) {
 			if (char.custom?.evasionstate) {
+				let txt = '';
+				if (!char.custom.evasionstate.canact)
+					txt = `In an evasive state, __${char.name}__ could not act.`;
+
 				char.custom.evasionstate.turns--;
-				if (char.custom.evasionstate.turns <= 0) {
+				if (char.custom.evasionstate.turns <= 0)
 					killVar(char, 'evasionstate');
-					return "";
-				}
+
+				return txt;
 			}
 		}
 	},

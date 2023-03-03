@@ -1953,6 +1953,7 @@ doTurn = async(btl, noTurnEmbed) => {
 					// Some other things...
 					if (char.status === 'sleep') canMove = false;
 					if (char?.custom?.forcemove) canMove = false;
+					if (char?.custom?.evasionstate && !char?.custom?.evasionstate.canact) canMove = false;
 
 					if (char?.custom?.flinch) {
 						canMove = false;
