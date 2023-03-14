@@ -1289,7 +1289,7 @@ passiveList = {
 
 	wonderguard: new Extra({
 		name: "Wonder Guard",
-		desc: `Nullifies damage from attacks that the user is not weak to. This has the drawback of making successful hits ${affinityEmoji.deadly}**Deadly**.`,
+		desc: `Nullifies damage from attacks that the user is not weak to. This has the drawback of making successful hits <:deadly:963413916879319072>**Deadly**.`,
 		args: [],
 		applyfunc(message, skill, args) {
 			makePassive(skill, "wonderguard", [true]);
@@ -1307,7 +1307,7 @@ passiveList = {
 			return true;
 		},
 		getinfo(vars, skill) {
-			return `__Nullifies damage__ from attacks that the user is not ${affinityEmoji.weak}${affinityEmoji.superweak}${affinityEmoji.deadly}**weak** to`;
+			return `__Nullifies damage__ from attacks that the user is not <:effective:963413917038694401><:supereffective:963413917198082048><:deadly:963413916879319072>**weak** to`;
 		}
 	}),
 
