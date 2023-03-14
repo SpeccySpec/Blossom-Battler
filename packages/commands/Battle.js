@@ -31,7 +31,7 @@ commands.guide = new Command({
 					let titleTxt = guideTxt.fields[i].title ? guideTxt.fields[i].title : `Section ${i}`
 					let descTxt = guideTxt.fields[i].text ? guideTxt.fields[i].text : 'Description Text'
 					let inline = guideTxt.fields[i].inline ? true : false
-					
+
 					if (descTxt.includes('%RANDOMSKILL%')) {
 						let possibleSkills = []
 						for (const val in skillFile) {
@@ -45,7 +45,7 @@ commands.guide = new Command({
 
 						descTxt = descTxt.replace('%RANDOMSKILL%', `${elementEmoji[skillDefs.type]}${skillDefs.name ? skillDefs.name : skillVal}`)
 					}
-					
+
 					descTxt = descTxt.replace('rpg!', getPrefix(message.guild.id))
 
 					DiscordEmbed.fields.push({name: titleTxt, value: descTxt, inline: inline})

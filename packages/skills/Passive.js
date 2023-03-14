@@ -1289,21 +1289,25 @@ passiveList = {
 
 	wonderguard: new Extra({
 		name: "Wonder Guard",
-		desc: "Nullifies damage from attacks that the user is not weak to.",
+		desc: `Nullifies damage from attacks that the user is not weak to. This has the drawback of making successful hits ${affinityEmoji.deadly}**Deadly**.`,
 		args: [],
 		applyfunc(message, skill, args) {
 			makePassive(skill, "wonderguard", [true]);
 			return true;
 		},
-		affinitymodoninf(char, inf, skill, passive, affinity, btl, vars) {
+		onaffinitycheck(char, inf, skill, passive, affinity, btl, vars, result) {
 			if (affinity === 'deadly' || affinity === 'superweak' || affinity === 'weak') {
-				return null;
+				affinity = 'deadly';
+				result.txt += `__${char.name}__'s __${passive.name}__ was surpassed!`;
+			} else {
+				affinity = 'block';
+				result.txt += `__${char.name}__'s __${passive.name}__ nullified the skill!`;
 			}
 
-			return ['block', `__${char.name}__'s __${passive.name}__ made the skill have no affect!`];
+			return true;
 		},
 		getinfo(vars, skill) {
-			return `**Nullifies damage from attacks that the user is not weak to**`
+			return `__Nullifies damage__ from attacks that the user is not ${affinityEmoji.weak}${affinityEmoji.superweak}${affinityEmoji.deadly}**weak** to`;
 		}
 	}),
 

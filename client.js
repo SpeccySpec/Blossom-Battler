@@ -457,7 +457,8 @@ weaponClasses = {
 	pierce: "Rapiers, Knives",
 	ranged: "Bow & Arrow, Ninja Stars",
 	books: "Magical Books that allow one to cast spells.",
-	staff: "Magical Staffs or Wands"
+	staff: "Magical Staffs or Wands",
+	incorporeal: "Magical Staffs or Wands"
 }
 
 armorClasses = {
@@ -475,7 +476,8 @@ classEmoji = {
 		pierce: "<:pierce:1008794365231104052>",
 		ranged: "<:ranged:1008794366648791161>",
 		books: "<:books:1008794354959269938>",
-		staff: "<:staff:1008794368750141540>"
+		staff: "<:staff:1008794368750141540>",
+		incorporeal: "<:bladed:1008794351591239842>"
 	},
 	armor: {
 		light: "<:light:1008794358637662338>",
