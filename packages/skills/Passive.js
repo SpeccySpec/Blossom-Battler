@@ -2016,33 +2016,24 @@ passiveList = {
 		desc: "Denies use of an element... Why is this here again-",
 		args: [
 			{
-				name: "Stat",
+				name: "Element",
 				type: "Word",
-				forced: true
-			},
-			{
-				name: "Stages",
-				type: "Num",
 				forced: true
 			}
 		],
 		applyfunc(message, skill, args) {
-			let stat = args[0].toLowerCase();
-			let stages = args[1];
-
-			if (![...stats, 'crit'].includes(stat)) return void message.channel.send("That's not a valid stat!");
-			if (stages == 0) return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
-			if (Math.abs(stages) > 3) return void message.channel.send("The maximum amount of stages is 3!");
+			let element = args[0].toLowerCase();
+			if (!Elements.includes(element)) return void message.channel.send("You entered an invalid type for the boost!");
 			
-			makePassive(skill, "koboost", [stat, stages]);
+			makePassive(skill, "skilldeny", [element]);
 			return true
 		},
-		onkill(char, targ, skill, dmg, passive, btl, vars) {
-			buffStat(char, vars[0], vars[1]);
-			return `Defeating __${targ.name}__ let __${char.name}'s__ _${passive.name}_ ${vars[1] > 0 ? 'buff' : 'debuff'} **${vars[0].toUpperCase()} ${Math.abs(vars[1])} times**.`;
+		canuseskill(char, targ, skill, passive, btl, vars) {
+			if (skill.type == vars[0]) return `${elementEmoji[vars[0]]}**${vars[0].charAt(0).toUpperCase() + vars[0].slice(1)}** skills have been banned by <:passive:963413845253193758>**${passive.name}**.`;
+			return true;
 		},
 		getinfo(vars, skill) {
-			return `Upon foe defeat, buffs **${vars[0].toUpperCase()} ${vars[1]}** times.`
+			return `The user cannot use ${elementEmoji[vars[0]]}**${vars[0].charAt(0).toUpperCase() + vars[0].slice(1)}** skills.`
 		}
 	}),
 }

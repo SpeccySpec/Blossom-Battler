@@ -1012,6 +1012,49 @@ sendCurTurnEmbed = (char, btl) => {
 						}
 					}
 
+					// CanUseSkill passives
+					if (doPassives(btl)) {
+						for (let s of char.skills) {
+							let pskill = skillFile[s];
+
+							if (pskill && pskill.type == 'passive') {
+								for (let i in pskill.passive) {
+									if (!passiveList[i]) continue;
+									if (!passiveList[i].canuseskill) continue;
+
+									if (passiveList[i].multiple) {
+										for (let l in pskill.extras[k]) {
+											let txt = passiveList[i].canuseskill(char, skill, pskill, btl, skill.heal[k][l]);
+
+											if (txt !== true) {
+												DiscordEmbed.title = txt;
+												alreadyResponded = true;
+
+												return i.update({
+													content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+													embeds: [DiscordEmbed],
+												});
+											}
+										}
+									} else {
+										let txt = passiveList[i].canuseskill(char, skill, pskill btl, skill.heal[k]);
+
+										if (txt !== true) {
+											DiscordEmbed.title = txt;
+											alreadyResponded = true;
+
+											return i.update({
+												content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+												embeds: [DiscordEmbed],
+												components: setUpComponents(char, btl, menustate)
+											});
+										}
+									}
+								}
+							}
+						}
+					}
+
 					if (btl.terrain && btl.terrain.type === "blindingradiance" && ((typeof(skill.type) === "string" && skill.type === "curse") || (typeof(skill.type) === "object" && skill.type.includes("curse")))) {
 						DiscordEmbed.title = "The cursed energy dissapears as soon as it appears...";
 						alreadyResponded = true;
