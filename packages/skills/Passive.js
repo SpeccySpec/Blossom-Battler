@@ -1575,7 +1575,7 @@ passiveList = {
 	}),
 
 	sacrifice: new Extra({
-		name: "Sacrifice (Persona)",
+		name: "Sacrifice (SMT)",
 		desc: "Upon foe defeat, restores HP equal to <HP Percent>% of the foe's level and MP equal to <MP Percent>% of the foe's level.",
 		args: [
 			{
