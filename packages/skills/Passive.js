@@ -25,7 +25,7 @@ let targetNames = {
 passiveList = {
 	// On Attack.
 	boost: new Extra({
-		name: "Boost",
+		name: "Boost (Persona)",
 		desc: "Boosts the powers/damage of skills of a specific element/attack type/cost type/target, of user's main element, multi-hit skills, skills that inflict or don't inflict a status effect, or all skills in general.",
 		args: [
 			{
@@ -144,7 +144,7 @@ passiveList = {
 	}),
 
 	statusboost: new Extra({
-		name: "Status Boost",
+		name: "Status Boost (Original)",
 		desc: "Boosts the chance of inflicting <Status Effect> by <Percentage>.",
 		args: [
 			{
@@ -220,7 +220,7 @@ passiveList = {
 	}),
 
 	earlybird: new Extra({
-		name: "Early Bird",
+		name: "Early Bird (Pokémon)",
 		desc: "For the first <Turns> turns the user's skills gain <Percentage Boost>% more power. Additionally the skills can lose <Accuracy Lost> in these turns, if set.",
 		args: [
 			{
@@ -261,7 +261,7 @@ passiveList = {
 	}),
 
 	moodswing: new Extra({
-		name: "Mood Swing",
+		name: "Mood Swing (Original)",
 		desc: "Every <Turns> turns, your mood will switch from Calm to Angry and back, buffing/nerfing skills respectively.",
 		args: [
 			{
@@ -313,7 +313,7 @@ passiveList = {
 	}),
 
 	berserk: new Extra({
-		name: "Berserk",
+		name: "Berserk (Original)",
 		desc: "The higher the HP, up to <Highest HP Percent>%, the stronger physical and ranged attacks will be by up to <Percentage Multiplier>%. <Percentage Multiplier> should be more than 100%.",
 		args: [
 			{
@@ -356,7 +356,7 @@ passiveList = {
 	}),
 
 	enraged: new Extra({
-		name: "Enraged",
+		name: "Enraged (Original)",
 		desc: "The less the HP, up to <Highest HP Percent>%, the stronger magical attacks will be by up to <Percentage Multiplier>%. <Percentage Multiplier> should be more than 100%.",
 		args: [
 			{
@@ -464,7 +464,7 @@ passiveList = {
 
 	// Start Of Turn
 	heal: new Extra({
-		name: "Heal",
+		name: "Heal (Original)",
 		desc: "Restores <Amount> of max <Cost Type> on the start of your turn, <Cost Type> being either HP, HPPercent, MP, MPPercent, or LB.",
 		args: [
 			{
@@ -558,7 +558,7 @@ passiveList = {
 	}),
 
 	damage: new Extra({
-		name: "Damage",
+		name: "Damage (Original)",
 		desc: "Inflicts <Damage> of <Element> damage to the target when attacked with a <Phys/Mag> skill.",
 		args: [
 			{
@@ -660,7 +660,7 @@ passiveList = {
 	}),
 
 	dodge: new Extra({
-		name: "Dodge",
+		name: "Dodge (Original)",
 		desc: "Has a <Chance>% chance to dodge attacks from a <Phys/Mag> skill.",
 		args: [
 			{
@@ -714,7 +714,7 @@ passiveList = {
 	}),
 
 	counter: new Extra({
-		name: "Counter",
+		name: "Counter (Persona)",
 		desc: "Has a <Chance>% chance to counter <Phys/Mag> attacks with an <Attack Type> skill named <Counter Name> with <Power> power, <Accuracy>% accuracy, {Critical Hit Chance}% crit chance, like a regular skill but the cost is optional and usually not necessary.",
 		args: [
 			{
@@ -917,7 +917,7 @@ passiveList = {
 	}),
 
 	status: new Extra({
-		name: "Status",
+		name: "Status (Pokémon)",
 		desc: "Has a <Chance>% chance of inflicting <Status Effect> on a fighter if they use a physical attack.",
 		args: [
 			{
@@ -996,7 +996,7 @@ passiveList = {
 	*/
 
 	curestatus: new Extra({
-		name: "Cure Status",
+		name: "Cure Status (Pokémon)",
 		desc: "<Chance>% chance to cure a negative status effect on the start of your turn.",
 		args: [
 			{
@@ -1023,7 +1023,7 @@ passiveList = {
 	}),
 
 	perfectkeeper: new Extra({
-		name: "Perfect Keeper",
+		name: "Perfect Keeper (Persona)",
 		desc: "Power of Physical Attacks is boosted at higher HP, and decreased at lower HP by up to <Percent>%.",
 		args: [
 			{
@@ -1048,7 +1048,7 @@ passiveList = {
 	}),
 
 	extrahit: new Extra({
-		name: "Extra Hit",
+		name: "Extra Hit (Original)",
 		desc: "Has a <Chance>% chance to hit <Hits> more times from a single hit skill with <Power Multiplier>x as much power.",
 		args: [
 			{
@@ -1111,7 +1111,7 @@ passiveList = {
 	}),
 
 	kindheart: new Extra({
-		name: "Kind Heart",
+		name: "Kind Heart (Original)",
 		desc: "Boosts pacify rate by <Percent>%.",
 		args: [
 			{
@@ -1132,7 +1132,7 @@ passiveList = {
 	}),
 
 	affinitycutter: new Extra({
-		name: "Affinity Cutter",
+		name: "Affinity Cutter (Original)",
 		desc: "<Chance>% chance to bypass resist affinities.",
 		args: [
 			{
@@ -1161,7 +1161,7 @@ passiveList = {
 	}),
 
 	affinityslicer: new Extra({
-		name: "Affinity Slicer",
+		name: "Affinity Slicer (Original)",
 		desc: "<Chance>% chance to bypass all resisting affinities, turning them into a resist or better.\n```diff\n+ Drain, Repel, Block ---> Resist\n+ Resist ---> Normal\n```",
 		args: [
 			{
@@ -1190,7 +1190,7 @@ passiveList = {
 	}),
 
 	swordbreaker: new Extra({
-		name: "Sword Breaker",
+		name: "Sword Breaker (Persona)",
 		desc: "<Chance>% chance for effective and normal attacks that hit the user to turn into a resist.",
 		args: [
 			{
@@ -1219,7 +1219,7 @@ passiveList = {
 	}),
 
 	magicmelee: new Extra({
-		name: "Magic Melee",
+		name: "Magic Melee (Original)",
 		desc: "Turns user's melee attack into a magic attack.",
 		args: [],
 		applyfunc(message, skill, args) {
@@ -1233,8 +1233,8 @@ passiveList = {
 	}),
 
 	meleetarget: new Extra({
-		name: "Melee Target",
-		desc: "Melee Attack to have a different target to choose between to attack.",
+		name: "Melee Target (Original)",
+		desc: "Melee Attack gains a different target to choose between to attack.",
 		args: [
 			{
 				name: "Targets",
@@ -1288,7 +1288,7 @@ passiveList = {
 	}),
 
 	wonderguard: new Extra({
-		name: "Wonder Guard",
+		name: "Wonder Guard (Pokémon)",
 		desc: `Nullifies damage from attacks that the user is not weak to. This has the drawback of making successful hits <:deadly:963413916879319072>**Deadly**.`,
 		args: [],
 		applyfunc(message, skill, args) {
@@ -1312,7 +1312,7 @@ passiveList = {
 	}),
 
 	repelmag: new Extra({
-		name: "Repel Magic",
+		name: "Repel Magic (Original)",
 		desc: "<Chance>% chance to repel magic or ranged attacks of specific elements.",
 		args: [
 			{
@@ -1366,7 +1366,7 @@ passiveList = {
 	}),
 
 	endure: new Extra({
-		name: "Endure",
+		name: "Endure (Persona)",
 		desc: "Upon defeat, revives the user until <Amount> times with {HP} HP.",
 		args: [
 			{
@@ -1407,7 +1407,7 @@ passiveList = {
 	}),
 
 	pinchmode: new Extra({
-		name: "Pinch Mode",
+		name: "Pinch Mode (Pixel Dungeon)",
 		desc: "Once the user is downed, they will be revived at <Revive HP%>% max HP and their skills will have <Damage Boost>% more power, but skills that attack them will have <Defence Lost>% more power and every turn they will lose <Lost HP%>% of their max HP. Heals will have no effect on them.",
 		args: [
 			{
@@ -1475,7 +1475,7 @@ passiveList = {
 	}),
 
 	guardboost: new Extra({
-		name: "Guard Boost",
+		name: "Guard Boost (Original)",
 		desc: "Reduces damage taken when guarding further by <Percent>%.",
 		args: [
 			{
@@ -1498,7 +1498,7 @@ passiveList = {
 	}),
 
 	guarddodge: new Extra({
-		name: "Guard Dodge",
+		name: "Guard Dodge (Original)",
 		desc: "Boosts dodigng attacks when guarding by <Percent>%.",
 		args: [
 			{
@@ -1521,7 +1521,7 @@ passiveList = {
 	}),
 
 	sacrificial: new Extra({
-		name: "Sacrificial",
+		name: "Sacrificial (Original)",
 		desc: "Boosts the power of sacrifice skills by <Percent>%.",
 		args: [
 			{
@@ -1546,7 +1546,7 @@ passiveList = {
 	}),
 
 	alterpain: new Extra({
-		name: "Alter Pain",
+		name: "Alter Pain (Persona)",
 		desc: "Gain <Percent>% of damage taken as MP.",
 		args: [
 			{
@@ -1575,7 +1575,7 @@ passiveList = {
 	}),
 
 	sacrifice: new Extra({
-		name: "Sacrifice",
+		name: "Sacrifice (Persona)",
 		desc: "Upon foe defeat, restores HP equal to <HP Percent>% of the foe's level and MP equal to <MP Percent>% of the foe's level.",
 		args: [
 			{
@@ -1613,7 +1613,7 @@ passiveList = {
 	}),
 
 	elementstore: new Extra({
-		name: "Element Store",
+		name: "Element Store (Original)",
 		desc: "<Chance>% chance to store <Damage Percent>% of damage taken from <Element> attacks to add up for the next attack. Stackable. Once hit, the stored damage is reset.",
 		args: [
 			{
@@ -1690,7 +1690,7 @@ passiveList = {
 	}),
 
 	affinitypoint: new Extra({
-		name: "Affinity Point",
+		name: "Affinity Point (Original)",
 		desc: "Every heal you obtain nets you a <Point Name>. These will buff your attacks depending on the power of the affinitypoint buff on the skill.",
 		args: [
 			{
@@ -1729,7 +1729,7 @@ passiveList = {
 
 /*
 	arenatrap: new Extra({
-		name: "Arena Trap",
+		name: "Arena Trap (Pokémon)",
 		desc: "Disables fleeing, or backup switching for the opposing teams as long as the user is alive.",
 		args: [],
 		applyfunc(message, skill, args) {
@@ -1744,7 +1744,7 @@ passiveList = {
 */
 
 	koboost: new Extra({
-		name: "KO Boost",
+		name: "KO Boost (Pokémon)",
 		desc: "Upon foe defeat, buff a stat.",
 		args: [
 			{
@@ -1779,7 +1779,7 @@ passiveList = {
 	}),
 
 	finalpush: new Extra({
-		name: "Final Push",
+		name: "Final Push (Pokémon)",
 		desc: "Boosts the powers of skills of a specific element by <Percentage> when HP is below <HPPercent>",
 		args: [
 			{
@@ -1835,7 +1835,7 @@ passiveList = {
 	}),
 
 	neutralisinggas: new Extra({
-		name: "Neutralising Gas",
+		name: "Neutralising Gas (Pokémon)",
 		desc: "Nullifies all passives in battle.",
 		args: [],
 		applyfunc(message, skill, args) {
@@ -1851,7 +1851,7 @@ passiveList = {
 	}),
 
 	forceweather: new Extra({
-		name: "Force Weather",
+		name: "Force Weather (Pokémon)",
 		desc: "Forces the specified weather on battle start for <Turns> turns.",
 		args: [
 			{
@@ -1897,7 +1897,7 @@ passiveList = {
 	}),
 
 	forceterrain: new Extra({
-		name: "Force Terrain",
+		name: "Force Terrain (Pokémon)",
 		desc: "Forces the specified terrain on battle start for <Turns> turns.",
 		args: [
 			{
@@ -2009,7 +2009,42 @@ passiveList = {
 
 			return txt;
 		}
-	})
+	}),
+
+	skilldeny: new Extra({
+		name: "Skill Deny (Original)",
+		desc: "Denies use of an element... Why is this here again-",
+		args: [
+			{
+				name: "Stat",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Stages",
+				type: "Num",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let stat = args[0].toLowerCase();
+			let stages = args[1];
+
+			if (![...stats, 'crit'].includes(stat)) return void message.channel.send("That's not a valid stat!");
+			if (stages == 0) return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
+			if (Math.abs(stages) > 3) return void message.channel.send("The maximum amount of stages is 3!");
+			
+			makePassive(skill, "koboost", [stat, stages]);
+			return true
+		},
+		onkill(char, targ, skill, dmg, passive, btl, vars) {
+			buffStat(char, vars[0], vars[1]);
+			return `Defeating __${targ.name}__ let __${char.name}'s__ _${passive.name}_ ${vars[1] > 0 ? 'buff' : 'debuff'} **${vars[0].toUpperCase()} ${Math.abs(vars[1])} times**.`;
+		},
+		getinfo(vars, skill) {
+			return `Upon foe defeat, buffs **${vars[0].toUpperCase()} ${vars[1]}** times.`
+		}
+	}),
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.

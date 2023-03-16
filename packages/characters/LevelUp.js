@@ -180,7 +180,7 @@ lvlUpWithXpInMind = (charDefs, forceEvo, message, returnembed) => {
 
 	let DiscordEmbed = briefDescription(charDefs);
 	DiscordEmbed.title = `${charDefs.name} levelled up${(lvlCount <= 1) ? '!' : ' ' + lvlCount + ' times!'}`;
-	DiscordEmbed.description = `_${charDefs.name}: "${selectQuote(charDefs, 'lvl')}"_\n\n**Level ${charDefs.level}**\n${DiscordEmbed.description}`;
+	DiscordEmbed.description = `${selectQuote(charDefs, 'lvl')}\n\n**Level ${charDefs.level}**\n${DiscordEmbed.description}`;
 
 	let channel = message.channel ?? message;
 
