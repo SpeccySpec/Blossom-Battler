@@ -263,7 +263,7 @@ enemyThinker = (char, btl) => {
 										for (let char2 of btl.teams[char.team].members) {
 											if (skill.heal?.healstat) {
 												if (!skill.heal.healstat[1] || skill.heal.healstat[1] == "hp") {
-													if (char2.hp <= (isBoss(char2) ? char2.maxhp/10 : char2.maxhp/3)) {
+													if (char2.hp > 0 && char2.hp <= (isBoss(char2) ? char2.maxhp/10 : char2.maxhp/3)) {
 														act.points += 5;
 													}
 												}
@@ -278,7 +278,7 @@ enemyThinker = (char, btl) => {
 										for (let ally of btl.teams[char.team].members) {
 											if (skill.heal?.healstat) {
 												if (!skill.heal.healstat[1] || skill.heal.healstat[1] == "hp") {
-													if (ally.hp <= (isBoss(ally) ? ally.maxhp/10 : ally.maxhp/3)) {
+													if (ally.hp > 0 && ally.hp <= (isBoss(ally) ? ally.maxhp/10 : ally.maxhp/3)) {
 														act = {
 															move: 'skills',
 															index: j,
@@ -506,6 +506,8 @@ enemyThinker = (char, btl) => {
 									case 'ally':
 									case 'spreadallies':
 										for (let ally of btl.teams[char.team].members) {
+											if (ally.hp <= 0) continue;
+
 											if (skill.heal?.healstat) {
 												if (!skill.heal.healstat[1] || skill.heal.healstat[1] == "hp") {
 													if (ally.hp <= (isBoss(ally) ? ally.maxhp/10 : ally.maxhp/3)) {
@@ -739,6 +741,8 @@ enemyThinker = (char, btl) => {
 									case 'ally':
 									case 'spreadallies':
 										for (let ally of btl.teams[char.team].members) {
+											if (ally.hp <= 0) continue;
+
 											if (skill.heal?.healstat) {
 												if (!skill.heal.healstat[1] || skill.heal.healstat[1] == "hp") {
 													if (ally.hp <= (isBoss(ally) ? ally.maxhp/10 : ally.maxhp/3)) {

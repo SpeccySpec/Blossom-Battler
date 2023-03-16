@@ -944,10 +944,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 				if (affinity === 'normal') quotetype = 'hurt';
 				if (affinity === 'resist') result.txt += `\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name, "%AFFINITY%", affinity)}`;
 
-				if (targ.hp <= 0) {
+				if (targ.hp <= 0)
 					quotetype = 'dead';
-					result.txt += `\n${selectQuote(char, 'kill', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}`;
-				} else
+				else
 					result.txt += `\n${selectQuote(char, 'landed', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}`;
 
 				result.txt += `\n${selectQuote(targ, quotetype, null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;

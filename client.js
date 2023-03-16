@@ -477,7 +477,7 @@ classEmoji = {
 		ranged: "<:ranged:1008794366648791161>",
 		books: "<:books:1008794354959269938>",
 		staff: "<:staff:1008794368750141540>",
-		incorporeal: "<:bladed:1008794351591239842>"
+		incorporeal: "<:incorporeal:1085978225911533668>"
 	},
 	armor: {
 		light: "<:light:1008794358637662338>",

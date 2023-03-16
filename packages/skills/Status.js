@@ -1653,12 +1653,11 @@ statusList = {
 			if (activation <= 0) return void message.channel.send("You entered an invalid value for <Activation Limit>.");
 			if (turns <= 0) return void message.channel.send("You entered an invalid value for <Turns>.");
 
-			skill.target = 'caster';
 			makeStatus(skill, "evasionboost", [element, chance, activation, turns, canact]);
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
-			addCusVal(char, 'evasionstate', {
+			addCusVal(targ, 'evasionstate', {
 				name: skill.name,
 				element: vars[0],
 				chance: vars[1],
@@ -1667,10 +1666,10 @@ statusList = {
 				canact: vars[4],
 			});
 
-			return `__${char.name}__ has entered an evasive state!`;
+			return `__${targ.name}__ has entered an evasive state!`;
 		},
 		getinfo(vars, skill) {
-			return `Enters evasive state for **${vars[3]} turns**, **${vars[1]}% chance to dodge ${vars[0]} skills ${vars[2]} time(s)**`
+			return `Target enters evasive state for **${vars[3]} turns**, **${Math.round(vars[1])}% chance to dodge ${vars[0]} skills ${vars[2]} time(s)**`
 		}
 	}),
 }
