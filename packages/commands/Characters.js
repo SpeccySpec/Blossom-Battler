@@ -4017,6 +4017,11 @@ commands.equipweapon = new Command({
 				if (char.weaponclass === 'none')
 					return message.channel.send(`${char.name} cannot equip any weapons.`);
 				else if ((typeof(char.weaponclass) == 'string' && char.weaponclass === char.weapons[args[1]].class) || (typeof(char.weaponclass) == 'object' && char.weaponclass.includes(char.weapons[args[1]].class))) {
+					if (char.curweapon && char.curweapon.name && char.curweapon.class) {
+						let oldweapon = objClone(char.curweapon);
+						char.weapons[char.curweapon.name] = oldweapon;
+					}
+
 					char.curweapon = objClone(char.weapons[args[1]]);
 					delete char.weapons[args[1]];
 
@@ -4025,6 +4030,11 @@ commands.equipweapon = new Command({
 				} else
 					return message.channel.send(`${char.name} is incapable of using this weapon as it's class is not ${char.weaponclass}.`);
 			} else {
+				if (char.curweapon && char.curweapon.name && char.curweapon.class) {
+					let oldweapon = objClone(char.curweapon);
+					char.weapons[char.curweapon.name] = oldweapon;
+				}
+
 				char.curweapon = objClone(char.weapons[args[1]]);
 
 				message.react('👍');
@@ -4105,6 +4115,11 @@ commands.equiparmor = new Command({
 		if (char.armors[args[1]]) {
 			if (char.armors[args[1]].class) {
 				if (char.armorclass === 'none' || char.armorclass === char.armors[args[1]].class) {
+					if (char.curarmor && char.curarmor.name && char.curarmor.class) {
+						let oldarmor = objClone(char.curarmor);
+						char.armors[char.curarmor.name] = oldarmor;
+					}
+
 					char.curarmor = objClone(char.armors[args[1]]);
 					delete char.armors[args[1]];
 
@@ -4114,6 +4129,11 @@ commands.equiparmor = new Command({
 					return message.channel.send(`${char.name} is incapable of wearing this armor as it's armor class is not ${char.armorclass}.`);
 				}
 			} else {
+				if (char.curarmor && char.curarmor.name && char.curarmor.class) {
+					let oldarmor = objClone(char.curarmor);
+					char.armors[char.curarmor.name] = oldarmor;
+				}
+
 				char.curarmor = objClone(char.armors[args[1]]);
 				delete char.armors[args[1]];
 
