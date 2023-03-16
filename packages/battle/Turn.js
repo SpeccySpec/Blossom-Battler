@@ -1018,13 +1018,13 @@ sendCurTurnEmbed = (char, btl) => {
 							let pskill = skillFile[s];
 
 							if (pskill && pskill.type == 'passive') {
-								for (let i in pskill.passive) {
-									if (!passiveList[i]) continue;
-									if (!passiveList[i].canuseskill) continue;
+								for (let k in pskill.passive) {
+									if (!passiveList[k]) continue;
+									if (!passiveList[k].canuseskill) continue;
 
-									if (passiveList[i].multiple) {
+									if (passiveList[k].multiple) {
 										for (let l in pskill.extras[k]) {
-											let txt = passiveList[i].canuseskill(char, skill, pskill, btl, skill.heal[k][l]);
+											let txt = passiveList[k].canuseskill(char, skill, pskill, btl, pskill.passive[k][l]);
 
 											if (txt !== true) {
 												DiscordEmbed.title = txt;
@@ -1037,7 +1037,7 @@ sendCurTurnEmbed = (char, btl) => {
 											}
 										}
 									} else {
-										let txt = passiveList[i].canuseskill(char, skill, pskill btl, skill.heal[k]);
+										let txt = passiveList[k].canuseskill(char, skill, pskill, btl, pskill.passive[k]);
 
 										if (txt !== true) {
 											DiscordEmbed.title = txt;
