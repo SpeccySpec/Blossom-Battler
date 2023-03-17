@@ -108,7 +108,7 @@ inflictStatus = (char, status, notxt) => {
 
 	// Do we block this status?
 	if (hasStatusAffinity(char, status.toLowerCase(), 'block')) 
-		return notxt ? '' : `${char.name} blocked the ${statusNames[char.status]}!`;
+		return '';
 
 	// Inflict the status.
 	let statusfuncs = statusEffectFuncs[status.toLowerCase()];

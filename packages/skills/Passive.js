@@ -1746,6 +1746,7 @@ passiveList = {
 	koboost: new Extra({
 		name: "KO Boost (Pokémon)",
 		desc: "Upon foe defeat, buff a stat.",
+		multiple: true,
 		args: [
 			{
 				name: "Stat",
@@ -2014,6 +2015,7 @@ passiveList = {
 	skilldeny: new Extra({
 		name: "Skill Deny (Original)",
 		desc: "Denies use of an element... Why is this here again-",
+		multiple: true,
 		args: [
 			{
 				name: "Element",
@@ -2033,9 +2035,40 @@ passiveList = {
 			return true;
 		},
 		getinfo(vars, skill) {
-			return `The user cannot use ${elementEmoji[vars[0]]}**${vars[0].charAt(0).toUpperCase() + vars[0].slice(1)}** skills.`
+			return `The user cannot use ${elementEmoji[vars[0]]}**${vars[0].charAt(0).toUpperCase() + vars[0].slice(1)}** skills`
 		}
 	}),
+
+/*
+	simple: new Extra({
+		name: "Simple (Pokémon)",
+		desc: "Doubles buffs gained or lost. May have a chance assigned to it, and a specific buff.",
+		args: [
+			{
+				name: "Stat",
+				type: "Word"
+			},
+			{
+				name: "Chance %",
+				type: "Decimal"
+			}
+		],
+		hardcoded: true,
+		applyfunc(message, skill, args) {
+			let stat = args[0].toLowerCase() ?? 'all';
+			let chance = Math.min(args[1] ?? 100, 100);
+
+			if (![...stats, "crit", "all"].includes(stat)) return void message.channel.send("That's not a valid stat!");
+			if (chance <= 0) return void message.channel.send("You can't have a percentage less than 0, as then it would never happen!");
+
+			makePassive(skill, "simple", [stat, chance])
+			return true
+		},
+		getinfo(vars, skill) {
+			return `The user cannot use ${elementEmoji[vars[0]]}**${vars[0].charAt(0).toUpperCase() + vars[0].slice(1)}** skills`
+		}
+	}),
+*/
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.

@@ -1520,7 +1520,7 @@ statusList = {
 	}),
 
 	psychoshift: new Extra({
-		name: "Psycho Shift",
+		name: "Psycho Shift (Pokémon)",
 		args: [],
 		desc: extrasList.psychoshift.desc,
 		applyfunc(message, skill, args) {
@@ -1693,6 +1693,54 @@ statusList = {
 		},
 		getinfo(vars, skill) {
 			return `Target enters evasive state for **${vars[3]} turns**, **${Math.round(vars[1])}% chance to dodge ${vars[0]} skills ${vars[2]} time(s)**`
+		}
+	}),
+
+	simplebeam: new Extra({
+		name: "Simple Beam (Pokémon)",
+		desc: "Gives the target the specified skill for {Turns} turns, or until the battle ends.",
+		args: [
+			{
+				name: "Skill",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num"
+			}
+		],
+		applyfunc(message, skill, args) {
+			let skillName = args[0];
+			let turns = args[1] ?? 0;
+
+			if (!skillFile[skillName]) return void message.channel.send("That's not a valid skill!");
+
+			makeStatus(skill, "simplebeam", [skillName, turns]);
+			return true;
+		},
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+			let skillnum = targ.skills.length;
+			targ.skills.push(vars[0]);
+
+			let str = `__${targ.name}__ has been given _${getFullName(skillFile[vars[0]])}_`;
+
+			if (vars[1] > 0) {
+				if (!targ.custom?.simplebeam) addCusVal(targ, "simplebeam", []);
+				targ.custom.simplebeam.push([skillnum, vars[1]+1, getFullName(skillFile[vars[0]])]);
+				str += `, for _**${vars[1]}** turns_`;
+			}
+
+			return `${str}!`;
+		},
+		getinfo(vars, skill) {
+			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+			let str = `Gives the __target__ a skill called **_${getFullName(skillFile[vars[0]])}_**`;
+
+			if (vars[1] > 0) str += ` for **${vars[1]} turns**`;
+
+			return str;
 		}
 	}),
 }

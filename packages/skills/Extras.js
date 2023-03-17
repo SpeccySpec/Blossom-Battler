@@ -2877,4 +2877,25 @@ customVariables = {
 			}
 		}
 	},
+
+	simplebeam: {
+		onturn(btl, char, v) {
+			let txt = '';
+			for (let i in v) {
+				let vars = v[i];
+
+				vars[1]--;
+				if (vars[1] <= 0) {
+					char.skills.splice(vars[0], 1);
+					txt += `${char.name} no-longer has ${vars[2]}.`;
+				}
+			}
+
+			v = v.filter(x => x[1] > 0);
+			if (v.length == 0) killVar(char, "simplebeam");
+
+			if (txt == '') return null;
+			return txt;
+		}
+	},
 }

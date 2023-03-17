@@ -960,7 +960,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 						status = skill.status;
 					}
 
-					result.txt += statusList.status.inflictStatus(char, targ, skill, status, btl, skill.pow);
+					let txt = statusList.status.inflictStatus(char, targ, skill, status, btl, skill.pow);
+					if (txt && txt != '') result.txt += txt;
 				}
 
 				// OnUseAtEndOfFunc
