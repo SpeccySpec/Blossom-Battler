@@ -3,8 +3,8 @@ const {exec} = require("child_process")
 
 exports.SaveBackup = async function() {
 	console.log("Saving backup...")
-	let path = "backups/" + new Date().toLocaleDateString().replaceAll("/", "-")
-	exec(`rm -rf ${path} && cp data -r backups && mv backups/data ${path}`, (error, _, stderr) => {
+	let path = "backups/" + new Date().toLocaleDateString().replaceAll("/", "-") + ".zip"
+	exec(`rm -rf ${path} && zip ${path} data`, (error, _, stderr) => {
 		if (error)
 			return void console.log(stderr)
 		console.log("Backup completed!")
