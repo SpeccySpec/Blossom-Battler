@@ -297,7 +297,7 @@ commands.getchar = new Command({
 	func: (message, args) => {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
-		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 
 		// Alright, let's get the character!
@@ -3498,7 +3498,7 @@ commands.exportchar = new Command({
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let userdata = setUpUserData(message.author.id);
-		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.RPGBotAdmin(message.author.id, message.guild.id) && charFile[args[0]].owner != message.author.id) return message.channel.send('You are not the owner of this character!');
 
@@ -3612,7 +3612,7 @@ commands.importchar = new Command({
 
 		let userdata = setUpUserData(message.author.id);
 		if (Object.keys(userdata.exports).length < 1) return message.channel.send('You have no characters to import from.');
-		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
 		
 		if (!userdata.exports[args[0]]) {
 			let charList = '```diff\n';
