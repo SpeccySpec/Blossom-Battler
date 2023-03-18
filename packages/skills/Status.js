@@ -1715,6 +1715,8 @@ statusList = {
 			let turns = args[1] ?? 0;
 
 			if (!skillFile[skillName]) return void message.channel.send("That's not a valid skill!");
+			if (skillFile[skillName] == skill) return void message.channel.send("You can't use this skill.");
+			if (skillFile[skillName].statusses?.simplebeam) return void message.channel.send("You can't use this skill.");
 
 			makeStatus(skill, "simplebeam", [skillName, turns]);
 			return true;
