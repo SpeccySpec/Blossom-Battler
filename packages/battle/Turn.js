@@ -2024,7 +2024,7 @@ doTurn = async(btl, noTurnEmbed) => {
 			}
 		}
 
-		if (btl.terrain && terrainFuncs && terrainFuncs[btl.terrain.type] && terrainFuncs[btl.terrain.type].onturn) {
+		if (btl.terrain && terrainFuncs && terrainFuncs[btl.terrain.type] && terrainFuncs[btl.terrain.type].onturn && (!char.status || (char.status && char.status != 'airborne'))) {
 			let txt = terrainFuncs[btl.terrain.type].onturn(char, btl);
 			if (txt != null) statusTxt += `\n${txt}`;
 

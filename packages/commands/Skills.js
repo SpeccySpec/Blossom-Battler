@@ -1642,6 +1642,7 @@ commands.liststatus = new Command({
 
 			// Positive Physical
 			mirror: '<:physical:973077052129423411>Positive Status Effect. Immobilized for 3 turns. Repel magic skills.',
+			airborne: '<:physical:973077052129423411>Positive Status Effect. Unaffected by physical skills and terrain effects.',
 
 			// Positive Mental
 			happy: '<:mental:1004855144745291887>Positive Status Effect. LUK and AGL increased, PRC decreased. Can still be teched on your opponents.'

@@ -491,19 +491,29 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 		
 		// How many total hits
 		let totalHits = 0;
+		let dodgeChance = 0;
 		for (let i = 0; i < skill.hits; i++) {
 			let c = randNum(1, 100);
 
 			if (skill.nomod && skill.nomod.acc) {
-				if (c <= skill.acc) {
-					totalHits++;
-					continue;
-				}
+				dodgeChance = skill.acc;
 			} else {
-				if (c <= skill.acc+((char.stats.prc-targ.stats.agl)/2)) {
-					totalHits++;
-					continue;
+				dodgeChance = skill.acc+((char.stats.prc-targ.stats.agl)/2);
+			}
+
+			// Airborne positive status
+			if (targ.status && targ.status == 'airborne') {
+				if (skill.atktype == 'physical') {
+					dodgeChance = 0;
+				} else {
+					dodgeChance -= 10;
 				}
+			}
+
+			console.log(dodgeChance + "% Chance to Dodge");
+			if (c <= dodgeChance) {
+				totalHits++;
+				continue;
 			}
 
 			break;
@@ -696,6 +706,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 					if ((skill.extras?.forcetech && skill.extras.forcetech.includes(targ.status)) || isTech(targ, skill.type)) {
 						dmg *= settings.rates.tech ?? 1.2;
 						techs[i] = true;
+						btl.doknockdown = true;
 
 						if (randNum(1, 100) <= 50 && settings.mechanics.onemores) {
 							result.oneMore = true;
@@ -1127,7 +1138,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 	// Status Effects
 	if (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].skillmod) {
-		statusEffectFuncs[char.status].skillmod(char, char.stats, btl);
+		statusEffectFuncs[char.status].skillmod(char, skill, btl);
 	}
 
 	// Weather
@@ -1435,7 +1446,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 						meleeAtk.statuschance = char2.melee.statuschance;
 					}
 
-					finalText += `\n${char2.name} wants to assist in attacking!\n`;
+					finalText += `\n__${char2.name}__ wants to assist in attacking!\n`;
 					console.log(meleeAtk);
 					let result = attackWithSkill(char2, targ, meleeAtk, btl, true, noExtraArray);
 					finalText += `${result.txt}\n`;
@@ -1444,6 +1455,17 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			}
 		}
 	}
+
+	// Airborne?
+	if (skill.atktype == 'physical' && char.status && char.status == 'airborne') {
+		finalText += `\n__${char.name}__ has landed on the floor.\n`
+		delete char.status;
+		delete char.statusturns;
+	}
+
+	// Airborne?
+	if (btl.doknockdown && char.status && char.status == 'airborne') finalText += `\n__${char.name}__ was knocked down to the floor!\n`
+	delete btl.doknockdown;
 
 	// Now, send the embed!
 	let DiscordEmbed = new Discord.MessageEmbed()

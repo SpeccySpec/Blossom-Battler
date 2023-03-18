@@ -2276,4 +2276,11 @@ statusEffectFuncs = {
 			return [`${char.name} is encased in a mirror.`, false];
 		}
 	},
+
+	airborne: {
+		hardcoded: true,
+		skillmod: function(char, skill, btl) {
+			if (skill.atktype == 'physical') skill.pow *= 2;
+		}
+	},
 }

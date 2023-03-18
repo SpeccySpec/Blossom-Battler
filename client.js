@@ -248,7 +248,8 @@ statusEffects = [
 
 	// Positive Statusses
 	"happy",
-	"mirror"
+	"mirror",
+	"airborne"
 ]
 
 statusNames = {
@@ -275,7 +276,8 @@ statusNames = {
 
 	// Positive Statusses
 	happy: 'Happiness',
-	mirror: 'Mirror'
+	mirror: 'Mirror',
+	airborne: 'Airborne'
 }
 
 statusEmojis = {
@@ -303,6 +305,7 @@ statusEmojis = {
 	// Positive Statusses
 	mirror: '<:mirror:963413990229311588>',
 	happy: '<:happy:973076333871644733>',
+	airborne: '<:wind:963413845848776714>',
 
 	// Buffs
 	atkup: "<:atkup:990629395486089216>",
@@ -348,7 +351,8 @@ elementTechs = {
 	blind: ['all'],
 	irradiation: ['fire', 'nuclear', 'water'],
 	sensitive: ['strike', 'slash', 'pierce', 'explode', 'spirit', 'wind'],
-	happy: ['psychic', 'bless', 'curse', 'spirit', 'sound']
+	happy: ['psychic', 'bless', 'curse', 'spirit', 'sound'],
+	airborne: ['pierce', 'electric', 'metal', 'gravity']
 }
 
 // Enemy Habitats
