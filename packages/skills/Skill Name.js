@@ -85,6 +85,15 @@ canUseSkill = (char, skill) => {
 	return canAfford(char, skill);
 }
 
+// Will we die from using this skill?
+willNotDieFromSkill = (char, skill) => {
+	if (!skill) return true;
+	if (!skill.type) return true;
+	if (skill.target == 'caster' && skill.pow) return false;
+
+	return true;
+}
+
 // Use cost costtype with char.
 useCost = (char, cost, costtype) => {
 	if (!costtype) costtype === 'mp';

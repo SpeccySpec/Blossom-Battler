@@ -308,7 +308,7 @@ enemyThinker = (char, btl) => {
 										act.points += 5+Math.round(st[status]/statusses.length);
 									}
 								}
-								
+
 								// AIThinker Hook
 								if (skill.statusses) {
 									for (let i in skill.statusses) {
@@ -357,8 +357,13 @@ enemyThinker = (char, btl) => {
 										}
 										break;
 									case 'caster':
-										targets = [char];
-										break;
+										if (!willNotDieFromSkill(char, skillFile[skill])) {
+											act.points -= 9999;
+											continue;
+										} else {
+											targets = [char];
+											break;
+										}
 									default:
 										targets = [targ];
 								}
@@ -589,8 +594,13 @@ enemyThinker = (char, btl) => {
 										}
 										break;
 									case 'caster':
-										targets = [char];
-										break;
+										if (!willNotDieFromSkill(char, skillFile[skill])) {
+											act.points -= 9999;
+											continue;
+										} else {
+											targets = [char];
+											break;
+										}
 									default:
 										targets = [targ];
 								}
@@ -798,8 +808,13 @@ enemyThinker = (char, btl) => {
 										}
 										break;
 									case 'caster':
-										targets = [char];
-										break;
+										if (!willNotDieFromSkill(char, skillFile[skill])) {
+											act.points -= 9999;
+											continue;
+										} else {
+											targets = [char];
+											break;
+										}
 									default:
 										targets = [targ];
 								}
@@ -857,7 +872,7 @@ enemyThinker = (char, btl) => {
 
 		default: // Easy mode AI:
 			// Select random options. Only change if the target is dead.
-			// Never consider bad outcomes.
+			// Never consider bad outcomes, except if the skill damages itself.
 			// Never watch out for affinities.
 			// Never watch out for shields, traps, ect.
 			for (let i in btl.teams) {
@@ -871,7 +886,7 @@ enemyThinker = (char, btl) => {
 
 					// Can we actually use this skill?
 					let loops = 0;
-					while (!canUseSkill(char, skillFile[skill]) && loops < 10) {
+					while (!canUseSkill(char, skillFile[skill]) && willNotDieFromSkill(char, skillFile[skill]) && loops < 10) {
 						skill = char.skills[randNum(char.skills.length-1)];
 						loops++;
 					}
