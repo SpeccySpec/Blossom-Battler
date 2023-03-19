@@ -2026,7 +2026,7 @@ passiveList = {
 		applyfunc(message, skill, args) {
 			let element = args[0].toLowerCase();
 			if (!Elements.includes(element)) return void message.channel.send("You entered an invalid type for the boost!");
-			
+
 			makePassive(skill, "skilldeny", [element]);
 			return true
 		},
@@ -2035,7 +2035,23 @@ passiveList = {
 			return true;
 		},
 		getinfo(vars, skill) {
-			return `The user cannot use ${elementEmoji[vars[0]]}**${vars[0].charAt(0).toUpperCase() + vars[0].slice(1)}** skills`
+			let txt = `Cannot use `;
+			let type = '';
+			let symbol = '';
+
+			for (let i in vars) {
+				if (!vars[i]) continue;
+
+				type = vars[i][0];
+				symbol = elementEmoji[type] ?? '';
+				txt += `${symbol}**${type.charAt(0).toUpperCase() + type.slice(1)}%**`
+				if (i < vars.length - 2) 
+					txt += `, `
+				else if (i == vars.length - 2) 
+					txt += ` or `
+			}
+
+			return `${txt} skills`;
 		}
 	}),
 

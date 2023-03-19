@@ -85,7 +85,7 @@ genDmg = (char, targ, btl, skill) => {
 		}
 	}
 
-	let atkStat = (skill.atktype === 'physical') ? statWithBuff(charStats.atk, char.buffs.atk ?? 0) : statWithBuff(charStats.mag, char.buffs.mag ?? 0);
+	let atkStat = (skill.atktype === 'physical') ? statWithBuff(charStats.atk ?? 1, char.buffs.atk ?? 0) : statWithBuff(charStats.mag ?? 1, char.buffs.mag ?? 0);
 	let endStat = statWithBuff(targStats.end, targ.buffs.end);
 	console.log(`Atk Checkpoint: ${atkStat}`);
 
