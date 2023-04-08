@@ -469,7 +469,6 @@ commands.git = new Command({
 		message.channel.send("Loading...")
 		switch (args[0].toLowerCase()) {
 			case "status": {
-				let result
 				exec("git fetch", (error, _, stderr) => {
 					if (error)
 						return void message.channel.send(stderr)
