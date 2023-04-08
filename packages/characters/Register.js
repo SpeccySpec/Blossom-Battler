@@ -193,12 +193,9 @@ longDescription = (charDefs, level, server, message, useguild) => {
 		dispLevel = `(At Level ${level})`;
 	}
 
-	let userTxt;
-	
-	if (useguild)
-		getServerUserFromGuild(char.owner, message);
-	else
-		getServerUser(char.owner, message);
+	const userTxt = useguild
+		? getServerUserFromGuild(char.owner, message)
+		: getServerUser(char.owner, message);
 
 	let tick = verifiedChar(char) ? '<:tick:973077052372701294>' : '';
 	let DiscordEmbed = new Discord.MessageEmbed()
