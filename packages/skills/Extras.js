@@ -251,7 +251,11 @@ extrasList = {
 			return `*(${Math.floor(charges[0])}/${vars[0]}) charges left.*`
 		},
 		getinfo(vars, skill) {
-			return `Has **${vars[0]}** charges`
+			let info = `Has **${vars[0]}** charges`
+			if (vars[1]) {
+				info += `, recharges by **${vars[1]}** every turn`
+			}
+			return info
 		}
 	}),
 
