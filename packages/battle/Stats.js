@@ -101,9 +101,12 @@ buffStat = (f, stat, amount, boosted) => {
 
 inflictStatus = (char, status, notxt) => {
 	if (!status) return '';
+
+	// Spectra is very fucking stupid, so she's going to replace common errors with the ID of the status that SHE wrote originaly.
 	if (status.toLowerCase() === 'paralysis' || status.toLowerCase() === 'paralyse') status = 'paralyze';
-	//same with poison but toxin
 	if (status.toLowerCase() === 'poison') status = 'toxin';
+
+	// Doesn't exist? Let's ignore this, then.
 	if (!statusEffectFuncs[status.toLowerCase()]) return '';
 
 	// Do we block this status?
