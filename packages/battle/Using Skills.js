@@ -1370,7 +1370,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		let skillDefs = objClone(skill);
 		skillDefs.pow *= targets[i][1];
 
-		let result = attackWithSkill(char, targ, skillDefs, btl, noExtraArray);
+		let result = attackWithSkill(char, targ, skillDefs, btl, null, noExtraArray);
 		finalText += `${result.txt}`;
 
 		if (result.oneMore) btl.doonemore = true;
@@ -1433,7 +1433,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 						name: char2.melee.name,
 						type: char2.melee.type,
 						pow: char2.melee.pow*2.5,
-						acc: 100,
+						acc: 9999,
 						crit: char2.melee.crit,
 						atktype: atkType,
 						target: targType,
@@ -1446,10 +1446,11 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 						meleeAtk.statuschance = char2.melee.statuschance;
 					}
 
-					finalText += `\n__${char2.name}__ wants to assist in attacking!\n`;
-					console.log(meleeAtk);
+					finalText += `\n__${char2.name}__ wants to assist __${char.name}__ with their attack!\n`;
+
 					let result = attackWithSkill(char2, targ, meleeAtk, btl, true, noExtraArray);
 					finalText += `${result.txt}\n`;
+
 					if (result.teamCombo) btl.canteamcombo = true;
 				}
 			}
