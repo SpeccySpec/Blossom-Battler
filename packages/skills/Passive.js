@@ -1766,16 +1766,27 @@ passiveList = {
 			if (![...stats, 'crit'].includes(stat)) return void message.channel.send("That's not a valid stat!");
 			if (stages == 0) return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
 			if (Math.abs(stages) > 3) return void message.channel.send("The maximum amount of stages is 3!");
-			
+
 			makePassive(skill, "koboost", [stat, stages]);
 			return true
 		},
 		onkill(char, targ, skill, dmg, passive, btl, vars) {
-			buffStat(char, vars[0], vars[1]);
+			buffStat(char, vars[0].toLowerCase(), vars[1]);
 			return `Defeating __${targ.name}__ let __${char.name}'s__ _${passive.name}_ ${vars[1] > 0 ? 'buff' : 'debuff'} **${vars[0].toUpperCase()} ${Math.abs(vars[1])} times**.`;
 		},
 		getinfo(vars, skill) {
-			return `Upon foe defeat, buffs **${vars[0].toUpperCase()} ${vars[1]}** times.`
+			let str = 'Upon foe defeat, **boosts user '
+
+			for (let i in vars) {
+				str += `${vars[i][0].toUpperCase()} ${vars[i][1]} time(s)`;
+
+				if (i < vars.length - 2) 
+					txt += `, `
+				else if (i == vars.length - 2) 
+					txt += ` and `
+			}
+
+			return `${str}**`;
 		}
 	}),
 

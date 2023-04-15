@@ -71,7 +71,7 @@ statWithBuff = (stat, buff) => {
 }
 
 buffStat = (f, stat, amount, boosted) => {
-	let statBuff = stat.toLowerCase();
+	let statBuff = (stat ?? 'atk').toLowerCase();
 
 	switch(statBuff) {
 		case 'all':

@@ -743,9 +743,12 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 							if (passiveList[i] && passiveList[i].dmgmod) {
 								if (noExtraArray && noExtraArray.includes(i)) continue;
 								if (passiveList[i].multiple) {
-									for (let k in psv.passive[i]) dmg = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i][k]) ?? dmg;
-								} else
-								dmg = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i][k]) ?? dmg;
+									for (let k in psv.passive[i]) {
+										dmg = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i][k]) ?? dmg;
+									}
+								} else {
+									dmg = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i]) ?? dmg;
+								}
 							}
 						}
 					}
@@ -861,14 +864,23 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 					}
 
 					if (targ.hp <= 0 && doPassives(btl)) {
+						let psv = null;
 						for (let i in char.skills) {
 							if (!skillFile[char.skills[i]]) continue;
 							if (skillFile[char.skills[i]].type != 'passive') continue;
 
-							for (let k in skillFile[char.skills[i]].passive) {
+							psv = skillFile[char.skills[i]];
+							for (let k in psv.passive) {
 								if (passiveList[k] && passiveList[k].onkill) {
 									if (noExtraArray && noExtraArray.includes(i)) continue;
-									result.txt += `\n${passiveList[k].onkill(char, targ, skill, total, skillFile[char.skills[i]], btl, skillFile[char.skills[i]].passive[k])}`;
+
+									if (passiveList[i].multiple) {
+										for (let j in psv.passive[k]) {
+											result.txt += `\n${passiveList[k].onkill(char, targ, skill, total, psv, btl, psv.passive[k][j])}`;
+										}
+									} else {
+										result.txt += `\n${passiveList[k].onkill(char, targ, skill, total, psv, btl, psv.passive[k])}`;
+									}
 								}
 							}
 						}
