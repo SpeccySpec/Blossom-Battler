@@ -2066,6 +2066,79 @@ passiveList = {
 		}
 	}),
 
+	autoboost: new Extra({
+		name: "Auto-Boost (Persona)",
+		desc: "When the battle starts, either the character will gain a stat boost, or the foes will lose one.",
+		multiple: true,
+		args: [
+			{
+				name: "Foes/Team/User",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Stat",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Stages",
+				type: "Num"
+			},
+			{
+				name: "Turns",
+				type: "Num"
+			}
+		],
+		applyfunc(message, skill, args) {
+			const target = args[0].toLowerCase()
+			const stat = args[1].toLowerCase()
+			const stages = args[2] ?? 1
+			const turns = args[4] ?? null
+
+			if (target != 'user' && target != 'foes' && target != 'team') 
+				return void message.channel.send(`You typed ${target} as the target. It must be either \`user\`, \`foes\`, or \`team\`.`)
+			if (![...stats, "crit", "all"].includes(stat))
+				return void message.channel.send("That's not a valid stat!");
+			if (stages == 0)
+				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
+			if (Math.abs(stages) > 3) 
+				return void message.channel.send("The maximum amount of stages is 3!");
+			if (turns && turns <= 0)
+				return void message.channel.send("You can't have a turn amount less than 0, as then it would revert to normal too soon.");
+
+			makePassive(skill, "autoboost", [target, stat, stages, 100, turns]);
+			return true;
+		},
+		battlestart(char, skill, btl, vars) {
+			switch(vars[0].toLowerCase()) {
+				case 'foes':
+					for (let i in btl.teams) {
+						for (let k in btl.teams[i].members) {
+							if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) {
+								extrasList.buff.buffChange(char, btl.teams[i].members[k], skill, btl, vars, 1);
+							}
+						}
+					}
+					break;
+
+				case 'team':
+					for (let k in btl.teams[char.team].members) {
+						if (btl.teams[char.team].members[k].hp > 0) {
+							extrasList.buff.buffChange(char, btl.teams[char.team].members[k], skill, btl, vars, 1);
+						}
+					}
+					break;
+
+				default:
+					extrasList.buff.buffChange(char, char, skill, btl, vars, 1);
+			}
+		},
+		getinfo(vars, skill) {
+			return `${buffText(vars)} at the **start of battle**`;
+		}
+	}),
+
 /*
 	simple: new Extra({
 		name: "Simple (Pokémon)",

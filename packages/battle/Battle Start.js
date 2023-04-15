@@ -5,15 +5,24 @@ doPassives = (btl) => {
 
 funcsAtBattleStart = (btl) => {
 	// Battle Start Passives
+	let psv = null;
 	for (let team of btl.teams) {
 		for (let char of team.members) {
 			for (let i in char.skills) {
 				if (!skillFile[char.skills[i]]) continue;
 				if (skillFile[char.skills[i]].type != 'passive') continue;
 
-				for (let k in skillFile[char.skills[i]].passive) {
+				psv = skillFile[char.skills[i]];
+
+				for (let k in psv.passive) {
 					if (passiveList[k] && passiveList[k].battlestart) {
-						passiveList[k].battlestart(char, skillFile[char.skills[i]], btl, skillFile[char.skills[i]].passive[k]);
+						if (passiveList[k].multiple) {
+							for (let j in psv.passive[k]) {
+								passiveList[k].battlestart(char, psv, btl, psv.passive[k][j]);
+							}
+						} else {
+							passiveList[k].battlestart(char, psv, btl, psv.passive[k]);
+						}
 					}
 				}
 			}

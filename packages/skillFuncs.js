@@ -16,8 +16,14 @@ buffText = (buffArray) => {
 		const stagestext = Math.abs(stages) == 1 ? "" : ` by **${Math.abs(stages)}** stages`
 		const turnstext = turns ? ` for **${turns}** turns` : ""
 		const end = i < buffArray.length ? ".\n" : ""
-		finaltext += `${start} ${type} the **${target}'s ${stats}**${stagestext}${turnstext}${end}`
+
+		if (target == 'foes') {
+			finaltext += `${start} ${type} the **${target}' ${stats}**${stagestext}${turnstext}${end}`
+		} else {
+			finaltext += `${start} ${type} the **${target}'s ${stats}**${stagestext}${turnstext}${end}`
+		}
 	}
+
 	return finaltext
 }
 
