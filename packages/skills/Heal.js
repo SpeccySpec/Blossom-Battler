@@ -501,7 +501,87 @@ healList = {
 
 			return text + '** to use';
 		}
-	})
+	}),
+
+	powerheal: new Extra({
+		name: "Power-based Healing",
+		desc: "Restores <HP/MP> by <Amount>, but is calculated as if it were dealing damage. _Negative values for <Heal Amount> will damage the target!_",
+		multiple: true,
+		diffflag: 0,
+		args: [
+			{
+				name: "Amount",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "HP/MP",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "User Stat",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Target Stat",
+				type: "Word",
+				forced: true
+			},
+		],
+		applyfunc(message, skill, args) {
+			let ustat = args[2].toLowerCase();
+			let ostat = args[3].toLowerCase();
+
+			if (args[0] == 0) args[0] = 60;
+
+			if (!['hp', 'mp'].includes(args[1].toLowerCase())) return void message.channel.send(`${args[1]} is an invalid meter to heal! Enter either HP or MP.`);
+			if (!stats.includes(ustat)) return void message.channel.send(`${args[2]} isn't a valid stat.`);
+			if (!stats.includes(ostat)) return void message.channel.send(`${args[3]} isn't a valid stat.`);
+
+			makeHeal(skill, "powerheal", [args[0], args[1].toLowerCase(), ustat, ostat]);
+			return true;
+		},
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			if (targ.custom?.pinch) return `__${targ.name}__ cannot be healed while they are in a pinch!`
+			if (!vars[0] || vars[0] == null || vars[0] == 0) return '';
+
+			vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
+			vars[0] = Math.round(vars[0] * multiplier);
+
+			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
+				settings = setUpSettings(btl.guild.id);
+				changeTrust(targ, char, Math.round(20*(settings.rates.trustrate ?? 1)), true, btl.channel);
+			}
+
+			let atkStat = statWithBuff(char.stats[vars[2]], char.buffs[vars[2]] ?? char.buffs.mag) ?? char.stats.mag;
+			let endStat = statWithBuff(targ.stats[vars[3]], targ.buffs[vars[3]] ?? targ.buffs.end) ?? targ.stats.end;
+
+			let def = (atkStat/endStat);
+
+			let heal = Math.round(5 * Math.sqrt(def * vars[0]))+randNum(-7, 7);
+			console.log(`Attack Stat: ${atkStat}, Endurance Stat: ${endStat}, Skill Pow: ${vars[0]}, Base Dmg: ${Math.round(5 * Math.sqrt(def * vars[0]))}, Real Dmg: ${heal}`);
+
+			targ[vars[1]] = Math.max(Math.min(targ[`max${vars[1]}`], targ[vars[1]]+heal), 0);
+			return `__${targ.name}__'s **${vars[1].toUpperCase()}** was restored by **${heal}**!`;
+		},
+		getinfo(vars, skill) {
+			let text = 'Restores '
+			for (i in vars) {
+				let healType = (vars[i][1] ?? 'hp').toUpperCase();
+				text += `**${vars[i][0]}${healType}** based on **user ${vars[i][2]}** and **target ${vars[i][3]}**`;
+
+				if (i < vars.length-2){
+					text += ', ';
+				} else if (i == vars.length-2) {
+					text += ' and ';
+				}
+			}
+
+			return `${text}, using the **Damage Formula**`
+		}
+	}),
 }
 
 modSkillResult = (char, targ, result, skill, btl) => {
