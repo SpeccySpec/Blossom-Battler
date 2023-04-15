@@ -454,7 +454,7 @@ enemyTypes = [
 ]
 
 weaponClasses = {
-	none: "A class that implies the character cannot use weapons.",
+	none: "Every weapon can be used, albeit... inefficiently. Each weapon will lose 40% of it's original benefit.",
 	bludgeon: "Hammers, Maces, Clubs",
 	bladed: "Swords, Daggers, Katanas",
 	longbladed: "Longswords, Greatswords",
@@ -470,6 +470,14 @@ armorClasses = {
 	light: "Lighter, smaller pieces of armor like Shields.",
 	heavy: "Entire suits of armor.",
 	magic: "Magical pieces of armor, like barriers."
+}
+
+accessoryClasses = {
+	default: "<:golden:973077051751940138>",
+	amulet: "",
+	necklace: "",
+	crystal: "",
+	magical: ""
 }
 
 classEmoji = {

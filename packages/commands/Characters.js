@@ -4341,6 +4341,48 @@ commands.tradeequipment = new Command({
 	}
 })
 
+commands.listweapontype = new Command({
+	desc: 'Lists all the weapon types.',
+	section: "skills",
+	aliases: ['listweapontypes', 'weapontypelist', 'wtlist', 'listwt'],
+	args: [],
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		const DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle('List of all the current weapon types.')
+			.setDescription('A weapon is a material a character may equip to strengthen themselves in battle. Each character can specialise in up to 2 weapon types, but can use any weapon anyway. If the user uses a non-applicable weapon type, the benefits will be cut by 40%.')
+			.addFields()
+
+		for (const i in weaponClasses) {
+			DiscordEmbed.fields.push({name: i.charAt(0).toUpperCase() + i.slice(1), value: weaponClasses[i], inline: true})
+		}
+
+		message.channel.send({embeds: [DiscordEmbed]})
+	}
+})
+
+commands.listarmortype = new Command({
+	desc: 'Lists all the armor types.',
+	section: "skills",
+	aliases: ['listarmortypes', 'armortypelist', 'atlist', 'listat'],
+	args: [],
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		const DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle('List of all the current armor types.')
+			.setDescription('A armor is a material a character may equip to strengthen themselves in battle. Each character can specialise in a single armor, but can use any armor anyway. If the user uses a non-applicable armor type, their agility will be cut based on the armor type.')
+			.addFields()
+
+		for (const i in armorClasses) {
+			DiscordEmbed.fields.push({name: i.charAt(0).toUpperCase() + i.slice(1), value: armorClasses[i], inline: true})
+		}
+
+		message.channel.send({embeds: [DiscordEmbed]})
+	}
+})
+
 hasTeamCombo = (char, char2) => {
 	if (!char.teamcombos) return false;
 	if (!char.teamcombos[char2.truename]) return false;
