@@ -4014,21 +4014,16 @@ commands.equipweapon = new Command({
 		
 		if (char.weapons[args[1]]) {
 			if (char.weapons[args[1]].class) {
-				if (char.weaponclass === 'none')
-					return message.channel.send(`${char.name} cannot equip any weapons.`);
-				else if ((typeof(char.weaponclass) == 'string' && char.weaponclass === char.weapons[args[1]].class) || (typeof(char.weaponclass) == 'object' && char.weaponclass.includes(char.weapons[args[1]].class))) {
-					if (char.curweapon && char.curweapon.name && char.curweapon.class) {
-						let oldweapon = objClone(char.curweapon);
-						char.weapons[char.curweapon.name] = oldweapon;
-					}
+				if (char.curweapon && char.curweapon.name && char.curweapon.class) {
+					let oldweapon = objClone(char.curweapon);
+					char.weapons[char.curweapon.name] = oldweapon;
+				}
 
-					char.curweapon = objClone(char.weapons[args[1]]);
-					delete char.weapons[args[1]];
+				char.curweapon = objClone(char.weapons[args[1]]);
+				delete char.weapons[args[1]];
 
-					message.react('👍');
-					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
-				} else
-					return message.channel.send(`${char.name} is incapable of using this weapon as it's class is not ${char.weaponclass}.`);
+				message.react('👍');
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 			} else {
 				if (char.curweapon && char.curweapon.name && char.curweapon.class) {
 					let oldweapon = objClone(char.curweapon);
@@ -4114,20 +4109,16 @@ commands.equiparmor = new Command({
 		
 		if (char.armors[args[1]]) {
 			if (char.armors[args[1]].class) {
-				if (char.armorclass === 'none' || char.armorclass === char.armors[args[1]].class) {
-					if (char.curarmor && char.curarmor.name && char.curarmor.class) {
-						let oldarmor = objClone(char.curarmor);
-						char.armors[char.curarmor.name] = oldarmor;
-					}
-
-					char.curarmor = objClone(char.armors[args[1]]);
-					delete char.armors[args[1]];
-
-					message.react('👍');
-					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
-				} else {
-					return message.channel.send(`${char.name} is incapable of wearing this armor as it's armor class is not ${char.armorclass}.`);
+				if (char.curarmor && char.curarmor.name && char.curarmor.class) {
+					let oldarmor = objClone(char.curarmor);
+					char.armors[char.curarmor.name] = oldarmor;
 				}
+
+				char.curarmor = objClone(char.armors[args[1]]);
+				delete char.armors[args[1]];
+
+				message.react('👍');
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 			} else {
 				if (char.curarmor && char.curarmor.name && char.curarmor.class) {
 					let oldarmor = objClone(char.curarmor);
@@ -4156,7 +4147,7 @@ commands.unequipequipment = new Command({
 			forced: true
 		},
 		{
-			name: "Weapon or Armor",
+			name: "Weapon, Armor or Accessory",
 			type: "Word",
 			forced: true
 		}
@@ -4169,6 +4160,7 @@ commands.unequipequipment = new Command({
 		let char = charFile[args[0]];
 		if (!char.weapons) char.weapons = {};
 		if (!char.armors) char.armors = {};
+		if (!char.accessories) char.accessories = {};
 		if (!char.weaponclass) char.weaponclass = 'none';
 		if (!char.armorclass) char.armorclass = 'none';
 
@@ -4186,9 +4178,15 @@ commands.unequipequipment = new Command({
 				char.armors[char.curarmor.id] = objClone(char.curarmor);
 				char.curarmor = {};
 				break;
+
+			case 'accessory':
+				if (char.curaccessory == {}) return message.channel.send(`${char.name} has no accessory equipped.`);
+				char.accessories[char.accessory.id] = objClone(char.curaccessory);
+				char.curaccessory = {};
+				break;
 			
 			default:
-				return message.channel.send("Please enter either ''Weapon'' or ''Armor''.");
+				return message.channel.send("Please enter either ''Weapon'', ''Armor'', or ''Accessory''.");
 		}
 
 		message.react('👍');
@@ -4208,7 +4206,7 @@ commands.trashequipment = new Command({
 			forced: true
 		},
 		{
-			name: "Weapon or Armor",
+			name: "Weapon, Armor or Accessory",
 			type: "Word",
 			forced: true
 		},
@@ -4226,6 +4224,7 @@ commands.trashequipment = new Command({
 		let char = charFile[args[0]];
 		if (!char.weapons) char.weapons = {};
 		if (!char.armors) char.armors = {};
+		if (!char.accessories) char.accessories = {};
 		if (!char.weaponclass) char.weaponclass = 'none';
 		if (!char.armorclass) char.armorclass = 'none';
 
@@ -4252,9 +4251,20 @@ commands.trashequipment = new Command({
 				}
 				break;
 
+			case 'accessory':
+				if (char.accessories[args[2]]) {
+					delete char.accessories[args[2]];
+				} else if (args[2].toLowerCase() === 'all') {
+					char.accessories = {};
+				} else {
+					return message.channel.send(`${args[2]} is a nonexistant accessory.`);
+				}
+				break;
+
 			case 'all':
 				char.weapons = {};
 				char.armors = {};
+				char.accessories = {};
 				break;
 			
 			default:
@@ -4278,7 +4288,7 @@ commands.tradeequipment = new Command({
 			forced: true
 		},
 		{
-			name: "Weapon or Armor",
+			name: "Weapon, Armor or Accessory",
 			type: "Word",
 			forced: true
 		},
@@ -4304,10 +4314,12 @@ commands.tradeequipment = new Command({
 
 		if (!char.weapons) char.weapons = {};
 		if (!char.armors) char.armors = {};
+		if (!char.accessories) char.accessories = {};
 		if (!char.weaponclass) char.weaponclass = 'none';
 		if (!char.armorclass) char.armorclass = 'none';
 		if (!char2.weapons) char2.weapons = {};
 		if (!char2.armors) char2.armors = {};
+		if (!char2.accessories) char2.accessories = {};
 		if (!char2.weaponclass) char2.weaponclass = 'none';
 		if (!char2.armorclass) char2.armorclass = 'none';
 
@@ -4331,9 +4343,18 @@ commands.tradeequipment = new Command({
 					return message.channel.send(`${args[2]} is a nonexistant armor.`);
 				}
 				break;
+
+			case 'accessories':
+				if (char.accessories[args[2]]) {
+					char2.accessories[args[2]] = objClone(char.accessories[args[2]]);
+					delete char.accessories[args[2]];
+				} else {
+					return message.channel.send(`${args[2]} is a nonexistant accessory.`);
+				}
+				break;
 			
 			default:
-				return message.channel.send("Please enter either ''Weapon'' or ''Armor''.");
+				return message.channel.send("Please enter either ''Weapon'', ''Armor'' or ''Accessory''.");
 		}
 
 		message.react('👍');
@@ -4355,7 +4376,7 @@ commands.listweapontype = new Command({
 			.addFields()
 
 		for (const i in weaponClasses) {
-			DiscordEmbed.fields.push({name: i.charAt(0).toUpperCase() + i.slice(1), value: weaponClasses[i], inline: true})
+			DiscordEmbed.fields.push({name: classEmoji.weapon[i] + i.charAt(0).toUpperCase() + i.slice(1), value: weaponClasses[i], inline: true})
 		}
 
 		message.channel.send({embeds: [DiscordEmbed]})
@@ -4372,11 +4393,32 @@ commands.listarmortype = new Command({
 		const DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
 			.setTitle('List of all the current armor types.')
-			.setDescription('A armor is a material a character may equip to strengthen themselves in battle. Each character can specialise in a single armor, but can use any armor anyway. If the user uses a non-applicable armor type, their agility will be cut based on the armor type.')
+			.setDescription('An armor is a material a character may equip to strengthen themselves in battle. Each character can specialise in a single armor, but can use any armor anyway. If the user uses a non-applicable armor type, their agility will be cut based on the armor type.')
 			.addFields()
 
 		for (const i in armorClasses) {
-			DiscordEmbed.fields.push({name: i.charAt(0).toUpperCase() + i.slice(1), value: armorClasses[i], inline: true})
+			DiscordEmbed.fields.push({name: classEmoji.armor[i] + i.charAt(0).toUpperCase() + i.slice(1), value: armorClasses[i], inline: true})
+		}
+
+		message.channel.send({embeds: [DiscordEmbed]})
+	}
+})
+
+commands.listaccessorytype = new Command({
+	desc: 'Lists all the armor types.',
+	section: "skills",
+	aliases: ['listaccessorytypes', 'accessorytypelist', 'actlist', 'listact'],
+	args: [],
+	func: (message, args) => {
+		let settings = setUpSettings(message.guild.id);
+		const DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#0099ff')
+			.setTitle('List of all the current accessory types.')
+			.setDescription('An accessory is a material a character may wear to strengthen themselves in battle. These are cosmetic and are identical to eachother.')
+			.addFields()
+
+		for (const i in accessoryClasses) {
+			DiscordEmbed.fields.push({name: classEmoji.accessory[i] + i.charAt(0).toUpperCase() + i.slice(1), value: armorClasses[i], inline: true})
 		}
 
 		message.channel.send({embeds: [DiscordEmbed]})

@@ -474,10 +474,10 @@ armorClasses = {
 
 accessoryClasses = {
 	default: "<:golden:973077051751940138>",
-	amulet: "",
-	necklace: "",
-	crystal: "",
-	magical: ""
+	amulet: "<:magic:1008794362307674204>",
+	necklace: "<:magic:1008794362307674204>",
+	crystal: "<:magic:1008794362307674204>",
+	magical: "<:magic:1008794362307674204>"
 }
 
 classEmoji = {
@@ -495,6 +495,13 @@ classEmoji = {
 		light: "<:light:1008794358637662338>",
 		heavy: "<:heavy:1008794356620214433>",
 		magic: "<:magic:1008794362307674204>"
+	},
+	accessory: {
+		default: "<:golden:973077051751940138>",
+		amulet: "<:magic:1008794362307674204>",
+		necklace: "<:magic:1008794362307674204>",
+		crystal: "<:magic:1008794362307674204>",
+		magical: "<:magic:1008794362307674204>"
 	}
 }
 

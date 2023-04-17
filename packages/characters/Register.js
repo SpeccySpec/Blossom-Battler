@@ -305,12 +305,18 @@ longDescription = (charDefs, level, server, message, useguild) => {
 		if (char.statusaffinities) {
 			let statusaffinityscore = 0
 			let statustotaffinities = 0
+			let finaladdition = 0;
 			let statAffs = '';
 			for (const affinity in char.statusaffinities) {
 				if (char.statusaffinities[affinity].length > 0) statAffs += `\n${affinityEmoji[affinity]}: `
 				for (const i in char.statusaffinities[affinity]) {
-					statustotaffinities++
-					statusaffinityscore += affinityScores[affinity]
+					statustotaffinities++;
+
+					finaladdition = affinityScores[affinity];
+					if (affinity == 'happy' || affinity == 'airborne' || affinity == 'mirror')
+						finaladdition *= -1;
+
+					statusaffinityscore += finaladdition
 					statAffs += `${statusEmojis[char.statusaffinities[affinity][i]]}`;
 				}
 			}

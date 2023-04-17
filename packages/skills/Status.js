@@ -2265,9 +2265,18 @@ statusEffectFuncs = {
 
 	happy: {
 		statmod: function(char, stats) {
-			stats.agl += char.level/10;
-			stats.luk += char.level/10;
 			stats.prc -= char.level/10;
+			if (hasStatusAffinity(char, 'happy', 'weak')) {
+				stats.agl += char.level/7;
+				stats.luk += char.level/7;
+			} else if (hasStatusAffinity(char, 'happy', 'resist')) {
+				stats.agl += char.level/15;
+				stats.luk += char.level/15;
+			} else {
+				stats.agl += char.level/10;
+				stats.luk += char.level/10;
+			}
+
 			return stats;
 		}
 	},

@@ -35,8 +35,9 @@ commands.openshop = new Command({
 		const trueName = shopName.toLowerCase()
 		const shopid = args[1].id
 		const shopData = setUpFile(`${dataPath}/json/${message.guild.id}/${shopid}/shops.json`);
-		if (shopData[trueName])
-			return void message.channel.send('A shop with the ID of `' + trueName + '` already exists!');
+
+//		if (shopData[trueName])
+//			return void message.channel.send('A shop with the ID of `' + trueName + '` already exists!');
 
 		const files = {
 			item: setUpFile(`${dataPath}/json/${message.guild.id}/items.json`, true),
