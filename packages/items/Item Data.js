@@ -67,7 +67,7 @@ itemData = {
 		target: 'ally',
 		func: function(char, targ, item, btl) {
 			if (targ.hp > 0) return 'But it failed!';
-			targ.hp = targ.maxhp/item.revive;
+			targ.hp = Math.round(targ.maxhp/100*item.revive);
 
 			return `__${char.name}__ used the __${item.name}__ to revive ${targ.name}!`;
 		}
