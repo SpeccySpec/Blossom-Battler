@@ -562,7 +562,7 @@ passiveList = {
 		desc: "Inflicts <Damage> of <Element> damage to the target when attacked with a <Phys/Mag> skill.",
 		args: [
 			{
-				name: "Phys/Mag",
+				name: "Phys/Mag/Ranged",
 				type: "Word",
 				forced: true
 			},
@@ -584,8 +584,8 @@ passiveList = {
 			let damage = args[1];
 			let element = args[2]?.toLowerCase();
 
-			if (physmag != 'phys' && physmag != 'mag')
-				return void message.channel.send("You entered an invalid value for <Phys/Mag>! It can be either PHYS or MAG.");
+			if (physmag != 'phys' && physmag != 'mag' && physmag != 'ranged')
+				return void message.channel.send("You entered an invalid value for <Phys/Mag>! It can be either PHYS, MAG or RANGED.");
 
 			if (damage == 0) return void message.channel.send("What's the point if it's dealing no damage?");
 
@@ -600,7 +600,7 @@ passiveList = {
 			let affinityTxt = affinityEmoji[affinity] ?? '';
 			let d = vars[1];
 
-			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic')) {
+			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic') || (vars[0] === 'ranged' && skill.atktype === 'ranged')) {
 				if (vars[1] < 0) {
 					inf.hp -= vars[1];
 					return ` __${inf.name}__ had their HP restored by ***${-vars[1]}*** thanks to __${char.name}__'s _${passive.name}_.`;
@@ -631,7 +631,7 @@ passiveList = {
 							return ` __${inf.name}__ drained __${char.name}__'s _${passive.name}_. Their HP was restored by ***${d}***${affinityTxt}!`;
 					}
 
-					inf.hp -= d;
+					inf.hp = Math.max(0, inf.hp-d);
 					if (inf.hp <= 0) {
 						return ` Having taken ***${d}***${affinityTxt} damage, __${inf.name}__ perished due to __${char.name}__'s _${passive.name}_!`;
 					} else {
