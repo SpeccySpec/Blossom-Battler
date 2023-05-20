@@ -68,7 +68,7 @@ commands.registerloot = new Command({
         }
     ],
     checkban: true,
-    func: (message, args) => {
+    func(message, args) {
         lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
 
         if (lootFile[args[0]] && message.author.id != lootFile[args[0]].originalAuthor && !utilityFuncs.isAdmin(message)) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
@@ -151,7 +151,7 @@ commands.renameloot = new Command({
         }
     ],
     checkban: true,
-    func: (message, args) => {
+    func(message, args) {
         lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
 
         if (!lootFile[args[0]]) return message.channel.send(`${args[0]} does not exist.`)
@@ -193,7 +193,7 @@ commands.getloot = new Command({
             forced: true,
         }
     ],
-    func: (message, args) => {
+    func(message, args) {
         lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
 
         if (!lootFile[args[0]]) return message.channel.send(`${args[0]} does not exist.`)
@@ -213,7 +213,7 @@ commands.listloots = new Command({
 			multiple: true
 		}
 	],
-    func: (message, args) => {
+    func(message, args) {
         let array = []
         lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
 
@@ -324,7 +324,7 @@ commands.searchloots = new Command({
             forced: true
         }
     ],
-    func: (message, args) => {
+    func(message, args) {
         lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
 
         let array = []
@@ -356,7 +356,7 @@ commands.purgeloot = new Command({
         }
     ],
     checkban: true,
-    func: (message, args) => {
+    func(message, args) {
         lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
 
         if (!lootFile[args[0]]) return message.channel.send(`${args[0]} is not a valid loot table name.`);

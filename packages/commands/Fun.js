@@ -31,7 +31,7 @@ commands.diceroll = new Command({
 			type: "Num"
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		const num1 = args[0]
 		const num2 = args[1] ?? 1
 
@@ -144,7 +144,7 @@ commands.scenario = new Command({
 		}
 	],
 	section: "fun",
-	func: (message, args) => {
+	func(message, args) {
 		const taggedUser = args[0]
 		const embed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
@@ -187,7 +187,7 @@ commands.quote = new Command({
 	desc: "Randomly select an inspirational quote from an Anime or Video Game.",
 	section: "fun",
 	aliases: ['randquote', 'randomquote'],
-	func: (message, args) => {
+	func(message, args) {
         let quoteText = quotes[Math.round(Math.random() * (quotes.length - 1))]
         let DiscordEmbed = new Discord.MessageEmbed()
             .setColor('#ffffff')
@@ -351,7 +351,7 @@ commands.ship = new Command({
 		}
 	],
 	section: "fun",
-	func: (message, args) => {
+	func(message, args) {
 		if (!args[0]) return message.channel.send(`Please specify at least one person who you want to ship yourself with, or two if you want to ship two different people.`);
 
 		// Undefined
@@ -390,7 +390,7 @@ commands.randship = new Command({
 		name: "Person #1",
 		type: "Word",
 	}],
-	func: (message, args) => {
+	func(message, args) {
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
 		if (Object.keys(charFile).length < 1) return message.channel.send("There are not enough characters to ship together.");
@@ -409,7 +409,7 @@ commands.dailyship = new Command({
 	desc: "Any ship can be set as a daily one! Test your luck to see if one you desire is here!",
 	section: "roll",
 	args: [],
-	func: (message, args) => {
+	func(message, args) {
 		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
 		if (Object.keys(charFile).length == 0) return message.channel.send(`No characters have been added yet!`);
 		if (!dailyShip) dailyShip = {};
@@ -459,7 +459,7 @@ commands.pmdquiz = new Command({
 			type: "Num",
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (inQuestion[message.author.id]) return message.channel.send("Finish your current quiz first!");
 
 		//check for invalid category
@@ -632,7 +632,7 @@ commands.dailyall = new Command({
 	desc: "Starts all commands for daily things.",
 	section: "roll",
 	args: [],
-	func: (message, args) => {
+	func(message, args) {
 		for (let i in dailies) {
 			commands[dailies[i]].call(message, args)
 		}

@@ -94,7 +94,7 @@ commands.makeparty = new Command({
 		}
 	],
 	admin: "You don't have permission to make a party.",
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -149,7 +149,7 @@ commands.partycurrency = new Command({
 		}
 	],
 	admin: "You don't have permission to set the currency of a party.",
-	func: (message, args) => {
+	func(message, args) {
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 
 		if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party!`);
@@ -180,7 +180,7 @@ commands.setleader = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
@@ -216,7 +216,7 @@ commands.addtoparty = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -260,7 +260,7 @@ commands.changepos = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
@@ -298,7 +298,7 @@ commands.kickfromparty = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		const parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		const party = parties[args[0]]
 		const charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -339,7 +339,7 @@ commands.backup = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -396,7 +396,7 @@ commands.splitparty = new Command({
 			forced: false
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 
@@ -528,7 +528,7 @@ commands.getparty = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 
 		if (!parties[args[0]]) return message.channel.send(`${args[0]} is an invalid party!`);
@@ -552,7 +552,7 @@ commands.listparty = new Command({
 			multiple: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let array = [];
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 
@@ -675,7 +675,7 @@ commands.purgeparty = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 
 		if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party name.`);
@@ -736,7 +736,7 @@ commands.chanegepartyname = new Command({
 	],
 	checkban: true,
 	aliases: ['renameparty', 'partyname'],
-	func: (message, args) => {
+	func(message, args) {
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 
 		if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party name.`);
@@ -765,7 +765,7 @@ commands.partytruename = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 
 		if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party name.`);
@@ -817,7 +817,7 @@ commands.useweapon = new Command({
             forced: true
         }
     ],
-    func: (message, args) => {
+    func(message, args) {
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party name.`);
 
@@ -865,7 +865,7 @@ commands.usearmor = new Command({
             forced: true
         }
     ],
-    func: (message, args) => {
+    func(message, args) {
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party name.`);
 
@@ -908,7 +908,7 @@ commands.setpet = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -948,7 +948,7 @@ commands.petnickname = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);

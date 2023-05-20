@@ -7,7 +7,7 @@ commands.guide = new Command({
 		type: "Num",
 		forced: true
 	}],
-	func: (message, args) => {
+	func(message, args) {
 		let pageNum = parseInt(args[0])
 		
 		let guidePath = `${dataPath}/guide.json`
@@ -65,7 +65,7 @@ commands.pvpleaderboards = new Command({
 		name: "Gamemode",
 		type: "Word",
 	}],
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id)
 
 		if (!settings['pvpstuff'] || settings['pvpstuff'].length <= 2) {
@@ -156,7 +156,7 @@ commands.locationsettings = new Command({
 			multiple: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (!args[0].id) return message.channel.send("That isn't a channel!");
 
 		// Set up files
@@ -218,7 +218,7 @@ commands.addencounter = new Command({
 			multiple: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (!args[0].id) return message.channel.send("That isn't a channel!");
 
 		// Set up files
@@ -257,7 +257,7 @@ commands.removeencounter = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (!args[0].id) return message.channel.send("That isn't a channel!");
 
 		// Set up files
@@ -285,7 +285,7 @@ commands.channeldata = new Command({
 			forced: false
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (!args[0] || !args[0].id) args[0] = message.channel;
 
 		// a
@@ -332,7 +332,7 @@ commands.endbattle = new Command({
 	desc: "Manually ends a battle happening in this channel. No stat changes, xp or money is saved.",
 	section: "battle",
 	aliases: ["endfight"],
-	func: (message, args) => {
+	func(message, args) {
 		// Set up files
 		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
 		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
@@ -383,7 +383,7 @@ commands.startbattle = new Command({
 			multiple: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (forceEndBattles[`${message.guild.id}-${message.channel.id}`]) forceEndBattles[`${message.guild.id}-${message.channel.id}`] = false;
 
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true);
@@ -628,7 +628,7 @@ commands.forcebattle = new Command({
 			multiple: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		commands.endbattle.call(message)
 		commands.startbattle.call(message, args)
 	}
@@ -656,7 +656,7 @@ commands.startpvp = new Command({
 			multiple: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (forceEndBattles[`${message.guild.id}-${message.channel.id}`]) forceEndBattles[`${message.guild.id}-${message.channel.id}`] = false;
 
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true);
@@ -928,7 +928,7 @@ commands.starttrial = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (forceEndBattles[`${message.guild.id}-${message.channel.id}`]) forceEndBattles[`${message.guild.id}-${message.channel.id}`] = false;
 
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true);
@@ -1139,7 +1139,7 @@ commands.testbattle = new Command({
 			multiple: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (forceEndBattles[`${message.guild.id}-${message.channel.id}`]) forceEndBattles[`${message.guild.id}-${message.channel.id}`] = false;
 
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true);
@@ -1390,7 +1390,7 @@ commands.aibattle = new Command({
 			multiple: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (forceEndBattles[`${message.guild.id}-${message.channel.id}`]) forceEndBattles[`${message.guild.id}-${message.channel.id}`] = false;
 
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true);
@@ -1509,7 +1509,7 @@ commands.resendembed = new Command({
 	desc: "Resends the Battle Embed. Maybe it broke or something, I suck.",
 	section: "battle",
 	aliases: ["makeembed", "replacembed"],
-	func: (message, args) => {
+	func(message, args) {
 		// Battle File!
 		makeDirectory(`${dataPath}/json/${message.guild.id}/${message.channel.id}`);
 		let btl = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/battle.json`, true);
@@ -1561,7 +1561,7 @@ commands.resumetrial = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (forceEndBattles[`${message.guild.id}-${message.channel.id}`]) forceEndBattles[`${message.guild.id}-${message.channel.id}`] = false;
 
 		let trials = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`, true);

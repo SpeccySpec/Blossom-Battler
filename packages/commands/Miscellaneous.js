@@ -194,7 +194,7 @@ commands.help = new Command({
 			type: "Word"
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
 			.setTitle('List of Commands')
@@ -304,7 +304,7 @@ commands.invite = new Command({
 	desc: "Invite Blossom Battler to another server!",
 	section: "misc",
 	noslash: true,
-	func: (message, args) => {
+	func(message, args) {
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#4b02c9')
 			.setTitle("Invite me to your server!")
@@ -365,7 +365,7 @@ commands.credits = new Command({
 	desc: "Shows who created Blossom Battler, beta tested by, and thanks to.",
 	section: "misc",
 	noslash: true,
-	func: (message, args) => {
+	func(message, args) {
 		creditsEmbed(message)
 	}
 })

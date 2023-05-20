@@ -65,7 +65,7 @@ commands.registerchar = new Command({
 		},
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id)
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -126,7 +126,7 @@ commands.changetruename = new Command({
 		},
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -240,7 +240,7 @@ commands.renamechar = new Command({
 		},
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -294,7 +294,7 @@ commands.getchar = new Command({
 			forced: false
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
@@ -317,7 +317,7 @@ commands.getgear = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -390,7 +390,7 @@ commands.listchars = new Command({
 			multiple: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let array = [];
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
@@ -569,7 +569,7 @@ commands.searchchars = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let array = [];
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
@@ -603,7 +603,7 @@ commands.nickname = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 		
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -634,7 +634,7 @@ commands.hidechar = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -669,7 +669,7 @@ commands.mpmeter = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 		
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -698,7 +698,7 @@ commands.mainelement = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -748,7 +748,7 @@ commands.weaponclass = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 		
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -787,7 +787,7 @@ commands.armorclass = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 		
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -874,7 +874,7 @@ commands.setaffinity = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// a LOT of checks :(
@@ -975,7 +975,7 @@ commands.gainxp = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id)
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -1010,7 +1010,7 @@ commands.awardenemyxp = new Command({
 	],
 	checkban: true,
 	admin: 'You don\'t have permission to give XP from enemies to characters!',
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id)
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -1043,7 +1043,7 @@ commands.levelup = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id)
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -1080,7 +1080,7 @@ commands.forcelevel = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id)
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -1135,7 +1135,7 @@ commands.trustxp = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id)
 		if (args[0] == "" || args[0] == " " || args[1] == "" || args[1] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -1172,7 +1172,7 @@ commands.cleartrust = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
 		if (args[0].toLowerCase() == 'all') {
@@ -1224,7 +1224,7 @@ commands.trustlevel = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]] || !charFile[args[1]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
@@ -1303,7 +1303,7 @@ commands.setmelee = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -1384,7 +1384,7 @@ commands.learnskill = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id)
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -1461,7 +1461,7 @@ commands.replaceskill = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -1518,7 +1518,7 @@ commands.forgetskill = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -1570,7 +1570,7 @@ commands.autolearn = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// some checks
@@ -1638,7 +1638,7 @@ commands.leaderskill = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (setUpSettings(message.guild.id).mechanics.leaderSkills == false) return message.channel.send('Leader Skills are disabled on this server.');
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -1730,7 +1730,7 @@ commands.clearleaderskill = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (setUpSettings(message.guild.id).mechanics.leaderSkills == false) return message.channel.send('Leader Skills are disabled on this server.');
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -1816,7 +1816,7 @@ commands.setlb = new Command({
 		},
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (setUpSettings(message.guild.id).mechanics.limitbreaks === false) return message.channel.send("Limit Breaks are disabled for this server.");
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -1921,7 +1921,7 @@ commands.clearlb = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (setUpSettings(message.guild.id).mechanics.limitbreaks === false) return message.channel.send("Limit Breaks are disabled for this server.");
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -2021,7 +2021,7 @@ commands.changestats = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
@@ -2075,7 +2075,7 @@ commands.updatecharacters = new Command({
 	aliases: ['updatechars', 'fixchars', 'interoperability'],
 	section: "moderation",
 	args: [],
-	func: (message, args) => {
+	func(message, args) {
 		if (!utilityFuncs.RPGBotAdmin(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are not a hardcoded admin of this bot.`);
 
 		let newFile = {}
@@ -2213,7 +2213,7 @@ commands.purgechar = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
 
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character name.`);
@@ -2271,7 +2271,7 @@ commands.randchar = new Command({
 	section: "roll",
 	aliases: ['randomchar'],
 	args: [],
-	func: (message, args) => {
+	func(message, args) {
 		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
 
 		if (Object.keys(charFile).length == 0) return message.channel.send(`No characters have been added yet.`);
@@ -2287,7 +2287,7 @@ commands.dailychar = new Command({
 	desc: 'Any random character can be set as a daily one! Test your luck to see if yours is here!',
 	section: "roll",
 	args: [],
-	func: (message, args) => {
+	func(message, args) {
 		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
 
 		if (Object.keys(charFile).length == 0) return message.channel.send(`No characters have been added yet!`);
@@ -2359,7 +2359,7 @@ commands.setquote = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -2419,7 +2419,7 @@ commands.clearquote = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -2503,7 +2503,7 @@ commands.getquotes = new Command({
 			forced: false
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -2556,7 +2556,7 @@ commands.randcharquote = new Command({
 	aliases: ['randquote', 'randomcharaquote'],
 	section: "roll",
 	args: [],
-	func: (message, args) => {
+	func(message, args) {
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (Object.keys(charFile).length == 0) return message.channel.send(`No characters have been added yet!`);
 		
@@ -2585,7 +2585,7 @@ commands.dailycharquote = new Command({
 	desc: "Any random character quote can be set as a daily one! Test your luck to see if your character's is here!",
 	section: "roll",
 	args: [],
-	func: (message, args) => {
+	func(message, args) {
 		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
 		if (Object.keys(charFile).length == 0) return message.channel.send(`No characters have been added yet!`);
 
@@ -2644,7 +2644,7 @@ commands.getbio = new Command({
 			forced: false
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -2676,7 +2676,7 @@ commands.gettrust = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 		
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
@@ -2708,7 +2708,7 @@ commands.setbioinfo = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -2797,7 +2797,7 @@ commands.clearbioinfo = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -2924,7 +2924,7 @@ commands.settransformation = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -2997,7 +2997,7 @@ commands.cleartransformation = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -3095,7 +3095,7 @@ commands.edittransformation = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -3171,7 +3171,7 @@ commands.gettransformation = new Command({
 			type: "Word",
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -3206,7 +3206,7 @@ commands.renametransformation = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -3244,7 +3244,7 @@ commands.transformationtruename = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -3292,7 +3292,7 @@ commands.transformationaffinity = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -3385,7 +3385,7 @@ commands.transformationskill = new Command({
 		},
 	],
 	section: 'characters',
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -3428,7 +3428,7 @@ commands.autolearntransformation = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -3462,7 +3462,7 @@ commands.cleartransformationskill = new Command({
 		}
 	],
 	section: 'characters',
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		if (!settings.mechanics.transformations) return message.channel.send('Transformations are not enabled on this server.');
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
@@ -3494,7 +3494,7 @@ commands.exportchar = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let userdata = setUpUserData(message.author.id);
@@ -3527,7 +3527,7 @@ commands.exportname = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 		let userdata = setUpUserData(message.author.id);
 		
@@ -3563,7 +3563,7 @@ commands.purgeexport = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let userdata = setUpUserData(message.author.id);
 
 		if (!userdata.exports[args[0]]) return message.channel.send(`${args[0]} is not a valid character name.`);
@@ -3607,7 +3607,7 @@ commands.importchar = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let userdata = setUpUserData(message.author.id);
@@ -3704,7 +3704,7 @@ commands.listcharms = new Command({
 			multiple: true,
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 
 		if (!settings.mechanics.charms) return message.channel.send('Charms are not enabled on this server.');
@@ -3791,7 +3791,7 @@ commands.findcharm = new Command({
 	],
 	checkban: true,
 	admin: "you don't have permission to give a charm to a character.",
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 
 		if (!settings.mechanics.charms) return message.channel.send('Charms are not enabled on this server.');
@@ -3832,7 +3832,7 @@ commands.abandoncharm = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 
 		if (!settings.mechanics.charms) return message.channel.send('Charms are not enabled on this server.');
@@ -3872,7 +3872,7 @@ commands.equipcharm = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 
 		if (!settings.mechanics.charms) return message.channel.send('Charms are not enabled on this server.');
@@ -3920,7 +3920,7 @@ commands.unequipcharm = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 
 		if (!settings.mechanics.charms) return message.channel.send('Charms are not enabled on this server.');
@@ -3961,7 +3961,7 @@ commands.obtainweapon = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
         let weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
@@ -3999,7 +3999,7 @@ commands.equipweapon = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
     	let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
@@ -4056,7 +4056,7 @@ commands.obtainarmor = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
         let armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`);
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
@@ -4094,7 +4094,7 @@ commands.equiparmor = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
        let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
@@ -4152,7 +4152,7 @@ commands.unequipequipment = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
@@ -4216,7 +4216,7 @@ commands.trashequipment = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
@@ -4303,7 +4303,7 @@ commands.tradeequipment = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
@@ -4367,7 +4367,7 @@ commands.listweapontype = new Command({
 	section: "skills",
 	aliases: ['listweapontypes', 'weapontypelist', 'wtlist', 'listwt'],
 	args: [],
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		const DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
@@ -4388,7 +4388,7 @@ commands.listarmortype = new Command({
 	section: "skills",
 	aliases: ['listarmortypes', 'armortypelist', 'atlist', 'listat'],
 	args: [],
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		const DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
@@ -4409,7 +4409,7 @@ commands.listaccessorytype = new Command({
 	section: "skills",
 	aliases: ['listaccessorytypes', 'accessorytypelist', 'actlist', 'listact'],
 	args: [],
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id);
 		const DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
@@ -4562,7 +4562,7 @@ commands.gettc = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is a nonexistant character!`);
 		if (!charFile[args[1]]) return message.channel.send(`${args[1]} is a nonexistant character!`);
@@ -4614,7 +4614,7 @@ commands.removetc = new Command({
 			forced: true
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is a nonexistant character!`);
 		if (!charFile[args[1]]) return message.channel.send(`${args[1]} is a nonexistant character!`);
@@ -4656,7 +4656,7 @@ commands.edittc = new Command({
 			multiple: true,
 		}
 	],
-	func: (message, args) => {
+	func(message, args) {
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is a nonexistant character!`);
 		if (!charFile[args[1]]) return message.channel.send(`${args[1]} is a nonexistant character!`);
@@ -4733,7 +4733,7 @@ commands.fullheal = new Command({
 		}
 	],
 	checkban: true,
-	func: (message, args) => {
+	func(message, args) {
 		let settings = setUpSettings(message.guild.id)
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 

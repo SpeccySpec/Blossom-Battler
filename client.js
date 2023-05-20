@@ -5,9 +5,11 @@
 
 //Discord.JS initiation.
 Discord = require('discord.js');
+Guilded = require('guilded.js');
 Builders = require('@discordjs/builders');
 Rest = require('@discordjs/rest');
 ApiTypes = require('discord-api-types/v9');
+
 client = new Discord.Client({
 	intents: [
 		Discord.Intents.FLAGS.GUILDS,
@@ -21,6 +23,10 @@ client = new Discord.Client({
 		'CHANNEL',
 		'REACTION'
 	]
+});
+
+gclient = new Guilded.Client({
+  token: process.env.GUILDED_TOKEN,
 });
 
 // Path to 'data' folder
@@ -1494,7 +1500,7 @@ makeDirectory(`${dataPath}/userdata`)
 makeDirectory(`${dataPath}/error`);
 
 // Token Check
-console.log(`${process.env.TOKEN} is the token!`);
+console.log(`${process.env.TOKEN} is the token for Discord, and ${process.env.GUILDED_TOKEN} is the token for Guilded!`);
 client.login(process.env.TOKEN);
 
 // Aight
