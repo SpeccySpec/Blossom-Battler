@@ -1430,7 +1430,7 @@ editDistance = (s1, s2) => {
 	return costs[s2.length];
 }
 
-client.on("messageCreate", (message) => {
+function messageCommand(message, guilded) {
 	if (message.author.bot) return;
 	if (message.channel.type === 'DM') return message.channel.send("Don't use me in DMs! That's kinda sussy!");
 
@@ -1475,6 +1475,16 @@ client.on("messageCreate", (message) => {
 		args.shift();
 		command.call(message, args);
 	}
+}
+
+// Discord
+client.on("messageCreate", (message) => {
+	return messageCommand(message, false);
+})
+
+// Guilded
+gclient.on("messageCreated", async message => {
+	return messageCommand(message, true);
 })
 
 client.on('interactionCreate', async interaction => {
