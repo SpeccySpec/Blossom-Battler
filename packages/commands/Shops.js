@@ -30,7 +30,7 @@ commands.openshop = new Command({
 	section: "shops",
 	checkban: true,
 	admin: "Only admins can create shops!",
-	func(message, args) {
+	func(message, args, guilded) {
 		const shopName = args[0]
 		const trueName = shopName.toLowerCase()
 		const shopid = args[1].id
@@ -340,7 +340,7 @@ commands.getshop = new Command({
 	],
 	section: "shops",
 	checkban: true,
-	func(message, args) {
+	func(message, args, guilded) {
 		const shopName = args[0]
 		const trueName = shopName.toLowerCase()
 		const shopid = message.channel.id
@@ -384,7 +384,7 @@ commands.addshopdialogue = new Command({
 	section: "shops",
 	checkban: true,
 	admin: "Only admins can add dialogue to shops!",
-	func(message, args) {
+	func(message, args, guilded) {
 		const trueName = args[0].toLowerCase()
 		const shopid = args[1].id
 		const shopPath = `${dataPath}/json/${message.guild.id}/${shopid}/shops.json`
@@ -424,7 +424,7 @@ commands.setshopcolor = new Command({
 	section: "shops",
 	checkban: true,
 	admin: "Only admins can change a shop's color!",
-	func(message, args) {
+	func(message, args, guilded) {
 		const trueName = args[0].toLowerCase()
 		const shopid = args[1].id
 		const shopPath = `${dataPath}/json/${message.guild.id}/${shopid}/shops.json`

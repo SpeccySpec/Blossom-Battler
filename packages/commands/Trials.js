@@ -164,7 +164,7 @@ commands.registertrial = new Command({
             type: "Word"
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         trialFile = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`)
 
         if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
@@ -269,7 +269,7 @@ commands.listtrials = new Command({
             multiple: true
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         let array = [];
         let trials = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`);
 
@@ -343,7 +343,7 @@ commands.searchtrials = new Command({
             forced: true
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         let array = [];
         let trials = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`);
 
@@ -566,7 +566,7 @@ commands.uploadtrial = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
 		enemies = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`, true)
         trials = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`, true)
         trialGlobals = setUpFile(`${dataPath}/json/globaltrials.json`, true)
@@ -628,7 +628,7 @@ commands.globaltrials = new Command({
             forced: false
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
 		trialGlobals = setUpFile(`${dataPath}/json/globaltrials.json`, true);
 
 		let valid = ['newest', 'oldest', 'mostliked', 'mostdisliked', 'mostplayed', 'mostcompleted'];
@@ -684,7 +684,7 @@ commands.playglobaltrial = new Command({
             forced: true
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
 		trialGlobals = setUpFile(`${dataPath}/json/globaltrials.json`, true);
 		parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
 

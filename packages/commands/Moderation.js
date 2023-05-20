@@ -11,7 +11,7 @@ commands.settings = new Command({
 	section: 'moderation',
 	aliases: ['serversettings', 'viewsettings', 'getsettings'],
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		let mechanicText = ''
@@ -185,7 +185,7 @@ commands.prefix = new Command({
 		}
 	],
 	admin: "You do not have permission to change the prefix!",
-	func(message, args) {
+	func(message, args, guilded) {
 		const prefix = args[0].toLowerCase()
 		let settings = setUpSettings(message.guild.id)
 		settings['prefix'] = prefix
@@ -211,7 +211,7 @@ commands.ban = new Command({
 		}
 	],
 	admin: "You do not have permission to ban users!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		let bannedUser = args[0]
@@ -253,7 +253,7 @@ commands.unban = new Command({
 		}
 	],
 	admin: "You do not have permission to unban users!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		let bannedUser = args[0]
@@ -281,7 +281,7 @@ commands.currency = new Command({
 		}
 	],
 	admin: "You do not have permission to change the currency!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 
@@ -327,7 +327,7 @@ commands.currencyemoji = new Command({
 		}
 	],
 	admin: "You do not have permission to change the currency emoji!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		let emotes = message.content.match(/<a?:.+?:\d{18}>|\p{Extended_Pictographic}/gu);
@@ -360,7 +360,7 @@ commands.description = new Command({
 		}
 	],
 	admin: "You do not have permission to change the description!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		if (args[0].length > 1024) {
@@ -392,7 +392,7 @@ commands.damageformula = new Command({
 		}
 	],
 	admin: "You do not have permission to change the damage formula!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		if (args[0].toLowerCase() != 'persona' && args[0].toLowerCase() != 'pokemon' && args[0].toLowerCase() != 'lamonka' && args[0].toLowerCase() != 'beta' && args[0].toLowerCase() != 'custom') {
@@ -425,7 +425,7 @@ commands.levelupformula = new Command({
 		}
 	],
 	admin: "You do not have permission to change the level up formula!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		let levelUpFormulas = {
@@ -465,7 +465,7 @@ commands.xprequirementformula = new Command({
 		}
 	],
 	admin: "You do not have permission to change the xp requirement formula!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		let xpCalcFormulas = {
@@ -499,7 +499,7 @@ commands.xprate = new Command({
 		}
 	],
 	admin: "You do not have permission to change the xp rate!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		if (args[0] < 0) {
@@ -524,7 +524,7 @@ commands.trustrate = new Command({
 		}
 	],
 	admin: "You do not have permission to change the trust rate!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		if (args[0] < 0) {
@@ -549,7 +549,7 @@ commands.moneyrate = new Command({
 		}
 	],
 	admin: "You do not have permission to change the money rate!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		if (args[0] < 0) {
@@ -574,7 +574,7 @@ commands.goldenchance = new Command({
 		}
 	],
 	admin: "You do not have permission to change the golden enemy chance!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		if (args[0] < 0 || args[0] > 100) {
@@ -599,7 +599,7 @@ commands.mainelementrate = new Command({
 		}
 	],
 	admin: "You do not have permission to change the main element damage rate!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		if (args[0] < 1) {
@@ -624,7 +624,7 @@ commands.critrate = new Command({
 		}
 	],
 	admin: "You do not have permission to change the critical hit damage rate!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		if (args[0] < 1.1) {
@@ -649,7 +649,7 @@ commands.techrate = new Command({
 		}
 	],
 	admin: "You do not have permission to change the technical damage rate!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 		if (settings.mechanics.technicaldamage == false) return message.channel.send('Technical damage is not enabled for this server!')
 
@@ -675,7 +675,7 @@ commands.mechanics = new Command({
 		}
 	],
 	admin: "You do not have permission to change the mechanics!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		const fullNames = {
@@ -726,7 +726,7 @@ commands.caps = new Command({
 		}
 	],
 	admin: "You do not have permission to change the caps!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		const fullNames = {
@@ -785,7 +785,7 @@ commands.transformationcaps = new Command({
 		}
 	],
 	admin: "You do not have permission to change the caps!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 		if (settings.mechanics.transformations == false) return message.channel.send('Transformations are not enabled!')
 
@@ -836,7 +836,7 @@ commands.affinityrates = new Command({
 		}
 	],
 	admin: "You do not have permission to change the affinity rates!",
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
 		const fullNames = {
@@ -882,7 +882,7 @@ commands.reloadfile = new Command({
 			type: 'Word',
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (!utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send('You do not have permission to reload files!')
 
 		let validFiles = ['armors', 'characters', 'chests', 'enemies', 'items', 'loot', 'parties', 'settings', 'shops', 'weapons', 'trials']

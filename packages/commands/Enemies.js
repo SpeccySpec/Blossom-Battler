@@ -84,7 +84,7 @@ commands.registerenemy = new Command({
 	],
 	checkban: true,
 	admin: "You do not have sufficient permissions to register an enemy.",
-	func(message, args) {
+	func(message, args, guilded) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid enemy name! Please enter an actual name.');
 
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
@@ -125,7 +125,7 @@ commands.journal = new Command({
 			forced: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid enemy name! Please enter an actual name.');
 
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
@@ -179,7 +179,7 @@ commands.encounter = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to manually set an enemy as encountered.',
-	func(message, args) {
+	func(message, args, guilded) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid enemy name! Please enter an actual name.');
 
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
@@ -203,7 +203,7 @@ commands.updateenemies = new Command({
 	desc: "Updates enemies!",
 	section: "enemies",
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (!utilityFuncs.RPGBotAdmin(message.author.id, message.guild.id)) return message.channel.send(`${message.author.username}, you are not a hardcoded admin of this bot.`);
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		for (let i in enemyFile) {
@@ -312,7 +312,7 @@ commands.setmoney = new Command({
     ],
 	checkban: true,
 	admin: 'You do not have permission to assign loot to an enemy.',
-    func(message, args) {
+    func(message, args, guilded) {
         enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 
         if (!lootFile[args[1]]) return message.channel.send(`${args[1]} is not a valid loot table name.`);
@@ -364,7 +364,7 @@ commands.ailevel = new Command({
     ],
 	checkban: true,
 	admin: 'You do not have permission to change the AI level of this enemy.',
-    func(message, args) {
+    func(message, args, guilded) {
         enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`, true);
 
         if (enemyFile[args[0]]) {
@@ -403,7 +403,7 @@ commands.assignloot = new Command({
     ],
 	checkban: true,
 	admin: 'You do not have permission to assign loot to an enemy.',
-    func(message, args) {
+    func(message, args, guilded) {
         lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
         enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
 
@@ -431,7 +431,7 @@ commands.deassignloot = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to deassign loot from an enemy.',
-	func(message, args) {
+	func(message, args, guilded) {
 		lootFile = setUpFile(`${dataPath}/json/${message.guild.id}/loot.json`)
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
 
@@ -519,7 +519,7 @@ commands.changeenemystats = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to change the stats of an enemy.',
-	func(message, args) {
+	func(message, args, guilded) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid enemy name! Please enter an actual name.');
 
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
@@ -564,7 +564,7 @@ commands.enemytype = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to change the type of an enemy.',
-	func(message, args) {
+	func(message, args, guilded) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid enemy name! Please enter an actual name.');
 
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
@@ -597,7 +597,7 @@ commands.enemyjournal = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to change the journal entry of an enemy.',
-	func(message, args) {
+	func(message, args, guilded) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid enemy name! Please enter an actual name.');
 
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
@@ -621,7 +621,7 @@ commands.listenemies = new Command({
 			multiple: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		let array = [];
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 
@@ -770,7 +770,7 @@ commands.searchenemies = new Command({
 			forced: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		let array = [];
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 
@@ -809,7 +809,7 @@ commands.purgeenemy = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to delete an enemy.',
-	func(message, args) {
+	func(message, args, guilded) {
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
 
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy name.`);
@@ -884,7 +884,7 @@ commands.randenemy = new Command({
 	section: "roll",
 	aliases: ['randomenemy'],
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
 		
 		let enemies = Object.keys(enemyFile);
@@ -911,7 +911,7 @@ commands.dailyenemy = new Command({
 	desc: 'Any random enemy can be set as a daily one! Test your luck to see if one you desire is here!',
 	section: "roll",
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
 
 		if (Object.keys(enemyFile).length == 0) return message.channel.send(`No enemies have been added yet!`);
@@ -955,7 +955,7 @@ commands.setimage = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to set an image for an enemy.',
-	func(message, args) {
+	func(message, args, guilded) {
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`)
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy name.`);
 
@@ -992,7 +992,7 @@ commands.setweight = new Command({
     ],
 	checkban: true,
 	admin: 'You do not have permission to assign loot to an enemy.',
-    func(message, args) {
+    func(message, args, guilded) {
         let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		
 		if (enemyFile[args[0]]) {
@@ -1027,7 +1027,7 @@ commands.setheight = new Command({
     ],
 	checkban: true,
 	admin: 'You do not have permission to assign loot to an enemy.',
-    func(message, args) {
+    func(message, args, guilded) {
         let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 
 		if (enemyFile[args[0]]) {
@@ -1050,7 +1050,7 @@ commands.randenemyquote = new Command({
 	aliases: ['randenemyquote', 'randomenemyquote'],
 	section: "roll",
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (Object.keys(enemyFile).length == 0) return message.channel.send(`No enemies have been added yet!`);
 		
@@ -1079,7 +1079,7 @@ commands.dailyenemyquote = new Command({
 	desc: "Any random enemy quote can be set as a daily one! Test your luck to see if theme enemy's that you desire is here!",
 	section: "roll",
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (Object.keys(enemyFile).length == 0) return message.channel.send(`No enemies have been added yet!`);
 
@@ -1164,7 +1164,7 @@ commands.setnegotiation = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to set negotiations.',
-	func(message, args) {
+	func(message, args, guilded) {
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
@@ -1198,7 +1198,7 @@ commands.listnegotiationspecials = new Command({
 	aliases: ['passiveextras', 'extraspassive', 'listextraspassive'],
 	section: "skills",
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		let title = 'List of Negotiation Specials'
 		let desc = 'When trying to pacify your target, options presented can have extra effects! These are called specials, and can be added with the "applyspecial" command.'
 
@@ -1240,7 +1240,7 @@ commands.applyspecial = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to assign an enemy\'s negotiation a special.',
-	func(message, args) {
+	func(message, args, guilded) {
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 
 		let enemyName = args.shift()
@@ -1289,7 +1289,7 @@ commands.clearspecials = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to clear an enemy\'s negotiation specials.',
-	func(message, args) {
+	func(message, args, guilded) {
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 
 		const enemy = enemyFile[args[0]]
@@ -1334,7 +1334,7 @@ commands.clearnegotiation = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to clear negotiations.',
-	func(message, args) {
+	func(message, args, guilded) {
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
@@ -1397,7 +1397,7 @@ commands.setpetvalues = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to set pet values.',
-	func(message, args) {
+	func(message, args, guilded) {
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
@@ -1435,7 +1435,7 @@ commands.clearpetvalues = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to clear pet values.',
-	func(message, args) {
+	func(message, args, guilded) {
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
@@ -1484,7 +1484,7 @@ commands.getenemydreams = new Command({
 			forced: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
@@ -1520,7 +1520,7 @@ commands.setenemydream = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to set enemy dreams.',
-	func(message, args) {
+	func(message, args, guilded) {
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
@@ -1552,7 +1552,7 @@ commands.clearenemydream = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to remove enemy dreams.',
-	func(message, args) {
+	func(message, args, guilded) {
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
 
@@ -1604,7 +1604,7 @@ commands.addpartypet = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to add party pets.',
-	func(message, args) {
+	func(message, args, guilded) {
 		let partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		if (!partyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
 
@@ -1639,7 +1639,7 @@ commands.removepartypet = new Command({
 	],
 	checkban: true,
 	admin: 'You do not have permission to remove party pets.',
-	func(message, args) {
+	func(message, args, guilded) {
 		let partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		if (!partyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
 
@@ -1671,7 +1671,7 @@ commands.setpet = new Command({
 		}
 	],
 	checkban: true,
-	func(message, args) {
+	func(message, args, guilded) {
 		let partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		if (!partyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
 		if (!partyFile[args[0]].negotiateAllies) return message.channel.send(`${args[0]} doesn't have any pets!`);
@@ -1696,7 +1696,7 @@ commands.removepet = new Command({
 		}
 	],
 	checkban: true,
-	func(message, args) {
+	func(message, args, guilded) {
 		let partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		if (!partyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
 		if (!partyFile[args[0]].curPet) return message.channel.send(`${args[0]} doesn't have a current pet!`);

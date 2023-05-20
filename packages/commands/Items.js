@@ -205,7 +205,7 @@ commands.registeritem = new Command({
         }
 	],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (itemFile[args[0]] && itemFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("This item exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
@@ -277,7 +277,7 @@ commands.getitem = new Command({
             forced: true
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
@@ -297,7 +297,7 @@ commands.listitems = new Command({
 			multiple: true
 		}
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         let array = []
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
@@ -427,7 +427,7 @@ commands.purgeitem = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
@@ -601,7 +601,7 @@ commands.edititem = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item name.`);
@@ -759,7 +759,7 @@ commands.searchitems = new Command({
             forced: true
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         let array = []
@@ -780,7 +780,7 @@ commands.randitem = new Command({
     section: "roll",
     aliases: ['randomitem'],
     args: [],
-    func(message, args) {
+    func(message, args, guilded) {
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (Object.keys(itemFile).length == 0) return message.channel.send(`No items have been added yet.`);
@@ -795,7 +795,7 @@ commands.dailyitem = new Command({
     desc: 'Any random item can be set as a daily one! Test your luck to see if yours is here!',
     section: "roll",
     args: [],
-    func(message, args) {
+    func(message, args, guilded) {
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
         if (Object.keys(itemFile).length == 0) return message.channel.send(`No items have been added yet!`);
         if (!dailyItem) dailyItem = {};
@@ -837,7 +837,7 @@ commands.itemimage = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
         if (!itemFile[args[0]]) return message.channel.send(`${args[0]} is not a valid item.`);
@@ -901,7 +901,7 @@ commands.registerweapon = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
         if (weaponFile[args[0]] && weaponFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("This weapon exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
@@ -957,7 +957,7 @@ commands.getweapon = new Command({
             forced: true
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
         if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon.`);
@@ -977,7 +977,7 @@ commands.listweapons = new Command({
 			multiple: true
 		}
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         let array = []
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
@@ -1092,7 +1092,7 @@ commands.searchweapons = new Command({
             forced: true
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
         let array = []
@@ -1113,7 +1113,7 @@ commands.randweapon = new Command({
     section: "roll",
     aliases: ['randomweapon'],
     args: [],
-    func(message, args) {
+    func(message, args, guilded) {
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
         if (Object.keys(weaponFile).length == 0) return message.channel.send(`No weapons have been added yet.`);
@@ -1128,7 +1128,7 @@ commands.dailyweapon = new Command({
     desc: 'Any random weapon can be set as a daily one! Test your luck to see if yours is here!',
     section: "roll",
     args: [],
-    func(message, args) {
+    func(message, args, guilded) {
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
         if (Object.keys(weaponFile).length == 0) return message.channel.send(`No weapons have been added yet!`);
         if (!dailyWeapon) dailyWeapon = {};
@@ -1170,7 +1170,7 @@ commands.weaponimage = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
         if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon.`);
@@ -1206,7 +1206,7 @@ commands.editweapon = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
         if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon.`);
@@ -1310,7 +1310,7 @@ commands.purgeweapon = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
 
         if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon name.`);
@@ -1441,7 +1441,7 @@ commands.registerarmor = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (armorFile[args[0]] && armorFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("This armor exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
@@ -1490,7 +1490,7 @@ commands.getarmor = new Command({
             forced: true
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (!armorFile[args[0]]) return message.channel.send(`${args[0]} is not a valid armor.`);
@@ -1510,7 +1510,7 @@ commands.listarmors = new Command({
 			multiple: true
 		}
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         let array = []
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
@@ -1623,7 +1623,7 @@ commands.searcharmors = new Command({
             forced: true
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         let array = []
@@ -1644,7 +1644,7 @@ commands.randarmor = new Command({
     section: "roll",
     aliases: ['randomarmor'],
     args: [],
-    func(message, args) {
+    func(message, args, guilded) {
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (Object.keys(armorFile).length == 0) return message.channel.send(`No armors have been added yet.`);
@@ -1658,7 +1658,7 @@ commands.randarmor = new Command({
 commands.dailyarmor = new Command({
     desc: 'Any random armor can be set as a daily one! Test your luck to see if yours is the one!',
     section: "roll",
-    func(message, args) {
+    func(message, args, guilded) {
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
         if (Object.keys(armorFile).length == 0) return message.channel.send(`No armors have been added yet!`);
         if (!dailyArmor) dailyArmor = {};
@@ -1700,7 +1700,7 @@ commands.armorimage = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (!armorFile[args[0]]) return message.channel.send(`${args[0]} is not a valid armor.`);
@@ -1736,7 +1736,7 @@ commands.editarmor = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (!armorFile[args[0]]) return message.channel.send(`${args[0]} is not a valid armor.`);
@@ -1831,7 +1831,7 @@ commands.purgearmor = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
 
         if (!armorFile[args[0]]) return message.channel.send(`${args[0]} is not a valid armor name.`);
@@ -1947,7 +1947,7 @@ commands.makecraftingrecipe = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
@@ -2121,7 +2121,7 @@ commands.clearitemrecipe = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
         armorFile = setUpFile(`${dataPath}/json/${message.guild.id}/armors.json`)
@@ -2159,7 +2159,7 @@ commands.startcrafting = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
 
         let party = parties[args[0]]
@@ -2362,7 +2362,7 @@ commands.obtainitems = new Command({
         }
     ],
     admin: "You don't have permission to give items to a party.",
-    func(message, args) {
+    func(message, args, guilded) {
         let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
         let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
         let weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);
@@ -2498,7 +2498,7 @@ commands.removepartyitems = new Command({
         }
     ],
     admin: "You don't have permission to remove items from a party.",
-    func(message, args) {
+    func(message, args, guilded) {
         let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
         let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
         let weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);
@@ -2623,7 +2623,7 @@ commands.transferitems = new Command({
             multiple: true
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
         let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
         let weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);

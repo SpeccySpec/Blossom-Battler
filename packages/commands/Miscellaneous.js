@@ -194,62 +194,66 @@ commands.help = new Command({
 			type: "Word"
 		}
 	],
-	func(message, args) {
-		let DiscordEmbed = new Discord.MessageEmbed()
-			.setColor('#0099ff')
-			.setTitle('List of Commands')
-		let category = args[0]
-		if (category) {
-			category = category.toLowerCase()
-			let pogname = aliases[category]
-			if (pogname)
-				category = pogname
-			let description = categories[category]
-			if (!description)
-				return void commands.help.call(message, [])
-			DiscordEmbed.setDescription(`**${category.toUpperCase()}** - ${description}`)
-
-			let commandsList = []
-			for (let command in commands) {
-				if ((commands[command].section == category || category == "all") && commands[command].section != 'aliases') {
-					commandsList.push([`${getPrefix(message.guild.id)}${command}`, commands[command].section, commands[command].getFullDesc()])
-				}
-			}
-
-			if (commandsList.length > 12) {
-				let commandsByCategory = {}
-				for (let command of commandsList) {
-					if (!commandsByCategory[command[1]]) commandsByCategory[command[1]] = []
-					commandsByCategory[command[1]].push([command[0], command[2]])
-				}
-				return sendHelp(message, commandsByCategory)
-			} else {
-				for (let i = 0; i < commandsList.length; i++) {
-					DiscordEmbed.addField(commandsList[i][0], commandsList[i][2], true)
-				}
-			}
-			DiscordEmbed.setFooter(`${commandsList.length} total commands found.`);
+	func(message, args, guilded) {
+		if (guilded) {
+			message.reply("We'll be done one day...");
 		} else {
-			const file = new Discord.MessageAttachment(`${dataPath}/images/Help.png`);
-			DiscordEmbed.setDescription(`If you want to check commands in which categories, we have a list of them below!\n\nIf you want to see all commands at once, type ${getPrefix(message.guild.id)}help all.\n\nArguments in <> or {} should be substituted in with other values. If they're in {}, then they're optional.`)
-			for (let i in categories) {
-				if (i == 'all') break;
+			let DiscordEmbed = new Discord.MessageEmbed()
+				.setColor('#0099ff')
+				.setTitle('List of Commands')
+			let category = args[0]
+			if (category) {
+				category = category.toLowerCase()
+				let pogname = aliases[category]
+				if (pogname)
+					category = pogname
+				let description = categories[category]
+				if (!description)
+					return void commands.help.call(message, [])
+				DiscordEmbed.setDescription(`**${category.toUpperCase()}** - ${description}`)
 
-				let aliasName = i
-				for (const a in aliases) {
-					if (aliases[a] == i) {
-						aliasName = a.toString()
-						break
+				let commandsList = []
+				for (let command in commands) {
+					if ((commands[command].section == category || category == "all") && commands[command].section != 'aliases') {
+						commandsList.push([`${getPrefix(message.guild.id)}${command}`, commands[command].section, commands[command].getFullDesc()])
 					}
 				}
-				DiscordEmbed.fields.push({name: aliasName.charAt(0).toUpperCase() + aliasName.slice(1), value: categories[i], inline: true});
+
+				if (commandsList.length > 12) {
+					let commandsByCategory = {}
+					for (let command of commandsList) {
+						if (!commandsByCategory[command[1]]) commandsByCategory[command[1]] = []
+						commandsByCategory[command[1]].push([command[0], command[2]])
+					}
+					return sendHelp(message, commandsByCategory)
+				} else {
+					for (let i = 0; i < commandsList.length; i++) {
+						DiscordEmbed.addField(commandsList[i][0], commandsList[i][2], true)
+					}
+				}
+				DiscordEmbed.setFooter(`${commandsList.length} total commands found.`);
+			} else {
+				const file = new Discord.MessageAttachment(`${dataPath}/images/Help.png`);
+				DiscordEmbed.setDescription(`If you want to check commands in which categories, we have a list of them below!\n\nIf you want to see all commands at once, type ${getPrefix(message.guild.id)}help all.\n\nArguments in <> or {} should be substituted in with other values. If they're in {}, then they're optional.`)
+				for (let i in categories) {
+					if (i == 'all') break;
+
+					let aliasName = i
+					for (const a in aliases) {
+						if (aliases[a] == i) {
+							aliasName = a.toString()
+							break
+						}
+					}
+					DiscordEmbed.fields.push({name: aliasName.charAt(0).toUpperCase() + aliasName.slice(1), value: categories[i], inline: true});
+				}
+				DiscordEmbed.setThumbnail('attachment://Help.png')
+
+				return message.channel.send({embeds: [DiscordEmbed], files: [file]})
 			}
-			DiscordEmbed.setThumbnail('attachment://Help.png')
 
-			return message.channel.send({embeds: [DiscordEmbed], files: [file]})
+			message.channel.send({embeds: [DiscordEmbed]});
 		}
-
-		message.channel.send({embeds: [DiscordEmbed]});
 	}
 })
 
@@ -304,7 +308,7 @@ commands.invite = new Command({
 	desc: "Invite Blossom Battler to another server!",
 	section: "misc",
 	noslash: true,
-	func(message, args) {
+	func(message, args, guilded) {
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#4b02c9')
 			.setTitle("Invite me to your server!")
@@ -365,7 +369,7 @@ commands.credits = new Command({
 	desc: "Shows who created Blossom Battler, beta tested by, and thanks to.",
 	section: "misc",
 	noslash: true,
-	func(message, args) {
+	func(message, args, guilded) {
 		creditsEmbed(message)
 	}
 })
@@ -463,7 +467,7 @@ commands.git = new Command({
 			forced: true
 		}
 	],
-	async func(message, args) {
+	async func(message, args, guilded) {
 		if (!utilityFuncs.RPGBotAdmin(message.author.id))
 			return void message.channel.send("Only a super admin can use this.")
 		message.channel.send("Loading...")

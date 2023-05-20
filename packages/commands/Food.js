@@ -234,7 +234,7 @@ commands.foodprivacy = new Command({
 			type: "Word"
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 
         setupFileProfile(message.author.id, 'privacy', userPrivacy)
 
@@ -599,7 +599,7 @@ commands.foodpreferences = new Command({
 commands.foodcategories = new Command({
 	desc: `Shows all the food categories and subcategories.`,
 	section: "food",
-	func(message, args) {
+	func(message, args, guilded) {
 		let embed = new Discord.MessageEmbed()
 		.setColor('#0099ff')
 		.setTitle(`Food Categories`)
@@ -639,7 +639,7 @@ commands.registerfood = new Command({
 			multiple: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 
 		if (args.length < 3) {
 			let embed = new Discord.MessageEmbed()
@@ -719,7 +719,7 @@ commands.renamefood = new Command({
 			forced: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (!checkCategories(args)) return setInvalidEmbed(message)
 
 		setupFileProfile(message.author.id, args[0].toLowerCase(), foodFiles[args[0].toLowerCase()])
@@ -769,7 +769,7 @@ commands.removefood = new Command({
 			forced: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (!checkCategories(args)) return setInvalidEmbed(message)
 
 		setupFileProfile(message.author.id, args[0].toLowerCase(), foodFiles[args[0].toLowerCase()])
@@ -804,7 +804,7 @@ commands.foodtemplate = new Command({
 			forced: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (!checkCategories(args)) return setInvalidEmbed(message)
 
 		setupFileProfile(message.author.id, args[0].toLowerCase(), foodFiles[args[0].toLowerCase()])
@@ -849,7 +849,7 @@ commands.foodimage = new Command({
 			multiple: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (!checkCategories(args)) return setInvalidEmbed(message)
 
 		setupFileProfile(message.author.id, args[0].toLowerCase(), foodFiles[args[0].toLowerCase()])
@@ -898,7 +898,7 @@ commands.food = new Command({
 			multiple: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		makefood(message, args)
 	}
 })

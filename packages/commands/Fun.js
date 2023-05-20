@@ -2,7 +2,7 @@
 commands.ping = new Command({
 	desc: "Check for my Latency and API Latency.",
 	section: "fun",
-	func: (message) => {
+	func(message, args, guilded) {
 		message.channel.send("Loading...").then((message2) => {
 			const latency = Math.round(client.ws.ping)
 			const ping = message2.createdTimestamp - message.createdTimestamp
@@ -31,7 +31,7 @@ commands.diceroll = new Command({
 			type: "Num"
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		const num1 = args[0]
 		const num2 = args[1] ?? 1
 
@@ -144,7 +144,7 @@ commands.scenario = new Command({
 		}
 	],
 	section: "fun",
-	func(message, args) {
+	func(message, args, guilded) {
 		const taggedUser = args[0]
 		const embed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
@@ -187,7 +187,7 @@ commands.quote = new Command({
 	desc: "Randomly select an inspirational quote from an Anime or Video Game.",
 	section: "fun",
 	aliases: ['randquote', 'randomquote'],
-	func(message, args) {
+	func(message, args, guilded) {
         let quoteText = quotes[Math.round(Math.random() * (quotes.length - 1))]
         let DiscordEmbed = new Discord.MessageEmbed()
             .setColor('#ffffff')
@@ -351,7 +351,7 @@ commands.ship = new Command({
 		}
 	],
 	section: "fun",
-	func(message, args) {
+	func(message, args, guilded) {
 		if (!args[0]) return message.channel.send(`Please specify at least one person who you want to ship yourself with, or two if you want to ship two different people.`);
 
 		// Undefined
@@ -390,7 +390,7 @@ commands.randship = new Command({
 		name: "Person #1",
 		type: "Word",
 	}],
-	func(message, args) {
+	func(message, args, guilded) {
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
 		if (Object.keys(charFile).length < 1) return message.channel.send("There are not enough characters to ship together.");
@@ -409,7 +409,7 @@ commands.dailyship = new Command({
 	desc: "Any ship can be set as a daily one! Test your luck to see if one you desire is here!",
 	section: "roll",
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
 		if (Object.keys(charFile).length == 0) return message.channel.send(`No characters have been added yet!`);
 		if (!dailyShip) dailyShip = {};
@@ -459,7 +459,7 @@ commands.pmdquiz = new Command({
 			type: "Num",
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (inQuestion[message.author.id]) return message.channel.send("Finish your current quiz first!");
 
 		//check for invalid category
@@ -632,7 +632,7 @@ commands.dailyall = new Command({
 	desc: "Starts all commands for daily things.",
 	section: "roll",
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		for (let i in dailies) {
 			commands[dailies[i]].call(message, args)
 		}
@@ -643,7 +643,7 @@ commands.dailyall = new Command({
 commands.listachievements = new Command({
 	desc: "List all the achievements that I have to offer! Completed achievements will be crossed out.",
 	section: "fun",
-	func: (message) => {
+	func(message, args, guilded) {
 		let array = [];
 
 		let user = setUpUserData(message.author.id);

@@ -1,3 +1,9 @@
+require('./global-funcs.js')
+
+//////////////
+// Sharding //
+//////////////
+
 // Include discord.js ShardingManger
 const { ShardingManager } = require('discord.js');
 
@@ -30,3 +36,6 @@ setInterval(SaveBackup, 86400000)
 
 // Spawn your shards
 manager.spawn();
+
+// Let's set up guilded...
+require("./guilded.js")

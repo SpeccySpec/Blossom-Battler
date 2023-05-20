@@ -23,7 +23,7 @@ commands.openblacksmith = new Command({
 	section: "shops",
 	checkban: true,
 	admin: "Only admins can create blacksmiths!",
-	func(message, args) {
+	func(message, args, guilded) {
 		const bsName = args[0];
 		const trueName = bsName.toLowerCase();
 		const bsID = args[1].id;
@@ -93,7 +93,7 @@ commands.enterblacksmiths = new Command({
 	],
 	section: "shops",
 	checkban: true,
-	func(message, args) {
+	func(message, args, guilded) {
 		let blacksmiths = setUpFile(`${dataPath}/json/${message.guild.id}/${message.channel.id}/blacksmiths.json`, true);
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`, true)
 		let name = vars[0].toLowerCase();

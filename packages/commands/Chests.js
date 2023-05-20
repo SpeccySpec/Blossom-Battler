@@ -125,7 +125,7 @@ commands.registerchest = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
 
         if (chestFile[args[0]] && chestFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this chest, therefore, you have insufficient permissions to overwrite it.")
@@ -321,7 +321,7 @@ commands.getchest = new Command({
             forced: true
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
 
         let channel = args[0]
@@ -362,7 +362,7 @@ commands.listchests = new Command({
 			multiple: true
 		}
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         let array = [];
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
 
@@ -517,7 +517,7 @@ commands.searchchests = new Command({
             forced: true
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
 
         let array = []
@@ -566,7 +566,7 @@ commands.purgechest = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
 
         if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);
@@ -627,7 +627,7 @@ commands.editchest = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
 
         if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);
@@ -742,7 +742,7 @@ commands.lockhint = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
 
         if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);
@@ -790,7 +790,7 @@ commands.openchest = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
 
@@ -899,7 +899,7 @@ commands.closechest = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
         let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 
@@ -949,7 +949,7 @@ commands.chestitems = new Command({
         }
     ],
     checkban: true,
-    func(message, args) {
+    func(message, args, guilded) {
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
 
         if (!chestFile[args[0]]) return message.channel.send(`There are no chests in this channel.`);
@@ -1117,7 +1117,7 @@ commands.putitems = new Command({
             multiple: true
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
         parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
 
@@ -1335,7 +1335,7 @@ commands.takeitems = new Command({
             multiple: true
         }
     ],
-    func(message, args) {
+    func(message, args, guilded) {
         chestFile = setUpFile(`${dataPath}/json/${message.guild.id}/chests.json`)
         parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`)
 

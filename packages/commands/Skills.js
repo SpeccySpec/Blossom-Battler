@@ -70,7 +70,7 @@ commands.registerskill = new Command({
 			forced: false
 		},
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
 		if (args[0].length > 50) return message.channel.send(`${args[0]} is too long of a skill name.`);
 
@@ -197,7 +197,7 @@ commands.registerstatus = new Command({
 			multiple: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (skillFile[args[0]] && message.author.id != skillFile[args[0]].originalAuthor && !utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
 
 		let skill = buildStatus(message, args[5], args)
@@ -253,7 +253,7 @@ commands.registerheal = new Command({
 			multiple: true
 		},
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (skillFile[args[0]] && message.author.id != skillFile[args[0]].originalAuthor && !utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
 
 		let skill = buildHeal(message, args[5], args)
@@ -294,7 +294,7 @@ commands.registerpassive = new Command({
 			multiple: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (skillFile[args[0]] && message.author.id != skillFile[args[0]].originalAuthor && !utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
 
 		let skill = buildPassive(message, args[2], args)
@@ -314,7 +314,7 @@ commands.updateskills = new Command({
 	args: [],
 	checkban: true,
 	admin: 'You have insufficient permissions to update skills.',
-	func(message, args) {
+	func(message, args, guilded) {
 		if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
 			message.channel.send("You have insufficient permissions to update skills.")
 			return false
@@ -423,7 +423,7 @@ commands.listatkextras = new Command({
 	aliases: ['atkextras', 'extrasatk', 'listextrasatk'],
 	section: "skills",
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		let title = 'List of Attacking Extras'
 		let desc = 'When attacking, skills can have extra effects! These are called extras, and can be added with the "applyextra" command.'
 
@@ -441,7 +441,7 @@ commands.liststatusextras = new Command({
 	aliases: ['statusextras', 'extrasstatus', 'listextrasstatus'],
 	section: "skills",
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		let title = 'List of Status Extras'
 		let desc = 'When using a status skill, skills can have extra effects! These are called extras, and can be added with the "applyextra" command.'
 
@@ -459,7 +459,7 @@ commands.listhealextras = new Command({
 	aliases: ['healextras', 'extrasheal', 'listextrasheal'],
 	section: "skills",
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		let title = 'List of Heal Extras'
 		let desc = 'When using a heal skill, skills can have extra effects! These are called extras, and can be added with the "applyextra" command.'
 
@@ -477,7 +477,7 @@ commands.listpassiveextras = new Command({
 	aliases: ['passiveextras', 'extraspassive', 'listextraspassive'],
 	section: "skills",
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		let title = 'List of Passive Extras'
 		let desc = 'When using a passive skill, skills can have extra effects! These are called extras, and can be added with the "applyextra" command.'
 
@@ -512,7 +512,7 @@ commands.applyextra = new Command({
 			multiple: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		const skillname = args.shift()
 		const skilldata = skillFile[skillname]
 		const extra = args.shift().toLowerCase()
@@ -564,7 +564,7 @@ commands.clearextras = new Command({
 			forced: true
 		},
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		const skilldata = skillFile[args[0]]
 		if (skilldata) {
 			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skilldata.originalAuthor != message.author.id) {
@@ -633,7 +633,7 @@ commands.editskill = new Command({
 			multiple: true,
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (skillFile[args[0]]) {
 			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skillFile[args[0]].originalAuthor != message.author.id) {
 				return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
@@ -917,7 +917,7 @@ commands.levellock = new Command({
 			forced: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (skillFile[args[0]]) {
 			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skillFile[args[0]].originalAuthor != message.author.id) {
 				return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
@@ -990,7 +990,7 @@ commands.preskill = new Command({
 			forced: false
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (skillFile[args[0]] && (skillFile[args[1]] || args[1].toLowerCase() === "remove")) {
 			if (hasPreSkill(skillFile[args[0]], args[1])) {
 				return message.channel.send(`${skillFile[args[0]].name} already has a pre-skill for ${args[1]}!`)
@@ -1056,7 +1056,7 @@ commands.evoskill = new Command({
 			forced: false
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (skillFile[args[0]] && skillFile[args[1]]) {
 			if (hasEvoSkill(skillFile[args[0]], args[1])) {
 				return message.channel.send(`${skillFile[args[0]].name} already has an evo-skill for ${args[1]}!`)
@@ -1131,7 +1131,7 @@ commands.getskill = new Command({
 			forced: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (skillFile[args[0]])
 			skillFuncs.skillDesc(skillFile[args[0]], args[0], message, `Here is the data for ${skillFile[args[0]].name}`)	
 		else
@@ -1150,7 +1150,7 @@ commands.listskills = new Command({
 			multiple: true
 		}
     ],
-	func(message, args) {
+	func(message, args, guilded) {
 		let array = []
 
 		const validTypes = ['user', 'element', 'cost', 'costtype', 'pow', 'acc', 'crit', 'hits', 'atktype', 'target', 'status', 'statuschance', 'preskill', 'evoskill', 'levellock', 'extra']
@@ -1341,7 +1341,7 @@ commands.searchskills = new Command({
 			forced: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
 		let array = []
 		for (const i in skillFile) {
 			if ((skillFile[i]?.name && skillFile[i].name.includes(args[0])) || i.includes(args[0])) {
@@ -1394,7 +1394,7 @@ commands.purgeskill = new Command({
 			forced: true
 		}
 	],
-	func(message, args) {
+	func(message, args, guilded) {
         if (skillFile[args[0]]) {
 			if (!utilityFuncs.RPGBotAdmin(message.author.id) && message.author.id != skillFile[args[0]].originalAuthor)
 				return message.channel.send("You have insufficient permissions to delete this skill as you don't own it.");
@@ -1523,7 +1523,7 @@ commands.dailyskill = new Command({
 	desc: 'Any random skill can be set as a daily one! Test your luck to see if yours is here!',
 	section: "roll",
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet!`);
 		if (!dailySkill) dailySkill = 'none';
 
@@ -1553,7 +1553,7 @@ commands.randskill = new Command({
 	section: "roll",
 	aliases: ['randomskill'],
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		if (Object.keys(skillFile).length == 0) return message.channel.send(`No skills have been added yet.`);
 
 		let skill = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
@@ -1567,7 +1567,7 @@ commands.orderskills = new Command({
 	args: [],
 	checkban: true,
 	admin: 'You have insufficient permissions to order skills.',
-	func(message, args) {
+	func(message, args, guilded) {
 		if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
 			message.channel.send("You have insufficient permissions to order skills.")
 			return false
@@ -1587,7 +1587,7 @@ commands.listelements = new Command({
 	section: "skills",
 	aliases: ['listelement', 'elementlist'],
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		const DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
 			.setTitle('List of usable elements:')
@@ -1607,7 +1607,7 @@ commands.liststatus = new Command({
 	section: "skills",
 	aliases: ['liststatuses', 'statuslist'],
 	args: [],
-	func(message, args) {
+	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id);
 		const DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#0099ff')
