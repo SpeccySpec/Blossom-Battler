@@ -844,7 +844,7 @@ hasStatusAffinity = (charDefs, element, affinity) => {
 
 	if (!charDefs.statusaffinities) return false;
 	if (!charDefs.statusaffinities[affinity]) return false;
-	if (!charDefs.drenched) return false;
+	if (charDefs.drenched) return false;
 
 	for (const aff of charDefs.statusaffinities[affinity]) {
 		if (aff.toLowerCase() == element.toLowerCase()) return true;
