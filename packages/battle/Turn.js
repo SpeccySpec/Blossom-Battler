@@ -484,6 +484,8 @@ function GetCharStatus(char) {
 		str += statusEmojis.confusion;
 	if (char.infatuation)
 		str += statusEmojis.infatuation;
+	if (char.drenched)
+		str += statusEmojis.drenched;
 	return str
 }
 
