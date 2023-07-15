@@ -1,7 +1,8 @@
 // Get full name of skill including elements.
 getFullName = (skillDefs) => {
+	if (!skillDefs) return "[INVALID SKILL]";
+
 	let fullName = '';
-	
 	if (typeof(skillDefs.type) === 'object') {
 		for (let type of skillDefs.type) fullName += elementEmoji[type] ?? '';
 	} else {

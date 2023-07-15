@@ -2235,6 +2235,8 @@ advanceTurn = (btl, firstturn) => {
 			} else
 				btl.curturn++;
 		}
+
+		// Quick Attack extra - TO BE DONE HERE
 	}
 
 	// Write Data.

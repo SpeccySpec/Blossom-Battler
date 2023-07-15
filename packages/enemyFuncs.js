@@ -600,12 +600,12 @@ module.exports = {
 			agl: enm.agl,
 			luk: enm.luk,
 
-			buffAtk: enm.negotiateDefs.qualities.atk,
-			buffMag: enm.negotiateDefs.qualities.mag,
-			buffEnd: enm.negotiateDefs.qualities.def,
+			buffAtk: enm.negotiateDefs.qualities.atk ?? 1,
+			buffMag: enm.negotiateDefs.qualities.mag ?? 1,
+			buffEnd: enm.negotiateDefs.qualities.def ?? 1,
 
 			melee: enm.melee,
-			skill: enm.negotiateDefs.qualities.skill
+			skill: enm.negotiateDefs.qualities.skill ?? 'Lunge';
 		}
 
 		if (enm.mainElement)
