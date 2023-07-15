@@ -1626,6 +1626,7 @@ commands.liststatus = new Command({
 			hunger: '<:physical:973077052129423411>ATK & MAG halved.',
 			blind: '<:physical:973077052129423411>PRC and AGL halved.',
 			irradiation: '<:physical:973077052129423411>Switch 3 random stats for 3 turns.',
+			drenched: '<:physical:973077052129423411>Nullifies status affinities. Stacks with other status effects.',
 
 			// Mental
 			dizzy: '<:mental:1004855144745291887>Accuracy of all skills halved for 3 turns.',
@@ -1659,9 +1660,9 @@ commands.liststatus = new Command({
 						techTxt += elementEmoji[elementTechs[statusEffects[i]][k]];
 				}
 				
-				if (techTxt === '') techTxt = 'NOTHING'
+				if (techTxt === '') techTxt = 'NONE'
 
-				DiscordEmbed.fields.push({name: `${statusEmojis[statusEffects[i].toLowerCase()]}${statusEffects[i]}`, value: `_${techTxt} tech off of ${statusEmojis[statusEffects[i].toLowerCase()]}._\n${statusDesc[statusEffects[i].toLowerCase()]}`, inline: true})
+				DiscordEmbed.fields.push({name: `${statusEmojis[statusEffects[i].toLowerCase()]}${statusEffects[i]}`, value: `(${techTxt})\n${statusDesc[statusEffects[i].toLowerCase()]}`, inline: true})
 			} else {
 				DiscordEmbed.fields.push({name: `${statusEmojis[statusEffects[i].toLowerCase()]}${statusEffects[i]}`, value: `${statusDesc[statusEffects[i].toLowerCase()]}`, inline: true})
 			}
