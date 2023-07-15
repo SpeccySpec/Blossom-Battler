@@ -3802,12 +3802,12 @@ commands.findcharm = new Command({
 
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
 		if (!charmFile[args[1]]) return message.channel.send(`${args[1]} is not a valid charm!`);
+		if (!charFile[args[0]].curCharms) charFile[args[0]].curCharms = [];
 
 		for (i in charFile[args[0]].curCharms) {
 			if (charFile[args[0]].curCharms[i] == args[1]) return message.channel.send(`${args[0]} already has ${args[1]}!`);
 		}
 
-		if (!charFile[args[0]].curCharms) charFile[args[0]].curCharms = [];
 		charFile[args[0]].curCharms.push(args[1]);
 
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
