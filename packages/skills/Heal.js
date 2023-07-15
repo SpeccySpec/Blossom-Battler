@@ -277,6 +277,7 @@ healList = {
 			switch(vars[0]) {
 				case 'physical':
 					if (targ.confusion) delete targ.confusion;
+					if (targ.drenched) delete targ.drenched;
 
 					if (isPhysicalStatus(targ.status)) {
 						delete targ.status;
@@ -300,6 +301,7 @@ healList = {
 				case 'all':
 					if (targ.confusion) delete targ.confusion;
 					if (targ.infatuation) delete targ.infatuation;
+					if (targ.drenched) delete targ.drenched;
 					delete targ.status;
 					delete targ.statusturns;
 
@@ -311,6 +313,8 @@ healList = {
 						if (targ.confusion) delete targ.confusion;
 					} else if (vars[0] === 'infatuation') {
 						if (targ.infatuation) delete targ.infatuation;
+					} else if (vars[0] === 'drenched') {
+						if (targ.drenched) delete targ.drenched;
 					} else {
 						if (targ.status === vars[0]) {
 							delete targ.status;
