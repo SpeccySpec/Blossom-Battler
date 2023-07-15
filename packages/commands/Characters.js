@@ -3710,7 +3710,7 @@ commands.listcharms = new Command({
 
 		if (!settings.mechanics.charms) return message.channel.send('Charms are not enabled on this server.');
 
-		let charmFile = setUpFile(`${dataPath}/charms.json`);
+		let charmFile = setUpFile(`${dataPath}/json/charms.json`);
 		let array = [];
 
 		const validTypes = ['name', 'notches'];
@@ -3798,7 +3798,7 @@ commands.findcharm = new Command({
 		if (!settings.mechanics.charms) return message.channel.send('Charms are not enabled on this server.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		let charmFile = setUpFile(`${dataPath}/charms.json`);
+		let charmFile = setUpFile(`${dataPath}/json/charms.json`);
 
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
 		if (!charmFile[args[1]]) return message.channel.send(`${args[1]} is not a valid charm!`);
@@ -3839,7 +3839,7 @@ commands.abandoncharm = new Command({
 		if (!settings.mechanics.charms) return message.channel.send('Charms are not enabled on this server.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		let charmFile = setUpFile(`${dataPath}/charms.json`);
+		let charmFile = setUpFile(`${dataPath}/json/charms.json`);
 
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
 		if (charFile[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
@@ -3879,7 +3879,7 @@ commands.equipcharm = new Command({
 		if (!settings.mechanics.charms) return message.channel.send('Charms are not enabled on this server.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		let charmFile = setUpFile(`${dataPath}/charms.json`);
+		let charmFile = setUpFile(`${dataPath}/json/charms.json`);
 
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
 		if (charFile[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
@@ -3927,7 +3927,7 @@ commands.unequipcharm = new Command({
 		if (!settings.mechanics.charms) return message.channel.send('Charms are not enabled on this server.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
-		let charmFile = setUpFile(`${dataPath}/charms.json`);
+		let charmFile = setUpFile(`${dataPath}/json/charms.json`);
 
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
 		if (charFile[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
