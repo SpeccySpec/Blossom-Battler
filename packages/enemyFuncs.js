@@ -605,7 +605,7 @@ module.exports = {
 			buffEnd: enm.negotiateDefs.qualities.def ?? 1,
 
 			melee: enm.melee,
-			skill: enm.negotiateDefs.qualities.skill ?? 'Lunge';
+			skill: enm.negotiateDefs.qualities.skill ?? 'Lunge'
 		}
 
 		if (enm.mainElement)

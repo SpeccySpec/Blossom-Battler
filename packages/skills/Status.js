@@ -2294,4 +2294,13 @@ statusEffectFuncs = {
 			if (skill.atktype == 'physical') skill.pow *= 2;
 		}
 	},
+
+	drenched: {
+		stackable: true,
+		hardcoded: true,
+		forceturns: 3,
+		onturn: function(btl, char) {
+			return `${char.name} is drenched...`;
+		}
+	},
 }

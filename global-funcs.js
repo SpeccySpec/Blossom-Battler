@@ -211,6 +211,7 @@ statusEffects = [
 	"confusion",
 	"irradiation",
 	"sensitive",
+	"drenched", // Stackable. Nullifies status affinities - both positive and negative - while afflicted.
 
 	// Positive Statusses
 	"happy",
@@ -239,6 +240,7 @@ statusNames = {
 	confusion: 'Confusion',
 	irradiation: 'Irradiation',
 	sensitive: 'Sensitive',
+	drenched: 'Drenched',
 
 	// Positive Statusses
 	happy: 'Happiness',
@@ -267,6 +269,7 @@ statusEmojis = {
 	confusion: '<:confusion:963413989604339762>',
 	irradiation: '<:irradiated:963413990199947294>',
 	sensitive: '<:sensitive:973076333825499156>',
+	drenched: '<:water:963413845886505011>',
 
 	// Positive Statusses
 	mirror: '<:mirror:963413990229311588>',
