@@ -764,6 +764,13 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 					}
 				}
 
+				// Imperishable Mettle.
+				if (char.charms.includes("ImperishableMettle")) {
+					dmg *= 1.05;
+				} else if (targ.charms.includes("ImperishableMettle")) {
+					dmg *= 0.95;
+				}
+
 				// Guarding
 				if (targ.guard && affinity != 'drain') {
 					dmg *= targ.guard;
@@ -791,7 +798,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 				// This damage is done!
 				damages.push(Math.max(1, Math.round(dmg)));
 			}
-			
+
 			console.log(crits);
 			console.log(affinities);
 			console.log(techs);
