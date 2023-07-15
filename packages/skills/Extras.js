@@ -2557,7 +2557,7 @@ customVariables = {
 						inf.hp = Math.max(0, inf.hp-d);
 						txt += `\n${inf.name} took ${d}${affinityTxt} damage from the trap!`;
 					} else {
-						txt += `\nBut ${inf.name} was able to evade the trap!\n${dodgeTxt(targ, char)}`
+						txt += `\nBut ${inf.name} was able to evade the trap!\n${dodgeTxt(inf, char)}`
 					}
 
 					addAtkMsg(btl, txt);
