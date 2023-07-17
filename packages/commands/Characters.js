@@ -3886,6 +3886,9 @@ commands.equipcharm = new Command({
 		if (charFile[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
 		if (!charmFile[args[1]]) return message.channel.send(`${args[1]} is not a valid charm!`);
 
+		if (!charFile[args[0]].charms) charFile[args[0]].charms = [];
+		if (!charFile[args[0]].curCharms) charFile[args[0]].curCharms = [];
+
 		if (!charFile[args[0]].curCharms.includes(args[1])) return message.channel.send(`${args[0]} does not have ${args[1]}!`);
 
 		if (charFile[args[0]].charms.includes(args[1])) return message.channel.send(`${args[0]} already has ${args[1]} equipped!`);

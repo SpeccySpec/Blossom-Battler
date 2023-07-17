@@ -8,6 +8,8 @@ funcsAtBattleStart = (btl) => {
 	let psv = null;
 	for (let team of btl.teams) {
 		for (let char of team.members) {
+			if (!char.charms) char.charms = []; // set up charms just incase they aren't
+
 			for (let i in char.skills) {
 				if (!skillFile[char.skills[i]]) continue;
 				if (skillFile[char.skills[i]].type != 'passive') continue;
