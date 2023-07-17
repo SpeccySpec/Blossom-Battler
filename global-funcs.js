@@ -853,7 +853,7 @@ isPhysicalStatus = (status) => {
 	return phys.includes(status.toLowerCase());
 }
 
-let stackable = ['confusion', 'infatuation'];
+let stackable = ['confusion', 'infatuation', 'drenched'];
 isStackableStatus = (status) => {
 	if (!status) return false;
 
