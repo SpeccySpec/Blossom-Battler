@@ -50,31 +50,31 @@
 	
 	"3": {
 		"title": "Page 3 - Battle System",
-		"desc": "This will go over the Battle System itself! It's very simple and easy to understand but battles can be confusing if you're not following along with it! With **all the listed commands**, you should use the **sided ID** of the character, which is usually to the left of their name & HP, like this!\n**0**: Ramia *(200/200HP) (100/100MP)*",
+		"desc": "This will go over the Battle System itself! It's simple and easy to understand, as you navigate it through buttons! On each turn, you will select your action, and target. A character will be listed on the side, like this:\n            <:leader:1007649145693143140>: Ramia *(200/200HP, 100/100MP)*",
 		"fields": [
 			{
 				"title": "Using a Melee Attack",
-				"text": "Use the command when it is your turn: **''rpg!usemelee <User> <Target>''**\nThis will use the character's melee attack against the foe. It is a weak attack that should only be used when you're out of other options.",
+				"text": "On your turn, select the <:strike:962465470458499132>Melee button to perform a melee attack.\nIt is a weak attack that should only be used when you're out of other options. You can edit your melee attack with the 'setmelee' command.",
 				"inline": false
 			},
 			{
 				"title": "Using a Skill",
-				"text": "Use the command when it is your turn: **''rpg!usemove <User> <Target> <Skill Name>''**\nThis will use the specified skill if the character knows it. You'll know if they know the skill because it'll be listed on the right side of the embed like this: \n\n                      %RANDOMSKILL%\n\n Each skill has an element, and the opponent may be weak to, resist, block, repel or drain it.",
+				"text": "On your turn, select the <:bless:962465467434426408>Skill button, and select a skill to perform a skill.\nThis will use the specified skill if the character knows it. You'll know if they know the skill because it'll be selectable in a button, usually listed by it's name: \n\n                      %RANDOMSKILL%\n\n Each skill has an element, and the opponent may be weak to, resist, block, repel or drain it.",
 				"inline": false
 			},
 			{
 				"title": "Using an Item",
-				"text": "Use the command when it is your turn: **''rpg!useitem <User> <Item Name> <Target>''**\nThis will use the specified item if the party has it. There's weapons & armor, healing items, reviving items and more.",
+				"text": "On your turn, select the <:healhpmp:1013848047345750066>Item button, and select an item to use it.\nThis will use the specified item if the party has it. There's weapons & armor, healing items, reviving items and more.",
 				"inline": false
 			},
 			{
 				"title": "Guarding",
-				"text": "Use the command when it is your turn: **''rpg!guard <User>''**\nSimply guards from the next attack. This halves the damage recieved and removes weakness affinities from the attack.",
+				"text": "Select the <:block:1007648919376896021>Guard button on your turn to guard.\nSimply guards from the next attack. This halves the damage recieved and removes weakness affinities from the attack.",
 				"inline": false
 			},
 			{
 				"title": "Tactics",
-				"text": "Use the command when it is your turn: **''rpg!tactics <User> <Type> <Target>''**\nYou can either run, negotiate or tweak your party here.\nRunning away has a chance to fail if your speed stat is lower than the enemies' average. You cannot run from bosses.\nYou can have backup party members to switch around with regular party members mid-battle. Only the leader of the party can do it, and it uses up their turn.\nAnd negotiation... this is explained on the next page.",
+				"text": "Select the <:crit:1007649126999138345>Tactics button on your turn to perform a tactic.\nYou'll be entered into a sub menu to do this.\nYou can either run, negotiate or tweak your party here.\nRunning away has a chance to fail if your speed stat is lower than the enemies' average. You cannot run from bosses.\nYou can have backup party members to switch around with regular party members mid-battle. Only the leader of the party can do it, and it uses up their turn.\nAnd negotiation... this is explained on the next page.",
 				"inline": false
 			}
 		]
@@ -86,7 +86,7 @@
 		"fields": [
 			{
 				"title": "The Command",
-				"text": "To negotiate with an enemy, use the command **''rpg!tactics <User> Pacify <Target>''**. It is part of the tactics menu. Each enemy usually has different ways to pacify them, think of Undertale or Deltarune's sparing system.",
+				"text": "To negotiate with an enemy, select the <:pacify:1013848035916267580>Pacify button in the <:crit:1007649126999138345>Tactics submenu. Each enemy usually has different ways to pacify them, think of Undertale or Deltarune's sparing system.",
 				"inline": false
 			},
 			{
