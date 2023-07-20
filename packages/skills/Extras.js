@@ -689,6 +689,17 @@ extrasList = {
 			let txt = amount > 0
 				? `__${targ.name}__'s _${stat ? stat.toUpperCase() : "???"}_ was buffed **${amount}** time(s)!`
 				: `__${targ.name}__'s _${stat ? stat.toUpperCase() : "???"}_ was debuffed **${absamount}** time(s)!`
+
+			// Force Message
+			if (skill.extras && skill.extras.forcemsg) {
+				for (let i in skill.extras.forcemsg) {
+					if ((amount > 0 && skill.extras.forcemsg[i][0] == 'onbuff') || (amount <= 0 && skill.extras.forcemsg[i][0] == 'ondebuff')) {
+						txt = replaceTxt(skill.extras.forcemsg[i][1], '%USER%', char.name, '%ENEMY%', targ.name, '%STAT%', stat ? stat.toUpperCase() : "???");
+						break;
+					}
+				}
+			}
+
 			if (chance && chance < 100) {
 				const rchance = randNum(1, 100);
 
@@ -2192,6 +2203,37 @@ extrasList = {
 		},
 		getinfo(vars, skill) {
 			return `Deals damage **equal to the __${vars[0]}'s level__**, with a **${vars[1]}**% modifier`;
+		}
+	}),
+
+	forcemsg: new Extra({
+		name: "Force Message (Original)",
+		desc: "A message will be displayed in a specific situation instead of the default message. Situations may include 'OnUse', 'OnHit', 'OnMiss', 'OnKill', 'OnBuff', and 'OnDebuff'. You can use %USER%, %ENEMY%, and %DAMAGE% to replace these values with the specified ones.",
+		multiple: true,
+		hardcoded: true,
+		args: [
+			{
+				name: "Situation",
+				type: "Word",
+				forced: true,
+			},
+			{
+				name: "Full Message",
+				type: "Word",
+				forced: true,
+			}
+		],
+		applyfunc(message, skill, args) {
+			let situation = args[0].toLowerCase();
+
+			if (!['onuse', 'onhit', 'onmiss', 'onkill', 'onbuff', 'ondebuff'].includes(situation))
+				return void message.channel.send(`${args[0]} is an invalid situation. Please enter one of the following:\n- OnUse\n- OnHit\n- OnMiss\n- OnKill\n- OnBuff\n- OnDebuff`);
+
+			makeExtra(skill, "forcemsg", [situation, args[1]]);
+			return true
+		},
+		getinfo(vars, skill) {
+			return '*Has a custom message.*';
 		}
 	}),
 }

@@ -520,7 +520,18 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 		}
 
 		if (totalHits <= 0) {
-			result.txt += dodgeTxt(char, targ);
+			// Force Message
+			if (skill.extras && skill.extras.forcemsg) {
+				for (let i in skill.extras.forcemsg) {
+					if (skill.extras.forcemsg[i][0] == 'onmiss') {
+						result.txt = replaceTxt(skill.extras.forcemsg[i][1], '%USER%', char.name, '%ENEMY%', targ.name);
+						break;
+					}
+				}
+			} else {
+				result.txt += dodgeTxt(char, targ);
+			}
+
 			return result;
 		} else {
 			// SkillMod
@@ -859,6 +870,16 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 				if (targ.hp <= 0) {
 					result.txt += `${dmgTxt} damage and was defeated!_\n${selectQuote(char, 'kill', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'death', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 
+					// Force Message
+					if (skill.extras && skill.extras.forcemsg) {
+						for (let i in skill.extras.forcemsg) {
+							if (skill.extras.forcemsg[i][0] == 'onkill') {
+								result.txt = replaceTxt(skill.extras.forcemsg[i][1], '%USER%', char.name, '%ENEMY%', targ.name, '%DAMAGE%', dmgTxt);
+								break;
+							}
+						}
+					}
+
 					// Endure Leader Skills
 					let party = btl.teams[targ.team];
 					if (settings?.mechanics?.leaderskills && party?.leaderskill && party.leaderskill.type === 'endure' && !party.leaderskill.disabled) {
@@ -894,6 +915,14 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 					}
 				} else {
 					result.txt += `${dmgTxt} damage!_`;
+					if (skill.extras && skill.extras.forcemsg) {
+						for (let i in skill.extras.forcemsg) {
+							if (skill.extras.forcemsg[i][0] == 'onhit') {
+								result.txt = replaceTxt(skill.extras.forcemsg[i][1], '%USER%', char.name, '%ENEMY%', targ.name, '%DAMAGE%', dmgTxt);
+								break;
+							}
+						}
+					}
 				}
 
 				// Limit Breaks
@@ -1342,7 +1371,18 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	} else if (skill.teamcombo) {
 		finalText += `__${char.name}__ ${ally ? ("and __" + ally.name + "__") : ""} struck with a powerful skill: **__${skill.name}__**!\n\n`;
 	} else {
-		finalText += `__${char.name}__ used __${skill.name}__!\n\n`;
+		let didreplace = false;
+		if (skill.extras && skill.extras.forcemsg) {
+			for (let i in skill.extras.forcemsg) {
+				if (skill.extras.forcemsg[i][0] == 'onuse') {
+					finalText += `${replaceTxt(skill.extras.forcemsg[i][1], '%USER%', char.name, '%ENEMY%', getCharFromId(targets[0][0], btl).name)}\n\n`;
+					didreplace = true;
+					break;
+				}
+			}
+		}
+
+		if (!didreplace) finalText += `__${char.name}__ used __${skill.name}__!\n\n`;
 	}
 
 	if (targets.length <= 1) 
