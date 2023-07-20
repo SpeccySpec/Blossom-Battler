@@ -113,8 +113,8 @@ passiveList = {
 			for (let i in vars) {
 				if (!vars[i]) continue;
 
-				let type = vars[i][0];
-				let midText = type;
+				let type = vars[i][0] ?? 'fire';
+				let midText = type ?? 'fire';
 				if (costTypeNames[midText]) midText = costTypeNames[midText];
 				if (Targets.includes(midText)) midText = targetNames[midText];
 				if (midText == 'nostatus') midText = 'non-status effect';
@@ -131,7 +131,8 @@ passiveList = {
 					symbol = elementEmoji[type] ?? statusEmojis[type] ?? '';
 				}
 
-				txt += `${symbol}**${midText.charAt(0).toUpperCase() + midText.slice(1) + suffixText}** ${type == 'heal' || type == 'status' ? 'skill' : 'attack'} ${type == 'heal' || type == 'status' ? `${vars[i][3] ? 'result' : 'effectiveness'}` : `${vars[i][3] ? 'damage' : 'power'}`} by **${vars[i][1] / (!vars[i][3] && !vars[i][2] && (type == 'heal' || type == 'status') ? 100 : 1)}${vars[i][2] ? '%' : (!vars[i][3] && (type == 'heal' || type == 'status') ? 'x' : '')}**`
+				let typeTxt = midText.charAt(0).toUpperCase() + midText.slice(1) + suffixText
+				txt += `${symbol}**${typeTxt}** ${type == 'heal' || type == 'status' ? 'skill' : 'attack'} ${type == 'heal' || type == 'status' ? `${vars[i][3] ? 'result' : 'effectiveness'}` : `${vars[i][3] ? 'damage' : 'power'}`} by **${vars[i][1] / (!vars[i][3] && !vars[i][2] && (type == 'heal' || type == 'status') ? 100 : 1)}${vars[i][2] ? '%' : (!vars[i][3] && (type == 'heal' || type == 'status') ? 'x' : '')}**`
 
 				if (i < vars.length - 2) 
 					txt += `, `
