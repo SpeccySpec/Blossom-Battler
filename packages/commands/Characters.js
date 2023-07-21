@@ -291,11 +291,14 @@ commands.getchar = new Command({
 		{
 			name: "Level",
 			type: "Num",
+			intcap: 1000,
 			forced: false
 		}
 	],
 	func(message, args, guilded) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+		if (args[1] > 1000) return message.channel.send('We do not support anything above level 1000.');
+		if (args[1] < 1) return message.channel.send('We do not support anything below level 1.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
