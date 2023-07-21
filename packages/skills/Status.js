@@ -1745,6 +1745,37 @@ statusList = {
 			return str;
 		}
 	}),
+
+	forcemsg: new Extra({
+		name: "Force Message (Original)",
+		desc: "A message will be displayed in a specific situation instead of the default message. Situations may include 'OnUse', 'OnBuff', and 'OnDebuff'. You can use %USER%, and %ENEMY% to replace these values with the specified ones.",
+		multiple: true,
+		hardcoded: true,
+		args: [
+			{
+				name: "Situation",
+				type: "Word",
+				forced: true,
+			},
+			{
+				name: "Full Message",
+				type: "Word",
+				forced: true,
+			}
+		],
+		applyfunc(message, skill, args) {
+			let situation = args[0].toLowerCase();
+
+			if (!['onuse', 'onbuff', 'ondebuff'].includes(situation))
+				return void message.channel.send(`${args[0]} is an invalid situation. Please enter one of the following:\n- OnUse\n- OnBuff\n- OnDebuff`);
+
+			makeStatus(skill, "forcemsg", [situation, args[1]]);
+			return true
+		},
+		getinfo(vars, skill) {
+			return '*Has a custom message.*';
+		}
+	}),
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.

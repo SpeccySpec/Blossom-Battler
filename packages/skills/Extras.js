@@ -699,6 +699,14 @@ extrasList = {
 					}
 				}
 			}
+			if (skill.statusses && skill.statusses.forcemsg) {
+				for (let i in skill.statusses.forcemsg) {
+					if ((amount > 0 && skill.statusses.forcemsg[i][0] == 'onbuff') || (amount <= 0 && skill.statusses.forcemsg[i][0] == 'ondebuff')) {
+						txt = replaceTxt(skill.statusses.forcemsg[i][1], '%USER%', char.name, '%ENEMY%', targ.name, '%STAT%', stat ? stat.toUpperCase() : "???");
+						break;
+					}
+				}
+			}
 
 			if (chance && chance < 100) {
 				const rchance = randNum(1, 100);

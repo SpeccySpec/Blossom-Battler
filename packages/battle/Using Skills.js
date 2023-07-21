@@ -1381,6 +1381,15 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 				}
 			}
 		}
+		if (skill.statusses && skill.statusses.forcemsg) {
+			for (let i in skill.statusses.forcemsg) {
+				if (skill.statusses.forcemsg[i][0] == 'onuse') {
+					finalText += `${replaceTxt(skill.statusses.forcemsg[i][1], '%USER%', char.name, '%ENEMY%', getCharFromId(targets[0][0], btl).name)}\n\n`;
+					didreplace = true;
+					break;
+				}
+			}
+		}
 
 		if (!didreplace) finalText += `__${char.name}__ used __${skill.name}__!\n\n`;
 	}
