@@ -119,7 +119,7 @@ useCost = (char, cost, costtype) => {
 			if (!isBoss(char)) char.mp = Math.max(0, char.mp - Math.round((char.maxmp/100) * cost));
 			break;
 
-		case 'mpandhppercent':
+		case 'hpandmppercent':
 			if (!isBoss(char)) char.hp = Math.max(1, char.hp - Math.round((char.maxhp/100) * cost));
 			if (!isBoss(char)) char.mp = Math.max(0, char.mp - Math.round((char.maxmp/100) * cost));
 			break;
@@ -128,7 +128,7 @@ useCost = (char, cost, costtype) => {
 			char.mp = Math.max(0, char.mp - cost);
 			break;
 
-		case 'mpandhp':
+		case 'hpandmp':
 			char.mp = Math.max(0, char.mp - cost);
 			char.hp = Math.max(1, char.hp - cost);
 			break;
