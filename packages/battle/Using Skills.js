@@ -1386,7 +1386,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			for (let i in skill.statusses.forcemsg) {
 				if (skill.statusses.forcemsg[i][0] == 'onuse') {
 					finalText += `${replaceTxt(skill.statusses.forcemsg[i][1], '%USER%', char.name, '%ENEMY%', getCharFromId(targets[0][0], btl).name)}\n\n`;
-					if (skill.statusses[i][2]) noEffectMsg = true;
+					if (skill.statusses.forcemsg[i][2]) noEffectMsg = true;
 					didreplace = true;
 					break;
 				}
