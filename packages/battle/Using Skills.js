@@ -1365,6 +1365,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	let targTxt = `__${char.name}__ => `;
+	let noEffectMsg = false;
 	
 	if (skill.limitbreak) {
 		finalText += `__${char.name}__ struck with their **strongest skill**!\n_**__${skill.name}__**!_\n\n`;
@@ -1385,6 +1386,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			for (let i in skill.statusses.forcemsg) {
 				if (skill.statusses.forcemsg[i][0] == 'onuse') {
 					finalText += `${replaceTxt(skill.statusses.forcemsg[i][1], '%USER%', char.name, '%ENEMY%', getCharFromId(targets[0][0], btl).name)}\n\n`;
+					if (skill.statusses[i][2]) noEffectMsg = true;
 					didreplace = true;
 					break;
 				}
@@ -1439,7 +1441,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		skillDefs.pow *= targets[i][1];
 
 		let result = attackWithSkill(char, targ, skillDefs, btl, null, noExtraArray);
-		finalText += `${result.txt}`;
+		if (!noEffectMsg) finalText += `${result.txt}`;
 
 		if (result.oneMore) btl.doonemore = true;
 		if (result.teamCombo) btl.canteamcombo = true;

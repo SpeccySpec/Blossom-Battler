@@ -1761,6 +1761,10 @@ statusList = {
 				name: "Full Message",
 				type: "Word",
 				forced: true,
+			},
+			{
+				name: "No Effect Message",
+				type: "YesNo",
 			}
 		],
 		applyfunc(message, skill, args) {
@@ -1769,7 +1773,7 @@ statusList = {
 			if (!['onuse', 'onbuff', 'ondebuff'].includes(situation))
 				return void message.channel.send(`${args[0]} is an invalid situation. Please enter one of the following:\n- OnUse\n- OnBuff\n- OnDebuff`);
 
-			makeStatus(skill, "forcemsg", [situation, args[1]]);
+			makeStatus(skill, "forcemsg", [situation, args[1], args[2] ?? false]);
 			return true
 		},
 		getinfo(vars, skill) {
