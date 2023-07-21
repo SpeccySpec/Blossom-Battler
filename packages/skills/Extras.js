@@ -309,6 +309,9 @@ extrasList = {
 				case 'mp':
 					if (!applyOperator(char.mp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}MP to use this move!`;
 					break;
+				case 'hpandmp':
+					if (!applyOperator(char.mp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}MP __and__ ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}HP to use this move!`;
+					break;
 				case 'lb':
 					if (!applyOperator(char.lbpercent, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}LB% to use this move!`;
 					break;
@@ -317,6 +320,9 @@ extrasList = {
 					break;
 				case 'hppercent':
 					if (!applyOperator((char.hp/char.maxhp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}% HP to use this move!`;
+					break;
+				case 'hpandmppercent':
+					if (!applyOperator((char.hp/char.maxhp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}% HP __and__ ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}% MP to use this move!`;
 					break;
 				default:
 					if (!applyOperator(char.hp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}HP to use this move!`;

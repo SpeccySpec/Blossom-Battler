@@ -297,6 +297,16 @@ function canUseSkill(userDefs, allySide, oppSide, skillDefs) {
 					return false;
 				break;
 
+			case "hpandmp":
+				if (userDefs.hp > skillDefs.needlessthan || userDefs.mp > skillDefs.needlessthan)
+					return false;
+				break;
+
+			case "hpandmppercent":
+				if (userDefs.hp > (userDefs.maxhp/100)*skillDefs.needlessthan || userDefs.mp > (userDefs.maxmp/100)*skillDefs.needlessthan)
+					return false;
+				break;
+
 			default:
 				if (userDefs.hp > skillDefs.needlessthan)
 					return false;

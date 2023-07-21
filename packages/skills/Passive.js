@@ -1,9 +1,11 @@
 let costTypeNames = {
 	hp: "HP",
 	mp: "MP",
+	hpandmp: "HP and MP",
 	lb: "LB",
 	hppercent: "% of user's Max HP",
-	mppercent: "% of user's Max MP"
+	mppercent: "% of user's Max MP",
+	hpandmppercent: "% of user's Max HP AND Max MP",
 }
 let targetNames = {
 	one: 'opponent',

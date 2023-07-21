@@ -400,6 +400,8 @@ costTypes = [
 	'mppercent',
 	'hp',
 	'hppercent',
+	'hpandmp',
+	'hpandmppercent',
 	'lb',
 	'lbpercent',
 	'money',
