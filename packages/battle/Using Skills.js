@@ -1474,7 +1474,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	if (skillCost && !skill.forcefree) useCost(char, Math.round(skillCost), skill.costtype);
 
 	// Do we have any final messages
-	if (btl.atkmsg) {
+	if (btl.atkmsg and !noEffectMsg) {
 		finalText += `\n${btl.atkmsg}`;
 		delete btl.atkmsg;
 	}
