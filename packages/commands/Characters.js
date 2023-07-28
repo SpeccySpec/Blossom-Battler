@@ -1,5 +1,5 @@
 commands.registerchar = new Command({
-	desc: `Register a character to use in-battle! Characters can learn skills, use items, and initiate in combat, along with wayyy more!.`,
+	desc: `Register a character to use in-battle! Characters can learn skills, use items, and initiate in combat, along with wayyy more!\nUse 'rpg!guide 1' to get more information.`,
 	aliases: ['registercharacter', 'makechar', 'regchar', 'regcharacter', 'charmake'],
 	section: "characters",
 	args: [

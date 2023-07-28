@@ -1,7 +1,7 @@
 {
     "0": {
 		"title": "Guide to Battles! - Ramia",
-		"desc": "Hii, I'm Ramia, the writer to this guide! Blossom Battler is a Discord Bot that allows you to create characters, skills, items and more! Flick through it with 'rpg!guide <Page Number>'!"
+		"desc": "Hii, I'm Ramia, the writer to this guide! Blossom Battler is a Discord Bot that allows you to create characters, skills, items and more! Flick through it with 'rpg!guide <Page Number>'!\n\n**Remember that, when you use a command without any inputs, you'll get a description of what the command does.**"
 	},
 	
 	"1": {
@@ -9,8 +9,23 @@
 		"desc": "Let's start with the most essential part! **Character creation**!\nWe'll be covering the command 'rpg!registerchar'. If you use it with no arguments, you'll get information about what each stat is for; I'm here to tell you about how characters here work in general!\n\nCharacters in Blossom Battler can be used for **battle**... well mostly battle. They can grow trust to other characters, have pets help... and more! Let's get started with the biggest parts.",
 		"fields": [
 			{
+				"title": "How the command works",
+				"text": "When you use the command, you'll get something like this:\n*<Word: Character Name> <Word: Main Element> <Num: Base HP> <Num: Base MP> <Num: Base Strength> <Num: Base Magic> <Num: Base Perception> <Num: Base Endurance> <Num: Base Charisma> <Num: Base Intelligence> <Num: Base Agility> <Num: Base Luck>*.\n\nDo not fret, this is simply telling you what you can input into the command! Each field is denoted by *<Word: This>*, where *Word* is the type of data you must input, and *This* is what the data does or is for. Now that you've been briefed, I'll tell you what each one is for.",
+				"inline": false
+			},
+			{
+				"title": "What each field does:",
+				"text": "*<Word: Character Name>* This is what the Character you are creating should be called. You will refer to this character via this name in the future!\n*<Word: Main Element>* The character's main element used for attacking! There are 21 major ones, and 3 minor ones, all of which can be listed via the command 'listelements'. **Think of these like Pokémon types**!\n*<Num: Base HP>* This should be a number between 1 and 50 that determines how much HP your character can have at **level 1**. This number gradually increase as you level up, and when added to **Base MP**, cannot exceed 65.\n*<Num: Base MP>* This is the same as **Base HP**, but for **MP**, or **Magic Points**. This is used up when using **magical skills** to attack, like your regular RPG!",
+				"inline": false
+			},
+			{
+				"title": "What each Stat does. The following may not exceed 10, and combined, may not exceed 45:",
+				"text": "*<Num: Base Strength>* This number is used when attacking enemies with **physical attacks**.\n*<Num: Base Magic>* This number is used when attacking enemies with **magical attacks**.\n*<Num: Base Perception>* The higher this number, the less of a chance your skill will miss.\n*<Num: Base Endurance>* The higher this number, the less damage you take from incoming attacks.\n*<Num: Base Charisma>* The higher this number, the higher chance you have to land mental status ailments.\n*<Num: Base Intelligence>* The higher this number, the more EXP you're able to garner from battles, and the lower chance you're inflicted with mental status ailments.\n*<Num: Base Agility>* The higher this number, the more likely it is you'll go first in the turn order, and the higher chance you have to dodge attacks that can miss.\n*<Num: Base Luck>* The higher, this number, the higher chance you have to land physical status ailments, OHKO skills, and critical hits. This is likewise for incoming attacks.",
+				"inline": false
+			},
+			{
 				"title": "Stats",
-				"text": "Stats are crucial. They WILL make or break a character. They WILL affect their playstyle. They WILL affect their usefulness. Arguably, these are the most important part of a character. Here are some reccomendations:\n\n**Healers** are usually magic based with average endurance & HP. They usually profess in one or two elements, and have healing skills.\n\n**Physical Attackers** come in 3 kinds, __Hard-Hitting__, __Average__ and __Agile__. __Hard-Hitting__ **Physical Attackers** usually have high endurance and HP, with less MP. Further down, they become faster and have less endurance.\n\n**Magic Attackers** are usually focused on __one element__, with another as a backup. The main element is often __stronger__ than the backup element. They can also be __Hard-Hitting__, __Average__ or __Agile__. *Please read the next page to figure out how to keep your characters balanced.*",
+				"text": "Now that you know how the command works, I'll start to go indepth about **character balance**! Stats are crucial. They WILL make or break a character. They WILL affect their playstyle. They WILL affect their usefulness. Arguably, these are the most important part of a character. Here are some reccomendations:\n\n**Healers** are usually magic based with average endurance & HP. They usually profess in one or two elements, and have healing skills.\n\n**Physical Attackers** come in 3 kinds, __Hard-Hitting__, __Average__ and __Agile__. __Hard-Hitting__ **Physical Attackers** usually have high endurance and HP, with less MP. Further down, they become faster and have less endurance.\n\n**Magic Attackers** are usually focused on __one element__, with another as a backup. The main element is often __stronger__ than the backup element. They can also be __Hard-Hitting__, __Average__ or __Agile__. *Please read the next page to figure out how to keep your characters balanced.*",
 				"inline": false
 			},
 			{
