@@ -2044,7 +2044,7 @@ passiveList = {
 			makePassive(skill, "skilldeny", [element]);
 			return true
 		},
-		canuseskill(char, targ, skill, passive, btl, vars) {
+		canuseskill(char, skill, passive, btl, vars) {
 			if (skill.type == vars[0]) return `${elementEmoji[vars[0]]}**${vars[0].charAt(0).toUpperCase() + vars[0].slice(1)}** skills have been banned by <:passive:963413845253193758>**${passive.name}**.`;
 			return true;
 		},
