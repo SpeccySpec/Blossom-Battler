@@ -1024,8 +1024,8 @@ sendCurTurnEmbed = (char, btl) => {
 									if (!passiveList[k]) continue;
 									if (!passiveList[k].canuseskill) continue;
 
-									if (passiveList[k].multiple) {
-										for (let l in pskill.extras[k]) {
+									if (passiveList[k].multiple && pskill.passive[k]) {
+										for (let l in pskill.passive[k]) {
 											let txt = passiveList[k].canuseskill(char, skill, pskill, btl, pskill.passive[k][l]);
 
 											if (txt !== true) {
