@@ -13,12 +13,14 @@ exports.SaveBackup = async function() {
 		if (backups > 10) exec("cd backups && rm -r \"$(ls -t | tail -1)\"")
 
 		// Update backups automatically.
-		exec('git add backups', (error, stdout, stderr) => {
-			if (error) return void console.log(stderr);
-			exec('git commit -m "Update backups (AUTOMATED BY BB)"', (error, stdout, stderr) => {
+		setTimeout(() => {
+			exec('git add backups', (error, stdout, stderr) => {
 				if (error) return void console.log(stderr);
-				exec("git push");
+				exec('git commit -m "Update backups (AUTOMATED BY BB)"', (error, stdout, stderr) => {
+					if (error) return void console.log(stderr);
+					exec("git push");
+				})
 			})
-		})
+		}, 10000)
 	})
 }
