@@ -1784,9 +1784,9 @@ passiveList = {
 				str += `${vars[i][0].toUpperCase()} ${vars[i][1]} time(s)`;
 
 				if (i < vars.length - 2) 
-					txt += `, `
+					str += `, `
 				else if (i == vars.length - 2) 
-					txt += ` and `
+					str += ` and `
 			}
 
 			return `${str}**`;
