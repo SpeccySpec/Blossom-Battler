@@ -1781,7 +1781,7 @@ passiveList = {
 			let str = 'Upon foe defeat, **boosts user '
 
 			for (let i in vars) {
-				str += `${vars[i][0].toUpperCase()} ${vars[i][1]} time(s)`;
+				str += `${(vars[i][0] ?? '???').toUpperCase()} ${vars[i][1]} time(s)`;
 
 				if (i < vars.length - 2) 
 					str += `, `
