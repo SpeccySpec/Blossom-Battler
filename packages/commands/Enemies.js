@@ -1719,9 +1719,7 @@ commands.exportenemies = new Command({
 	checkban: true,
 	func: async(message, args) => {
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
-		let link = await hastebin(JSON.stringify(enemyFile, '	', 4), {extension: "json"});
-
-		message.channel.send(`👍 ${message.author}, check your DMs!`);
-		message.author.send(`Here is the character data you requested!\n${link}`);
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		message.channel.send({content: `Here is the enemy data you requested!`, files: [`${dataPath}/json/${message.guild.id}/enemies.json`]});
 	}
 })
