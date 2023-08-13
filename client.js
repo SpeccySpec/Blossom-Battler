@@ -351,7 +351,8 @@ typeParsers = {
 	Channel: ({message, arg}) => {return message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')) ? message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')).id : undefined},
 	RealChannel: ({message, arg}) => {return message.guild.channels.cache.find(c => c.name == arg || c.id == arg || c.id == arg.replace(/[<#>]/g, '')) ?? undefined},
 	ID: arg => {},
-	Image: ({message}) => {return checkImage(message, undefined, message.attachments.first())}
+	Image: ({message}) => {return checkImage(message, undefined, message.attachments.first())},
+	JSON: ({message}) => {return message.attachments.first()}
 }
 
 // Slash Commands
@@ -365,7 +366,8 @@ let datatypetoconst = {
 	Channel: INTEGER,
 	RealChannel: CHANNEL,
 	ID: INTEGER,
-	Image: ATTACHMENT
+	Image: ATTACHMENT,
+	JSON: ATTACHMENT
 }
 
 for (let i in commands) {

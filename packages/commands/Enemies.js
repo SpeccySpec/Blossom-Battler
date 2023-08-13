@@ -1723,3 +1723,20 @@ commands.exportenemies = new Command({
 		message.channel.send({content: `Here is the enemy data you requested!`, files: [`${dataPath}/json/${message.guild.id}/enemies.json`]});
 	}
 })
+
+commands.importenemies = new Command({
+	desc: "[SUPERADMIN ONLY]",
+	aliases: ['importenemyfile', 'realimportenemy'],
+	section: "enemies",
+	args: [],
+	checkban: true,
+	func: async(message, args) => {
+		if (!utilityFuncs.RPGBotAdmin(message.author.id)) return void message.channel.send("Only a super admin can use this.")
+
+		// get the file's URL
+		const file = message.attachments.first()?.url;
+		if (!file) return message.channel.send('There is no file here!');
+
+		message.channel.send({content: `${message.attachments.first().url} is your url... but nothing has happened!`});
+	}
+})
