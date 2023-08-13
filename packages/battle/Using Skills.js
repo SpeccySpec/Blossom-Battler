@@ -105,6 +105,8 @@ genDmg = (char, targ, btl, skill) => {
 	}
 
 	if (skill.limitbreak) {
+		console.log(`Attack Stat: ${atkStat}, Endurance Stat: ${endStat}, Skill Pow: ${skill.pow}, Base Dmg: ${((skill.pow+(atkStat*2)-endStat)*2)}, Real Dmg: ${Math.round((((skill.pow+(atkStat*2)-endStat)*2) + Math.round(Math.random() * 30))/2)}`);
+		console.log(`Math.round((((${skill.pow}+(${atkStat*2})-${endStat})*2) + ${Math.round(Math.random() * 30)})/2)`);
 		return Math.round((((skill.pow+(atkStat*2)-endStat)*2) + Math.round(Math.random() * 30))/2);
 	} else {
 		let dmg = 0;
@@ -221,14 +223,14 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 	}
 
 	// Healing Skills
-	if (skill.type === 'heal') {
+	if (skill.type === 'heal' || (skill.limitbreak && skill.class == 'heal')) {
 		if (skill.heal) {
 			if (trustLevel(char, targ) >= trustLvl.morehealbuff)
 				skill.pow *= 1.2;
 			else if (trustLevel(char, targ) >= trustLvl.healbuff)
 				skill.pow *= 1.1;
 
-			if (char.mimic || char.clone || char.reincarnate) skill.pow *= 1/3;
+			if (char.mimic || char.clone || char.reincarnate) skill.pow /= 4;
 
 			for (let i in skill.heal) {
 				if (!healList[i]) continue;
@@ -259,7 +261,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 			}
 		}
 	// Status Skills
-	} else if (skill.type === 'status') {
+	} else if (skill.type === 'status' || (skill.limitbreak && (skill.class === 'boost' || skill.class === 'cripple'))) {
 		if (skill.statusses) {
 			for (let i in skill.statusses) {
 				if (!statusList[i]) continue;
@@ -1368,7 +1370,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	let noEffectMsg = false;
 	
 	if (skill.limitbreak) {
-		finalText += `__${char.name}__ struck with their **strongest skill**!\n_**__${skill.name}__**!_\n\n`;
+		finalText += `__${char.name}__ concentrates, and strikes with their **strongest attack** at full power!\n## **__${skill.name}__!**\n\n`;
 	} else if (skill.teamcombo) {
 		finalText += `__${char.name}__ ${ally ? ("and __" + ally.name + "__") : ""} struck with a powerful skill: **__${skill.name}__**!\n\n`;
 	} else {

@@ -1714,7 +1714,7 @@ statusList = {
 			let skillName = args[0];
 			let turns = args[1] ?? 0;
 
-			if (!skillFile[skillName]) return void message.channel.send("That's not a valid skill!");
+			if (!skillFile[skillName]) return void message.channel.send(`${skillName} is not a valid skill!`);
 			if (skillFile[skillName] == skill) return void message.channel.send("You can't use this skill.");
 			if (skillFile[skillName].statusses?.simplebeam) return void message.channel.send("You can't use this skill.");
 
@@ -1825,35 +1825,56 @@ hasStatus = (skill, extra) => {
 }
 
 // Apply Extra Effects to an existing skill using the extrasList above.
-applyStatus = (message, skill, skillExtra, rawargs) => {
+applyStatus = (message, skill, skillExtra, rawargs, lb) => {
 	if (!skill.statusses) skill.statusses = {};
 	if (!skillExtra || !statusList[skillExtra]) return message.channel.send("You're adding an invalid extra! Use the ''liststatusextras'' command to list all extras.");
-	if (!statusList[skillExtra].apply(message, skill, rawargs)) return false
-	
+
+	if (lb) {
+		if (!statusList[skillExtra].apply(message, skill, rawargs.slice(3))) return false;
+	} else {
+		if (!statusList[skillExtra].apply(message, skill, rawargs)) return false;
+	}
+
 	message.react('👍')
 	skill.done = true;
 	console.log("win")
 	return true;
 }
 
-buildStatus = (message, extra, args) => {
-	let skill = {
-		name: args[0],
-		type: 'status',
-		cost: args[1],
-		costtype: args[2].toLowerCase(),
-		target: args[3],
-		originalAuthor: message.author.id
-	}
+buildStatus = (message, extra, args, lb) => {
+	let skill = {};
 
 	if (statusList?.[extra]?.unregsiterable && !utilityFuncs.RPGBotAdmin(message.author.id)) {
 		message.channel.send(`You lack permissions to apply ${statusList[extra].name} for this skill.`)
 		return false;
 	}
 
-	applyStatus(message, skill, extra.toLowerCase(), args.slice(6))
+	if (lb) {
+		skill = {
+			name: args[1],
+			level: args[2],
+			class: args[3].toLowerCase(),
+			cost: args[4],
+			limitbreak: true,
+			target: args[6],
+			originalAuthor: message.author.id
+		}
+
+		applyStatus(message, skill, extra.toLowerCase(), args.slice(8));
+	} else {
+		skill = {
+			name: args[0],
+			type: 'status',
+			cost: args[1],
+			costtype: args[2].toLowerCase(),
+			target: args[3],
+			originalAuthor: message.author.id
+		}
+
+		applyStatus(message, skill, extra.toLowerCase(), args.slice(6));
+	}
 	
-	if (skill.done) {
+	if (skill && skill.done) {
 		delete skill.done;
 		return skill;
 	} else {

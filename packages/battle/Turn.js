@@ -887,7 +887,7 @@ sendCurTurnEmbed = (char, btl) => {
 					let lbDefs = objClone(canUseLb(char, btl));
 
 					if (lbDefs.target) {
-						if (lbDefs.target === 'allopposing' || lbDefs.target === 'allallies' || lbDefs.target === 'everyone' || lbDefs.target.includes('random')) {
+						if (lbDefs.target === 'allopposing' || lbDefs.target === 'allallies' || lbDefs.target === 'everyone' || lbDefs.target == 'caster' || lbDefs.target.includes('random')) {
 							btl.action.target = [undefined, undefined];
 							alreadyResponded = true;
 							doAction(char, btl, btl.action);
@@ -1784,11 +1784,9 @@ doAction = (char, btl, action) => {
 			lbDefs.costtype = 'lb';
 			lbDefs.limitbreak = true;
 			lbDefs.atktype = aType;
-
-			lbDefs.pow += Math.round((char.lbp-lbDefs.cost)/3);
 			lbDefs.cost = char.lbp;
 
-			lbDefs.target = 'one';
+			if (lbDefs.class == 'heal') lbDefs.target = 'allallies';
 
 			useSkill(char, btl, action, lbDefs);
 			break;
@@ -2132,7 +2130,7 @@ advanceTurn = (btl, firstturn) => {
 			}
 
 			// Max & Min LB
-			char.lb = Math.min(Math.max(char.lb, 0), 1000);
+			char.lbp = Math.min(Math.max(char.lbp, 0), 1000);
 
 			// This character is dead or pacified.
 			if (char.hp <= 0 || char.pacified) {

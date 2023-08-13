@@ -200,7 +200,7 @@ commands.registerstatus = new Command({
 	func(message, args, guilded) {
 		if (skillFile[args[0]] && message.author.id != skillFile[args[0]].originalAuthor && !utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
 
-		let skill = buildStatus(message, args[5], args)
+		let skill = buildStatus(message, args[5], args);
 		if (!skill) return;
 
 		skillFile[args[0]] = skill;

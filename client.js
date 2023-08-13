@@ -370,6 +370,7 @@ let datatypetoconst = {
 	JSON: ATTACHMENT
 }
 
+/*
 for (let i in commands) {
 	if (cmds.length >= 100) break;
 
@@ -401,41 +402,6 @@ for (let i in commands) {
 	cmds.push(cmd);
 }
 
-/*
-for (let i in commands) {
-	if (cmds.length >= 100) break;
-
-	let c = commands[i];
-	if (c.alias) continue;
-	if (c.noslash) continue;
-
-	let str = c.desc;
-	if (str.length > 100) str = `${str.slice(0, 97)}...`;
-
-	let cmd = {
-		name: i,
-		description: str
-	}
-
-	// Create a new command
-	if (c.args && c.args.length > 0) {
-		cmd.options = [];
-
-		for (let o of c.args) {
-			cmd.options.push({
-				name: o.name,
-				type: datatypetoconst[o.type] ?? STRING,
-				required: o.forced ?? false
-			});
-		}
-	}
-
-	client.application.commands.create(cmd)
-//	cmds.push(cmd);
-}
-*/
-
-
 const rest = new Rest.REST({ version: '9' }).setToken(process.env.TOKEN);
 
 (async () => {
@@ -452,6 +418,7 @@ const rest = new Rest.REST({ version: '9' }).setToken(process.env.TOKEN);
 		console.error(error);
 	}
 })();
+*/
 
 // Run this shit
 let folders = ['skills', 'characters', 'enemies', 'party', 'battle', 'items', 'campaign'] // i TOLD YOU there WILL EEEVEN be moreee

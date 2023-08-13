@@ -589,7 +589,7 @@ healList = {
 }
 
 modSkillResult = (char, targ, result, skill, btl) => {
-	if (doPassives(btl)) {
+	if (doPassives(btl) && !skill.limitbreak) {
 		for (let skillName of char.skills) {
 			if (!skillFile[skillName]) continue;
 
@@ -611,7 +611,7 @@ modSkillResult = (char, targ, result, skill, btl) => {
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.
-function makeHeal(skill, extra, func) {
+makeHeal = (skill, extra, func) => {
 	if (!skill.heal) skill.heal = {};
 	if (!skill.heal[extra]) skill.heal[extra] = [];
 
@@ -639,10 +639,15 @@ hasHealType = (skill, extra) => {
 }
 
 // Apply Extra Effects to an existing skill using the extrasList above.
-applyHeal = (message, skill, skillExtra, rawargs) => {
+applyHeal = (message, skill, skillExtra, rawargs, lb) => {
 	if (!skill.heal) skill.heal = {};
 	if (!skillExtra || !healList[skillExtra]) return message.channel.send("You're adding an invalid extra! Use the ''listhealextras'' command to list all extras.");
-	if (!healList[skillExtra].apply(message, skill, rawargs)) return false
+
+	if (lb) {
+		if (!healList[skillExtra].apply(message, skill, rawargs.slice(3))) return false;
+	} else {
+		if (!healList[skillExtra].apply(message, skill, rawargs)) return false;
+	}
 	
 	message.react('👍')
 	skill.done = true;

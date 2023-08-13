@@ -263,22 +263,6 @@ longDescription = (charDefs, level, server, message, useguild) => {
 
 	DiscordEmbed.fields.push({ name: 'Skills', value: skillDesc, inline: true });
 
-	// Limit Breaks
-	if (settings.mechanics.limitbreaks) {
-		let lbDesc = '';
-
-		if (char.lb && char.lb[1]) {
-			for (const i in char.lb) {
-				lbDesc += `**${i}: ${char.lb[i].name}**\n_${char.lb[i].pow} Power, ${char.lb[i].cost}LB%_`;
-				if (char.lb[i].hits > 1) lbDesc += `_, ${char.lb[i].hits} Hits_`;
-				lbDesc += '\n\n';
-			}
-		}
-		
-		if (lbDesc != '')
-			DiscordEmbed.fields.push({ name: 'Limit Breaks', value: lbDesc, inline: true });
-	}
-
 	// Affinities
 	let affinityscore = 0
 	let totaffinities = 0
@@ -332,30 +316,36 @@ longDescription = (charDefs, level, server, message, useguild) => {
 	}
 	if (charAffs != '') DiscordEmbed.fields.push({ name: 'Affinities', value: charAffs, inline: true });
 
-	if (settings.mechanics.charms && char.curCharms && char.curCharms.length > 0) {
-		let charmFile = setUpFile(`${dataPath}/json/charms.json`);
-			
-		let notches = 0
-		if (charDefs.charms) {
-			for (const i in charDefs.charms)
-				notches += charmFile[charDefs.charms[i]].notches
-		}
-			
-		let charms = ''
-		for (const i in charDefs.curCharms) {
-			if (charFuncs.equippedCharm(charDefs, charDefs.curCharms[i]))
-				charms += `**${charmFile[charDefs.curCharms[i]].name}** (${charmFile[charDefs.curCharms[i]].notches} notches)\n`
-			else
-				charms += `${charmFile[charDefs.curCharms[i]].name} (${charmFile[charDefs.curCharms[i]].notches} notches)\n`
-		}
-			
-		if (charms === '')
-			charms = 'None'
-		else
-			charms += `*${notches}/${charFuncs.needNotches(charDefs.level)} Notches taken.*`
+	// Limit Breaks
+	if (settings.mechanics.limitbreaks) {
+		let lbDesc = '';
 
-		if (charms != '')
-			DiscordEmbed.fields.push({ name: 'Charms', value: charms, inline: true });
+		if (char.lb && char.lb[1]) {
+			for (const i in char.lb) {
+				lbDesc += `**${i}: ${char.lb[i].name}**\n__[${char.lb[i].class.toUpperCase()} CLASS]__\nCosts **${char.lb[i].cost}%** of the Limit Break Gauge\n`;
+
+				switch(char.lb[i].class) {
+					case 'attack':
+						lbDesc += `**${char.lb[i].pow}** Power`;
+						if (char.lb[i].hits > 1) lbDesc += `\nAttacks **${char.lb[i].hits}** times`;
+						break;
+
+					case 'heal':
+						lbDesc += `Restores **${char.lb[i].pow}HP**`;
+						break;
+
+					case 'boost':
+					case 'cripple':
+						// maybe later
+						break;
+				}
+
+				lbDesc += `\n_${char.lb[i].desc ?? "A full power attack."}_\n\n`;
+			}
+		}
+
+		if (lbDesc != '')
+			DiscordEmbed.fields.push({ name: '__Limit Breaks__', value: lbDesc, inline: false });
 	}
 
 	let transTxt = '';
@@ -386,6 +376,33 @@ longDescription = (charDefs, level, server, message, useguild) => {
 		}
 	}
 	if (transTxt != '') DiscordEmbed.fields.push({ name: 'Transformations', value: transTxt, inline: false });
+
+	// Charms
+	if (settings.mechanics.charms && char.curCharms && char.curCharms.length > 0) {
+		let charmFile = setUpFile(`${dataPath}/json/charms.json`);
+			
+		let notches = 0
+		if (charDefs.charms) {
+			for (const i in charDefs.charms)
+				notches += charmFile[charDefs.charms[i]].notches
+		}
+			
+		let charms = ''
+		for (const i in charDefs.curCharms) {
+			if (charFuncs.equippedCharm(charDefs, charDefs.curCharms[i]))
+				charms += `**${charmFile[charDefs.curCharms[i]].name}** (${charmFile[charDefs.curCharms[i]].notches} notches)\n`
+			else
+				charms += `${charmFile[charDefs.curCharms[i]].name} (${charmFile[charDefs.curCharms[i]].notches} notches)\n`
+		}
+			
+		if (charms === '')
+			charms = 'None'
+		else
+			charms += `*${notches}/${charFuncs.needNotches(charDefs.level)} Notches taken.*`
+
+		if (charms != '')
+			DiscordEmbed.fields.push({ name: 'Charms', value: charms, inline: false });
+	}
 
 	let enmLoot = ``
 	if (char.loot && char.loot != '') {

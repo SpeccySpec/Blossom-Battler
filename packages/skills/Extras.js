@@ -2305,11 +2305,15 @@ hasExtra = (skill, extra) => {
 }
 
 // Apply Extra Effects to an existing skill using the extrasList above.
-applyExtra = (message, skill, skillExtra, rawargs) => {
+applyExtra = (message, skill, skillExtra, rawargs, lb) => {
 	if (!skill.extras) skill.extras = {};
 	if (!skillExtra || !extrasList[skillExtra]) return message.channel.send("You're adding an invalid extra! Use the ''listatkextras'' command to list all extras.");
-	if (extrasList[skillExtra].apply(message, skill, rawargs))
-		message.react('👍')
+	
+	if (lb) {
+		if (extrasList[skillExtra].apply(message, skill, rawargs.slice(3))) message.react('👍');
+	} else {
+		if (extrasList[skillExtra].apply(message, skill, rawargs)) message.react('👍');
+	}
 
 	return true;
 }

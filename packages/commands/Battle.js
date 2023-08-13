@@ -479,6 +479,7 @@ commands.startbattle = new Command({
 			if (!charFile[party.members[i]]) continue;
 
 			let char = objClone(charFile[party.members[i]]);
+			console.log(char.lb);
 
 			char.truename = party.members[i];
 			if (!char.name) char.name = party.members[i];
