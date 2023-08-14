@@ -104,31 +104,25 @@ genDmg = (char, targ, btl, skill) => {
 		damageformula = skill.extras.forceformula.toLowerCase();
 	}
 
-	if (skill.limitbreak) {
-		console.log(`Attack Stat: ${atkStat}, Endurance Stat: ${endStat}, Skill Pow: ${skill.pow}, Base Dmg: ${((skill.pow+(atkStat*2)-endStat)*2)}, Real Dmg: ${Math.round((((skill.pow+(atkStat*2)-endStat)*2) + Math.round(Math.random() * 30))/2)}`);
-		console.log(`Math.round((((${skill.pow}+(${atkStat*2})-${endStat})*2) + ${Math.round(Math.random() * 30)})/2)`);
-		return Math.round((((skill.pow+(atkStat*2)-endStat)*2) + Math.round(Math.random() * 30))/2);
-	} else {
-		let dmg = 0;
-		switch(damageformula) {
-			case 'persona':
-				dmg = Math.round(5 * Math.sqrt(def * skill.pow))+randNum(-7, 7);
-				console.log(`Attack Stat: ${atkStat}, Endurance Stat: ${endStat}, Skill Pow: ${skill.pow}, Base Dmg: ${Math.round(5 * Math.sqrt(def * skill.pow))}, Real Dmg: ${dmg}`);
-				break;
-			case 'pokemon':
-				dmg = Math.round((((2*char.level)/5+2)*skill.pow*def)/50+2)+randNum(-7, 7);
-				break;
-			case 'lamonka':
-				dmg = Math.ceil(((skill.pow+char.level)*(def/4)))*(0.95+(Math.random()/20));
-				break;
-			case 'beta':
-				dmg = randNum(char.level+35)+randNum(skill.pow/1.75)+randNum(-7, 7);
-				break;
-		}
-		
-		if (isNaN(dmg) || dmg <= 0) dmg = 1;
-		return dmg;
+	let dmg = 0;
+	switch(damageformula) {
+		case 'persona':
+			dmg = Math.round(5 * Math.sqrt(def * skill.pow))+randNum(-7, 7);
+			console.log(`Attack Stat: ${atkStat}, Endurance Stat: ${endStat}, Skill Pow: ${skill.pow}, Base Dmg: ${Math.round(5 * Math.sqrt(def * skill.pow))}, Real Dmg: ${dmg}`);
+			break;
+		case 'pokemon':
+			dmg = Math.round((((2*char.level)/5+2)*skill.pow*def)/50+2)+randNum(-7, 7);
+			break;
+		case 'lamonka':
+			dmg = Math.ceil(((skill.pow+char.level)*(def/4)))*(0.95+(Math.random()/20));
+			break;
+		case 'beta':
+			dmg = randNum(char.level+35)+randNum(skill.pow/1.75)+randNum(-7, 7);
+			break;
 	}
+	
+	if (isNaN(dmg) || dmg <= 0) dmg = 1;
+	return dmg;
 }
 
 // Get the affinity of an attack based on skill or status.
