@@ -215,7 +215,10 @@ class Shop {
 			else
 				partyitems[item] += 1
 		const armors = setUpFile(`${dataPath}/json/${i.message.guild.id}/armors.json`)
+
+		if (!this.party.armors) this.party.armors = {};
 		const partyarmors = this.party.armors
+
 		for (const armor of stuff.armors)
 			if (!partyarmors[armor])
 				partyarmors[armor] = armors[armor]
@@ -228,8 +231,12 @@ class Shop {
 				], [
 					makeButton('Back', '◀️', 'grey', null, "main")
 				])
+
 		const weapons = setUpFile(`${dataPath}/json/${i.message.guild.id}/weapons.json`)
+
+		if (!this.party.weapons) this.party.weapons = {};
 		const partyweapons = this.party.weapons
+
 		for (const weapon of stuff.weapons)
 			if (!partyweapons[weapon])
 				partyweapons[weapon] = weapons[weapon]
