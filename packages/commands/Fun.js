@@ -639,7 +639,32 @@ commands.dailyall = new Command({
 	}
 })
 
-// Achievements
+// User Data
+commands.getuserdata = new Command({
+	desc: "List all the achievements that I have to offer! Completed achievements will be crossed out.",
+	section: "fun",
+	func(message, args, guilded) {
+		let array = [];
+
+		let user = setUpUserData(message.author.id);
+		if (!user.vars) user.vars = {};
+		if (!user.achievements) user.achievements = [];
+
+		let totalAchievements = 0;
+		let doneAchievements = 0;
+		for (const i in bbAchievements) {
+			totalAchievements++;
+			if (user.achievements[i]) doneAchievements++;
+		}
+
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#006937')
+			.setTitle(`${message.author.username}'s User Data`)
+			.addFields({name: 'Stars', value: `${user.stars}<:golden:973077051751940138>`, inline: true}, {name: 'Achievements', value: `${doneAchievements}/${totalAchievements}`, inline: true})
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
 commands.listachievements = new Command({
 	desc: "List all the achievements that I have to offer! Completed achievements will be crossed out.",
 	section: "fun",

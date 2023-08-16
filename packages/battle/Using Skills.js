@@ -356,7 +356,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 						}
 
 						if (dodge) {
-							result.txt += `__${targ.name}__'s _${passive.name}_ allowed them to dodge __${char.name}__'s _${skill.name}_!`;
+							result.txt += `__${targ.name}__'s _${passive.name}_ allowed them to dodge __${char.name}__'s _${skill.name}_!\n`;
 							return result
 						}
 					} else if (passiveList[k] && passiveList[k].onaffinitycheck && !noRepel) {
