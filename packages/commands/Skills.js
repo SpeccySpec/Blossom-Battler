@@ -138,16 +138,16 @@ commands.registerskill = new Command({
 		skillFile[args[0]] = skillDefs;
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
-		if (Object.keys(skillFile).length == 4000) {
+		if (Object.keys(skillFile).length == 5000) {
 			var c = client.channels.cache.get('874697575746383953');
-			if (c) c.send(`**[NOTICE]**\n${message.author} is the one who registered the **4000th skill**, **${args[0]}**!\nThey will recieve 25<:golden:973077051751940138> as a prize!`);
+			if (c) c.send(`**[NOTICE]**\n${message.author} is the one who registered the **5000th skill**, **${args[0]}**!\nThey will recieve 50<:golden:973077051751940138> as a prize!`);
 
-			giveStars(message.author.id, 25);
+			giveStars(message.author.id, 50);
 
 			const DiscordEmbed = new Discord.MessageEmbed()
 				.setColor('#4b02c9')
-				.setTitle(`You obtained __25<:golden:973077051751940138>!__`)
-				.setDescription(`_You have registered the 4000th skill, ${args[0]}! How lucky!_`)
+				.setTitle(`You obtained __50<:golden:973077051751940138>!__`)
+				.setDescription(`_You have registered the 5000th skill, ${args[0]}! How lucky!_`)
 			user.send({embeds: [DiscordEmbed]});
 		}
 
