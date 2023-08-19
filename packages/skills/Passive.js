@@ -865,7 +865,11 @@ passiveList = {
 			}
 
 			if (args[14]) {
-				if (!applyExtra(message, counterSkill, args[14], args.slice(15))) {
+				if (['dualelement', 'rollout', 'need', 'charges', 'dreameater', 'forcemsg'].includes(args[14].toLowerCase())) {
+					return void message.channel.send(`The ${args[14]} extra may not be used with counters for technical reasons.`);
+				}
+
+				if (!applyExtra(message, counterSkill, args[14].toLowerCase(), args.slice(15))) {
 					return void message.channel.send("Something went wrong with applying this extra. See above... maybe? Pwease?");
 				}
 			}
