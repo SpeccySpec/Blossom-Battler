@@ -222,6 +222,7 @@ const menuStates = {
 
 			let canselect = true;
 
+			// Afford/Status Effects
 			if (!canAfford(char, skillinfo)) {
 				canselect = false;
 			} else if (char.status) {
@@ -238,6 +239,11 @@ const menuStates = {
 						if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'ranged') canselect = false;
 						break;
 				}
+			}
+
+			// Disable.
+			if (char.custom?.disable) {
+				if (char.custom.disable[0] == skillname) canselect = false;
 			}
 
 			comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
@@ -1677,6 +1683,7 @@ doAction = (char, btl, action) => {
 				useSkill(char, btl, action, skillFile[char.pet.skill] ?? skillFile.Agi);
 			} else {
 				useSkill(char, btl, action);
+				char.lastskill = action.index;
 			}
 
 			break;

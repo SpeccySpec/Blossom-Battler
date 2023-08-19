@@ -1780,6 +1780,25 @@ statusList = {
 			return '*Has a custom message.*';
 		}
 	}),
+
+	disable: new Extra({
+		name: "Disable (Pokémon)",
+		desc: "The target is unnable to use their last move.",
+		args: [],
+		applyfunc(message, skill, args) {
+			makeStatus(skill, "disable", [true]);
+			return true;
+		},
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			if (!targ.lastskill) return "...But it failed!";
+
+			addCusVal(targ, 'disable', [targ.lastskill, 5]);
+			return `__${targ.name}__ has been disabled from using ${skillFile[targ.lastskill].name}!`;
+		},
+		getinfo(vars, skill) {
+			return "Target **disabled** from using last skill."
+		}
+	}),
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.
@@ -2111,7 +2130,7 @@ statusEffectFuncs = {
 			
 			let usableskills = [];
 			for (let i in char.skills) {
-				if (canUseSkill(char, skillFile[char.skills[i]])) usableskills.push(char.skills[i]);
+				if (canUseSkill(char, skillFile[char.skills[i]], char.skills[i])) usableskills.push(char.skills[i]);
 			}
 			
 			if (usableskills.length <= 0) {

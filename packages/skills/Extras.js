@@ -2962,4 +2962,17 @@ customVariables = {
 			return txt;
 		}
 	},
+
+	disable: {
+		onturn(btl, char, v) {
+			if (char.custom?.disable) {
+				char.custom.disable[1]--;
+				if (char.custom.disable[1] <= 0) {
+					let txt = `${char.name} is now able to use ${skillFile[char.custom.disable[0]].name}!`;
+					killVar(char, "disable");
+					return txt;
+				}
+			}
+		}
+	},
 }

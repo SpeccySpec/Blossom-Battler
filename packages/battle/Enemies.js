@@ -72,7 +72,7 @@ function legacyAi(char, btl) {
 	let possibleSkills = [];
 	for (let skill of char.skills) {
 		let skillDefs = skillFile[skill];
-		if (canUseSkill(char, skillFile[skill])) possibleSkills.push(skill);
+		if (canUseSkill(char, skillFile[skill], skill)) possibleSkills.push(skill);
 	}
 
 	let allySide = btl.teams[char.team].members;
@@ -238,7 +238,7 @@ enemyThinker = (char, btl) => {
 
 						// If we can't use this skill, don't bother check for it.
 						if (!skill.melee) {
-							if (!canUseSkill(char, skill)) continue;
+							if (!canUseSkill(char, skill, j)) continue;
 						}
 
 						// This is the action we're going to use.
@@ -472,7 +472,7 @@ enemyThinker = (char, btl) => {
 
 						// If we can't use this skill, don't bother check for it.
 						if (!skill.melee) {
-							if (!canUseSkill(char, skill)) continue;
+							if (!canUseSkill(char, skill, j)) continue;
 						}
 
 						// This is the action we're going to use.
@@ -716,7 +716,7 @@ enemyThinker = (char, btl) => {
 
 						// If we can't use this skill, don't bother check for it.
 						if (!skill.melee) {
-							if (!canUseSkill(char, skill)) continue;
+							if (!canUseSkill(char, skill, j)) continue;
 						}
 
 						// This is the action we're going to use.
@@ -886,7 +886,7 @@ enemyThinker = (char, btl) => {
 
 					// Can we actually use this skill?
 					let loops = 0;
-					while (!canUseSkill(char, skillFile[skill]) && willNotDieFromSkill(char, skillFile[skill]) && loops < 10) {
+					while (!canUseSkill(char, skillFile[skill], skill) && willNotDieFromSkill(char, skillFile[skill]) && loops < 10) {
 						skill = char.skills[randNum(char.skills.length-1)];
 						loops++;
 					}

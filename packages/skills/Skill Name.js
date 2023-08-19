@@ -70,7 +70,7 @@ canAfford = (char, skill) => {
 }
 
 // Can we use this skill?
-canUseSkill = (char, skill) => {
+canUseSkill = (char, skill, skillid) => {
 	if (!skill) return false;
 	if (!skill.type) return false;
 
@@ -92,6 +92,11 @@ canUseSkill = (char, skill) => {
 				if (skill.type === "heal") return false;
 				break;
 		}
+	}
+
+	// Disable.
+	if (char.custom?.disable) {
+		if (char.custom.disable[0] == skillid) return false;
 	}
 
 	return canAfford(char, skill);
