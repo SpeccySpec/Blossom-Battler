@@ -148,7 +148,7 @@ commands.registerskill = new Command({
 				.setColor('#4b02c9')
 				.setTitle(`You obtained __50<:golden:973077051751940138>!__`)
 				.setDescription(`_You have registered the 5000th skill, ${args[0]}! How lucky!_`)
-			user.send({embeds: [DiscordEmbed]});
+			message.author.send({embeds: [DiscordEmbed]});
 		}
 
 		skillFuncs.skillDesc(skillDefs, skillDefs.name, message, `${skillDefs.name} has been registered:`)
