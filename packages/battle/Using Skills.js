@@ -100,6 +100,7 @@ genDmg = (char, targ, btl, skill) => {
 	
 	let formulas = ['persona', 'pokemon', 'lamonka', 'beta'];
 	let damageformula = settings.formulas.damageFormula ?? 'persona';
+
 	if (skill.extras && skill.extras.forceformula && formulas.includes(skill.extras.forceformula.toLowerCase())) {
 		damageformula = skill.extras.forceformula.toLowerCase();
 	}
