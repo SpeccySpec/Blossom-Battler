@@ -12,15 +12,19 @@ getTurnOrder = (btl) => {
 		for (const k in btl.teams[i].members) {
 			let f = btl.teams[i].members[k];
 
-			turnorder.push(objClone(f));
-			if (f.type && (f.type.includes('boss') || f.type.includes('deity'))) turnorder.push(objClone(f));
+			if ((f.reincarnate || f.clone) && f.hp <= 0) {
+				turnorder.push(objClone(f));
+				if (f.type && (f.type.includes('boss') || f.type.includes('deity'))) turnorder.push(objClone(f));
+			}
 		}
 
 		for (const k in btl.teams[i].backup) {
 			let f = btl.teams[i].backup[k];
 
-			turnorder.push(objClone(f));
-			if (f.type && (f.type.includes('boss') || f.type.includes('deity'))) turnorder.push(objClone(f));
+			if ((f.reincarnate || f.clone) && f.hp <= 0) {
+				turnorder.push(objClone(f));
+				if (f.type && (f.type.includes('boss') || f.type.includes('deity'))) turnorder.push(objClone(f));
+			}
 		}
 	}
 
