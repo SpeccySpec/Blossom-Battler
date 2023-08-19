@@ -865,7 +865,7 @@ passiveList = {
 			}
 
 			if (args[14]) {
-				if (['rollout', 'need', 'charges', 'dreameater', 'forcemsg'].includes(args[14].toLowerCase())) {
+				if (['need', 'charges', 'forcemsg', 'rest'].includes(args[14].toLowerCase())) {
 					return void message.channel.send(`The ${args[14]} extra may not be used with counters for technical reasons.`);
 				}
 
