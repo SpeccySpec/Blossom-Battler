@@ -107,17 +107,17 @@ genDmg = (char, targ, btl, skill) => {
 	let dmg = 0;
 	switch(damageformula) {
 		case 'persona':
-			dmg = Math.round(5 * Math.sqrt(def * skill.pow))+randNum(-7, 7);
+			dmg = Math.round(5 * Math.sqrt(def * Math.abs(skill.pow)))+randNum(-10, 10);
 			console.log(`Attack Stat: ${atkStat}, Endurance Stat: ${endStat}, Skill Pow: ${skill.pow}, Base Dmg: ${Math.round(5 * Math.sqrt(def * skill.pow))}, Real Dmg: ${dmg}`);
 			break;
 		case 'pokemon':
-			dmg = Math.round((((2*char.level)/5+2)*skill.pow*def)/50+2)+randNum(-7, 7);
+			dmg = Math.round((((2*char.level)/5+2)*Math.abs(skill.pow)*def)/50+2)+randNum(-10, 10);
 			break;
 		case 'lamonka':
 			dmg = Math.ceil(((skill.pow+char.level)*(def/4)))*(0.95+(Math.random()/20));
 			break;
 		case 'beta':
-			dmg = randNum(char.level+35)+randNum(skill.pow/1.75)+randNum(-7, 7);
+			dmg = randNum(char.level+35)+randNum(skill.pow/1.75)+randNum(-10, 10);
 			break;
 	}
 	
