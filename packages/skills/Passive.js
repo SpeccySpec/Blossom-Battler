@@ -784,6 +784,15 @@ passiveList = {
 			{
 				name: "Cost Type",
 				type: "Word"
+			},
+			{
+				name: "Attack Extra",
+				type: "Word"
+			},
+			{
+				name: "Variable #1, Variable #2 ...",
+				multiple: true,
+				type: "Word"
 			}
 		],
 		applyfunc(message, skill, args) {
@@ -826,6 +835,23 @@ passiveList = {
 				return void message.channel.send(`${targets} is an invalid target!\n` + 'Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n- SpreadOpposing\n- SpreadAllies```')
 			if (!costTypeNames[costtype])
 				return void message.channel.send(`${costtype} is not a valid cost type!`)
+
+			let counterSkill = {
+				name: counterName,
+				cost: cost,
+				costtype: costtype,
+				pow: power,
+				acc: accuracy,
+				crit: critChance,
+				type: element,
+				atktype: atype,
+				target: targets,
+				hits: hits,
+				extras: {
+					affinitypow: [5]
+				}
+			}
+
 			if (status != 'none') {
 				if (!utilityFuncs.inArray(status, statusEffects)) {
 					let str = `${status} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
@@ -834,40 +860,17 @@ passiveList = {
 	
 					return void message.channel.send(str)
 				}
-				makePassive(skill, "counter", [physmag, chance, {
-					name: counterName,
-					cost: cost,
-					costtype: costtype,
-					pow: power,
-					acc: accuracy,
-					crit: critChance,
-					type: element,
-					atktype: atype,
-					target: targets,
-					hits: hits,
-					extras: {
-						affinitypow: [5]
-					},
-					status: status,
-					statuschance: statusChance
-				}]);
-			} else {
-				makePassive(skill, "counter", [physmag, chance, {
-					name: counterName,
-					cost: cost,
-					costtype: costtype,
-					pow: power,
-					acc: accuracy,
-					crit: critChance,
-					type: element,
-					atktype: atype,
-					target: targets,
-					hits: hits,
-					extras: {
-						affinitypow: [5]
-					}
-				}]);
+				counterSkill.status = status;
+				counterSkill.statuschance = statusChance;
 			}
+
+			if (args[14]) {
+				if (!applyExtra(message, counterSkill, args[14], args.slice(15))) {
+					return void message.channel.send("Something went wrong with applying this extra. See above... maybe? Pwease?");
+				}
+			}
+
+			makePassive(skill, "counter", [physmag, chance, counterSkill]);
 			return true;
 		},
 		onaffinitycheck(char, inf, skill, passive, affinity, btl, vars, result) {
