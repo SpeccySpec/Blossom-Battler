@@ -138,6 +138,7 @@ commands.registerskill = new Command({
 		skillFile[args[0]] = skillDefs;
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
+		console.log(Object.keys(skillFile).length);
 		if (Object.keys(skillFile).length == 5000) {
 			var c = client.channels.cache.get('874697575746383953');
 			if (c) c.send(`**[NOTICE]**\n${message.author} is the one who registered the **5000th skill**, **${args[0]}**!\nThey will recieve 50<:golden:973077051751940138> as a prize!`);
@@ -206,6 +207,19 @@ commands.registerstatus = new Command({
 		skillFile[args[0]] = skill;
 		if (args[4].toLowerCase != 'none') skillFile[args[0]].desc = args[4];
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+
+		if (Object.keys(skillFile).length == 5000) {
+			var c = client.channels.cache.get('874697575746383953');
+			if (c) c.send(`**[NOTICE]**\n${message.author} is the one who registered the **5000th skill**, **${args[0]}**!\nThey will recieve 50<:golden:973077051751940138> as a prize!`);
+
+			giveStars(message.author.id, 50);
+
+			const DiscordEmbed = new Discord.MessageEmbed()
+				.setColor('#4b02c9')
+				.setTitle(`You obtained __50<:golden:973077051751940138>!__`)
+				.setDescription(`_You have registered the 5000th skill, ${args[0]}! How lucky!_`)
+			message.author.send({embeds: [DiscordEmbed]});
+		}
 		
 		skillFuncs.skillDesc(skill, skill.name, message, `${skill.name} has been registered:`)
 	}
@@ -263,6 +277,19 @@ commands.registerheal = new Command({
 		if (args[4].toLowerCase != 'none') skillFile[args[0]].desc = args[4];
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
+		if (Object.keys(skillFile).length == 5000) {
+			var c = client.channels.cache.get('874697575746383953');
+			if (c) c.send(`**[NOTICE]**\n${message.author} is the one who registered the **5000th skill**, **${args[0]}**!\nThey will recieve 50<:golden:973077051751940138> as a prize!`);
+
+			giveStars(message.author.id, 50);
+
+			const DiscordEmbed = new Discord.MessageEmbed()
+				.setColor('#4b02c9')
+				.setTitle(`You obtained __50<:golden:973077051751940138>!__`)
+				.setDescription(`_You have registered the 5000th skill, ${args[0]}! How lucky!_`)
+			message.author.send({embeds: [DiscordEmbed]});
+		}
+
 		skillFuncs.skillDesc(skill, skill.name, message, `${skill.name} has been registered:`)
 	}
 })
@@ -303,6 +330,19 @@ commands.registerpassive = new Command({
 		skillFile[args[0]] = skill;
 		if (args[1].toLowerCase != 'none') skillFile[args[0]].desc = args[1];
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+
+		if (Object.keys(skillFile).length == 5000) {
+			var c = client.channels.cache.get('874697575746383953');
+			if (c) c.send(`**[NOTICE]**\n${message.author} is the one who registered the **5000th skill**, **${args[0]}**!\nThey will recieve 50<:golden:973077051751940138> as a prize!`);
+
+			giveStars(message.author.id, 50);
+
+			const DiscordEmbed = new Discord.MessageEmbed()
+				.setColor('#4b02c9')
+				.setTitle(`You obtained __50<:golden:973077051751940138>!__`)
+				.setDescription(`_You have registered the 5000th skill, ${args[0]}! How lucky!_`)
+			message.author.send({embeds: [DiscordEmbed]});
+		}
 
 		skillFuncs.skillDesc(skill, skill.name, message, `${skill.name} has been registered:`)
 	}
