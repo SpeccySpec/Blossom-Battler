@@ -925,7 +925,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 				// Limit Breaks
 				if (settings.mechanics.limitbreaks && !skill.limitbreak && !skill.teamcombo) {
 					if (!char.lbp) char.lbp = 0;
-					char.lbp += truncNum(total/(skill.hits*((skill.target === 'one' || skill.target === 'ally') ? 2 : 8)), 2)
+					char.lbp += truncNum(total/(skill.hits*((skill.target === 'one' || skill.target === 'ally') ? 8 : 64)), 2)
 				}
 
 				// Full Combo!
