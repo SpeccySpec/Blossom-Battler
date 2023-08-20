@@ -1816,7 +1816,7 @@ statusList = {
 			return `__${targ.name}__ has been disabled from using ${skillFile[targ.lastskill].name}!`;
 		},
 		getinfo(vars, skill) {
-			return "Target **disabled** from using last skill."
+			return "Target **disabled** from using last skill"
 		}
 	}),
 }
