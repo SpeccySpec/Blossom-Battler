@@ -1727,7 +1727,7 @@ statusList = {
 			makeStatus(skill, "simplebeam", [skillName, turns, target]);
 			return true;
 		},
-		onuse(char, targ, skill, btl, vars, multiplier) {
+		onselect(char, skill, btl, vars, multiplier) {
 			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
 
 			if (vars[2] && vars[2] === 'user') {
@@ -1741,7 +1741,14 @@ statusList = {
 					char.custom.simplebeam.push([skillnum, vars[1]+1, getFullName(skillFile[vars[0]])]);
 					str += `, for _**${vars[1]}** turns_`;
 				}
-			} else {
+			}
+
+			return `${str}!`;
+		},
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+
+			if (!vars[2] || vars[2] != 'user') {
 				let skillnum = targ.skills.length;
 				targ.skills.push(vars[0]);
 
