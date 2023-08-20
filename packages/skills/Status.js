@@ -1708,37 +1708,57 @@ statusList = {
 			{
 				name: "Turns",
 				type: "Num"
+			},
+			{
+				name: "User/Target",
+				type: "Word"
 			}
 		],
 		applyfunc(message, skill, args) {
 			let skillName = args[0];
 			let turns = args[1] ?? 0;
+			let target = args[2].toLowerCase() ?? 'target';
 
 			if (!skillFile[skillName]) return void message.channel.send(`${skillName} is not a valid skill!`);
 			if (skillFile[skillName] == skill) return void message.channel.send("You can't use this skill.");
 			if (skillFile[skillName].statusses?.simplebeam) return void message.channel.send("You can't use this skill.");
+			if (target != 'user' && target != 'target') return void message.channel.send("<User/Target> must either be set to 'User' or 'Target'.");
 
-			makeStatus(skill, "simplebeam", [skillName, turns]);
+			makeStatus(skill, "simplebeam", [skillName, turns, target]);
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
 			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
-			let skillnum = targ.skills.length;
-			targ.skills.push(vars[0]);
 
-			let str = `__${targ.name}__ has been given _${getFullName(skillFile[vars[0]])}_`;
+			if (vars[2] && vars[2] === 'user') {
+				let skillnum = char.skills.length;
+				char.skills.push(vars[0]);
 
-			if (vars[1] > 0) {
-				if (!targ.custom?.simplebeam) addCusVal(targ, "simplebeam", []);
-				targ.custom.simplebeam.push([skillnum, vars[1]+1, getFullName(skillFile[vars[0]])]);
-				str += `, for _**${vars[1]}** turns_`;
+				let str = `__${char.name}__ has been given _${getFullName(skillFile[vars[0]])}_`;
+
+				if (vars[1] > 0) {
+					if (!char.custom?.simplebeam) addCusVal(char, "simplebeam", []);
+					char.custom.simplebeam.push([skillnum, vars[1]+1, getFullName(skillFile[vars[0]])]);
+					str += `, for _**${vars[1]}** turns_`;
+				}
+			} else {
+				let skillnum = targ.skills.length;
+				targ.skills.push(vars[0]);
+
+				let str = `__${targ.name}__ has been given _${getFullName(skillFile[vars[0]])}_`;
+
+				if (vars[1] > 0) {
+					if (!targ.custom?.simplebeam) addCusVal(targ, "simplebeam", []);
+					targ.custom.simplebeam.push([skillnum, vars[1]+1, getFullName(skillFile[vars[0]])]);
+					str += `, for _**${vars[1]}** turns_`;
+				}
 			}
 
 			return `${str}!`;
 		},
 		getinfo(vars, skill) {
 			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
-			let str = `Gives the __target__ a skill called **_${getFullName(skillFile[vars[0]])}_**`;
+			let str = `Gives the __${vars[2] ?? "target"}__ a skill called **_${getFullName(skillFile[vars[0]])}_**`;
 
 			if (vars[1] > 0) str += ` for **${vars[1]} turns**`;
 

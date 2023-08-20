@@ -2250,6 +2250,33 @@ extrasList = {
 			return '*Has a custom message.*';
 		}
 	}),
+
+	dekaja: new Extra({
+		name: "Dekaja",
+		desc: "Removes the target's positive buffs.",
+		args: [],
+		applyfunc(message, skill, args) {
+			makeStatus(skill, "dekaja", [true]);
+			return true;
+		},
+		onuse(char, targ, skill, btl, vars) {
+			for (let i in targ.buffs) {
+				if (targ.buffs[i] > 0) targ.buffs[i] = 0;
+			}
+			if(targ?.custom?.buffTurns) {
+				for (i in targ.custom.buffTurns) {
+					if (targ.custom.buffTurns[i][1] >= 0) targ.custom.buffTurns[i] = ''
+				}
+				targ.custom.buffTurns = targ.custom.buffTurns.filter(x => x.length != 0);
+
+				if (targ.custom.buffTurns.length == 0) {
+					killVar(targ, "buffTurns");
+				}
+			}
+
+			return `__${targ.name}__'s positive buffs were nullified$!`;
+		},
+	})
 }
 
 // Make an Extra for a skill. "func" should be an array of 1-5 values indicating what the extra does.
