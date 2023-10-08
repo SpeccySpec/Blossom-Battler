@@ -936,3 +936,66 @@ commands.reloadfile = new Command({
 		})
 	}
 })
+
+// Export a file.
+commands.exportfile = new Command({
+	desc: "Exports a file.",
+	aliases: ['exportafile', 'realexportfile', 'exportdata'],
+	section: "moderation",
+	args: [
+		{
+			name: 'File Name',
+			type: 'Word',
+			forced: true
+		},
+	],
+	checkban: true,
+	func: async(message, args) => {
+		// Firstly, make sure if this file should be legal.
+		let files = ["armors.json", "characters.json", "chests.json", "enemies.json", "items.json", "shops.json"];
+		if (!files.includes(args[0].toLowerCase())) return void message.channel.send("That file either does not exist or is illegal.");
+
+		// Upload content.
+		message.channel.send({content: `Here is the data you requested!`, files: [`${dataPath}/json/${message.guild.id}/${args[0]}`]});
+	}
+})
+
+const downloadFile = (async(url, destfolder, filename) => {
+	const res = await fetch(url);
+	if (!fs.existsSync(destfolder)) await fs.mkdir(destfolder);
+
+	const destination = paths.resolve(destfolder, filename);
+	const fileStream = fs.createWriteStream(destination, { flags: 'w' });
+	await streamP.finished(stream.Readable.fromWeb(res.body).pipe(fileStream));
+});
+
+commands.importfile = new Command({
+	desc: "[SUPERADMIN ONLY]",
+	aliases: ['importenemyfile', 'realimportenemy'],
+	section: "moderation",
+	args: [
+		{
+			name: 'File Name',
+			type: 'Word',
+			forced: true
+		},
+	],
+	checkban: true,
+	func: async(message, args) => {
+		if (!utilityFuncs.RPGBotAdmin(message.author.id)) return void message.channel.send("Only a super admin can use this.");
+
+		// Firstly, make sure if this file should be legal.
+		let files = ["armors.json", "characters.json", "chests.json", "enemies.json", "items.json", "shops.json"];
+		if (!files.includes(args[0].toLowerCase())) return void message.channel.send("That file either does not exist or is illegal.");
+
+		// get the file's URL
+		const file = message.attachments.first()?.url;
+		if (!file) return message.channel.send('There is no file here!');
+
+		// Download the file.
+		await downloadFile(message.attachments.first().url, `./data/json/${message.guild.id}/`, args[0]);
+
+		// Send a confirmation message.
+		message.channel.send({content: `Uploaded this file to the server data as ${args[0]}.`});
+	}
+})

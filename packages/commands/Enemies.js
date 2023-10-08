@@ -1710,33 +1710,3 @@ commands.removepet = new Command({
 		message.channel.send(`${curPet} steps back from the spot of group pet.`)
 	}
 })
-
-commands.exportenemies = new Command({
-	desc: "Exports an enemy file... for what use? I'm not sure.",
-	aliases: ['exportenemyfile', 'realexportenemy'],
-	section: "enemies",
-	args: [],
-	checkban: true,
-	func: async(message, args) => {
-		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
-		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
-		message.channel.send({content: `Here is the enemy data you requested!`, files: [`${dataPath}/json/${message.guild.id}/enemies.json`]});
-	}
-})
-
-commands.importenemies = new Command({
-	desc: "[SUPERADMIN ONLY]",
-	aliases: ['importenemyfile', 'realimportenemy'],
-	section: "enemies",
-	args: [],
-	checkban: true,
-	func: async(message, args) => {
-		if (!utilityFuncs.RPGBotAdmin(message.author.id)) return void message.channel.send("Only a super admin can use this.")
-
-		// get the file's URL
-		const file = message.attachments.first()?.url;
-		if (!file) return message.channel.send('There is no file here!');
-
-		message.channel.send({content: `${message.attachments.first().url} is your url... but nothing has happened!`});
-	}
-})

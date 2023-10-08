@@ -42,9 +42,14 @@ Canvas = require('canvas');
 
 //FS, for writing files.
 fs = require('fs');
+fsP = require("fs/promises");
 
-//Request, for requesting files
+// File modules.
 request = require('request');
+nodeFetch = require('node-fetch');
+stream = require('stream');
+streamP = require('stream/promises');
+paths = require("path");
 
 //hatebin, for converting long walls of text into links
 hastebin = require('hastebin-gen');
