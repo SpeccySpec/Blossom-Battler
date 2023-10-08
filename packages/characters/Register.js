@@ -193,7 +193,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 		dispLevel = `(At Level ${level})`;
 	}
 
-	const userTxt = useguild
+	let userTxt = useguild
 		? getServerUserFromGuild(char.owner, message)
 		: getServerUser(char.owner, message);
 
