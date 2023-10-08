@@ -484,6 +484,11 @@ commands.startbattle = new Command({
 			char.truename = party.members[i];
 			if (!char.name) char.name = party.members[i];
 
+			if (charFile[party.members[i]].ai) {
+				char.automove = true;
+				char.memory = {};
+			}
+
 			char.id = battleid;
 			battleid++;
 
@@ -503,6 +508,11 @@ commands.startbattle = new Command({
 
 			let char = objClone(charFile[party.backup[i]]);
 			if (!char.name) char.name = party.backup[i];
+
+			if (charFile[party.backup[i]].ai) {
+				char.automove = true;
+				char.memory = {};
+			}
 
 			char.truename = party.backup[i];
 			char.id = battleid;
@@ -1260,6 +1270,11 @@ commands.testbattle = new Command({
 			char.truename = party.members[i];
 			if (!char.name) char.name = party.members[i];
 
+			if (charFile[party.members[i]].ai) {
+				char.automove = true;
+				char.memory = {};
+			}
+
 			char.id = battleid;
 			battleid++;
 
@@ -1279,6 +1294,11 @@ commands.testbattle = new Command({
 
 			let char = objClone(charFile[party.backup[i]]);
 			if (!char.name) char.name = party.backup[i];
+
+			if (charFile[party.backup[i]].ai) {
+				char.automove = true;
+				char.memory = {};
+			}
 
 			char.truename = party.backup[i];
 			char.id = battleid;
