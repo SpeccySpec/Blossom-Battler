@@ -197,6 +197,8 @@ longDescription = (charDefs, level, server, message, useguild) => {
 		? getServerUserFromGuild(char.owner, message)
 		: getServerUser(char.owner, message);
 
+	if (char.ai) userTxt = "Automated";
+
 	let tick = verifiedChar(char) ? '<:tick:973077052372701294>' : '';
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(!char.type ? elementColors[char.mainElement] : enemyTypeColors[char.type])
