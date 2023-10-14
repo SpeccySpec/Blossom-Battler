@@ -128,7 +128,7 @@ commands.journal = new Command({
 	func(message, args, guilded) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid enemy name! Please enter an actual name.');
 
-		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`, true);
 		if (!enemyFile[args[0]]) return message.channel.send('Nonexistant Enemy.');
 
 		if (!foundEnemy(args[0], message.guild.id)) {
