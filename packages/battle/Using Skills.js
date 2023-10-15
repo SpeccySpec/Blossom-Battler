@@ -430,6 +430,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 			}
 		}
 
+		if (isTech(targ, skill.type) && (affinity == "block" || affinity == "repel" || affinity == "drain")) {
+			affinity = "normal";
+		}
+
 		// noRepel used here to change repelled attacks into a block.
 		if (affinity == 'block' || (affinity == 'repel' && noRepel)) {
 			result.txt += `${targ.name} blocked it!\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'block', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
