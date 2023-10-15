@@ -501,7 +501,7 @@ function GetCharStatus(char) {
 
 function GetCharName(char) {
 	let str = char.name;
-	if (char.transformed) str = `${elementEmoji[char.transformations[char.transformed].mainElement]}**__${char.name}__**`;
+	if (char.transformed) str = `${elementEmoji[char.transformations[char.transformed].mainElement ?? "spirit"]}**__${char.name}__**`;
 
 	return str;
 }
@@ -1908,6 +1908,14 @@ doTurn = async(btl, noTurnEmbed) => {
 	
 	// Skip this turn if we're dead or pacified or in backup
 	if (char == "backup" || char.hp <= 0 || char.pacified) return advanceTurn(btl);
+
+	// IsNan?
+	let charFile = setUpFile(`${dataPath}/json/${btl.guild.id}/characters.json`, true);
+
+	if (isNaN(char.hp) && charFile[char.truename]) char.hp = charFile[char.truename].hp;
+	if (isNaN(char.mp) && charFile[char.truename]) char.mp = charFile[char.truename].mp;
+	if (isNaN(char.maxhp) && charFile[char.truename]) char.maxhp = charFile[char.truename].maxhp;
+	if (isNaN(char.maxmp) && charFile[char.truename]) char.maxmp = charFile[char.truename].maxmp;
 
 	// a
 	let statusTxt = '';

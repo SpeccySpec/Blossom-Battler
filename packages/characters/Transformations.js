@@ -213,10 +213,10 @@ doTransformation = (char, tname, btl) => {
 		if (char.transformations[tname][s]) {
 			char[s] = char.transformations[tname][s];
 		} else {
-			if (s === "maxhp") {
+			if (s === "maxhp" && char.transformations[tname].hp) {
 				char.hp += char.transformations[tname].hp;
 				char.maxhp += char.transformations[tname].hp;
-			} else if (s === "maxmp") {
+			} else if (s === "maxmp" && char.transformations[tname].mp) {
 				char.mp += char.transformations[tname].mp;
 				char.maxmp += char.transformations[tname].mp;
 			}
@@ -226,7 +226,7 @@ doTransformation = (char, tname, btl) => {
 	char.custom.revert[1].mainElement = char.mainElement;
 
 	if (char.transformations[tname].skill) char.skills.push(char.transformations[tname].skill);
-	if (char.transformations[tname].mainElement != char.mainElement) char.mainElement = [char.mainElement, char.transformations[tname].mainElement];
+	if (char.transformations[tname].mainElement && char.transformations[tname].mainElement != char.mainElement) char.mainElement = [char.mainElement, char.transformations[tname].mainElement];
 
 	char.transformed = tname;
 	char.notransform = true;
