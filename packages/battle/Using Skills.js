@@ -430,7 +430,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 			}
 		}
 
-		if (isTech(targ, skill.type) && (affinity == "block" || affinity == "repel" || affinity == "drain")) {
+		if (isTech(targ, skill.type) && (affinity == "block" || affinity == "repel" || affinity == "drain" || affinity == "resist")) {
 			affinity = "normal";
 		}
 
