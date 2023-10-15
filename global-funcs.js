@@ -886,6 +886,10 @@ getCurrentDate = () => {
 	return today
 }
 
+badVal = (val) => {
+	return (isNaN(val) || val == null || val == undefined);
+}
+
 //////////////
 // COMMANDS //
 //////////////

@@ -1912,10 +1912,10 @@ doTurn = async(btl, noTurnEmbed) => {
 	// IsNan?
 	let charFile = setUpFile(`${dataPath}/json/${btl.guild.id}/characters.json`, true);
 
-	if (isNaN(char.hp) && charFile[char.truename]) char.hp = charFile[char.truename].hp;
-	if (isNaN(char.mp) && charFile[char.truename]) char.mp = charFile[char.truename].mp;
-	if (isNaN(char.maxhp) && charFile[char.truename]) char.maxhp = charFile[char.truename].maxhp;
-	if (isNaN(char.maxmp) && charFile[char.truename]) char.maxmp = charFile[char.truename].maxmp;
+	if (badVal(char.hp) && charFile[char.truename]) char.hp = charFile[char.truename].hp;
+	if (badVal(char.mp) && charFile[char.truename]) char.mp = charFile[char.truename].mp;
+	if (badVal(char.maxhp) && charFile[char.truename]) char.maxhp = charFile[char.truename].maxhp;
+	if (badVal(char.maxmp) && charFile[char.truename]) char.maxmp = charFile[char.truename].maxmp;
 
 	// a
 	let statusTxt = '';
