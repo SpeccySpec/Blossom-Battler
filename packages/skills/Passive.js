@@ -1781,8 +1781,8 @@ passiveList = {
 			return true
 		},
 		onkill(char, targ, skill, dmg, passive, btl, vars) {
-			buffStat(char, vars[0].toLowerCase(), vars[1]);
-			return `Defeating __${targ.name}__ let __${char.name}'s__ _${passive.name}_ ${vars[1] > 0 ? 'buff' : 'debuff'} **${vars[0].toUpperCase()} ${Math.abs(vars[1])} times**.`;
+			buffStat(char, (vars[0] ?? "atk").toLowerCase(), (vars[1] ?? 1));
+			return `Defeating __${targ.name}__ let __${char.name}'s__ _${passive.name}_ ${(vars[1] ?? 1) > 0 ? 'buff' : 'debuff'} **${(vars[0] ?? "atk").toUpperCase()} ${Math.abs(vars[1] ?? 1)} times**.`;
 		},
 		getinfo(vars, skill) {
 			let str = 'Upon foe defeat, **boosts user '
