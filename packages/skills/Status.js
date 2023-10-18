@@ -1729,12 +1729,13 @@ statusList = {
 		},
 		onselect(char, skill, btl, vars, multiplier) {
 			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+			let str = "";
 
 			if (vars[2] && vars[2] === 'user') {
 				let skillnum = char.skills.length;
 				char.skills.push(vars[0]);
 
-				let str = `__${char.name}__ has been given _${getFullName(skillFile[vars[0]])}_`;
+				str = `__${char.name}__ has been given _${getFullName(skillFile[vars[0]])}_`;
 
 				if (vars[1] > 0) {
 					if (!char.custom?.simplebeam) addCusVal(char, "simplebeam", []);
@@ -1747,12 +1748,13 @@ statusList = {
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
 			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+			let str = "";
 
 			if (!vars[2] || vars[2] != 'user') {
 				let skillnum = targ.skills.length;
 				targ.skills.push(vars[0]);
 
-				let str = `__${targ.name}__ has been given _${getFullName(skillFile[vars[0]])}_`;
+				str = `__${targ.name}__ has been given _${getFullName(skillFile[vars[0]])}_`;
 
 				if (vars[1] > 0) {
 					if (!targ.custom?.simplebeam) addCusVal(targ, "simplebeam", []);
