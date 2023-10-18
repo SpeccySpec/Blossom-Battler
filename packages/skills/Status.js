@@ -1949,7 +1949,7 @@ statusEffectFuncs = {
 				affinityTxt = affinityEmoji.resist;
 			}
 
-			char.hp = Math.max(1, char.hp-dmg);
+			char.hp = Math.max(1, char.hp-Math.round(dmg));
 			
 			return `${char.name} took ${dmg}${affinityTxt} damage from their burns!`
 		},

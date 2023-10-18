@@ -161,7 +161,7 @@ extrasList = {
 					if (hasFailed && statusOHKO.length > 0 && (statusOHKO.includes(targ.status) || (statusOHKO.includes('infatuation') && targ.infatuation) || (statusOHKO.includes('confusion') && targ.confusion))) hasFailed = false
 					if (hasFailed && affinityOHKO.length > 0 && affinityOHKO.includes(affinity)) hasFailed = false
 
-					if (hasFailed) return !failDamage ? dodgeTxt(targ, char) : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
+					if (hasFailed) return !failDamage ? dodgeTxt(char, targ) : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
 				}
 			}
 
@@ -173,7 +173,7 @@ extrasList = {
 				targ.hp = 0;
 				return `__${char.name}__ instantly KO'd __${targ.name}__!\n${selectQuote(char, 'kill', null, '%ENEMY%', targ.name, '%SKILL%', skill.name)}${selectQuote(targ, 'death', null, '%ENEMY%', char.name, '%SKILL%', skill.name)}`;
 			} else {
-				return !failDamage ? dodgeTxt(targ, char) : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
+				return !failDamage ? dodgeTxt(char, targ) : extrasList.ohko.attackSkill(char, targ, skill, result, btl);
 			}
 		},
 		hardcodedinfo: true
