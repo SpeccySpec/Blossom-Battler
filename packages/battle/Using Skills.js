@@ -903,7 +903,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 								if (passiveList[k] && passiveList[k].onkill) {
 									if (noExtraArray && noExtraArray.includes(i)) continue;
 
-									if (passiveList[i].multiple) {
+									if (passiveList[k].multiple) {
 										for (let j in psv.passive[k]) {
 											result.txt += `\n${passiveList[k].onkill(char, targ, skill, total, psv, btl, psv.passive[k][j])}`;
 										}
