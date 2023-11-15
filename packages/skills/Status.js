@@ -1739,7 +1739,7 @@ statusList = {
 		applyfunc(message, skill, args) {
 			let skillName = args[0];
 			let turns = args[1] ?? 0;
-			let target = args[2].toLowerCase() ?? 'target';
+			let target = args[2] ? args[2].toLowerCase() : 'target';
 
 			if (!skillFile[skillName]) return void message.channel.send(`${skillName} is not a valid skill!`);
 			if (skillFile[skillName] == skill) return void message.channel.send("You can't use this skill.");
