@@ -2100,7 +2100,6 @@ commands.clearlb = new Command({
 	}
 })
 
-
 commands.changestats = new Command({
 	desc: "Change the stats of a character.",
 	aliases: ['setstats', 'changestat', 'setstat'],
@@ -2171,10 +2170,12 @@ commands.changestats = new Command({
 		if (charFile[args[0]]) {
 			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id)
 				return message.channel.send(`${args[0]} already exists, and you don't own them. You cannot change their stats.`);
+		} else {
+			return message.channel.send(`${args[0]} is not a valid character! Make sure the character exists before you change their stats.`);
 		}
 
 		if ((args[1] + args[2]) > settings.caps.hpmpcap) return message.channel.send(`The maximum total points for HP and MP is ${settings.caps.hpmpcap}! Currently, you have ${args[1]+args[2]}.`);
-	
+
 		let bst = 0;
 		for (let i = 3; i < args.length; i++) {
 			if (args[i]) {

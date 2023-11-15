@@ -81,6 +81,28 @@ statusList = {
 			let randChance = randNum(1, 100)
 
 			if (randChance <= chance) {
+				if (skill.type === 'status' && doPassives(btl)) {
+					let repelChance = 0;
+					let targChance = 0;
+					for (let i in targ.skills) {
+						if (!skillFile[targ.skills[i]]) continue;
+						if (skillFile[targ.skills[i]].type != 'passive') continue;
+
+						for (let k in skillFile[targ.skills[i]].passive) {
+							if (k == "magicbounce") {
+								repelChance = randNum(1, 100)
+								targChance = skillFile[targ.skills[i]].passive[k][0];
+								
+								if (targChance < 100 && skillFile[targ.skills[i]].passive[k][1]) targChance += ((char.stats.luk-targ.stats.luk)/2);
+
+								if (targChance >= 100 || repelChance <= targChance) {
+									return `\nBut, ${targ.name}'s __${skillFile[targ.skills[i]].name}__ repelled the attack!\n\n${inflictStatus(char, status)}\n${selectQuote(targ, 'landed')}\n${selectQuote(char, 'hurt')}`
+								}
+							}
+						}
+					}
+				}
+
 				return `\n${inflictStatus(targ, status)}\n${selectQuote(char, 'landed')}\n${selectQuote(targ, 'hurt')}`;
 			} else {
 				if (skill.type == 'status')

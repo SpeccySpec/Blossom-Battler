@@ -2179,6 +2179,39 @@ passiveList = {
 		}
 	}),
 */
+
+	magicbounce: new Extra({
+		name: "Magic Bounce (Pokémon)",
+		desc: "<Chance>% chance to reflect status afflicting moves to the opponent. If {LuckBased} is set to true, the Luck Stat may influence this stat.",
+		hardcoded: true,
+		args: [
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "LuckBased",
+				type: "YesNo"
+			}
+		],
+		applyfunc(message, skill, args) {
+			let chance = parseFloat(args[0]);
+			let luckBased = args[1];
+
+			if (chance <= 0 || chance > 100) {
+				return void message.channel.send(`${chance}% is an invalid percentage! Try 1-100%.`);
+			}
+
+			makePassive(skill, "magicbounce", [chance, luckBased ?? false]);
+			return true;
+		},
+		getinfo(vars, skill) {
+			let luckbased = vars[1] ? ", **Luck-Dependant** " : " "
+			let chance = vars[0] < 100 ? `**${vars[0]}%${luckbased}Chance**` : "**Guaranteed**"
+			return `${chance} to reflect ${elementEmoji.status}**Skills that will afflict a status effect** back to the attacker`
+		}
+	}),
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.
