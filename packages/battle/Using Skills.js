@@ -777,9 +777,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 				}
 
 				// Imperishable Mettle.
-				if (char.charms.includes("ImperishableMettle")) {
+				if (char.charms && char.charms.includes("ImperishableMettle")) {
 					dmg *= 1.05;
-				} else if (targ.charms.includes("ImperishableMettle")) {
+				} else if (targ.charms && targ.charms.includes("ImperishableMettle")) {
 					dmg *= 0.95;
 				}
 
