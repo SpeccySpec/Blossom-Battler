@@ -68,18 +68,18 @@ weatherFuncs = {
 				let dmg = 10;
 				let affinity = '';
 
-				if (char.affinities.weak.includes("ice")) {
+				if (char.affinities.weak && char.affinities.weak.includes("ice")) {
 					dmg *= 2;
 					affinity = affinityEmoji.weak;
-				} else if (char.affinities.superweak.includes("ice")) {
+				} else if (char.affinities.superweak && char.affinities.superweak.includes("ice")) {
 					dmg *= 4;
 					affinity = affinityEmoji.superweak;
-				} else if (char.affinities.resist.includes("ice")) {
+				} else if (char.affinities.resist && char.affinities.resist.includes("ice")) {
 					dmg *= 0.5;
 					affinity = affinityEmoji.resist;
-				} else if (char.affinities.block.includes("ice") || char.affinities.repel.includes("ice")) {
+				} else if ((char.affinities.block && char.affinities.block.includes("ice")) || (char.affinities.repel && char.affinities.repel.includes("ice"))) {
 					return `__${char.name}__ is able to negate the hail damage.`;
-				} else if (char.affinities.drain.includes("ice")) {
+				} else if (char.affinities.drain && char.affinities.drain.includes("ice")) {
 					char.hp = Math.min(char.maxhp, char.hp+dmg);
 					return `The __Hail__ heals __${char.name}__ by ${dmg}${affinityEmoji.drain} HP!`;
 				}
