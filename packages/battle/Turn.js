@@ -996,7 +996,7 @@ sendCurTurnEmbed = (char, btl) => {
 							if (!healList[k].canuse) continue;
 
 							if (healList[k].multiple) {
-								for (let l in skill.extras[k]) {
+								for (let l in skill.heal[k]) {
 									let txt = healList[k].canuse(char, skill, btl, skill.heal[k][l]);
 									if (txt !== true) {
 										DiscordEmbed.title = txt;
