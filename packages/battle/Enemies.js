@@ -177,7 +177,7 @@ enemyThinker = (char, btl) => {
 	let ai = [];
 
 	// Difficulty levels should be handled
-	switch(char.difficulty ?? 'easy') {
+	switch(char.automove ? 'hard' : (char.difficulty ?? 'easy')) {
 		case 'legacy': // Legacy AI.
 			// Doesn't use the whole AI thing.
 			ai.push(legacyAi(char, btl));
