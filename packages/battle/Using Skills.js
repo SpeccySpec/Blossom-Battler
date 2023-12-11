@@ -511,7 +511,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 				}
 			}
 
-			console.log(dodgeChance + "% Chance to Dodge");
+			//console.log(dodgeChance + "% Chance to Dodge");
 			if (c <= dodgeChance) {
 				totalHits++;
 				continue;
