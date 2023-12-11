@@ -2108,6 +2108,7 @@ statusEffectFuncs = {
 	},
 
 	sleep: {
+		forceturns: 1,
 		onturn: function(btl, char) {
 			if (char.statusturns <= 0) {
 				delete char.status;
