@@ -512,7 +512,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 			}
 
 			//console.log(dodgeChance + "% Chance to Dodge");
-			if (c <= dodgeChance) {
+			if (c <= dodgeChance || skill.assistSkill) {
 				totalHits++;
 				continue;
 			}
@@ -1503,13 +1503,14 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					let meleeAtk = {
 						name: char2.melee.name,
 						type: char2.melee.type,
-						pow: char2.melee.pow*2.5,
+						pow: (char2.melee.pow+char2.level)*2.5,
 						acc: 9999,
 						crit: char2.melee.crit,
 						atktype: atkType,
 						target: targType,
 						melee: true,
-						noassistance: true
+						noassistance: true,
+						assistSkill: true,
 					}
 
 					if (char2.melee.status) {
