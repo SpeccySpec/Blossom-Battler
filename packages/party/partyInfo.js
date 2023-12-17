@@ -69,8 +69,13 @@ partyDesc = (party, message) => {
 
 	// Items
 	let items = '';
-	for (const i in party.items) items += `${itemTypeEmoji[itemFile[i]?.type] ?? ''} ${itemRarityEmoji[itemFile[i]?.rarity] ?? ''}${i}: ${party.items[i]}\n`;
+	let totalItems = 0;
+	for (const i in party.items) {
+		if (totalItems <= 9) items += `${itemTypeEmoji[itemFile[i]?.type] ?? ''} ${itemRarityEmoji[itemFile[i]?.rarity] ?? ''}${i}: ${party.items[i]}\n`;
+		totalItems++;
+	}
 
+	if (totalItems > 9) items += `${totalItems-9} more...`;
 	if (items != '') DiscordEmbed.fields.push({ name: 'Items', value: items, inline: true });
 
 	// Weapons and Armor
