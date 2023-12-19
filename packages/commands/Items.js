@@ -83,23 +83,39 @@ function weaponDesc(weaponDefs, weaponName, message) {
     let finalText = "";
 
     if (weaponDefs.cost && weaponDefs.cost != 0) finalText += `Costs **${weaponDefs.cost}** ${getCurrency(message.guild.id)}s\n`;
-    if (weaponDefs.melee) finalText += `**Melee** Buff: **${weaponDefs.melee}**\n`;
-    if (weaponDefs.atk) finalText += `**ATK** Buff: **${weaponDefs.atk}**\n`;
-    if (weaponDefs.mag) finalText += `**MAG** Buff: **${weaponDefs.mag}**\n`;
+    if (weaponDefs.melee) finalText += `_Melee Attack Power Boost: **${weaponDefs.melee}**_\n\n`;
+
+	let stats = ["atk", "mag", "end", "agl"];
+	for (let i of stats) {
+		if (weaponDefs[i]) {
+			if (weaponDefs[i] > 0) {
+				finalText += `**${i.toUpperCase()}** Buff: **${weaponDefs[i]}**\n`;
+			} else if (weaponDefs[i] < 0) {
+				finalText += `**${i.toUpperCase()}** Penalty: **${weaponDefs[i]}**\n`;
+			}
+		}
+	}
 
     if (weaponDefs.skill && weaponDefs.skill != '') {
         let type = ''
+		let passiveTxt = false;
         if (skillFile[weaponDefs.skill]) {
             if (typeof skillFile[weaponDefs.skill].type === 'string')
                 type = `${elementEmoji[skillFile[weaponDefs.skill].type]}`;
+				if (skillFile[weaponDefs.skill].type == 'passive') passiveTxt = true;
             else if (typeof skillFile[weaponDefs.skill].type === 'object') {
                 for (const i in skillFile[weaponDefs.skill].type) type += `${skillFile[weaponDefs.skill].type[i]}`;
             }
         } else type = `<:invalid:964148473295409155>`
 
-        finalText += `The user may cast **${type}${weaponDefs.skill}**\n`;
+        if (passiveTxt) {
+			finalText += `The user obtains **${type}${weaponDefs.skill}** as a Passive Skill.\n`;
+		} else {
+			finalText += `The user may cast **${type}${weaponDefs.skill}**\n`;
+		}
     }
 
+    finalText += '\n'
     finalText += getRecipe(weaponDefs)
     finalText += '\n'
 
@@ -122,19 +138,36 @@ function armorDesc(armorDefs, armorName, message) {
     let finalText = "";
 
     if (armorDefs.cost && armorDefs.cost != 0) finalText += `Costs **${armorDefs.cost}** ${getCurrency(message.guild.id)}s\n`;
-    if (armorDefs.end) finalText += `**END** Buff: **${armorDefs.end}**\n`;
+
+	let stats = ["end", "agl", "atk", "mag"];
+	for (let i of stats) {
+		if (armorDefs[i]) {
+			if (armorDefs[i] > 0) {
+				finalText += `**${i.toUpperCase()}** Buff: **${armorDefs[i]}**\n`;
+			} else if (armorDefs[i] < 0) {
+				finalText += `**${i.toUpperCase()}** Penalty: **${armorDefs[i]}**\n`;
+			}
+		}
+	}
 
     if (armorDefs.skill && armorDefs.skill != '') {
         let type = ''
+		let passiveTxt = false;
         if (skillFile[armorDefs.skill]) {
             if (typeof skillFile[armorDefs.skill].type === 'string')
                 type = `${elementEmoji[skillFile[armorDefs.skill].type]}`;
+
+				if (skillFile[armorDefs.skill].type == 'passive') passiveTxt = true;
             else if (typeof skillFile[armorDefs.skill].type === 'object') {
                 for (const i in skillFile[armorDefs.skill].type) type += `${skillFile[armorDefs.skill].type[i]}`;
             }
         } else type = `<:invalid:964148473295409155>`
 
-        finalText += `The user may cast **${type}${armorDefs.skill}**\n`;
+        if (passiveTxt) {
+			finalText += `The user obtains **${type}${armorDefs.skill}** as a Passive Skill.\n`;
+		} else {
+			finalText += `The user may cast **${type}${armorDefs.skill}**.\n`;
+		}
     }
 
     finalText += getRecipe(armorDefs)
@@ -892,6 +925,16 @@ commands.registerweapon = new Command({
             forced: true
         },
         {
+            name: "AGL Buff",
+            type: "Num",
+            forced: true
+        },
+        {
+            name: "END Buff",
+            type: "Num",
+            forced: true
+        },
+        {
             name: "Skill",
             type: "Word"
         },
@@ -919,27 +962,28 @@ commands.registerweapon = new Command({
 
 		// Skill
         let skill
-        if (args[7]) {
-            if (!skillFile[args[7]]) 
-				message.channel.send(`${args[7]} is not a valid skill. I'll still make this weapon regardless`);
+        if (args[9]) {
+            if (!skillFile[args[9]]) 
+				message.channel.send(`_"${args[9]}"_ is not a valid skill. I'll still make this weapon regardless`);
             else
-				skill = args[7];
+				skill = args[9];
         }
-        
+
         weaponFile[args[0]] = {
             name: args[0],
             class: args[2].toLowerCase(),
             cost: Math.max(args[1], 0),
             element: args[3].toLowerCase(),
-            desc: args[8],
+            desc: args[10],
+			atk: args[5],
+			mag: args[6],
+			agl: args[7],
+			end: args[8],
             originalAuthor: message.author.id
         }
 
         if (skill) weaponFile[args[0]].skill = skill;
-
         if (args[4] > 0) weaponFile[args[0]].melee = args[4];
-        if (args[5] > 0) weaponFile[args[0]].atk = args[5];
-        if (args[6] > 0) weaponFile[args[0]].mag = args[6];
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile, null, 4));
 
@@ -959,7 +1003,6 @@ commands.getweapon = new Command({
     ],
     func(message, args, guilded) {
         weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
-
         if (!weaponFile[args[0]]) return message.channel.send(`${args[0]} is not a valid weapon.`);
 
         message.channel.send({content: `Here's your info on ${args[0]}:`, embeds: [weaponDesc(weaponFile[args[0]], args[0], message)]});
@@ -1432,6 +1475,11 @@ commands.registerarmor = new Command({
             forced: true
         },
         {
+            name: "AGL Buff",
+            type: "Num",
+            forced: true
+        },
+        {
             name: "Skill",
             type: "Word",
         },
@@ -1457,9 +1505,12 @@ commands.registerarmor = new Command({
 
 		// Skill
 		let skill
-        if (args[5]) {
-            if (!skillFile[args[5]]) message.channel.send(`${args[5]} is not a valid skill. I'll still make this armor regardless`);
-            else skill = args[5];
+        if (args[6]) {
+            if (!skillFile[args[6]]) {
+				message.channel.send(`${args[6]} is not a valid skill. I'll still make this armor regardless`);
+            } else {
+				skill = args[6];
+			}
         }
 
         armorFile[args[0]] = {
@@ -1467,12 +1518,13 @@ commands.registerarmor = new Command({
             class: args[2].toLowerCase(),
             cost: Math.max(args[1], 0),
             element: args[3].toLowerCase(),
-            desc: args[6],
+			end: args[4],
+			agl: args[5],
+            desc: args[7],
             originalAuthor: message.author.id
         }
 
         if (skill) armorFile[args[0]].skill = skill;
-        if (args[4] > 0) armorFile[args[0]].end = args[4];
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/armors.json`, JSON.stringify(armorFile, null, 4));
 
