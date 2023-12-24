@@ -654,7 +654,7 @@ commands.hidechar = new Command({
 })
 
 commands.mpmeter = new Command({
-	desc: `Change the character's MP Meter.`,
+	desc: `Purely cosmetic! Changes a character's MP meter.`,
 	aliases: ['magicmeter'],
 	section: "characters",
 	args: [
