@@ -5,7 +5,10 @@ verifiedChar = (char) => {
 
 	// Level Limit
 	if (char.level > 99) return false;
-	
+
+	// HP and MP maximum
+	if ((char.basehp+char.basemp) > 65) return false;
+
 	// Base Stat Total
 	let bst = 0;
 	for (let i in char.basestats) {
