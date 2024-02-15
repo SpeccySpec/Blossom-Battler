@@ -643,8 +643,6 @@ passiveList = {
 						// On hit
 						if (inf.hp > 0 && inf.custom) {
 							for (let i in inf.custom) {
-								if (noVarsArray && noVarsArray.includes(i)) continue;
-
 								if (customVariables[i] && customVariables[i].onhit) {
 									str += '\n' + (customVariables[i].onhit(btl, inf, char, d, inf.custom[i], skill) ?? '');
 								}
