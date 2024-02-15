@@ -2942,7 +2942,7 @@ customVariables = {
 				}
 
 				if (skill.target === 'one' || skill.target === 'ally' || skill.target === 'caster') {
-					let linkatk = attackWithSkill(inf, char, vars.skilldefs, btl, null, ["link"], ["link"]);
+					let linkatk = attackWithSkill(inf, char, vars.skilldefs, btl, null, ["link", "damage"], ["link", "damage"]);
 					txt += `__${vars.username}__'s _${vars.skilldefs.name}_ strikes! ${linkatk.txt}\n`;
 				}
 			}
