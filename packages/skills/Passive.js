@@ -641,8 +641,8 @@ passiveList = {
 						let str = ` __${inf.name}__ took ***${d}***${affinityTxt} damage due to __${char.name}__'s _${passive.name}_!`;
 
 						// On hit
-						if (targ.hp > 0 && targ.custom) {
-							for (let i in targ.custom) {
+						if (inf.hp > 0 && inf.custom) {
+							for (let i in inf.custom) {
 								if (noVarsArray && noVarsArray.includes(i)) continue;
 
 								if (customVariables[i] && customVariables[i].onhit) {
