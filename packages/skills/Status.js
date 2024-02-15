@@ -1914,6 +1914,11 @@ applyStatus = (message, skill, skillExtra, rawargs, lb) => {
 buildStatus = (message, extra, args, lb) => {
 	let skill = {};
 
+	if (!extra) {
+		message.channel.send("No extra was supplied.\n\n_This is likely a bug. Please submit to the Blossom Battler discord server._")
+		return false;
+	}
+
 	if (statusList?.[extra]?.unregsiterable && !utilityFuncs.RPGBotAdmin(message.author.id)) {
 		message.channel.send(`You lack permissions to apply ${statusList[extra].name} for this skill.`)
 		return false;
