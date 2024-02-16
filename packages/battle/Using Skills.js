@@ -208,7 +208,7 @@ function divideBy(val, nominator, denominator, times) {
 }
 
 // Attack targ with skill using char's stats. noRepel disables repel affinities. noExtraArray disables certain extras. noVarsArray disables certain vars.
-attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) => {
+attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, noMiss) => {
 	let settings = setUpSettings(btl.guild.id);
 
 	const result = {
@@ -339,7 +339,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 				if (skillFile[targ.skills[i]].type != 'passive') continue;
 
 				for (let k in skillFile[targ.skills[i]].passive) {
-					if (passiveList[k] && passiveList[k].forcedodge) {
+					if (passiveList[k] && passiveList[k].forcedodge && !noMiss) {
 						if (noExtraArray && noExtraArray.includes(k)) continue;
 						const psv = passiveList[k];
 						const passive = skillFile[targ.skills[i]];
@@ -494,6 +494,11 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray) =
 		let totalHits = 0;
 		let dodgeChance = 0;
 		for (let i = 0; i < skill.hits; i++) {
+			if (noMiss) {
+				totalHits++;
+				continue;
+			}
+
 			let c = randNum(1, 100);
 
 			if (skill.nomod && skill.nomod.acc) {
@@ -1125,7 +1130,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		skill.cost = cost[0];
 		skill.costtype = cost[1];
 
-		// Make sure CopySkill doesn't cuck us over
+		// Make sure CopySkill doesn't mess us up
 		if (skill.type === 'heal' && (skill.target === 'ally' || skill.target === 'one') && act.target[0] != char.team) skill.target = 'caster';
 	}
 
@@ -1520,7 +1525,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 					finalText += `\n__${char2.name}__ wants to assist __${char.name}__ with their attack!\n`;
 
-					let result = attackWithSkill(char2, targ, meleeAtk, btl, true, noExtraArray);
+					let result = attackWithSkill(char2, targ, meleeAtk, btl, true, noExtraArray, true);
 					finalText += `${result.txt}\n`;
 
 					if (result.teamCombo) btl.canteamcombo = true;
