@@ -172,7 +172,7 @@ function setInvalidEmbed(message, limit) {
 validExtensions = ['png', 'bmp', 'tiff', 'tif', 'gif', 'jpg', 'jpeg', 'apng', 'webp']
 checkImage = (message, arg, image) => {
 	if (image != undefined) {
-		if (!validExtensions.includes(image.url.split('.').pop())) {
+		if (!validExtensions.includes(image.url.split('.'))) {
 			message.channel.send(`The image you uploaded is not a valid image.`)
 			return false
 		}
@@ -182,7 +182,7 @@ checkImage = (message, arg, image) => {
 		if (arg.startsWith('<') && arg.endsWith('>')) {
 			arg = arg.slice(1, -1)
 		}
-		if (!validExtensions.includes(arg.split('.').pop())) {
+		if (!validExtensions.includes(arg.split('.'))) {
 			message.channel.send(`The image you uploaded is not a valid image.`)
 			return false
 		}
