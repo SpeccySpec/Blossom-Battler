@@ -349,23 +349,30 @@ aiTypes = {
 weathers = [
 	'none',
 	"rain", // 1.3x to water, 0.7x to fire. Also puts out burning fighters.
-	"thunder", // 1.3x to elec, water skills become dualelement electric.
+	"thunderstorm", // 1.3x to elec, water skills become dualelement electric. 1.25x paralysis chance.
 	"sunlight", // 1.3x to fire, 1.1x to nuclear, 0.7x to water, grass. Also thaws freezing fighters.
 	"windy", // 1.3x to wind, physicals get dualelement wind.
 	"sandstorm", // -33% perception to non earth main elements.
-	"hail" // 10 ice based damage per turn to non ice main elements. Yes, that means this is affected by affinities.
+	"hail", // 10 ice based damage per turn to non ice main elements. Yes, that means this is affected by affinities.
+	"darkmoon", // 1.1x to psychic, 0.9x to all others. Chance to inflict confusion to non psy/spirit mains.
+	"eclipse", // 1.1x to magic.
+	"bloodmoon", // 1.4x to curse, 1.2x to phys, -25% MAG stat for bless mains.
+	"blizzard", // 1.5x to Ice, 0.5x to Fire, 1.25x Freeze Chance. Puts out burning fighters.
+	"supermoon" // 1.2x to Psychic, Bless, Curse, and Spirit. +15% Accuracy. -15% Luck.
 ]
 
 terrains = [
 	'none',
 	"flaming", // 10 damage with 10% chance of burn to non fire main elements. Also puts out freezing fighters.
-	"thunder", // 1.2x to elec. 1.25x paralysis chance.
 	"grassy", // 10% heal before turn. 17% for grass mains.
 	"light", // 1.3x to bless. 0.5x to curse.
 	"psychic", // reverse turn order.
 	"misty", // ignore status inflictions. Also removes all status effects on turn.
 	"sky", // 1.2x to wind. 0.9x to earth. +25% agl. +40% to wind mains.
 	"muddy", // 1.35x to earth, 0.8x accuracy to physicals, -33% agl to non earth mains.
+	"spiritual", // 1.25x to Spirit. +25% CHR. Spirit-based affinities are amplified.
+	"damned", // 1.25x to Physical. -75% magic.
+	"purged", // 1.25x to Magic and Ranged. -75% attack.
 
 	// boss specific
 	"flooded", // 1.3x to water. Makes physical skills dualelement water.

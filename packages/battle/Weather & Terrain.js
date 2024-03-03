@@ -4,7 +4,7 @@ weatherFuncs = {
 			if (char.status && char.status === 'burn') {
 				delete char.status;
 				delete char.statusturns;
-				return `__${char.name}__ is put out by the rain!`;
+				return `__${char.name}__ is put out by the **Rain**!`;
 			}
 
 			return null;
@@ -18,13 +18,17 @@ weatherFuncs = {
 		}
 	},
 
-	thunder: {
+	thunderstorm: {
 		onselect(char, skill, btl) {
 			if (skill.type === "electric") {
 				skill.pow *= 1.3;
 			} else if (skill.type === "water") {
 				skill.type = ["water", "electric"];
 				skill.pow *= 1.1;
+			}
+
+			if (skill.status && typeof(skill.status) === "string" && skill.status === "paralyze" && skill.statuschance) {
+				skill.statuschance *= 1.25;
 			}
 		}
 	},
@@ -95,6 +99,87 @@ weatherFuncs = {
 			return null;
 		}
 	},
+
+	darkmoon: {
+		onselect(char, skill, btl) {
+			if (skill.type === "psychic") {
+				skill.pow *= 1.1;
+			} else {
+				skill.pow *= 0.9;
+			}
+		},
+		onturn(char, btl) {
+			if (!isMainElement("psychic", char) && !isMainElement("spirit", char)) {
+				if (!char.confusion && randNum(1, 100) <= 33) {
+					char.confusion = 3;
+					return `__${char.name}__ is confused by the aura of the **Dark Moon**...`;
+				}
+			}
+
+			return null;
+		}
+	},
+
+	eclipse: {
+		onselect(char, skill, btl) {
+			if (!["strike", "slash", "pierce"].includes(skill.type)) {
+				skill.pow *= 1.1;
+			}
+		},
+	},
+
+	bloodmoon: {
+		onselect(char, skill, btl) {
+			if (skill.type === "curse") {
+				skill.pow *= 1.4;
+			} else if (["strike", "slash", "pierce"].includes(skill.type)) {
+				skill.pow *= 1.2;
+			}
+		},
+		statmod(char, stats, btl) {
+			if (isMainElement("bless", char))
+				stats.mag *= 3/4;
+
+			return stats;
+		}
+	},
+
+	blizzard: {
+		onturn(char, btl) {
+			if (char.status && char.status === 'burn') {
+				delete char.status;
+				delete char.statusturns;
+				return `__${char.name}__ is put out by the **Blizzard**!`;
+			}
+
+			return null;
+		},
+		onselect(char, skill, btl) {
+			if (skill.type === "ice") {
+				skill.pow *= 1.5;
+			} else if (skill.type === "fire") {
+				skill.pow /= 2;
+			}
+
+			if (skill.status && typeof(skill.status) === "string" && skill.status === "freeze" && skill.statuschance) {
+				skill.statuschance *= 1.25;
+			}
+		}
+	},
+
+	supermoon: {
+		onselect(char, skill, btl) {
+			if (["psychic", "bless", "curse", "spirit"].includes(skill.type)) {
+				skill.pow *= 1.2;
+			}
+
+			skill.acc -= 15;
+		},
+		statmod(char, stats, btl) {
+			stats.luk *= 1.15;
+			return stats;
+		}
+	},
 }
 
 terrainFuncs = {
@@ -138,17 +223,6 @@ terrainFuncs = {
 			}
 
 			return txt;
-		}
-	},
-
-	thunder: {
-		onselect(char, skill, btl) {
-			if (skill.type === "electric") {
-				skill.pow *= 1.2;
-				if (skill.status && typeof(skill.status) === "string" && skill.status === "paralyze" && skill.statuschance) {
-					skill.statuschance *= 1.25;
-				}
-			}
 		}
 	},
 
@@ -223,6 +297,37 @@ terrainFuncs = {
 			if (skill.type === "earth") skill.pow *= 1.35;
 			if (skill.atktype === "physical") skill.acc *= 0.8;
 		}
+	},
+
+	spiritual: {
+		statmod(char, stats, btl) {
+			stats.chr *= 1.25
+			return stats;
+		},
+		onselect(char, skill, btl) {
+			if (skill.type === "spirit") skill.pow *= 1.25;
+		},
+		hardcoded: true,
+	},
+
+	damned: {
+		statmod(char, stats, btl) {
+			stats.mag /= 4
+			return stats;
+		},
+		onselect(char, skill, btl) {
+			if (skill.atktype === "physical") skill.pow *= 1.25;
+		},
+	},
+
+	purged: {
+		statmod(char, stats, btl) {
+			stats.atk /= 4
+			return stats;
+		},
+		onselect(char, skill, btl) {
+			if (!skill.atktype === "physical") skill.pow *= 1.25;
+		},
 	},
 	
 	/*
