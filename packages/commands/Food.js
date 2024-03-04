@@ -1045,7 +1045,7 @@ async function generateImage(message, args, results) {
 					for (f in foodValues) {
 						foodstring += `**${f}**:\n`
 						for (fo in foodValues[f]) {
-							foodstring += `- *(${foodValues[f][fo]}x)* ${fo}\n`
+							foodstring += `- ${foodValues[f][fo] == 1 ? '' : `*(${foodValues[f][fo]}x)* `}${fo}\n`
 						}
 					}
 				}
