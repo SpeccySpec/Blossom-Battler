@@ -1,0 +1,22 @@
+{
+	"name": "Blossom-Battler",
+	"version": "1.0.0",
+	"main": "index.js",
+	"author": "Spectra",
+	"contributors": ["Spectra", "Felicia.iso", "Verwex"],
+	"license": "Apache-2.0",
+	"description": "Discord bot that will add Turn-Based RPG Battling to your Discord Server!",
+	"keywords": ["Turn-Based", "RPG", "Discord Bot", "Customization"],
+	"repository": "https://github.com/SpeccySpec/Blossom-Battler",
+	"bugs": "https://github.com/SpeccySpec/Blossom-Battler/issues",
+	"dependencies": {
+		"@discordjs/rest": "^1.3.0",
+		"canvas": "^2.10.1",
+		"discord-api-types": "^0.37.14",
+		"discord.js": "^13.15.0",
+		"dotenv": "^16.0.0",
+		"guilded.js": "^0.23.4",
+		"hastebin-gen": "^2.0.5",
+		"request": "^2.88.2"
+	}
+}
