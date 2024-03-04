@@ -1038,7 +1038,7 @@ async function generateImage(message, args, results) {
 
 				//if length of result[i] is bigger than 8, send a hastebin
 				if (results[i].length > 8) {
-					foodstring = `Hastebin:\n${await hastebin(foodstring)}`
+					foodstring = `Too long to generate,,,`//`Hastebin:\n${await hastebin(foodstring)}`
 				}
 
 				embed.addField(`${i.charAt(0).toUpperCase() + i.slice(1)}`, foodstring, false)
@@ -1102,7 +1102,7 @@ async function generateFood(args, results, category) {
 							draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/${i}/${results[i][a].name}.png`)
 						} else {
 							try {
-								draw = await Canvas.loadImage(results[i][a].image)
+								draw = await Canvas.loadImage(results[i][a].image[0])
 							} catch (e) {
 								draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/error_${results[i]}.png`)
 							}
@@ -1114,7 +1114,7 @@ async function generateFood(args, results, category) {
 						draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/${i}/${results[i].name}.png`)
 					} else {
 						try {
-							draw = await Canvas.loadImage(results[i].image)
+							draw = await Canvas.loadImage(results[i].image[0])
 						} catch (e) {
 							draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/error_${results[i]}.png`)
 						}
@@ -1128,7 +1128,7 @@ async function generateFood(args, results, category) {
 				draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/cones/${results['cones'].name}.png`)
 			} else {
 				try {
-					draw = await Canvas.loadImage(results['cones'].image)
+					draw = await Canvas.loadImage(results['cones'].image[0])
 				} catch (e) {
 					draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/error_cones.png`)
 				}
@@ -1142,7 +1142,7 @@ async function generateFood(args, results, category) {
 					draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/flavors/${results[`flavors`][i].name}.png`)
 				} else {
 					try {
-						draw = await Canvas.loadImage(results[`flavors`][i].image)
+						draw = await Canvas.loadImage(results[`flavors`][i].image[0])
 					} catch (e) {
 						draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/error_scoops.png`)
 					}
@@ -1171,7 +1171,7 @@ async function generateFood(args, results, category) {
 					draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/ingredients/${results[`ingredients`][i].name}.png`)
 				} else {
 					try {
-						draw = await Canvas.loadImage(results[`ingredients`][i].image)
+						draw = await Canvas.loadImage(results[`ingredients`][i].image[0])
 					} catch (e) {
 						draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/error_ingredients.png`)
 					}
