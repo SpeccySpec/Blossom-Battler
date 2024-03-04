@@ -2,8 +2,8 @@
 // Here you go Verwex :)
 foodFiles = {}
 
-userPreferences = setUpFile(`${dataPath}/json/food/s_preferences.json`)
-userPrivacy = setUpFile(`${dataPath}/json/food/s_privacy.json`)
+userPreferences = setUpFile(`${dataPath}/json/food/S_preferences.json`)
+userPrivacy = setUpFile(`${dataPath}/json/food/S_privacy.json`)
 
 //available categories
 var categories = ['icecream', 'pizza', 'hamburger']
