@@ -944,10 +944,10 @@ async function makefood(message, args) {
 		switch (foodArguments[args[0].toLowerCase()][i].type) {
 			case "number":
 				//make sure the number is bound to min and max, and if there isn't a number, then det it to its default
-				foodargs[foodArguments[args[0].toLowerCase()][i].name.toLowerCase()] = (args[start] && (parseInt(args[start]) || args[start] == 0)) ? Math.max(Math.min(parseInt(args[1]), foodArguments[args[0].toLowerCase()][i].max), foodArguments[args[0].toLowerCase()][i].min) : foodArguments[args[0].toLowerCase()][i].default
+				foodargs[foodArguments[args[0].toLowerCase()][i].name.toLowerCase()] = (args[start] && (parseInt(args[start]) || args[start] == 0)) ? Math.max(Math.min(parseInt(args[start]), foodArguments[args[0].toLowerCase()][i].max), foodArguments[args[0].toLowerCase()][i].min) : foodArguments[args[0].toLowerCase()][i].default
 				break
 			case "boolean":
-				foodargs[foodArguments[args[0].toLowerCase()][i].name.toLowerCase()] = (args[start] ? (args[start].toLowerCase() == "true" ? true : false) : true)
+				foodargs[foodArguments[args[0].toLowerCase()][i].name.toLowerCase()] = (args[start] ? (['yes', 'true', 'y', '1'].includes(args[start].toLowerCase()) ? true : false) : true)
 				break
 		}
 
@@ -1119,16 +1119,18 @@ async function generateFood(args, results, category) {
 						drawRotated(Math.random() * 360, draw)
 					}
 				} else {
-					if (results[i].owner == "Official") {
-						draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/${i}/${results[i].name}.png`)
-					} else {
-						try {
-							draw = await Canvas.loadImage(results[i].image[0])
-						} catch (e) {
-							draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/error_${i}.png`)
+					if (['crusts', 'cheeses', 'sauces'].includes(i)) {
+						if (results[i].owner == "Official") {
+							draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/${i}/${results[i].name}.png`)
+						} else {
+							try {
+								draw = await Canvas.loadImage(results[i].image[0])
+							} catch (e) {
+								draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/error_${i}.png`)
+							}
 						}
+						drawRotated(Math.random() * 360, draw)
 					}
-					drawRotated(Math.random() * 360, draw)
 				}
 			}
 			break
