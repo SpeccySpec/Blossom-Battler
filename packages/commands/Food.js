@@ -1144,7 +1144,7 @@ async function generateFood(args, results, category) {
 					try {
 						draw = await Canvas.loadImage(results[`flavors`][i].image[0])
 					} catch (e) {
-						draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/error_scoops.png`)
+						draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/error_scoop.png`)
 					}
 				}
 
