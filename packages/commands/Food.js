@@ -62,7 +62,7 @@ foodArguments = {
 			"type": "number",
 			"default": 3,
 			"min": 0,
-			"max": 50,
+			"max": 25,
 			"required": true
 		}
 	},
@@ -72,7 +72,7 @@ foodArguments = {
 			"type": "number",
 			"default": 6,
 			"min": 0,
-			"max": 50,
+			"max": 25,
 			"required": true
 		},
 		"condiments": {
@@ -80,7 +80,7 @@ foodArguments = {
 			"type": "number",
 			"default": 2,
 			"min": 0,
-			"max": 20,
+			"max": 10,
 			"required": false
 		},
 		"cheese_include": {
@@ -100,7 +100,7 @@ foodArguments = {
 			"type": "number",
 			"default": 6,
 			"min": 0,
-			"max": 50,
+			"max": 25,
 			"required": true
 		}
 	},
@@ -662,7 +662,7 @@ commands.registerfood = new Command({
 			return message.channel.send(`The ${args[0].toLowerCase()} ${singularVerb[args[1].toLowerCase()]} item **${args[2].toLowerCase()}** already exists in your list.`)
 		}
 
-		if (args[2].length > 256) {
+		if (args[2].length > 64) {
 			return message.channel.send(`The ${args[0].toLowerCase()} ${singularVerb[args[1].toLowerCase()]} item name **${args[2].toLowerCase()}** is too long.`)
 		}
 
@@ -728,7 +728,7 @@ commands.renamefood = new Command({
 			return message.channel.send(`The ${args[0].toLowerCase()} ${singularVerb[args[1].toLowerCase()]} item **${args[2].toLowerCase()}** does not exist in your list.`)
 		}
 
-		if (args[3].length > 256) {
+		if (args[3].length > 64) {
 			return message.channel.send(`The ${args[0].toLowerCase()} ${singularVerb[args[1].toLowerCase()]} item name **${args[3].toLowerCase()}** is too long.`)
 		}
 
@@ -1029,16 +1029,25 @@ async function generateImage(message, args, results) {
 			embed.addField(`${singularVerb[i].charAt(0).toUpperCase() + singularVerb[i].replace('_amount', '').slice(1)}`, `${results[i]}`, true)
 		} else if (typeof results[i] == 'object') {
 			if (isInMultiples[i]) {
-				let foodstring = ''
-				for (f in results[i]) {
-					foodstring += `- ${results[i][f].name} *(${results[i][f].owner})*\n`
-				}
+				let foodstring = "";
+				let foodValues = {}
 
 				if (results[i].length == 0) foodstring = 'None'
+				else {
+					for (f in results[i]) {
+						var result = results[i][f];
 
-				//if length of result[i] is bigger than 8, send a hastebin
-				if (results[i].length > 8) {
-					foodstring = `Too long to generate,,,`//`Hastebin:\n${await hastebin(foodstring)}`
+						if (!foodValues[result.owner]) foodValues[result.owner] = {};
+						if (!foodValues[result.owner][result.name]) foodValues[result.owner][result.name] = 0;
+						foodValues[result.owner][result.name]++;
+					}
+
+					for (f in foodValues) {
+						foodstring += `**${f}**:\n`
+						for (fo in foodValues[f]) {
+							foodstring += `- *(${foodValues[f][fo]}x)* ${fo}\n`
+						}
+					}
 				}
 
 				embed.addField(`${i.charAt(0).toUpperCase() + i.slice(1)}`, foodstring, false)
