@@ -2295,7 +2295,7 @@ extrasList = {
 			{
 				name: "Immobilize Chance%",
 				type: "Decimal",
-				forced: true
+				forced: false
 			},
 			{
 				name: "Turns",
@@ -2314,10 +2314,12 @@ extrasList = {
 			const turns = parseInt(args[3]);
 			const immobilize = parseFloat(args[2] ?? 0);
 
-			makeExtra(skill, "firespin", [chance, dmgmult, turns, immobilize ?? null, arg[4] ?? null]);
+			makeExtra(skill, "firespin", [chance, dmgmult, turns, immobilize ?? null, args[4] ?? null]);
 			return true
 		},
 		ondamage(char, targ, dmg, skill, btl, vars) {
+			if (targ.custom?.firespin) return;
+
 			var immobile = false;
 			if (vars[3] && vars[3] > 0 && (randNum(1000) <= (vars[3]*10))) {
 				immobile = true;
@@ -2332,14 +2334,14 @@ extrasList = {
 			});
 
 			if (immobile == true) {
-				return `__${targ.name}__ has been engulfed in __${char.name}__'s *${vars[4] ?? skill.name}*`;
-			} else {
 				return `__${targ.name}__ has been trapped by __${char.name}__'s *${vars[4] ?? skill.name}*`;
+			} else {
+				return `__${targ.name}__ has been engulfed in __${char.name}__'s *${vars[4] ?? skill.name}*`;
 			}
 		},
 		getinfo(vars, skill) {
-			let txt = `**${vars[0] >= 100 ? "Guaranteed" : vars[0]}%** chance to engulf the **target**, dealing **${vars[1]}%** of the dealt damage to the target, for **${vars[2}** turns.`;
-			if (vars[3]) txt += `, and a $ **${vars[3] >= 100 ? "Guaranteed" : vars[3]}%** chance to completely immobilize them during that time.`;
+			let txt = `**${vars[0] >= 100 ? "Guaranteed" : vars[0]+"%"}** chance to engulf the **target**, dealing **${vars[1]}%** of the dealt damage to the target, for **${vars[2]}** turns`;
+			if (vars[3]) txt += `, and a $ **${vars[3] >= 100 ? "Guaranteed" : vars[3]}%** chance to completely immobilize them during that time`;
 			return txt;
 		}
 	})
@@ -3078,6 +3080,7 @@ customVariables = {
 	},
 
 	firespin: {
+		toembed: "<:warning:878094052208296007>",
 		onturn: function(btl, char, v) {
 			char.hp = Math.max(0, char.hp-v.damage);
 
@@ -3093,7 +3096,7 @@ customVariables = {
 			}
 
 			if (char.custom?.firespin) {
-				char.custom?.firespin.turns--;
+				char.custom.firespin.turns--;
 				if (char.custom?.firespin.turns <= 0) {
 					txt += `\n__${char.name}__ broke free!`;
 					killVar(char, "firespin");
