@@ -2276,6 +2276,72 @@ extrasList = {
 
 			return `__${targ.name}__'s positive buffs were nullified$!`;
 		},
+	}),
+
+	firespin: new Extra({
+		name: "Fire Spin (Pokemon)",
+		desc: "<Chance%> to inflict the opponent with a constant <Damage%> damage of the original damage. Additionally, you can set an {Immobilize Chance%} to make the opponent completely immobile for these turns. The effect itself will be referred to as {Lingering Damage Name}, or the Skill's name if there isn't one supplied.",
+		args: [
+			{
+				name: "Chance%",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Damage%",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Immobilize Chance%",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Lingering Damage Name",
+				type: "Word",
+				forced: false
+			}
+		],
+		applyfunc(message, skill, args) {
+			const chance = parseFloat(args[0]);
+			const dmgmult = parseFloat(args[1]);
+			const turns = parseInt(args[3]);
+			const immobilize = parseFloat(args[2] ?? 0);
+
+			makeExtra(skill, "firespin", [chance, dmgmult, turns, immobilize ?? null, arg[4] ?? null]);
+			return true
+		},
+		ondamage(char, targ, dmg, skill, btl, vars) {
+			var immobile = false;
+			if (vars[3] && vars[3] > 0 && (randNum(1000) <= (vars[3]*10))) {
+				immobile = true;
+			}
+
+			addCusVal(targ, "firespin", {
+				name: vars[4] ?? skill.name,
+				infname: char.name,
+				damage: Math.round(vars[1]*dmg/100),
+				immobilize: immobile,
+				turns: vars[2]
+			});
+
+			if (immobile == true) {
+				return `__${targ.name}__ has been engulfed in __${char.name}__'s *${vars[4] ?? skill.name}*`;
+			} else {
+				return `__${targ.name}__ has been trapped by __${char.name}__'s *${vars[4] ?? skill.name}*`;
+			}
+		},
+		getinfo(vars, skill) {
+			let txt = `**${vars[0] >= 100 ? "Guaranteed" : vars[0]}%** chance to engulf the **target**, dealing **${vars[1]}%** of the dealt damage to the target, for **${vars[2}** turns.`;
+			if (vars[3]) txt += `, and a $ **${vars[3] >= 100 ? "Guaranteed" : vars[3]}%** chance to completely immobilize them during that time.`;
+			return txt;
+		}
 	})
 }
 
@@ -3008,6 +3074,33 @@ customVariables = {
 					return txt;
 				}
 			}
+		}
+	},
+
+	firespin: {
+		onturn: function(btl, char, v) {
+			char.hp = Math.max(0, char.hp-v.damage);
+
+			let txt = `__${char.name}__ took **${v.damage}** damage from __${v.infname}__'s _${v.name}_`
+
+			if (char.hp <= 0)
+				txt += " and was defeated!";
+			else {
+				if (v.immobilize)
+					txt += " and is immobilized!"
+				else
+					txt += "!"
+			}
+
+			if (char.custom?.firespin) {
+				char.custom?.firespin.turns--;
+				if (char.custom?.firespin.turns <= 0) {
+					txt += `\n__${char.name}__ broke free!`;
+					killVar(char, "firespin");
+				}
+			}
+
+			return txt;
 		}
 	},
 }
