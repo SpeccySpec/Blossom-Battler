@@ -1113,7 +1113,7 @@ async function generateFood(args, results, category) {
 							try {
 								draw = await Canvas.loadImage(results[i][a].image[0])
 							} catch (e) {
-								draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/error_${results[i]}.png`)
+								draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/error_${i}.png`)
 							}
 						}
 						drawRotated(Math.random() * 360, draw)
@@ -1125,7 +1125,7 @@ async function generateFood(args, results, category) {
 						try {
 							draw = await Canvas.loadImage(results[i].image[0])
 						} catch (e) {
-							draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/error_${results[i]}.png`)
+							draw = await Canvas.loadImage(`${dataPath}/images/food/${category}/error_${i}.png`)
 						}
 					}
 					drawRotated(Math.random() * 360, draw)
