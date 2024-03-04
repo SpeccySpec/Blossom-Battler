@@ -4,5 +4,6 @@ package-lock.json
 package.json
 data/
 .vscode/
+backups/
 env.zip
 old.env
