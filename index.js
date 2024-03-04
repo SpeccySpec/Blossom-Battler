@@ -37,5 +37,5 @@ setInterval(SaveBackup, 86400000)
 // Spawn your shards
 manager.spawn();
 
-// Let's set up guilded...
-require("./guilded.js")
+// Let's set up guilded... TODO: uncomment this once guilded is added...if ever <.<
+//require("./guilded.js")
