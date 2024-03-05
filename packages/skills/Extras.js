@@ -2133,7 +2133,7 @@ extrasList = {
 			}
 		},
 		getinfo(vars, skill) {
-			return `**${vars[0]}%** chance to make the target flinch.`;
+			return `**${vars[0]}%** chance to make the target flinch`;
 		}
 	}),
 
@@ -2342,8 +2342,8 @@ extrasList = {
 			}
 		},
 		getinfo(vars, skill) {
-			let txt = `**${vars[0] >= 100 ? "Guaranteed" : vars[0]+"%"}** chance to engulf the **target**, dealing **${vars[1]}%** of the dealt damage to the target, for **${vars[2]}** turns`;
-			if (vars[3]) txt += `, and a $ **${vars[3] >= 100 ? "Guaranteed" : vars[3]}%** chance to completely immobilize them during that time`;
+			let txt = `**${vars[0] >= 100 ? "Guaranteed" : vars[0]+"% chance"}** to engulf the **target**, dealing **${vars[1]}%** of the dealt damage to the target, for **${vars[2]}** turns`;
+			if (vars[3]) txt += `, and **${vars[3] >= 100 ? "guaranteed" : "a "+vars[3]+"% chance"}** to completely immobilize them during that time`;
 			return txt;
 		}
 	})
