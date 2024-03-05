@@ -2007,19 +2007,21 @@ extrasList = {
 			if (args[0] <= 0 || args[0] > 100) return message.channel.send(`${args[0]} is an invalid number! Please enter a value between 0 and 100.`);
 			let roar = [args[0]];
 
-			if (![...stats, "crit", "all"].includes(args[1]))
-				return void message.channel.send("That's not a valid stat!");
-			else
-				roar.push(args[1]);
+			if (args[1]) {
+				if (![...stats, "crit", "all"].includes(args[1]))
+					return void message.channel.send("That's not a valid stat!");
+				else
+					roar.push(args[1]);
 
-			if (args[2] == 0)
-				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
-			else if (args[2] > 3 || args[2] < -3)
-				return void message.channel.send("Too many/little stages! The minimum is -3, whilst the maximum is 3.");
-			else
-				roar.push(args[2]);
+				if (args[2] == 0)
+					return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
+				else if (args[2] > 3 || args[2] < -3)
+					return void message.channel.send("Too many/little stages! The minimum is -3, whilst the maximum is 3.");
+				else
+					roar.push(args[2]);
+			}
 
-			makeExtra(skill, "roar", [args[0]]);
+			makeExtra(skill, "roar", roar);
 			return true
 		},
 		onuseatendoffunc(char, targ, skill, btl, vars) {
