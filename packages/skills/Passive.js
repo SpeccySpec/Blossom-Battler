@@ -2258,7 +2258,7 @@ hasPassiveType = (skill, extra) => {
 applyPassive = (message, skill, skillExtra, rawargs) => {
 	if (!skill.passive) skill.passive = {};
 	if (!passiveList || !passiveList[skillExtra]) return message.channel.send("You're adding an invalid extra! Use the ''listpassiveextras'' command to list all extras.");
-	if (!passiveList[skillExtra].apply(message, skill, rawargs)) return false
+	if (!passiveList[skillExtra].apply(message, skill, rawargs, passiveList[skillExtra].name)) return false
 	
 	message.react('👍')
 	skill.done = true;

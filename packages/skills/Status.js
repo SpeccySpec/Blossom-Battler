@@ -1900,9 +1900,9 @@ applyStatus = (message, skill, skillExtra, rawargs, lb) => {
 	if (!skillExtra || !statusList[skillExtra]) return message.channel.send("You're adding an invalid extra! Use the ''liststatusextras'' command to list all extras.");
 
 	if (lb) {
-		if (!statusList[skillExtra].apply(message, skill, rawargs.slice(3))) return false;
+		if (!statusList[skillExtra].apply(message, skill, rawargs.slice(3), statusList[skillExtra].name)) return false;
 	} else {
-		if (!statusList[skillExtra].apply(message, skill, rawargs)) return false;
+		if (!statusList[skillExtra].apply(message, skill, rawargs, statusList[skillExtra].name)) return false;
 	}
 
 	message.react('👍')

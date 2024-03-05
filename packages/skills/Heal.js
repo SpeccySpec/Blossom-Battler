@@ -644,9 +644,9 @@ applyHeal = (message, skill, skillExtra, rawargs, lb) => {
 	if (!skillExtra || !healList[skillExtra]) return message.channel.send("You're adding an invalid extra! Use the ''listhealextras'' command to list all extras.");
 
 	if (lb) {
-		if (!healList[skillExtra].apply(message, skill, rawargs.slice(3))) return false;
+		if (!healList[skillExtra].apply(message, skill, rawargs.slice(3), healList[skillExtra].name)) return false;
 	} else {
-		if (!healList[skillExtra].apply(message, skill, rawargs)) return false;
+		if (!healList[skillExtra].apply(message, skill, rawargs, healList[skillExtra].name)) return false;
 	}
 	
 	message.react('👍')
