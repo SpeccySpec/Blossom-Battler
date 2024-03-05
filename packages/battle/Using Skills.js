@@ -306,7 +306,23 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				}
 			}
 
-			if (returnThis) return result;
+			if (returnThis) {
+				for (let i in skill.extras) {
+					if (!extrasList[i]) continue;
+					if (!extrasList[i].onuse) continue;
+					if (noExtraArray && noExtraArray.includes(i)) continue;
+
+					if (extrasList[i].multiple) {
+						for (let k in skill.extras[i]) {
+							result.txt += `\n${(extrasList[i].onuse(char, targ, skill, btl, skill.extras[i][k] ) ?? '')}`;
+						}
+					} else {
+						result.txt += `\n${(extrasList[i].onuse(char, targ, skill, btl, skill.extras[i]) ?? '')}`;
+					}
+				}
+
+				return result;
+			}
 
 			// SkillFailOnUse
 			for (let i in skill.extras) {
