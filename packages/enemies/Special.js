@@ -515,7 +515,7 @@ function makeSpecial(option, special, func) {
 applySpecial = (message, option, special, rawargs) => {
 	if (!option.specials) option.specials = {};
 	if (!special || !specialList[special]) return message.channel.send("You're adding an invalid extra! Use the ''listnegotiationspecials'' command to list all extras.");
-	if (!specialList[special].apply(message, option, rawargs)) return false
+	if (!specialList[special].apply(message, option, rawargs, specialList[special].name)) return false
 	
 	message.react('👍');
 	console.log("win");

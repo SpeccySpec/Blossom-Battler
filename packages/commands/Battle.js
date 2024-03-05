@@ -65,6 +65,16 @@ commands.pvpleaderboards = new Command({
 		name: "Gamemode",
 		type: "Word",
 	}],
+	doc: {
+		desc: `The gamemodes that you can check for are:\n- ${['regular', 'metronome', 'randskills', 'randstats', 'charscramble'].join("\n- ")}`,
+		/*fields: [
+			{
+				name: "Field Placeholder",
+				value: "Field Description Placeholder",
+				inline: true,
+			},
+		],*/
+	},
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
@@ -83,7 +93,7 @@ commands.pvpleaderboards = new Command({
 
 		let gamemode = "none"
 		if (args[0]) {
-			if (args[0].toLowerCase() === "metronome" || args[0].toLowerCase() === "randskills" || args[0].toLowerCase() === "randstats" || args[0].toLowerCase() === "charfuck") {
+			if (args[0].toLowerCase() === "metronome" || args[0].toLowerCase() === "randskills" || args[0].toLowerCase() === "randstats" || args[0].toLowerCase() === "charscramble") {
 				gamemode = args[0].toLowerCase()
 			}
 		}

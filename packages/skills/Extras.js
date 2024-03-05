@@ -5,7 +5,7 @@ const ArgList = require("../arglist.js")
 
 Extra = class extends ArgList {
 	constructor(object) {
-		super(object.args, object.desc)
+		super(object.args, object.desc, object.doc)
 		this.name = object.name
 		this.multiple = object.multiple
 		this.diffflag = object.diffflag
@@ -20,8 +20,8 @@ Extra = class extends ArgList {
 		this.useonfail = object.useonfail; //used for negotiation specials cause I use this exact same class.
 	}
 
-	apply(message, skill, rawargs) {
-		const args = this.parse(message, rawargs)
+	apply(message, skill, rawargs, extraName) {
+		const args = this.parse(message, rawargs, extraName)
 		if (!args)
 			return false
 		return this.applyfunc(message, skill, args)
@@ -2407,13 +2407,13 @@ applyExtra = (message, skill, skillExtra, rawargs, lb) => {
 	if (!skillExtra || !extrasList[skillExtra]) return void message.channel.send("You're adding an invalid extra! Use the ''listatkextras'' command to list all extras.");
 
 	if (lb) {
-		if (extrasList[skillExtra].apply(message, skill, rawargs.slice(3))) {
+		if (extrasList[skillExtra].apply(message, skill, rawargs.slice(3), extrasList[skillExtra].name)) {
 			message.react('👍');
 		} else {
 			return false
 		}
 	} else {
-		if (extrasList[skillExtra].apply(message, skill, rawargs)) {
+		if (extrasList[skillExtra].apply(message, skill, rawargs, extrasList[skillExtra].name)) {
 			message.react('👍');
 		} else {
 			return false

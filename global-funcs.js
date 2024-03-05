@@ -902,7 +902,7 @@ badVal = (val) => {
 //////////////
 Command = class extends ArgList {
 	constructor(object) {
-		super(object.args, object.desc)
+		super(object.args, object.desc, object.doc)
 		this.section = object.section
 		this.func = object.func
 		this.checkban = object.checkban

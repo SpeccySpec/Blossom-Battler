@@ -185,18 +185,18 @@ async function sendHelp(message, commandsInCategories) {
 }
 
 commands.help = new Command({
-	desc: "Lists all of Blossom Battler's commands.",
+	desc: "Lists all of Blossom Battler's commands, or help regarding a specific command of your choosing.",
 	section: "misc",
 	noslash: true,
 	args: [
 		{
-			name: "Category",
+			name: "Category / Command",
 			type: "Word"
 		}
 	],
 	func(message, args, guilded) {
-		if (guilded) {
-			message.reply("We'll be done one day...");
+		if (commands[args[0]]) {
+			commands[args[0]].summonDocumentation(message, args, getPrefix(message.guild.id)+args[0].toLowerCase());
 		} else {
 			let DiscordEmbed = new Discord.MessageEmbed()
 				.setColor('#0099ff')
