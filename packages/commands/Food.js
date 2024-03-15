@@ -171,23 +171,27 @@ function setInvalidEmbed(message, limit) {
 
 validExtensions = ['png', 'bmp', 'tiff', 'tif', 'gif', 'jpg', 'jpeg', 'apng', 'webp']
 checkImage = (message, arg, image) => {
-	if (image != undefined) {
-		if (!validExtensions.includes(image.url.split('.'))) {
-			message.channel.send(`The image you uploaded is not a valid image.`)
-			return false
-		}
-		return image.url
+	if (!image && !arg) return false;
+	
+	if (image != undefined) arg = image.url;
+	
+	if (arg.startsWith('||') && arg.endsWith('||')) {
+		arg = arg.slice(2, -2)
 	}
-	if (arg) {
-		if (arg.startsWith('<') && arg.endsWith('>')) {
-			arg = arg.slice(1, -1)
-		}
-		if (!validExtensions.includes(arg.split('.'))) {
-			message.channel.send(`The image you uploaded is not a valid image.`)
-			return false
-		}
-		return arg
+	if (arg.startsWith('<') && arg.endsWith('>')) {
+		arg = arg.slice(1, -1)
 	}
+
+	let tempArg = arg.split('.');
+	let tempExtension = tempArg[tempArg.length - 1].split('?')[0];
+
+	console.log(arg, tempArg, tempExtension);
+
+	if (!validExtensions.includes(tempExtension)) {
+		message.channel.send(`The image you uploaded is not a valid image.`)
+		return false
+	}
+	return arg
 }
 
 function checkCategories(args, limit) {
@@ -635,7 +639,7 @@ commands.registerfood = new Command({
 		{
 			name: "Attachment",
 			type: "Image or URL",
-			forced: true,
+			forced: false,
 			multiple: true
 		}
 	],
