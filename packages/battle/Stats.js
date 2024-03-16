@@ -129,15 +129,15 @@ inflictStatus = (char, status, notxt) => {
 	return notxt ? '' : `${char.name} was inflicted with ${statusNames[status]}!`;
 }
 
-getCharFromId = (id, btl) => {
+getCharFromId = (ID, btl) => {
 	for (const i in btl.teams) {
 		for (const k in btl.teams[i].members) {
-			if (btl.teams[i].members[k].id && btl.teams[i].members[k].id == id) return btl.teams[i].members[k];
+			if (!isNaN(btl.teams[i].members[k]?.id) && btl.teams[i].members[k].id == ID) return btl.teams[i].members[k];
 		}
 
 		// If they're in backup then return "backup"
 		for (const k in btl.teams[i].backup) {
-			if (btl.teams[i].backup[k].id && btl.teams[i].backup[k].id == id) return "backup";
+			if (!isNaN(btl.teams[i].backup[k]?.id) && btl.teams[i].backup[k].id == ID) return "backup";
 		}
 	}
 
