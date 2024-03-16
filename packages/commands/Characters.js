@@ -1114,7 +1114,7 @@ commands.forcelevel = new Command({
 
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 
-		updateSkillEvos(charFile[args[0]], true, message, message.guild.id, charFile);
+		updateSkillEvos(charFile[args[0]], false, message, message.guild.id, charFile);
 
 		// Send an Embed to notify us!
 		let DiscordEmbed = briefDescription(charFile[args[0]]);
