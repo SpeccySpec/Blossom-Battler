@@ -1437,7 +1437,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 				let targArray = [];
 				for (let i = 0; i < possible.length; i++) {
-					targArray.push([possible[randNumber][i].id, 1 - (Math.abs(possible[randNumber][i].id-1 - initChoice)) / possible[randNumber].length]);
+					targArray.push([possible[randNumber][i].id, 1 - (Math.abs(i - initChoice)) / possible[randNumber].length]);
 				}
 				
 				targArray.sort((a, b) => b[1] - a[1]);
@@ -1506,7 +1506,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 				let targArray = [];
 				for (let i = 0; i < possible[randTeam].length; i++) {
-					targArray.push([possible[randTeam][i].id, 1 - (Math.abs(possible[randTeam][i].id-1 - initChoice)) / possible[randTeam].length]);
+					targArray.push([possible[randTeam][i].id, 1 - (Math.abs(i - initChoice)) / possible[randTeam].length]);
 				}
 				
 				targArray.sort((a, b) => b[1] - a[1]);
