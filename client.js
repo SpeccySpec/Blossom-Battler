@@ -534,14 +534,14 @@ function messageCommand(message, guilded) {
 	if (message.author.bot) return;
 	if (message.channel.type === 'DM') return message.channel.send("Don't use me in DMs! That's kinda sussy!");
 
+	message.content = message.content.replace(/“/g, '"').replace(/”/g, '"').replace(/[^\S\r\n]/g, " ") // iOS quotation marks & untypable whitespaces
+
 	// Set up directory :)
 	makeDirectory(`${dataPath}/json/${message.guild.id}`);
 
 	// Register commands
 	prefix = getPrefix(message.guild.id)
 	if (!message.content.toLowerCase().startsWith(prefix)) return;
-
-	message.content = message.content.replace(/“/g, '"').replace(/”/g, '"') // iOS quotation marks 
 
 	let args = [...message.content.slice(prefix.length).matchAll(/"([^"]*?)"|[^ ]+/gm)].map(el => el[1] || el[0] || "");
 	if (args.length == 0) return;
