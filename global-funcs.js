@@ -397,9 +397,9 @@ Targets = [
 	'caster', // target the caster
 
 	//RANDOM SINGLE TARGETS
-	'random', // target random fighters
 	'randomopposing', // target random foes
 	'randomallies', // target random allies
+	'random', // target random fighters
 
 	//ENTIRE SIDES
 	'allopposing', // target all foes

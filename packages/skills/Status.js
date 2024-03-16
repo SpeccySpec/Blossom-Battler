@@ -1402,13 +1402,13 @@ statusList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
-			addCusVal(targ, 'revert', [vars[2] == 0 ? -1 : vars[2], {
+			addCusVal(char, 'revert', [vars[2] == 0 ? -1 : vars[2], {
 				stats: char.stats,
 				melee: char.melee
 			}]);
 			addCusVal(char, 'forcemove', [vars[2] == 0 ? -1 : vars[2], {
 				move: 'melee',
-				target: [targ.team, targ.pos],
+				//target: [],
 			}]);
 
 			char.melee.pow *= vars[1];

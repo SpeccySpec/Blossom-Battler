@@ -1285,16 +1285,28 @@ passiveList = {
 					case 'ally': txt += 'an ally'; break;
 					case 'caster': txt += 'the caster'; break;
 
-					case 'allopposing': txt += 'all foes'; break;
-					case 'allallies': txt += 'all allies'; break;
 					case 'randomopposing': txt += 'a random foe'; break;
 					case 'randomallies': txt += 'a random ally'; break;
-
 					case 'random': txt += 'a random fighter'; break;
+
+					case 'allopposing': txt += 'all foes'; break;
+					case 'allallies': txt += 'all allies'; break;
+
 					case 'everyone': txt += 'all fighters'; break;
 
-					case 'spreadopposing': txt += 'foes with spreading'; break;
-					case 'spreadallies': txt += 'allies with spreading'; break;
+					case 'spreadopposing': txt += 'a foe with spreading to 2 surrounding'; break;
+					case 'spreadallies': txt += 'an ally with spreading to 2 surrounding'; break;
+
+					case 'randomspreadopposing': txt += 'a random foe with spreading to 2 surrounding'; break;
+					case 'randomspreadallies': txt += 'a random ally with spreading to 2 surrounding'; break;
+					case 'randomspread': txt += 'a random fighter with spreading to 2 surrounding'; break;
+
+					case 'widespreadopposing': txt += 'a foe with spreading to all foes based on distance'; break;
+					case 'widespreadallies': txt += 'an ally with spreading to all allies based on distance'; break;
+
+					case 'randomwidespreadopposing': txt += 'a random foe with spreading to all foes based on distance'; break;
+					case 'randomwidespreadallies': txt += 'a random ally with spreading to all foes based on distance'; break;
+					case 'randomwidespread': txt += 'a random fighter with spreading to all foes based on distance'; break;
 				}
 
 				if (i < vars.length - 2) {

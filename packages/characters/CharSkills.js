@@ -7,6 +7,32 @@ makeMelee = (char) => {
 
 		if (psv.passive.magicmelee) atkType = 'magic';
 		if (psv.passive.meleetarget) targType = psv.passive.meleetarget[0][randNum(0, psv.passive.meleetarget[0].length - 1)]
+
+		if (char.ragesoul) {
+			let targRandom = {
+				one: 'randomopposing',
+				ally: 'randomallies',
+				caster: 'caster',
+				allopposing: 'allopposing',
+				allallies: 'allallies',
+				randomopposing: 'randomopposing',
+				randomallies: 'randomallies',
+				random: 'random',
+				everyone: 'everyone',
+				randomspread: 'randomspread',
+				randomwidespread: 'randomwidespread',
+				spreadopposing: 'randomspreadopposing',
+				spreadallies: 'randomspreadallies',
+				randomspreadopposing: 'randomspreadopposing',
+				randomspreadallies: 'randomspreadallies',
+				widespreadopposing: 'randomwidespreadopposing',
+				widespreadallies: 'randomwidespreadallies',
+				randomwidespreadopposing: 'randomwidespreadopposing',
+				randomwidespreadallies: 'randomwidespreadallies'
+			};
+
+			targType = targRandom[targType];
+		}
 	}
 
 	let meleeAtk = {
