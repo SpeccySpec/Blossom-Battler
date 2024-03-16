@@ -2485,7 +2485,7 @@ statusEffectFuncs = {
 					.setTitle(`${char.name}'s turn!`)
 					.setDescription(`...But it failed!`);
 				btl.channel.send({embeds: [DiscordEmbed]});
-				return false;
+				return true;
 			}
 
 			var act = actionTable[Math.floor(Math.random() * (actionTable.length-1+0.99))]; //that 0.99 is for ABSOLUTE even chances
