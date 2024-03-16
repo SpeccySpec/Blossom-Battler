@@ -216,6 +216,13 @@ replaceEvoSkills = async (charDefs, toUpdate, channel, server, charFile) => {
 		}
 	}
 
+	for (skill in charDefs.skills) {
+		if (charDefs.skills[skill] == 'remove') {
+			if (charDefs.autolearn) delete charDefs.autolearn[skill.toString()];
+		}
+	}
+	charDefs.skills = charDefs.skills.filter(x => x != 'remove');
+
 	fs.writeFileSync(`${dataPath}/json/${server}/characters.json`, JSON.stringify(charFile, null, '    '));
 }
 
