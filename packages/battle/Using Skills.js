@@ -76,12 +76,12 @@ genDmg = (char, targ, btl, skill) => {
 	// Custom Variable StatMod.
 	if (char.custom) {
 		for (let i in char.custom) {
-			if (customVariables[i] && customVariables[i].statmod) charStats = customVariables[i].statmod(btl, char, charStats, char.custom[i]);
+			if (customVariables[i] && customVariables[i].statmod) customVariables[i].statmod(btl, char, skill, char.custom[i]);
 		}
 	}
 	if (targ.custom) {
 		for (let i in targ.custom) {
-			if (customVariables[i] && customVariables[i].statmod) targStats = customVariables[i].statmod(btl, targ, targStats, targ.custom[i]);
+			if (customVariables[i] && customVariables[i].statmod) customVariables[i].statmod(btl, targ, skill, targ.custom[i]);
 		}
 	}
 
