@@ -398,7 +398,7 @@ creditsEmbed = async (message) => {
 		if (credits[index].userID) {
 			if (users[index] != null) {
 				embed.setThumbnail(users[index].displayAvatarURL())
-				embed.addField(`Name`, `${users[index].username}#${users[index].discriminator}`, false)
+				embed.addField(`Name`, `${users[index].username}`, false)
 			}
 			embed.addField(`Role`, credits[index].role, false)
 			embed.addField(`Description`, credits[index].description, false)
