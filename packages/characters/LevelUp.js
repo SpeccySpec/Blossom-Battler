@@ -7,14 +7,14 @@ xpBar = (charDefs) => {
 	return getBar('xp', charDefs.xp, charDefs.maxxp);
 }
 
-gainXp = (message, charDefs, xp, allone) => {
+gainXp = (message, charDefs, xp, allone, server, charFile) => {
     charDefs.xp += xp;
 	console.log(`${charDefs.name} ${charDefs.xp}/${charDefs.maxxp}XP`);
 
 	let channel = message.channel ?? message;
 
 	if (allone) {
-		let embed = lvlUpWithXpInMind(charDefs, false, message, true);
+		let embed = lvlUpWithXpInMind(charDefs, false, message, true, server, charFile);
 
 		if (embed) {
 			channel.send({content: `${xpBar(charDefs)}\n${charDefs.name} got _${xp}XP_!`, embeds: [embed]});
@@ -23,7 +23,7 @@ gainXp = (message, charDefs, xp, allone) => {
 		}
 	} else {
 		channel.send(`${xpBar(charDefs)}\n${charDefs.name} got _${xp}XP_!`);
-		lvlUpWithXpInMind(charDefs, false, message);
+		lvlUpWithXpInMind(charDefs, false, message, false, server, charFile);
 	}
 }
 
@@ -90,51 +90,165 @@ updateStats = (charDefs, server, updateXp) => {
 	}
 }
 
-updateSkillEvos = (charDefs, forceEvo) => {
-	if (forceEvo == true) {
-		for (const i in charDefs.skills) {
-			let skillDefs = skillFile[charDefs.skills[i]];
-
-			while (skillDefs && skillDefs.preskills && charDefs.level <= skillDefs.preskills[0][1]) {
-				if (skillDefs.preskills[0][0] == 'remove') delete charDefs.autolearn[charDefs.skills.indexOf(charDefs.skills[i])];
-
-				charDefs.skills[i] = skillDefs.preskills[0][0];
-				skillDefs = skillFile[charDefs.skills[i]];
-			}
-			while (skillDefs && skillDefs.evoskills && charDefs.level >= skillDefs.evoskills[0][1]) {
-				charDefs.skills[i] = skillDefs.evoskills[0][0];
-				skillDefs = skillFile[charDefs.skills[i]];
+checkForEvos = async (charDefs, skillDefs, toUpdate, field) => {
+	if (skillDefs) {
+		if (skillDefs.preskills) {
+			for (preskill in skillDefs.preskills) {
+				if (charDefs.level <= skillDefs.preskills[preskill][1]) toUpdate[field].preskills.push(skillDefs.preskills[preskill][0]);
 			}
 		}
 
-		charDefs.skills = charDefs.skills.filter(x => x != 'remove');
-	} else {
-		if (!charDefs.autolearn) return;
+		if (skillDefs.evoskills) {
+			for (evoskill in skillDefs.evoskills) {
+				if (charDefs.level >= skillDefs.evoskills[evoskill][1]) toUpdate[field].evoskills.push(skillDefs.evoskills[evoskill][0]);
+			}
+		}
+	}
+}
 
-		var checkSkills = []
+evoSkillMessageCollector = async (charDefs, toUpdate, channel, server, ind, field, charFile) => {
+	let skillDefs = skillFile[charDefs.skills[parseInt(ind)]];
+	let skillChoice = (field.preskills.length > 1 ? field.preskills : field.evoskills);
+
+	let descText = '';
+	let skillButtons = [];
+
+	descText += `Looks like you got multiple paths to choose from! From **`;
+
+	if (typeof skillDefs.type == 'string') {
+		descText += elementEmoji[skillDefs.type]
+	} else {
+		for (const j in skillDefs.type) {
+			descText += elementEmoji[skillDefs.type[j]]
+		}
+	}
+
+	descText += `${skillDefs.name}**, you can **${field.preskills.length > 1 ? 'downgrade' : 'upgrade'}** to:\n`;
+
+	for (skill in skillChoice) {
+		let skillInfo = skillFile[skillChoice[skill]];
+
+		descText += '- ';
+		if (typeof skillInfo.type == 'string') {
+			descText += elementEmoji[skillInfo.type]
+		} else {
+			for (const j in skillInfo.type) {
+				descText += elementEmoji[skillInfo.type[j]]
+			}
+		}
+		descText += `${skillInfo.name}\n`;
+
+		//Skills
+		let btncolor = 'blue'
+		if (skillInfo?.type === 'heal') 
+			btncolor = 'green'
+		else if (skillInfo?.type === 'status') 
+			btncolor = 'grey'
+		else if (skillInfo?.atktype === 'physical') 
+			btncolor = 'red'
+
+		let emoji1 = skillInfo ? elementEmoji[skillInfo.type] : elementEmoji.strike;
+		if (typeof(skillInfo?.type) === 'object') emoji1 = skillInfo ? elementEmoji[skillInfo.type[0]] : elementEmoji.strike;
+
+		skillButtons.push(makeButton(skillInfo?.name, emoji1, btncolor, true, skillChoice[skill], false))
+	}
+
+	descText += `\nWhich one do you choose?`
+
+	let DiscordEmbed = new Discord.MessageEmbed()
+	.setColor(elementColors[charDefs.mainElement])
+	.setTitle(`__${elementEmoji[charDefs.mainElement]}${charDefs.name}__'s ${field.preskills.length > 1 ? 'preskill' : 'evoskill'} choice: ${skillDefs.name}`)
+	.setDescription(descText);
+
+	let embedMessage = ''
+	embedMessage = await channel.send({
+		embeds: [DiscordEmbed],
+		components: [new Discord.MessageActionRow({components: skillButtons})]
+	})
+
+	const collector = embedMessage.createMessageComponentCollector({
+		filter: ({user}) => user.id === charDefs.owner || user.flags.serialize().ADMINISTRATOR || adminList.includes(user.id)
+	})
+
+	collector.on('collect', async interaction => {
+		collector.stop();
+		embedMessage.delete();
+
+		console.log(skillChoice);
+		console.log(interaction.component.customId);
+		charDefs.skills[parseInt(ind)] = skillChoice[skillChoice.indexOf(interaction.component.customId)];
+		toUpdate[ind] = {
+			"preskills": [],
+			"evoskills": []
+		}
+
+		checkForEvos(charDefs, skillFile[charDefs.skills[parseInt(ind)]], toUpdate, ind);
+		return replaceEvoSkills(charDefs, toUpdate, channel, server, charFile)
+	});
+}
+
+replaceEvoSkills = async (charDefs, toUpdate, channel, server, charFile) => {
+	for (ind in toUpdate) {
+		if (toUpdate[ind].preskills.length == 1) {
+			charDefs.skills[parseInt(ind)] = toUpdate[ind].preskills[0];
+			toUpdate[ind] = {
+				"preskills": [],
+				"evoskills": []
+			}
+
+			checkForEvos(charDefs, skillFile[charDefs.skills[parseInt(ind)]], toUpdate, ind);
+			return replaceEvoSkills(charDefs, toUpdate, channel, server, charFile)
+		} else if (toUpdate[ind].preskills.length > 1) {
+			return evoSkillMessageCollector(charDefs, toUpdate, channel, server, ind, toUpdate[ind], charFile);
+		}
+
+		if (toUpdate[ind].evoskills.length == 1) {
+			charDefs.skills[parseInt(ind)] = toUpdate[ind].evoskills[0];
+			toUpdate[ind] = {
+				"preskills": [],
+				"evoskills": []
+			}
+
+			checkForEvos(charDefs, skillFile[charDefs.skills[parseInt(ind)]], toUpdate, ind);
+			return replaceEvoSkills(charDefs, toUpdate, channel, server, charFile)
+		} else if (toUpdate[ind].evoskills.length > 1) {
+			return evoSkillMessageCollector(charDefs, toUpdate, channel, server, ind, toUpdate[ind], charFile)
+		}
+	}
+
+	fs.writeFileSync(`${dataPath}/json/${server}/characters.json`, JSON.stringify(charFile, null, '    '));
+}
+
+updateSkillEvos = async (charDefs, forceEvo, message, server, charFile) => {
+	if (!charDefs.autolearn && !forceEvo) return;
+
+	let checkSkills = [];
+	let toUpdate = {};
+
+	if (forceEvo) {
+		checkSkills = charDefs.skills;
+	} else {
 		for (const i in charDefs.autolearn) {
 			if (charDefs.autolearn[i] && charDefs.skills[parseInt(i)]) {
 				checkSkills.push(charDefs.skills[parseInt(i)])
 			}
 		}
-
-		for (const i in checkSkills) {
-			let skillDefs = skillFile[checkSkills[i]];
-
-			while (skillDefs && skillDefs.preskills && charDefs.level <= skillDefs.preskills[0][1]) {
-				if (skillDefs.preskills[0][0] == 'remove') delete charDefs.autolearn[charDefs.skills.indexOf(charDefs.skills[i])];
-
-				charDefs.skills[i] = skillDefs.preskills[0][0];
-				skillDefs = skillFile[charDefs.skills[i]];
-			}
-			while (skillDefs && skillDefs.evoskills && charDefs.level >= skillDefs.evoskills[0][1]) {
-				charDefs.skills[i] = skillDefs.evoskills[0][0];
-				skillDefs = skillFile[charDefs.skills[i]];
-			}
-		}
-
-		charDefs.skills = charDefs.skills.filter(x => x != 'remove');
 	}
+
+	for (const i in checkSkills) {
+		toUpdate[i.toString()] = {
+			"preskills": [],
+			"evoskills": []
+		};
+
+		let skillDefs = skillFile[checkSkills[i]];
+
+		checkForEvos(charDefs, skillDefs, toUpdate, i.toString());
+	}
+
+	let channel = message.channel ?? message;
+
+	replaceEvoSkills(charDefs, toUpdate, channel, server, charFile);
 }
 
 levelUp = (charDefs, forceEvo, server) => {
@@ -176,19 +290,19 @@ levelDown = (charDefs, forceEvo, server) => {
 }
 
 // Convert all XP into Levels
-lvlUpWithXpInMind = (charDefs, forceEvo, message, returnembed) => {
+lvlUpWithXpInMind = (charDefs, forceEvo, message, returnembed, server, charFile) => {
 	let lvlCount = 0;
 	while (charDefs.xp >= charDefs.maxxp) {
 		if (charDefs.level < 99) {
-			levelUp(charDefs, forceEvo, message.guild.id)
+			levelUp(charDefs, forceEvo, server)
 			lvlCount++;
 		}
 	}
 
-	updateSkillEvos(charDefs, forceEvo);
-
 	if (lvlCount <= 0) return;
 	if (!message && !returnembed) return;
+
+	updateSkillEvos(charDefs, forceEvo, message, server, charFile);
 
 	let DiscordEmbed = briefDescription(charDefs);
 	DiscordEmbed.title = `${charDefs.name} levelled up${(lvlCount <= 1) ? '!' : ' ' + lvlCount + ' times!'}`;
@@ -203,13 +317,15 @@ lvlUpWithXpInMind = (charDefs, forceEvo, message, returnembed) => {
 }
 
 // Level up a set number of times
-levelUpTimes = (charDefs, forceEvo, times, message) => {
+levelUpTimes = (charDefs, forceEvo, times, message, charFile) => {
 	for (let i = 0; i < times; i++) levelUp(charDefs, forceEvo, message.guild.id);
-	updateSkillEvos(charDefs, forceEvo);
-	if (!message) return;
 
-	let DiscordEmbed = briefDescription(charDefs);
-	DiscordEmbed.title = `${charDefs.name} levelled up${(times <= 1) ? '!' : ' ' + times + ' times!'}`;
-	if (selectQuote(charDefs, 'lvl')) DiscordEmbed.description = `_${charDefs.name}: "${selectQuote(charDefs, 'lvl')}"_\n\n${DiscordEmbed.description}`;
-	message.channel.send({embeds: [DiscordEmbed]});
+	if (message) {
+		let DiscordEmbed = briefDescription(charDefs);
+		DiscordEmbed.title = `${charDefs.name} levelled up${(times <= 1) ? '!' : ' ' + times + ' times!'}`;
+		if (selectQuote(charDefs, 'lvl')) DiscordEmbed.description = `_${charDefs.name}: "${selectQuote(charDefs, 'lvl')}"_\n\n${DiscordEmbed.description}`;
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+
+	updateSkillEvos(charDefs, forceEvo, message, message.guild.id, charFile);
 }

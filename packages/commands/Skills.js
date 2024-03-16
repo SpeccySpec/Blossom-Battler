@@ -1031,6 +1031,8 @@ commands.preskill = new Command({
 	],
 	func(message, args, guilded) {
 		if (skillFile[args[0]] && (skillFile[args[1]] || args[1].toLowerCase() === "remove")) {
+			if (skillFile[args[0]].preskills.length == 5) return message.channel.send(`${skillFile[args[0]].name} already has enough preskills. There's no need to add more.`);
+
 			if (hasPreSkill(skillFile[args[0]], args[1])) {
 				return message.channel.send(`${skillFile[args[0]].name} already has a pre-skill for ${args[1]}!`)
 			}
@@ -1097,6 +1099,8 @@ commands.evoskill = new Command({
 	],
 	func(message, args, guilded) {
 		if (skillFile[args[0]] && skillFile[args[1]]) {
+			if (skillFile[args[0]].evoskills.length == 5) return message.channel.send(`${skillFile[args[0]].name} already has enough evoskills. There's no need to add more.`);
+
 			if (hasEvoSkill(skillFile[args[0]], args[1])) {
 				return message.channel.send(`${skillFile[args[0]].name} already has an evo-skill for ${args[1]}!`)
 			}

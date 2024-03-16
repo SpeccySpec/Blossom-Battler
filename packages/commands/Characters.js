@@ -995,7 +995,7 @@ commands.gainxp = new Command({
 		if (charFile[args[0]].level >= settings.caps.levelcap) return message.channel.send(`${charFile[args[0]].name} cannot level up any further!`);
 
 		// gainXp function handles everything.
-		gainXp(message, charFile[args[0]], args[1]);
+		gainXp(message, charFile[args[0]], args[1], false, message.guild.id, charFile);
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
@@ -1029,7 +1029,7 @@ commands.awardenemyxp = new Command({
 		if (!enemyFile[args[1]]) return message.channel.send('Nonexistant Enemy.');
 
 		// gainXp function handles everything.
-		gainXp(message, charFile[args[0]], enemyFile[args[1]].xp);
+		gainXp(message, charFile[args[0]], enemyFile[args[1]].xp, false, message.guild.id, charFile);
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
@@ -1064,7 +1064,7 @@ commands.levelup = new Command({
 		if (args[1] >= 999) return message.channel.send("Don't even try it.");
 
 		// levelUpTimes function handles everything.
-		levelUpTimes(charFile[args[0]], false, args[1], message);
+		levelUpTimes(charFile[args[0]], false, args[1], message, charFile);
 		charFile[args[0]].xp = 0;
 
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
@@ -1112,9 +1112,9 @@ commands.forcelevel = new Command({
 		charFile[args[0]].skills = charFile[args[0]].skills.filter(skill => skill != '');
 		charFile[args[0]].xp = 0;
 
-		updateSkillEvos(charFile[args[0]], true);
-
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+
+		updateSkillEvos(charFile[args[0]], true, message, message.guild.id, charFile);
 
 		// Send an Embed to notify us!
 		let DiscordEmbed = briefDescription(charFile[args[0]]);

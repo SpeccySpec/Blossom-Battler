@@ -192,7 +192,6 @@ winBattle = (btl, i) => {
 	let users = [];
 	for (let char of btl.teams[i].members) {
 		if (charFile[char.truename]) {
-			if (enemyxp > 0) gainXp(btl.channel, charFile[char.truename], enemyxp, true);
 			charFile[char.truename].hp = Math.min(charFile[char.truename].maxhp, char.hp);
 			charFile[char.truename].mp = Math.min(charFile[char.truename].maxmp, char.mp);
 
@@ -210,6 +209,8 @@ winBattle = (btl, i) => {
 				charFile[char.truename].trust = char.trust;
 				charFile[char2.truename].trust = char2.trust;
 			}
+
+			if (enemyxp > 0) gainXp(btl.channel, charFile[char.truename], enemyxp, true, btl.channel.guildId, charFile);
 
 			// Also, get the USERS that participated in this battle
 			if (!users.includes(char.owner)) users.push(char.owner);
