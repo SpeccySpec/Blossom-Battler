@@ -3,7 +3,15 @@ let st = {
 	allopposing: 'one',
 	everyone: 'one',
 	spreadopposing: 'one',
-	spreadallies: 'ally'
+	spreadallies: 'ally',
+	randomspreadallies: 'ally',
+	randomspreadopposing: 'one',
+	randomspread: 'one',
+	randomwidespread: 'one',
+	widespreadopposing: 'one',
+	widespreadallies: 'ally',
+	randomwidespreadopposing: 'one',
+	randomwidespreadallies: 'ally'
 }
 
 forceSingleTarget = (skill) => {
@@ -2093,7 +2101,7 @@ statusEffectFuncs = {
 				char.statusturns = 3;
 			}
 		},
-		onremove: function(char) {
+		onremove: function(btl, char) {
 			delete char.parachance
 		},
 		onturn: function(btl, char) {
@@ -2214,10 +2222,19 @@ statusEffectFuncs = {
 				allopposing: 'allallies',
 				allallies: 'allopposing',
 				randomopposing: 'randomallies',
+				randomallies: 'randomopposing',
 				random: 'random',
 				everyone: 'everyone',
+				randomspread: 'randomspread',
+				randomwidespread: 'randomwidespread',
 				spreadopposing: 'spreadallies',
-				spreadallies: 'spreadopposing'
+				spreadallies: 'spreadopposing',
+				randomspreadopposing: 'randomspreadallies',
+				randomspreadallies: 'randomspreadopposing',
+				widespreadopposing: 'widespreadallies',
+				widespreadallies: 'widespreadopposing',
+				randomwidespreadopposing: 'randomwidespreadallies',
+				randomwidespreadallies: 'randomwidespreadopposing'
 			}
 
 			if (!skillDefs.target)
@@ -2254,7 +2271,7 @@ statusEffectFuncs = {
 
 	rage: {
 		forceturns: 2,
-		onremove(char) {
+		onremove(btl, char) {
 			killVar(char, 'forcemove');
 		},
 		turnoverride(btl, char) {
@@ -2365,7 +2382,7 @@ statusEffectFuncs = {
 				char.statusturns = 1;
 			}
 		},
-		onremove: function(char) {
+		onremove: function(btl, char) {
 			char.stats = objClone(char.originalstats);
 			delete char.originalstats;
 		},
@@ -2433,6 +2450,182 @@ statusEffectFuncs = {
 		forceturns: 3,
 		onturn: function(btl, char) {
 			return `${char.name} is drenched...`;
+		}
+	},
+
+	insanity: {
+		oninflict: function(char) {
+			char.statusturns = (char.boss || char.finalboss || char.diety) ? 1 : 3;
+		},
+		onremove(btl, char) {
+			DiscordEmbed = new Discord.MessageEmbed()
+				.setColor("#ff1fa9")
+				.setTitle(`${char.name}'s turn!`)
+				.setDescription(`${char.name} is brought back to clarity!`+(char.hp <= 0?`\n...And is defeated!\n${selectQuote(targ, 'death', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`:''));
+			btl.channel.send({embeds: [DiscordEmbed]});
+		},
+		turnoverride: function(btl, char) {
+			if (char?.status && char?.statusturns <= 0) return true;
+
+			let actionTable = [];
+
+			if (char.boss || char.finalboss || char.diety) {
+				if (hasStatusAffinity(char, 'insanity', 'resist')) actionTable = ['skip'];
+				else if (hasStatusAffinity(char, 'insanity', 'normal')) actionTable = ['skip', 'brainwash'];
+				else actionTable = ['skip', 'brainwash', 'action'];
+			} else {
+				if (hasStatusAffinity(char, 'insanity', 'resist')) actionTable = [];
+				else if (hasStatusAffinity(char, 'insanity', 'normal')) actionTable = ['skip'];
+				else actionTable = ['skip', 'brainwash'];
+			}
+
+			if (actionTable.length == 0) {
+				DiscordEmbed = new Discord.MessageEmbed()
+					.setColor("#ff1fa9")
+					.setTitle(`${char.name}'s turn!`)
+					.setDescription(`...But it failed!`);
+				btl.channel.send({embeds: [DiscordEmbed]});
+				return false;
+			}
+
+			var act = actionTable[Math.floor(Math.random() * (actionTable.length-1+0.99))]; //that 0.99 is for ABSOLUTE even chances
+
+			switch (act) {
+				case 'brainwash':
+					let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+			
+					let usableskills = [];
+					for (let i in char.skills) {
+						if (canUseSkill(char, skillFile[char.skills[i]], char.skills[i])) usableskills.push(char.skills[i]);
+					}
+					
+					if (usableskills.length <= 0) {
+						DiscordEmbed = new Discord.MessageEmbed()
+							.setColor("#ff1fa9")
+							.setTitle(`${char.name}'s turn!`)
+							.setDescription(`...But it failed!`);
+						btl.channel.send({embeds: [DiscordEmbed]});
+						return false;
+					}
+
+					let skill = usableskills[randNum(usableskills.length-1)];
+					let skillDefs = objClone(skillFile[skill]);
+
+					let targRandom = {
+						one: 'random',
+						ally: 'random',
+						caster: 'random',
+						allopposing: (randNum(1) == 0 ? 'allopposing' : 'allallies'),
+						allallies: (randNum(1) == 0 ? 'allallies' : 'allopposing'),
+						randomopposing: 'random',
+						randomallies: 'random',
+						random: 'random',
+						everyone: 'everyone',
+						randomspread: 'randomspread',
+						randomwidespread: 'randomwidespread',
+						spreadopposing: 'randomspread',
+						spreadallies: 'randomspread',
+						randomspreadopposing: 'randomspread',
+						randomspreadallies: 'randomspread',
+						widespreadopposing: 'randomwidespread',
+						widespreadallies: 'randomwidespread',
+						randomwidespreadopposing: 'randomwidespread',
+						randomwidespreadallies: 'randomwidespread'
+					}
+
+					if (!skillDefs.target)
+						skillDefs.target = 'random';
+					else
+						skillDefs.target = targRandom[skillDefs.target];
+
+					let result = {
+						move: 'skills',
+						index: skill,
+						target: [char.team, randNum(btl.teams[char.team].members.length-1)],
+					}
+
+					useSkill(char, btl, result, skillDefs);
+					break;
+				case 'action':
+					let skillDefine = {};
+
+					switch (Math.floor(Math.random() * 2.99)) { //Hear me out. 0-0.99 is result 0, 1-1.99 is result 1, and 2-2.99 is result 2. Balanced!
+						case 0: //Buff random enemy
+							skillDefine = {
+								"name": "Insanity Action: Buff",
+								"type": "status",
+								"cost": 0,
+								"costtype": "mp",
+								"target": "randomopposing",
+								"statusses": {
+									"buff": [
+										[
+											"target",
+											"random",
+											1,
+											100
+										],
+									]
+								},
+							};
+							break;
+						case 1: //Debuff user
+							skillDefine = {
+								"name": "Insanity Action: Hinder",
+								"type": "status",
+								"cost": 0,
+								"costtype": "mp",
+								"target": "caster",
+								"statusses": {
+									"buff": [
+										[
+											"user",
+											"random",
+											-1,
+											100
+										],
+									]
+								},
+							};
+							break;
+						case 2: //Heal Random Target
+							skillDefine = {
+								"name": "Insanity Action: Heal",
+								"cost": 0,
+								"costtype": "mp",
+								"type": "heal",
+								"target": "random",
+								"heal": {
+									"powerheal": [
+										[
+											50,
+											"hp",
+											"atk",
+											"end"
+										]
+									]
+								},
+							}
+							break;
+					}
+
+					let resultDefine = {
+						move: 'skills',
+						index: 0,
+						target: [char.team, randNum(btl.teams[char.team].members.length-1)],
+					}
+					useSkill(char, btl, resultDefine, skillDefine);
+					break;
+				case 'skip':
+					DiscordEmbed = new Discord.MessageEmbed()
+						.setColor("#ff1fa9")
+						.setTitle(`${char.name}'s turn!`)
+						.setDescription(`${char.name} cannot comprehend what's going on, losing their turn!`);
+					btl.channel.send({embeds: [DiscordEmbed]});
+					break;
+			}
+
+			return false;
 		}
 	},
 }

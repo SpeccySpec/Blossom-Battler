@@ -103,7 +103,8 @@ const statusEffects = [
 	"infatuation",
 	"mirror",
 	"blind",
-	"confusion"
+	"confusion",
+	"insanity"
 ]
 
 const statusEmojis = {
@@ -127,7 +128,8 @@ const statusEmojis = {
 	infatuation: '❣️',
 	mirror: '<:mirror:929864689406582784>',
 	blind: '🕶️',
-	confusion: '☄️'
+	confusion: '☄️',
+	insanity: '<:insanity:1217924742237913218>'
 }
 
 // Enemy Habitats
@@ -256,7 +258,8 @@ const elementTechs = {
 	hunger: ['strike', 'pierce', 'earth'],
 	illness: ['slash', 'poison', 'nuclear'],
 	mirror: ['strike', 'slash', 'pierce'],
-	blind: ['curse', 'bless', 'gravity']
+	blind: ['curse', 'bless', 'gravity'],
+	insanity: ['psychic', 'curse'],
 }
 
 function isTech(charDefs, element) {
@@ -867,6 +870,10 @@ function inflictStatus(oppDefs, skillDefs) {
 		finaltext = `${oppDefs.name} was blinded!`
 		oppDefs.status = "blind"
 		oppDefs.statusturns = 3
+	} else if (skillStatus === "insanity") {
+		finaltext = `${oppDefs.name} was brought to insanity!`
+		oppDefs.status = "insanity"
+		oppDefs.statusturns = (oppDefs.boss || oppDefs.finalboss || oppDefs.diety) ? 1 : 3
 	}
 	
 	return finaltext
@@ -955,6 +962,10 @@ function inflictStatusFromText(oppDefs, statusEffect) {
 		finaltext = `${oppDefs.name} was blinded!`
 		oppDefs.status = "blind"
 		oppDefs.statusturns = 3
+	} else if (skillStatus === "insanity") {
+		finaltext = `${oppDefs.name} was brought to insanity!`
+		oppDefs.status = "insanity"
+		oppDefs.statusturns = (oppDefs.boss || oppDefs.finalboss || oppDefs.diety) ? 1 : 3
 	}
 	
 	return finaltext

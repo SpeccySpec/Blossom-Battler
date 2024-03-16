@@ -168,16 +168,40 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 				finalText += "Targets a **random fighter** in-battle.\n";
 				break;
 			case "randomopposing":
-				finalText += "Targets a **random opponent** in-battle.\n";
+				finalText += "Targets a **random foe** in-battle.\n";
 				break;
 			case "randomallies":
 				finalText += "Targets a **random ally** in-battle.\n";
 				break;
 			case "spreadopposing":
-				finalText += "Targets **one opponent and spreads to two surrounding**.\n";
+				finalText += "Targets **one foe and spreads to two surrounding**.\n";
 				break;
 			case "spreadallies":
 				finalText += "Targets **an ally and spreads to two surrounding**.\n";
+				break;
+			case "randomspread":
+				finalText += "Targets **a random fighter in-battle and spreads to two surrounding**.\n";
+				break;
+			case "randomspreadopposing":
+				finalText += "Targets **a random foe in-battle and spreads to two surrounding**.\n";
+				break;
+			case "randomspreadallies":
+				finalText += "Targets **a random ally in-battle and spreads to two surrounding**.\n";
+				break;
+			case "randomwidespread":
+				finalText += "Targets **a random fighter in-battle and spreads to everyone on its side based on distance**.\n";
+				break;
+			case "widespreadopposing":
+				finalText += "Targets **one foe and spreads to all foes based on distance**.\n";
+				break;
+			case "widespreadallies":
+				finalText += "Targets **an ally and spreads to all allies based on distance**.\n";
+				break;
+			case "randomwidespreadopposing":
+				finalText += "Targets **a random foe in-battle and spreads to all foes based on distance**.\n";
+				break;
+			case "randomwidespreadallies":
+				finalText += "Targets **a random ally in-battle and spreads to all allies based on distance**.\n";
 				break;
 			default:
 				finalText += "Targets **one foe**.\n";

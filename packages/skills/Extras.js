@@ -622,7 +622,7 @@ extrasList = {
 
 			if (target != 'user' && target != 'target') 
 				return void message.channel.send(`You typed ${target} as the target. It must be either \`user\` or \`target\`.`)
-			if (![...stats, "crit", "all"].includes(stat))
+			if (![...stats, "crit", "all", "random"].includes(stat))
 				return void message.channel.send("That's not a valid stat!");
 			if (stages == 0)
 				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
@@ -677,6 +677,12 @@ extrasList = {
 					buffChange(char, targ, skill, btl, [target, "agl", amount, chance, turns], null, boostedAmount) + "\n" +
 					buffChange(char, targ, skill, btl, [target, "prc", amount, chance, turns], null, boostedAmount) + "\n" +
 					buffChange(char, targ, skill, btl, [target, "crit", amount, chance, turns], null, boostedAmount)
+			} else if (stat == "random") {
+				const buffChange = extrasList.buff.buffChange
+				const target = vars[0]
+				const stat = ["atk", "mag", "end", "agl", "prc", "crit"][randNum(5)];
+
+				return buffChange(char, targ, skill, btl, [target, stat, amount, chance, turns], null, boostedAmount);
 			} else if (typeof stat == "object") {
 				const buffChange = extrasList.buff.buffChange
 				const target = vars[0]

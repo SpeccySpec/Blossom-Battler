@@ -103,7 +103,7 @@ commands.registerskill = new Command({
 		let atype = args[8].toLowerCase();
 		if (atype != 'physical' && atype != 'magic' && atype != 'ranged') return message.channel.send(`${atype} is an invalid form of contact! Try physical, magic or ranged.`);
 
-		if (!args[9] || !utilityFuncs.inArray(args[9].toLowerCase(), Targets)) return message.channel.send('Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n-SpreadOpposing\n- SpreadAllies```')
+		if (!args[9] || !utilityFuncs.inArray(args[9].toLowerCase(), Targets)) return message.channel.send(`Please enter a valid target type for **Target**!\`\`\`diff\n- ${Targets.join('\n- ')}\`\`\``)
 
 		let skillDefs = {
 			name: args[0],
@@ -1679,6 +1679,7 @@ commands.liststatus = new Command({
 			infatuation: '<:mental:1004855144745291887>50% chance to hault attack. Stacks with other status effects.',
 			confusion: '<:mental:1004855144745291887>50% chance to damage self when attacking. Stacks with other status effects.',
 			sensitive: '<:mental:1004855144745291887>Debuff a random stat once hit a single time per opponent for 3 turns.',
+			insanity: '<:mental:1004855144745291887>One of multiple effects on turn for 1 turn for bosses, and 3 on non-bosses.\n\nEffects:\nNon-Boss: Skip Turn, Random Skill, Insanity Action (Buff random enemy once/Debuff itself once/Heal random target)\nBoss: Skip Turn, Random Skill\n\nStatus affinities change what effects can be applied.',
 
 			// Positive Physical
 			mirror: '<:physical:973077052129423411>Positive Status Effect. Immobilized for 3 turns. Repel magic skills.',

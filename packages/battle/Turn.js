@@ -725,7 +725,7 @@ sendCurTurnEmbed = (char, btl) => {
 				btl.action.move = 'melee';
 				btl.action.melee = makeMelee(char);
 
-				if ((btl.action.melee.target === "one" || btl.action.melee.target === "spreadopposing")) {
+				if ((btl.action.melee.target === "one" || btl.action.melee.target === "spreadopposing" || btl.action.melee.target === "widespreadopposing")) {
 					let alivecount = 0;
 					let alivenum = [0, 0];
 
@@ -755,7 +755,7 @@ sendCurTurnEmbed = (char, btl) => {
 					} else {
 						menustate = MENU_TEAMSEL;
 					}
-				} else if (btl.action.melee.target === "ally" || btl.action.melee.target === "spreadallies") {
+				} else if (btl.action.melee.target === "ally" || btl.action.melee.target === "spreadallies" || btl.action.melee.target === "widespreadallies") {
 					btl.action.target[0] = char.team;
 					if (btl.teams[char.team].members.length == 1) {
 						alreadyResponded = true;
@@ -1154,7 +1154,7 @@ sendCurTurnEmbed = (char, btl) => {
 
 					if (hasStatus(skill, 'mimic')) {
 						menustate = MENU_ANYSEL;
-					} else if ((skill.target === "one" || skill.target === "spreadopposing")) {
+					} else if ((skill.target === "one" || skill.target === "spreadopposing" || skill.target === "widespreadopposing")) {
 						let alivecount = 0;
 						let alivenum = [0, 0];
 
@@ -1183,7 +1183,7 @@ sendCurTurnEmbed = (char, btl) => {
 						} else {
 							menustate = MENU_TEAMSEL;
 						}
-					} else if (skill.target === "ally" || skill.target === "spreadallies") {
+					} else if (skill.target === "ally" || skill.target === "spreadallies" || skill.target === "widespreadallies") {
 						btl.action.target[0] = char.team;
 						if (btl.teams[char.team].members.length == 1) {
 							alreadyResponded = true;
@@ -1961,13 +1961,13 @@ doTurn = async(btl, noTurnEmbed) => {
 
 		if (char.hp <= 0) {
 			canMove = false;
-			if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(char);
+			if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(btl, char);
 			delete char.status;
 			delete char.statusturns;
 		} else {
 			char.statusturns--;
 			if (char.statusturns <= 0) {
-				if (statusEffectFuncs[char.status]?.onremove) statusEffectFuncs[char.status].onremove(char);
+				if (statusEffectFuncs[char.status]?.onremove) statusEffectFuncs[char.status].onremove(btl, char);
 				delete char.status;
 				delete char.statusturns;
 			}

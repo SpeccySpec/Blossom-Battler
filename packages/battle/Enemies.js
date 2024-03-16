@@ -52,7 +52,9 @@ let st = {
 	blind: 1,
 	irradiation: 2,
 	sensitive: 3,
-	happy: 1
+	happy: 1,
+	airborne: 1,
+	insanity: 3
 }
 
 // Affinities

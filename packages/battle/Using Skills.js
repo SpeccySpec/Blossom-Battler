@@ -1381,6 +1381,133 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			if (btl.teams[act.target[0]].members[act.target[1]+1] && btl.teams[act.target[0]].members[act.target[1]+1].hp > 0) targets.push([btl.teams[act.target[0]].members[act.target[1]+1].id, 0.6666666666666666]);
 			break;
 
+		case 'randomspreadopposing':
+			for (let i in btl.teams) {
+				if (char.team == i) continue;
+				
+				for (let k in btl.teams[i].members)
+					if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k]);
+			}
+
+			for (let i = 0; i < skill.hits; i++) {
+				let randNumber = randNum(possible.length-1);
+				let initChoice = possible[randNumber]?.id ? randNumber : 0;
+
+				targets.push([possible[initChoice].id, 1]);
+				if (possible[initChoice-1] && possible[initChoice-1].hp > 0) targets.push([possible[initChoice-1].id, 0.6666666666666666]);
+				if (possible[initChoice+1] && possible[initChoice+1].hp > 0) targets.push([possible[initChoice+1].id, 0.6666666666666666]);
+			}
+
+			skill.hits = 1; // make the skill one hit now.
+			break;
+
+		case 'randomspreadallies':
+			while (targets.length < skill.hits) {
+				let initChoice = randNum(party.members.length-1);
+
+				if (party.members[initChoice] && party.members[initChoice].hp > 0) targets.push([party.members[initChoice].id, 1]);
+				if (party.members[initChoice-1] && party.members[initChoice-1].hp > 0) targets.push([party.members[initChoice-1].id, 0.6666666666666666]);
+				if (party.members[initChoice+1] && party.members[initChoice+1].hp > 0) targets.push([party.members[initChoice+1].id, 0.6666666666666666]);
+			}
+
+			skill.hits = 1; // make the skill one hit now.
+			break;
+
+		case 'widespreadallies':
+		case 'widespreadopposing':
+			let targetValue = act.target[1];
+			for (let i = 0; i < btl.teams[act.target[0]].members.length; i++) {
+				if (btl.teams[act.target[0]].members[i] && btl.teams[act.target[0]].members[i].hp > 0) targets.push([btl.teams[act.target[0]].members[i].id, 1 - (Math.abs(i - targetValue)) / settings.caps.teamsize]);
+			}
+
+			targets.sort((a, b) => b[1] - a[1]);
+			break;
+
+		case 'randomwidespreadopposing':
+			for (let i in btl.teams) {
+				if (char.team == i) continue;
+				
+				for (let k in btl.teams[i].members)
+					if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k]);
+			}
+
+			for (let i = 0; i < skill.hits; i++) {
+				let randNumber = randNum(possible.length-1);
+				let initChoice = possible[randNumber]?.id ? randNumber : 0;
+
+				let targArray = [];
+				for (let i = 0; i < possible.length; i++) {
+					targArray.push([possible[i].id, 1 - (Math.abs(possible[i].id-1 - initChoice)) / settings.caps.teamsize]);
+				}
+				
+				targArray.sort((a, b) => b[1] - a[1]);
+				for (let i in targArray) {
+					targets.push(targArray[i]);
+				}
+			}
+
+			skill.hits = 1; // make the skill one hit now.
+			break;
+
+		case 'randomwidespreadallies':
+			while (targets.length < skill.hits) {
+				let initChoice = randNum(party.members.length-1);
+
+				for (let i = 0; i < party.members.length; i++) {
+					if (party.members[i] && party.members[i].hp > 0) targets.push([party.members[i].id, 1 - (Math.abs(i - initChoice)) / settings.caps.teamsize]);
+				}
+	
+				targets.sort((a, b) => b[1] - a[1]);
+			}
+
+			skill.hits = 1; // make the skill one hit now.
+			break;
+
+		case 'randomspread':
+			for (let i in btl.teams) {
+				possible[i] = [];
+				for (let k in btl.teams[i].members)
+					if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) possible[i].push(btl.teams[i].members[k]);
+			}
+
+			for (let i = 0; i < skill.hits; i++) {
+				let randTeam = randNum(possible.length-1);
+				let randNumber = randNum(possible[randTeam].length-1);
+				let initChoice = possible[randTeam][randNumber]?.id ? randNumber : 0;
+
+				targets.push([possible[randTeam][initChoice].id, 1]);
+				if (possible[randTeam][initChoice-1] && possible[randTeam][initChoice-1].hp > 0) targets.push([possible[randTeam][initChoice-1].id, 0.6666666666666666]);
+				if (possible[randTeam][initChoice+1] && possible[randTeam][initChoice+1].hp > 0) targets.push([possible[randTeam][initChoice+1].id, 0.6666666666666666]);
+			}
+
+			skill.hits = 1; // make the skill one hit now.
+			break;
+		case 'randomwidespread':
+			for (let i in btl.teams) {
+				possible[i] = [];
+				for (let k in btl.teams[i].members)
+					if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) possible[i].push(btl.teams[i].members[k]);
+			}
+
+			for (let i = 0; i < skill.hits; i++) {
+				let randTeam = randNum(possible.length-1);
+				let randNumber = randNum(possible[randTeam].length-1);
+				let initChoice = possible[randTeam][randNumber]?.id ? randNumber : 0;
+
+				let targArray = [];
+				for (let i = 0; i < possible[randTeam].length; i++) {
+					targArray.push([possible[randTeam][i].id, 1 - (Math.abs(possible[randTeam][i].id-1 - initChoice)) / settings.caps.teamsize]);
+				}
+				
+				targArray.sort((a, b) => b[1] - a[1]);
+				for (let i in targArray) {
+					targets.push(targArray[i]);
+				}
+			}
+
+			skill.hits = 1; // make the skill one hit now.
+			break;
+
 		// Target ourselves as a failsafe.
 		default:
 			targets.push([char.id, 1]);
@@ -1421,11 +1548,11 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	if (targets.length <= 1) 
 		targTxt += `__${getCharFromId(targets[0][0], btl).name}__`;
 	else {
-		if (skill.target === 'allallies' || skill.target === 'spreadallies') {
+		if (skill.target === 'allallies' || skill.target === 'spreadallies' || skill.target === 'widespreadallies') {
 			targTxt += '__Allies__'
 		} else if (skill.target === 'everyone') {
 			targTxt += '__Everyone__'
-		} else if (skill.target === 'random' || skill.target === 'randomopposing') {
+		} else if (skill.target === 'random' || skill.target === 'randomopposing' || skill.target === 'randomallies' || skill.target === 'randomspreadopposing' || skill.target === 'randomspreadallies' || skill.target === 'randomwidespreadopposing' || skill.target === 'randomwidespreadallies') {
 			targTxt += '__???__'
 		} else {
 			targTxt += '__Foes__'

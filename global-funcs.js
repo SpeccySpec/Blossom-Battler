@@ -212,6 +212,7 @@ statusEffects = [
 	"irradiation",
 	"sensitive",
 	"drenched", // Stackable. Nullifies status affinities - both positive and negative - while afflicted.
+	"insanity", // Random Effects based on chance, different against bosses
 
 	// Positive Statusses
 	"happy",
@@ -241,6 +242,7 @@ statusNames = {
 	irradiation: 'Irradiation',
 	sensitive: 'Sensitive',
 	drenched: 'Drenched',
+	insanity: 'Insanity',
 
 	// Positive Statusses
 	happy: 'Happiness',
@@ -270,6 +272,7 @@ statusEmojis = {
 	irradiation: '<:irradiated:963413990199947294>',
 	sensitive: '<:sensitive:973076333825499156>',
 	drenched: '<:water:963413845886505011>',
+	insanity: '<:insanity:1217924742237913218>',
 
 	// Positive Statusses
 	mirror: '<:mirror:963413990229311588>',
@@ -321,7 +324,8 @@ elementTechs = {
 	irradiation: ['fire', 'nuclear', 'water'],
 	sensitive: ['strike', 'slash', 'pierce', 'explode', 'spirit', 'wind'],
 	happy: ['psychic', 'bless', 'curse', 'spirit', 'sound'],
-	airborne: ['pierce', 'electric', 'metal', 'gravity']
+	airborne: ['pierce', 'electric', 'metal', 'gravity'],
+	insanity: ['psychic', 'curse'],
 }
 
 // Enemy Habitats
@@ -385,21 +389,42 @@ terrains = [
 	"eternaldarkness" //1.5x to Curse. Bless Skills become unusable. All Curse Skills get Feint.
 ]
 
+//tiers of AOE: one -> spreadopposing -> widespreadopposing -> allopposing
 Targets = [
+	//SINGLE TARGETS
 	'one', // target one foe
 	'ally', // target one ally
 	'caster', // target the caster
 
-	'allopposing', // target all foes
-	'allallies', // target all allies
+	//RANDOM SINGLE TARGETS
+	'random', // target random fighters
 	'randomopposing', // target random foes
 	'randomallies', // target random allies
 
-	'random', // target random fighters
+	//ENTIRE SIDES
+	'allopposing', // target all foes
+	'allallies', // target all allies
+
+	//EVERYONE
 	'everyone', // target all fighters
-	
+
+	//SINGLE SPREADS
 	'spreadopposing', // target one foe, damage spreads to 2 surrounding.
-	'spreadallies' // target one ally, effects spread to 2 surrounding.
+	'spreadallies', // target one ally, effects spread to 2 surrounding.
+
+	//RANDOM SPREADS
+	'randomspreadopposing', // target random foe, damage spreads to 2 surrounding.
+	'randomspreadallies', // target random ally, effects spread to 2 surrounding.
+	'randomspread', // target random target, effects spread to 2 surrounding.
+
+	//ENTIRE SIDE SPREADS
+	'widespreadopposing', //target one foe, damage spread to all foes based on distance
+	'widespreadallies', //target one ally, effects spread to all allies based on distance
+
+	//RANDOM ENTIRE SIDE SPREADS
+	'randomwidespreadopposing', //target random foe, damage spread to all foes based on distance
+	'randomwidespreadallies', //target random ally, effects spread to all allies based on distance
+	'randomwidespread' //target random target, effects spread to all targets on the same side based on distance
 ]
 
 costTypes = [
@@ -412,7 +437,7 @@ costTypes = [
 	'lb',
 	'lbpercent',
 	'money',
-	'moneypercent'
+	'moneypercent',
 ]
 
 trustLvl = {
