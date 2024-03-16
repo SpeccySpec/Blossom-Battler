@@ -929,7 +929,7 @@ commands.editskill = new Command({
 					skillFile[args[0]].target = args[2].toLowerCase();
 					break;
 				default:
-					return message.channel.send(`${args[2].toLowerCase()} is an invalid field!`);
+					return message.channel.send(`${editField} is an invalid field!`);
 			}
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
