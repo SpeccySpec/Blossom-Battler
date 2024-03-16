@@ -1472,6 +1472,11 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 			for (let i = 0; i < skill.hits; i++) {
 				let randTeam = randNum(possible.length-1);
+				while (possible[randTeam].length == 0) {
+					randTeam++;
+					if (randTeam >= possible.length) randTeam = 0;
+				}
+
 				let randNumber = randNum(possible[randTeam].length-1);
 				let initChoice = possible[randTeam][randNumber]?.id ? randNumber : 0;
 
@@ -1491,6 +1496,11 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 			for (let i = 0; i < skill.hits; i++) {
 				let randTeam = randNum(possible.length-1);
+				while (possible[randTeam].length == 0) {
+					randTeam++;
+					if (randTeam >= possible.length) randTeam = 0;
+				}
+
 				let randNumber = randNum(possible[randTeam].length-1);
 				let initChoice = possible[randTeam][randNumber]?.id ? randNumber : 0;
 
