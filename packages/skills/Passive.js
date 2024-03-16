@@ -3,6 +3,7 @@ let costTypeNames = {
 	mp: "MP",
 	hpandmp: "HP and MP",
 	lb: "LB",
+	lbpercent: "% of user's LB",
 	hppercent: "% of user's Max HP",
 	mppercent: "% of user's Max MP",
 	hpandmppercent: "% of user's Max HP AND Max MP",
@@ -12,16 +13,28 @@ let targetNames = {
 	ally: 'ally',
 	caster: 'caster',
 
-	allopposing: 'all opponent',
-	allallies: 'all ally',
 	randomopposing: 'random opponent',
 	randomallies: 'random ally',
-
 	random: 'random fighter',
+
+	allopposing: 'all opponent',
+	allallies: 'all ally',
+	
 	everyone: 'everyone',
 	
 	spreadopposing: 'opponent spread',
-	spreadallies: 'ally spread'
+	spreadallies: 'ally spread',
+
+	randomspreadopposing: 'random opponent spread',
+	randomspreadallies: 'random ally spread',
+	randomspread: 'random fighter spread',
+
+	widespreadopposing: 'opponent wide spread',
+	widespreadallies: 'ally wide spread',
+
+	randomwidespreadopposing: 'random opponent wide spread',
+	randomwidespreadallies: 'random ally wide spread',
+	randomwidespread: 'random fighter wide spread',
 }
 
 passiveList = {
