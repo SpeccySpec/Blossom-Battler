@@ -1417,7 +1417,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		case 'widespreadopposing':
 			let targetValue = act.target[1];
 			for (let i = 0; i < btl.teams[act.target[0]].members.length; i++) {
-				if (btl.teams[act.target[0]].members[i] && btl.teams[act.target[0]].members[i].hp > 0) targets.push([btl.teams[act.target[0]].members[i].id, 1 - (Math.abs(i - targetValue)) / settings.caps.teamsize]);
+				if (btl.teams[act.target[0]].members[i] && btl.teams[act.target[0]].members[i].hp > 0) targets.push([btl.teams[act.target[0]].members[i].id, 1 - (Math.abs(i - targetValue)) / btl.teams[act.target[0]].members.length]);
 			}
 
 			targets.sort((a, b) => b[1] - a[1]);
@@ -1437,7 +1437,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 				let targArray = [];
 				for (let i = 0; i < possible.length; i++) {
-					targArray.push([possible[i].id, 1 - (Math.abs(possible[i].id-1 - initChoice)) / settings.caps.teamsize]);
+					targArray.push([possible[randNumber][i].id, 1 - (Math.abs(possible[randNumber][i].id-1 - initChoice)) / possible[randNumber].length]);
 				}
 				
 				targArray.sort((a, b) => b[1] - a[1]);
@@ -1454,7 +1454,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 				let initChoice = randNum(party.members.length-1);
 
 				for (let i = 0; i < party.members.length; i++) {
-					if (party.members[i] && party.members[i].hp > 0) targets.push([party.members[i].id, 1 - (Math.abs(i - initChoice)) / settings.caps.teamsize]);
+					if (party.members[i] && party.members[i].hp > 0) targets.push([party.members[i].id, 1 - (Math.abs(i - initChoice)) / party.members.length]);
 				}
 	
 				targets.sort((a, b) => b[1] - a[1]);
@@ -1506,7 +1506,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 				let targArray = [];
 				for (let i = 0; i < possible[randTeam].length; i++) {
-					targArray.push([possible[randTeam][i].id, 1 - (Math.abs(possible[randTeam][i].id-1 - initChoice)) / settings.caps.teamsize]);
+					targArray.push([possible[randTeam][i].id, 1 - (Math.abs(possible[randTeam][i].id-1 - initChoice)) / possible[randTeam].length]);
 				}
 				
 				targArray.sort((a, b) => b[1] - a[1]);
