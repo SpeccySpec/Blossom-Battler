@@ -1104,10 +1104,15 @@ commands.forcelevel = new Command({
 
 		//check every skill. if skill exists, check its level lock. If level lock is lower, set it to '', and then filter later
 		for (let skill in charFile[args[0]].skills) {
-			if (skillFile[charFile[args[0]].skills[skill]].levelLock > args[1]) charFile[args[0]].skills[skill] = '';
+			if (skillFile[charFile[args[0]].skills[skill]].levelLock > args[1]) { 
+				if (charFile[args[0]].autolearn) delete charFile[args[0]].autolearn[charFile[args[0]].skills.indexOf(charFile[args[0]].skills[skill])];
+				charFile[args[0]].skills[skill] = '';
+			}
 		}
 		charFile[args[0]].skills = charFile[args[0]].skills.filter(skill => skill != '');
 		charFile[args[0]].xp = 0;
+
+		updateSkillEvos(charFile[args[0]], true);
 
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 
@@ -2228,9 +2233,7 @@ commands.updatecharacters = new Command({
 		let newFile = {}
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		for (let i in charFile) {
-			newFile[i] = objClone(charFile[i]);				
-			delete newFile[i].autoLearn;
-			delete newFile[i].leaderSkill;
+			newFile[i] = objClone(charFile[i]);
 			for (let k of stats) delete newFile[i][k];
 			for (let k of Affinities) delete newFile[i][k];
 			for (let k of stats) delete newFile[i][`base${k}`];
@@ -2284,8 +2287,6 @@ commands.updatecharacters = new Command({
 				repel: charFile[i].repel,
 				drain: charFile[i].drain
 			}
-
-			newFile[i].autolearn = charFile[i].autoLearn
 
 			// Quotes
 			if (!newFile[i].quotes) newFile[i].quotes = {};

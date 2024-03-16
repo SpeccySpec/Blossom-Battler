@@ -271,7 +271,7 @@ commands.updateenemies = new Command({
 		// delete old shit
 		setTimeout(function() {
 			for (let i in enemyFile) {
-				delete enemyFile[i].autoLearn;
+				delete enemyFile[i].autolearn;
 				delete enemyFile[i].leaderSkill;
 				for (let k of stats) delete enemyFile[i][k];
 				for (let k of Affinities) delete enemyFile[i][k];

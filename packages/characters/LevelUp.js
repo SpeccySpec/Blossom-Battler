@@ -90,6 +90,53 @@ updateStats = (charDefs, server, updateXp) => {
 	}
 }
 
+updateSkillEvos = (charDefs, forceEvo) => {
+	if (forceEvo == true) {
+		for (const i in charDefs.skills) {
+			let skillDefs = skillFile[charDefs.skills[i]];
+
+			while (skillDefs && skillDefs.preskills && charDefs.level <= skillDefs.preskills[0][1]) {
+				if (skillDefs.preskills[0][0] == 'remove') delete charDefs.autolearn[charDefs.skills.indexOf(charDefs.skills[i])];
+
+				charDefs.skills[i] = skillDefs.preskills[0][0];
+				skillDefs = skillFile[charDefs.skills[i]];
+			}
+			while (skillDefs && skillDefs.evoskills && charDefs.level >= skillDefs.evoskills[0][1]) {
+				charDefs.skills[i] = skillDefs.evoskills[0][0];
+				skillDefs = skillFile[charDefs.skills[i]];
+			}
+		}
+
+		charDefs.skills = charDefs.skills.filter(x => x != 'remove');
+	} else {
+		if (!charDefs.autolearn) return;
+
+		var checkSkills = []
+		for (const i in charDefs.autolearn) {
+			if (charDefs.autolearn[i] && charDefs.skills[parseInt(i)]) {
+				checkSkills.push(charDefs.skills[parseInt(i)])
+			}
+		}
+
+		for (const i in checkSkills) {
+			let skillDefs = skillFile[checkSkills[i]];
+
+			while (skillDefs && skillDefs.preskills && charDefs.level <= skillDefs.preskills[0][1]) {
+				if (skillDefs.preskills[0][0] == 'remove') delete charDefs.autolearn[charDefs.skills.indexOf(charDefs.skills[i])];
+
+				charDefs.skills[i] = skillDefs.preskills[0][0];
+				skillDefs = skillFile[charDefs.skills[i]];
+			}
+			while (skillDefs && skillDefs.evoskills && charDefs.level >= skillDefs.evoskills[0][1]) {
+				charDefs.skills[i] = skillDefs.evoskills[0][0];
+				skillDefs = skillFile[charDefs.skills[i]];
+			}
+		}
+
+		charDefs.skills = charDefs.skills.filter(x => x != 'remove');
+	}
+}
+
 levelUp = (charDefs, forceEvo, server) => {
 	let settings = setUpSettings(server)
 
@@ -108,46 +155,9 @@ levelUp = (charDefs, forceEvo, server) => {
 	// Update XP
 	charDefs.xp -= charDefs.maxxp
 	charDefs.maxxp += Math.round(charDefs.maxxp/6.5)
-	
-	// Check Skills
-	if (charDefs.lvlUpQueue) {
-		for (const i in charDefs.lvlUpQueue) {
-			if (charDefs.lvlUpQueue[i][1] == charDefs.level) {
-				charDefs.skills.push(charDefs.lvlUpQueue[i][0])
-			}
-		}
-	}
-	
-	if (forceEvo == true) {
-		for (const i in charDefs.skills) {
-			if (skillFile[charDefs.skills[i]] && skillFile[charDefs.skills[i]].evoSkill) {
-				var skillDefs = skillFile[charDefs.skills[i]]
-
-				if (charDefs.level == skillDefs.evoSkill[1])
-					charDefs.skills[i] = skillDefs.evoSkill[0];
-			}
-		}
-	} else {
-		if (!charDefs.autoLearn) return;
-
-		var checkSkills = []
-		for (const i in charDefs.autoLearn) {
-			if (charDefs.autoLearn[i] && charDefs.skills[parseInt(i)]) {
-				checkSkills.push([charDefs.skills[parseInt(i)], parseInt(i)])
-			}
-		}
-
-		for (const i in checkSkills) {
-			if (skillFile[checkSkills[i][0]] && skillFile[checkSkills[i][0]].evoSkill) {
-				var skillDefs = skillFile[checkSkills[i][0]]
-				
-				if (charDefs.level == skillDefs.evoSkill[1]) charDefs.skills[checkSkills[i][1]] = skillDefs.evoSkill[0];
-			}
-		}
-	}
 }
 
-levelDown = (charDefs, server) => {
+levelDown = (charDefs, forceEvo, server) => {
 	if (charDefs.level <= 1) {
 		charDefs.xp = 1;
 		return false;
@@ -175,6 +185,8 @@ lvlUpWithXpInMind = (charDefs, forceEvo, message, returnembed) => {
 		}
 	}
 
+	updateSkillEvos(charDefs, forceEvo);
+
 	if (lvlCount <= 0) return;
 	if (!message && !returnembed) return;
 
@@ -193,6 +205,7 @@ lvlUpWithXpInMind = (charDefs, forceEvo, message, returnembed) => {
 // Level up a set number of times
 levelUpTimes = (charDefs, forceEvo, times, message) => {
 	for (let i = 0; i < times; i++) levelUp(charDefs, forceEvo, message.guild.id);
+	updateSkillEvos(charDefs, forceEvo);
 	if (!message) return;
 
 	let DiscordEmbed = briefDescription(charDefs);
