@@ -2158,7 +2158,13 @@ advanceTurn = (btl, firstturn) => {
 				resetEffects(char);
 
 				// If this character is a clone or reincarnate, remove them from the members.
-				if (char.clone || char.reincarnate) btl.teams[i].members.splice(k, 1);
+				if (char.clone || char.reincarnate) { 
+					btl.teams[i].members.splice(k, 1);
+					while (btl.turnorder.indexOf(char.id) != -1) {
+						if (btl.turnorder.indexOf(char.id) <= btl.curturn) btl.curturn--;
+						btl.turnorder.splice(btl.turnorder.indexOf(char.id), 1); 
+					}
+				}
 
 				// moving on...
 				continue;
@@ -2209,10 +2215,10 @@ advanceTurn = (btl, firstturn) => {
 			return;
 		}
 
-		//clear reincarnates
+		//clear reincarnates and clones
 		for (let i in btl.teams) {
-			while (btl.teams[i].members.some(m => m.reincarnate)) {
-				let char = btl.teams[i].members.find(m => m.reincarnate);
+			while (btl.teams[i].members.some(m => m.reincarnate||m.clone)) {
+				let char = btl.teams[i].members.find(m => m.reincarnate||m.clone);
 				btl.teams[i].members.splice(btl.teams[i].members.indexOf(char), 1);
 			}
 		}
