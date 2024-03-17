@@ -7,14 +7,14 @@ xpBar = (charDefs) => {
 	return getBar('xp', charDefs.xp, charDefs.maxxp);
 }
 
-gainXp = (message, charDefs, xp, allone, server, charFile) => {
+gainXp = (message, charDefs, xp, allone, server) => {
     charDefs.xp += xp;
 	console.log(`${charDefs.name} ${charDefs.xp}/${charDefs.maxxp}XP`);
 
 	let channel = message.channel ?? message;
 
 	if (allone) {
-		let embed = lvlUpWithXpInMind(charDefs, false, message, true, server, charFile);
+		let embed = lvlUpWithXpInMind(charDefs, false, message, true, server);
 
 		if (embed) {
 			channel.send({content: `${xpBar(charDefs)}\n${charDefs.name} got _${xp}XP_!`, embeds: [embed]});
@@ -23,7 +23,7 @@ gainXp = (message, charDefs, xp, allone, server, charFile) => {
 		}
 	} else {
 		channel.send(`${xpBar(charDefs)}\n${charDefs.name} got _${xp}XP_!`);
-		lvlUpWithXpInMind(charDefs, false, message, false, server, charFile);
+		lvlUpWithXpInMind(charDefs, false, message, false, server);
 	}
 }
 
@@ -106,7 +106,7 @@ checkForEvos = async (charDefs, skillDefs, toUpdate, field) => {
 	}
 }
 
-evoSkillMessageCollector = async (charDefs, toUpdate, channel, server, ind, field, charFile) => {
+evoSkillMessageCollector = async (charDefs, toUpdate, channel, server, ind, field) => {
 	let skillDefs = skillFile[charDefs.skills[parseInt(ind)]];
 	let skillChoice = (field.preskills.length > 1 ? field.preskills : field.evoskills);
 
@@ -183,11 +183,11 @@ evoSkillMessageCollector = async (charDefs, toUpdate, channel, server, ind, fiel
 		}
 
 		checkForEvos(charDefs, skillFile[charDefs.skills[parseInt(ind)]], toUpdate, ind);
-		return replaceEvoSkills(charDefs, toUpdate, channel, server, charFile)
+		return replaceEvoSkills(charDefs, toUpdate, channel, server)
 	});
 }
 
-replaceEvoSkills = async (charDefs, toUpdate, channel, server, charFile) => {
+replaceEvoSkills = async (charDefs, toUpdate, channel, server) => {
 	for (ind in toUpdate) {
 		if (toUpdate[ind].preskills.length == 1) {
 			charDefs.skills[parseInt(ind)] = toUpdate[ind].preskills[0];
@@ -197,9 +197,9 @@ replaceEvoSkills = async (charDefs, toUpdate, channel, server, charFile) => {
 			}
 
 			checkForEvos(charDefs, skillFile[charDefs.skills[parseInt(ind)]], toUpdate, ind);
-			return replaceEvoSkills(charDefs, toUpdate, channel, server, charFile)
+			return replaceEvoSkills(charDefs, toUpdate, channel, server)
 		} else if (toUpdate[ind].preskills.length > 1) {
-			return evoSkillMessageCollector(charDefs, toUpdate, channel, server, ind, toUpdate[ind], charFile);
+			return evoSkillMessageCollector(charDefs, toUpdate, channel, server, ind, toUpdate[ind]);
 		}
 
 		if (toUpdate[ind].evoskills.length == 1) {
@@ -210,9 +210,9 @@ replaceEvoSkills = async (charDefs, toUpdate, channel, server, charFile) => {
 			}
 
 			checkForEvos(charDefs, skillFile[charDefs.skills[parseInt(ind)]], toUpdate, ind);
-			return replaceEvoSkills(charDefs, toUpdate, channel, server, charFile)
+			return replaceEvoSkills(charDefs, toUpdate, channel, server)
 		} else if (toUpdate[ind].evoskills.length > 1) {
-			return evoSkillMessageCollector(charDefs, toUpdate, channel, server, ind, toUpdate[ind], charFile)
+			return evoSkillMessageCollector(charDefs, toUpdate, channel, server, ind, toUpdate[ind])
 		}
 	}
 
@@ -223,10 +223,18 @@ replaceEvoSkills = async (charDefs, toUpdate, channel, server, charFile) => {
 	}
 	charDefs.skills = charDefs.skills.filter(x => x != 'remove');
 
-	fs.writeFileSync(`${dataPath}/json/${server}/characters.json`, JSON.stringify(charFile, null, '    '));
+	let charFile = setUpFile(`${dataPath}/json/${server}/characters.json`);
+
+	for (i in charFile) {
+		if (charFile[i].name == charDefs.name && charFile[i].owner == charDefs.owner && charFile[i].mainElement == charDefs.mainElement) {
+			charFile[i] = charDefs;
+			fs.writeFileSync(`${dataPath}/json/${server}/characters.json`, JSON.stringify(charFile, null, '    '));
+			return;
+		}
+	}
 }
 
-updateSkillEvos = async (charDefs, forceEvo, message, server, charFile) => {
+updateSkillEvos = async (charDefs, forceEvo, message, server) => {
 	if (!charDefs.autolearn && !forceEvo) return;
 
 	let checkSkills = [];
@@ -255,7 +263,7 @@ updateSkillEvos = async (charDefs, forceEvo, message, server, charFile) => {
 
 	let channel = message.channel ?? message;
 
-	replaceEvoSkills(charDefs, toUpdate, channel, server, charFile);
+	replaceEvoSkills(charDefs, toUpdate, channel, server);
 }
 
 levelUp = (charDefs, forceEvo, server) => {
@@ -297,7 +305,7 @@ levelDown = (charDefs, forceEvo, server) => {
 }
 
 // Convert all XP into Levels
-lvlUpWithXpInMind = (charDefs, forceEvo, message, returnembed, server, charFile) => {
+lvlUpWithXpInMind = (charDefs, forceEvo, message, returnembed, server) => {
 	let lvlCount = 0;
 	while (charDefs.xp >= charDefs.maxxp) {
 		if (charDefs.level < 99) {
@@ -309,7 +317,7 @@ lvlUpWithXpInMind = (charDefs, forceEvo, message, returnembed, server, charFile)
 	if (lvlCount <= 0) return;
 	if (!message && !returnembed) return;
 
-	updateSkillEvos(charDefs, forceEvo, message, server, charFile);
+	updateSkillEvos(charDefs, forceEvo, message, server);
 
 	let DiscordEmbed = briefDescription(charDefs);
 	DiscordEmbed.title = `${charDefs.name} levelled up${(lvlCount <= 1) ? '!' : ' ' + lvlCount + ' times!'}`;
@@ -324,7 +332,7 @@ lvlUpWithXpInMind = (charDefs, forceEvo, message, returnembed, server, charFile)
 }
 
 // Level up a set number of times
-levelUpTimes = (charDefs, forceEvo, times, message, charFile) => {
+levelUpTimes = (charDefs, forceEvo, times, message) => {
 	for (let i = 0; i < times; i++) levelUp(charDefs, forceEvo, message.guild.id);
 
 	if (message) {
@@ -334,5 +342,5 @@ levelUpTimes = (charDefs, forceEvo, times, message, charFile) => {
 		message.channel.send({embeds: [DiscordEmbed]});
 	}
 
-	updateSkillEvos(charDefs, forceEvo, message, message.guild.id, charFile);
+	updateSkillEvos(charDefs, forceEvo, message, message.guild.id);
 }
