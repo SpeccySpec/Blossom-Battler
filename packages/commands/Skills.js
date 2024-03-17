@@ -2005,7 +2005,7 @@ statusDescs = [
 					},
 					boss: {
 						weak: `Lasts *1 turn* and *removes Insanity Action* from the effects pool.`,
-						normal: `Lasts *1 turn* and *removes Insanity Action and Random Skill* from the efffects pool`,
+						normal: `Lasts *1 turn* and *removes Insanity Action and Random Skill* from the effects pool`,
 						resist: `Shakes it off immediately.`,
 					}
 				}
