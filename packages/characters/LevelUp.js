@@ -174,8 +174,6 @@ evoSkillMessageCollector = async (charDefs, toUpdate, channel, server, ind, fiel
 		collector.stop();
 		embedMessage.delete();
 
-		console.log(skillChoice);
-		console.log(interaction.component.customId);
 		charDefs.skills[parseInt(ind)] = skillChoice[skillChoice.indexOf(interaction.component.customId)];
 		toUpdate[ind] = {
 			"preskills": [],

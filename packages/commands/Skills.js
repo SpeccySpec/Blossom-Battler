@@ -1031,7 +1031,7 @@ commands.preskill = new Command({
 	],
 	func(message, args, guilded) {
 		if (skillFile[args[0]] && (skillFile[args[1]] || args[1].toLowerCase() === "remove")) {
-			if (skillFile[args[0]].preskills.length == 5) return message.channel.send(`${skillFile[args[0]].name} already has enough preskills. There's no need to add more.`);
+			if (skillFile[args[0]]?.preskills && skillFile[args[0]].preskills.length == 5) return message.channel.send(`${skillFile[args[0]].name} already has enough preskills. There's no need to add more.`);
 
 			if (hasPreSkill(skillFile[args[0]], args[1])) {
 				return message.channel.send(`${skillFile[args[0]].name} already has a pre-skill for ${args[1]}!`)
@@ -1040,6 +1040,10 @@ commands.preskill = new Command({
 			if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
 				if (skillFile[args[0]].originalAuthor != message.author.id && args[1].toLowerCase() === "remove") {
 					return preSkillRequest(message, args, skillFile[args[0]], 'remove');
+				}
+
+				if (skillFile[args[0]].originalAuthor != message.author.id && skillFile[args[1]].originalAuthor != message.author.id) {
+					return message.channel.send(`You don't own ${skillFile[args[0]].name} or ${skillFile[args[1]].name}.`);
 				}
 
 				if (skillFile[args[0]].originalAuthor != message.author.id && skillFile[args[1]] && skillFile[args[1]].originalAuthor == message.author.id) {
@@ -1055,6 +1059,66 @@ commands.preskill = new Command({
 			if (args[1].toLowerCase() !== "remove" && args[3] && (args[3].toLowerCase() == 'y' || args[3].toLowerCase() == 'yes')) {
 				if (!hasEvoSkill(skillFile[args[1]], args[0])) {
 					setEvoSkill(skillFile[args[1]], args[0], args[2]-1);
+				}
+			}
+
+			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+			message.react('👍');
+		} else {
+			return message.channel.send(`${skillFile[args[0]] ? args[1] : args[0]} is an invalid Skill Name!`);
+		}
+	}
+})
+
+commands.removepreskill = new Command({
+	desc: "Remove a Pre-Skill that a server may have.",
+	section: "skills",
+	aliases: ['removepreviousskill', 'deletepreskill', 'deletepreviousskill'],
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Pre-Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Affect Evo-Skill?",
+			type: "YesNo",
+			forced: false
+		}
+	],
+	func(message, args, guilded) {
+		if (skillFile[args[0]] && (skillFile[args[1]] || args[1].toLowerCase() === "remove")) {
+			if (!hasPreSkill(skillFile[args[0]], args[1])) {
+				return message.channel.send(`${skillFile[args[0]].name} does not have a pre-skill for ${args[1]}!`)
+			}
+
+			if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
+				if (skillFile[args[0]].originalAuthor != message.author.id && args[1].toLowerCase() === "remove") {
+					return removePreSkillRequest(message, args, skillFile[args[0]], 'remove');
+				}
+
+				if (skillFile[args[0]].originalAuthor != message.author.id && skillFile[args[1]].originalAuthor != message.author.id) {
+					return message.channel.send(`You don't own ${skillFile[args[0]].name} or ${skillFile[args[1]].name}.`);
+				}
+
+				if (skillFile[args[0]].originalAuthor != message.author.id && skillFile[args[1]] && skillFile[args[1]].originalAuthor == message.author.id) {
+					return removePreSkillRequest(message, args, skillFile[args[0]], skillFile[args[1]], skillFile[args[0]].originalAuthor);
+				}
+
+				if (skillFile[args[0]].originalAuthor == message.author.id && skillFile[args[1]] && skillFile[args[1]].originalAuthor != message.author.id) {
+					return removePreSkillRequest(message, args, skillFile[args[0]], skillFile[args[1]], skillFile[args[1]].originalAuthor);
+				}
+			}
+
+			removePreSkill(skillFile[args[0]], args[1]);
+			if (args[1].toLowerCase() !== "remove" && args[2]) {
+				if (hasEvoSkill(skillFile[args[1]], args[0])) {
+					removeEvoSkill(skillFile[args[1]], args[0]);
 				}
 			}
 
@@ -1099,7 +1163,7 @@ commands.evoskill = new Command({
 	],
 	func(message, args, guilded) {
 		if (skillFile[args[0]] && skillFile[args[1]]) {
-			if (skillFile[args[0]].evoskills.length == 5) return message.channel.send(`${skillFile[args[0]].name} already has enough evoskills. There's no need to add more.`);
+			if (skillFile[args[0]]?.evoskills && skillFile[args[0]].evoskills.length == 5) return message.channel.send(`${skillFile[args[0]].name} already has enough evoskills. There's no need to add more.`);
 
 			if (hasEvoSkill(skillFile[args[0]], args[1])) {
 				return message.channel.send(`${skillFile[args[0]].name} already has an evo-skill for ${args[1]}!`)
@@ -1150,6 +1214,62 @@ commands.evoskill = new Command({
 						}
 					}
 					fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/characters.json`, JSON.stringify(charFile, null, '    '));
+				}
+			}
+
+			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+			message.react('👍');
+		} else {
+			return message.channel.send(`${skillFile[args[0]] ? args[1] : args[0]} is an invalid Skill Name!`);
+		}
+	}
+})
+
+commands.removeevoskill = new Command({
+	desc: "Remove an Evo-Skill that a server may have.",
+	section: "skills",
+	aliases: ['removeevolutionskill', 'deleteevoskill', 'deleteevolutionskill'],
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Evo-skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Affect Pre-Skill?",
+			type: "YesNo",
+			forced: false
+		}
+	],
+	func(message, args, guilded) {
+		if (skillFile[args[0]] && (skillFile[args[1]] || args[1].toLowerCase() === "remove")) {
+			if (!hasEvoSkill(skillFile[args[0]], args[1])) {
+				return message.channel.send(`${skillFile[args[0]].name} does not have an evo-skill for ${args[1]}!`)
+			}
+
+			if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
+				if (skillFile[args[0]].originalAuthor != message.author.id && skillFile[args[1]].originalAuthor != message.author.id) {
+					return message.channel.send(`You don't own ${skillFile[args[0]].name} or ${skillFile[args[1]].name}.`);
+				}
+
+				if (skillFile[args[0]].originalAuthor != message.author.id && skillFile[args[1]] && skillFile[args[1]].originalAuthor == message.author.id) {
+					return removeEvoSkillRequest(message, args, skillFile[args[0]], skillFile[args[1]], skillFile[args[0]].originalAuthor);
+				}
+
+				if (skillFile[args[0]].originalAuthor == message.author.id && skillFile[args[1]] && skillFile[args[1]].originalAuthor != message.author.id) {
+					return removeEvoSkillRequest(message, args, skillFile[args[0]], skillFile[args[1]], skillFile[args[1]].originalAuthor);
+				}
+			}
+
+			removeEvoSkill(skillFile[args[0]], args[1]);
+			if (args[2]) {
+				if (hasPreSkill(skillFile[args[1]], args[0])) {
+					removePreSkill(skillFile[args[1]], args[0]);
 				}
 			}
 
