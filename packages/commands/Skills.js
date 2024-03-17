@@ -2031,14 +2031,14 @@ statusDescs = [
 			{
 				name: "airborne",
 				type: "physical",
-				desc: `Disables effects of terrain for the afflicted for *3 turns*, but *may expire if attacked with a physical or ranged skill*. Reduces dodge chance *(physical -> may reduce by 100%, other -> may reduce by 10%)* and doubles afflicted's physical skill power.`,
+				desc: `Disables effects of terrain for the afflicted for *3 turns*, but *may expire if they use a physical skill*. Increases dodge chance *(physical -> may increase by 100%, other -> may increase by 10%)* and doubles afflicted's physical skill power.`,
 				ailments: {
 					nonboss: {
-						weak: `*Won't* expire if hit with a physical or ranged skill and *halves* dodge chance reduction.`,
-						normal: `Dodge chance reduction is *regular*.`,
-						resist: `*Doubles* dodge chance reduction.`,
+						weak: `*Won't* expire if they use a physical skill and *doubles* dodge chance addition.`,
+						normal: `Dodge chance addition is *regular*.`,
+						resist: `*Halves* dodge chance addition.`,
 					},
-					boss: `*Won't* expire if hit with a physical or ranged skill and *nullifies* dodge chance reduction.`
+					boss: `*Won't* expire if they use a physical skill and *doubles* dodge chance addition.`
 				}
 			},
 			{
