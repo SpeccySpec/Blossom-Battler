@@ -1924,12 +1924,12 @@ statusDescs = [
 			{
 				name: "happy",
 				type: "mental",
-				desc: `*Increases ${statusEmojis["critup"]}CRIT & ${statusEmojis["aglup"]}AGL stats positively based on level* for *3 turns*, but *decreases the ${statusEmojis["prcdown"]}PRC stat by 1/10th of the afflicted's level*.`,
+				desc: `*Increases ${statusEmojis["critup"]}LUK & ${statusEmojis["aglup"]}AGL stats positively based on level* for *3 turns*, but *decreases the ${statusEmojis["prcdown"]}PRC stat by 1/10th of the afflicted's level*.`,
 				ailments: {
 					nonboss: {
-						weak: `${statusEmojis["critup"]}CRIT & ${statusEmojis["aglup"]}AGL increased by *1/7th* of afflicted's level`,
-						normal: `${statusEmojis["critup"]}CRIT & ${statusEmojis["aglup"]}AGL increased by *1/10th* of afflicted's level`,
-						resist: `${statusEmojis["critup"]}CRIT & ${statusEmojis["aglup"]}AGL increased by *1/15th* of afflicted's level`,
+						weak: `${statusEmojis["critup"]}LUK & ${statusEmojis["aglup"]}AGL increased by *1/7th* of afflicted's level`,
+						normal: `${statusEmojis["critup"]}LUK & ${statusEmojis["aglup"]}AGL increased by *1/10th* of afflicted's level`,
+						resist: `${statusEmojis["critup"]}LUK & ${statusEmojis["aglup"]}AGL increased by *1/15th* of afflicted's level`,
 					},
 					boss: `Affects them the same as non-bosses.`
 				}
