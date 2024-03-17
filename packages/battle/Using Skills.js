@@ -132,7 +132,9 @@ getAffinity = (char, skillType) => {
 
 	if (char.status === 'mirror') {
 		if (skillType === 'strike' || skillType === 'slash' || skillType === 'pierce' || skillType === 'explode')
-			return 'superweak';
+			if (!isBoss(char)) {
+				return (hasStatusAffinity(char, 'mirror', 'resist') ? 'deadly' : (hasStatusAffinity(char, 'mirror', 'weak') ? 'weak' : 'superweak'));
+			}
 		else
 			return 'repel';
 	}
@@ -526,9 +528,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 			// Airborne positive status
 			if (targ.status && targ.status == 'airborne') {
 				if (skill.atktype == 'physical') {
-					dodgeChance = 0;
+					dodgeChance *= hasStatusAffinity(targ, 'airborne', 'weak') ? 0.5 : 0;
 				} else {
-					dodgeChance -= 10;
+					let dodgeRed = 0.1 * (hasStatusAffinity(targ, 'airborne', 'weak') ? 0.5 : (hasStatusAffinity(targ, 'airborne', 'resist') ? 2 : 1))
+					dodgeChance *= 1 - dodgeRed;
 				}
 			}
 
@@ -1688,7 +1691,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// Airborne?
-	if (skill.atktype == 'physical' && char.status && char.status == 'airborne') {
+	if ((skill.atktype == 'physical' || skill.atktype == 'ranged') && char.status && char.status == 'airborne' && (!isBoss(char) && !hasStatusAffinity(char, 'airborne', 'weak'))) {
 		finalText += `\n__${char.name}__ has landed on the floor.\n`
 		delete char.status;
 		delete char.statusturns;

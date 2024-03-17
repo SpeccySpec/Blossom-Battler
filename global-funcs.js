@@ -880,7 +880,7 @@ replaceTxt = (str, ...txt) => {
 	return str;
 }
 
-let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror'];
+let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'airborne', 'drenched'];
 isPhysicalStatus = (status) => {
 	if (!status) return false;
 

@@ -1645,73 +1645,441 @@ commands.listelements = new Command({
 	}
 })
 
+statusDescs = [
+	{
+		title: "<:physical:973077052129423411> Physical Negative Ailments",
+		statuses: [
+			{
+				name: "burn",
+				desc: `Takes *an amount of HP* of damage each turn until *3 turns pass*, cured, or once 1 HP is reached. *May change the ${statusEmojis["atkdown"]}ATK stat*.`,
+				ailments: {
+					nonboss: {
+						weak: `Takes *1/5th* of max HP & *1/4s* the ${statusEmojis["atkdown"]}ATK stat.`,
+						normal: `Takes *1/10th* of max HP & *1/2s* the ${statusEmojis["atkdown"]}ATK stat.`,
+						resist: `Takes *1/20th* of max HP & *1/1.25s* the ${statusEmojis["atkdown"]}ATK stat.`,
+					},
+					boss: `Takes *5 HP* & *doesn't change ${statusEmojis["atkdown"]}ATK stat*.`
+				}
+			},
+			{
+				name: "bleed",
+				desc: `Takes *an amount of HP* of damage each turn until *3 turns pass*, cured, or once the afflicted is defeated.`,
+				ailments: {
+					nonboss: {
+						weak: `Takes *1/5th* of max HP.`,
+						normal: `Takes *1/10th* of max HP.`,
+						resist: `Takes *1/20th* of max HP.`,
+					},
+					boss: `Takes *10 HP*.`
+				}
+			},
+			{
+				name: "freeze",
+				desc: `Immobilizes the afflicted for an *amount of turns*.`,
+				ailments: {
+					nonboss: {
+						weak: `Lasts *2 turns*.`,
+						normal: `Lasts *1 turn*.`,
+						resist: `Lasts *1 turn, but has a 50% chance of thawing out*.`,
+					},
+					boss: `*Thaws out immediately*.`
+				}
+			},
+			{
+				name: "paralyze",
+				desc: `Has *a chance* to immobilize the afflicted until expired. Halves chance each turn.`,
+				ailments: {
+					nonboss: {
+						weak: `Lasts *5 turns* and sets initial paralyze chance to *160%*.`,
+						normal: `Lasts *4 turns* and sets initial paralyze chance to *80%*.`,
+						resist: `Lasts *3 turns* and sets initial paralyze chance to *40%*.`,
+					},
+					boss: `*Shakes it off immediately*.`
+				}
+			},
+			{
+				name: "toxin",
+				desc: `Takes *an amount of HP* of damage each turn until *3 turns pass*, cured, or once 1 HP is reached. *May change the ${statusEmojis["magdown"]}MAG stat*.`,
+				ailments: {
+					nonboss: {
+						weak: `Takes *1/5th* of max HP & *1/4s* the ${statusEmojis["magdown"]}MAG stat.`,
+						normal: `Takes *1/10th* of max HP & *1/2s* the ${statusEmojis["magdown"]}MAG stat.`,
+						resist: `Takes *1/20th* of max HP & *1/1.25s* the ${statusEmojis["magdown"]}MAG stat.`,
+					},
+					boss: `Takes *5 HP* & *doesn't change ${statusEmojis["magdown"]}MAG stat*.`
+				}
+			},
+			{
+				name: "dazed",
+				desc: `Disables physical and ranged skill usage for *an amount of turns*.`,
+				ailments: {
+					nonboss: {
+						weak: `Lasts *3 turns*.`,
+						normal: `Lasts *2 turns*.`,
+						resist: `Lasts *1 turn*.`,
+					},
+					boss: `Lasts *1 turn*.`
+				}
+			},
+			{
+				name: "hunger",
+				desc: `*May alter ${statusEmojis["atkdown"]}ATK & ${statusEmojis["magdown"]}MAG stats*.`,
+				ailments: {
+					nonboss: {
+						weak: `*1/4s* ${statusEmojis["atkdown"]}ATK & ${statusEmojis["magdown"]}MAG stats.`,
+						normal: `*1/2s* ${statusEmojis["atkdown"]}ATK & ${statusEmojis["magdown"]}MAG stats.`,
+						resist: `*1/1.25s* ${statusEmojis["atkdown"]}ATK & ${statusEmojis["magdown"]}MAG stats.`,
+					},
+					boss: `Affects them the same as non-bosses.`
+				}
+			},
+			{
+				name: "blind",
+				desc: `*May alter ${statusEmojis["prcdown"]}PRC & ${statusEmojis["agldown"]}AGL stats*.`,
+				ailments: {
+					nonboss: {
+						weak: `*1/4s* ${statusEmojis["prcdown"]}PRC & ${statusEmojis["agldown"]}AGL stats.`,
+						normal: `*1/2s* ${statusEmojis["prcdown"]}PRC & ${statusEmojis["agldown"]}AGL stats.`,
+						resist: `*1/1.25s* ${statusEmojis["prcdown"]}PRC & ${statusEmojis["agldown"]}AGL stats.`,
+					},
+					boss: `Affects them the same as non-bosses.`
+				}
+			},
+			{
+				name: "irradiation",
+				desc: `Switches *an amount of random stats* for *an amount of turns*.`,
+				ailments: {
+					nonboss: {
+						weak: `Lasts *5 turns* and switches *3 stats*.`,
+						normal: `Lasts *3 turns* and switches *2 stats*.`,
+						resist: `Lasts *1 turn* and switches *2 stats*.`,
+					},
+					boss: `Affects them the same as non-bosses.`
+				}
+			},
+			{
+				name: "drenched",
+				desc: `Nullifies status affinities for *3 turns*. *Stacks with other status effects.*`,
+			}
+		]
+	},
+	{
+		title: "<:mental:1004855144745291887> Mental Negative Ailments",
+		statuses: [
+			{
+				name: "dizzy",
+				desc: `Halves accuracy of all skills for *2 turns*.`,
+			},
+			{
+				name: "sleep",
+				desc: `Immobilizes for *1 turn*. May restore *an amount of HP and MP* while affected.`,
+				ailments: {
+					nonboss: {
+						weak: `Does not restore HP and MP.`,
+						normal: `Restores *1/20th* of max HP and max MP`,
+						resist: `Restores *1/10th* of max HP and max MP`,
+					},
+					boss: `Let's them do their turn instead of immobilizing.`
+				}
+			},
+			{
+				name: "despair",
+				desc: `Takes *an amount of MP* each turn until *3 turns pass*, cured, or until the afflected runs out of MP which renders them defeated.`,
+				ailments: {
+					nonboss: {
+						weak: `Takes *1/5th* of max MP.`,
+						normal: `Takes *1/10th* of max MP.`,
+						resist: `Takes *1/20th* of max MP.`,
+					},
+					boss: `Takes *10* MP.`
+				}
+			},
+			{
+				name: "brainwash",
+				desc: `Forces the afflicted to use a random move from their pool on the flipped target *(one -> ally)* for *an amount of turns*. Will make afflicted hit themselves if no usable skills are detected.`,
+				ailments: {
+					nonboss: {
+						weak: `Lasts *3 turns*.`,
+						normal: `Lasts *2 turns*.`,
+						resist: `Lasts *1 turn*.`,
+					},
+					boss: `Shakes it off immediately.`
+				}
+			},
+			{
+				name: "fear",
+				desc: `Has *a chance* to immobilize the afflicted, but will pass if *3 turns pass*, cured, or takes effect.`,
+				ailments: {
+					nonboss: {
+						weak: `*75%* chance to immobilize, *but will not remove itself once it takes effect.*.`,
+						normal: `*50%* chance to immobilize.`,
+						resist: `*25%* chance to immobilize.`,
+					},
+					boss: `Shakes it off immediately.`
+				}
+			},
+			{
+				name: "rage",
+				desc: `Forces the afflicted to use a stronger melee attack on a random target for *an amount of turns*`,
+				ailments: {
+					nonboss: {
+						weak: `Lasts *3 turns*.`,
+						normal: `Lasts *2 turns*.`,
+						resist: `Lasts *1 turn*.`,
+					},
+					boss: `Shakes it off immediately.`
+				}
+			},
+			{
+				name: "ego",
+				desc: `Disables healing skill usage for *an amount of turns*.`,
+				ailments: {
+					nonboss: {
+						weak: `Lasts *5 turns*.`,
+						normal: `Lasts *3 turns*.`,
+						resist: `Lasts *1 turn*.`,
+					},
+					boss: `Lasts *1 turn*.`
+				}
+			},
+			{
+				name: "silence",
+				desc: `Disables magical skill usage and prevents the afflicted from being healed for *an amount of turns*.`,
+				ailments: {
+					nonboss: {
+						weak: `Lasts *3 turns*.`,
+						normal: `Lasts *2 turns*.`,
+						resist: `Lasts *1 turn*.`,
+					},
+					boss: `Lasts *1 turn*.`
+				}
+			},
+			{
+				name: "infatuation",
+				desc: `Has a 50% chance to hault attack for *3 turns*. *Stacks with other status effects.*`,
+			},
+			{
+				name: "confusion",
+				desc: `Has a 50% chance for the afflicted to hit themselves for *3 turns*. *Stacks with other status effects.*`,
+			},
+			{
+				name: "sensitive",
+				desc: `Debuffs a random stat once hit a single time per opponent *(2 hits from 2 opponents -> 2 debuffs, 2 hits from 1 opponent -> 1 debuff)* for *an amount of turns*.`,
+				ailments: {
+					nonboss: {
+						weak: `Lasts *2 turns* but debuffs two random statuses once hit a single time per opponent.`,
+						normal: `Lasts *2 turns*.`,
+						resist: `Lasts *1 turn*.`,
+					},
+					boss: `Lasts *1 turn*.`
+				}
+			},
+			{
+				name: "insanity",
+				desc: `May force the afflicted to take *one of multiple actions* for *an amount of turns*. The possible actions are:\n- Skip Turn\n- Random skill on a random target\n- Insanity Action (Buff random enemy's random stat once / Debuff the afflicted's random stat once / Heal a random target with 50 power)`,
+				ailments: {
+					nonboss: {
+						weak: `Lasts *3 turns*.`,
+						normal: `Lasts *3 turns* and *removes Insanity Action* from the effects pool.`,
+						resist: `Lasts *3 turns* and *removes Insanity Action and Random Skill* from the effects pool.`,
+					},
+					boss: {
+						weak: `Lasts *1 turn* and *removes Insanity Action* from the effects pool.`,
+						normal: `Lasts *1 turn* and *removes Insanity Action and Random Skill* from the efffects pool`,
+						resist: `Shakes it off immediately.`,
+					}
+				}
+			}
+		]
+	},
+	{
+		title: "<:tick:973077052372701294> Positive Ailments",
+		statuses: [
+			{
+				name: "mirror",
+				type: "physical",
+				desc: `Immobilizes for *3 turns*. ${affinityEmoji["repel"]}Repels magic skills, but may make ${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode skills *more effective*.`,
+				ailments: {
+					nonboss: {
+						weak: `Effectiveness of ${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode skills is ${affinityEmoji["weak"]}weak.`,
+						normal: `Effectiveness of ${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode skills is ${affinityEmoji["superweak"]}superweak.`,
+						resist: `Effectiveness of ${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode skills is ${affinityEmoji["deadly"]}deadly.`,
+					},
+					boss: `Effectiveness of ${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode skills is unchanged.`
+				}
+			},
+			{
+				name: "airborne",
+				type: "physical",
+				desc: `Disables effects of terrain for the afflicted for *3 turns*, but *may expire if attacked with a physical or ranged skill*. Reduces dodge chance *(physical -> may reduce by 100%, other -> may reduce by 10%)* and doubles afflicted's physical skill power.`,
+				ailments: {
+					nonboss: {
+						weak: `*Won't* expire if hit with a physical or ranged skill and *halves* dodge chance reduction.`,
+						normal: `Dodge chance reduction is *regular*.`,
+						resist: `*Doubles* dodge chance reduction.`,
+					},
+					boss: `*Won't* expire if hit with a physical or ranged skill and *nullifies* dodge chance reduction.`
+				}
+			},
+			{
+				name: "happy",
+				type: "mental",
+				desc: `*Increases ${statusEmojis["lukup"]}LUK & ${statusEmojis["aglup"]}AGL stats positively based on level* for *3 turns*, but *decreases the ${statusEmojis["prcdown"]}PRC stat by 1/10th of the afflicted's level*.`,
+				ailments: {
+					nonboss: {
+						weak: `${statusEmojis["lukup"]}LUK & ${statusEmojis["aglup"]}AGL increased by *1/7th* of afflicted's level`,
+						normal: `${statusEmojis["lukup"]}LUK & ${statusEmojis["aglup"]}AGL increased by *1/10th* of afflicted's level`,
+						resist: `${statusEmojis["lukup"]}LUK & ${statusEmojis["aglup"]}AGL increased by *1/15th* of afflicted's level`,
+					},
+					boss: `Affects them the same as non-bosses.`
+				}
+			},
+		]
+	}
+]
+
 commands.liststatus = new Command({
 	desc: 'Lists all the status effects.',
 	section: "skills",
 	aliases: ['liststatuses', 'statuslist'],
-	args: [],
-	func(message, args, guilded) {
-		let settings = setUpSettings(message.guild.id);
-		const DiscordEmbed = new Discord.MessageEmbed()
-			.setColor('#0099ff')
-			.setTitle('List of status effects:')
-			.setDescription('Status affects will affect fighters in-battle and can be fatal if not cured.')
-			.addFields()
-
-		let statusDesc = {
-			// Physical
-			burn: '<:physical:973077052129423411>Take 1/10th of max HP damage each turn until cured, or you reach one hp. Halves ATK stat.',
-			bleed: '<:physical:973077052129423411>Take 1/10th of max HP damage each until cured, or the inflicted is defeated.',
-			freeze: '<:physical:973077052129423411>Immobilized for one turn.',
-			paralyze: '<:physical:973077052129423411>Chance to be immobilized until the status passes.',
-			toxin: '<:physical:973077052129423411>Take 1/10th of max HP damage each turn until cured, or you reach one hp. Halves MAG stat.',
-			dazed: '<:physical:973077052129423411>Unable to use any physical skills for 2 turns.',
-			hunger: '<:physical:973077052129423411>ATK & MAG halved.',
-			blind: '<:physical:973077052129423411>PRC and AGL halved.',
-			irradiation: '<:physical:973077052129423411>Switch 3 random stats for 3 turns.',
-			drenched: '<:physical:973077052129423411>Nullifies status affinities. Stacks with other status effects.',
-
-			// Mental
-			dizzy: '<:mental:1004855144745291887>Accuracy of all skills halved for 3 turns.',
-			sleep: '<:mental:1004855144745291887>Immobilized for 2 turns, restore 1/20th of HP & MP while affected.',
-			despair: '<:mental:1004855144745291887>Lose 1/10th of max MP every turn until cured. Downs the inflicted once they reach 0MP.',
-			brainwash: '<:mental:1004855144745291887>Use a random move on the incorrect target for 2 turns.',
-			fear: '<:mental:1004855144745291887>50% chance to be immobilized but cured from the status.',
-			rage: '<:mental:1004855144745291887>Forced to use stronger melee attack on a random target for 2 turns.',
-			ego: '<:mental:1004855144745291887>Unnable to use heal skills for 3 turns.',
-			silence: '<:mental:1004855144745291887>Unable to use any magical skills and be healed for 2 turns.',
-			infatuation: '<:mental:1004855144745291887>50% chance to hault attack. Stacks with other status effects.',
-			confusion: '<:mental:1004855144745291887>50% chance to damage self when attacking. Stacks with other status effects.',
-			sensitive: '<:mental:1004855144745291887>Debuff a random stat once hit a single time per opponent for 3 turns.',
-			insanity: '<:mental:1004855144745291887>One of multiple effects on turn for 1 turn for bosses, and 3 on non-bosses.\n\nEffects:\nNon-Boss: Skip Turn, Random Skill, Insanity Action (Buff random enemy once/Debuff itself once/Heal random target)\nBoss: Skip Turn, Random Skill\n\nStatus affinities change what effects can be applied.',
-
-			// Positive Physical
-			mirror: '<:physical:973077052129423411>Positive Status Effect. Immobilized for 3 turns. Repel magic skills.',
-			airborne: '<:physical:973077052129423411>Positive Status Effect. Unaffected by physical skills and terrain effects.',
-
-			// Positive Mental
-			happy: '<:mental:1004855144745291887>Positive Status Effect. LUK and AGL increased, PRC decreased. Can still be teched on your opponents.'
+	args: [
+		{
+			name: "Status",
+			type: "Word",
+			forced: false,
 		}
+	],
+	async func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id);
 
-		for (const i in statusEffects) {
+		const genStatusDescription = (status, hideAffinities) => {
+			let text = '';
+
+			if (hideAffinities) {
+				if (status.type) text += `${status.type == 'physical' ? '*<:physical:973077052129423411> Physical' : '*<:mental:1004855144745291887> Mental'}*\n`
+			} else {
+				text += `${isPhysicalStatus(status.name) || status.type == 'physical' ? '*<:physical:973077052129423411> Physical' : '*<:mental:1004855144745291887> Mental'}*\n`
+			}
+
 			if (settings.mechanics.technicaldamage) {
+				text += '*Techs: ';
+
 				let techTxt = ''
-				for (const k in elementTechs[statusEffects[i]]) {
-					if (elementTechs[statusEffects[i]][k] === 'all') {
+				for (const k in elementTechs[status.name]) {
+					if (elementTechs[status.name][k] === 'all') {
 						techTxt = 'ALL';
 						break;
 					} else
-						techTxt += elementEmoji[elementTechs[statusEffects[i]][k]];
+						techTxt += elementEmoji[elementTechs[status.name][k]];
 				}
 				
 				if (techTxt === '') techTxt = 'NONE'
 
-				DiscordEmbed.fields.push({name: `${statusEmojis[statusEffects[i].toLowerCase()]}${statusEffects[i]}`, value: `(${techTxt})\n${statusDesc[statusEffects[i].toLowerCase()]}`, inline: true})
-			} else {
-				DiscordEmbed.fields.push({name: `${statusEmojis[statusEffects[i].toLowerCase()]}${statusEffects[i]}`, value: `${statusDesc[statusEffects[i].toLowerCase()]}`, inline: true})
+				text += techTxt + '*\n\n';
 			}
+
+			text += status.desc+'\n\n';
+
+			if (!hideAffinities) {
+				if (status.ailments) text += '**Status Affinity Changes:**\n'
+
+				for (affinity in status.ailments) {
+					text += affinity == 'nonboss' ? '**Non-Bosses:**' : '**Bosses:**';
+
+					if (typeof status.ailments[affinity] == "object") {
+						text += '\n';
+
+						for (side in status.ailments[affinity]) {
+							text += affinityEmoji[side] + ': ' + status.ailments[affinity][side] + '\n';
+						}
+
+						text += '\n';
+					} else {
+						text += " "+status.ailments[affinity]+'\n';
+					}
+				}
+			} else {
+				if (status.ailments) text += `**Has affinity changes.** For full view, please refer to: __${getPrefix(message.guild.id)}liststatus ${status.name}__`
+			}
+
+			return text;
 		}
 
-		message.channel.send({embeds: [DiscordEmbed]})
+		if (args[0]) {
+			if (!utilityFuncs.inArray(args[0].toLowerCase(), statusEffects)) return message.channel.send(`${args[0]} is not a valid status effect!`);
+
+			let statDef;
+
+			for (side in statusDescs) {
+				for (stat in statusDescs[side].statuses) {
+					if (statusDescs[side].statuses[stat].name == args[0].toLowerCase()) {
+						statDef = statusDescs[side].statuses[stat];
+						break;
+					}
+				}
+				if (statDef) break;
+			}
+
+			message.channel.send({
+				embeds: [new Discord.MessageEmbed({
+					color: '#0099ff',
+					title: `${statusEmojis[statDef.name]}${statusNames[statDef.name]} (${statDef.name})`,
+					description: genStatusDescription(statDef, false),
+				})]
+			})
+
+		} else {
+			let page = 0;
+
+			const generateEmbed = async (page) => {
+				const current = statusDescs[page];
+				return new Discord.MessageEmbed({
+					color: '#0099ff',
+					title: 'List of status effects:',
+					description: `Status affects will affect fighters in-battle and can be fatal if not cured, or beneficial.\n### ${current.title}`,
+					fields: await Promise.all(
+						current.statuses.map(async arrayDefs => ({
+							name: `${statusEmojis[arrayDefs.name]}${statusNames[arrayDefs.name]} (${arrayDefs.name})`,
+							value: genStatusDescription(arrayDefs, true),
+							inline: true
+						}))
+					)
+				})
+			}
+
+			embedMessage = await message.channel.send({
+				embeds: [await generateEmbed(page)],
+				components: [new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]})]
+			})
+		
+			const collector = embedMessage.createMessageComponentCollector({
+				filter: ({user}) => user.id == message.author.id
+			})
+
+			collector.on('collect', async interaction => {
+				if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
+					if (interaction.customId === 'back') {
+						page--;
+						if (page < 0) page = statusDescs.length - 1;
+					} else if (interaction.customId === 'forward') {
+						page++;
+						if (page >= statusDescs.length) page = 0
+					}
+		
+					await interaction.update({
+						embeds: [await generateEmbed(page)],
+						components: [
+							new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]}),
+						]
+					})
+				} else {
+					collector.stop()
+					await interaction.update({
+					embeds: [await generateEmbed(page)],
+					components: []
+					})
+				}
+			})
+		}
 	}
 })

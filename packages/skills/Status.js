@@ -2043,7 +2043,7 @@ statusEffectFuncs = {
 			let statusTxt = '';
 			let affinityTxt = '';
 
-			let dmg = Math.round(char.maxhp/8)
+			let dmg = Math.round(char.maxhp/10)
 			if (isBoss(char)) dmg = 10;
 
 			if (hasStatusAffinity(char, 'bleed', 'weak')) {
@@ -2189,8 +2189,28 @@ statusEffectFuncs = {
 	},
 
 	brainwash: {
-		forceturns: 2,
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'brainwash', 'weak')) {
+				char.statusturns = 3;
+			} else if (hasStatusAffinity(char, 'brainwash', 'resist')) {
+				char.statusturns = 1;
+			} else {
+				char.statusturns = 2;
+			}
+		},
 		turnoverride: function(btl, char) {
+			if (isBoss(char)) {
+				DiscordEmbed = new Discord.MessageEmbed()
+					.setColor("#ff1fa9")
+					.setTitle(`${char.name}'s turn!`)
+					.setDescription(`${char.name} shakes it off immediately!`);
+				btl.channel.send({embeds: [DiscordEmbed]});
+
+				delete char.status;
+				delete char.statusturns;
+				return true;
+			}
+
 			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
 			
 			let usableskills = [];
@@ -2256,25 +2276,52 @@ statusEffectFuncs = {
 	fear: {
 		onturn: function(btl, char) {
 			if (isBoss(char)) {
-				return `${char.name} shook off the fear!`;
 				delete char.status;
 				delete char.statuschance;
+				return `${char.name} shook off the fear!`;
 			}
 
-			if (randNum(1, 100) <= 50) {
+			let chance = 50;
+			if (hasStatusAffinity(char, 'fear', 'weak')) chance = 75;
+			if (hasStatusAffinity(char, 'fear', 'resist')) chance = 25;
+
+			if (randNum(1, 100) <= chance) {
+				if (chance != 75) {
+					delete char.status;
+					delete char.statuschance;
+				}
 				return [`${char.name} is stopped in their tracks by fear, losing their turn!`, false];
-				delete char.status;
-				delete char.statuschance;
 			}
 		}
 	},
 
 	rage: {
-		forceturns: 2,
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'rage', 'weak')) {
+				char.statusturns = 3;
+			} else if (hasStatusAffinity(char, 'rage', 'resist')) {
+				char.statusturns = 1;
+			} else {
+				char.statusturns = 2;
+			}
+		},
 		onremove(btl, char) {
 			killVar(char, 'forcemove');
 		},
 		turnoverride(btl, char) {
+			if (isBoss(char)) {
+				DiscordEmbed = new Discord.MessageEmbed()
+					.setColor("#ff1fa9")
+					.setTitle(`${char.name}'s turn!`)
+					.setDescription(`${char.name} shakes it off immediately!`);
+				btl.channel.send({embeds: [DiscordEmbed]});
+
+				delete char.status;
+				delete char.statusturns;
+				killVar(char, 'forcemove');
+				return true;
+			}
+
 			let targs = [];
 			let team = {};
 			let targ = {};
@@ -2294,17 +2341,41 @@ statusEffectFuncs = {
 	},
 
 	ego: {
-		forceturns: 3,
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'ego', 'weak')) {
+				char.statusturns = 5;
+			} else if (hasStatusAffinity(char, 'ego', 'resist') || isBoss(char)) {
+				char.statusturns = 1;
+			} else {
+				char.statusturns = 3;
+			}
+		},
 		hardcoded: true
 	},
 
 	silence: {
-		forceturns: 2,
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'silence', 'weak')) {
+				char.statusturns = 3;
+			} else if (hasStatusAffinity(char, 'silence', 'resist') || isBoss(char)) {
+				char.statusturns = 1;
+			} else {
+				char.statusturns = 2;
+			}
+		},
 		hardcoded: true
 	},
 
 	dazed: {
-		forceturns: 2,
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'dazed', 'weak')) {
+				char.statusturns = 3;
+			} else if (hasStatusAffinity(char, 'dazed', 'resist') || isBoss(char)) {
+				char.statusturns = 1;
+			} else {
+				char.statusturns = 2;
+			}
+		},
 		hardcoded: true
 	},
 
@@ -2409,6 +2480,13 @@ statusEffectFuncs = {
 	},
 
 	sensitive: {
+		oninflict: function(char) {
+			char.originalstats = objClone(char.stats);
+
+			if (hasStatusAffinity(char, 'sensitive', 'resist')) {
+				char.statusturns = 1;
+			} else char.statusturns = 2;
+		},
 		hardcoded: true
 	},
 
@@ -2455,7 +2533,7 @@ statusEffectFuncs = {
 
 	insanity: {
 		oninflict: function(char) {
-			char.statusturns = (char.boss || char.finalboss || char.diety) ? 1 : 3;
+			char.statusturns = (isBoss(char)) ? 1 : 3;
 		},
 		onremove(btl, char) {
 			DiscordEmbed = new Discord.MessageEmbed()
@@ -2465,11 +2543,9 @@ statusEffectFuncs = {
 			btl.channel.send({embeds: [DiscordEmbed]});
 		},
 		turnoverride: function(btl, char) {
-			if (char?.status && char?.statusturns <= 0) return true;
-
 			let actionTable = [];
 
-			if (char.boss || char.finalboss || char.diety) {
+			if (!isBoss(char)) {
 				if (hasStatusAffinity(char, 'insanity', 'resist')) actionTable = ['skip'];
 				else if (hasStatusAffinity(char, 'insanity', 'normal')) actionTable = ['skip', 'brainwash'];
 				else actionTable = ['skip', 'brainwash', 'action'];
@@ -2480,10 +2556,13 @@ statusEffectFuncs = {
 			}
 
 			if (actionTable.length == 0) {
+				delete char.status;
+				delete char.statusturns;
+
 				DiscordEmbed = new Discord.MessageEmbed()
 					.setColor("#ff1fa9")
 					.setTitle(`${char.name}'s turn!`)
-					.setDescription(`...But it failed!`);
+					.setDescription(`...But it failed! ${isBoss(char) ? `${char.name} shakes it off immediately!` : ''}`);
 				btl.channel.send({embeds: [DiscordEmbed]});
 				return true;
 			}
