@@ -2480,12 +2480,17 @@ statusEffectFuncs = {
 	},
 
 	sensitive: {
+		onremove: function(char) {
+			killVar(char, 'sensitive');
+		},
 		oninflict: function(char) {
 			char.originalstats = objClone(char.stats);
 
-			if (hasStatusAffinity(char, 'sensitive', 'resist')) {
+			if (hasStatusAffinity(char, 'sensitive', 'resist') || isBoss(char)) {
 				char.statusturns = 1;
 			} else char.statusturns = 2;
+
+			addCusVal(char, 'sensitive', (hasStatusAffinity(char, 'sensitive', 'weak') && !isBoss(char) ? [1,1] : [1]));
 		},
 		hardcoded: true
 	},

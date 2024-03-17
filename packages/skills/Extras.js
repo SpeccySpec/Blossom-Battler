@@ -3114,4 +3114,18 @@ customVariables = {
 			return txt;
 		}
 	},
+
+	sensitive: {
+		onhit(btl, char, inf, dmg, v, skill) {
+			if (dmg > 0) {
+				let txt = '';
+
+				for (let num in v) {
+					txt += extrasList.buff.buffChange(inf, char, skill, btl, ["target", "random", -1, 100], null) + '\n'
+				}
+
+				return txt;
+			}
+		}
+	}
 }

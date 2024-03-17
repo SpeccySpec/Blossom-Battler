@@ -1867,7 +1867,7 @@ statusDescs = [
 				desc: `Debuffs a random stat once hit a single time per opponent *(2 hits from 2 opponents -> 2 debuffs, 2 hits from 1 opponent -> 1 debuff)* for *an amount of turns*.`,
 				ailments: {
 					nonboss: {
-						weak: `Lasts *2 turns* but debuffs two random statuses once hit a single time per opponent.`,
+						weak: `Lasts *2 turns* but debuffs two random statuses instead.`,
 						normal: `Lasts *2 turns*.`,
 						resist: `Lasts *1 turn*.`,
 					},
@@ -1924,12 +1924,12 @@ statusDescs = [
 			{
 				name: "happy",
 				type: "mental",
-				desc: `*Increases ${statusEmojis["lukup"]}LUK & ${statusEmojis["aglup"]}AGL stats positively based on level* for *3 turns*, but *decreases the ${statusEmojis["prcdown"]}PRC stat by 1/10th of the afflicted's level*.`,
+				desc: `*Increases ${statusEmojis["critup"]}CRIT & ${statusEmojis["aglup"]}AGL stats positively based on level* for *3 turns*, but *decreases the ${statusEmojis["prcdown"]}PRC stat by 1/10th of the afflicted's level*.`,
 				ailments: {
 					nonboss: {
-						weak: `${statusEmojis["lukup"]}LUK & ${statusEmojis["aglup"]}AGL increased by *1/7th* of afflicted's level`,
-						normal: `${statusEmojis["lukup"]}LUK & ${statusEmojis["aglup"]}AGL increased by *1/10th* of afflicted's level`,
-						resist: `${statusEmojis["lukup"]}LUK & ${statusEmojis["aglup"]}AGL increased by *1/15th* of afflicted's level`,
+						weak: `${statusEmojis["critup"]}CRIT & ${statusEmojis["aglup"]}AGL increased by *1/7th* of afflicted's level`,
+						normal: `${statusEmojis["critup"]}CRIT & ${statusEmojis["aglup"]}AGL increased by *1/10th* of afflicted's level`,
+						resist: `${statusEmojis["critup"]}CRIT & ${statusEmojis["aglup"]}AGL increased by *1/15th* of afflicted's level`,
 					},
 					boss: `Affects them the same as non-bosses.`
 				}
