@@ -296,6 +296,7 @@ module.exports = {
 		skillArray.sort(function(a, b) {
 			return b[1].rating - a[1].rating
 		})
+		skillArray = skillArray.reverse();
 
 		let skillObj = {}
 		for (const skill in skillArray) {
