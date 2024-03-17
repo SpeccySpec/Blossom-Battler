@@ -273,18 +273,18 @@ module.exports = {
 			let accScore = 0;
 
 			if (typeof skillFile[skill].type === 'string') {
-				elementScore = elementPoints[skillFile[skill].type] ? parseInt(elementPoints[skillFile[skill].type])*10000000000 : 0
+				elementScore = elementPoints[skillFile[skill].type] ? parseInt(elementPoints[skillFile[skill].type])*100 : 0
 			} else {
 				for (const i in skillFile[skill].type) {
-					if (i == 0) elementScore = elementPoints[skillFile[skill].type[i]] ? parseInt(elementPoints[skillFile[skill].type[i]])*10000000000 : 0
-					else elementScore += elementPoints[skillFile[skill].type[i]] ? parseInt(elementPoints[skillFile[skill].type[i]])*100000000 : 0
+					if (i == 0) elementScore = elementPoints[skillFile[skill].type[i]] ? parseInt(elementPoints[skillFile[skill].type[i]])*100 : 0
+					else elementScore += elementPoints[skillFile[skill].type[i]] ? parseInt(elementPoints[skillFile[skill].type[i]]) : 0
 				}
 			}
 
-			powScore += skillFile[skill]?.pow ? Math.min(skillFile[skill].pow, 2000)*1000 : 0
+			powScore += skillFile[skill]?.pow ? Math.min(skillFile[skill].pow, 2000) : 0
 			accScore += skillFile[skill]?.acc ? Math.min(skillFile[skill].acc, 100) : 0
 
-			skillFile[skill].rating = elementScore + powScore + accScore;
+			skillFile[skill].rating = (elementScore*10000 + powScore)*1000 + accScore;
 		}
 		
 		//convert skillFile to an array, sort it, and then convert it back to an object
