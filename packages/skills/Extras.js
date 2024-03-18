@@ -2356,7 +2356,7 @@ extrasList = {
 }
 
 // Make an Extra for a skill. "func" should be an array of 1-5 values indicating what the extra does.
-function makeExtra(skill, extra, func) {
+makeExtra = (skill, extra, func) => {
 	if (!skill.extras) skill.extras = {};
 	if (!skill.extras[extra]) skill.extras[extra] = [];
 
