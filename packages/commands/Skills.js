@@ -2107,11 +2107,13 @@ commands.liststatus = new Command({
 					text += affinity == 'nonboss' ? '**Non-Bosses:**' : '**Bosses:**';
 
 					if (typeof status.ailments[affinity] == "object") {
-						text += '\n';
+						if (settings.mechanics.stataffinities) {
+							text += '\n';
 
-						for (side in status.ailments[affinity]) {
-							text += affinityEmoji[side] + ': ' + status.ailments[affinity][side] + '\n';
-						}
+							for (side in status.ailments[affinity]) {
+								text += affinityEmoji[side] + ': ' + status.ailments[affinity][side] + '\n';
+							}
+						} else text += ' '+status.ailments[affinity]['normal']
 
 						text += '\n';
 					} else {
@@ -2119,7 +2121,7 @@ commands.liststatus = new Command({
 					}
 				}
 			} else {
-				if (status.ailments) text += `**Has affinity changes.** For full view, please refer to: __${getPrefix(message.guild.id)}liststatus ${status.name}__`
+				if (status.ailments) text += `For full view, please refer to: __${getPrefix(message.guild.id)}liststatus ${status.name}__`
 			}
 
 			return text;
