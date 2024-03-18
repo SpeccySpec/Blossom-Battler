@@ -1363,7 +1363,7 @@ commands.testbattle = new Command({
 			enemy.pacify = 0;
 			
 			// Does this battle pass as a boss
-			if (enemy.type.includes('boss') || enemy.type.includes('deity')) battle.bossbattle = true;
+			if (enemy.type.includes('boss') || enemy.type.includes('bigboss') || enemy.type.includes('deity')) battle.bossbattle = true;
 
 			setupBattleStats(enemy);
 

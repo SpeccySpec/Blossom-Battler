@@ -14,7 +14,7 @@ getTurnOrder = (btl) => {
 
 			if (!(f.reincarnate || f.clone) || ((f.reincarnate || f.clone) && f.hp > 0)) {
 				turnorder.push(objClone(f));
-				if (f.type && (f.type.includes('boss') || f.type.includes('deity'))) turnorder.push(objClone(f));
+				if (f.type && (f.type.includes('boss') || f.type.includes('bigboss') || f.type.includes('deity'))) turnorder.push(objClone(f));
 			}
 		}
 
@@ -23,7 +23,7 @@ getTurnOrder = (btl) => {
 
 			if (!(f.reincarnate || f.clone) || ((f.reincarnate || f.clone) && f.hp > 0)) {
 				turnorder.push(objClone(f));
-				if (f.type && (f.type.includes('boss') || f.type.includes('deity'))) turnorder.push(objClone(f));
+				if (f.type && (f.type.includes('boss') || f.type.includes('bigboss') || f.type.includes('deity'))) turnorder.push(objClone(f));
 			}
 		}
 	}
@@ -2061,7 +2061,7 @@ doTurn = async(btl, noTurnEmbed) => {
 			}
 		}
 
-		if (char.type && (char.type.includes("boss") || char.type === "deity")) char.ignorestatus = true;
+		if (char.type && (char.type.includes("boss") || char.type.includes('bigboss') || char.type === "deity")) char.ignorestatus = true;
 	}
 
 	// Rest

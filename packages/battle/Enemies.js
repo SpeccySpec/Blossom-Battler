@@ -2,7 +2,7 @@
 isBoss = (f) => {
 	if (!f) return false;
 	if (!f.type) return false;
-	return (f.type.includes('boss') || f.type.includes('deity'));
+	return (f.type.includes('boss') || f.type.includes('bigboss') || f.type.includes('deity'));
 }
 
 // Learn the affinities of using this skill.

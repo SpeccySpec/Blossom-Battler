@@ -341,7 +341,7 @@ function enemyThinker(userDefs, allySide, oppSide) {
 	}
 	
 	// Heal if under 1/5 hp
-	if (!userDefs.miniboss && !userDefs.boss && !userDefs.finalboss && Math.random() < 0.5) {
+	if (!userDefs.miniboss && !userDefs.boss && !userDefs.bigboss && Math.random() < 0.5) {
 		var healSkills = [];
 		for (const i in possibleSkills) {
 			var skillDefs = skillFile[possibleSkills[i]]
