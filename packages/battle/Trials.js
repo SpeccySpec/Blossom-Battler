@@ -88,7 +88,7 @@ nextWave = (btl) => {
 			enemy.pacify = 0;
 
 			// Boss Wave txt
-			if (enemy.type.includes('boss') || enemy.type.includes('deity')) bosswave = true;
+			if (enemy.type.includes('boss') || enemy.type.includes('bigboss') || enemy.type.includes('deity')) bosswave = true;
 			
 			// Just to be sure...
 			enemy.team = 1;

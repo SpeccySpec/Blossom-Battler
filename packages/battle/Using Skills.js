@@ -195,6 +195,17 @@ getAffinity = (char, skillType) => {
 				affinity = "superweak"
 		}
 	}
+
+	if (btl?.terrain?.type === 'spiritual' && skillType === 'spirit') {
+		if (char.affinities.deadly.includes("spirit")) affinity = "superweak";
+		else if (char.affinities.superweak.includes("spirit")) affinity = "weak";
+		else if (char.affinities.weak.includes("spirit")) affinity = "normal";
+		else if (char.affinities.resist.includes("spirit")) affinity = "block";
+		else if (char.affinities.block.includes("spirit")) affinity = "block";
+		else if (char.affinities.repel.includes("spirit")) affinity = "repel";
+		else if (char.affinities.drain.includes("drain")) affinity = "drain";
+		else affinity = "resist";
+	}
 	
 	return affinity
 }
@@ -528,9 +539,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 			// Airborne positive status
 			if (targ.status && targ.status == 'airborne') {
 				if (skill.atktype == 'physical') {
-					dodgeChance *= hasStatusAffinity(targ, 'airborne', 'weak') ? 0.5 : 0;
+					dodgeChance *= (!isBoss(targ) && hasStatusAffinity(targ, 'airborne', 'resist')) ? 0.5 : 0;
 				} else {
-					let dodgeRed = 0.1 * (hasStatusAffinity(targ, 'airborne', 'weak') ? 0.5 : (hasStatusAffinity(targ, 'airborne', 'resist') ? 2 : 1))
+					let dodgeRed = 0.1 * (hasStatusAffinity(targ, 'airborne', 'resist') ? 0.5 : (hasStatusAffinity(targ, 'airborne', 'weak') ? 2 : 1))
+					if (isBoss(targ)) dodgeRed = 0.1 * 2;
 					dodgeChance *= 1 - dodgeRed;
 				}
 			}
@@ -1691,7 +1703,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// Airborne?
-	if ((skill.atktype == 'physical' || skill.atktype == 'ranged') && char.status && char.status == 'airborne' && (!isBoss(char) && !hasStatusAffinity(char, 'airborne', 'weak'))) {
+	if ((skill.atktype == 'physical') && char.status && char.status == 'airborne' && (!isBoss(char) && !hasStatusAffinity(char, 'airborne', 'weak'))) {
 		finalText += `\n__${char.name}__ has landed on the floor.\n`
 		delete char.status;
 		delete char.statusturns;

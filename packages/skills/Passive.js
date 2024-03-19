@@ -1951,7 +1951,7 @@ passiveList = {
 			}
 		},
 		getinfo(vars, skill) {
-			return `Forces the weather to **${vars[0]}** on battle start ${(vars[1] <= 1) ? "**indefinitely**" : `for **${vars[1]} turns**`}`;
+			return `Forces the weather to **${weatherDescs[vars[0]].emoji}${vars[0]}** on battle start ${(vars[1] <= 1) ? "**indefinitely**" : `for **${vars[1]} turns**`}`;
 		}
 	}),
 
@@ -1997,7 +1997,7 @@ passiveList = {
 			}
 		},
 		getinfo(vars, skill) {
-			return `Forces the terrain to **${vars[0]}** on battle start ${(vars[1] <= 1) ? "**indefinitely**" : `for **${vars[1]} turns**`}`;
+			return `Forces the terrain to **${terrainDescs[vars[0]].emoji}${vars[0]}** on battle start ${(vars[1] <= 1) ? "**indefinitely**" : `for **${vars[1]} turns**`}`;
 		}
 	}),
 

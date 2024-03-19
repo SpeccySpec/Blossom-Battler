@@ -1363,7 +1363,7 @@ commands.testbattle = new Command({
 			enemy.pacify = 0;
 			
 			// Does this battle pass as a boss
-			if (enemy.type.includes('boss') || enemy.type.includes('deity')) battle.bossbattle = true;
+			if (enemy.type.includes('boss') || enemy.type.includes('bigboss') || enemy.type.includes('deity')) battle.bossbattle = true;
 
 			setupBattleStats(enemy);
 
@@ -1630,5 +1630,169 @@ commands.resumetrial = new Command({
 		} else {
 			sendCurTurnEmbed(char, btl);
 		}
+	}
+})
+
+commands.listweather = new Command({
+	desc: 'Lists all the weather types and their effects.',
+	section: "battle",
+	aliases: ['listweathers', 'weatherlist'],
+	args: [
+		{
+			name: "Status",
+			type: "Word",
+			forced: false,
+		}
+	],
+	async func(message, args, guilded) {
+		let weatherListing = [];
+
+		for (i in weatherDescs) weatherListing.push([i, weatherDescs[i]]);
+
+		let page = 0;
+
+		const generateEmbed = async (page) => {
+			const current = weatherListing.slice(page, page + 6);
+			return new Discord.MessageEmbed({
+				color: '#0099ff',
+				title: 'List of Weather Types:',
+				description: `Weather Types will affect fighters in-battle with various strengths and weaknesses.`,
+				fields: await Promise.all(
+					current.map(async arrayDefs => ({
+						name: `${arrayDefs[1].emoji}${arrayDefs[1].name} (${arrayDefs[0]})`,
+						value: arrayDefs[1].desc,
+						inline: true
+					}))
+				)
+			})
+		}
+
+		embedMessage = await message.channel.send({
+			embeds: [await generateEmbed(page)],
+			components: [new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]})]
+		})
+		
+		const collector = embedMessage.createMessageComponentCollector({
+			filter: ({user}) => user.id == message.author.id
+		})
+
+		collector.on('collect', async interaction => {
+			if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
+				if (interaction.customId === 'forward') {
+					page += 6
+
+					if (page >= weatherListing.length) {
+						page = 0
+					}
+				} else if (interaction.customId === 'back') {
+					page -= 6
+
+					if (page < 0) {
+						page = weatherListing.length - (weatherListing.length % 6 != 0 ? weatherListing.length % 6 : 6)
+					}
+				}
+
+				await interaction.update({
+					embeds: [await generateEmbed(page)],
+					components: [
+						new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]}),
+					]
+				})
+			} else {
+				collector.stop()
+				await interaction.update({
+				embeds: [await generateEmbed(page)],
+				components: []
+				})
+			}
+		})
+	}
+})
+
+commands.listterrain = new Command({
+	desc: 'Lists all the terrain types and their effects.',
+	section: "skills",
+	aliases: ['listterrains', 'terrainlist'],
+	args: [
+		{
+			name: "Status",
+			type: "Word",
+			forced: false,
+		}
+	],
+	async func(message, args, guilded) {
+		let terrainArray = [[],[]];
+
+		for (i in terrainDescs) terrainArray[!terrainDescs[i]?.boss ? 0 : 1 ].push([i, terrainDescs[i]]);
+
+		let page = 0;
+		let pageIndex = 0;
+
+		const generateEmbed = async (page) => {
+			const current = terrainArray[page].slice(pageIndex, pageIndex + 6);
+			return new Discord.MessageEmbed({
+				color: '#0099ff',
+				title: 'List of Terrain Types:',
+				description: `Terrain Types will affect fighters in-battle with various strengths and weaknesses.${current[0][1].boss ? "\n### These Terrain Types are boss specific. I don't recommend characters use these, but I won't stop you." : ""}`,
+				fields: await Promise.all(
+					current.map(async arrayDefs => ({
+						name: `${arrayDefs[1].emoji}${arrayDefs[1].name} (${arrayDefs[0]})`,
+						value: arrayDefs[1].desc,
+						inline: true
+					}))
+				)
+			})
+		}
+
+		embedMessage = await message.channel.send({
+			embeds: [await generateEmbed(page)],
+			components: [new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]})]
+		})
+		
+		const collector = embedMessage.createMessageComponentCollector({
+			filter: ({user}) => user.id == message.author.id
+		})
+
+		collector.on('collect', async interaction => {
+			if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
+				if (interaction.customId === 'forward') {
+					pageIndex += 6
+
+					if (pageIndex >= terrainArray[page].length) {
+						page++
+
+						if (page >= terrainArray.length) {
+							page = 0
+						}
+						pageIndex = 0
+					}
+				} else if (interaction.customId === 'back') {
+					pageIndex -= 6
+
+					if (pageIndex < 0) {
+						page--
+
+						if (page < 0) {
+							page = terrainArray.length-1
+						}
+
+						pageIndex = terrainArray[page].length - (terrainArray[page].length % 6 != 0 ? terrainArray[page].length % 6 : 6)
+					}
+				}
+
+				await interaction.update({
+					embeds: [await generateEmbed(page)],
+					components: [
+						new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]}),
+					]
+				})
+			} else {
+				collector.stop()
+				await interaction.update({
+				embeds: [await generateEmbed(page)],
+				components: []
+				})
+			}
+		})
 	}
 })

@@ -1,3 +1,5 @@
+const utilityFuncs = require("../utilityFuncs");
+
 /*
 	XP
 	- HANDLE GAINING XP
@@ -167,7 +169,7 @@ evoSkillMessageCollector = async (charDefs, toUpdate, channel, server, ind, fiel
 	})
 
 	const collector = embedMessage.createMessageComponentCollector({
-		filter: ({user}) => user.id === charDefs.owner || user.flags.serialize().ADMINISTRATOR || adminList.includes(user.id)
+		filter: ({user}) => user.id === charDefs.owner || user.flags.serialize().ADMINISTRATOR || utilityFuncs.RPGBotAdmin(user.id)
 	})
 
 	collector.on('collect', async interaction => {

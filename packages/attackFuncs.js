@@ -548,7 +548,7 @@ function genDmg(userDefs, targDefs, skillDefs, server, forceDmgType, btl) {
 	if (skillDefs.limitbreak) {
 		values[0] = Math.round((((skillPow+(atkStat*2)-targDefs.end)*2) + Math.round(Math.random() * 30))/2)
 
-		if (targDefs.miniboss || targDefs.boss || targDefs.diety)
+		if (targDefs.miniboss || targDefs.boss || targDefs.bigboss || targDefs.diety)
 			values[0] = Math.round(values[0]*0.75);
 		
 		// Damage Types
@@ -873,7 +873,7 @@ function inflictStatus(oppDefs, skillDefs) {
 	} else if (skillStatus === "insanity") {
 		finaltext = `${oppDefs.name} was brought to insanity!`
 		oppDefs.status = "insanity"
-		oppDefs.statusturns = (oppDefs.boss || oppDefs.finalboss || oppDefs.diety) ? 1 : 3
+		oppDefs.statusturns = (oppDefs.boss || oppDefs.bigboss || oppDefs.diety) ? 1 : 3
 	}
 	
 	return finaltext
@@ -965,7 +965,7 @@ function inflictStatusFromText(oppDefs, statusEffect) {
 	} else if (skillStatus === "insanity") {
 		finaltext = `${oppDefs.name} was brought to insanity!`
 		oppDefs.status = "insanity"
-		oppDefs.statusturns = (oppDefs.boss || oppDefs.finalboss || oppDefs.diety) ? 1 : 3
+		oppDefs.statusturns = (oppDefs.boss || oppDefs.bigboss || oppDefs.diety) ? 1 : 3
 	}
 	
 	return finaltext
@@ -1249,7 +1249,7 @@ function attackEnemy(userName, oppName, userDefs, oppDefs, skillDefs, useEnergy,
 			embedText.targetText = `${userDefs.name} => ${oppDefs.name}`
 			embedText.attackText = `${userDefs.name} used ${skillDefs.name}!`
 
-			if (oppDefs.boss || oppDefs.miniboss || oppDefs.finalboss || oppDefs.diety) {
+			if (oppDefs.boss || oppDefs.miniboss || oppDefs.bigboss || oppDefs.diety) {
 				embedText.resultText += 'But it failed!'
 				return embedText
 			}

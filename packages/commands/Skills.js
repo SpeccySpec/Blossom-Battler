@@ -2005,7 +2005,7 @@ statusDescs = [
 					},
 					boss: {
 						weak: `Lasts *1 turn* and *removes Insanity Action* from the effects pool.`,
-						normal: `Lasts *1 turn* and *removes Insanity Action and Random Skill* from the efffects pool`,
+						normal: `Lasts *1 turn* and *removes Insanity Action and Random Skill* from the effects pool`,
 						resist: `Shakes it off immediately.`,
 					}
 				}
@@ -2031,14 +2031,14 @@ statusDescs = [
 			{
 				name: "airborne",
 				type: "physical",
-				desc: `Disables effects of terrain for the afflicted for *3 turns*, but *may expire if attacked with a physical or ranged skill*. Reduces dodge chance *(physical -> may reduce by 100%, other -> may reduce by 10%)* and doubles afflicted's physical skill power.`,
+				desc: `Disables effects of terrain for the afflicted for *3 turns*, but *may expire if they use a physical skill*. Increases dodge chance *(physical -> may increase by 100%, other -> may increase by 10%)* and doubles afflicted's physical skill power.`,
 				ailments: {
 					nonboss: {
-						weak: `*Won't* expire if hit with a physical or ranged skill and *halves* dodge chance reduction.`,
-						normal: `Dodge chance reduction is *regular*.`,
-						resist: `*Doubles* dodge chance reduction.`,
+						weak: `*Won't* expire if they use a physical skill and *doubles* dodge chance addition.`,
+						normal: `Dodge chance addition is *regular*.`,
+						resist: `*Halves* dodge chance addition.`,
 					},
-					boss: `*Won't* expire if hit with a physical or ranged skill and *nullifies* dodge chance reduction.`
+					boss: `*Won't* expire if they use a physical skill and *doubles* dodge chance addition.`
 				}
 			},
 			{
@@ -2107,11 +2107,13 @@ commands.liststatus = new Command({
 					text += affinity == 'nonboss' ? '**Non-Bosses:**' : '**Bosses:**';
 
 					if (typeof status.ailments[affinity] == "object") {
-						text += '\n';
+						if (settings.mechanics.stataffinities) {
+							text += '\n';
 
-						for (side in status.ailments[affinity]) {
-							text += affinityEmoji[side] + ': ' + status.ailments[affinity][side] + '\n';
-						}
+							for (side in status.ailments[affinity]) {
+								text += affinityEmoji[side] + ': ' + status.ailments[affinity][side] + '\n';
+							}
+						} else text += ' '+status.ailments[affinity]['normal']
 
 						text += '\n';
 					} else {
@@ -2119,7 +2121,7 @@ commands.liststatus = new Command({
 					}
 				}
 			} else {
-				if (status.ailments) text += `**Has affinity changes.** For full view, please refer to: __${getPrefix(message.guild.id)}liststatus ${status.name}__`
+				if (status.ailments) text += `For full view, please refer to: __${getPrefix(message.guild.id)}liststatus ${status.name}__`
 			}
 
 			return text;
@@ -2150,15 +2152,16 @@ commands.liststatus = new Command({
 
 		} else {
 			let page = 0;
+			let pageIndex = 0;
 
 			const generateEmbed = async (page) => {
-				const current = statusDescs[page];
+				const current = statusDescs[page].statuses.slice(pageIndex, pageIndex + 6);
 				return new Discord.MessageEmbed({
 					color: '#0099ff',
 					title: 'List of status effects:',
-					description: `Status affects will affect fighters in-battle and can be fatal if not cured, or beneficial.\n### ${current.title}`,
+					description: `Status affects will affect fighters in-battle and can be fatal if not cured, or beneficial.\n### ${statusDescs[page].title}`,
 					fields: await Promise.all(
-						current.statuses.map(async arrayDefs => ({
+						current.map(async arrayDefs => ({
 							name: `${statusEmojis[arrayDefs.name]}${statusNames[arrayDefs.name]} (${arrayDefs.name})`,
 							value: genStatusDescription(arrayDefs, true),
 							inline: true
@@ -2178,12 +2181,29 @@ commands.liststatus = new Command({
 
 			collector.on('collect', async interaction => {
 				if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
-					if (interaction.customId === 'back') {
-						page--;
-						if (page < 0) page = statusDescs.length - 1;
-					} else if (interaction.customId === 'forward') {
-						page++;
-						if (page >= statusDescs.length) page = 0
+					if (interaction.customId === 'forward') {
+						pageIndex += 6
+
+						if (pageIndex >= statusDescs[page].statuses.length) {
+							page++
+
+							if (page >= statusDescs.length) {
+								page = 0
+							}
+							pageIndex = 0
+						}
+					} else if (interaction.customId === 'back') {
+						pageIndex -= 6
+
+						if (pageIndex < 0) {
+							page--
+
+							if (page < 0) {
+								page = statusDescs.length-1
+							}
+							
+							pageIndex = statusDescs[page].statuses.length - (statusDescs[page].statuses.length % 6 != 0 ? statusDescs[page].statuses.length % 6 : 6)
+						}
 					}
 		
 					await interaction.update({
