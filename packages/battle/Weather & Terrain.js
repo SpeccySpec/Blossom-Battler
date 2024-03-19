@@ -78,6 +78,9 @@ weatherFuncs = {
 				} else if (char.affinities.superweak && char.affinities.superweak.includes("ice")) {
 					dmg *= 4;
 					affinity = affinityEmoji.superweak;
+				} else if (char.affinities.deadly && char.affinities.deadly.includes("ice")) {
+					dmg *= 8;
+					affinity = affinityEmoji.deadly;
 				} else if (char.affinities.resist && char.affinities.resist.includes("ice")) {
 					dmg *= 0.5;
 					affinity = affinityEmoji.resist;
@@ -202,6 +205,9 @@ terrainFuncs = {
 				} else if (char.affinities.superweak.includes("fire")) {
 					dmg *= 4;
 					affinity = affinityEmoji.superweak;
+				} else if (char.affinities.deadly.includes("fire")) {
+					dmg *= 8;
+					affinity = affinityEmoji.deadly;
 				} else if (char.affinities.resist.includes("fire")) {
 					dmg *= 0.5;
 					affinity = affinityEmoji.resist;
