@@ -195,6 +195,17 @@ getAffinity = (char, skillType) => {
 				affinity = "superweak"
 		}
 	}
+
+	if (btl?.terrain?.type === 'spiritual' && skillType === 'spirit') {
+		if (char.affinities.deadly.includes("spirit")) affinity = "superweak";
+		else if (char.affinities.superweak.includes("spirit")) affinity = "weak";
+		else if (char.affinities.weak.includes("spirit")) affinity = "normal";
+		else if (char.affinities.resist.includes("spirit")) affinity = "block";
+		else if (char.affinities.block.includes("spirit")) affinity = "block";
+		else if (char.affinities.repel.includes("spirit")) affinity = "repel";
+		else if (char.affinities.drain.includes("drain")) affinity = "drain";
+		else affinity = "resist";
+	}
 	
 	return affinity
 }
