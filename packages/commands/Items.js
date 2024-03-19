@@ -16,7 +16,7 @@ function getRecipe(itemDefs, message) {
 			} else if (itemFile[i]) {
 				finalText += `- ${itemRarityEmoji[itemFile[i].rarity]}${itemTypeEmoji[itemFile[i].type]}**${itemFile[i].name}** __x${itemDefs.recipe[i][1]}__\n`;
 			} else { // Failsafe
-				finalText += `- **${i}** __x${itemDefs.recipe[i][1]}__\n`;
+				finalText += `- **${i}** __x${itemDefs.recipe[i][1]}__ _(May not exist)_\n`;
 			}
 		}
     }
