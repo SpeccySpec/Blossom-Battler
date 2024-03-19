@@ -1716,8 +1716,8 @@ commands.leaderskill = new Command({
 				break;
 
 			case 'heal':
-				if (args[4] > 10) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for this leader skill is 10%.`);
-				if (args[4] < 1) return message.channel.send(`${args[4]}% is too low a boost :/`);
+				if (args[3] > 10) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for this leader skill is 10%.`);
+				if (args[3] < 1) return message.channel.send(`${args[4]}% is too low a boost :/`);
 				var2 = args[3];
 				break;
 
