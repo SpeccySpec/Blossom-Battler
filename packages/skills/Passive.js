@@ -674,7 +674,7 @@ passiveList = {
 			let txt = 'Inflicts '
 
 			for (i in vars) {
-				txt += `**${vars[i][1]} ${elementEmoji[vars[i][2]]}${vars[i][2].charAt(0).toUpperCase() + vars[i][2].slice(1)} damage** when struck with a **${vars[i][0] == 'phys' ? 'physical' : 'magic'}** skill`;
+				txt += `**${vars[i][1]} ${elementEmoji[vars[i][2]]}${vars[i][2].charAt(0).toUpperCase() + vars[i][2].slice(1)} damage** when struck with a **${vars[i][0] == 'phys' ? 'physical' : (vars[i][0] == 'ranged' ? 'ranged' : 'magic')}** skill`;
 
 				if (i < vars.length - 2) {
 					txt += ', ';
