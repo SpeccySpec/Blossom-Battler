@@ -1733,7 +1733,7 @@ commands.listterrain = new Command({
 			return new Discord.MessageEmbed({
 				color: '#0099ff',
 				title: 'List of status effects:',
-				description: `Weather Types will affect fighters in-battle with various strengths and weaknesses.${current[0][1].boss ? "\n### These Terrain types are boss specific. I don't recommend characters use this, but I won't stop you." : ""}`,
+				description: `Weather Types will affect fighters in-battle with various strengths and weaknesses.${current[0][1].boss ? "\n### These Terrain types are boss specific. I don't recommend characters use these, but I won't stop you." : ""}`,
 				fields: await Promise.all(
 					current.map(async arrayDefs => ({
 						name: `${arrayDefs[1].emoji}${arrayDefs[1].name} (${arrayDefs[0]})`,
