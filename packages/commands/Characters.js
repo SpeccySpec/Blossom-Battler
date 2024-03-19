@@ -1620,9 +1620,12 @@ for (let i in leaderSkillTxt) {
 
 // Leader Skills
 commands.leaderskill = new Command({
-	desc: "A Leader Skill is a skill characters activate for the entire team when they are at the front of a party. This can have various effects on the characters reccomended to use, the skills reccomended to use, the playstyle of your party and more!```diff\n" + leaderTxt + "```",
+	desc: "A Leader Skill is a skill characters activate for the entire team when they are at the front of a party. For more info, use 'help'.",
 	aliases: ['setleaderskill', 'leadskill', 'frontskill', 'orderskill'],
 	section: "characters",
+	doc: {
+		desc: "A Leader Skill is a skill characters activate for the entire team when they are at the front of a party. This can have various effects on the characters reccomended to use, the skills reccomended to use, the playstyle of your party and more!```diff\n" + leaderTxt + "```",
+	},
 	args: [
 		{
 			name: "Character Name",
