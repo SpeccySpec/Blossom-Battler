@@ -365,6 +365,69 @@ weathers = [
 	"supermoon" // 1.2x to Psychic, Bless, Curse, and Spirit. +15% Accuracy. -15% Luck.
 ]
 
+weatherDescs = {
+	none: {
+		name: "Normal",
+		emoji: "",
+		desc: "Just the usual weather, nothing interesting."
+	},
+	rain: {
+		name: "Rain",
+		emoji: "<:rain:1219370321862459532>",
+		desc: `Gives *30%* more skill power to ${elementEmoji['water']}water skills but reduces skill power of ${elementEmoji['fire']}fire skills by *30%*.\n*Will put out the ${statusEmojis['burn']}burning fighters.*`
+	},
+	thunderstorm: {
+		name: "Thunderstorm",
+		emoji: elementEmoji['electric'],
+		desc: `Gives *30%* more skill power to ${elementEmoji['electric']}electric skills and *10%* more skill power to ${elementEmoji['water']}water skills.\n${elementEmoji['water']}Water skills will *also get the ${elementEmoji['electric']}electric dual typing* and *__single__ ${statusEmojis['paralyze']}paralyze chance is raised by 25%*.`
+	},
+	sunlight: {
+		name: "Sunlight",
+		emoji: "<:sunlight:1219375987255677031>",
+		desc: `Gives *30%* more skill power to ${elementEmoji['fire']}fire skills and *10%* more skill power to ${elementEmoji['nuclear']}nuclear skills, but reduces skill power of ${elementEmoji['water']}water and ${elementEmoji['grass']}grass skills by *30%*.\n*Will thaw out the ${statusEmojis['freeze']}freezing fighters*.`
+	},
+	windy: {
+		name: "Windy",
+		emoji: elementEmoji['wind'],
+		desc: `Gives *30%* more skill power to ${elementEmoji['wind']}wind skills.\n<:physical:973077052129423411>physical single element non-${elementEmoji['wind']}wind skills will *also get the ${elementEmoji['wind']}wind dual typing*.`
+	},
+	sandstorm: {
+		name: "Sandstorm",
+		emoji: "<:sandstorm:1219379309920387162>",
+		desc: `Decreases perception by *30%* for *non-${elementEmoji['earth']}earth main fighters*.`
+	},
+	hail: {
+		name: "Hail",
+		emoji: elementEmoji['ice'],
+		desc: `*Attacks non-${elementEmoji['ice']}ice main fighters* with *10 ${elementEmoji['ice']}ice damage*.\nDoubles damage the weaker the fighter is.`
+	},
+	darkmoon: {
+		name: "Dark Moon",
+		emoji: "<:darkmoon:1219385827730133022>",
+		desc: `Gives *10%* more skill power to ${elementEmoji['psychic']}psychic skills but reduces skill power of other skills by *10%*.\nHas a *1/3* chance to ${statusEmojis['confusion']}confuse non-${elementEmoji['psychic']}psychic/${elementEmoji['spirit']}spirit mains.`
+	},
+	eclipse: {
+		name: "Eclipse",
+		emoji: "<:eclipse:1219385829093539921>",
+		desc: `Gives *10%* more skill power to non-${elementEmoji['strike']}strike, non-${elementEmoji['slash']}slash and non-${elementEmoji['pierce']}pierce skills.`
+	},
+	bloodmoon: {
+		name: "Blood Moon",
+		emoji: "<:bloodmoon:1219385825641365647>",
+		desc: `Gives *40%* more skill power to ${elementEmoji['curse']}curse skills and *20%* more skill power to ${elementEmoji['strike']}strike, ${elementEmoji['slash']}slash and ${elementEmoji['pierce']}pierce skills, but *cuts the raw ${statusEmojis['magdown']}MAG stat of ${elementEmoji['bless']}bless mains by 25%.*`
+	},
+	blizzard: {
+		name: "Blizzard",
+		emoji: "<:blizzard:1219385823795875982>",
+		desc: `Gives *50%* more skill power to ${elementEmoji['ice']}ice skills but reduces skill power of ${elementEmoji['fire']}fire skills by *50%*.\n*Will put out the ${statusEmojis['burn']}burning fighters* and *__single__ ${statusEmojis['freeze']}freezing chance is raised by 25%*.`
+	},
+	supermoon: {
+		name: "Super Moon",
+		emoji: "<:supermoon:1219385822521065502>",
+		desc: `Gives *20%* more skill power to ${elementEmoji['psychic']}psychic, ${elementEmoji['bless']}bless, ${elementEmoji['curse']}curse and ${elementEmoji['spirit']}spirit skills.\n*Increases the raw ${statusEmojis['critup']}LUK stat by 15%*, but also *cuts skill accuracy by 15%*.`
+	}
+}
+
 terrains = [
 	'none',
 	"flaming", // 10 damage with 10% chance of burn to non fire main elements. Also puts out freezing fighters.
@@ -388,6 +451,112 @@ terrains = [
 	"blindingradiance", // 1.5x to Bless. Curse Skills become unusable. Ignore Status Inflictions.
 	"eternaldarkness" //1.5x to Curse. Bless Skills become unusable. All Curse Skills get Feint.
 ]
+
+terrainDescs = {
+	none: {
+		name: "Normal",
+		emoji: "",
+		desc: "Just the usual terrain, nothing interesting."
+	},
+	flaming: {
+		name: "Flaming",
+		emoji: elementEmoji['fire'],
+		desc: `*Attacks non-${elementEmoji['fire']}fire main fighters* with *10 ${elementEmoji['fire']}fire damage*.\nWill thaw out the ${statusEmojis['freeze']}freezing fighters*, but every turn there's a *10%* chance they start ${elementEmoji['burn']}burning.`
+	},
+	grassy: {
+		name: "Grassy",
+		emoji: elementEmoji['grass'],
+		desc: `Heals *10%* of non-${elementEmoji['grass']}grass main's HP every turn, *17%* otherwise.`
+	},
+	light: {
+		name: "Light",
+		emoji: elementEmoji['bless'],
+		desc: `Gives *30%* more skill power to ${elementEmoji['bless']}bless skills but reduces skill power of ${elementEmoji['curse']}curse skills by *50%*.`
+	},
+	psychic: {
+		name: "Psychic",
+		emoji: elementEmoji['psychic'],
+		desc: `Reverses the turn order while active.`
+	},
+	misty: {
+		name: "Misty",
+		emoji: "<:misty:1219423960429756486>",
+		desc: `Removes any possibility of having status effects.`
+	},
+	sky: {
+		name: "Sky",
+		emoji: "<:sky:1219423963361443871>",
+		desc: `Gives *20%* more skill power to ${elementEmoji['wind']}wind skills but reduces skill power of ${elementEmoji['earth']}earth skills by *10%*.\n*Increases the raw ${statusEmojis['aglup']}AGL stat by 25%* for non-${elementEmoji['wind']}wind mains, *40%* otherwise.`
+	},
+	muddy: {
+		name: "Muddy",
+		emoji: "<:muddy:1219423961830523081>",
+		desc: `Gives *35%* more skill power to ${elementEmoji['earth']}earth skills, but cuts accuracy of <:physical:973077052129423411>physical skills by 20%.\nReduces ${statusEmojis['agldown']}AGL stat by 33%* for non-${elementEmoji['earth']}earth mains.`
+	},
+	spiritual: {
+		name: "Spiritual",
+		emoji: elementEmoji['spirit'],
+		desc: `Gives *25%* more skill power to ${elementEmoji['spirit']}spirit skills and *increases raw ${itemTypeEmoji['pacify']}CHR stat by 25%.*\n${elementEmoji['spirit']}Spirit affinities are amplified.`
+	},
+	damned: {
+		name: "Damned",
+		emoji: "<:damned:1219685300700184747>",
+		desc: `Gives *25%* more skill power to <:physical:973077052129423411>physical skills, but *cuts the raw ${statusEmojis['magdown']}MAG stat by 75%*.`
+	},
+	purged: {
+		name: "Purged",
+		emoji: "<:purged:1219685299156684900>",
+		desc: `Gives *25%* more skill power to <:ranged:1008794366648791161>ranged and <:magic:1008794362307674204>magic skills, but *cuts the raw ${statusEmojis['atkdown']}ATK stat by 75%*.`
+	},
+	flooded: {
+		name: "Flooded",
+		emoji: "<:flooded:1219426902888939600>",
+		boss: true,
+		desc: `Gives *30%* more skill power to ${elementEmoji['water']}water skills.\n<:physical:973077052129423411>Physical skills will *also get the ${elementEmoji['water']}water dual typing*.`
+	},
+	swamp: {
+		name: "Swamp",
+		emoji: "<:swamp:1219423964397310095>",
+		boss: true,
+		desc: `Gives *30%* more skill power to ${elementEmoji['earth']}earth and ${elementEmoji['grass']}grass skills.\n*${elementEmoji['earth']}Earth and ${elementEmoji['grass']}grass skills will become dual typed with each other*.`
+	},
+	glacial: {
+		name: "Glacial",
+		emoji: "<:glacial:1219423956826853466>",
+		boss: true,
+		desc: `Gives *30%* more skill power and *20%* more ${statusEmojis['freeze']}freezing chance to ${elementEmoji['ice']}ice.\n*${elementEmoji['water']}Water skills will become ${elementEmoji['ice']}ice skills* while active.`
+	},
+	fairydomain: {
+		name: "Fairy Domain",
+		emoji: "<:fairydomain:1219423955128156291>",
+		boss: true,
+		desc: `Gives *30%* more skill power to ${elementEmoji['psychic']}psychic and ${elementEmoji['bless']}bless skills.\n*${elementEmoji['psychic']}Psychic and ${elementEmoji['spirit']}spirit skills will *also get the ${elementEmoji['bless']}bless dual typing*.`
+	},
+	graveyard: {
+		name: "Graveyard",
+		emoji: "<:graveyard:1219423958487666778>",
+		boss: true,
+		desc: `Gives *30%* more skill power to ${elementEmoji['spirit']}spirit skills.\n*${elementEmoji['curse']}Curse skills will *also get the ${elementEmoji['spirit']}spirit dual typing*.`
+	},
+	factory: {
+		name: "Factory",
+		emoji: "<:factory:1219676417005191309>",
+		boss: true,
+		desc: `Gives *50%* more skill power to ${elementEmoji['metal']}metal skills.`
+	},
+	blindingradiance: {
+		name: "Blinding Radiance",
+		emoji: "<:sunlight:1219375987255677031>",
+		boss: true,
+		desc: `Gives *50%* more skill power to ${elementEmoji['bless']}bless skills and removes any possibility of having status effects.\n${elementEmoji['curse']}Curse skills become unusable.`
+	},
+	eternaldarkness: {
+		name: "Eternal Darkness",
+		emoji: "<:eternaldarkness:1219423953445978182>",
+		boss: true,
+		desc: `Gives *50%* more skill power and the *Feint* extra to ${elementEmoji['curse']}curse skills.\n${elementEmoji['bless']}Bless skills become unusable.`
+	}
+}
 
 //tiers of AOE: one -> spreadopposing -> widespreadopposing -> allopposing
 Targets = [

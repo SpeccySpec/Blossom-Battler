@@ -604,8 +604,8 @@ sendCurTurnEmbed = (char, btl) => {
 	if (char.pet) statDesc = `${char.name} wants to assist the team in battle! Tell it to do something!\n`;
 
 	let weatherTxt = '';
-	if (btl.weather) weatherTxt += `\n${btl.weather.type.toUpperCase()} Weather.`;
-	if (btl.terrain) weatherTxt += `\n${btl.terrain.type.toUpperCase()} Terrain.`;
+	if (btl.weather) weatherTxt += `\n${weatherDescs[btl.weather.type].emoji}*${weatherDescs[btl.weather.type].name}* Weather.`;
+	if (btl.terrain) weatherTxt += `\n${terrainDescs[btl.terrain.type].emoji}*${terrainDescs[btl.terrain.type].name}* Terrain.`;
 	statDesc += weatherTxt;
 	
 	// No Passives
