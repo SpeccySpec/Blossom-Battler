@@ -65,7 +65,7 @@ shortBio = (char, sect, server) => {
 		} else if (sect == 'age') {
 			bioTxt = `${char.bio[sect]} Years Old`;
 		} else if (sect == 'gender') {
-			bioTxt = `${char.bio[sect] == 'male' ? `<:male:970044964870434836>` : char.bio[sect] == 'female' ? `<:female:970044964992090142>` : 'Other'}`
+			bioTxt = `${char.bio[sect] == 'male' ? `<:male:970044964870434836>` : char.bio[sect] == 'female' ? `<:female:970044964992090142>` : `Other *(${char.bio[sect]})*`}`
 		} else {
 			bioTxt = char.bio[sect];
 		}
