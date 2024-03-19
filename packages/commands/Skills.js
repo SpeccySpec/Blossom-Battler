@@ -1375,11 +1375,11 @@ commands.listskills = new Command({
 							break;
 						case 'element':
 							args[a] = args[a].toLowerCase();
-							isConditionMet = (skillFile[i].type == args[a])
+							isConditionMet = (skillFile[i].type == args[a] || skillFile[i].type.includes(args[a]))
 							break;
 						case 'status':
 							args[a] = args[a].toLowerCase();
-							isConditionMet = (skillFile[i].status && skillFile[i].status == args[a])
+							isConditionMet = (skillFile[i].status && (skillFile[i].status == args[a] || skillFile[i].status.includes(args[a])))
 							break;
 						case 'cost':
 						case 'pow':
