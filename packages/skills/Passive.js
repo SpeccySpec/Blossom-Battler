@@ -689,10 +689,10 @@ passiveList = {
 
 	dodge: new Extra({
 		name: "Dodge (Original)",
-		desc: "Has a <Chance>% chance to dodge attacks from a <Phys/Mag> skill.",
+		desc: "Has a <Chance>% chance to dodge attacks from a <Phys/Mag/Ranged/Element> skill.",
 		args: [
 			{
-				name: "Phys/Mag",
+				name: "Phys/Mag/Ranged/Element",
 				type: "Word",
 				forced: true
 			},
@@ -708,8 +708,8 @@ passiveList = {
 			let physmag = args[0]?.toLowerCase();
 			let chance = args[1];
 
-			if (physmag != 'phys' && physmag != 'mag')
-				return void message.channel.send("You entered an invalid value for <Phys/Mag>! It can be either PHYS or MAG.");
+			if (physmag != 'phys' && physmag != 'mag' && physmag != 'ranged' && !Elements.includes(physmag))
+				return void message.channel.send("You entered an invalid value for <Phys/Mag/Ranged/Element>! The valid ones are: PHYS, MAG, RANGED, "+Elements.join(', ')+".");
 
 			if (chance < 1) return void message.channel.send("What's the point if it never dodges?");
 
@@ -717,7 +717,7 @@ passiveList = {
 			return true;
 		},
 		forcedodge(char, inf, skill, passive, btl, vars) {
-			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic')) {
+			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic') || (vars[0] === 'ranged' && skill.atktype === 'ranged') || (vars[0] === skill.type || skill.type.includes(vars[0]))) {
 				if (randNum(1, 100) <= vars[1]) return true;
 				return false;
 			} else {
@@ -728,7 +728,7 @@ passiveList = {
 			let txt = 'Has'
 
 			for (i in vars) {
-				txt += ` a **${vars[i][1]}%** chance to dodge **${vars[i][0] == 'phys' ? 'physical' : 'magic'}** attacks`;
+				txt += ` a **${vars[i][1]}%** chance to dodge **${(vars[i][0] == 'phys' ? 'physical' : (vars[i][0] == 'mag' ? 'magic' : (vars[i][0] == 'ranged' ? 'ranged' : `${elementEmoji[vars[i][0]]}${vars[i][0]}`)))}** attacks`;
 
 				if (i < vars.length - 2) {
 					txt += ', ';
