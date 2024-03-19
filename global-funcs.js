@@ -688,6 +688,7 @@ leaderSkillTxt = {
 	items: 'Increased item gain after battle.',
 	pacify: 'Pacify Enemies by the specified percentage at the start of battle.',
 	endure: 'One character in your team can endure one fatal attack.',
+	heal: 'Heal the character with the lowest health on the start of your turn.',
 }
 
 enemyTypeColors = {

@@ -1712,6 +1712,12 @@ commands.leaderskill = new Command({
 				var2 = args[4];
 				break;
 
+			case 'heal':
+				if (args[4] > 10) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for this leader skill is 10%.`);
+				if (args[4] < 1) return message.channel.send(`${args[4]}% is too low a boost :/`);
+				var2 = args[3];
+				break;
+
 			default:
 				return message.channel.send(`${args[2]} is an invalid leader skill type! Use either: Boost, Discount, Crit, Endure, Status, Money, Items, Pacify, Buff, Debuff.`);	
 		}

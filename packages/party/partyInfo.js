@@ -22,7 +22,7 @@ partyDesc = (party, message) => {
 		let char = chars[party.members[0]];
 		embedColor = elementColors[char.mainElement] ?? '#e36b2b';
 
-		if (char.leaderskill) leaderSkill = `**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} toward ${char.leaderskill.var1.toUpperCase()}`
+		if (char.leaderskill) leaderSkill = `**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type.toLowerCase()]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} toward ${char.leaderskill.var1.toUpperCase()}`
 	}
 
 	// Currency

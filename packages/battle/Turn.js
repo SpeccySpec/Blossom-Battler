@@ -1920,6 +1920,25 @@ doTurn = async(btl, noTurnEmbed) => {
 	// a
 	let statusTxt = '';
 
+	// Heal Leader Skills
+	let party = btl.teams[char.team];
+	if (settings?.mechanics?.leaderskills && char.leader && party?.leaderskill && party.leaderskill.type === 'heal') {
+		let lowest = 9999999;
+		let lowestid = 0;
+		for (let i in party.members) {
+			if (party.members[i].hp <= lowest) {
+				lowest = party.members[i].hp;
+				lowestid = i;
+			}
+		}
+
+		if (party.members[lowestid] && party.members[lowestid].hp < party.members[lowestid].maxhp) {
+			let healhp = Math.round((party.members[lowestid].maxhp/100)*party.leaderskill.var2);
+			party.members[lowestid].hp = Math.min(party.members[lowestid].maxhp, party.members[lowestid].hp + healhp);
+			statusTxt += `__${party.members[lowestid].name}__'s HP was restored by **${healhp}** due to __${char.name}__'s _Leader Skill_: **${party.leaderskill.name}**.`;
+		}
+	}
+
 	// Start Of Turn passives.
 	if (doPassives(btl)) {
 		for (let s of char.skills) {
