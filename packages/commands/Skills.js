@@ -2152,15 +2152,16 @@ commands.liststatus = new Command({
 
 		} else {
 			let page = 0;
+			let pageIndex = 0;
 
 			const generateEmbed = async (page) => {
-				const current = statusDescs[page];
+				const current = statusDescs[page].statuses.slice(pageIndex, pageIndex + 6);
 				return new Discord.MessageEmbed({
 					color: '#0099ff',
 					title: 'List of status effects:',
-					description: `Status affects will affect fighters in-battle and can be fatal if not cured, or beneficial.\n### ${current.title}`,
+					description: `Status affects will affect fighters in-battle and can be fatal if not cured, or beneficial.\n### ${statusDescs[page].title}`,
 					fields: await Promise.all(
-						current.statuses.map(async arrayDefs => ({
+						current.map(async arrayDefs => ({
 							name: `${statusEmojis[arrayDefs.name]}${statusNames[arrayDefs.name]} (${arrayDefs.name})`,
 							value: genStatusDescription(arrayDefs, true),
 							inline: true
@@ -2180,12 +2181,29 @@ commands.liststatus = new Command({
 
 			collector.on('collect', async interaction => {
 				if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
-					if (interaction.customId === 'back') {
-						page--;
-						if (page < 0) page = statusDescs.length - 1;
-					} else if (interaction.customId === 'forward') {
-						page++;
-						if (page >= statusDescs.length) page = 0
+					if (interaction.customId === 'forward') {
+						pageIndex += 6
+
+						if (pageIndex >= statusDescs[page].statuses.length) {
+							page++
+
+							if (page >= statusDescs.length) {
+								page = 0
+							}
+							pageIndex = 0
+						}
+					} else if (interaction.customId === 'back') {
+						pageIndex -= 6
+
+						if (pageIndex < 0) {
+							page--
+
+							if (page < 0) {
+								page = statusDescs.length-1
+							}
+							
+							pageIndex = statusDescs[page].statuses.length - (statusDescs[page].statuses.length % 6 != 0 ? statusDescs[page].statuses.length % 6 : 6)
+						}
 					}
 		
 					await interaction.update({
