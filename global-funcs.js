@@ -466,7 +466,7 @@ terrainDescs = {
 	grassy: {
 		name: "Grassy",
 		emoji: elementEmoji['grass'],
-		desc: `Heals *10%* of non-${elementEmoji['grass']}grass main's HP every turn, *17%* otherwise.`
+		desc: `Heals *10%* of non-${elementEmoji['grass']}grass main's max HP every turn, *17%* otherwise.`
 	},
 	light: {
 		name: "Light",
@@ -536,7 +536,7 @@ terrainDescs = {
 		name: "Graveyard",
 		emoji: "<:graveyard:1219423958487666778>",
 		boss: true,
-		desc: `Gives *30%* more skill power to ${elementEmoji['spirit']}spirit skills.\n*${elementEmoji['curse']}Curse skills will *also get the ${elementEmoji['spirit']}spirit dual typing*.`
+		desc: `Gives *30%* more skill power to ${elementEmoji['spirit']}spirit skills.\n${elementEmoji['curse']}Curse skills will *also get the ${elementEmoji['spirit']}spirit dual typing*.`
 	},
 	factory: {
 		name: "Factory",
