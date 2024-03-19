@@ -143,6 +143,7 @@ let usesPercent = {
 	items: true,
 	pacify: true,
 	endure: true,
+	heal: true,
 }
 
 const affinityScores = {
