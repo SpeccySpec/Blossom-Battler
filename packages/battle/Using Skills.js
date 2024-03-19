@@ -195,17 +195,6 @@ getAffinity = (char, skillType) => {
 				affinity = "superweak"
 		}
 	}
-
-	if (btl?.terrain?.type === 'spiritual' && skillType === 'spirit') {
-		if (char.affinities.deadly.includes("spirit")) affinity = "superweak";
-		else if (char.affinities.superweak.includes("spirit")) affinity = "weak";
-		else if (char.affinities.weak.includes("spirit")) affinity = "normal";
-		else if (char.affinities.resist.includes("spirit")) affinity = "block";
-		else if (char.affinities.block.includes("spirit")) affinity = "block";
-		else if (char.affinities.repel.includes("spirit")) affinity = "repel";
-		else if (char.affinities.drain.includes("drain")) affinity = "drain";
-		else affinity = "resist";
-	}
 	
 	return affinity
 }
@@ -359,6 +348,19 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 		}
 
 		let affinity = getAffinity(targ, skill.type);
+
+		//Spiritual Terrain
+		if (btl?.terrain?.type === 'spiritual' && skill.type === 'spirit') {
+			if (targ.affinities?.deadly && targ.affinities.deadly.includes("spirit")) affinity = "superweak";
+			else if (targ.affinities?.superweak && targ.affinities.superweak.includes("spirit")) affinity = "weak";
+			else if (targ.affinities?.weak && targ.affinities.weak.includes("spirit")) affinity = "normal";
+			else if (targ.affinities?.resist && targ.affinities.resist.includes("spirit")) affinity = "block";
+			else if (targ.affinities?.block && targ.affinities.block.includes("spirit")) affinity = "block";
+			else if (targ.affinities?.repel && targ.affinities.repel.includes("spirit")) affinity = "repel";
+			else if (targ.affinities?.drain && targ.affinities.drain.includes("drain")) affinity = "drain";
+			else affinity = "resist";
+		}
+
 		let shieldtype = targ.custom?.shield?.type ?? undefined;
 
 		// ForceDodge and OnAffinityCheck passive funcs
