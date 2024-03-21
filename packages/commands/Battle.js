@@ -581,7 +581,7 @@ commands.startbattle = new Command({
 			if (enemy.type.includes('boss') || enemy.type.includes('bigboss') || enemy.type.includes('deity')) battle.bossbattle = true;
 
 			//check for golden chance
-			if (Math.random() <= (goldenChance / 100)) enemy.golden = true;
+			if (!battle.bossbattle && Math.random() <= (goldenChance / 100)) enemy.golden = true;
 
 			setupBattleStats(enemy);
 
