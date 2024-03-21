@@ -192,7 +192,7 @@ commands.setleader = new Command({
 		if (removeFromParty(parties[args[0]], args[1])) {
 			parties[args[0]].members.unshift(args[1]);
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
-			message.channel.send(`${charFile[args[1]]} is now the leader of ${args[0]}!`);
+			message.channel.send(`${charFile[args[1]].name} is now the leader of ${args[0]}!`);
 		} else {
 			return message.channel.send(`${args[1]} is not in the party!`);
 		}
