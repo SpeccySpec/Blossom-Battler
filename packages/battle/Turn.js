@@ -2161,7 +2161,7 @@ advanceTurn = (btl, firstturn) => {
 			// Always update for Futuresight
 			char.team = i;
 			char.pos = k;
-			
+
 			// Bugfix
 			if (char.status && char.status === "none") {
 				delete char.status;
@@ -2187,6 +2187,36 @@ advanceTurn = (btl, firstturn) => {
 
 				// moving on...
 				continue;
+			}
+
+			// Enemy extras
+			if (char.decieve) {
+				char.decieveturns--;
+				if (char.decieveturns <= 0) {
+					char.name = char.oldname;
+					delete char.decieveturns;
+					delete char.decieve;
+					delete char.oldname;
+				}
+			} else if (char.enemyextras?.decieve && randNum(1, 5) <= 1) {
+				let charname = objClone(char.name);
+				char.oldname = charname;
+
+				let nameswap = randNum(0, charname.length-1);
+				let character = char.name[nameswap];
+				console.log(character);
+
+				if (character.toUpperCase() == character) {
+					let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+					char.name = char.name.replace(character, chars[randNum(chars.length-1)]);
+				} else {
+					let chars = "abcdefghijklmnopqrstuvwxyz";
+					char.name = char.name.replace(character, chars[randNum(chars.length-1)]);
+				}
+
+				char.decieve = true;
+				char.decieveturns = 2;
+				console.log(char.name, char.oldname);
 			}
 
 			// Custom Variables.

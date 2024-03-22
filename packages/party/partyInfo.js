@@ -18,7 +18,7 @@ partyDesc = (party, message) => {
 
 	// Show Leader Skill
 	let embedColor = '#e36b2b';
-	let leaderSkill = 'No Leader Skill...?';
+	let leaderSkill = settings.mechanics.leaderskills ? 'No Leader Skill...?' : '';
 	if (chars[party.members[0]]) {
 		let char = chars[party.members[0]];
 		embedColor = elementColors[char.mainElement] ?? '#e36b2b';

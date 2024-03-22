@@ -290,6 +290,20 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 		}
 	// Attacking Skills
 	} else {
+		// Decieve
+		if (targ.decieve) {
+			targ.name = targ.oldname;
+			delete targ.decieve;
+			delete targ.decieveturns;
+			delete targ.oldname;
+
+			let dmg = randNum(50, 50+targ.level);
+			result.txt += `__${targ.name}__ managed to decieve __${char.name}__, dealing **${dmg}** damage to them!\n\n${selectQuote(char, 'hurt', null, "%ENEMY%", targ.name, "%SKILL%", "Decieve")}`;
+
+			char.hp = Math.max(0, char.hp-dmg);
+			return result;
+		}
+
 		// Override
 		if (skill.extras) {
 			let returnThis = false;
