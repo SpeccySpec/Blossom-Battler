@@ -91,6 +91,8 @@ genDmg = (char, targ, btl, skill) => {
 
 	if (skill.extras?.statcalc) {
 		atkStat = statWithBuff(charStats[skill.extras.statcalc[0].toLowerCase()], char.buffs[skill.extras.statcalc[0].toLowerCase()] ?? 1);
+	} else if (skill.extras?.grassknot) {
+		atkStat = statWithBuff(targStats[skill.extras.grassknot[0].toLowerCase()], targ.buffs[skill.extras.grassknot[0].toLowerCase()] ?? 1);
 	}
 	if (skill.extras?.hitcalc) {
 		endStat = statWithBuff(targStats[skill.extras.hitcalc[0].toLowerCase()], targ.buffs[skill.extras.hitcalc[0].toLowerCase()] ?? 1);

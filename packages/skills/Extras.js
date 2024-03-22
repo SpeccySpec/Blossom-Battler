@@ -1313,7 +1313,7 @@ extrasList = {
 
 	statcalc: new Extra({
 		name: "Stat Calculation (Original)",
-		desc: "Uses the user's <Stat> for calculating damage.",
+		desc: "Uses the user's <Stat> in place of their offensive stat for dealing damage.",
 		args: [
 			{
 				name: "Stat",
@@ -1330,13 +1330,13 @@ extrasList = {
 		},
 		hardcoded: true,
 		getinfo(vars, skill) {
-			return `Uses _user's_ **${vars[0].toUpperCase()}** to calculate damage`;
+			return `Uses _user's_ **${vars[0].toUpperCase()}** to deal damage`;
 		}
 	}),
 
 	hitcalc: new Extra({
 		name: "Hit Calculation (Original)",
-		desc: "Uses the opponent's <Stat> for calculating damage.",
+		desc: "Uses the opponent's <Stat> in place of their endurance for taking damage.",
 		args: [
 			{
 				name: "Stat",
@@ -1353,7 +1353,7 @@ extrasList = {
 		},
 		hardcoded: true,
 		getinfo(vars, skill) {
-			return `Uses _target's_ **${vars[0].toUpperCase()}** to calculate damage`;
+			return `Uses _target's_ **${vars[0].toUpperCase()}** to take damage`;
 		}
 	}),
 
@@ -1390,6 +1390,29 @@ extrasList = {
 		},
 		getinfo(vars, skill) {
 			return `Current user's MP can modify damage by **${vars[0]}%**`;
+		}
+	}),
+
+	grassknot: new Extra({
+		name: "Grass Knot (Pokémon)",
+		desc: "Uses the opponent's <Stat> in place of your offensive stat to deal damage.",
+		args: [
+			{
+				name: "Stat",
+				type: "Word",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			const stat = args[0].toLowerCase()
+			if (!stats.includes(stat))
+				return void message.channel.send("That's not a valid stat!");
+			makeExtra(skill, "grassknot", [stat]);
+			return true
+		},
+		hardcoded: true,
+		getinfo(vars, skill) {
+			return `Uses _target's_ **${vars[0].toUpperCase()}** to deal damage`;
 		}
 	}),
 
