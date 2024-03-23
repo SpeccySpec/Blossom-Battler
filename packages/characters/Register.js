@@ -269,7 +269,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 		}
 	}
 
-	if (char.curweapon.skill) {
+	if (char.curweapon?.skill) {
 		let skill = char.curweapon.skill;
 
 		skillDesc += "**"
