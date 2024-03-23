@@ -231,17 +231,21 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 			if (char.mimic || char.clone || char.reincarnate) skill.pow /= 4;
 
-			for (let i in skill.heal) {
-				if (!healList[i]) continue;
-				if (!healList[i].onuse) continue;
-				if (noExtraArray && noExtraArray.includes(i)) continue;
+			if (skill.heal.wish && (!noExtraArray || (noExtraArray && !noExtraArray.includes('wish')))) {
+				result.txt += `\n${healList['wish'].onuse(char, targ, skill, btl, skill.heal.wish, skill.pow) ?? ''}`;
+			} else {
+				for (let i in skill.heal) {
+					if (!healList[i]) continue;
+					if (!healList[i].onuse) continue;
+					if (noExtraArray && noExtraArray.includes(i)) continue;
 
-				if (healList[i].multiple) {
-					for (let k in skill.heal[i]) {
-						result.txt += `\n${healList[i].onuse(char, targ, skill, btl, skill.heal[i][k], skill.pow) ?? ''}`;
+					if (healList[i].multiple) {
+						for (let k in skill.heal[i]) {
+							result.txt += `\n${healList[i].onuse(char, targ, skill, btl, skill.heal[i][k], skill.pow) ?? ''}`;
+						}
+					} else {
+						result.txt += `\n${healList[i].onuse(char, targ, skill, btl, skill.heal[i], skill.pow) ?? ''}`;
 					}
-				} else {
-					result.txt += `\n${healList[i].onuse(char, targ, skill, btl, skill.heal[i], skill.pow) ?? ''}`;
 				}
 			}
 

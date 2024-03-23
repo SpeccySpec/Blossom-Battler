@@ -398,6 +398,7 @@ healList = {
 
 			if (turns <= 0) return void message.channel.send("You can't wish for 0 turns or less!");
 			makeHeal(skill, "wish", [turns]);
+
 			let hasHeal = false
 			for (var i in skill.heal) {
 				if (i != "sacrifice" && i != "wish") {
@@ -406,20 +407,23 @@ healList = {
 				}
 			}
 			if (!hasHeal) makeHeal(skill, "healstat", [60, 'hp']);
+
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
 			vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
 			vars[0] = ~~(vars[0] / multiplier);
+
 			addCusVal(targ, "wishheal", {
 				turns: vars[0],
-				vars: vars
+				user: char,
+				skill: skill
 			})
 
-			return `__${char.name}__ will experience a healing wish in **${vars[0]}** turns.`;
+			return `__${targ.name}__ will experience a healing wish in **${vars[0]}** turns...`;
 		},
 		getinfo(vars, skill) {
-			return `Heals after **${vars[0]} turns**`;
+			return `Force the heal to occur after **${vars[0]} turns**`;
 		}
 	}),
 

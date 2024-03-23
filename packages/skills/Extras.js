@@ -2948,9 +2948,25 @@ customVariables = {
 			if (char.custom?.wishheal) {
 				char.custom.wishheal.turns--;
 				if (char.custom.wishheal.turns <= 0) {
-					let txt = healList.healstat.onuse(char, char, {}, btl, vars.vars);
-					killVar(char, 'wishheal');
+					let txt = "";
+					let skill = vars.skill;
+					let user = vars.user;
 
+					for (let i in skill.heal) {
+						if (!healList[i]) continue;
+						if (!healList[i].onuse) continue;
+						if (i.toLowerCase() == 'wish') continue;
+
+						if (healList[i].multiple) {
+							for (let k in skill.heal[i]) {
+								txt += `\n${healList[i].onuse(user, char, skill, btl, skill.heal[i][k], skill.pow) ?? ''}`;
+							}
+						} else {
+							txt += `\n${healList[i].onuse(user, char, skill, btl, skill.heal[i], skill.pow) ?? ''}`;
+						}
+					}
+
+					killVar(char, 'wishheal');
 					return txt;
 				}
 			}
