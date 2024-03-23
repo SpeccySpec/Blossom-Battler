@@ -2034,7 +2034,7 @@ passiveList = {
 			let phys = isPhysicalStatus(targ.status);
 
 			if (targ.status && (type == 'all' || (type == 'physical' && phys) || (type == 'mental' && !phys) || targ.status == type))
-				dmg = Math.round(dmg*vars[0]/100);
+				dmg += Math.round(dmg*vars[1]/100);
 
 			return dmg;
 		},
