@@ -627,14 +627,14 @@ enemyTypes = [
 
 weaponClasses = {
 	none: "Every weapon can be used, albeit... inefficiently. Each weapon will lose 40% of it's original benefit.",
-	bludgeon: "Hammers, Maces, Clubs",
-	bladed: "Swords, Daggers, Katanas",
-	longbladed: "Longswords, Greatswords",
-	pierce: "Rapiers, Knives",
-	ranged: "Bow & Arrow, Ninja Stars",
+	bludgeon: "Hammers, Maces, Clubs.",
+	bladed: "Swords, Daggers, Katanas.",
+	longbladed: "Longswords, Greatswords.",
+	pierce: "Rapiers, Knives.",
+	ranged: "Bow & Arrow, Ninja Stars.",
 	books: "Magical Books that allow one to cast spells.",
-	staff: "Magical Staffs or Wands",
-	incorporeal: "Magical Staffs or Wands"
+	staff: "Staffs or Wands that cast magic.",
+	incorporeal: "Weapons formed by magic."
 }
 
 armorClasses = {
