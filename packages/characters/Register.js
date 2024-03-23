@@ -289,7 +289,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 			skillDesc += `🛑 Invalid Skill (${skill})**\n`;
 		} else {
 			let type = typeof skillFile[skill].type == 'object' ? elementEmoji[skillFile[skill].type[0]] : elementEmoji[skillFile[skill].type];
-			skillDesc += `${classEmoji.armor[char.curweapon.class ?? 'none']}${type}${skillFile[skill].name}**\n`;
+			skillDesc += `${classEmoji.armor[char.curarmor.class ?? 'none']}${type}${skillFile[skill].name}**\n`;
 		}
 	}
 
