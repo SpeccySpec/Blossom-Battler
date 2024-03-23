@@ -206,14 +206,22 @@ longDescription = (charDefs, level, server, message, useguild) => {
 		.setTitle(`${elementEmoji[char.mainElement]}${tick}${char.name} ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
 
 	let desc = ''
-	if (char.weaponclass) {
+	if (char.curweapon) {
+		desc += `**${char.curweapon.type ? elementEmoji[char.curweapon.type] : ''}${classEmoji.weapon[char.curweapon.class ?? 'none']}__${char.curweapon.name}__ equipped.**\n`;
+	} else if (char.weaponclass) {
 		if (typeof(char.weaponclass) == 'object') {
 			desc += `_Can wield ${classEmoji.weapon[char.weaponclass[0]]}${char.weaponclass[0]} and ${classEmoji.weapon[char.weaponclass[1]]}${char.weaponclass[1]} weapons._\n`;
 		} else {
 			if (char.weaponclass && char.weaponclass != "none") desc += `_Can wield ${classEmoji.weapon[char.weaponclass]}${char.weaponclass} weapons._\n`;
 		}
 	}
-	if (char.armorclass && char.armorclass != "none") desc += `_Can wear ${classEmoji.armor[char.armorclass]}${char.armorclass} armor._\n`;
+
+	if (char.curarmor) {
+		desc += `**${char.curarmor.type ? elementEmoji[char.curarmor.type] : ''}${classEmoji.armor[char.curarmor.class ?? 'none']}__${char.curarmor.name}__ equipped.**\n`;
+	} else if (char.armorclass && char.armorclass != "none") {
+		desc += `_Can wear ${classEmoji.armor[char.armorclass]}${char.armorclass} armor._\n`;
+	}
+	
 	desc += '\n';
 
 	if (char.leaderskill && settings.mechanics.leaderskills) desc += `**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} ${char.leaderskill.var1 ? `toward ${elementEmoji[char.leaderskill.var1] ?? ''}${char.leaderskill.var1.toUpperCase()}` : ''}`;
@@ -258,6 +266,18 @@ longDescription = (charDefs, level, server, message, useguild) => {
 				if (charDefs.autolearn && charDefs.autolearn[i]) skillDesc += ' <:tick:973077052372701294>';
 				skillDesc += `\n`;
 			}
+		}
+	}
+
+	if (char.curweapon.skill) {
+		let skill = char.curweapon.skill;
+
+		skillDesc += "**"
+		if (!skillFile[skill]) {
+			skillDesc += `🛑 Invalid Skill (${skill})**\n`;
+		} else {
+			let type = typeof skillFile[skill].type == 'object' ? elementEmoji[skillFile[skill].type[0]] : elementEmoji[skillFile[skill].type];
+			skillDesc += `${classEmoji.weapon[char.curweapon.class ?? 'none']}${type}${skillFile[skill].name}**\n`;
 		}
 	}
 

@@ -654,6 +654,7 @@ accessoryClasses = {
 
 classEmoji = {
 	weapon: {
+		none: "<:golden:973077051751940138>",
 		bludgeon: "<:bludgeon:1008794352706932817>",
 		bladed: "<:bladed:1008794351591239842>",
 		longbladed: "<:longbladed:1008794360676110457>",
@@ -664,6 +665,7 @@ classEmoji = {
 		incorporeal: "<:incorporeal:1085978225911533668>"
 	},
 	armor: {
+		none: "<:golden:973077051751940138>",
 		light: "<:light:1008794358637662338>",
 		heavy: "<:heavy:1008794356620214433>",
 		magic: "<:magic:1008794362307674204>"
