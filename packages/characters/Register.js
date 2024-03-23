@@ -281,6 +281,18 @@ longDescription = (charDefs, level, server, message, useguild) => {
 		}
 	}
 
+	if (char.curarmor?.skill) {
+		let skill = char.curarmor?.skill;
+
+		skillDesc += "**"
+		if (!skillFile[skill]) {
+			skillDesc += `🛑 Invalid Skill (${skill})**\n`;
+		} else {
+			let type = typeof skillFile[skill].type == 'object' ? elementEmoji[skillFile[skill].type[0]] : elementEmoji[skillFile[skill].type];
+			skillDesc += `${classEmoji.armor[char.curweapon.class ?? 'none']}${type}${skillFile[skill].name}**\n`;
+		}
+	}
+
 	// Fix skills n shit
 	if (skillDesc.length > 1000) skillDesc = `${skillDesc.slice(0, 1000)}_..._`;
 
