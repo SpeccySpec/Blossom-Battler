@@ -206,7 +206,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 		.setTitle(`${elementEmoji[char.mainElement]}${tick}${char.name} ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
 
 	let desc = ''
-	if (char.curweapon) {
+	if (char.curweapon && char.curweapon.name) {
 		desc += `**${char.curweapon.type ? elementEmoji[char.curweapon.type] : ''}${classEmoji.weapon[char.curweapon.class ?? 'none']}__${char.curweapon.name}__ equipped.**\n`;
 	} else if (char.weaponclass) {
 		if (typeof(char.weaponclass) == 'object') {
@@ -216,7 +216,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 		}
 	}
 
-	if (char.curarmor) {
+	if (char.curarmor && char.curarmor.name) {
 		desc += `**${char.curarmor.type ? elementEmoji[char.curarmor.type] : ''}${classEmoji.armor[char.curarmor.class ?? 'none']}__${char.curarmor.name}__ equipped.**\n`;
 	} else if (char.armorclass && char.armorclass != "none") {
 		desc += `_Can wear ${classEmoji.armor[char.armorclass]}${char.armorclass} armor._\n`;
