@@ -1024,9 +1024,8 @@ statusList = {
 			return true;
 		},
 		canuse(char, skill, btl, vars) {
-			let members = btl.teams[char.team].members
-			
-			if (members.some(member => member.reincarnate)) return 'You cannot have more than one summon at a time!'
+			let members = btl.teams[char.team].members;
+			if (members.some(member => member.reincarnate)) return 'You cannot have more than one summon at a time!';
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
