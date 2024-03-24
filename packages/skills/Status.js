@@ -974,6 +974,14 @@ statusList = {
 				type: "Word"
 			},
 			{
+				name: "High Stat",
+				type: "Word"
+			},
+			{
+				name: "Low Stat",
+				type: "Word"
+			},
+			{
 				name: "Skill #1",
 				type: "Word",
 				forced: true,
@@ -988,8 +996,10 @@ statusList = {
 			let mp = args[4]
 			let deploy = (args[5] && args[5].toLowerCase() != 'none') ? args[5] : "%PLAYER% has summoned an undead %UNDEAD%"
 			let name = args[6] ?? "Reincarnate"
-			let skills = args.slice(7)
-			
+			let highstat = args[7] ? args[7].toLowerCase() : "none";
+			let lowstat = args[8] ? args[8].toLowerCase() : "none";
+			let skills = args.slice(9)
+
 			let settings = setUpSettings(message.guild.id)
 
 			if (level < 1 || level > settings.caps.levelcap) return void message.channel.send("You can't have a level less than 1 or greater than " + settings.caps.levelcap + "!");
@@ -1000,17 +1010,23 @@ statusList = {
 			if (mp <= 0) return void message.channel.send("MP Percent must be at least 1!");
 			if (deploy.length <= 0 || deploy.length > 500) return void message.channel.send("Deploy Message must be between 1 and 500 characters!");
 
+			if (![...stats, "none"].includes(highstat))
+				message.channel.send(`${highstat} is not a valid stat. You may also enter "none".`);
+
+			if (![...stats, "none", "all"].includes(lowstat))
+				message.channel.send(`${highstat} is not a valid stat. You may also enter "all" or "none".`);
+
 			skills.filter(skill => skillFile[skill] && (!skill.levellock || (skill.levellock && (!skill.levellock != 'unobtainable' && skill.levellock <= level))))
 
 			if (skills.length < 1) return void message.channel.send("None of the skills you entered are valid! They either don't exist or their level lock is higher than the level chosen.");
 
-			makeStatus(skill, "reincarnate", [min, max, hp, mp, deploy, skills, name]);
+			makeStatus(skill, "reincarnate", [min, max, hp, mp, deploy, skills, name, highstat, lowstat]);
 			return true;
 		},
 		canuse(char, skill, btl, vars) {
 			let members = btl.teams[char.team].members
 			
-			if (members.some(member => member.reincarnate)) return 'You cannot have more than one reincarnate at a time!'
+			if (members.some(member => member.reincarnate)) return 'You cannot have more than one summon at a time!'
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
@@ -1025,8 +1041,14 @@ statusList = {
 			newchar.maxmp = Math.round(newchar.maxmp * vars[3]/100);
 			newchar.hp = newchar.maxhp;
 			newchar.mp = newchar.maxmp;
-			for (let i in newchar.stats) { 
-				newchar.stats[i] = Math.round(modSkillResult(char, targ, randNum(vars[0], vars[1]), skill, btl) * multiplier);
+			for (let i in newchar.stats) {
+				if (i == vars[7] || vars[7] == "all") {
+					newchar.stats[i] = Math.round(modSkillResult(char, targ, randNum(vars[0] + ((vars[1]-vars[0])/2), vars[1]), skill, btl) * multiplier);
+				} else if (i == vars[8] || vars[8] == "all") {
+					newchar.stats[i] = Math.round(modSkillResult(char, targ, randNum(vars[0], vars[1] - ((vars[1]-vars[0])/2)), skill, btl) * multiplier);
+				} else {
+					newchar.stats[i] = Math.round(modSkillResult(char, targ, randNum(vars[0], vars[1]), skill, btl) * multiplier);
+				}
 			}
 
 			newchar.id = nextAvaliableId(btl);
@@ -1099,7 +1121,12 @@ statusList = {
 			return replaceTxt(vars[4], '%PLAYER%', `__${char.name}__`, '%UNDEAD%', name);
 		},
 		getinfo(vars, skill) {
-			return "Summons **an undead ally**"
+			let txt = `Summons **an undead ally**`;
+
+			if (vars[7] && vars[7] != "none") txt += `, prioritizing their **${vars[7].toUpperCase()}**`;
+			if (vars[8] && vars[8] != "none") txt += `, minimizing **${vars[8].toUpperCase()}**`;
+
+			return txt;
 		}
 	}),
 
