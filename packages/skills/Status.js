@@ -982,6 +982,10 @@ statusList = {
 				type: "Word"
 			},
 			{
+				name: "Randomize Affinities",
+				type: "YesNo"
+			},
+			{
 				name: "Skill #1",
 				type: "Word",
 				forced: true,
@@ -990,15 +994,15 @@ statusList = {
 		],
 		applyfunc(message, skill, args) {
 			const level = args[0];
-			let min = args[1]
-			let max = args[2]
-			let hp = args[3]
-			let mp = args[4]
-			let deploy = (args[5] && args[5].toLowerCase() != 'none') ? args[5] : "%PLAYER% has summoned an undead %UNDEAD%"
-			let name = args[6] ?? "Reincarnate"
+			let min = args[1];
+			let max = args[2];
+			let hp = args[3];
+			let mp = args[4];
+			let deploy = (args[5] && args[5].toLowerCase() != 'none') ? args[5] : "%PLAYER% has summoned an undead %UNDEAD%";
+			let name = args[6] ?? "Reincarnate";
 			let highstat = args[7] ? args[7].toLowerCase() : "none";
 			let lowstat = args[8] ? args[8].toLowerCase() : "none";
-			let skills = args.slice(9)
+			let skills = args.slice(10);
 
 			let settings = setUpSettings(message.guild.id)
 
@@ -1011,16 +1015,16 @@ statusList = {
 			if (deploy.length <= 0 || deploy.length > 500) return void message.channel.send("Deploy Message must be between 1 and 500 characters!");
 
 			if (![...stats, "none"].includes(highstat))
-				message.channel.send(`${highstat} is not a valid stat. You may also enter "none".`);
+				return void message.channel.send(`${highstat} is not a valid stat. You may also enter "none".`);
 
 			if (![...stats, "none", "all"].includes(lowstat))
-				message.channel.send(`${highstat} is not a valid stat. You may also enter "all" or "none".`);
+				return void message.channel.send(`${highstat} is not a valid stat. You may also enter "all" or "none".`);
 
 			skills.filter(skill => skillFile[skill] && (!skill.levellock || (skill.levellock && (!skill.levellock != 'unobtainable' && skill.levellock <= level))))
 
 			if (skills.length < 1) return void message.channel.send("None of the skills you entered are valid! They either don't exist or their level lock is higher than the level chosen.");
 
-			makeStatus(skill, "reincarnate", [min, max, hp, mp, deploy, skills, name, highstat, lowstat]);
+			makeStatus(skill, "reincarnate", [min, max, hp, mp, deploy, skills, name, highstat, lowstat, args[9] ?? false]);
 			return true;
 		},
 		canuse(char, skill, btl, vars) {
@@ -1067,24 +1071,26 @@ statusList = {
 			const varsToDelete = ['lb', 'quotes', 'armor', 'weapon', 'bio', 'trust', 'teamCombo', 'custom', 'statusaffinities', 'memory']
 			for (let i in varsToDelete) newchar[varsToDelete[i]] = {}
 
-			newchar.affinities = {};
-			const affinities = ["superweak", "weak", "weak", "weak", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "resist", "resist", "block", "repel", "drain"]
-			for (const k in Elements) {
-				if (Elements[k] != "heal" && Elements[k] != "status" && Elements[k] != "passive" && Elements[k] != "almighty"){
-					let elementAffinity = Math.floor(Math.random() * (affinities.length-1))
-					if (!newchar.affinities[affinities[elementAffinity]]) newchar.affinities[affinities[elementAffinity]] = [];
-					if (affinities[elementAffinity] != "normal") {newchar.affinities[affinities[elementAffinity]].push(Elements[k])}
-				}
-			}
-
-			let settings = setUpSettings(btl.guild.id)
-			if (settings?.mechanics?.statusaffinities) {
-				const affinities = ["weak", "weak", "weak", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "resist", "resist", "block"]
-				for (const k in statusEffects) {
-					if (statusEffects[k] != "infatuation" && statusEffects[k] != "mirror" && statusEffects[k] != "happy"){
+			if (vars[9]) {
+				newchar.affinities = {};
+				const affinities = ["superweak", "weak", "weak", "weak", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "resist", "resist", "block", "repel", "drain"]
+				for (const k in Elements) {
+					if (Elements[k] != "heal" && Elements[k] != "status" && Elements[k] != "passive" && Elements[k] != "almighty"){
 						let elementAffinity = Math.floor(Math.random() * (affinities.length-1))
-						if (!newchar.statusaffinities[affinities[elementAffinity]]) newchar.statusaffinities[affinities[elementAffinity]] = [];
-						if (affinities[elementAffinity] != "normal") {newchar.statusaffinities[affinities[elementAffinity]].push(statusEffects[k])}
+						if (!newchar.affinities[affinities[elementAffinity]]) newchar.affinities[affinities[elementAffinity]] = [];
+						if (affinities[elementAffinity] != "normal") {newchar.affinities[affinities[elementAffinity]].push(Elements[k])}
+					}
+				}
+
+				let settings = setUpSettings(btl.guild.id)
+				if (settings?.mechanics?.statusaffinities) {
+					const affinities = ["weak", "weak", "weak", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "resist", "resist", "block"]
+					for (const k in statusEffects) {
+						if (statusEffects[k] != "infatuation" && statusEffects[k] != "mirror" && statusEffects[k] != "happy"){
+							let elementAffinity = Math.floor(Math.random() * (affinities.length-1))
+							if (!newchar.statusaffinities[affinities[elementAffinity]]) newchar.statusaffinities[affinities[elementAffinity]] = [];
+							if (affinities[elementAffinity] != "normal") {newchar.statusaffinities[affinities[elementAffinity]].push(statusEffects[k])}
+						}
 					}
 				}
 			}
@@ -1768,24 +1774,37 @@ statusList = {
 			{
 				name: "User/Target",
 				type: "Word"
+			},
+			{
+				name: "Chance",
+				type: "Decimal"
 			}
 		],
 		applyfunc(message, skill, args) {
 			let skillName = args[0];
 			let turns = args[1] ?? 0;
 			let target = args[2] ? args[2].toLowerCase() : 'target';
+			let chance = args[3] ?? 100;
 
 			if (!skillFile[skillName]) return void message.channel.send(`${skillName} is not a valid skill!`);
 			if (skillFile[skillName] == skill) return void message.channel.send("You can't use this skill.");
 			if (skillFile[skillName].statusses?.simplebeam) return void message.channel.send("You can't use this skill.");
 			if (target != 'user' && target != 'target') return void message.channel.send("<User/Target> must either be set to 'User' or 'Target'.");
+			if (chance < 0) return void message.channel.send(`The **{Chance}** must be above 0%. ${chance}% does not apply.`);
+			if (chance > 100) chance = 100;
 
-			makeStatus(skill, "simplebeam", [skillName, turns, target]);
+			makeStatus(skill, "simplebeam", [skillName, turns, target, chance]);
 			return true;
 		},
 		onselect(char, skill, btl, vars, multiplier) {
 			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
 			let str = "";
+
+			if (vars[3] && vars[3] < 100) {
+				if (randNum(1000) > vars[3]*10) {
+					return "But it failed...";
+				}
+			}
 
 			if (vars[2] && vars[2] === 'user') {
 				let skillnum = char.skills.length;
@@ -1806,6 +1825,12 @@ statusList = {
 			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
 			let str = "";
 
+			if (vars[3] && vars[3] < 100) {
+				if (randNum(1000) > vars[3]*10) {
+					return "But it missed...";
+				}
+			}
+
 			if (!vars[2] || vars[2] != 'user') {
 				let skillnum = targ.skills.length;
 				targ.skills.push(vars[0]);
@@ -1823,8 +1848,14 @@ statusList = {
 		},
 		getinfo(vars, skill) {
 			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
-			let str = `Gives the __${vars[2] ?? "target"}__ a skill called **_${getFullName(skillFile[vars[0]])}_**`;
 
+			let chance = "";
+			if (vars[3] && vars[3] >= 100)
+				chance = "Guaranteed to";
+			else
+				chance = `${vars[3]}% chance to`;
+
+			let str = `${chance} give the __${vars[2] ?? "target"}__ a skill called **_${getFullName(skillFile[vars[0]])}_**`;
 			if (vars[1] > 0) str += ` for **${vars[1]} turns**`;
 
 			return str;
