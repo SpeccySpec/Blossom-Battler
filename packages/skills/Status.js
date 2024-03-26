@@ -1122,7 +1122,8 @@ statusList = {
 			delete newchar.deity
 
 			btl.teams[char.team].members.push(newchar);
-			btl.turnorder = getTurnOrder(btl)
+			btl.turnorder = getTurnOrder(btl);
+			char.forceskipturnorder = 2;
 			return replaceTxt(vars[4], '%PLAYER%', `__${char.name}__`, '%UNDEAD%', name);
 		},
 		getinfo(vars, skill) {

@@ -1909,6 +1909,11 @@ doTurn = async(btl, noTurnEmbed) => {
 	// Skip this turn if we're dead or pacified or in backup
 	if (char == "backup" || char.hp <= 0 || char.pacified) return advanceTurn(btl);
 
+	if (char.forceskipturnorder) {
+		delete char.forceskipturnorder;
+		return advanceTurn(btl);
+	}
+
 	// IsNan?
 	let charFile = setUpFile(`${dataPath}/json/${btl.guild.id}/characters.json`, true);
 
@@ -2217,6 +2222,14 @@ advanceTurn = (btl, firstturn) => {
 				char.decieve = true;
 				char.decieveturns = 2;
 				console.log(char.name, char.oldname);
+			}
+
+			// Turnorder hardcode
+			if (char.forceskipturnorder) {
+				char.forceskipturnorder--;
+				if (char.forceskipturnorder <= 0) {
+					delete char.forceskipturnorder;
+				}
 			}
 
 			// Custom Variables.
