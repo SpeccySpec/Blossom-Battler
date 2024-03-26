@@ -454,13 +454,13 @@ longDescription = (charDefs, level, server, message, useguild) => {
 				enmLoot += `- **${lootDefs.items[i].type}:** `
 				switch (lootDefs.items[i].type) {
 					case "item":
-						enmLoot += `${itemFile[lootDefs.items[i].id].name ? itemFile[lootDefs.items[i].id].name : lootDefs.items[i].id} `;
+						enmLoot += `${itemFile[lootDefs.items[i].id] ? itemFile[lootDefs.items[i].id].name : lootDefs.items[i].id} `;
 						break;
 					case "weapon":
-						enmLoot += `${weaponFile[lootDefs.items[i].id].name ? weaponFile[lootDefs.items[i].id].name : lootDefs.items[i].id} `;
+						enmLoot += `${weaponFile[lootDefs.items[i].id] ? weaponFile[lootDefs.items[i].id].name : lootDefs.items[i].id} `;
 						break;
 					case "armor":
-						enmLoot += `${armorFile[lootDefs.items[i].id].name ? armorFile[lootDefs.items[i].id].name : lootDefs.items[i].id} `;
+						enmLoot += `${armorFile[lootDefs.items[i].id] ? armorFile[lootDefs.items[i].id].name : lootDefs.items[i].id} `;
 						break;
 				}
 				enmLoot += `(${lootDefs.items[i].amount}x)\n`;
