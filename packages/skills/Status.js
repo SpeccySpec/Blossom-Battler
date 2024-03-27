@@ -986,6 +986,10 @@ statusList = {
 				type: "YesNo"
 			},
 			{
+				name: "Scale stats with User Level",
+				type: "YesNo"
+			},
+			{
 				name: "Skill #1",
 				type: "Word",
 				forced: true,
@@ -1002,7 +1006,8 @@ statusList = {
 			let name = args[6] ?? "Reincarnate";
 			let highstat = args[7] ? args[7].toLowerCase() : "none";
 			let lowstat = args[8] ? args[8].toLowerCase() : "none";
-			let skills = args.slice(10);
+			let levelup = args[10] ?? false;
+			let skills = args.slice(11);
 
 			let settings = setUpSettings(message.guild.id)
 
@@ -1013,6 +1018,7 @@ statusList = {
 			if (hp <= 0) return void message.channel.send("HP Percent must be at least 1!");
 			if (mp <= 0) return void message.channel.send("MP Percent must be at least 1!");
 			if (deploy.length <= 0 || deploy.length > 500) return void message.channel.send("Deploy Message must be between 1 and 500 characters!");
+			if (levelup && max > 10) return void message.channel.send(`If __{Scale stats with User Level}__ is set to true, __<Maximum of Stat>__ should not be set above **10**.`);
 
 			if (![...stats, "none"].includes(highstat))
 				return void message.channel.send(`${highstat} is not a valid stat. You may also enter "none".`);
@@ -1024,7 +1030,7 @@ statusList = {
 
 			if (skills.length < 1) return void message.channel.send("None of the skills you entered are valid! They either don't exist or their level lock is higher than the level chosen.");
 
-			makeStatus(skill, "reincarnate", [min, max, hp, mp, deploy, skills, name, highstat, lowstat, args[9] ?? false]);
+			makeStatus(skill, "reincarnate", [min, max, hp, mp, deploy, skills, name, highstat, lowstat, args[9] ?? false, levelup, level]);
 			return true;
 		},
 		canuse(char, skill, btl, vars) {
@@ -1044,15 +1050,6 @@ statusList = {
 			newchar.maxmp = Math.round(newchar.maxmp * vars[3]/100);
 			newchar.hp = newchar.maxhp;
 			newchar.mp = newchar.maxmp;
-			for (let i in newchar.stats) {
-				if (i == vars[7] || vars[7] == "all") {
-					newchar.stats[i] = Math.round(modSkillResult(char, targ, randNum(vars[0] + ((vars[1]-vars[0])/2), vars[1]), skill, btl) * multiplier);
-				} else if (i == vars[8] || vars[8] == "all") {
-					newchar.stats[i] = Math.round(modSkillResult(char, targ, randNum(vars[0], vars[1] - ((vars[1]-vars[0])/2)), skill, btl) * multiplier);
-				} else {
-					newchar.stats[i] = Math.round(modSkillResult(char, targ, randNum(vars[0], vars[1]), skill, btl) * multiplier);
-				}
-			}
 
 			newchar.id = nextAvaliableId(btl);
 			newchar.melee.name = 'Strike Attack'
@@ -1067,6 +1064,22 @@ statusList = {
 			if (newchar.dreams) newchar.dreams = []
 			if (newchar.negotiate) newchar.negotiate = []
 			delete newchar.negotiateDefs
+
+			for (let i in newchar.stats) {
+				if (i == vars[7] || vars[7] == "all") {
+					newchar.stats[i] = Math.round(modSkillResult(char, targ, randNum(vars[0] + ((vars[1]-vars[0])/2), vars[1]), skill, btl) * multiplier);
+				} else if (i == vars[8] || vars[8] == "all") {
+					newchar.stats[i] = Math.round(modSkillResult(char, targ, randNum(vars[0], vars[1] - ((vars[1]-vars[0])/2)), skill, btl) * multiplier);
+				} else {
+					newchar.stats[i] = Math.round(modSkillResult(char, targ, randNum(vars[0], vars[1]), skill, btl) * multiplier);
+				}
+
+				// some new hacks in the works
+				if (vars[10]) {
+					newchar.basestats[`base${i}`] = newchar.stats[i];
+					updateStats(newchar, btl.guild.id, false);
+				}
+			}
 
 			const varsToDelete = ['lb', 'quotes', 'armor', 'weapon', 'bio', 'trust', 'teamCombo', 'custom', 'statusaffinities', 'memory']
 			for (let i in varsToDelete) newchar[varsToDelete[i]] = {}

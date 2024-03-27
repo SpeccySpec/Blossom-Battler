@@ -60,11 +60,21 @@ loseBattle = (btl, i) => {
 		.setDescription(`**[BATTLE LOST...]**\nThe enemies defeated you...\nYou lost all of your items and ${lostmoney} ${settings.currency_emoji}${settings.currency}s...`)
 	btl.channel.send({embeds: [DiscordEmbed]}).then(message => {
 		if (Object.keys(party.items).length > 0) {
+			let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`, true);
+
 			let items = [`Team ${btl.teams[i].name}'s lost items`, btl.channel.id, 'true', 'none', '0', `Team ${btl.teams[i].name} lost a battle on ${getCurrentDate()}. This is what happened to their items.`];
+
+			let newItems = {}
 			for (let i in party.items) {
-				items.push('item');
-				items.push(i);
-				items.push(party.items[i]);
+				if (itemFile[i]) {
+					if (itemFile[i].type != "key") {
+						items.push('item');
+						items.push(i);
+						items.push(party.items[i]);
+					} else {
+						newItems[i] = party.items[i];
+					}
+				}
 			}
 
 			console.log(items);

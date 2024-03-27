@@ -64,6 +64,8 @@ function itemDesc(itemDefs, itemName, message) {
                 break;
             case 'material':
                 finalText += `A **type of material** used in **item fusions** or **equipment upgrading**\n`;
+            case 'key':
+                finalText += `A **very important** item. Probably shouldn't be lost.\n`;
         }
     }
 
@@ -292,6 +294,7 @@ commands.registeritem = new Command({
                 amount = args[4] && parseInt(args[4]) ? Math.max(0, Math.min(parseInt(args[4]), 100)) : 30;
                 break;
 			case 'material':
+			case 'key':
 				// Nothing here...
 				break;
 
@@ -341,7 +344,7 @@ commands.listitems = new Command({
         let array = []
         itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
 
-        const validTypes = ['user', 'rarity', 'cost', 'skill', 'heal', 'healmp', 'healhpmp', 'revive', 'pacify', 'material', 'recipe']
+        const validTypes = ['user', 'rarity', 'cost', 'skill', 'heal', 'healmp', 'healhpmp', 'revive', 'pacify', 'material', 'key', 'recipe']
         
         if (args[0]) {
 			if (args.length % 2 != 0) {
@@ -413,6 +416,7 @@ commands.listitems = new Command({
                         case 'revive':
                         case 'pacify':
                         case 'material':
+						case 'key':
                             if (args[a].toString().toLowerCase() == 'true') {
                                 isConditionMet = (itemFile[item].type == args[a-1])
                             } else if (args[a].toString().toLowerCase() == 'false') {
