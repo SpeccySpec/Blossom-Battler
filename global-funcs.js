@@ -149,7 +149,8 @@ itemTypes = [
 	"healallhpmp",
 	"revive",
 	"material",
-	"pacify"
+	"pacify",
+	"key"
 ]
 
 itemTypeEmoji = {
@@ -165,6 +166,7 @@ itemTypeEmoji = {
 	revive: '<:revive:973078509868183572>',
 	material: '<:material:973078509595537459>',
 	pacify: '<:pacify:973077052142026752>',
+	key: '<:key_item:1222988722660970578>'
 }
 
 itemRarities = [

@@ -64,6 +64,7 @@ function itemDesc(itemDefs, itemName, message) {
                 break;
             case 'material':
                 finalText += `A **type of material** used in **item fusions** or **equipment upgrading**\n`;
+				break;
             case 'key':
                 finalText += `A **very important** item. Probably shouldn't be lost.\n`;
         }
@@ -2190,8 +2191,12 @@ commands.craftitem = new Command({
 					delete party.armors[i];
 				} else {
 					if (itemFile[i]) {
-						if (!party.items || !party.items[i] || party.items[i] < itemDefs.recipe[i][1]) return message.channel.send(`__Team ${party.name}__ does not own the necessary **${itemFile[i].name}** needed to craft **${itemDefs.name}**. _(Requires **${itemDefs.recipe[i][1]}**.)_`);
-						party.items[i] -= itemDefs.recipe[i][1];
+						if (itemFile[i].type == 'key') {
+							if (!party.items || !party.items[i] || party.items[i] < itemDefs.recipe[i][1]) return message.channel.send(`__Team ${party.name}__ does not have the **${itemFile[i].name}** needed to craft **${itemDefs.name}**.`);
+						} else {
+							if (!party.items || !party.items[i] || party.items[i] < itemDefs.recipe[i][1]) return message.channel.send(`__Team ${party.name}__ does not own the necessary **${itemFile[i].name}** needed to craft **${itemDefs.name}**. _(Requires **${itemDefs.recipe[i][1]}**.)_`);
+							party.items[i] -= itemDefs.recipe[i][1];
+						}
 					} else {
 						return message.channel.send(`One of the items needed to craft **${itemDefs.name}** does not exist on this server.`);
 					}

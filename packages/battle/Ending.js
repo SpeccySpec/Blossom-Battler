@@ -80,7 +80,7 @@ loseBattle = (btl, i) => {
 			console.log(items);
 			commands.registerchest.call(message, [...items]);
 
-			party.items = {};
+			party.items = objClone(newItems);
 		}
 
 		parties[btl.teams[i].name] = party;
