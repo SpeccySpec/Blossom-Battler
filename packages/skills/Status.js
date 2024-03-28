@@ -1078,6 +1078,10 @@ statusList = {
 				if (vars[10]) {
 					newchar.basestats[`base${i}`] = newchar.stats[i];
 					updateStats(newchar, btl.guild.id, false);
+					newchar.maxhp = Math.round(newchar.maxhp * vars[2]/100);
+					newchar.maxmp = Math.round(newchar.maxmp * vars[3]/100);
+					newchar.hp = newchar.maxhp;
+					newchar.mp = newchar.maxmp;
 				}
 			}
 
