@@ -1816,7 +1816,7 @@ extrasList = {
 
 	brickbreak: new Extra({
 		name: "Brick Break (Pokémon)",
-		desc: "Breaks any kind of shield the foe may have, but reduces damage when doing so.",
+		desc: "Breaks any kind of shield the foe may have, but may reduce damage when doing so. The extent to which can be determined by __{Multiplier}__. This should be a number that the attack is multiplied by, so 0.5 is the default.",
 		args: [
 			{
 				name: "Multiplier",
@@ -2287,7 +2287,7 @@ extrasList = {
 		desc: "Removes the target's positive buffs.",
 		args: [],
 		applyfunc(message, skill, args) {
-			makeStatus(skill, "dekaja", [true]);
+			makeExtra(skill, "dekaja", [true]);
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars) {
