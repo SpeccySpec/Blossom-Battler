@@ -708,7 +708,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				// Critical Hits
 				if (skill.crit) {
 					let c = randNum(100);
-					if ((c <= skill.crit+((char.stats.luk-targ.stats.luk)/2)) || char.stagger) {
+					if ((c <= skill.crit+((char.stats.luk-targ.stats.luk)/2)) || (targ.status && targ.status === "stagger")) {
 						if (settings.mechanics.onemores) {
 							result.oneMore = true;
 							targ.down = true;
@@ -746,10 +746,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						if (doPassives(btl)) {
 							for (let skillName of char.skills) {
 								if (!skillFile[skillName]) continue;
-					
+
 								let psv = skillFile[skillName];
 								if (psv.type != 'passive' || !psv.passive) continue;
-					
+
 								for (let i in psv.passive) {
 									if (passiveList[i] && passiveList[i].critmod) {
 										if (noExtraArray && noExtraArray.includes(i)) continue;
@@ -769,7 +769,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						dmg *= critRate;
 
 						// Get rid of stagger
-						if (char.stagger) delete char.stagger;
+						if (char.status && char.status === "stagger") {
+							delete char.status;
+							delete char.statusturns;
+						}
 					}
 				}
 

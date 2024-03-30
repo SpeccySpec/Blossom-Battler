@@ -216,11 +216,13 @@ statusEffects = [
 	"drenched", // Stackable. Nullifies status affinities - both positive and negative - while afflicted.
 	"insanity", // Random Effects based on chance, different against bosses
 	"stagger",
+	"shrouded",
 
 	// Positive Statusses
 	"happy",
 	"mirror",
-	"airborne"
+	"airborne",
+	"blessed"
 ]
 
 statusNames = {
@@ -247,11 +249,13 @@ statusNames = {
 	drenched: 'Drenched',
 	insanity: 'Insanity',
 	stagger: 'Staggering',
+	shrouded: 'Shrouded',
 
 	// Positive Statusses
 	happy: 'Happiness',
 	mirror: 'Mirror',
-	airborne: 'Airborne'
+	airborne: 'Airborne',
+	blessed: 'Blessed'
 }
 
 statusEmojis = {
@@ -278,11 +282,13 @@ statusEmojis = {
 	drenched: '<:water:963413845886505011>',
 	insanity: '<:insanity:1217924742237913218>',
 	stagger: '<:pinch:1004506376036429924>',
+	shrouded: '<:wind:963413845848776714>',
 
 	// Positive Statusses
 	mirror: '<:mirror:963413990229311588>',
 	happy: '<:happy:973076333871644733>',
 	airborne: '<:wind:963413845848776714>',
+	blessed: '<:bless:963413844628230254>',
 
 	// Buffs
 	atkup: "<:atkup:990629395486089216>",
@@ -331,7 +337,8 @@ elementTechs = {
 	happy: ['psychic', 'bless', 'curse', 'spirit', 'sound'],
 	airborne: ['pierce', 'electric', 'metal', 'gravity'],
 	insanity: ['psychic', 'curse'],
-	stagger: ['strike', 'slash', 'pierce']
+	stagger: ['strike', 'slash', 'pierce'],
+	shrouded: ['wind'],
 }
 
 // Enemy Habitats

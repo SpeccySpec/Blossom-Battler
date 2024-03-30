@@ -601,7 +601,13 @@ sendCurTurnEmbed = (char, btl) => {
 
 	let menustate = MENU_ACT;
 
-	let statDesc = `${getBar('hp', char.hp, char.maxhp)} ${char.hp}/${char.maxhp}HP\n${getBar('mp', char.mp, char.maxmp)} ${char.mp}/${char.maxmp}MP`;
+	let statDesc = '';
+	if (char.status == "shrouded") {
+		statDesc += `${getBar('hp', 0, char.maxhp)}???/???HP\n${getBar('mp', 0, char.maxmp)} ???/???MP`;
+	} else {
+		statDesc += `${char.hp}/${char.maxhp}HP\n${getBar('mp', char.mp, char.maxmp)} ${char.mp}/${char.maxmp}MP`;
+	}
+
 	if (settings.mechanics.limitbreaks) statDesc += `, ${Math.round(char.lbp)}LB%`;
 	if (char.pet) statDesc = `${char.name} wants to assist the team in battle! Tell it to do something!\n`;
 
@@ -643,7 +649,12 @@ sendCurTurnEmbed = (char, btl) => {
 			} else {
 				let s = GetCharStatus(c);
 				let n = GetCharName(c);
-				teamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+
+				if (c.status == "shrouded") {
+					teamDesc += `${l}: ${s}${n} _(???/???HP, ???/???MP)_\n`;
+				} else {
+					teamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+				}
 			}
 		}
 	}
@@ -658,7 +669,12 @@ sendCurTurnEmbed = (char, btl) => {
 		} else {
 			let s = GetCharStatus(c)
 			let n = GetCharName(c);
-			myTeamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+
+			if (c.status == "shrouded") {
+				myTeamDesc += `${l}: ${s}${n} _(???/???HP, ???/???MP)_\n`;
+			} else {
+				myTeamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+			}
 		}
 	}
 	

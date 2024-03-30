@@ -1878,12 +1878,36 @@ statusDescs = [
 				}
 			},
 			{
+				name: "drenched",
+				desc: `Nullifies status affinities for *3 turns*. *Stacks with other status effects.*`,
+			},
+			{
 				name: "stagger",
 				desc: "The next attack is **guaranteed** a critical hit.",
 			},
 			{
-				name: "drenched",
-				desc: `Nullifies status affinities for *3 turns*. *Stacks with other status effects.*`,
+				name: "shrouded",
+				desc: "Incapable of seeing the afflicted's current stats.",
+				ailments: {
+					nonboss: {
+						weak: "Lasts *4 turns*.",
+						normal: "Lasts *3 turns*.",
+						resist: "Can see *HP*.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
+			},
+			{
+				name: "blessed",
+				desc: "Cannot get afflicted by a status effect while this status effect is active.",
+				ailments: {
+					nonboss: {
+						weak: "Lasts *2 turns*.",
+						normal: "Lasts *3 turns*.",
+						resist: "Lasts *4 turns.*.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
 			}
 		]
 	},

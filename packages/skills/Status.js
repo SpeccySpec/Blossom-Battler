@@ -2612,11 +2612,20 @@ statusEffectFuncs = {
 	},
 
 	stagger: {
-		stackable: true,
+		forceturns: 3,
 		hardcoded: true,
-		forceturns: 2,
+	},
+
+	blessed: {
+		forceturns: 3,
+		hardcoded: true,
+	},
+
+	shrouded: {
+		forceturns: 3,
+		hardcoded: true,
 		onturn: function(btl, char) {
-			return `__${char.name}__ is staggering.`;
+			return `__${char.name}__ is shrouded...`;
 		}
 	},
 
