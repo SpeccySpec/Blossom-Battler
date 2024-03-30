@@ -496,6 +496,8 @@ function GetCharStatus(char) {
 		str += statusEmojis.infatuation;
 	if (char.drenched)
 		str += statusEmojis.drenched;
+	if (char.stagger)
+		str += statusEmojis.stagger;
 	return str
 }
 

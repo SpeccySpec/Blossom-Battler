@@ -215,6 +215,7 @@ statusEffects = [
 	"sensitive",
 	"drenched", // Stackable. Nullifies status affinities - both positive and negative - while afflicted.
 	"insanity", // Random Effects based on chance, different against bosses
+	"stagger",
 
 	// Positive Statusses
 	"happy",
@@ -245,6 +246,7 @@ statusNames = {
 	sensitive: 'Sensitive',
 	drenched: 'Drenched',
 	insanity: 'Insanity',
+	stagger: 'Staggering',
 
 	// Positive Statusses
 	happy: 'Happiness',
@@ -275,6 +277,7 @@ statusEmojis = {
 	sensitive: '<:sensitive:973076333825499156>',
 	drenched: '<:water:963413845886505011>',
 	insanity: '<:insanity:1217924742237913218>',
+	stagger: '<:pinch:1004506376036429924>',
 
 	// Positive Statusses
 	mirror: '<:mirror:963413990229311588>',
@@ -328,6 +331,7 @@ elementTechs = {
 	happy: ['psychic', 'bless', 'curse', 'spirit', 'sound'],
 	airborne: ['pierce', 'electric', 'metal', 'gravity'],
 	insanity: ['psychic', 'curse'],
+	stagger: ['strike', 'slash', 'pierce']
 }
 
 // Enemy Habitats

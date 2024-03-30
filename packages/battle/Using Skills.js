@@ -708,7 +708,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				// Critical Hits
 				if (skill.crit) {
 					let c = randNum(100);
-					if (c <= skill.crit+((char.stats.luk-targ.stats.luk)/2)) {
+					if ((c <= skill.crit+((char.stats.luk-targ.stats.luk)/2)) || char.stagger) {
 						if (settings.mechanics.onemores) {
 							result.oneMore = true;
 							targ.down = true;
@@ -766,8 +766,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 							}
 						}
 
-
 						dmg *= critRate;
+
+						// Get rid of stagger
+						if (char.stagger) delete char.stagger;
 					}
 				}
 

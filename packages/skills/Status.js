@@ -2611,6 +2611,15 @@ statusEffectFuncs = {
 		}
 	},
 
+	stagger: {
+		stackable: true,
+		hardcoded: true,
+		forceturns: 2,
+		onturn: function(btl, char) {
+			return `__${char.name}__ is staggering.`;
+		}
+	},
+
 	insanity: {
 		oninflict: function(char) {
 			char.statusturns = (isBoss(char)) ? 1 : 3;

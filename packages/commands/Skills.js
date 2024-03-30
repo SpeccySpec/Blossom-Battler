@@ -1878,6 +1878,10 @@ statusDescs = [
 				}
 			},
 			{
+				name: "stagger",
+				desc: "The next attack is **guaranteed** a critical hit.",
+			},
+			{
 				name: "drenched",
 				desc: `Nullifies status affinities for *3 turns*. *Stacks with other status effects.*`,
 			}
