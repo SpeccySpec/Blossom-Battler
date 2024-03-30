@@ -1896,18 +1896,6 @@ statusDescs = [
 					},
 					boss: "Affects them the same as non-bosses."
 				}
-			},
-			{
-				name: "blessed",
-				desc: "Cannot get afflicted by a status effect while this status effect is active.",
-				ailments: {
-					nonboss: {
-						weak: "Lasts *2 turns*.",
-						normal: "Lasts *3 turns*.",
-						resist: "Lasts *4 turns.*.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
 			}
 		]
 	},
@@ -2082,6 +2070,18 @@ statusDescs = [
 					boss: `Affects them the same as non-bosses.`
 				}
 			},
+			{
+				name: "blessed",
+				desc: "Cannot get afflicted by a status effect while this status effect is active.",
+				ailments: {
+					nonboss: {
+						weak: "Lasts *2 turns*.",
+						normal: "Lasts *3 turns*.",
+						resist: "Lasts *4 turns.*.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
+			}
 		]
 	}
 ]
