@@ -2716,7 +2716,7 @@ commands.randcharquote = new Command({
 	func(message, args, guilded) {
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (Object.keys(charFile).length == 0) return message.channel.send(`No characters have been added yet!`);
-		
+
 		let possibleQuotes = []
 		for (const i in quoteTypes) {
 			for (const k in charFile) {

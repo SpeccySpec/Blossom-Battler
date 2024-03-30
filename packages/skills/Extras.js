@@ -2308,7 +2308,7 @@ extrasList = {
 			return `__${targ.name}__'s positive buffs were nullified$!`;
 		},
 		getinfo(vars, skill) {
-			return "Removes the target's buffs"
+			return "Removes the **target's** buffs";
 		}
 	}),
 
