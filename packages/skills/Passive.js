@@ -37,6 +37,25 @@ let targetNames = {
 	randomwidespread: 'random fighter wide spread',
 }
 
+/*
+	[[[Hook Documentation - PASSIVE hooks in order of appearance.]]]
+
+	statmod(btl, char, skill, vars)
+	- Freely change the character and skill's stats on use.
+
+	onturn(btl, char, vars)
+	- On the start of the turn, this runs.
+
+	dmgmod(char, targ, dmg, skill, btl, vars)
+	- Should return an integer that is going to be the new damage dealt.
+
+	critmod(char, targ, dmg, crit, skill, btl, vars)
+	- Returns the crit chance. You can edit the crit chance.
+
+	endturn(char, vars, btl)
+	- onturn() but after the player has moved.
+*/
+
 passiveList = {
 	// On Attack.
 	boost: new Extra({

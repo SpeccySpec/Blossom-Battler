@@ -1892,6 +1892,34 @@ doAction = (char, btl, action) => {
 		}
 	}
 
+	let onturntxt = '';
+	if (doPassives(btl) && char.hp > 0) {
+		for (let s of char.skills) {
+			let skill = skillFile[s];
+
+			if (skill && skill.type == 'passive') {
+				for (let i in skill.passive) {
+					if (passiveList[i] && passiveList[i].endturn) {
+						if (passiveList[i].multiple) {
+							for (let k in skill.passive[i]) onturntxt += (passiveList[i].endturn(btl, char, action, skill.passive[i][k]) ?? '');;
+						} else {
+							onturntxt += (passiveList[i].endturn(btl, char, action, skill.passive[i]) ?? '');
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if (onturntxt != '') {
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#ff1fa9')
+			.setTitle(`${char.name}'s Turn!`)
+			.setDescription(onturntxt.replace(/\n{3,}/, () => "\n\n"))
+
+		btl.channel.send({embeds: [DiscordEmbed]});
+	}
+
 	// Save file data
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/${btl.channel.id}/battle.json`, JSON.stringify(btl, '	', 4));
 
