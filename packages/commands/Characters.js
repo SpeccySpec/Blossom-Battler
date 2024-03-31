@@ -4899,6 +4899,8 @@ commands.fullheal = new Command({
 
 				charFile[args[1]].hp = charFile[args[1]].maxhp;
 				charFile[args[1]].mp = charFile[args[1]].maxmp;
+				if (charFile[args[1]].status) delete charFile[args[1]].status;
+				if (charFile[args[1]].statusturns) delete charFile[args[1]].statusturns;
 				break;
 
 			case 'party':
@@ -4908,10 +4910,14 @@ commands.fullheal = new Command({
 				for (let i of parties[args[1]].members) {
 					charFile[i].hp = charFile[i].maxhp;
 					charFile[i].mp = charFile[i].maxmp;
+					if (charFile[i].status) delete charFile[args[1]].status;
+					if (charFile[i].statusturns) delete charFile[args[1]].statusturns;
 				}
 				for (let i of parties[args[1]].backup) {
 					charFile[i].hp = charFile[i].maxhp;
 					charFile[i].mp = charFile[i].maxmp;
+					if (charFile[i].status) delete charFile[args[1]].status;
+					if (charFile[i].statusturns) delete charFile[args[1]].statusturns;
 				}
 				break;
 
@@ -4920,6 +4926,77 @@ commands.fullheal = new Command({
 				for (let i in charFile) {
 					charFile[i].hp = charFile[i].maxhp;
 					charFile[i].mp = charFile[i].maxmp;
+					if (charFile[i].status) delete charFile[args[1]].status;
+					if (charFile[i].statusturns) delete charFile[args[1]].statusturns;
+				}
+				break;
+
+			default:
+				return message.channel.send('Invalid type! Please enter a valid type.');
+		}
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		message.react('👍');
+	}
+})
+
+commands.curestatus = new Command({
+	desc: "Cure a status effect from a character, party or everyone in the server.",
+	aliases: ['statusheal', 'removestatus'],
+	section: "characters",
+	args: [
+		{
+			name: "Character/Party/Everyone",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Character or Party",
+			type: "Word",
+			forced: false
+		}
+	],
+	checkban: true,
+	func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id)
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		// Set up files.
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+
+		// Checks
+		let charcheck = args[0].toLowerCase();
+		switch(charcheck) {
+			case 'character':
+			case 'one':
+			case 'char':
+				if (!charFile[args[1]]) return message.channel.send(`${args[1]} is an invalid character.`);
+				if (!utilityFuncs.isAdmin(message) && charFile[args[1]].owner != message.author.id) return message.channel.send(`You don't own ${args[1]}!`);
+
+				if (charFile[args[1]].status) delete charFile[args[1]].status;
+				if (charFile[args[1]].statusturns) delete charFile[args[1]].statusturns;
+				break;
+
+			case 'party':
+			case 'team':
+				if (!parties[args[1]]) return message.channel.send(`${args[1]} is an invalid party.`);
+
+				for (let i of parties[args[1]].members) {
+					if (charFile[i].status) delete charFile[args[1]].status;
+					if (charFile[i].statusturns) delete charFile[args[1]].statusturns;
+				}
+				for (let i of parties[args[1]].backup) {
+					if (charFile[i].status) delete charFile[args[1]].status;
+					if (charFile[i].statusturns) delete charFile[args[1]].statusturns;
+				}
+				break;
+
+			case 'all':
+			case 'everyone':
+				for (let i in charFile) {
+					if (charFile[i].status) delete charFile[args[1]].status;
+					if (charFile[i].statusturns) delete charFile[args[1]].statusturns;
 				}
 				break;
 
