@@ -281,7 +281,7 @@ statusEmojis = {
 	sensitive: '<:sensitive:973076333825499156>',
 	drenched: '<:water:963413845886505011>',
 	insanity: '<:insanity:1217924742237913218>',
-	stagger: '<:pinch:1004506376036429924>',
+	stagger: '<:staggered:1223972073014300682>',
 	shrouded: '<:shrouded:1223968915122815026>',
 
 	// Positive Statusses
