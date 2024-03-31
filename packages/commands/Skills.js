@@ -475,9 +475,9 @@ commands.listatkextras = new Command({
 	}
 })
 
-commands.liststatusextras = new Command({
+commands.listsupportextras = new Command({
 	desc: 'List the possible extras you can give a __status__ skill.',
-	aliases: ['statusextras', 'extrasstatus', 'listextrasstatus'],
+	aliases: ['supportextras', 'extrassupport', 'listextrassupport'],
 	section: "skills",
 	args: [],
 	func(message, args, guilded) {
