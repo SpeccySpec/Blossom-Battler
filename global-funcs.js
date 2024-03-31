@@ -267,7 +267,7 @@ statusEmojis = {
 	bleed: "<:bleed:963413989281390612>",
     toxin: "<:toxin:963413990044737548>",
     freeze: "<:freeze:963413989960843324>",
-    paralyze: "<:electric:963413844733100042>",
+    paralyze: "<:paralyze:1224050178307260517>",
 	sleep: "<:sleep:980497282103390308>",
 	dizzy: "<:dizzy:963413989805662269>",
 	despair: "<:despair:963413989805674516>",
