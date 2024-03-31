@@ -282,13 +282,13 @@ statusEmojis = {
 	drenched: '<:water:963413845886505011>',
 	insanity: '<:insanity:1217924742237913218>',
 	stagger: '<:pinch:1004506376036429924>',
-	shrouded: '<:wind:963413845848776714>',
+	shrouded: '<:shrouded:1223968915122815026>',
 
 	// Positive Statusses
 	mirror: '<:mirror:963413990229311588>',
 	happy: '<:happy:973076333871644733>',
 	airborne: '<:wind:963413845848776714>',
-	blessed: '<:bless:963413844628230254>',
+	blessed: '<:blessed:1223966695241158666>',
 
 	// Buffs
 	atkup: "<:atkup:990629395486089216>",
