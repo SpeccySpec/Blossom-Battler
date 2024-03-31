@@ -605,7 +605,7 @@ sendCurTurnEmbed = (char, btl) => {
 	if (char.shrouded) {
 		statDesc += `${getBar('hp', 0, char.maxhp)}???/???HP\n${getBar('mp', 0, char.maxmp)} ???/???MP`;
 	} else {
-		statDesc += `${char.hp}/${char.maxhp}HP\n${getBar('mp', char.mp, char.maxmp)} ${char.mp}/${char.maxmp}MP`;
+		statDesc += `${getBar('hp', char.hp, char.maxhp)}${char.hp}/${char.maxhp}HP\n${getBar('mp', char.mp, char.maxmp)} ${char.mp}/${char.maxmp}MP`;
 	}
 
 	if (settings.mechanics.limitbreaks) statDesc += `, ${Math.round(char.lbp)}LB%`;
