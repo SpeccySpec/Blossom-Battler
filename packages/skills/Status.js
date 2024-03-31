@@ -2822,4 +2822,46 @@ statusEffectFuncs = {
 			return false;
 		}
 	},
+
+	brave: {
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'brave', 'weak')) {
+				char.statusturns = 2;
+			} else if (hasStatusAffinity(char, 'brave', 'resist')) {
+				char.statusturns = 4;
+			} else {
+				char.statusturns = 3;
+			}
+		},
+		lbgain: function(char, targ, skill, lbgain, btl) {
+			if (hasStatusAffinity(char, 'brave', 'weak')) {
+				lbgain = Math.round(lbgain*1.25);
+			} else if (hasStatusAffinity(char, 'brave', 'resist')) {
+				lbgain = Math.round(lbgain*1.75);
+			} else {
+				lbgain = Math.round(lbgain*1.5);
+			}
+		}
+	},
+
+	apathy: {
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'apathy', 'weak')) {
+				char.statusturns = 4;
+			} else if (hasStatusAffinity(char, 'apathy', 'resist')) {
+				char.statusturns = 2;
+			} else {
+				char.statusturns = 3;
+			}
+		},
+		lbgain: function(char, targ, skill, lbgain, btl) {
+			if (hasStatusAffinity(char, 'apathy', 'weak')) {
+				lbgain = Math.round(lbgain*0.25);
+			} else if (hasStatusAffinity(char, 'apathy', 'resist')) {
+				lbgain = Math.round(lbgain*0.75);
+			} else {
+				lbgain = Math.round(lbgain*0.5);
+			}
+		}
+	},
 }

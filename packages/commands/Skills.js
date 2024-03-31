@@ -2025,6 +2025,18 @@ statusDescs = [
 						resist: `Shakes it off immediately.`,
 					}
 				}
+			},
+			{
+				name: "apathy",
+				desc: "Weaken the gain of the **Limit Break Meter**, to 0.5x. Has no effect if **Limit Breaks** are disabled on this server.",
+				ailments: {
+					nonboss: {
+						weak: "Lasts *4 turns*, 0.25x.",
+						normal: "Lasts *3 turns*, 0.5x.",
+						resist: "Lasts *2 turns.*, 0.75x.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
 			}
 		]
 	},
@@ -2078,6 +2090,18 @@ statusDescs = [
 						weak: "Lasts *2 turns*.",
 						normal: "Lasts *3 turns*.",
 						resist: "Lasts *4 turns.*.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
+			},
+			{
+				name: "brave",
+				desc: "Boost the gain of the **Limit Break Meter**, by 1.5x. Has no effect if **Limit Breaks** are disabled on this server.",
+				ailments: {
+					nonboss: {
+						weak: "Lasts *2 turns*, 1.25x.",
+						normal: "Lasts *3 turns*, 1.5x.",
+						resist: "Lasts *4 turns.*, 1.75x.",
 					},
 					boss: "Affects them the same as non-bosses."
 				}

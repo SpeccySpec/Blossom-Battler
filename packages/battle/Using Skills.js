@@ -992,7 +992,32 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				// Limit Breaks
 				if (settings.mechanics.limitbreaks && !skill.limitbreak && !skill.teamcombo) {
 					if (!char.lbp) char.lbp = 0;
-					char.lbp += truncNum(total/(skill.hits*((skill.target === 'one' || skill.target === 'ally') ? 8 : 64)), 2)
+
+					let lbgain = truncNum(total/(skill.hits*((skill.target === 'one' || skill.target === 'ally') ? 8 : 64)), 2)
+
+					// LbGain
+					if (skill.extras) {
+						for (let i in skill.extras) {
+							if (!extrasList[i]) continue;
+							if (!extrasList[i].onuse) continue;
+							if (noExtraArray && noExtraArray.includes(i)) continue;
+
+							if (extrasList[i].multiple) {
+								for (let k in skill.extras[i]) {
+									lbgain = `\n${(extrasList[i].lbgain(char, targ, skill, btl, lbgain, skill.extras[i][k]) ?? '')}`;
+								}
+							} else {
+								lbgain = `\n${(extrasList[i].lbgain(char, targ, skill, lbgain, btl, skill.extras[i]) ?? '')}`;
+							}
+						}
+					}
+
+					if (statusEffectFuncs[char.status] && statusEffectFuncs[char.status].lbgain) {
+						lbgain = statusEffectFuncs[char.status].lbgain(char, targ, skill, lbgain, btl);
+					}
+
+					// Statusses
+					char.lbp += lbgain;
 				}
 
 				// Full Combo!
@@ -1007,7 +1032,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) {
-								result.txt += `\n${(extrasList[i].onuse(char, targ, skill, btl, skill.extras[i][k] ) ?? '')}`;
+								result.txt += `\n${(extrasList[i].onuse(char, targ, skill, btl, skill.extras[i][k]) ?? '')}`;
 							}
 						} else {
 							result.txt += `\n${(extrasList[i].onuse(char, targ, skill, btl, skill.extras[i]) ?? '')}`;
