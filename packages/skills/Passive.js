@@ -52,7 +52,7 @@ let targetNames = {
 	critmod(char, targ, dmg, crit, skill, btl, vars)
 	- Returns the crit chance. You can edit the crit chance.
 
-	endturn(char, vars, action, btl)
+	endturn(btl, char, action, skill)
 	- onturn() but after the player has moved, including action.
 */
 
@@ -2268,6 +2268,43 @@ passiveList = {
 			return `${chance} to reflect ${elementEmoji.status}**Skills that will afflict a status effect** back to the attacker`
 		}
 	}),
+
+	dp: new Extra({
+		name: "Determination Points (Original)",
+		desc: "Starts the battle with 0 MP, but restores it when dealing or being dealt damage or when shielding.",
+		args: [],
+		applyfunc(message, skill, args) {
+			makePassive(skill, "dp", [true])
+			return true
+		},
+		battlestart(char, skill, btl, vars) {
+			char.mp = 0
+		},
+		ondamage(char, inf, skill, dmg, passive, btl, vars) {
+			return dpDamage(char, dmg / char.maxhp)
+		},
+		dmgmod(char, targ, dmg, skill, btl, vars) {
+			addAtkMsg(btl, dpDamage(char, dmg / targ.maxhp))
+			return dmg
+		},
+		endturn(btl, char, action, skill) {
+			return char.guard
+				? dpDamage(char, 0.25)
+				: ""
+		},
+		getinfo(vars, skill) {
+			return "The user starts with **no MP**, but can recover it by:\n" +
+			"- Dealing damage.\n" +
+			"- Taking damage.\n" +
+			"- Guarding"
+		}
+	})
+}
+
+function dpDamage(char, decimal) {
+	let amount = Math.floor(decimal * char.maxmp)
+	char.mp += amount
+	return `__${char.name}__'s MP was restored by **${amount}**!`
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.
