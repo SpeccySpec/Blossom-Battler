@@ -839,12 +839,18 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					}
 				}
 
+				// DmgMod
+				if (char.status && statusEffectFuncs[targ.status] && statusEffectFuncs[targ.status].dmgmod) {
+					dmg = statusEffectFuncs[targ.status].dmgmod(btl, targ, dmg, skill);
+				}
+
 				// Imperishable Mettle.
 				if (char.charms && char.charms.includes("ImperishableMettle")) {
 					dmg *= 1.05;
 				} else if (targ.charms && targ.charms.includes("ImperishableMettle")) {
 					dmg *= 0.95;
 				}
+	
 
 				// Guarding
 				if (targ.guard && affinity != 'drain') {

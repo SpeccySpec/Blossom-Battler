@@ -2044,6 +2044,24 @@ statusDescs = [
 		]
 	},
 	{
+		title: "<:sound:962465470403997846> Neutral Status Ailments",
+		statuses: [
+			{
+				name: "dry",
+				type: "physical",
+				desc: `Increases ${elementEmoji["fire"]}**fire** and ${elementEmoji["earth"]}**earth** damage. Decreases ${elementEmoji["ice"]}**ice** and ${elementEmoji["electric"]}**electric**.`,
+				ailments: {
+					nonboss: {
+						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
+						normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
+						resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
+			},
+		]
+	},
+	{
 		title: "<:tick:973077052372701294> Positive Ailments",
 		statuses: [
 			{

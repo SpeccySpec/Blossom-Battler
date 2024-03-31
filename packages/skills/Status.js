@@ -2864,4 +2864,53 @@ statusEffectFuncs = {
 			}
 		}
 	},
+
+	// this code is so lazy but it probably works lmao.
+	dry: {
+		dmgmod: function(btl, targ, dmg, skill) {
+			if (hasStatusAffinity(char, 'dry', 'weak')) {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("fire") || skill.type.includes("earth")) {
+						dmg = Math.round(dmg*1.75);
+					} else if (skill.type.includes("ice") || skill.type.includes("electric")) {
+						dmg = Math.round(dmg*0.75);
+					}
+				} else {
+					if (skill.type === "fire" || skill.type === "earth") {
+						dmg = Math.round(dmg*1.75);
+					} else if (skill.type === "ice" || skill.type === "electric") {
+						dmg = Math.round(dmg*0.75);
+					}
+				}
+			} else if (hasStatusAffinity(char, 'dry', 'resist')) {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("fire") || skill.type.includes("earth")) {
+						dmg = Math.round(dmg*1.25);
+					} else if (skill.type.includes("ice") || skill.type.includes("electric")) {
+						dmg = Math.round(dmg/4);
+					}
+				} else {
+					if (skill.type === "fire" || skill.type === "earth") {
+						dmg = Math.round(dmg*1.25);
+					} else if (skill.type === "ice" || skill.type === "electric") {
+						dmg = Math.round(dmg/4);
+					}
+				}
+			} else {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("fire") || skill.type.includes("earth")) {
+						dmg = Math.round(dmg*1.5);
+					} else if (skill.type.includes("ice") || skill.type.includes("electric")) {
+						dmg = Math.round(dmg/2);
+					}
+				} else {
+					if (skill.type === "fire" || skill.type === "earth") {
+						dmg = Math.round(dmg*1.5);
+					} else if (skill.type === "ice" || skill.type === "electric") {
+						dmg = Math.round(dmg/2);
+					}
+				}
+			}
+		}
+	},
 }
