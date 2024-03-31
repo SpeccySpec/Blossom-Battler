@@ -343,7 +343,7 @@ elementTechs = {
 	happy: ['psychic', 'bless', 'curse', 'spirit', 'sound'],
 	airborne: ['pierce', 'electric', 'metal', 'gravity'],
 	insanity: ['psychic', 'curse'],
-	stagger: ['strike', 'slash', 'pierce'],
+	stagger: ['strike', 'earth', 'gravity'],
 }
 
 // Enemy Habitats

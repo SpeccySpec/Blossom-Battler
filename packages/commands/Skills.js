@@ -1879,14 +1879,17 @@ statusDescs = [
 			},
 			{
 				name: "drenched",
+				type: "physical",
 				desc: `Nullifies status affinities for *3 turns*. *Stacks with other status effects.*`,
 			},
 			{
 				name: "stagger",
+				type: "physical",
 				desc: "The next attack is **guaranteed** a critical hit.",
 			},
 			{
 				name: "shrouded",
+				type: "physical",
 				desc: "Incapable of seeing the afflicted's current stats.",
 				ailments: {
 					nonboss: {
@@ -2084,6 +2087,7 @@ statusDescs = [
 			},
 			{
 				name: "blessed",
+				type: "physical",
 				desc: "Cannot get afflicted by a **negative status effect** while this status effect is active. *Stacks with other status effects.*",
 				ailments: {
 					nonboss: {
@@ -2096,6 +2100,7 @@ statusDescs = [
 			},
 			{
 				name: "brave",
+				type: "mental",
 				desc: "Boost the gain of the **Limit Break Meter**, by 1.5x. Has no effect if **Limit Breaks** are disabled on this server.",
 				ailments: {
 					nonboss: {
