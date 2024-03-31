@@ -2627,9 +2627,6 @@ statusEffectFuncs = {
 		stackable: true,
 		hardcoded: true,
 		forceturns: 3,
-		onturn: function(btl, char) {
-			return `${char.name} is drenched...`;
-		}
 	},
 
 	stagger: {
