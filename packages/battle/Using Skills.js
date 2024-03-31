@@ -999,7 +999,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					if (skill.extras) {
 						for (let i in skill.extras) {
 							if (!extrasList[i]) continue;
-							if (!extrasList[i].onuse) continue;
+							if (!extrasList[i].lbgain) continue;
 							if (noExtraArray && noExtraArray.includes(i)) continue;
 
 							if (extrasList[i].multiple) {
