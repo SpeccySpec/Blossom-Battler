@@ -602,7 +602,7 @@ sendCurTurnEmbed = (char, btl) => {
 	let menustate = MENU_ACT;
 
 	let statDesc = '';
-	if (char.status == "shrouded") {
+	if (char.shrouded) {
 		statDesc += `${getBar('hp', 0, char.maxhp)}???/???HP\n${getBar('mp', 0, char.maxmp)} ???/???MP`;
 	} else {
 		statDesc += `${char.hp}/${char.maxhp}HP\n${getBar('mp', char.mp, char.maxmp)} ${char.mp}/${char.maxmp}MP`;
@@ -650,8 +650,8 @@ sendCurTurnEmbed = (char, btl) => {
 				let s = GetCharStatus(c);
 				let n = GetCharName(c);
 
-				if (c.status == "shrouded") {
-					teamDesc += `${l}: ${s}${n} _(???/???HP, ???/???MP)_\n`;
+				if (c.shrouded) {
+					teamDesc += `${l}: ${n} _(???/???HP, ???/???MP)_\n`;
 				} else {
 					teamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
 				}
@@ -670,8 +670,8 @@ sendCurTurnEmbed = (char, btl) => {
 			let s = GetCharStatus(c)
 			let n = GetCharName(c);
 
-			if (c.status == "shrouded") {
-				myTeamDesc += `${l}: ${s}${n} _(???/???HP, ???/???MP)_\n`;
+			if (c.shrouded) {
+				myTeamDesc += `${l}: **?**${n} _(???/???HP, ???/???MP)_\n`;
 			} else {
 				myTeamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
 			}

@@ -338,7 +338,6 @@ elementTechs = {
 	airborne: ['pierce', 'electric', 'metal', 'gravity'],
 	insanity: ['psychic', 'curse'],
 	stagger: ['strike', 'slash', 'pierce'],
-	shrouded: ['wind'],
 }
 
 // Enemy Habitats
@@ -1063,20 +1062,6 @@ replaceTxt = (str, ...txt) => {
 	}
 
 	return str;
-}
-
-let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'airborne', 'drenched'];
-isPhysicalStatus = (status) => {
-	if (!status) return false;
-
-	return phys.includes(status.toLowerCase());
-}
-
-let stackable = ['confusion', 'infatuation', 'drenched'];
-isStackableStatus = (status) => {
-	if (!status) return false;
-
-	return stackable.includes(status.toLowerCase());
 }
 
 getPrefix = (server) => {

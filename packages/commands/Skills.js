@@ -2072,7 +2072,7 @@ statusDescs = [
 			},
 			{
 				name: "blessed",
-				desc: "Cannot get afflicted by a status effect while this status effect is active.",
+				desc: "Cannot get afflicted by a **negative status effect** while this status effect is active. *Stacks with other status effects.*",
 				ailments: {
 					nonboss: {
 						weak: "Lasts *2 turns*.",
