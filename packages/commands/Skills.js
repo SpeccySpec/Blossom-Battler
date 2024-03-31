@@ -1899,6 +1899,18 @@ statusDescs = [
 					},
 					boss: "Affects them the same as non-bosses."
 				}
+			},
+			{
+				name: "dissolved",
+				desc: `Takes *an amount of HP* of damage each turn until *3 turns pass*, cured, or once 1 HP is reached. *May change the ${statusEmojis["enddown"]}END stat*.`,
+				ailments: {
+					nonboss: {
+						weak: `Takes *1/5th* of max HP & *1/4s* the ${statusEmojis["enddown"]}END stat.`,
+						normal: `Takes *1/10th* of max HP & *1/2s* the ${statusEmojis["enddown"]}END stat.`,
+						resist: `Takes *1/20th* of max HP & *1/1.25s* the ${statusEmojis["enddown"]}END stat.`,
+					},
+					boss: `Takes *5 HP* & *doesn't change ${statusEmojis["enddown"]}END stat*.`
+				}
 			}
 		]
 	},

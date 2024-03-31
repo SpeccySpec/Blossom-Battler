@@ -2157,6 +2157,39 @@ statusEffectFuncs = {
 		}
 	},
 
+	dissolved: {
+		onturn: function(btl, char) {
+			let statusTxt = '';
+			let affinityTxt = '';
+
+			let dmg = Math.round(char.maxhp/10);
+			if (isBoss(char)) dmg = 5;
+
+			if (hasStatusAffinity(char, 'dissolved', 'weak')) {
+				dmg *= 2;
+				affinityTxt = affinityEmoji.weak;
+			} else if (hasStatusAffinity(char, 'dissolved', 'resist')) {
+				dmg /= 2;
+				affinityTxt = affinityEmoji.resist;
+			}
+
+			char.hp = Math.max(1, char.hp-Math.round(dmg));
+			return `${char.name} took ${dmg}${affinityTxt} damage from their caustic burns.`
+		},
+		statmod: function(char, stats) {
+			if (isBoss(char)) return stats;
+			if (hasStatusAffinity(char, 'dissolved', 'weak')) {
+				stats.end /= 4;
+			} else if (hasStatusAffinity(char, 'dissolved', 'resist')) {
+				stats.end /= 1.25;
+			} else {
+				stats.end /= 2;
+			}
+
+			return stats;
+		}
+	},
+
 	freeze: {
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'freeze', 'weak'))

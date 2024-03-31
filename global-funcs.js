@@ -199,6 +199,7 @@ statusEffects = [
     "burn", // 1/10th HP lost. [WEAK] 1/5th HP lost. [RESIST] 1/20th HP lost.
 	"bleed", // 1/10th HP lost. [WEAK] 1/5th HP lost. [RESIST] 1/20th HP lost.
     "freeze", // One turn lost. [WEAK] Two turns lost. [RESIST] Chance to have turn lost.
+	"dissolved",
     "paralyze", // Turns can be lost. Chance for this to happen lowers over time. [WEAK] Doubled Length. [RESIST] Halved Length.
 	"dizzy", // 50% accuracy on moves [WEAK] 33% accuracy on moves [RESIST] 80% accuracy on moves
 	"sleep",
@@ -237,6 +238,7 @@ statusNames = {
     burn: 'Burning',
 	bleed: 'Bleeding',
     freeze: 'Freezing',
+	dissolved: 'Dissolved',
     paralyze: 'Paralysis',
 	sleep: 'Sleeping',
 	dizzy: 'Dizziness',
@@ -297,6 +299,7 @@ statusEmojis = {
 	stagger: '<:staggered:1223972073014300682>',
 	shrouded: '<:shrouded:1223968915122815026>',
 	apathy: '<:apathy:1224057009511338154>',
+	dissolved: '<:acid:1224111765504266300>',
 
 	// Neutral Statusses
 	dry: '<:dry:1224057395706204262>',
