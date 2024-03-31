@@ -219,6 +219,9 @@ statusEffects = [
 	"shrouded",
 	"brave",
 
+	// Neutral Statusses
+	"dry",
+
 	// Positive Statusses
 	"happy",
 	"mirror",
@@ -254,6 +257,9 @@ statusNames = {
 	shrouded: 'Shrouded',
 	apathy: 'Apathy',
 
+	// Neutral Statusses
+	dry: 'Dried',
+
 	// Positive Statusses
 	happy: 'Happiness',
 	mirror: 'Mirror',
@@ -283,11 +289,14 @@ statusEmojis = {
 	confusion: '<:confusion:963413989604339762>',
 	irradiation: '<:irradiated:963413990199947294>',
 	sensitive: '<:sensitive:973076333825499156>',
-	drenched: '<:water:963413845886505011>',
+	drenched: '<:drenched:1224053518298648720>',
 	insanity: '<:insanity:1217924742237913218>',
 	stagger: '<:staggered:1223972073014300682>',
 	shrouded: '<:shrouded:1223968915122815026>',
 	apathy: '<:prcdown:990629407238529044>',
+
+	// Neutral Statusses
+	dry: '<:dry:1224057395706204262>',
 
 	// Positive Statusses
 	mirror: '<:mirror:963413990229311588>',
@@ -340,10 +349,14 @@ elementTechs = {
 	blind: ['all'],
 	irradiation: ['fire', 'nuclear', 'water'],
 	sensitive: ['strike', 'slash', 'pierce', 'explode', 'spirit', 'wind'],
-	happy: ['psychic', 'bless', 'curse', 'spirit', 'sound'],
-	airborne: ['pierce', 'electric', 'metal', 'gravity'],
 	insanity: ['psychic', 'curse'],
 	stagger: ['strike', 'earth', 'gravity'],
+
+	// Neutral Statusses
+
+	// Positive Statusses
+	happy: ['psychic', 'bless', 'curse', 'spirit', 'sound'],
+	airborne: ['pierce', 'electric', 'metal', 'gravity'],
 }
 
 // Enemy Habitats
