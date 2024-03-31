@@ -52,7 +52,7 @@ let targetNames = {
 	critmod(char, targ, dmg, crit, skill, btl, vars)
 	- Returns the crit chance. You can edit the crit chance.
 
-	endturn(char, vars, action, btl)
+	endturn(btl, char, action, skill)
 	- onturn() but after the player has moved, including action.
 */
 
@@ -2287,7 +2287,11 @@ passiveList = {
 			addAtkMsg(btl, dpDamage(char, dmg / targ.maxhp))
 			return dmg
 		},
-		
+		endturn(btl, char, action, skill) {
+			return char.guard
+				? dpDamage(char, 0.25)
+				: ""
+		}
 	})
 }
 
