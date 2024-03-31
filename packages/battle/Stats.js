@@ -110,8 +110,10 @@ inflictStatus = (char, status, notxt) => {
 	if (!statusEffectFuncs[status.toLowerCase()]) return '';
 
 	// Do we block this status?
-	if (hasStatusAffinity(char, status.toLowerCase(), 'block')) 
-		return '';
+	if (hasStatusAffinity(char, status.toLowerCase(), 'block')) return '';
+
+	// Do we have blessed?
+	if (char.blessed && !isPositiveStatus(status)) return '';
 
 	// Inflict the status.
 	let statusfuncs = statusEffectFuncs[status.toLowerCase()];

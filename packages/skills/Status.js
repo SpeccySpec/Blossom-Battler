@@ -2044,6 +2044,27 @@ buildStatus = (message, extra, args, lb) => {
 // This file shares names with Status Effects anyway lol
 // We might as well shove some extra stuff in here
 // statusEffectFuncs will be an object that doe ufnnye status
+let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'airborne', 'drenched', 'staggered', 'shrouded'];
+isPhysicalStatus = (status) => {
+	if (!status) return false;
+
+	return phys.includes(status.toLowerCase());
+}
+
+let stackable = ['confusion', 'infatuation', 'drenched', 'shrouded', 'blessed'];
+isStackableStatus = (status) => {
+	if (!status) return false;
+
+	return stackable.includes(status.toLowerCase());
+}
+
+let positive = ['mirror', 'airborne', 'happy', 'blessed'];
+isPositiveStatus = (status) => {
+	if (!status) return false;
+
+	return positive.includes(status.toLowerCase());
+}
+
 statusEffectFuncs = {
 	burn: {
 		onturn: function(btl, char) {
@@ -2613,20 +2634,19 @@ statusEffectFuncs = {
 
 	stagger: {
 		forceturns: 3,
-		hardcoded: true,
+		hardcoded: true
 	},
 
 	blessed: {
 		forceturns: 3,
-		hardcoded: true,
+		stackable: true,
+		hardcoded: true
 	},
 
 	shrouded: {
 		forceturns: 3,
 		hardcoded: true,
-		onturn: function(btl, char) {
-			return `__${char.name}__ is shrouded...`;
-		}
+		stackable: true
 	},
 
 	insanity: {

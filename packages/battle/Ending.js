@@ -204,6 +204,8 @@ winBattle = (btl, i) => {
 		if (charFile[char.truename]) {
 			charFile[char.truename].hp = Math.min(charFile[char.truename].maxhp, char.hp);
 			charFile[char.truename].mp = Math.min(charFile[char.truename].maxmp, char.mp);
+			charFile[char.truename].status = char.status;
+			charFile[char.truename].statusturns = char.statusturns;
 
 			// While I'm here... why don't I sort out Trust!
 			if (!char.trust) char.trust = {};

@@ -475,14 +475,14 @@ commands.listatkextras = new Command({
 	}
 })
 
-commands.liststatusextras = new Command({
+commands.listsupportextras = new Command({
 	desc: 'List the possible extras you can give a __status__ skill.',
-	aliases: ['statusextras', 'extrasstatus', 'listextrasstatus'],
+	aliases: ['supportextras', 'extrassupport', 'listextrassupport'],
 	section: "skills",
 	args: [],
 	func(message, args, guilded) {
 		let title = 'List of Status Extras'
-		let desc = 'When using a status skill, skills can have extra effects! These are called extras, and can be added with the "applyextra" command.'
+		let desc = 'When using a <:status:962465470349463585>**Support** skill, skills can have extra effects! These are called extras, and can be added with the "applyextra" command.'
 
 		let extras = []
 		for (let i in statusList) {
@@ -2072,7 +2072,7 @@ statusDescs = [
 			},
 			{
 				name: "blessed",
-				desc: "Cannot get afflicted by a status effect while this status effect is active.",
+				desc: "Cannot get afflicted by a **negative status effect** while this status effect is active. *Stacks with other status effects.*",
 				ailments: {
 					nonboss: {
 						weak: "Lasts *2 turns*.",
