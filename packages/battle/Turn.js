@@ -496,6 +496,8 @@ function GetCharStatus(char) {
 		str += statusEmojis.infatuation;
 	if (char.drenched)
 		str += statusEmojis.drenched;
+	if (char.stagger)
+		str += statusEmojis.stagger;
 	return str
 }
 
@@ -599,7 +601,13 @@ sendCurTurnEmbed = (char, btl) => {
 
 	let menustate = MENU_ACT;
 
-	let statDesc = `${getBar('hp', char.hp, char.maxhp)} ${char.hp}/${char.maxhp}HP\n${getBar('mp', char.mp, char.maxmp)} ${char.mp}/${char.maxmp}MP`;
+	let statDesc = '';
+	if (char.status == "shrouded") {
+		statDesc += `${getBar('hp', 0, char.maxhp)}???/???HP\n${getBar('mp', 0, char.maxmp)} ???/???MP`;
+	} else {
+		statDesc += `${char.hp}/${char.maxhp}HP\n${getBar('mp', char.mp, char.maxmp)} ${char.mp}/${char.maxmp}MP`;
+	}
+
 	if (settings.mechanics.limitbreaks) statDesc += `, ${Math.round(char.lbp)}LB%`;
 	if (char.pet) statDesc = `${char.name} wants to assist the team in battle! Tell it to do something!\n`;
 
@@ -641,7 +649,12 @@ sendCurTurnEmbed = (char, btl) => {
 			} else {
 				let s = GetCharStatus(c);
 				let n = GetCharName(c);
-				teamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+
+				if (c.status == "shrouded") {
+					teamDesc += `${l}: ${s}${n} _(???/???HP, ???/???MP)_\n`;
+				} else {
+					teamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+				}
 			}
 		}
 	}
@@ -656,7 +669,12 @@ sendCurTurnEmbed = (char, btl) => {
 		} else {
 			let s = GetCharStatus(c)
 			let n = GetCharName(c);
-			myTeamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+
+			if (c.status == "shrouded") {
+				myTeamDesc += `${l}: ${s}${n} _(???/???HP, ???/???MP)_\n`;
+			} else {
+				myTeamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+			}
 		}
 	}
 	
@@ -1872,6 +1890,34 @@ doAction = (char, btl, action) => {
 		for (let i in char.custom) {
 			if (customVariables[i] && customVariables[i].endturn) charStats = customVariables[i].endturn(btl, char, char.custom[i]);
 		}
+	}
+
+	let onturntxt = '';
+	if (doPassives(btl) && char.hp > 0) {
+		for (let s of char.skills) {
+			let skill = skillFile[s];
+
+			if (skill && skill.type == 'passive') {
+				for (let i in skill.passive) {
+					if (passiveList[i] && passiveList[i].endturn) {
+						if (passiveList[i].multiple) {
+							for (let k in skill.passive[i]) onturntxt += (passiveList[i].endturn(btl, char, action, skill.passive[i][k]) ?? '');;
+						} else {
+							onturntxt += (passiveList[i].endturn(btl, char, action, skill.passive[i]) ?? '');
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if (onturntxt != '') {
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor('#ff1fa9')
+			.setTitle(`${char.name}'s Turn!`)
+			.setDescription(onturntxt.replace(/\n{3,}/, () => "\n\n"))
+
+		btl.channel.send({embeds: [DiscordEmbed]});
 	}
 
 	// Save file data

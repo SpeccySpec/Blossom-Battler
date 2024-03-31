@@ -2611,6 +2611,24 @@ statusEffectFuncs = {
 		}
 	},
 
+	stagger: {
+		forceturns: 3,
+		hardcoded: true,
+	},
+
+	blessed: {
+		forceturns: 3,
+		hardcoded: true,
+	},
+
+	shrouded: {
+		forceturns: 3,
+		hardcoded: true,
+		onturn: function(btl, char) {
+			return `__${char.name}__ is shrouded...`;
+		}
+	},
+
 	insanity: {
 		oninflict: function(char) {
 			char.statusturns = (isBoss(char)) ? 1 : 3;

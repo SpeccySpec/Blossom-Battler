@@ -2378,6 +2378,37 @@ extrasList = {
 			if (vars[3]) txt += `, and **${vars[3] >= 100 ? "guaranteed" : "a "+vars[3]+"% chance"}** to completely immobilize them during that time`;
 			return txt;
 		}
+	}),
+
+	weaponmod: new Extra({
+		name: "Weapon Modifier (Original)",
+		desc: "The skill may either recieve the weapon's element in addition to it's original, or use the element to replace the original.",
+		args: [
+			{
+				name: "Replace",
+				type: "YesNo"
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "weaponmod", [args[0] ?? false]);
+			return true
+		},
+		statmod(char, skill, vars, btl) {
+			if (char.curweapon?.element) {
+				if (vars[0]) {
+					skill.type = char.curweapon.element;
+				} else {
+					if (typeof skill.type === 'object') {
+						skill.type[skill.type.length] = char.curweapon.element;
+					} else {
+						skill.type = [skill.type, char.curweapon.element];
+					}
+				}
+			}
+		},
+		getinfo(vars, skill) {
+			return `Element **${vars[0] ? "replaced" : "added"}** to the original element **from the user's weapon**.`;
+		}
 	})
 }
 
