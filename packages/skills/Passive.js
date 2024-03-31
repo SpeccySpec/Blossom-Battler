@@ -52,8 +52,8 @@ let targetNames = {
 	critmod(char, targ, dmg, crit, skill, btl, vars)
 	- Returns the crit chance. You can edit the crit chance.
 
-	endturn(char, vars, btl)
-	- onturn() but after the player has moved.
+	endturn(char, vars, action, btl)
+	- onturn() but after the player has moved, including action.
 */
 
 passiveList = {

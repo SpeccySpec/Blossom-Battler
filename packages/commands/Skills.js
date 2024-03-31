@@ -482,7 +482,7 @@ commands.listsupportextras = new Command({
 	args: [],
 	func(message, args, guilded) {
 		let title = 'List of Status Extras'
-		let desc = 'When using a status skill, skills can have extra effects! These are called extras, and can be added with the "applyextra" command.'
+		let desc = 'When using a <:status:962465470349463585>**Support** skill, skills can have extra effects! These are called extras, and can be added with the "applyextra" command.'
 
 		let extras = []
 		for (let i in statusList) {
