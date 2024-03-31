@@ -2291,6 +2291,12 @@ passiveList = {
 			return char.guard
 				? dpDamage(char, 0.25)
 				: ""
+		},
+		getinfo(vars, skill) {
+			return "The user starts with **no MP**, but can recover it by:\n" +
+			"- Dealing damage.\n" +
+			"- Taking damage.\n" +
+			"- Guarding"
 		}
 	})
 }
