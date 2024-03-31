@@ -1902,6 +1902,7 @@ statusDescs = [
 			},
 			{
 				name: "dissolved",
+				type: "physical",
 				desc: `Takes *an amount of HP* of damage each turn until *3 turns pass*, cured, or once 1 HP is reached. *May change the ${statusEmojis["enddown"]}END stat*.`,
 				ailments: {
 					nonboss: {

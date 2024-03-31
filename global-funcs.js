@@ -238,7 +238,7 @@ statusNames = {
     burn: 'Burning',
 	bleed: 'Bleeding',
     freeze: 'Freezing',
-	dissolved: 'Dissolved',
+	dissolved: 'Dissolving',
     paralyze: 'Paralysis',
 	sleep: 'Sleeping',
 	dizzy: 'Dizziness',
