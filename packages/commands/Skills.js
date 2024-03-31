@@ -2049,7 +2049,7 @@ statusDescs = [
 			{
 				name: "dry",
 				type: "physical",
-				desc: `Increases ${elementEmoji["fire"]}**fire** and ${elementEmoji["earth"]}**earth** damage. Decreases ${elementEmoji["ice"]}**ice** and ${elementEmoji["electric"]}**electric**.`,
+				desc: `Increases ${elementEmoji["fire"]}**fire** and ${elementEmoji["earth"]}**earth** damage. Decreases ${elementEmoji["ice"]}**ice** and ${elementEmoji["electric"]}**electric**. *Stacks with other status effects.*`,
 				ailments: {
 					nonboss: {
 						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",

@@ -2867,6 +2867,7 @@ statusEffectFuncs = {
 
 	// this code is so lazy but it probably works lmao.
 	dry: {
+		stackable: true,
 		dmgmod: function(btl, targ, dmg, skill) {
 			if (hasStatusAffinity(char, 'dry', 'weak')) {
 				if (typeof skill.type === "object") {
