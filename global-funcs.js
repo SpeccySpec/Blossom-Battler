@@ -293,7 +293,7 @@ statusEmojis = {
 	insanity: '<:insanity:1217924742237913218>',
 	stagger: '<:staggered:1223972073014300682>',
 	shrouded: '<:shrouded:1223968915122815026>',
-	apathy: '<:prcdown:990629407238529044>',
+	apathy: '<:apathy:1224057009511338154>',
 
 	// Neutral Statusses
 	dry: '<:dry:1224057395706204262>',
