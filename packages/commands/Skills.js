@@ -2187,7 +2187,7 @@ statusDescs = [
 						normal: "Lasts *3 turns*.",
 						resist: "Lasts *4 turns.*.",
 					},
-					boss: "Affects them the same as non-bosses."
+					boss: "Forced resistance."
 				}
 			},
 			{
@@ -2200,9 +2200,22 @@ statusDescs = [
 						normal: "Lasts *3 turns*, 1.5x.",
 						resist: "Lasts *4 turns.*, 1.75x.",
 					},
-					boss: "Affects them the same as non-bosses."
+					boss: "Forced resistance."
 				}
-			}
+			},
+			{
+				name: "lovable",
+				type: "mental",
+				desc: "Incapable of being targetted by single target or otherwise skills that require you to focus a single foe. *Stacks with other status effects.*",
+				ailments: {
+					nonboss: {
+						weak: "Lasts 1 turn.",
+						normal: "Lasts 2 turns.",
+						resist: "Lasts 3 turns.",
+					},
+					boss: "Forced resistance."
+				}
+			},
 		]
 	}
 ]

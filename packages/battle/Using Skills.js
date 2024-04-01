@@ -854,7 +854,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				}
 
 				for (let i in stackable) {
-					if (targ[stackable[i]] && statusEffectFuncs[stackable[i]] && statusEffectFuncs[stackable[i]].dmgmod) dmg = statusEffectFuncs[targ.status].dmgmod(btl, targ, dmg, skill);
+					if (targ[stackable[i]] && statusEffectFuncs[stackable[i]] && statusEffectFuncs[stackable[i]].dmgmod) dmg = statusEffectFuncs[stackable[i]].dmgmod(btl, targ, dmg, skill);
 				}
 
 				// Imperishable Mettle.
