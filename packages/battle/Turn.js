@@ -246,21 +246,23 @@ const menuStates = {
 			}
 
 			// Lovable
-			let alivecount = 0;
-			let alivechar = {};
-			for (let k in btl.teams) {
-				if (k == char.team) continue;
+			if (skillinfo.target && skillinfo.target === "one") {
+				let alivecount = 0;
+				let alivechar = {};
+				for (let k in btl.teams) {
+					if (k == char.team) continue;
 
-				for (let j in btl.teams[k].members) {
-					if (btl.teams[k].members[j].hp > 0) {
-						alivechar = btl.teams[k].members[j];
-						alivecount++;
+					for (let j in btl.teams[k].members) {
+						if (btl.teams[k].members[j].hp > 0) {
+							alivechar = btl.teams[k].members[j];
+							alivecount++;
+						}
 					}
 				}
-			}
 
-			if (alivecount == 1) {
-				if (alivechar.lovable) canselect = false;
+				if (alivecount == 1) {
+					if (alivechar.lovable) canselect = false;
+				}
 			}
 
 			// Disable.
