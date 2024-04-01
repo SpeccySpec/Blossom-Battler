@@ -2909,7 +2909,7 @@ statusEffectFuncs = {
 			if (char.dry <= 0) delete char.dry;
 		},
 		dmgmod: function(btl, targ, dmg, skill) {
-			if (hasStatusAffinity(char, 'dry', 'weak')) {
+			if (hasStatusAffinity(targ, 'dry', 'weak')) {
 				if (typeof skill.type === "object") {
 					if (skill.type.includes("fire") || skill.type.includes("earth")) {
 						dmg = Math.round(dmg*1.75);
@@ -2923,7 +2923,7 @@ statusEffectFuncs = {
 						dmg = Math.round(dmg*0.75);
 					}
 				}
-			} else if (hasStatusAffinity(char, 'dry', 'resist')) {
+			} else if (hasStatusAffinity(targ, 'dry', 'resist')) {
 				if (typeof skill.type === "object") {
 					if (skill.type.includes("fire") || skill.type.includes("earth")) {
 						dmg = Math.round(dmg*1.25);
@@ -2965,7 +2965,7 @@ statusEffectFuncs = {
 			if (char.light <= 0) delete char.light;
 		},
 		dmgmod: function(btl, targ, dmg, skill) {
-			if (hasStatusAffinity(char, 'light', 'weak')) {
+			if (hasStatusAffinity(targ, 'light', 'weak')) {
 				if (typeof skill.type === "object") {
 					if (skill.type.includes("wind") || skill.type.includes("explode")) {
 						dmg = Math.round(dmg*1.75);
@@ -2979,7 +2979,7 @@ statusEffectFuncs = {
 						dmg = Math.round(dmg*0.75);
 					}
 				}
-			} else if (hasStatusAffinity(char, 'light', 'resist')) {
+			} else if (hasStatusAffinity(targ, 'light', 'resist')) {
 				if (typeof skill.type === "object") {
 					if (skill.type.includes("wind") || skill.type.includes("explode")) {
 						dmg = Math.round(dmg*1.25);
@@ -3021,7 +3021,7 @@ statusEffectFuncs = {
 			if (char.heavy <= 0) delete char.heavy;
 		},
 		dmgmod: function(btl, targ, dmg, skill) {
-			if (hasStatusAffinity(char, 'heavy', 'weak')) {
+			if (hasStatusAffinity(targ, 'heavy', 'weak')) {
 				if (typeof skill.type === "object") {
 					if (skill.type.includes("earth") || skill.type.includes("strike")) {
 						dmg = Math.round(dmg*1.75);
@@ -3035,7 +3035,7 @@ statusEffectFuncs = {
 						dmg = Math.round(dmg*0.75);
 					}
 				}
-			} else if (hasStatusAffinity(char, 'heavy', 'resist')) {
+			} else if (hasStatusAffinity(targ, 'heavy', 'resist')) {
 				if (typeof skill.type === "object") {
 					if (skill.type.includes("earth") || skill.type.includes("strike")) {
 						dmg = Math.round(dmg*1.25);
@@ -3076,9 +3076,9 @@ statusEffectFuncs = {
 			if (skill.atktype === "physical" || skill.atktype === "ranged") {
 				let mult = 2;
 
-				if (hasStatusAffinity(char, 'enchanted', 'weak')) {
+				if (hasStatusAffinity(targ, 'enchanted', 'weak')) {
 					mult = 3;
-				} else if (hasStatusAffinity(char, 'enchanted', 'resist')) {
+				} else if (hasStatusAffinity(targ, 'enchanted', 'resist')) {
 					mult = 1.5;
 				}
 
@@ -3095,9 +3095,9 @@ statusEffectFuncs = {
 			if (skill.atktype === "magic") {
 				let mult = 2;
 
-				if (hasStatusAffinity(char, 'invisible', 'weak')) {
+				if (hasStatusAffinity(targ, 'invisible', 'weak')) {
 					mult = 3;
-				} else if (hasStatusAffinity(char, 'invisible', 'resist')) {
+				} else if (hasStatusAffinity(targ, 'invisible', 'resist')) {
 					mult = 1.5;
 				}
 
