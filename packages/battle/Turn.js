@@ -245,6 +245,24 @@ const menuStates = {
 				}
 			}
 
+			// Lovable
+			let alivecount = 0;
+			let alivechar = {};
+			for (let k in btl.teams) {
+				if (k == char.team) continue;
+
+				for (let j in btl.teams[k].members) {
+					if (btl.teams[k].members[j].hp > 0) {
+						alivechar = btl.teams[k].members[j];
+						alivecount++;
+					}
+				}
+			}
+
+			if (alivecount == 1) {
+				if (alivechar.lovable) canselect = false;
+			}
+
 			// Disable.
 			if (char.custom?.disable) {
 				if (char.custom.disable[0] == skillname) canselect = false;
@@ -394,17 +412,18 @@ const menuStates = {
 					if (!skill) continue;
 					if (members[i].pacified) continue;
 
+					canSelect = true;
 					if (skill.type === 'heal') {
 						if (skill.heal.revive) {
-							if (members[i].hp > 0) continue;
+							if (members[i].hp > 0) canSelect = false;
 						}
-						if (members[i]?.status === 'ego') continue;
+						if (members[i]?.status === 'ego') canSelect = false;
 					} else if (skill.type === 'status' && skill.statusses?.mimic) {
-						if (members[i].hp <= 0) continue;
-						if (members[i].id === char.id) continue;
-						if (isBoss(members[i])) continue;
+						if (members[i].hp <= 0) canSelect = false;
+						if (members[i].id === char.id) canSelect = false;
+						if (isBoss(members[i])) canSelect = false;
 					} else {
-						if (members[i].hp <= 0) continue;
+						if (members[i].hp <= 0) canSelect = false;
 						if (members[i].lovable) canSelect = false;
 					}
 
