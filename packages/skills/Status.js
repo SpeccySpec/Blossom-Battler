@@ -2904,6 +2904,10 @@ statusEffectFuncs = {
 	// this code is so lazy but it probably works lmao.
 	dry: {
 		stackable: true,
+		onturn: function(btl, char) {
+			char.dry--;
+			if (char.dry <= 0) delete char.dry;
+		},
 		dmgmod: function(btl, targ, dmg, skill) {
 			if (hasStatusAffinity(char, 'dry', 'weak')) {
 				if (typeof skill.type === "object") {
@@ -2956,6 +2960,10 @@ statusEffectFuncs = {
 	light: {
 		opposite: 'heavy',
 		stackable: true,
+		onturn: function(btl, char) {
+			char.light--;
+			if (char.light <= 0) delete char.light;
+		},
 		dmgmod: function(btl, targ, dmg, skill) {
 			if (hasStatusAffinity(char, 'light', 'weak')) {
 				if (typeof skill.type === "object") {
@@ -3008,6 +3016,10 @@ statusEffectFuncs = {
 	heavy: {
 		opposite: 'light',
 		stackable: true,
+		onturn: function(btl, char) {
+			char.heavy--;
+			if (char.heavy <= 0) delete char.heavy;
+		},
 		dmgmod: function(btl, targ, dmg, skill) {
 			if (hasStatusAffinity(char, 'heavy', 'weak')) {
 				if (typeof skill.type === "object") {
@@ -3112,13 +3124,17 @@ statusEffectFuncs = {
 	lovable: {
 		hardcoded: true,
 		stackable: true,
+		onturn: function(btl, char) {
+			char.lovable--;
+			if (char.lovable <= 0) delete char.lovable;
+		},
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'lovable', 'weak')) {
-				char.statusturns = 3;
+				char.lovable = 3;
 			} else if (hasStatusAffinity(char, 'lovable', 'resist')) {
-				char.statusturns = 1;
+				char.lovable = 1;
 			} else {
-				char.statusturns = 2;
+				char.lovable = 2;
 			}
 		}
 	},
