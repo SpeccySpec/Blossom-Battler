@@ -1699,11 +1699,17 @@ doAction = (char, btl, action) => {
 	delete btl.canteamcombo;
 
 	if (!action) {
+		char.guard = 0.45;
+
+		let mpget = Math.max(1, Math.round((char.maxmp/100*5)-5+randNum(1,10)));
+		char.mp = Math.min(char.maxmp, Math.round(char.mp+mpget));
+
 		DiscordEmbed = new Discord.MessageEmbed()
 			.setColor(elementColors[char.mainElement] ?? elementColors.strike)
-			.setTitle('Confused')
-			.setDescription(`${char.name} chose not to do anything.`);
+			.setTitle(`${char.name} => Self`)
+			.setDescription(`${char.name} guards! This reduces damage, and restores ${mpget}MP!`)
 		btl.channel.send({embeds: [DiscordEmbed]});
+		break;
 	} else {
 		switch(action.move) {
 			case 'melee':
