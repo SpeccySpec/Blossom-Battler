@@ -492,16 +492,17 @@ function GetCharStatus(char) {
 				str += typeof toembed == "string" ? toembed : toembed(custom[val])
 			}
 		}
-	if (char.status)
-		str += statusEmojis[char.status];
-	if (char.confusion)
-		str += statusEmojis.confusion;
-	if (char.infatuation)
-		str += statusEmojis.infatuation;
-	if (char.drenched)
-		str += statusEmojis.drenched;
-	if (char.stagger)
-		str += statusEmojis.stagger;
+
+	if (char.status) str += statusEmojis[char.status];
+
+	let stackable = [];
+	for (let i in statusEffectFuncs) {
+		if (statusEffectFuncs[i].stackable) stackable.push(i);
+	}
+	for (let i in stackable) {
+		if (char[stackable[i]] && statusEmojis[stackable[i]]) str += statusEmojis[stackable[i]];
+	}
+
 	return str
 }
 
@@ -1709,7 +1710,6 @@ doAction = (char, btl, action) => {
 			.setTitle(`${char.name} => Self`)
 			.setDescription(`${char.name} guards! This reduces damage, and restores ${mpget}MP!`)
 		btl.channel.send({embeds: [DiscordEmbed]});
-		break;
 	} else {
 		switch(action.move) {
 			case 'melee':
