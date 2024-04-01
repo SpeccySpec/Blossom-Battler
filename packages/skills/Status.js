@@ -2269,7 +2269,7 @@ statusEffectFuncs = {
 				if (!hasStatusAffinity(char, 'sleep', 'weak')) {
 					char.hp = Math.min(char.maxhp, char.hp+hp);
 					char.mp = Math.min(char.maxmp, char.mp+mp);
-					return [`${char.name} is asleep. They are able to restore ${hp}HP and ${mp}${char.mpMeter[1]}!`, false];
+					return [`${char.name} is asleep. They are able to restore ${hp}HP and ${mp}${char.mpMeter ? char.mpMeter[1] : "MP"}!`, false];
 				} else {
 					return [`${char.name} is in a deep sleep...`, false];
 				}
@@ -2310,10 +2310,10 @@ statusEffectFuncs = {
 			char.mp = Math.max(0, char.mp-dmg);
 			if (char.mp <= 0) {
 				char.hp = 0;
-				return `${char.name} lost ${dmg}${affinityTxt}${char.mpMeter[1]} from their despair, running out of ${char.mpMeter[1]} and therefore being defeated!`;
+				return `${char.name} lost ${dmg}${affinityTxt}${char.mpMeter ? char.mpMeter[1] : "MP"} from their despair, running out of ${char.mpMeter ? char.mpMeter[1] : "MP"} and therefore being defeated!`;
 			}
 
-			return `${char.name} lost ${dmg}${affinityTxt}${char.mpMeter[1]} from their despair!`;
+			return `${char.name} lost ${dmg}${affinityTxt}${char.mpMeter ? char.mpMeter[1] : "MP"} from their despair!`;
 		}
 	},
 

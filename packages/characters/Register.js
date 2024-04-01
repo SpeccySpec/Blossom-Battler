@@ -119,8 +119,8 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
 
 briefDescription = (char) => {
 	let statDesc = ''
-	if (!char.type) statDesc += `${char.hp}/${char.maxhp}HP\n${char.mp}/${char.maxmp}${char.mpMeter[1]}\n`
-	else statDesc += `${char.hp}HP\n${char.mp}${char.mpMeter[1]}\n${char.xp}XP\n`
+	if (!char.type) statDesc += `${char.hp}/${char.maxhp}HP\n${char.mp}/${char.maxmp}${char.mpMeter ? char.mpMeter[1] : "MP"}\n`
+	else statDesc += `${char.hp}HP\n${char.mp}${char.mpMeter ? char.mpMeter[1] : "MP"}\n${char.xp}XP\n`
 	for (const i in char.stats) {
 		statDesc += `\n${char.stats[i]}${i.toUpperCase()}`
 	}
@@ -236,7 +236,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 	if (!char.type) 
 		statDesc += `Level ${char.level}\n${char.hp}/${char.maxhp}HP (${char.basehp} Base)\n${char.mp}/${char.maxmp}${char.mpMeter[1]} (${char.basemp} Base)\n${char.xp}/${char.maxxp}XP\n${getBar('xp', char.xp, char.maxxp, 9)}\n`;
 	else 
-		statDesc += `Level ${char.level}\n${char.hp}HP\n${char.mp}${char.mpMeter[1]}\n${char.xp}XP\n`;
+		statDesc += `Level ${char.level}\n${char.hp}HP\n${char.mp}${char.mpMeter ? char.mpMeter[1] : "MP"}\n${char.xp}XP\n`;
 
 	for (const i in char.stats) statDesc += `\n${char.stats[i]}${i.toUpperCase()}${!char.type ? ` (${char.basestats['base'+i]} Base)` : ''}`;
 

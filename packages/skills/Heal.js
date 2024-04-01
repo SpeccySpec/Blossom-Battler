@@ -49,7 +49,7 @@ healList = {
 				case 'mp':
 					let heal = vars[0] + (-8+randNum(16));
 					targ[vars[1]] = Math.max(Math.min(targ[`max${vars[1]}`], targ[vars[1]]+heal), 0);
-					return `__${targ.name}__'s ${regenType == "hp" ? "HP" : char.mpMeter[1]} was restored by **${heal}**!`;
+					return `__${targ.name}__'s ${regenType == "hp" ? "HP" : (char.mpMeter ? char.mpMeter[1] : "MP")} was restored by **${heal}**!`;
 
 				case 'hppercent':
 					if (vars[0] >= 100) {
@@ -65,12 +65,12 @@ healList = {
 				case 'mppercent':
 					if (vars[0] >= 100) {
 						targ.mp = targ.maxmp;
-						return `__${targ.name}__'s ${targ.mpMeter[1]} was _fully restored_!`;
+						return `__${targ.name}__'s ${targ.mpMeter ? targ.mpMeter[1] : "MP"} was _fully restored_!`;
 					} else {
 						let amountm = Math.round((targ.maxmp/100)*vars[0]);
 
 						targ.mp = Math.max(Math.min(targ.maxmp, targ.mp+amountm), 0);
-						return `__${targ.name}__'s ${targ.mpMeter[1]} was restored by **${amountm}**!`;
+						return `__${targ.name}__'s ${targ.mpMeter ? targ.mpMeter[1] : "MP"} was restored by **${amountm}**!`;
 					}
 
 				case 'lb':
@@ -475,13 +475,13 @@ healList = {
 
 			switch(vars[3].toLowerCase()) {
 				case 'mp':
-					if (!applyOperator(char.mp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}${char.mpMeter[1]} to use this move!`;
+					if (!applyOperator(char.mp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}${char.mpMeter ? char.mpMeter[1] : "MP"} to use this move!`;
 					break;
 				case 'lb':
 					if (!applyOperator(char.lbpercent, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}LB% to use this move!`;
 					break;
 				case 'mppercent':
-					if (!applyOperator((char.mp/char.maxmp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${(char.mp/char.maxmp)*vars[2]}% ${char.mpMeter[1]} to use this move!`;
+					if (!applyOperator((char.mp/char.maxmp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${(char.mp/char.maxmp)*vars[2]}% ${char.mpMeter ? char.mpMeter[1] : "MP"} to use this move!`;
 					break;
 				case 'hppercent':
 					if (!applyOperator((char.hp/char.maxhp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}% HP to use this move!`;
@@ -572,7 +572,7 @@ healList = {
 			console.log(`Attack Stat: ${atkStat}, Endurance Stat: ${endStat}, Skill Pow: ${vars[0]}, Base Dmg: ${Math.round(5 * Math.sqrt(def * vars[0]))}, Real Dmg: ${heal}`);
 
 			targ[vars[1]] = Math.max(Math.min(targ[`max${vars[1]}`], targ[vars[1]]+heal), 0);
-			return `__${targ.name}__'s **${vars[1] == "hp" ? "HP" : char.mpMeter[1]}** was restored by **${heal}**!`;
+			return `__${targ.name}__'s **${vars[1] == "hp" ? "HP" : (char.mpMeter ? char.mpMeter[1] : "MP")}** was restored by **${heal}**!`;
 		},
 		getinfo(vars, skill) {
 			let text = 'Restores '
