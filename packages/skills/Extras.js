@@ -860,7 +860,13 @@ extrasList = {
 			targ.mp -= MPtaken;
 			if (targ.mp < 0) targ.mp = 0;
 
-			return `__${char.name}__ took **${MPtaken}${char.mpMeter ? char.mpMeter[1] : "MP"}** from __${targ.name}__!`;
+			let usermp = char.mpMeter ? char.mpMeter[1] : "MP";
+			let targmp = targ.mpMeter ? targ.mpMeter[1] : "MP";
+
+			if (usermp == targmp)
+				return `__${char.name}__ drained **${MPtaken}${usermp}** from __${targ.name}__!`;
+			else
+				return `__${char.name}__ drained **${MPtaken}${targmp}** from __${targ.name}__, turning it into usable ${usermp}.`;
 		},
 		getinfo(vars, skill) {
 			return `Takes **${vars[0]}MP** from the target`
