@@ -177,6 +177,7 @@ function legacyAi(char, btl) {
 enemyThinker = (char, btl) => {
 	// Ah shit. Enemy AI. AH FUCk.
 	let ai = [];
+	let singletarg = false;
 
 	// Difficulty levels should be handled
 	switch(char.automove ? 'hard' : (char.difficulty ?? 'easy')) {
@@ -368,11 +369,13 @@ enemyThinker = (char, btl) => {
 										}
 									default:
 										targets = [targ];
+										singletarg = true;
 								}
 
 								// Judge for all targets of skill.
 								for (let t of targets) {
 									if (t.hp <= 0) continue;
+									if (singletarg && t.lovable) continue;
 
 									if (skill.type != 'almighty' && !skill.extras?.ohko && !skill.extras?.stealmp) {
 										if (!char.affinitycheck[t.id]) char.affinitycheck[t.id] = objClone(t.affinities);
@@ -605,11 +608,13 @@ enemyThinker = (char, btl) => {
 										}
 									default:
 										targets = [targ];
+										singletarg = true;
 								}
 
 								// Judge for all targets of skill.
 								for (let t of targets) {
 									if (t.hp <= 0) continue;
+									if (singletarg && t.lovable) continue;
 
 									// Judge based on target affinity. Only do this 85% of the time on hard.
 									if (skill.type != 'almighty' && !skill.extras?.ohko && !skill.extras?.stealmp) {
@@ -819,11 +824,13 @@ enemyThinker = (char, btl) => {
 										}
 									default:
 										targets = [targ];
+										singletarg = true;
 								}
 
 								// Judge for all targets of skill.
 								for (let targ of targets) {
 									if (targ.hp <= 0) continue;
+									if (singletarg && targ.lovable) continue;
 
 									// Judge based on target affinity. Only do this 50% of the time on medium.
 									if (skill.type != 'almighty' && !skill.extras?.ohko && !skill.extras?.stealmp) {
@@ -882,6 +889,7 @@ enemyThinker = (char, btl) => {
 
 				for (let targ of btl.teams[i].members) {
 					if (targ.hp <= 0) continue;
+					if (skill.target === "one" && targ.lovable) continue;
 
 					// Select random skill.
 					let skill = char.skills[randNum(char.skills.length-1)];
