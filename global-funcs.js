@@ -222,9 +222,14 @@ statusEffects = [
 	"stagger",
 	"shrouded",
 	"brave",
+	"grassimped",
 
 	// Neutral Statusses
 	"dry",
+	"light",
+	"heavy",
+	"enchanted",
+	"invisible",
 
 	// Positive Statusses
 	"happy",
@@ -261,9 +266,14 @@ statusNames = {
 	stagger: 'Staggering',
 	shrouded: 'Shrouded',
 	apathy: 'Apathy',
+	grassimped: 'Grassimped',
 
 	// Neutral Statusses
 	dry: 'Dried',
+	light: 'Light',
+	heavy: 'Heavy',
+	enchanted: 'Enchanted',
+	invisible: 'Invisible',
 
 	// Positive Statusses
 	happy: 'Happiness',
@@ -300,9 +310,14 @@ statusEmojis = {
 	shrouded: '<:shrouded:1223968915122815026>',
 	apathy: '<:apathy:1224057009511338154>',
 	dissolved: '<:dissolved:1224276500870725712>',
+	grassimped: '<:grassimped:1224076081225531412>',
 
 	// Neutral Statusses
 	dry: '<:dry:1224057395706204262>',
+	light: '<:light:1224309188755456000>',
+	heavy: '<:heavy:1224309198834372608>',
+	enchanted: '<:enchanted:1224285253170892851>',
+	invisible: '<:invisible:1224290091661394020>',
 
 	// Positive Statusses
 	mirror: '<:mirror:963413990229311588>',
@@ -357,8 +372,11 @@ elementTechs = {
 	sensitive: ['strike', 'slash', 'pierce', 'explode', 'spirit', 'wind'],
 	insanity: ['psychic', 'curse'],
 	stagger: ['strike', 'earth', 'gravity'],
+	grassimped: ['fire', "wind"],
 
 	// Neutral Statusses
+	enchanted: ['strike', 'slash', 'pierce'],
+	invisible: ['curse', 'bless', 'psychic'],
 
 	// Positive Statusses
 	happy: ['psychic', 'bless', 'curse', 'spirit', 'sound'],

@@ -2625,6 +2625,7 @@ statusEffectFuncs = {
 	},
 
 	happy: {
+		opposite: 'apathy',
 		statmod: function(char, stats) {
 			stats.prc -= char.level/10;
 			if (hasStatusAffinity(char, 'happy', 'weak')) {
@@ -2857,6 +2858,7 @@ statusEffectFuncs = {
 	},
 
 	brave: {
+		opposite: 'apathy',
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'brave', 'weak')) {
 				char.statusturns = 2;
@@ -2878,6 +2880,7 @@ statusEffectFuncs = {
 	},
 
 	apathy: {
+		opposite: 'brave',
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'apathy', 'weak')) {
 				char.statusturns = 4;
@@ -2945,6 +2948,164 @@ statusEffectFuncs = {
 					}
 				}
 			}
+
+			return dmg;
+		}
+	},
+
+	light: {
+		opposite: 'heavy',
+		stackable: true,
+		dmgmod: function(btl, targ, dmg, skill) {
+			if (hasStatusAffinity(char, 'light', 'weak')) {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("wind") || skill.type.includes("explode")) {
+						dmg = Math.round(dmg*1.75);
+					} else if (skill.type.includes("earth") || skill.type.includes("strike")) {
+						dmg = Math.round(dmg*0.75);
+					}
+				} else {
+					if (skill.type === "wind" || skill.type === "explode") {
+						dmg = Math.round(dmg*1.75);
+					} else if (skill.type === "earth" || skill.type === "strike") {
+						dmg = Math.round(dmg*0.75);
+					}
+				}
+			} else if (hasStatusAffinity(char, 'light', 'resist')) {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("wind") || skill.type.includes("explode")) {
+						dmg = Math.round(dmg*1.25);
+					} else if (skill.type.includes("earth") || skill.type.includes("strike")) {
+						dmg = Math.round(dmg/4);
+					}
+				} else {
+					if (skill.type === "wind" || skill.type === "explode") {
+						dmg = Math.round(dmg*1.25);
+					} else if (skill.type === "earth" || skill.type === "strike") {
+						dmg = Math.round(dmg/4);
+					}
+				}
+			} else {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("wind") || skill.type.includes("explode")) {
+						dmg = Math.round(dmg*1.5);
+					} else if (skill.type.includes("earth") || skill.type.includes("strike")) {
+						dmg = Math.round(dmg/2);
+					}
+				} else {
+					if (skill.type === "wind" || skill.type === "explode") {
+						dmg = Math.round(dmg*1.5);
+					} else if (skill.type === "earth" || skill.type === "strike") {
+						dmg = Math.round(dmg/2);
+					}
+				}
+			}
+
+			return dmg;
+		}
+	},
+
+	heavy: {
+		opposite: 'light',
+		stackable: true,
+		dmgmod: function(btl, targ, dmg, skill) {
+			if (hasStatusAffinity(char, 'heavy', 'weak')) {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("earth") || skill.type.includes("strike")) {
+						dmg = Math.round(dmg*1.75);
+					} else if (skill.type.includes("wind") || skill.type.includes("explode")) {
+						dmg = Math.round(dmg*0.75);
+					}
+				} else {
+					if (skill.type === "earth" || skill.type === "strike") {
+						dmg = Math.round(dmg*1.75);
+					} else if (skill.type === "wind" || skill.type === "explode") {
+						dmg = Math.round(dmg*0.75);
+					}
+				}
+			} else if (hasStatusAffinity(char, 'heavy', 'resist')) {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("earth") || skill.type.includes("strike")) {
+						dmg = Math.round(dmg*1.25);
+					} else if (skill.type.includes("wind") || skill.type.includes("explode")) {
+						dmg = Math.round(dmg/4);
+					}
+				} else {
+					if (skill.type === "earth" || skill.type === "strike") {
+						dmg = Math.round(dmg*1.25);
+					} else if (skill.type === "wind" || skill.type === "explode") {
+						dmg = Math.round(dmg/4);
+					}
+				}
+			} else {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("earth") || skill.type.includes("strike")) {
+						dmg = Math.round(dmg*1.5);
+					} else if (skill.type.includes("wind") || skill.type.includes("explode")) {
+						dmg = Math.round(dmg/2);
+					}
+				} else {
+					if (skill.type === "earth" || skill.type === "strike") {
+						dmg = Math.round(dmg*1.5);
+					} else if (skill.type === "wind" || skill.type === "explode") {
+						dmg = Math.round(dmg/2);
+					}
+				}
+			}
+
+			return dmg;
+		}
+	},
+
+	enchanted: {
+		opposite: 'invisible',
+		hardcoded: true,
+		dmgmod: function(btl, targ, dmg, skill) {
+			if (skill.atktype === "physical" || skill.atktype === "ranged") {
+				let mult = 2;
+
+				if (hasStatusAffinity(char, 'enchanted', 'weak')) {
+					mult = 3;
+				} else if (hasStatusAffinity(char, 'enchanted', 'resist')) {
+					mult = 1.5;
+				}
+
+				dmg = Math.round(dmg*mult);
+			}
+			return dmg;
+		}
+	},
+
+	invisible: {
+		opposite: 'enchanted',
+		hardcoded: true,
+		dmgmod: function(btl, targ, dmg, skill) {
+			if (skill.atktype === "magic") {
+				let mult = 2;
+
+				if (hasStatusAffinity(char, 'invisible', 'weak')) {
+					mult = 3;
+				} else if (hasStatusAffinity(char, 'invisible', 'resist')) {
+					mult = 1.5;
+				}
+
+				dmg = Math.round(dmg*mult);
+			}
+
+			return dmg;
+		}
+	},
+
+	grassimped: {
+		forceturns: 2,
+		onturn: function(btl, char) {
+			if (isBoss(char)) {
+				delete char.status;
+				delete char.statuschance;
+				return "${char.name} magically returns to their normal form.";
+			}
+
+			return [`${char.name} tries to waddle around... but as a **Grassimp**, they cannot do much.`, false];
 		}
 	},
 }

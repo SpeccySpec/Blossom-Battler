@@ -1912,6 +1912,15 @@ statusDescs = [
 					},
 					boss: `Takes *5 HP* & *doesn't change ${statusEmojis["enddown"]}END stat*.`
 				}
+			},
+			{
+				name: "grassimped",
+				type: "physical",
+				desc: "You're turned into a Grassimp! How do you do anything in this weird, bushy form?",
+				ailments: {
+					nonboss: "You cannot have affinities toward this Status Ailment.",
+					boss: "Immune to this status ailment."
+				}
 			}
 		]
 	},
@@ -2068,6 +2077,58 @@ statusDescs = [
 						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
 						normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
 						resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
+			},
+			{
+				name: "light",
+				type: "physical",
+				desc: `Increases ${elementEmoji["wind"]}**wind** and ${elementEmoji["explode"]}**explode** damage. Decreases ${elementEmoji["strike"]}**strike** and ${elementEmoji["earth"]}**earth**. *Stacks with other status effects.*`,
+				ailments: {
+					nonboss: {
+						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
+						normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
+						resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
+			},
+			{
+				name: "heavy",
+				type: "physical",
+				desc: `Increases ${elementEmoji["strike"]}**strike** and ${elementEmoji["earth"]}**earth** damage. Decreases ${elementEmoji["wind"]}**wind** and ${elementEmoji["explode"]}**explode**. *Stacks with other status effects.*`,
+				ailments: {
+					nonboss: {
+						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
+						normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
+						resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
+			},
+			{
+				name: "enchanted",
+				type: "physical",
+				desc: "Immune to Magic. **Double Damage taken from Physical and Ranged attacks.**",
+				ailments: {
+					nonboss: {
+						weak: "**3x** damage from physical attacks.",
+						normal: "**2x** damage from physical attacks.",
+						resist: "**1.5x** damage from physical attacks.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
+			},
+			{
+				name: "invisible",
+				type: "physical",
+				desc: "Immune to Physical and Ranged attacks. **Double Damage taken from Magic attacks.**",
+				ailments: {
+					nonboss: {
+						weak: "**3x** damage from magic attacks.",
+						normal: "**2x** damage from magic attacks.",
+						resist: "**1.5x** damage from magic attacks.",
 					},
 					boss: "Affects them the same as non-bosses."
 				}

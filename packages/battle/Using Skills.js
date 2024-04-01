@@ -442,6 +442,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 			}
 		}
 
+		// Invisible and Enchanted
+		if ((targ.status === "enchanted" && skill.atktype === "magic") || (targ.status === "invisible" && (skill.atktype === "physical" || skill.atktype === "ranged")))
+			affinity = "block";
+
 		// Evasive State
 		if (targ.custom?.evasionstate) {
 			let evade = targ.custom.evasionstate;

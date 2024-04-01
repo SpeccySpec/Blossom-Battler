@@ -109,6 +109,9 @@ inflictStatus = (char, status, notxt) => {
 	// Doesn't exist? Let's ignore this, then.
 	if (!statusEffectFuncs[status.toLowerCase()]) return '';
 
+	// Don't Grassimp Bosses.
+	if (status == "grassimped" && char.boss) return;
+
 	// Do we block this status?
 	if (hasStatusAffinity(char, status.toLowerCase(), 'block')) return '';
 
