@@ -534,7 +534,7 @@ passiveList = {
 			switch(vars[1].toLowerCase()) {
 				case 'mp': {
 					char.mp = Math.max(char.mp + amount, 0)
-					finalTxt = `__${char.name}__'s MP was restored by **${amount}**!`;
+					finalTxt = `__${char.name}__'s ${char.mpMeter[1]} was restored by **${amount}**!`;
 					break;
 				}
 
@@ -545,7 +545,7 @@ passiveList = {
 					} else {
 						amount = Math.round((char.maxmp/100)*amount)
 						char.mp = Math.max(char.mp + amount, 0)
-						finalTxt = `__${char.name}__'s MP was restored by **${amount}**!`;
+						finalTxt = `__${char.name}__'s ${char.mpMeter[1]} was restored by **${amount}**!`;
 					}
 
 					break;
@@ -561,7 +561,7 @@ passiveList = {
 				case 'mppercent': {
 					amount = Math.round((char.maxmp/100)*amount)
 					char.mp = Math.max(char.mp + amount, 0)
-					finalTxt = `__${char.name}__'s MP was restored by **${amount}**!`;
+					finalTxt = `__${char.name}__'s ${char.mpMeter[1]} was restored by **${amount}**!`;
 					break;
 				}
 
@@ -1632,7 +1632,7 @@ passiveList = {
 			if (char.hp > 0) {
 				let heal = Math.round((dmg/100)*vars[0]);
 				char.mp = Math.min(char.maxmp, char.mp+heal);
-				return `__${char.name}'s__ _${passive.name}_ was able to restore **${heal}MP** from the attack!`;
+				return `__${char.name}'s__ _${passive.name}_ was able to restore **${heal}${char.mpMeter[1]}** from the attack!`;
 			}
 		},
 		getinfo(vars, skill) {
@@ -1671,7 +1671,7 @@ passiveList = {
 			char.hp = Math.min(char.maxhp, char.hp+heal);
 			char.mp = Math.min(char.maxmp, char.mp+healmp);
 
-			return `__${char.name}'s__ _${passive.name}_ was able to restore **${heal}HP** and **${healmp}MP** from __${targ.name}__'s defeat!`;
+			return `__${char.name}'s__ _${passive.name}_ was able to restore **${heal}HP** and **${healmp}${char.mpMeter[1]}** from __${targ.name}__'s defeat!`;
 		},
 		getinfo(vars, skill) {
 			return `Upon foe defeat, restores **${vars[0]}%** of the foe's level as HP and **${vars[1]}%** of the foe's level as MP to the user`
@@ -2304,7 +2304,7 @@ passiveList = {
 function dpDamage(char, decimal) {
 	let amount = Math.floor(decimal * char.maxmp)
 	char.mp += amount
-	return `__${char.name}__'s MP was restored by **${amount}**!`
+	return `__${char.name}__'s ${char.mpMeter[1]} was restored by **${amount}**!`
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.

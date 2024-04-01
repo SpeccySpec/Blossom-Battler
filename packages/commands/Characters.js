@@ -554,7 +554,7 @@ commands.listchars = new Command({
 			}
 			if (isConditionMet == false || isConditionMet == undefined) continue;
 
-			let descTxt = `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}MP`;
+			let descTxt = `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}${charFile[i].mpMeter[1]}`;
 
 			let tick = verifiedChar(charFile[i]) ? '<:tick:973077052372701294>' : '';
 			array.push({title: `${elementEmoji[charFile[i].mainElement]}${tick}${charFile[i].name} (${i})`, desc: descTxt});
@@ -582,7 +582,7 @@ commands.searchchars = new Command({
 		for (const i in charFile) {
 			if (charFile[i].hidden) continue;
 			if (charFile[i].name.toLowerCase().includes(args[0].toLowerCase()) || i.toLowerCase().includes(args[0].toLowerCase())) {
-				array.push({title: `${elementEmoji[charFile[i].mainElement]}${charFile[i].name} (${i})`, desc: `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}MP`});
+				array.push({title: `${elementEmoji[charFile[i].mainElement]}${charFile[i].name} (${i})`, desc: `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}${charFile[i].mpMeter[1]}`});
 			}
 		}
 
@@ -3132,7 +3132,7 @@ commands.settransformation = new Command({
         const DiscordEmbed = new Discord.MessageEmbed()
             .setColor('#f2c055')
 			.setTitle(`${charFile[args[0]].name}'s __${elementEmoji[transDefs.mainElement]}${transDefs.name}__  Transformation's Stats:`)
-            .setDescription(`${transDefs.desc ? `*` + transDefs.desc + '*\n\n' : ''}**Stats:**\n${transDefs.hp}HP++\n${transDefs.mp}MP++\n\n${transDefs.atk}ATK++\n${transDefs.mag}MAG++\n${transDefs.prc}PRC++\n${transDefs.end}END++\n${transDefs.chr}CHR++\n${transDefs.int}INT++\n${transDefs.agl}AGL++\n${transDefs.luk}LUK++`)
+            .setDescription(`${transDefs.desc ? `*` + transDefs.desc + '*\n\n' : ''}**Stats:**\n${transDefs.hp}HP++\n${transDefs.mp}${charFile[args[0]].mpMeter[1]}++\n\n${transDefs.atk}ATK++\n${transDefs.mag}MAG++\n${transDefs.prc}PRC++\n${transDefs.end}END++\n${transDefs.chr}CHR++\n${transDefs.int}INT++\n${transDefs.agl}AGL++\n${transDefs.luk}LUK++`)
         message.channel.send({content: `👍 ${charFile[args[0]].name}'s ${transDefs.name} transformation has been registered!`, embeds: [DiscordEmbed]});
 	}
 })
@@ -3308,7 +3308,7 @@ commands.edittransformation = new Command({
         const DiscordEmbed = new Discord.MessageEmbed()
             .setColor('#f2c055')
 			.setTitle(`${charFile[args[0]].name}'s __${elementEmoji[transDefs.mainElement]}${transDefs.name}__ Transformation's Stats:`)
-            .setDescription(`${transDefs.desc ? `*` + transDefs.desc + '*\n\n' : ''}**Stats:**\n${transDefs.hp}HP++\n${transDefs.mp}MP++\n\n${transDefs.atk}ATK++\n${transDefs.mag}MAG++\n${transDefs.prc}PRC++\n${transDefs.end}END++\n${transDefs.chr}CHR++\n${transDefs.int}INT++\n${transDefs.agl}AGL++\n${transDefs.luk}LUK++`)
+            .setDescription(`${transDefs.desc ? `*` + transDefs.desc + '*\n\n' : ''}**Stats:**\n${transDefs.hp}HP++\n${transDefs.mp}${charFile[args[0]].mpMeter[1]}++\n\n${transDefs.atk}ATK++\n${transDefs.mag}MAG++\n${transDefs.prc}PRC++\n${transDefs.end}END++\n${transDefs.chr}CHR++\n${transDefs.int}INT++\n${transDefs.agl}AGL++\n${transDefs.luk}LUK++`)
         message.channel.send({content: `👍 ${charFile[args[0]].name}'s ${transDefs.name} transformation has been changed!`, embeds: [DiscordEmbed]});
 	}
 })

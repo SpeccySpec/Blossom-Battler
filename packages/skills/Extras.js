@@ -307,22 +307,22 @@ extrasList = {
 
 			switch(vars[3].toLowerCase()) {
 				case 'mp':
-					if (!applyOperator(char.mp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}MP to use this move!`;
+					if (!applyOperator(char.mp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}${char.mpMeter[1]} to use this move!`;
 					break;
 				case 'hpandmp':
-					if (!applyOperator(char.mp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}MP __and__ ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}HP to use this move!`;
+					if (!applyOperator(char.mp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}${char.mpMeter[1]} __and__ ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}HP to use this move!`;
 					break;
 				case 'lb':
 					if (!applyOperator(char.lbpercent, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}LB% to use this move!`;
 					break;
 				case 'mppercent':
-					if (!applyOperator((char.mp/char.maxmp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${(char.mp/char.maxmp)*vars[2]}% MP to use this move!`;
+					if (!applyOperator((char.mp/char.maxmp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${(char.mp/char.maxmp)*vars[2]}% ${char.mpMeter[1]} to use this move!`;
 					break;
 				case 'hppercent':
 					if (!applyOperator((char.hp/char.maxhp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}% HP to use this move!`;
 					break;
 				case 'hpandmppercent':
-					if (!applyOperator((char.hp/char.maxhp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}% HP __and__ ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}% MP to use this move!`;
+					if (!applyOperator((char.hp/char.maxhp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}% HP __and__ ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}% ${char.mpMeter[1]} to use this move!`;
 					break;
 				default:
 					if (!applyOperator(char.hp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}HP to use this move!`;
@@ -860,10 +860,10 @@ extrasList = {
 			targ.mp -= MPtaken;
 			if (targ.mp < 0) targ.mp = 0;
 
-			return `__${char.name}__ took **${MPtaken} MP** from __${targ.name}__!`;
+			return `__${char.name}__ took **${MPtaken}${char.mpMeter[1]}** from __${targ.name}__!`;
 		},
 		getinfo(vars, skill) {
-			return `Takes **${vars[0]} MP** from the target`
+			return `Takes **${vars[0]}MP** from the target`
 		}
 	}),
 
@@ -882,7 +882,7 @@ extrasList = {
 			targ.mp = Math.max(0, targ.mp-mpStolen)
 			char.mp = Math.min(char.maxmp, char.mp+mpStolen)
 			
-			return `__${char.name}__ managed to steal **${mpStolen}** MP!`;
+			return `__${char.name}__ managed to steal **${mpStolen}${char.mpMeter[1]}**!`;
 		},
 		getinfo(vars, skill) {
 			return `Steals MP from the target instead of dealing damage`
@@ -2557,7 +2557,7 @@ customVariables = {
 			let heal = Math.round((dmg/100)*vars.heal);
 			inf.mp = Math.min(inf.maxmp, inf.mp+heal);
 
-			return `__${vars.infname}__'s _${vars.name}_ allowed __${inf.name}__ to restore **${heal}**MP!`;
+			return `__${vars.infname}__'s _${vars.name}_ allowed __${inf.name}__ to restore **${heal}${char.mpMeter[1]}**!`;
 		}
 	},
 
@@ -2924,7 +2924,7 @@ customVariables = {
 							case 'mp':
 								let heal = regenAmount + (-8+randNum(16));
 								char[regenType] =  Math.max(Math.min(char[`max${regenType}`], char[regenType]+heal), 0);;
-								txt += `__${char.name}__'s **${regenType.toUpperCase()}** was restored by **${heal}**!`;
+								txt += `__${char.name}__'s ${regenType == "hp" ? "HP" : char.mpMeter[1]} was restored by **${heal}**!`;
 								break;
 			
 							case 'hppercent':
@@ -2942,12 +2942,12 @@ customVariables = {
 							case 'mppercent':
 								if (regenAmount >= 100) {
 									char.mp = char.maxmp;
-									txt += `__${char.name}__'s MP was _fully restored_!`;
+									txt += `__${char.name}__'s ${char.mpMeter[1]} was _fully restored_!`;
 								} else {
 									let amountm = Math.round((char.maxmp/100)*regenAmount);
 			
 									char.mp =  Math.max(Math.min(char.maxmp, char.mp+amountm), 0);;
-									txt += `__${char.name}__'s MP was restored by **${amountm}**!`;
+									txt += `__${char.name}__'s ${char.mpMeter[1]} was restored by **${amountm}**!`;
 								}
 								break;
 			
