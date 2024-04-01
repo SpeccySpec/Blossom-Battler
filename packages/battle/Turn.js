@@ -205,7 +205,7 @@ const menuStates = {
 			}
 		}
 	},
-	[MENU_SKILL]: ({char, comps}) => {
+	[MENU_SKILL]: ({char, btl, comps}) => {
 		for (const i in char.skills) {
 			const skillname = char.skills[i]
 			const skillinfo = skillFile[skillname]
