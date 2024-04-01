@@ -892,7 +892,6 @@ enemyThinker = (char, btl) => {
 					let skill = char.skills[randNum(char.skills.length-1)];
 
 					if (targ.hp <= 0) continue;
-					if (skillFile[skill] && skillFile[skill].target === "one" && targ.lovable) continue;
 
 					// Can we actually use this skill?
 					let loops = 0;
@@ -900,6 +899,8 @@ enemyThinker = (char, btl) => {
 						skill = char.skills[randNum(char.skills.length-1)];
 						loops++;
 					}
+
+					if (skillFile[skill] && skillFile[skill].target === "one" && targ.lovable) continue;
 
 					// Melee as failsafe
 					if (loops >= 10) {
