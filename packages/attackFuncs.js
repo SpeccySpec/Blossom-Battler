@@ -1134,7 +1134,7 @@ function attackEnemy(userName, oppName, userDefs, oppDefs, skillDefs, useEnergy,
 
 			embedText.targetText = `${userName} => ${oppName}`
 			embedText.attackText = `${userName} used ${skillDefs.name}!`
-			embedText.resultText = `${(oppDefs.id == userDefs.id) ? "They" : oppName} had their MP restored by ${skillDefs.pow}!\n${healedQuote}`
+			embedText.resultText = `${(oppDefs.id == userDefs.id) ? "They" : oppName} had their ${oppDefs.mpMeter ? oppDefs.mpMeter[1] : "MP"} restored by **${skillDefs.pow}**!\n${healedQuote}`
 		} else if (skillDefs.hptomp) {
 			if (userDefs.mp <= 0) {
 				embedText.targetText = `${userName} => ${oppName}`
@@ -1146,7 +1146,7 @@ function attackEnemy(userName, oppName, userDefs, oppDefs, skillDefs, useEnergy,
 
 				embedText.targetText = `${userName} => ${oppName}`
 				embedText.attackText = `${userName} used ${skillDefs.name}!`
-				embedText.resultText = `${userName} converted their MP into HP for ${(oppDefs.id == userDefs.id) ? "Themselves" : oppName}!`
+				embedText.resultText = `${userName} converted their ${oppDefs.mpMeter ? oppDefs.mpMeter[1] : "MP"} into HP for ${(oppDefs.id == userDefs.id) ? "Themselves" : oppName}!`
 			}
 		} else {
 			oppDefs.hp = Math.min(oppDefs.maxhp, oppDefs.hp + skillDefs.pow)
@@ -1240,7 +1240,7 @@ function attackEnemy(userName, oppName, userDefs, oppDefs, skillDefs, useEnergy,
 
 			embedText.targetText = `${userDefs.name} => ${oppDefs.name}`
 			embedText.attackText = `${userDefs.name} used ${skillDefs.name}!`
-			embedText.resultText = `${userName} stole ${skillDefs.pow}MP from the target!`
+			embedText.resultText = `${userName} stole **${skillDefs.pow}${userDefs.mpMeter ? userDefs.mpMeter[1] : "MP"}** from the target!`
 			return embedText
 		}
 		
@@ -1634,7 +1634,7 @@ function attackEnemy(userName, oppName, userDefs, oppDefs, skillDefs, useEnergy,
 					if (charFuncs.hasPassive(oppDefs, "sacrifice")) {
 						oppDefs.hp = Math.min(oppDefs.maxhp, oppDefs.hp + userDefs.level)
 						oppDefs.mp = Math.min(oppDefs.maxmp, oppDefs.mp + Math.floor(userDefs.level/2))
-						finaltext += `, with ${oppDefs.name}'s HP being restored by ${userDefs.level} & MP restored by ${userDefs.level/2}`
+						finaltext += `, with ${oppDefs.name}'s HP being restored by ${userDefs.level} & ${oppDefs.mpMeter ? oppDefs.mpMeter[1] : "MP"} restored by **${userDefs.level/2}**`
 					}
 					
 					finaltext += '!'
@@ -2069,7 +2069,7 @@ function attackEnemy(userName, oppName, userDefs, oppDefs, skillDefs, useEnergy,
 						if (charFuncs.hasPassive(userDefs, "sacrifice")) {
 							userDefs.hp = Math.min(userDefs.maxhp, userDefs.hp + oppDefs.level)
 							userDefs.mp = Math.min(userDefs.maxmp, userDefs.mp + Math.floor(oppDefs.level/2))
-							finaltext += `, with ${userDefs.name}'s HP being restored by ${oppDefs.level} & MP restored by ${oppDefs.level/2}`
+							finaltext += `, with ${userDefs.name}'s HP being restored by ${oppDefs.level} & ${userDefs.mpMeter ? userDefs.mpMeter[1] : "MP"} restored by **${oppDefs.level/2}**`
 						}
 
 						finaltext += '!'
@@ -2114,7 +2114,7 @@ function attackEnemy(userName, oppName, userDefs, oppDefs, skillDefs, useEnergy,
 						if (charFuncs.hasPassive(oppDefs, "sacrifice")) {
 							oppDefs.hp = Math.min(oppDefs.maxhp, oppDefs.hp + userDefs.level)
 							oppDefs.mp = Math.min(oppDefs.maxmp, oppDefs.mp + Math.floor(userDefs.level/2))
-							finaltext += `, with ${oppDefs.name}'s HP being restored by ${userDefs.level} & MP restored by ${userDefs.level/2}`
+							finaltext += `, with ${oppDefs.name}'s HP being restored by ${userDefs.level} & ${oppDefs.mpMeter ? oppDefs.mpMeter[1] : "MP"} restored by **${userDefs.level/2}**`
 						}
 						
 						finaltext += '!'
@@ -2274,7 +2274,7 @@ function attackEnemy(userName, oppName, userDefs, oppDefs, skillDefs, useEnergy,
 						let mpGain = Math.round((result/100)*painDefs.pow);		
 						targDefs.mp = Math.min(targDefs.maxmp, targDefs.mp+mpGain);
 
-						finaltext += `\n${targDefs.name}'s ${painDefs.name} allowed them to gain ${mpGain}MP back!`;
+						finaltext += `\n${targDefs.name}'s ${painDefs.name} allowed them to gain **${mpGain}${targDefs.mpMeter ? targDefs.mpMeter[1] : "MP"}** back!`;
 					}
 				}
 			} else {
@@ -2561,7 +2561,7 @@ function attackEnemy(userName, oppName, userDefs, oppDefs, skillDefs, useEnergy,
 							if (charFuncs.hasPassive(userDefs, "sacrifice")) {
 								userDefs.hp = Math.min(userDefs.maxhp, userDefs.hp + oppDefs.level)
 								userDefs.mp = Math.min(userDefs.maxmp, userDefs.mp + Math.floor(oppDefs.level/2))
-								finaltext += `, with ${userDefs.name}'s HP being restored by ${oppDefs.level} & MP restored by ${oppDefs.level/2}`
+								finaltext += `, with ${userDefs.name}'s HP being restored by ${oppDefs.level} & ${userDefs.mpMeter ? userDefs.mpMeter[1] : "MP"} restored by **${oppDefs.level/2}**`
 							}
 							
 							finaltext += '!'
@@ -2601,7 +2601,7 @@ function attackEnemy(userName, oppName, userDefs, oppDefs, skillDefs, useEnergy,
 							if (charFuncs.hasPassive(oppDefs, "sacrifice")) {
 								oppDefs.hp = Math.min(oppDefs.maxhp, oppDefs.hp + userDefs.level)
 								oppDefs.mp = Math.min(oppDefs.maxmp, oppDefs.mp + Math.floor(userDefs.level/2))
-								finaltext += `, with ${oppDefs.name}'s HP being restored by ${userDefs.level} & MP restored by ${userDefs.level/2}`
+								finaltext += `, with ${oppDefs.name}'s HP being restored by ${userDefs.level} & ${oppDefs.mpMeter ? oppDefs.mpMeter[1] : "MP"} restored by **${userDefs.level/2}**`
 							}
 							
 							finaltext += '!'
@@ -2757,7 +2757,7 @@ function attackEnemy(userName, oppName, userDefs, oppDefs, skillDefs, useEnergy,
 							let mpGain = Math.round((total/100)*painDefs.pow);		
 							targDefs.mp = Math.min(targDefs.maxmp, targDefs.mp+mpGain);
 
-							finaltext += `\n${targDefs.name}'s ${painDefs.name} allowed them to gain ${mpGain}MP back!`;
+							finaltext += `\n${targDefs.name}'s ${painDefs.name} allowed them to gain **${mpGain}${targDefs.mpMeter ? targDefs.mpMeter[1] : "MP"}** back!`;
 						}
 					}
 				}
@@ -2836,7 +2836,7 @@ function attackEnemy(userName, oppName, userDefs, oppDefs, skillDefs, useEnergy,
 		if (mpSteal > 0) {
 			userDefs.mp += mpSteal
 			if (userDefs.mp > userDefs.maxmp) userDefs.mp = userDefs.maxmp;
-			finaltext += `\n${userName} managed to steal ${mpSteal}MP from ${oppName}!`;
+			finaltext += `\n${userName} managed to steal **${mpSteal}${userDefs.mpMeter ? userDefs.mpMeter[1] : "MP"}** from ${oppName}!`;
 		}
 		
 		if (skillDefs.steal) {
@@ -3117,7 +3117,7 @@ function meleeAttack(userDefs, enmDefs, server, rage, btl) {
 			if (charFuncs.hasPassive(userDefs, "sacrifice")) {
 				userDefs.hp = Math.min(userDefs.maxhp, userDefs.hp + enmDefs.level)
 				userDefs.mp = Math.min(userDefs.maxmp, userDefs.mp + (enmDefs.level/2))
-				finaltext += `, with ${userDefs.name}'s HP being restored by ${enmDefs.level} & MP restored by ${enmDefs.level/2}`
+				finaltext += `, with ${userDefs.name}'s HP being restored by ${enmDefs.level} & ${userDefs.mpMeter ? userDefs.mpMeter[1] : "MP"} restored by **${enmDefs.level/2}**`
 			}
 			
 			finaltext += '!'

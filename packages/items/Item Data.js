@@ -24,7 +24,7 @@ itemData = {
 		target: 'ally',
 		func: function(char, targ, item, btl) {
 			targ.mp = Math.min(targ.maxmp, targ.mp + item.healmp);
-			return `__${char.name}__ used the __${item.name}__ to heal **${item.healmp}MP** to __${targ.name}__!`;
+			return `__${char.name}__ used the __${item.name}__ to heal **${item.healmp}${targ.mpMeter ? targ.mpMeter[1] : "MP"}** to __${targ.name}__!`;
 		}
 	},
 
@@ -45,7 +45,7 @@ itemData = {
 		func: function(char, targ, item, btl) {
 			targ.hp = Math.min(targ.maxhp, targ.hp + item.healhpmp);
 			targ.mp = Math.min(targ.maxmp, targ.mp + item.healhpmp);
-			return `__${char.name}__ used the __${item.name}__ to heal **${item.healhpmp}HP** and **${item.healhpmp}MP** to __${targ.name}__!`;
+			return `__${char.name}__ used the __${item.name}__ to heal **${item.healhpmp}HP** and **${item.healhpmp}${targ.mpMeter ? targ.mpMeter[1] : "MP"}** to __${targ.name}__!`;
 		}
 	},
 

@@ -627,9 +627,9 @@ sendCurTurnEmbed = (char, btl) => {
 
 	let statDesc = '';
 	if (char.shrouded) {
-		statDesc += `${getBar('hp', 0, char.maxhp)}???/???HP\n${getBar('mp', 0, char.maxmp)} ???/???MP`;
+		statDesc += `${getBar('hp', 0, char.maxhp)}???/???HP\n${getBar('mp', 0, char.maxmp)} ???/???${char.mpMeter ? char.mpMeter[1] : "MP"}`;
 	} else {
-		statDesc += `${getBar('hp', char.hp, char.maxhp)}${char.hp}/${char.maxhp}HP\n${getBar('mp', char.mp, char.maxmp)} ${char.mp}/${char.maxmp}MP`;
+		statDesc += `${getBar('hp', char.hp, char.maxhp)}${char.hp}/${char.maxhp}HP\n${getBar('mp', char.mp, char.maxmp)} ${char.mp}/${char.maxmp}${char.mpMeter ? char.mpMeter[1] : "MP"}`;
 	}
 
 	if (settings.mechanics.limitbreaks) statDesc += `, ${Math.round(char.lbp)}LB%`;
@@ -675,9 +675,9 @@ sendCurTurnEmbed = (char, btl) => {
 				let n = GetCharName(c);
 
 				if (c.shrouded) {
-					teamDesc += `${l}: ${n} _(???/???HP, ???/???MP)_\n`;
+					teamDesc += `${l}: ${n} _(???/???HP, ???/???${c.mpMeter ? c.mpMeter[1] : "MP"})_\n`;
 				} else {
-					teamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+					teamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}${c.mpMeter ? c.mpMeter[1] : "MP"})_\n`;
 				}
 			}
 		}
@@ -695,9 +695,9 @@ sendCurTurnEmbed = (char, btl) => {
 			let n = GetCharName(c);
 
 			if (c.shrouded) {
-				myTeamDesc += `${l}: **?**${n} _(???/???HP, ???/???MP)_\n`;
+				myTeamDesc += `${l}: **?**${n} _(???/???HP, ???/???${c.mpMeter ? c.mpMeter[1] : "MP"})_\n`;
 			} else {
-				myTeamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+				myTeamDesc += `${l}: ${s}${n} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}${c.mpMeter ? c.mpMeter[1] : "MP"})_\n`;
 			}
 		}
 	}
@@ -1320,7 +1320,7 @@ sendCurTurnEmbed = (char, btl) => {
 								teamDesc += `~~${l}: ${c.name} _(DOWN)_~~\n`;
 							} else {
 								let s = c.pacified ? itemTypeEmoji.pacify : (c.status ? `${statusEmojis[c.status]}` : '');
-								teamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}MP)_\n`;
+								teamDesc += `${l}: ${s}${c.name} _(${c.hp}/${c.maxhp}HP, ${c.mp}/${c.maxmp}${c.mpMeter ? c.mpMeter[1] : "MP"})_\n`;
 							}
 						}
 
@@ -1376,7 +1376,7 @@ sendCurTurnEmbed = (char, btl) => {
 
 							for (let k in btl.teams[char.team].backup) {
 								let f = btl.teams[char.team].backup[k];
-								DiscordEmbed.fields.push({name: `**[${k}]** __${f.name}__`, value: `${f.hp}/${f.maxhp}HP\n${f.mp}/${f.maxmp}MP`, inline: true});
+								DiscordEmbed.fields.push({name: `**[${k}]** __${f.name}__`, value: `${f.hp}/${f.maxhp}HP\n${f.mp}/${f.maxmp}${f.mpMeter ? f.mpMeter[1] : "MP"}`, inline: true});
 							}
 							menustate = MENU_BACKUP;
 							alreadyResponded = true;
@@ -1727,7 +1727,7 @@ doAction = (char, btl, action) => {
 		DiscordEmbed = new Discord.MessageEmbed()
 			.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 			.setTitle(`${char.name} => Self`)
-			.setDescription(`${char.name} guards! This reduces damage, and restores ${mpget}MP!`)
+			.setDescription(`${char.name} guards! This reduces damage, and restores **${mpget}${char.mpMeter ? char.mpMeter[1] : "MP"}**!`)
 		btl.channel.send({embeds: [DiscordEmbed]});
 	} else {
 		switch(action.move) {
@@ -1776,7 +1776,7 @@ doAction = (char, btl, action) => {
 				DiscordEmbed = new Discord.MessageEmbed()
 					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 					.setTitle(`${char.name} => Self`)
-					.setDescription(`${char.name} guards! This reduces damage, and restores ${mpget}MP!`)
+					.setDescription(`${char.name} guards! This reduces damage, and restores **${mpget}${char.mpMeter ? char.mpMeter[1] : "MP"}**!`)
 				btl.channel.send({embeds: [DiscordEmbed]});
 				break;
 			
