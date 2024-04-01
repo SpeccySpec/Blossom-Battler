@@ -221,7 +221,7 @@ statusEffects = [
 	"insanity", // Random Effects based on chance, different against bosses
 	"stagger",
 	"shrouded",
-	"brave",
+	"apathy",
 	"grassimped",
 
 	// Neutral Statusses
@@ -236,7 +236,8 @@ statusEffects = [
 	"mirror",
 	"airborne",
 	"blessed",
-	"apathy"
+	"brave",
+	"lovable"
 ]
 
 statusNames = {
@@ -280,7 +281,8 @@ statusNames = {
 	mirror: 'Mirror',
 	airborne: 'Airborne',
 	blessed: 'Blessed',
-	brave: 'Brave'
+	brave: 'Brave',
+	lovable: 'Lovable'
 }
 
 statusEmojis = {
@@ -325,6 +327,7 @@ statusEmojis = {
 	airborne: '<:wind:963413845848776714>',
 	blessed: '<:blessed:1223966695241158666>',
 	brave: '<:brave:1223985925206446170>',
+	lovable: '<:lovable:1224346501237575833>',
 
 	// Buffs
 	atkup: "<:atkup:990629395486089216>",

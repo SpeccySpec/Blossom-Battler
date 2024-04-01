@@ -332,9 +332,12 @@ const menuStates = {
 			case 'lb':
 				for (const i in members) {
 					if (members[i].hp <= 0 || members[i].pacified) continue;
-					comps[CalcCompins(comps, i)].push(
-						makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
-					)
+
+					if (members[i].lovable) {
+						comps[CalcCompins(comps, i)].push(makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString(), true))
+					} else {
+						comps[CalcCompins(comps, i)].push(makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString()))
+					}
 				}
 				break;
 
@@ -382,9 +385,11 @@ const menuStates = {
 						makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
 					)
 				}
+				break;
 
 			default:
 				let skill = skillFile[btl.action.index];
+				let canSelect = true;
 				for (const i in members) {
 					if (!skill) continue;
 					if (members[i].pacified) continue;
@@ -400,11 +405,10 @@ const menuStates = {
 						if (isBoss(members[i])) continue;
 					} else {
 						if (members[i].hp <= 0) continue;
+						if (members[i].lovable) canSelect = false;
 					}
 
-					comps[CalcCompins(comps, i)].push(
-						makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
-					)
+					comps[CalcCompins(comps, i)].push(makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString(), !canSelect))
 				}
 		}
 	},

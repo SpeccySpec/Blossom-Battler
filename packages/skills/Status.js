@@ -3108,4 +3108,18 @@ statusEffectFuncs = {
 			return [`${char.name} tries to waddle around... but as a **Grassimp**, they cannot do much.`, false];
 		}
 	},
+
+	lovable: {
+		hardcoded: true,
+		stackable: true,
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'lovable', 'weak')) {
+				char.statusturns = 3;
+			} else if (hasStatusAffinity(char, 'lovable', 'resist')) {
+				char.statusturns = 1;
+			} else {
+				char.statusturns = 2;
+			}
+		}
+	},
 }
