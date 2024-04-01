@@ -1698,195 +1698,203 @@ doAction = (char, btl, action) => {
 
 	delete btl.canteamcombo;
 
-	switch(action.move) {
-		case 'melee':
-			useSkill(char, btl, action, action.melee);
-			break;
+	if (!action) {
+		DiscordEmbed = new Discord.MessageEmbed()
+			.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+			.setTitle('Confused')
+			.setDescription(`${char.name} chose not to do anything.`);
+		btl.channel.send({embeds: [DiscordEmbed]});
+	} else {
+		switch(action.move) {
+			case 'melee':
+				useSkill(char, btl, action, action.melee);
+				break;
 
-		case 'skill':
-		case 'skills':
-			if (char.pet) {
-				useSkill(char, btl, action, skillFile[char.pet.skill] ?? skillFile.Agi);
-			} else {
-				useSkill(char, btl, action);
-				char.lastskill = action.index;
-			}
-
-			break;
-
-		case 'item':
-			let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`, true);
-			let itemTxt = '';
-
-			if (party.items[action.index] && itemFile[action.index] && party.items[action.index] > 0) {
-				party.items[action.index]--;
-				itemTxt = itemData[itemFile[action.index].type].func(char, btl.teams[action.target[0]].members[action.target[1]], objClone(itemFile[action.index]), btl);
-
-				if (party.items[action.index] <= 0) delete party.items[action.index];
-			} else {
-				itemTxt = "...But the party doesn't have any of that item left...?";
-			}
-
-			// Now, send the embed!
-			DiscordEmbed = new Discord.MessageEmbed()
-				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
-				.setTitle('Using Item...')
-				.setDescription(itemTxt.replace(/\n{3,}/, () => "\n\n"))
-			btl.channel.send({embeds: [DiscordEmbed]});
-			break;
-
-		case 'guard':
-			char.guard = 0.45;
-
-			let mpget = Math.max(1, Math.round((char.maxmp/100*5)-5+randNum(1,10)));
-			char.mp = Math.min(char.maxmp, Math.round(char.mp+mpget));
-
-			DiscordEmbed = new Discord.MessageEmbed()
-				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
-				.setTitle(`${char.name} => Self`)
-				.setDescription(`${char.name} guards! This reduces damage, and restores ${mpget}MP!`)
-			btl.channel.send({embeds: [DiscordEmbed]});
-			break;
-		
-		case 'run':
-			let runTxt = '';
-
-			let avgSpd = 0;
-			let totalFoes = 0;
-			for (let i in btl.teams) {
-				if (i == char.team) continue;
-
-				for (let k in btl.teams[i].members) {
-					if (btl.teams[i].members[k].hp > 0) {
-						avgSpd += statWithBuff(btl.teams[i].members[k].stats.agl, btl.teams[i].members[k].buffs.agl);
-						totalFoes++;
-					}
+			case 'skill':
+			case 'skills':
+				if (char.pet) {
+					useSkill(char, btl, action, skillFile[char.pet.skill] ?? skillFile.Agi);
+				} else {
+					useSkill(char, btl, action);
+					char.lastskill = action.index;
 				}
-			}
-			avgSpd /= totalFoes;
 
-			let runCheck = (90 + ((statWithBuff(char.stats.agl, char.buffs.agl) - avgSpd)/2));
-			if (randNum(100) <= runCheck) {
+				break;
+
+			case 'item':
+				let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`, true);
+				let itemTxt = '';
+
+				if (party.items[action.index] && itemFile[action.index] && party.items[action.index] > 0) {
+					party.items[action.index]--;
+					itemTxt = itemData[itemFile[action.index].type].func(char, btl.teams[action.target[0]].members[action.target[1]], objClone(itemFile[action.index]), btl);
+
+					if (party.items[action.index] <= 0) delete party.items[action.index];
+				} else {
+					itemTxt = "...But the party doesn't have any of that item left...?";
+				}
+
+				// Now, send the embed!
 				DiscordEmbed = new Discord.MessageEmbed()
 					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
-					.setTitle('Running Away!')
-					.setDescription("You escaped from the enemies!")
-				btl.channel.send({embeds: [DiscordEmbed]});
-
-				runFromBattle(char, btl, 0)
-				return;
-			} else {
-				DiscordEmbed = new Discord.MessageEmbed()
-					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
-					.setTitle('Running Away!')
-					.setDescription("You couldn't get away!")
+					.setTitle('Using Item...')
+					.setDescription(itemTxt.replace(/\n{3,}/, () => "\n\n"))
 				btl.channel.send({embeds: [DiscordEmbed]});
 				break;
-			}
 
-		case 'forfeit':
-			DiscordEmbed = new Discord.MessageEmbed()
-				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
-				.setTitle('Forfeiting!')
-				.setDescription(`Team ${btl.teams[char.team].name} is forfeiting the match!`)
-			btl.channel.send({embeds: [DiscordEmbed]});
-			break;
+			case 'guard':
+				char.guard = 0.45;
 
-		case 'pacify':
-			doPacify(char, btl, btl.action);
-			break;
+				let mpget = Math.max(1, Math.round((char.maxmp/100*5)-5+randNum(1,10)));
+				char.mp = Math.min(char.maxmp, Math.round(char.mp+mpget));
 
-		case 'backup':
-			let char1 = objClone(btl.teams[char.team].members[action.target[1]]);
-			let char2 = objClone(btl.teams[char.team].backup[action.index]);
-			btl.teams[char.team].backup[action.index] = objClone(char1);
-			btl.teams[char.team].members[action.target[1]] = objClone(char2);
-
-			DiscordEmbed = new Discord.MessageEmbed()
-				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
-				.setTitle(`__${char.name}__ => __${char1.name}__, __${char2.name}__`)
-				.setDescription(`__${char.name}__ decided to swap __${char1.name}__ for __${char2.name}__.\n___${char2.name}__ will fight in __${char1.name}'s__ place._`.replace(/\n{3,}/, () => "\n\n"))
-			btl.channel.send({embeds: [DiscordEmbed]});
-			break;
-
-		case 'lb':
-			let aType = (char.stats.atk > char.stats.mag) ? 'physical' : 'magic';
-			let lbDefs = objClone(canUseLb(char, btl));
-			lbDefs.acc = 100;
-			lbDefs.crit = 0;
-			lbDefs.costtype = 'lb';
-			lbDefs.limitbreak = true;
-			lbDefs.atktype = aType;
-			lbDefs.cost = char.lbp;
-
-			if (lbDefs.class == 'heal') lbDefs.target = 'allallies';
-
-			useSkill(char, btl, action, lbDefs);
-			break;
-
-		case 'tc':
-			// lets get the mean of all 2 participants' stats.
-			let ally = btl.teams[char.team].members[action.ally];
-			let avgchar = objClone(char);
-			for (let i in avgchar.stats) avgchar.stats[i] = (char.stats[i]+ally.stats[i])/2;
-
-			if (!hasTeamCombo(char, ally)) {
 				DiscordEmbed = new Discord.MessageEmbed()
 					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
-					.setTitle(`__${char.name}__ => __${ally.name}__`)
-					.setDescription(`__${char.name}__ tried to attack with __${ally.name}__... but it failed...?`.replace(/\n{3,}/, () => "\n\n"))
+					.setTitle(`${char.name} => Self`)
+					.setDescription(`${char.name} guards! This reduces damage, and restores ${mpget}MP!`)
 				btl.channel.send({embeds: [DiscordEmbed]});
-			} else {
-				// Now...
-				let tc = objClone(hasTeamCombo(char, ally));
-				tc.forcefree = true;
-				tc.teamcombo = true;
+				break;
+			
+			case 'run':
+				let runTxt = '';
 
-				tc.acc = 100;
-				tc.crit = 0;
-				tc.pow = 0;
-				let skills = [objClone(char.skills), objClone(ally.skills)];
-				let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+				let avgSpd = 0;
+				let totalFoes = 0;
+				for (let i in btl.teams) {
+					if (i == char.team) continue;
 
-				for (let i in skills) {
-					skills[i].filter(s => !skillFile[s]);
-					skills[i].sort(function(a, b) {return skillFile[b].pow - skillFile[a].pow});
-					tc.pow += skillFile[skills[i][0]].pow;
+					for (let k in btl.teams[i].members) {
+						if (btl.teams[i].members[k].hp > 0) {
+							avgSpd += statWithBuff(btl.teams[i].members[k].stats.agl, btl.teams[i].members[k].buffs.agl);
+							totalFoes++;
+						}
+					}
+				}
+				avgSpd /= totalFoes;
+
+				let runCheck = (90 + ((statWithBuff(char.stats.agl, char.buffs.agl) - avgSpd)/2));
+				if (randNum(100) <= runCheck) {
+					DiscordEmbed = new Discord.MessageEmbed()
+						.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+						.setTitle('Running Away!')
+						.setDescription("You escaped from the enemies!")
+					btl.channel.send({embeds: [DiscordEmbed]});
+
+					runFromBattle(char, btl, 0)
+					return;
+				} else {
+					DiscordEmbed = new Discord.MessageEmbed()
+						.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+						.setTitle('Running Away!')
+						.setDescription("You couldn't get away!")
+					btl.channel.send({embeds: [DiscordEmbed]});
+					break;
 				}
 
-				tc.pow /= tc.hits ?? 1;
-				useSkill(avgchar, btl, action, tc, ally);
+			case 'forfeit':
+				DiscordEmbed = new Discord.MessageEmbed()
+					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setTitle('Forfeiting!')
+					.setDescription(`Team ${btl.teams[char.team].name} is forfeiting the match!`)
+				btl.channel.send({embeds: [DiscordEmbed]});
+				break;
 
-				if (skillFile[skills[0][0]].cost && skillFile[skills[0][0]].costtype) {
-					useCost(char, skillFile[skills[0][0]].cost, skillFile[skills[0][0]].costtype);
+			case 'pacify':
+				doPacify(char, btl, btl.action);
+				break;
+
+			case 'backup':
+				let char1 = objClone(btl.teams[char.team].members[action.target[1]]);
+				let char2 = objClone(btl.teams[char.team].backup[action.index]);
+				btl.teams[char.team].backup[action.index] = objClone(char1);
+				btl.teams[char.team].members[action.target[1]] = objClone(char2);
+
+				DiscordEmbed = new Discord.MessageEmbed()
+					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setTitle(`__${char.name}__ => __${char1.name}__, __${char2.name}__`)
+					.setDescription(`__${char.name}__ decided to swap __${char1.name}__ for __${char2.name}__.\n___${char2.name}__ will fight in __${char1.name}'s__ place._`.replace(/\n{3,}/, () => "\n\n"))
+				btl.channel.send({embeds: [DiscordEmbed]});
+				break;
+
+			case 'lb':
+				let aType = (char.stats.atk > char.stats.mag) ? 'physical' : 'magic';
+				let lbDefs = objClone(canUseLb(char, btl));
+				lbDefs.acc = 100;
+				lbDefs.crit = 0;
+				lbDefs.costtype = 'lb';
+				lbDefs.limitbreak = true;
+				lbDefs.atktype = aType;
+				lbDefs.cost = char.lbp;
+
+				if (lbDefs.class == 'heal') lbDefs.target = 'allallies';
+
+				useSkill(char, btl, action, lbDefs);
+				break;
+
+			case 'tc':
+				// lets get the mean of all 2 participants' stats.
+				let ally = btl.teams[char.team].members[action.ally];
+				let avgchar = objClone(char);
+				for (let i in avgchar.stats) avgchar.stats[i] = (char.stats[i]+ally.stats[i])/2;
+
+				if (!hasTeamCombo(char, ally)) {
+					DiscordEmbed = new Discord.MessageEmbed()
+						.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+						.setTitle(`__${char.name}__ => __${ally.name}__`)
+						.setDescription(`__${char.name}__ tried to attack with __${ally.name}__... but it failed...?`.replace(/\n{3,}/, () => "\n\n"))
+					btl.channel.send({embeds: [DiscordEmbed]});
+				} else {
+					// Now...
+					let tc = objClone(hasTeamCombo(char, ally));
+					tc.forcefree = true;
+					tc.teamcombo = true;
+
+					tc.acc = 100;
+					tc.crit = 0;
+					tc.pow = 0;
+					let skills = [objClone(char.skills), objClone(ally.skills)];
+					let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+
+					for (let i in skills) {
+						skills[i].filter(s => !skillFile[s]);
+						skills[i].sort(function(a, b) {return skillFile[b].pow - skillFile[a].pow});
+						tc.pow += skillFile[skills[i][0]].pow;
+					}
+
+					tc.pow /= tc.hits ?? 1;
+					useSkill(avgchar, btl, action, tc, ally);
+
+					if (skillFile[skills[0][0]].cost && skillFile[skills[0][0]].costtype) {
+						useCost(char, skillFile[skills[0][0]].cost, skillFile[skills[0][0]].costtype);
+					}
+					if (skillFile[skills[1][0]].cost && skillFile[skills[1][0]].costtype) {
+						useCost(ally, skillFile[skills[1][0]].cost, skillFile[skills[1][0]].costtype);
+					}
+
+					char.donetc = true;
 				}
-				if (skillFile[skills[1][0]].cost && skillFile[skills[1][0]].costtype) {
-					useCost(ally, skillFile[skills[1][0]].cost, skillFile[skills[1][0]].costtype);
-				}
+				break;
 
-				char.donetc = true;
-			}
-			break;
+			case 'transform':
+				doTransformation(char, btl.action.index, btl);
 
-		case 'transform':
-			doTransformation(char, btl.action.index, btl);
+				DiscordEmbed = new Discord.MessageEmbed()
+					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setTitle(`${char.name} => Self`)
+					.setDescription(`${char.name} undergoes a transformation, taking their ${btl.action.index} form!`)
+				btl.channel.send({embeds: [DiscordEmbed]});
+				break;
 
-			DiscordEmbed = new Discord.MessageEmbed()
-				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
-				.setTitle(`${char.name} => Self`)
-				.setDescription(`${char.name} undergoes a transformation, taking their ${btl.action.index} form!`)
-			btl.channel.send({embeds: [DiscordEmbed]});
-			break;
+			case 'save':
+				DiscordEmbed = new Discord.MessageEmbed()
+					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setTitle('Saving trial...')
+					.setDescription('You can resume this trial by using the "resumetrial" command.')
+				btl.channel.send({embeds: [DiscordEmbed]});
 
-		case 'save':
-			DiscordEmbed = new Discord.MessageEmbed()
-				.setColor(elementColors[char.mainElement] ?? elementColors.strike)
-				.setTitle('Saving trial...')
-				.setDescription('You can resume this trial by using the "resumetrial" command.')
-			btl.channel.send({embeds: [DiscordEmbed]});
-
-			saveTrial(btl);
-			return;
+				saveTrial(btl);
+				return;
+		}
 	}
 
 	// Custom Variable EndTurn
