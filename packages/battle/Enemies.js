@@ -888,11 +888,11 @@ enemyThinker = (char, btl) => {
 				if (i == char.team) continue;
 
 				for (let targ of btl.teams[i].members) {
-					if (targ.hp <= 0) continue;
-					if (skill.target === "one" && targ.lovable) continue;
-
 					// Select random skill.
 					let skill = char.skills[randNum(char.skills.length-1)];
+
+					if (targ.hp <= 0) continue;
+					if (skillFile[skill].target === "one" && targ.lovable) continue;
 
 					// Can we actually use this skill?
 					let loops = 0;
