@@ -362,6 +362,7 @@ typeParsers = {
 }
 
 // Slash Commands
+/*
 let cmds = [];
 
 let datatypetoconst = {
@@ -376,31 +377,56 @@ let datatypetoconst = {
 	JSON: ATTACHMENT
 }
 
-/*
-for (let i in commands) {
-	if (cmds.length >= 100) break;
+let cmdcats = {
+	misc: "Other things that don't fit into the other sections.",
+	moderation: "Every bot needs something to moderate the server.",
+	fun: "Fun things to use, come try them out!",
+	food: "Tasty, tasty food! All for you to try out!",
+	items: "Items that you can use to do things!",
+	loot: "Loot that you can get from killing or pacifying enemies!",
+	chests: "Chests for storing whatever item, weapon or armor you want! Or to get some goodies.",
+	shops: "Need Items? Open shops and sell them!",
+	skills: "Can't fight without the various attacks now, can ya?",
+	characters: "Characters! The ones who will feel evil and succeed in their quests! I hope.",
+	enemies: "Enemies! The ones that you will fight to the death! I hope you don't get killed!",
+	parties: "Can't battle without parties now, can ya?",
+	battle: "The main part of Blossom Battler is well... the battles of course!",
+	trials: "Trials! Where you test yourself against waves of enemies!",
+	roll: "Random and Daily things! Dailies reroll every day! Roll away!",
+	all: "All of the existing commands"
+}
 
-	let c = commands[i];
-	if (c.alias) continue;
-	if (c.noslash) continue;
-
-	let str = c.desc;
-	if (str.length > 100) str = `${str.slice(0, 97)}...`;
-
+for (let k in cmdcats) {
 	let cmd = new Builders.SlashCommandBuilder()
-		.setName(i)
-		.setDescription(str);
+		.setName(`bb${k}`)
+		.setDescription(cmdcats[k]);
 
-	// Create a new command
-	if (c.args && c.args.length > 0) {
-		for (let o of c.args) {
-			switch(o.type ?? "Word") {
-				default:
-					cmd.addStringOption(option =>
-						option.setName(o.name.replace(/[ #,%'/()123467890]/g,'').toLowerCase())
-							.setDescription(o.desc ?? '???')
-							.setRequired(o.forced ?? false)
-					)
+	for (let i in commands) {
+		let c = commands[i];
+		if (c.section != k) continue;
+		if (c.alias) continue;
+		if (c.noslash) continue;
+
+		cmd.addStringOption(option =>
+			option.setName(i.replace(/[ #,%'/()123467890]/g,'').toLowerCase())
+				.setDescription(c.desc ?? '???')
+				.setRequired(true)
+		)
+
+		let str = c.desc;
+		if (str.length > 100) str = `${str.slice(0, 97)}...`;
+
+		// Create a new command
+		if (c.args && c.args.length > 0) {
+			for (let o of c.args) {
+				switch(o.type ?? "Word") {
+					default:
+						cmd.addStringOption(option =>
+							option.setName(o.name.replace(/[ #,%'/()123467890]/g,'').toLowerCase())
+								.setDescription(o.desc ?? '???')
+								.setRequired(o.forced ?? false)
+						)
+				}
 			}
 		}
 	}
