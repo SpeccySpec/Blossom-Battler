@@ -1289,6 +1289,19 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// Attack Extras
+	if (skill.extras) {
+		for (let i in skill.extras) {
+			if (extrasList[i] && extrasList[i].statmod) {
+				if (noExtraArray && noExtraArray.includes(i)) continue;
+				if (extrasList[i].multiple) {
+					for (let k in skill.extras[i]) extrasList[i].statmod(char, skill, skill.extras[i][k], btl)
+				} else
+					extrasList[i].statmod(char, skill, skill.extras[i], btl)
+			}
+		}
+	}
+
+	// Attack Extras
 	if (char.custom) {
 		for (let i in char.custom) {
 			if (noExtraArray && noExtraArray.includes(i)) continue;
@@ -1356,19 +1369,6 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	if (settings?.mechanics?.leaderskills && party?.leaderskill && party.leaderskill.type === 'boost') {
 		if (party.leaderskill.var1.toLowerCase() == 'all' || skill?.atktype == party.leaderskill.var1.toLowerCase() || (skill.type == party.leaderskill.var1.toLowerCase() || skill.type.includes(party.leaderskill.var1.toLowerCase()))) {
 			skill.pow += skill.pow * (party.leaderskill.var2 / 100);
-		}
-	}
-
-	// Attack Extras
-	if (skill.extras) {
-		for (let i in skill.extras) {
-			if (extrasList[i] && extrasList[i].statmod) {
-				if (noExtraArray && noExtraArray.includes(i)) continue;
-				if (extrasList[i].multiple) {
-					for (let k in skill.extras[i]) extrasList[i].statmod(char, skill, skill.extras[i][k], btl)
-				} else
-					extrasList[i].statmod(char, skill, skill.extras[i], btl)
-			}
 		}
 	}
 	

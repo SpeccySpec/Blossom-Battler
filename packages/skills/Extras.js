@@ -1730,8 +1730,9 @@ extrasList = {
 			if (num <= vars[0]) {
 				let extrahits = randNum(1, vars[1]);
 
-				skill.hits += extrahits;
+				skill.hits = parseInt(skill.hits) + extrahits;
 				addAtkMsg(btl, `__${char.name}__'s __${skill.name}__ landed **${extrahits}** extra time(s)!`);
+				console.log(skill.hits + " hits")
 			}
 		},
 		getinfo(vars, skill) {
