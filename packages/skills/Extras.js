@@ -1713,8 +1713,8 @@ extrasList = {
 			}
 		],
 		applyfunc(message, skill, args) {
-			const chance = args[0]
-			const hits = args[1]
+			const chance = args[0];
+			const hits = args[1];
 
 			if (chance <= 0 || chance > 50) return message.channel.send("Invalid value for <Chance>! It should be above 0 or below 50.");
 			
@@ -1728,8 +1728,10 @@ extrasList = {
 			let num = randNum(100);
 
 			if (num <= vars[0]) {
-				skill.hits += vars[1];
-				addAtkMsg(btl, `__${char.name}__'s __${skill.name}__ landed **${vars[1]}** extra time(s)!`);
+				let extrahits = randNum(1, vars[1]);
+
+				skill.hits += extrahits;
+				addAtkMsg(btl, `__${char.name}__'s __${skill.name}__ landed **${extrahits}** extra time(s)!`);
 			}
 		},
 		getinfo(vars, skill) {
