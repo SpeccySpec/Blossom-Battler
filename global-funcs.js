@@ -286,7 +286,7 @@ statusNames = {
 }
 
 statusEmojis = {
-    burn: "<:burn:963413989688213524>",
+    burn: "<:burn:1224662396313014324>",
 	bleed: "<:bleed:963413989281390612>",
     toxin: "<:toxin:963413990044737548>",
     freeze: "<:freeze:963413989960843324>",
