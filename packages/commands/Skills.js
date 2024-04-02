@@ -1914,6 +1914,40 @@ statusDescs = [
 				}
 			},
 			{
+				name: "doomed",
+				type: "physical",
+				desc: `Take increased damage from ${elementEmoji["bless"]}**Bless** skills. *May change the ${statusEmojis["enddown"]}END stat*.`,
+				ailments: {
+					nonboss: {
+						weak: `Doubled damage from ${elementEmoji["bless"]}**Bless** skills. *1/2s* the ${statusEmojis["enddown"]}END stat.`,
+						normal: `1.5x damage from ${elementEmoji["bless"]}**Bless** skills. *1/2s* the ${statusEmojis["enddown"]}END stat.`,
+						resist: `1.25x damage from ${elementEmoji["bless"]}**Bless** skills. *0.75x* the ${statusEmojis["enddown"]}END stat.`,
+					},
+					boss: {
+						weak: `1.75x damage from ${elementEmoji["bless"]}**Bless** skills. *Doesn't change ${statusEmojis["enddown"]}END stat*.`,
+						normal: `1.5x damage from ${elementEmoji["bless"]}**Bless** skills. *Doesn't change ${statusEmojis["enddown"]}END stat*.`,
+						resist: `1.25x damage from ${elementEmoji["bless"]}**Bless** skills. *Doesn't change ${statusEmojis["enddown"]}END stat*.`,
+					},
+				}
+			},
+			{
+				name: "weakened",
+				type: "physical",
+				desc: `Take increased damage from ${elementEmoji["curse"]}**Curse** skills. *May change the ${statusEmojis["atkdown"]}ATK stat*.`,
+				ailments: {
+					nonboss: {
+						weak: `Doubled damage from ${elementEmoji["curse"]}**Curse** skills. *1/2s* the ${statusEmojis["atkdown"]}ATK stat.`,
+						normal: `1.5x damage from ${elementEmoji["curse"]}**Curse** skills. *1/2s* the ${statusEmojis["atkdown"]}ATK stat.`,
+						resist: `1.25x damage from ${elementEmoji["curse"]}**Curse** skills. *0.75x* the ${statusEmojis["atkdown"]}ATK stat.`,
+					},
+					boss: {
+						weak: `1.75x damage from ${elementEmoji["curse"]}**Curse** skills. *Doesn't change ${statusEmojis["atkdown"]}ATK stat*.`,
+						normal: `1.5x damage from ${elementEmoji["curse"]}**Curse** skills. *Doesn't change ${statusEmojis["atkdown"]}ATK stat*.`,
+						resist: `1.25x damage from ${elementEmoji["curse"]}**Curse** skills. *Doesn't change ${statusEmojis["atkdown"]}ATK stat*.`,
+					},
+				}
+			},
+			{
 				name: "grassimped",
 				type: "physical",
 				desc: "You're turned into a Grassimp! How do you do anything in this weird, bushy form?",

@@ -2904,21 +2904,24 @@ statusEffectFuncs = {
 	// this code is so lazy but it probably works lmao.
 	dry: {
 		stackable: true,
+		forceturns: 3,
 		onturn: function(btl, char) {
 			char.dry--;
 			if (char.dry <= 0) delete char.dry;
 		},
-		dmgmod: function(btl, targ, dmg, skill) {
+		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if (hasStatusAffinity(targ, 'dry', 'weak')) {
 				if (typeof skill.type === "object") {
 					if (skill.type.includes("fire") || skill.type.includes("earth")) {
 						dmg = Math.round(dmg*1.75);
+						emojitxt += statusEmojis.dry;
 					} else if (skill.type.includes("ice") || skill.type.includes("electric")) {
 						dmg = Math.round(dmg*0.75);
 					}
 				} else {
 					if (skill.type === "fire" || skill.type === "earth") {
 						dmg = Math.round(dmg*1.75);
+						emojitxt += statusEmojis.dry;
 					} else if (skill.type === "ice" || skill.type === "electric") {
 						dmg = Math.round(dmg*0.75);
 					}
@@ -2927,12 +2930,14 @@ statusEffectFuncs = {
 				if (typeof skill.type === "object") {
 					if (skill.type.includes("fire") || skill.type.includes("earth")) {
 						dmg = Math.round(dmg*1.25);
+						emojitxt += statusEmojis.dry;
 					} else if (skill.type.includes("ice") || skill.type.includes("electric")) {
 						dmg = Math.round(dmg/4);
 					}
 				} else {
 					if (skill.type === "fire" || skill.type === "earth") {
 						dmg = Math.round(dmg*1.25);
+						emojitxt += statusEmojis.dry;
 					} else if (skill.type === "ice" || skill.type === "electric") {
 						dmg = Math.round(dmg/4);
 					}
@@ -2941,12 +2946,14 @@ statusEffectFuncs = {
 				if (typeof skill.type === "object") {
 					if (skill.type.includes("fire") || skill.type.includes("earth")) {
 						dmg = Math.round(dmg*1.5);
+						emojitxt += statusEmojis.dry;
 					} else if (skill.type.includes("ice") || skill.type.includes("electric")) {
 						dmg = Math.round(dmg/2);
 					}
 				} else {
 					if (skill.type === "fire" || skill.type === "earth") {
 						dmg = Math.round(dmg*1.5);
+						emojitxt += statusEmojis.dry;
 					} else if (skill.type === "ice" || skill.type === "electric") {
 						dmg = Math.round(dmg/2);
 					}
@@ -2960,21 +2967,24 @@ statusEffectFuncs = {
 	light: {
 		opposite: 'heavy',
 		stackable: true,
+		forceturns: 3,
 		onturn: function(btl, char) {
 			char.light--;
 			if (char.light <= 0) delete char.light;
 		},
-		dmgmod: function(btl, targ, dmg, skill) {
+		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if (hasStatusAffinity(targ, 'light', 'weak')) {
 				if (typeof skill.type === "object") {
 					if (skill.type.includes("wind") || skill.type.includes("explode")) {
 						dmg = Math.round(dmg*1.75);
+						emojitxt += statusEmojis.light;
 					} else if (skill.type.includes("earth") || skill.type.includes("strike")) {
 						dmg = Math.round(dmg*0.75);
 					}
 				} else {
 					if (skill.type === "wind" || skill.type === "explode") {
 						dmg = Math.round(dmg*1.75);
+						emojitxt += statusEmojis.light;
 					} else if (skill.type === "earth" || skill.type === "strike") {
 						dmg = Math.round(dmg*0.75);
 					}
@@ -2983,12 +2993,14 @@ statusEffectFuncs = {
 				if (typeof skill.type === "object") {
 					if (skill.type.includes("wind") || skill.type.includes("explode")) {
 						dmg = Math.round(dmg*1.25);
+						emojitxt += statusEmojis.light;
 					} else if (skill.type.includes("earth") || skill.type.includes("strike")) {
 						dmg = Math.round(dmg/4);
 					}
 				} else {
 					if (skill.type === "wind" || skill.type === "explode") {
 						dmg = Math.round(dmg*1.25);
+						emojitxt += statusEmojis.light;
 					} else if (skill.type === "earth" || skill.type === "strike") {
 						dmg = Math.round(dmg/4);
 					}
@@ -2997,12 +3009,14 @@ statusEffectFuncs = {
 				if (typeof skill.type === "object") {
 					if (skill.type.includes("wind") || skill.type.includes("explode")) {
 						dmg = Math.round(dmg*1.5);
+						emojitxt += statusEmojis.light;
 					} else if (skill.type.includes("earth") || skill.type.includes("strike")) {
 						dmg = Math.round(dmg/2);
 					}
 				} else {
 					if (skill.type === "wind" || skill.type === "explode") {
 						dmg = Math.round(dmg*1.5);
+						emojitxt += statusEmojis.light;
 					} else if (skill.type === "earth" || skill.type === "strike") {
 						dmg = Math.round(dmg/2);
 					}
@@ -3016,21 +3030,24 @@ statusEffectFuncs = {
 	heavy: {
 		opposite: 'light',
 		stackable: true,
+		forceturns: 3,
 		onturn: function(btl, char) {
 			char.heavy--;
 			if (char.heavy <= 0) delete char.heavy;
 		},
-		dmgmod: function(btl, targ, dmg, skill) {
+		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if (hasStatusAffinity(targ, 'heavy', 'weak')) {
 				if (typeof skill.type === "object") {
 					if (skill.type.includes("earth") || skill.type.includes("strike")) {
 						dmg = Math.round(dmg*1.75);
+						emojitxt += statusEmojis.heavy;
 					} else if (skill.type.includes("wind") || skill.type.includes("explode")) {
 						dmg = Math.round(dmg*0.75);
 					}
 				} else {
 					if (skill.type === "earth" || skill.type === "strike") {
 						dmg = Math.round(dmg*1.75);
+						emojitxt += statusEmojis.heavy;
 					} else if (skill.type === "wind" || skill.type === "explode") {
 						dmg = Math.round(dmg*0.75);
 					}
@@ -3039,12 +3056,14 @@ statusEffectFuncs = {
 				if (typeof skill.type === "object") {
 					if (skill.type.includes("earth") || skill.type.includes("strike")) {
 						dmg = Math.round(dmg*1.25);
+						emojitxt += statusEmojis.heavy;
 					} else if (skill.type.includes("wind") || skill.type.includes("explode")) {
 						dmg = Math.round(dmg/4);
 					}
 				} else {
 					if (skill.type === "earth" || skill.type === "strike") {
 						dmg = Math.round(dmg*1.25);
+						emojitxt += statusEmojis.heavy;
 					} else if (skill.type === "wind" || skill.type === "explode") {
 						dmg = Math.round(dmg/4);
 					}
@@ -3053,6 +3072,7 @@ statusEffectFuncs = {
 				if (typeof skill.type === "object") {
 					if (skill.type.includes("earth") || skill.type.includes("strike")) {
 						dmg = Math.round(dmg*1.5);
+						emojitxt += statusEmojis.heavy;
 					} else if (skill.type.includes("wind") || skill.type.includes("explode")) {
 						dmg = Math.round(dmg/2);
 					}
@@ -3070,9 +3090,10 @@ statusEffectFuncs = {
 	},
 
 	enchanted: {
-		opposite: 'invisible',
 		hardcoded: true,
-		dmgmod: function(btl, targ, dmg, skill) {
+		opposite: 'invisible',
+		forceturns: 2,
+		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if (skill.atktype === "physical" || skill.atktype === "ranged") {
 				let mult = 2;
 
@@ -3083,15 +3104,17 @@ statusEffectFuncs = {
 				}
 
 				dmg = Math.round(dmg*mult);
+				emojitxt += statusEmojis.enchanted;
 			}
 			return dmg;
 		}
 	},
 
 	invisible: {
-		opposite: 'enchanted',
 		hardcoded: true,
-		dmgmod: function(btl, targ, dmg, skill) {
+		opposite: 'enchanted',
+		forceturns: 2,
+		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if (skill.atktype === "magic") {
 				let mult = 2;
 
@@ -3102,9 +3125,84 @@ statusEffectFuncs = {
 				}
 
 				dmg = Math.round(dmg*mult);
+				emojitxt += statusEmojis.invisible;
 			}
 
 			return dmg;
+		}
+	},
+
+	doomed: {
+		stackable: true,
+		opposite: 'weakened',
+		forceturns: 3,
+		onturn: function(btl, char) {
+			char.doomed--;
+			if (char.doomed <= 0) delete char.doomed;
+		},
+		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
+			if ((typeof skill.type === "object" && skill.type.includes("bless")) || (skill.type === "bless")) {
+				let mult = 1.5;
+
+				if (hasStatusAffinity(targ, 'doomed', 'weak')) {
+					mult = 2;
+				} else if (hasStatusAffinity(targ, 'doomed', 'resist')) {
+					mult = 1.25;
+				}
+
+				dmg = Math.round(dmg*mult);
+				emojitxt += statusEmojis.doomed;
+			}
+
+			return dmg;
+		},
+		statmod: function(char, stats) {
+			if (isBoss(char)) return stats;
+
+			if (hasStatusAffinity(char, 'doomed', 'resist')) {
+				stats.end *= 0.75;
+			} else {
+				stats.end /= 2;
+			}
+
+			return stats;
+		}
+	},
+
+	weakened: {
+		stackable: true,
+		opposite: 'doomed',
+		forceturns: 3,
+		onturn: function(btl, char) {
+			char.weakened--;
+			if (char.weakened <= 0) delete char.weakened;
+		},
+		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
+			if ((typeof skill.type === "object" && skill.type.includes("curse")) || (skill.type === "curse")) {
+				let mult = 1.5;
+
+				if (hasStatusAffinity(targ, 'weakened', 'weak')) {
+					mult = 2;
+				} else if (hasStatusAffinity(targ, 'weakened', 'resist')) {
+					mult = 1.25;
+				}
+
+				dmg = Math.round(dmg*mult);
+				emojitxt += statusEmojis.weakened;
+			}
+
+			return dmg;
+		},
+		statmod: function(char, stats) {
+			if (isBoss(char)) return stats;
+
+			if (hasStatusAffinity(char, 'weakened', 'resist')) {
+				stats.atk *= 0.75;
+			} else {
+				stats.atk /= 2;
+			}
+
+			return stats;
 		}
 	},
 

@@ -610,15 +610,16 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				}
 			}
 
-			// Store which hits are crits, techs and what affinity each hit is.
+			// Store which hits are crits, techs and what affinity each hit is, along with customizable emojis per damage.
 			let crits = [];
 			let affinities = [];
 			let techs = [];
+			let emojis = [];
 
 			// Here we go...
 			for (let i = 0; i < totalHits; i++) {
 				let dmg = genDmg(char, targ, btl, skill);
-				
+
 				// Sustain Extra
 				if (totalHits > 1) {
 					if (i > 0 && !skill.extras?.sustain) {
@@ -794,6 +795,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					}
 				}
 
+				// Set up emojis
+				emojis[i] = "";
+
 				// DmgMod
 				if (skill.extras) {
 					for (let i in skill.extras) {
@@ -803,10 +807,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) {
-								dmg = extrasList[i].dmgmod(char, targ, dmg, skill, btl, skill.extras[i][k]) ?? dmg;
+								dmg = extrasList[i].dmgmod(char, targ, dmg, skill, btl, skill.extras[i][k], emojis[i]) ?? dmg;
 							}
 						} else {
-							dmg = extrasList[i].dmgmod(char, targ, dmg, skill, btl, skill.extras[i]) ?? dmg;
+							dmg = extrasList[i].dmgmod(char, targ, dmg, skill, btl, skill.extras[i], emojis[i]) ?? dmg;
 						}
 					}
 				}
@@ -823,10 +827,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 								if (noExtraArray && noExtraArray.includes(i)) continue;
 								if (passiveList[i].multiple) {
 									for (let k in psv.passive[i]) {
-										dmg = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i][k]) ?? dmg;
+										dmg = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i][k], emojis[i]) ?? dmg;
 									}
 								} else {
-									dmg = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i]) ?? dmg;
+									dmg = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i], emojis[i]) ?? dmg;
 								}
 							}
 						}
@@ -838,14 +842,14 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						if (noVarsArray && noVarsArray.includes(i)) continue;
 
 						if (customVariables[i] && customVariables[i].dmgmod) {
-							result.txt += '\n' + (customVariables[i].dmgmod(btl, targ, char, dmg, skill, targ.custom[i]) ?? '');
+							result.txt += '\n' + (customVariables[i].dmgmod(btl, targ, char, dmg, skill, targ.custom[i], emojis[i]) ?? '');
 						}
 					}
 				}
 
 				// DmgMod
 				if (targ.status && statusEffectFuncs[targ.status] && statusEffectFuncs[targ.status].dmgmod) {
-					dmg = statusEffectFuncs[targ.status].dmgmod(btl, targ, dmg, skill);
+					dmg = statusEffectFuncs[targ.status].dmgmod(btl, targ, dmg, skill, emojis[i]);
 				}
 
 				let stackable = [];
@@ -854,7 +858,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				}
 
 				for (let i in stackable) {
-					if (targ[stackable[i]] && statusEffectFuncs[stackable[i]] && statusEffectFuncs[stackable[i]].dmgmod) dmg = statusEffectFuncs[stackable[i]].dmgmod(btl, targ, dmg, skill);
+					if (targ[stackable[i]] && statusEffectFuncs[stackable[i]] && statusEffectFuncs[stackable[i]].dmgmod){
+						dmg = statusEffectFuncs[stackable[i]].dmgmod(btl, targ, dmg, skill, emojis[i]);
+					}
 				}
 
 				// Imperishable Mettle.
@@ -903,6 +909,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 				for (let i in damages) {
 					dmgTxt += `**${damages[i]}**${affinityEmoji.drain}`;
+					if (emojis[i] != "") dmgTxt += emojis[i];
 					if (crits[i]) dmgTxt += critEmoji;
 
 					total += damages[i];
@@ -929,6 +936,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					dmgTxt += `**${damages[i]}**`;
 					if (affinityEmoji[affinities[i]] && affinities[i].toLowerCase() != 'normal') dmgTxt += affinityEmoji[affinities[i]];
 					if (techs[i]) dmgTxt += statusEmojis[targ.status.toLowerCase()] ?? statusEmojis.burn;
+					if (emojis[i] != "") dmgTxt += emojis[i];
 					if (crits[i]) dmgTxt += critEmoji;
 
 					total += damages[i];

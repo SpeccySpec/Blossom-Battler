@@ -222,6 +222,8 @@ statusEffects = [
 	"stagger",
 	"shrouded",
 	"apathy",
+	"doomed",
+	"weakened",
 	"grassimped",
 
 	// Neutral Statusses
@@ -267,6 +269,8 @@ statusNames = {
 	stagger: 'Staggering',
 	shrouded: 'Shrouded',
 	apathy: 'Apathy',
+	doomed: 'Doomed',
+	weakened: 'Weakened',
 	grassimped: 'Grassimped',
 
 	// Neutral Statusses
@@ -312,6 +316,8 @@ statusEmojis = {
 	shrouded: '<:shrouded:1223968915122815026>',
 	apathy: '<:apathy:1224057009511338154>',
 	dissolved: '<:dissolved:1224276500870725712>',
+	doomed: '<:doomed:1224665169872027709>',
+	weakened: '<:weakened:1224662513031970956>',
 	grassimped: '<:grassimped:1224076081225531412>',
 
 	// Neutral Statusses

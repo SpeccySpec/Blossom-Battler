@@ -49,7 +49,7 @@ healList = {
 				case 'mp':
 					let heal = vars[0] + (-8+randNum(16));
 					targ[vars[1]] = Math.max(Math.min(targ[`max${vars[1]}`], targ[vars[1]]+heal), 0);
-					return `__${targ.name}__'s ${regenType == "hp" ? "HP" : (char.mpMeter ? char.mpMeter[1] : "MP")} was restored by **${heal}**!`;
+					return `__${targ.name}__'s ${vars[1] == "hp" ? "HP" : (char.mpMeter ? char.mpMeter[1] : "MP")} was restored by **${heal}**!`;
 
 				case 'hppercent':
 					if (vars[0] >= 100) {
