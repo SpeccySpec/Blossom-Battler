@@ -305,7 +305,7 @@ statusEmojis = {
 	blind: '<:blind:963413989482696754>',
 	confusion: '<:confusion:963413989604339762>',
 	irradiation: '<:irradiated:963413990199947294>',
-	sensitive: '<:sensitive:973076333825499156>',
+	sensitive: '<:sensitive:1224663804613361756>',
 	drenched: '<:drenched:1224053518298648720>',
 	insanity: '<:insanity:1217924742237913218>',
 	stagger: '<:staggered:1223972073014300682>',
