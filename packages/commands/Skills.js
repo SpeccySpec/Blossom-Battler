@@ -1916,7 +1916,7 @@ statusDescs = [
 			{
 				name: "doomed",
 				type: "physical",
-				desc: `Take increased damage from ${elementEmoji["bless"]}**Bless** skills. *May change the ${statusEmojis["enddown"]}END stat*.`,
+				desc: `Take increased damage from ${elementEmoji["bless"]}**Bless** skills. *May change the ${statusEmojis["enddown"]}END stat*. *Stacks with other status effects.*`,
 				ailments: {
 					nonboss: {
 						weak: `Doubled damage from ${elementEmoji["bless"]}**Bless** skills. *1/2s* the ${statusEmojis["enddown"]}END stat.`,
@@ -1933,7 +1933,7 @@ statusDescs = [
 			{
 				name: "weakened",
 				type: "physical",
-				desc: `Take increased damage from ${elementEmoji["curse"]}**Curse** skills. *May change the ${statusEmojis["atkdown"]}ATK stat*.`,
+				desc: `Take increased damage from ${elementEmoji["curse"]}**Curse** skills. *May change the ${statusEmojis["atkdown"]}ATK stat*. *Stacks with other status effects.*`,
 				ailments: {
 					nonboss: {
 						weak: `Doubled damage from ${elementEmoji["curse"]}**Curse** skills. *1/2s* the ${statusEmojis["atkdown"]}ATK stat.`,
