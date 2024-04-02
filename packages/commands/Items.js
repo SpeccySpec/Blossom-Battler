@@ -2223,7 +2223,7 @@ commands.craftitem = new Command({
 })
 
 commands.obtainitems = new Command({
-    desc: 'Obtain items/weapons/armor/currency/loot items to a party.',
+    desc: 'Give items/weapons/armor/currency/loot items to a party.',
     aliases: ['giveitem'],
     section: 'parties',
     checkban: true,
