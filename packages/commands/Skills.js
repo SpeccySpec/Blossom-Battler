@@ -2186,6 +2186,19 @@ statusDescs = [
 				}
 			},
 			{
+				name: "dragonscale",
+				type: "physical",
+				desc: `Immobilizes for *3 turns*. ${affinityEmoji["repel"]}**Repels** physical skills, but may make ${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode skills *more effective*.`,
+				ailments: {
+					nonboss: {
+						weak: `Effectiveness of **skills that tech off of this status effect** is ${affinityEmoji["weak"]}**Weak**.`,
+						normal: `Effectiveness of **skills that tech off of this status effect** is ${affinityEmoji["superweak"]}SuperWeak.`,
+						resist: `Effectiveness of **skills that tech off of this status effect** is ${affinityEmoji["deadly"]}**Deadly**.`,
+					},
+					boss: `Effectiveness of **skills that tech off of this status effect** is unchanged.`
+				}
+			},
+			{
 				name: "airborne",
 				type: "physical",
 				desc: `Disables effects of terrain for the afflicted for *3 turns*, but *may expire if they use a physical skill*. Increases dodge chance *(physical -> may increase by 100%, other -> may increase by 10%)* and doubles afflicted's physical skill power.`,

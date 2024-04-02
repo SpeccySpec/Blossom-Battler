@@ -132,13 +132,25 @@ genDmg = (char, targ, btl, skill) => {
 getAffinity = (char, skillType) => {
 	let affinity = 'normal';
 
+	// Mirror and DragonScale
 	if (char.status === 'mirror') {
-		if (skillType === 'strike' || skillType === 'slash' || skillType === 'pierce' || skillType === 'explode')
+		if (skillType === 'strike' || skillType === 'slash' || skillType === 'pierce' || skillType === 'explode') {
 			if (!isBoss(char)) {
 				return (hasStatusAffinity(char, 'mirror', 'resist') ? 'deadly' : (hasStatusAffinity(char, 'mirror', 'weak') ? 'weak' : 'superweak'));
 			}
-		else
+		} else {
 			return 'repel';
+		}
+	} else if (char.status === 'dragonscale') {
+		if (elementTechs.dragonscale.includes(skillType)) {
+			if (!isBoss(char)) {
+				return (hasStatusAffinity(char, 'dragonscale', 'resist') ? 'deadly' : (hasStatusAffinity(char, 'dragonscale', 'weak') ? 'weak' : 'superweak'));
+			}
+		} else if (skillType === 'strike' || skillType === 'slash' || skillType === 'pierce' || skillType === 'explode') {
+			return 'repel';
+		} else {
+			return 'normal';
+		}
 	}
 
 	if (!char.affinities) return 'normal';

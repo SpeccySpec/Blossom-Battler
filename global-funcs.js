@@ -236,6 +236,7 @@ statusEffects = [
 	// Positive Statusses
 	"happy",
 	"mirror",
+	"dragonscale",
 	"airborne",
 	"blessed",
 	"brave",
@@ -283,6 +284,7 @@ statusNames = {
 	// Positive Statusses
 	happy: 'Happiness',
 	mirror: 'Mirror',
+	dragonscale: 'Dragon Scale',
 	airborne: 'Airborne',
 	blessed: 'Blessed',
 	brave: 'Brave',
@@ -329,6 +331,7 @@ statusEmojis = {
 
 	// Positive Statusses
 	mirror: '<:mirror:963413990229311588>',
+	dragonscale: '<:dragonscale:1224681842846994572>',
 	happy: '<:happy:973076333871644733>',
 	airborne: '<:wind:963413845848776714>',
 	blessed: '<:blessed:1223966695241158666>',
@@ -390,6 +393,7 @@ elementTechs = {
 	// Positive Statusses
 	happy: ['psychic', 'bless', 'curse', 'spirit', 'sound'],
 	airborne: ['pierce', 'electric', 'metal', 'gravity'],
+	dragonscale: ['psychic', 'spirit', 'bless', 'curse', 'nuclear'],
 }
 
 // Enemy Habitats

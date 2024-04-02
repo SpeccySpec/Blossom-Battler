@@ -2650,6 +2650,13 @@ statusEffectFuncs = {
 		}
 	},
 
+	dragonscale: {
+		hardcoded: true,
+		onturn: function(btl, char) {
+			return [`${char.name} is encased in a magnificent dragon scales... far too heavy to move.`, false];
+		}
+	},
+
 	airborne: {
 		hardcoded: true,
 		skillmod: function(char, skill, btl) {
