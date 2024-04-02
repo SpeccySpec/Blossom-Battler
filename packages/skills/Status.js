@@ -2668,6 +2668,10 @@ statusEffectFuncs = {
 		stackable: true,
 		hardcoded: true,
 		forceturns: 3,
+		onturn: function(btl, char) {
+			char.drenched--;
+			if (char.drenched <= 0) delete char.drenched;
+		},
 	},
 
 	stagger: {
@@ -2678,13 +2682,21 @@ statusEffectFuncs = {
 	blessed: {
 		forceturns: 3,
 		stackable: true,
-		hardcoded: true
+		hardcoded: true,
+		onturn: function(btl, char) {
+			char.blessed--;
+			if (char.blessed <= 0) delete char.blessed;
+		},
 	},
 
 	shrouded: {
 		forceturns: 3,
 		hardcoded: true,
-		stackable: true
+		stackable: true,
+		onturn: function(btl, char) {
+			char.shrouded--;
+			if (char.shrouded <= 0) delete char.shrouded;
+		},
 	},
 
 	insanity: {
