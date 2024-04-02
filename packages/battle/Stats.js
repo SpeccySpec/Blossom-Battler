@@ -123,7 +123,7 @@ inflictStatus = (char, status, notxt) => {
 	if (statusfuncs.stackable) {
 		if (char[status.toLowerCase()]) return ''; // don't overwrite an existing instance of this status.
 
-		char[status.toLowerCase()] = statusfuncs.forceturns ?? 3;
+		char[status.toLowerCase()] = (statusfuncs.forceturns+1) ?? 4;
 	} else {
 		char.status = status.toLowerCase();
 		char.statusturns = statusfuncs.forceturns ?? 3;
