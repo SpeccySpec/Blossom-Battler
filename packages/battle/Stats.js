@@ -121,6 +121,8 @@ inflictStatus = (char, status, notxt) => {
 	// Inflict the status.
 	let statusfuncs = statusEffectFuncs[status.toLowerCase()];
 	if (statusfuncs.stackable) {
+		if (char[status.toLowerCase()]) return ''; // don't overwrite an existing instance of this status.
+
 		char[status.toLowerCase()] = statusfuncs.forceturns ?? 3;
 	} else {
 		char.status = status.toLowerCase();
