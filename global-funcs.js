@@ -300,7 +300,7 @@ statusEmojis = {
 	sleep: "<:sleep:980497282103390308>",
 	dizzy: "<:dizzy:963413989805662269>",
 	despair: "<:despair:963413989805674516>",
-    brainwash: "<:brainwash:963413989537222666>",
+    brainwash: "<:brainwash:1224990018527825990>",
 	fear: "<:fear:963413990376091668>",
 	rage: "<:rage:963413990384472084>",
 	ego: "<:ego:963413989839212564>",
@@ -332,7 +332,7 @@ statusEmojis = {
 	// Positive Statusses
 	mirror: '<:mirror:963413990229311588>',
 	dragonscale: '<:dragonscale:1224681842846994572>',
-	happy: '<:happy:973076333871644733>',
+	happy: '<:happy:1224044692358828092>',
 	airborne: '<:wind:963413845848776714>',
 	blessed: '<:blessed:1223966695241158666>',
 	brave: '<:brave:1223985925206446170>',
