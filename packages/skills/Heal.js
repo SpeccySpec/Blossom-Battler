@@ -222,7 +222,7 @@ healList = {
 	}),
 
 	recarmdra: new Extra({
-		name: "Recarmdra",
+		name: "Recarmdra (Persona)",
 		desc: "Fully restores party HP and MP, but downs the user.",
 		args: [],
 		applyfunc(message, skill, args) {

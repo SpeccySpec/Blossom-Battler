@@ -531,7 +531,7 @@ terrainDescs = {
 	},
 	flaming: {
 		name: "Flaming",
-		emoji: elementEmoji['fire'],
+		emoji: "<:flaming:1225089585197879397>",
 		desc: `*Attacks non-${elementEmoji['fire']}fire main fighters* with *10 ${elementEmoji['fire']}fire damage*.\nWill thaw out the ${statusEmojis['freeze']}freezing fighters*, but every turn there's a *10%* chance they start ${elementEmoji['burn']}burning.`
 	},
 	grassy: {
