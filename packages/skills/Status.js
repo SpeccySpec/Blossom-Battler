@@ -2067,7 +2067,7 @@ isPositiveStatus = (status) => {
 
 statusEffectFuncs = {
 	burn: {
-		onturn: function(btl, char) {
+		endturn: function(btl, char) {
 			let statusTxt = '';
 			let affinityTxt = '';
 
@@ -2101,7 +2101,7 @@ statusEffectFuncs = {
 	},
 
 	toxin: {
-		onturn: function(btl, char) {
+		endturn: function(btl, char) {
 			let statusTxt = '';
 			let affinityTxt = '';
 
@@ -2135,7 +2135,7 @@ statusEffectFuncs = {
 	},
 
 	bleed: {
-		onturn: function(btl, char) {
+		endturn: function(btl, char) {
 			let statusTxt = '';
 			let affinityTxt = '';
 
@@ -2158,7 +2158,7 @@ statusEffectFuncs = {
 	},
 
 	dissolved: {
-		onturn: function(btl, char) {
+		endturn: function(btl, char) {
 			let statusTxt = '';
 			let affinityTxt = '';
 
@@ -2292,7 +2292,7 @@ statusEffectFuncs = {
 	},
 
 	despair: {
-		onturn: function(btl, char) {
+		endturn: function(btl, char) {
 			let statusTxt = '';
 			let affinityTxt = '';
 

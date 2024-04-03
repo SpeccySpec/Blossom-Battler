@@ -196,7 +196,7 @@ terrainFuncs = {
 			}
 
 			if (!isMainElement("fire", char)) {
-				let dmg = 10;
+				let dmg = randNum(8, 17);
 				let affinity = '';
 
 				if (char.affinities.weak.includes("fire")) {
@@ -205,7 +205,7 @@ terrainFuncs = {
 				} else if (char.affinities.superweak.includes("fire")) {
 					dmg *= 4;
 					affinity = affinityEmoji.superweak;
-				} else if (char.affinities.deadly.includes("fire")) {
+				} else if (char.affinities.deadly?.includes("fire")) {
 					dmg *= 8;
 					affinity = affinityEmoji.deadly;
 				} else if (char.affinities.resist.includes("fire")) {
@@ -221,7 +221,7 @@ terrainFuncs = {
 				char.hp = Math.max(0, char.hp-dmg);
 
 				if (char.hp <= 0) {
-					txt += `__${char.name}__ was ___defeated${affinity}___ by the __Flaming Terrain__!\n${selectQuote(char, 'death', null)}`;
+					txt += `__${char.name}__ took ___${dmg}${affinity}___ damage and was defeated by the __Flaming Terrain__!\n${selectQuote(char, 'death', null)}`;
 				} else {
 					txt += `__${char.name}__ took ___${dmg}${affinity}___ damage from the __Flaming Terrain__!`;
 					if (randNum(1, 100) <= 10) txt += `\n${inflictStatus(char, "burn")}`;

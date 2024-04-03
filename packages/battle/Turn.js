@@ -1924,6 +1924,52 @@ doAction = (char, btl, action) => {
 		}
 	}
 
+	// Status Effects.
+	let onturntxt = '';
+	if (char.status && statusEffectFuncs[char.status.toLowerCase()] && statusEffectFuncs[char.status.toLowerCase()].endturn) {
+		onturntxt += statusEffectFuncs[char.status.toLowerCase()].endturn(btl, char) ?? '';
+		if (onturntxt != '') onturntxt += '\n';
+
+		if (char.hp <= 0) {
+			if (statusEffectFuncs[char.status.toLowerCase()].onremove) statusEffectFuncs[char.status.toLowerCase()].onremove(btl, char);
+			delete char.status;
+			delete char.statusturns;
+		} else if (!statusEffectFuncs[char.status.toLowerCase()].onturn) {
+			char.statusturns--;
+			if (char.statusturns <= 0) {
+				if (statusEffectFuncs[char.status.toLowerCase()]?.onremove) statusEffectFuncs[char.status.toLowerCase()].onremove(btl, char);
+				delete char.status;
+				delete char.statusturns;
+			}
+		}
+	}
+
+	// Stackable statusses
+	let stackable = [];
+	for (let i in statusEffectFuncs) {
+		if (statusEffectFuncs[i].stackable) stackable.push(i);
+	}
+
+	for (let i in stackable) {
+		if (char[stackable[i]] && statusEffectFuncs[stackable[i]] && statusEffectFuncs[stackable[i]].onturn) {
+			onturntxt += statusEffectFuncs[stackable[i]].endturn(btl, char) ?? '';
+			if (onturntxt != '') onturntxt += '\n';
+
+			if (char.hp <= 0) {
+				if (statusEffectFuncs[stackable[i]].onremove) statusEffectFuncs[stackable[i]].onremove(btl, char);
+				delete char.status;
+				delete char.statusturns;
+			} else if (!statusEffectFuncs[stackable[i]].onturn) {
+				char.statusturns--;
+				if (char.statusturns <= 0) {
+					if (statusEffectFuncs[stackable[i]]?.onremove) statusEffectFuncs[stackable[i]].onremove(btl, char);
+					delete char.status;
+					delete char.statusturns;
+				}
+			}
+		}
+	}
+
 	// Custom Variable EndTurn
 	if (char.custom) {
 		for (let i in char.custom) {
@@ -1931,7 +1977,7 @@ doAction = (char, btl, action) => {
 		}
 	}
 
-	let onturntxt = '';
+	// Passive endturn.
 	if (doPassives(btl) && char.hp > 0) {
 		for (let s of char.skills) {
 			let skill = skillFile[s];
@@ -1950,10 +1996,45 @@ doAction = (char, btl, action) => {
 		}
 	}
 
+	// Lastly, weather and terrain.
+	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].onturn) {
+		let txt = weatherFuncs[btl.weather.type].onturn(char, btl);
+		if (txt != null) onturntxt += `\n${txt}`;
+
+		btl.weather.turns--;
+		if (btl.weather.turns == 0) {
+			onturntxt += `\nThe ${btl.weather.type} is clearing up.`;
+
+			if (btl.weather.force) {
+				btl.weather.type = btl.weather.force
+				btl.weather.turns = -1;
+			} else {
+				delete btl.weather;
+			}
+		}
+	}
+
+	if (btl.terrain && terrainFuncs && terrainFuncs[btl.terrain.type] && terrainFuncs[btl.terrain.type].onturn && (!char.status || (char.status && char.status != 'airborne'))) {
+		let txt = terrainFuncs[btl.terrain.type].onturn(char, btl);
+		if (txt != null) onturntxt += `\n${txt}`;
+
+		btl.terrain.turns--;
+		if (btl.terrain.turns == 0) {
+			onturntxt += `\nThe ${btl.weather.type} is clearing up.`;
+	
+			if (btl.terrain.force) {
+				btl.terrain.type = btl.terrain.force
+				btl.terrain.turns = -1;
+			} else {
+				delete btl.terrain;
+			}
+		}
+	}
+
 	if (onturntxt != '') {
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#ff1fa9')
-			.setTitle(`${char.name}'s Turn!`)
+			.setTitle(`__${char.name}'s__ Turn!`)
 			.setDescription(onturntxt.replace(/\n{3,}/, () => "\n\n"))
 
 		btl.channel.send({embeds: [DiscordEmbed]});
@@ -2131,41 +2212,6 @@ doTurn = async(btl, noTurnEmbed) => {
 						canMove = false;
 						delete char.custom.flinch;
 					}
-				}
-			}
-		}
-
-		// Lastly, weather and terrain.
-		if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].onturn) {
-			let txt = weatherFuncs[btl.weather.type].onturn(char, btl);
-			if (txt != null) statusTxt += `\n${txt}`;
-
-			btl.weather.turns--;
-			if (btl.weather.turns == 0) {
-				statusTxt += `\nThe ${btl.weather.type} is clearing up.`;
-
-				if (btl.weather.force) {
-					btl.weather.type = btl.weather.force
-					btl.weather.turns = -1;
-				} else {
-					delete btl.weather;
-				}
-			}
-		}
-
-		if (btl.terrain && terrainFuncs && terrainFuncs[btl.terrain.type] && terrainFuncs[btl.terrain.type].onturn && (!char.status || (char.status && char.status != 'airborne'))) {
-			let txt = terrainFuncs[btl.terrain.type].onturn(char, btl);
-			if (txt != null) statusTxt += `\n${txt}`;
-
-			btl.terrain.turns--;
-			if (btl.terrain.turns == 0) {
-				statusTxt += `\nThe ${btl.weather.type} is clearing up.`;
-		
-				if (btl.terrain.force) {
-					btl.terrain.type = btl.terrain.force
-					btl.terrain.turns = -1;
-				} else {
-					delete btl.terrain;
 				}
 			}
 		}
