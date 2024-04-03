@@ -228,6 +228,7 @@ statusEffects = [
 
 	// Neutral Statusses
 	"dry",
+	"wet", 
 	"light",
 	"heavy",
 	"enchanted",
@@ -276,6 +277,7 @@ statusNames = {
 
 	// Neutral Statusses
 	dry: 'Dried',
+	wet: 'Wet', 
 	light: 'Light',
 	heavy: 'Heavy',
 	enchanted: 'Enchanted',
@@ -324,6 +326,7 @@ statusEmojis = {
 
 	// Neutral Statusses
 	dry: '<:dry:1224057395706204262>',
+	wet: '<:wet:1224993103895728218>', 
 	light: '<:light:1224309188755456000>',
 	heavy: '<:heavy:1224309198834372608>',
 	enchanted: '<:enchanted:1224285253170892851>',
