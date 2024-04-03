@@ -2921,6 +2921,68 @@ statusEffectFuncs = {
 	},
 
 	// this code is so lazy but it probably works lmao.
+	wet: {
+		stackable: true,
+		forceturns: 3,
+		onturn: function(btl, char) {
+			char.wet--;
+			if (char.wet <= 0) delete char.wet;
+		},
+		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
+			if (hasStatusAffinity(targ, 'wet', 'weak')) {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("ice") || skill.type.includes("electric")) {
+						dmg = Math.round(dmg*1.75);
+						emojitxt += statusEmojis.wet;
+					} else if (skill.type.includes("fire") || skill.type.includes("earth")) {
+						dmg = Math.round(dmg*0.75);
+					}
+				} else {
+					if (skill.type === "ice" || skill.type === "electric") {
+						dmg = Math.round(dmg*1.75);
+						emojitxt += statusEmojis.wet;
+					} else if (skill.type === "fire" || skill.type === "earth") {
+						dmg = Math.round(dmg*0.75);
+					}
+				}
+			} else if (hasStatusAffinity(targ, 'wet', 'resist')) {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("ice") || skill.type.includes("electric")) {
+						dmg = Math.round(dmg*1.25);
+						emojitxt += statusEmojis.wet;
+					} else if (skill.type.includes("fire") || skill.type.includes("earth")) {
+						dmg = Math.round(dmg/4);
+					}
+				} else {
+					if (skill.type === "ice" || skill.type === "electric") {
+						dmg = Math.round(dmg*1.25);
+						emojitxt += statusEmojis.wet;
+					} else if (skill.type === "fire" || skill.type === "earth") {
+						dmg = Math.round(dmg/4);
+					}
+				}
+			} else {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("ice") || skill.type.includes("electric")) {
+						dmg = Math.round(dmg*1.5);
+						emojitxt += statusEmojis.wet;
+					} else if (skill.type.includes("fire") || skill.type.includes("earth")) {
+						dmg = Math.round(dmg/2);
+					}
+				} else {
+					if (skill.type === "ice" || skill.type === "electric") {
+						dmg = Math.round(dmg*1.5);
+						emojitxt += statusEmojis.wet;
+					} else if (skill.type === "fire" || skill.type === "earth") {
+						dmg = Math.round(dmg/2);
+					}
+				}
+			}
+
+			return [dmg, emojitxt];
+		}
+	},
+
 	dry: {
 		stackable: true,
 		forceturns: 3,
@@ -2979,7 +3041,7 @@ statusEffectFuncs = {
 				}
 			}
 
-			return dmg;
+			return [dmg, emojitxt];
 		}
 	},
 
@@ -3042,7 +3104,7 @@ statusEffectFuncs = {
 				}
 			}
 
-			return dmg;
+			return [dmg, emojitxt];
 		}
 	},
 
@@ -3104,7 +3166,7 @@ statusEffectFuncs = {
 				}
 			}
 
-			return dmg;
+			return [dmg, emojitxt];
 		}
 	},
 
@@ -3125,7 +3187,7 @@ statusEffectFuncs = {
 				dmg = Math.round(dmg*mult);
 				emojitxt += statusEmojis.enchanted;
 			}
-			return dmg;
+			return [dmg, emojitxt];
 		}
 	},
 
@@ -3147,7 +3209,7 @@ statusEffectFuncs = {
 				emojitxt += statusEmojis.invisible;
 			}
 
-			return dmg;
+			return [dmg, emojitxt];
 		}
 	},
 
@@ -3173,7 +3235,7 @@ statusEffectFuncs = {
 				emojitxt += statusEmojis.doomed;
 			}
 
-			return dmg;
+			return [dmg, emojitxt];
 		},
 		statmod: function(char, stats) {
 			if (isBoss(char)) return stats;
@@ -3210,7 +3272,7 @@ statusEffectFuncs = {
 				emojitxt += statusEmojis.weakened;
 			}
 
-			return dmg;
+			return [dmg, emojitxt];
 		},
 		statmod: function(char, stats) {
 			if (isBoss(char)) return stats;

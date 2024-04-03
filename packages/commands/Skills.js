@@ -2116,6 +2116,19 @@ statusDescs = [
 				}
 			},
 			{
+				name: "wet",
+				type: "physical",
+				desc: `Increases ${elementEmoji["ice"]}**ice** and ${elementEmoji["electric"]}**electric** damage. Decreases ${elementEmoji["fire"]}**fire** and ${elementEmoji["earth"]}**earth**. *Stacks with other status effects.*`,
+				ailments: {
+					nonboss: {
+						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
+						normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
+						resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
+			},
+			{
 				name: "light",
 				type: "physical",
 				desc: `Increases ${elementEmoji["wind"]}**wind** and ${elementEmoji["explode"]}**explode** damage. Decreases ${elementEmoji["strike"]}**strike** and ${elementEmoji["earth"]}**earth**. *Stacks with other status effects.*`,

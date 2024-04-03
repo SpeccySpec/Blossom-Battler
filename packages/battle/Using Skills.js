@@ -811,6 +811,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				emojis[i] = "";
 
 				// DmgMod
+				let ret;
 				if (skill.extras) {
 					for (let i in skill.extras) {
 						if (!extrasList[i]) continue;
@@ -839,10 +840,24 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 								if (noExtraArray && noExtraArray.includes(i)) continue;
 								if (passiveList[i].multiple) {
 									for (let k in psv.passive[i]) {
-										dmg = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i][k], emojis[i]) ?? dmg;
+										ret = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i][k], emojis[i]) ?? dmg;
+
+										if (typeof ret == "object") {
+											dmg = ret[0];
+											emojis[i] = ret[1];
+										} else {
+											dmg = ret;
+										}
 									}
 								} else {
-									dmg = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i], emojis[i]) ?? dmg;
+									ret = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i], emojis[i]) ?? dmg;
+
+									if (typeof ret == "object") {
+										dmg = ret[0];
+										emojis[i] = ret[1];
+									} else {
+										dmg = ret;
+									}
 								}
 							}
 						}
@@ -859,9 +874,15 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					}
 				}
 
-				// DmgMod
 				if (targ.status && statusEffectFuncs[targ.status] && statusEffectFuncs[targ.status].dmgmod) {
-					dmg = statusEffectFuncs[targ.status].dmgmod(btl, targ, dmg, skill, emojis[i]);
+					ret = statusEffectFuncs[targ.status].dmgmod(btl, targ, dmg, skill, emojis[i]);
+
+					if (typeof ret == "object") {
+						dmg = ret[0];
+						emojis[i] = ret[1];
+					} else {
+						dmg = ret;
+					}
 				}
 
 				let stackable = [];
@@ -871,7 +892,14 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 				for (let i in stackable) {
 					if (targ[stackable[i]] && statusEffectFuncs[stackable[i]] && statusEffectFuncs[stackable[i]].dmgmod){
-						dmg = statusEffectFuncs[stackable[i]].dmgmod(btl, targ, dmg, skill, emojis[i]);
+						ret = statusEffectFuncs[stackable[i]].dmgmod(btl, targ, dmg, skill, emojis[i]);
+
+						if (typeof ret == "object") {
+							dmg = ret[0];
+							emojis[i] = ret[1];
+						} else {
+							dmg = ret;
+						}
 					}
 				}
 
