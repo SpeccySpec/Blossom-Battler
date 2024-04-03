@@ -952,11 +952,15 @@ commands.exportfile = new Command({
 	checkban: true,
 	func: async(message, args) => {
 		// Firstly, make sure if this file should be legal.
-		let files = ["armors.json", "characters.json", "chests.json", "enemies.json", "items.json", "shops.json"];
+		let files = ["armors.json", "characters.json", "chests.json", "enemies.json", "items.json", "shops.json", "skills.json"];
 		if (!files.includes(args[0].toLowerCase())) return void message.channel.send("That file either does not exist or is illegal.");
 
 		// Upload content.
-		message.channel.send({content: `Here is the data you requested!`, files: [`${dataPath}/json/${message.guild.id}/${args[0]}`]});
+		if (args[0].toLowerCase() === "skills.json") {
+			message.channel.send({content: `Here is the data you requested!`, files: [`${dataPath}/json/skills.json`]});
+		} else {
+			message.channel.send({content: `Here is the data you requested!`, files: [`${dataPath}/json/${message.guild.id}/${args[0]}`]});
+		}
 	}
 })
 
