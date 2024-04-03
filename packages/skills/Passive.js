@@ -1734,8 +1734,8 @@ passiveList = {
 		statmod(btl, char, skill, vars) {
 			// Add things stored by the elementstore custom variable to the skill's power.
 			// Then, delete the elementstore custom variable.
-			if (skill.extras?.elementstore) {
-				skill.pow += skill.extras.elementstore;
+			if (char.custom?.elementstore) {
+				skill.pow += char.custom.elementstore;
 				killVar(char, 'elementstore');
 			}
 		},
