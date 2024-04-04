@@ -2445,3 +2445,73 @@ commands.liststatus = new Command({
 		}
 	}
 })
+
+commands.listtargettype = new Command({
+	desc: 'Lists all the possible target types, and how they affect skills.',
+	section: "skills",
+	aliases: ['listtargets', 'listtargtype', 'listtarg'],
+	args: [],
+	async func(message, args, guilded) {
+		let targListing = [];
+
+		for (i in TargetDesc) targListing.push([i, TargetDesc[i]]);
+
+		let page = 0;
+
+		const generateEmbed = async (page) => {
+			const current = targListing.slice(page, page + 6);
+			return new Discord.MessageEmbed({
+				color: '#0099ff',
+				title: "List of possible Target Types:",
+				description: "Every skill can have a target type, and there are a surprising amount of them to choose from.",
+				fields: await Promise.all(
+					current.map(async arrayDefs => ({
+						name: `${arrayDefs[0]}`,
+						value: arrayDefs[1],
+						inline: true
+					}))
+				)
+			})
+		}
+
+		embedMessage = await message.channel.send({
+			embeds: [await generateEmbed(page)],
+			components: [new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]})]
+		})
+		
+		const collector = embedMessage.createMessageComponentCollector({
+			filter: ({user}) => user.id == message.author.id
+		})
+
+		collector.on('collect', async interaction => {
+			if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
+				if (interaction.customId === 'forward') {
+					page += 6
+
+					if (page >= targListing.length) {
+						page = 0
+					}
+				} else if (interaction.customId === 'back') {
+					page -= 6
+
+					if (page < 0) {
+						page = targListing.length - (targListing.length % 6 != 0 ? targListing.length % 6 : 6)
+					}
+				}
+
+				await interaction.update({
+					embeds: [await generateEmbed(page)],
+					components: [
+						new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]}),
+					]
+				})
+			} else {
+				collector.stop()
+				await interaction.update({
+				embeds: [await generateEmbed(page)],
+				components: []
+				})
+			}
+		})
+	}
+})
