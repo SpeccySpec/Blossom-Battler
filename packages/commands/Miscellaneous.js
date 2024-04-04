@@ -354,6 +354,11 @@ credits = [
 		description: "A guy with a great sense of humor, suggesting ideas and ideas for new features."
 	},
 	{
+		userID: '569614525951901696',
+		role: 'Beta Tester',
+		description: 'A gal with great willpower to research and charisma with a creative mind, sharing many ideas that helped expand the bot.'
+	},
+	{
 		name: "Everyone at the Blossom Battler Discord",
 		description: "You have been very helpful with bug reports and feature suggestions, and you have been a great help to the development of Blossom Battler.",
 		thumbnail: `https://cdn.discordapp.com/attachments/958747864970981376/1004818067953553618/Help.png`
