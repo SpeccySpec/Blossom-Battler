@@ -396,12 +396,17 @@ let cmdcats = {
 	all: "All of the existing commands"
 }
 
+let j = 0;
 for (let k in cmdcats) {
 	let cmd = new Builders.SlashCommandBuilder()
 		.setName(`bb${k}`)
 		.setDescription(cmdcats[k]);
 
+	j = 0;
 	for (let i in commands) {
+		j++
+		if (j > 20) break;
+
 		let c = commands[i];
 		if (c.section != k) continue;
 		if (c.alias) continue;
@@ -409,7 +414,7 @@ for (let k in cmdcats) {
 
 		cmd.addStringOption(option =>
 			option.setName(i.replace(/[ #,%'/()123467890]/g,'').toLowerCase())
-				.setDescription(c.desc ?? '???')
+				.setDescription(`Provide no arguments for help on ${i}.`)
 				.setRequired(true)
 		)
 
@@ -424,7 +429,7 @@ for (let k in cmdcats) {
 						cmd.addStringOption(option =>
 							option.setName(o.name.replace(/[ #,%'/()123467890]/g,'').toLowerCase())
 								.setDescription(o.desc ?? '???')
-								.setRequired(o.forced ?? false)
+								.setRequired(true)
 						)
 				}
 			}
