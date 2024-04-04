@@ -1073,7 +1073,7 @@ commands.preskill = new Command({
 commands.removepreskill = new Command({
 	desc: "Remove a Pre-Skill that a server may have.",
 	section: "skills",
-	aliases: ['removepreviousskill', 'deletepreskill', 'deletepreviousskill'],
+	aliases: ['clearpreskill', 'purgepreskill', 'removepreviousskill', 'deletepreskill', 'deletepreviousskill'],
 	args: [
 		{
 			name: "Skill Name",
@@ -1228,7 +1228,7 @@ commands.evoskill = new Command({
 commands.removeevoskill = new Command({
 	desc: "Remove an Evo-Skill that a server may have.",
 	section: "skills",
-	aliases: ['removeevolutionskill', 'deleteevoskill', 'deleteevolutionskill'],
+	aliases: ['clearevoskill', 'purgeevoskill', 'removeevolutionskill', 'deleteevoskill', 'deleteevolutionskill'],
 	args: [
 		{
 			name: "Skill Name",
