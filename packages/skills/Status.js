@@ -2065,6 +2065,13 @@ isPositiveStatus = (status) => {
 	return positive.includes(status.toLowerCase());
 }
 
+let neutral = ['dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible'];
+isNeutralStatus = (status) => {
+	if (!status) return false;
+
+	return neutral.includes(status.toLowerCase());
+}
+
 statusEffectFuncs = {
 	burn: {
 		endturn: function(btl, char) {

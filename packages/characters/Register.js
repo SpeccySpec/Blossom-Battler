@@ -332,8 +332,10 @@ longDescription = (charDefs, level, server, message, useguild) => {
 					statustotaffinities++;
 
 					finaladdition = affinityScores[affinity];
-					if (affinity == 'happy' || affinity == 'airborne' || affinity == 'mirror')
+					if (isPositiveStatus(char.statusaffinities[affinity][i]))
 						finaladdition *= -1;
+					if (isNeutralStatus(char.statusaffinities[affinity][i]))
+						finaladdition *= 0;
 
 					statusaffinityscore += finaladdition
 					statAffs += `${statusEmojis[char.statusaffinities[affinity][i]]}`;
