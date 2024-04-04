@@ -2044,14 +2044,14 @@ buildStatus = (message, extra, args, lb) => {
 // This file shares names with Status Effects anyway lol
 // We might as well shove some extra stuff in here
 // statusEffectFuncs will be an object that doe ufnnye status
-let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed'];
+let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed', 'chilled', 'overheat'];
 isPhysicalStatus = (status) => {
 	if (!status) return false;
 
 	return phys.includes(status.toLowerCase());
 }
 
-let stackable = ['confusion', 'infatuation', 'drenched', 'shrouded', 'blessed', 'lovable', 'light', 'heavy', 'dry', 'wet', 'doomed', 'weakened', 'drenched', 'shrouded'];
+let stackable = ['confusion', 'infatuation', 'drenched', 'shrouded', 'blessed', 'lovable', 'light', 'heavy', 'dry', 'wet', 'doomed', 'weakened', 'overheat', 'chilled'];
 isStackableStatus = (status) => {
 	if (!status) return false;
 
@@ -2065,7 +2065,7 @@ isPositiveStatus = (status) => {
 	return positive.includes(status.toLowerCase());
 }
 
-let neutral = ['dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible'];
+let neutral = ['dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'chilled', 'overheat'];
 isNeutralStatus = (status) => {
 	if (!status) return false;
 
@@ -3332,6 +3332,132 @@ statusEffectFuncs = {
 			} else {
 				char.lovable = 2;
 			}
+		}
+	},
+
+	chilled: {
+		stackable: true,
+		forceturns: 3,
+		opposite: ["overheat"],
+		onturn: function(btl, char) {
+			char.chilled--;
+			if (char.chilled <= 0) delete char.chilled;
+		},
+		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
+			if (hasStatusAffinity(targ, 'chilled', 'weak')) {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("ice") || skill.type.includes("water")) {
+						dmg = Math.round(dmg*1.75);
+						emojitxt += statusEmojis.chilled;
+					} else if (skill.type.includes("fire") || skill.type.includes("metal")) {
+						dmg = Math.round(dmg*0.75);
+					}
+				} else {
+					if (skill.type === "ice" || skill.type === "water") {
+						dmg = Math.round(dmg*1.75);
+						emojitxt += statusEmojis.chilled;
+					} else if (skill.type === "fire" || skill.type === "metal") {
+						dmg = Math.round(dmg*0.75);
+					}
+				}
+			} else if (hasStatusAffinity(targ, 'chilled', 'resist')) {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("ice") || skill.type.includes("water")) {
+						dmg = Math.round(dmg*1.25);
+						emojitxt += statusEmojis.chilled;
+					} else if (skill.type.includes("fire") || skill.type.includes("metal")) {
+						dmg = Math.round(dmg/4);
+					}
+				} else {
+					if (skill.type === "ice" || skill.type === "water") {
+						dmg = Math.round(dmg*1.25);
+						emojitxt += statusEmojis.chilled;
+					} else if (skill.type === "fire" || skill.type === "metal") {
+						dmg = Math.round(dmg/4);
+					}
+				}
+			} else {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("ice") || skill.type.includes("water")) {
+						dmg = Math.round(dmg*1.5);
+						emojitxt += statusEmojis.chilled;
+					} else if (skill.type.includes("fire") || skill.type.includes("metal")) {
+						dmg = Math.round(dmg/2);
+					}
+				} else {
+					if (skill.type === "ice" || skill.type === "water") {
+						dmg = Math.round(dmg*1.5);
+						emojitxt += statusEmojis.chilled;
+					} else if (skill.type === "fire" || skill.type === "metal") {
+						dmg = Math.round(dmg/2);
+					}
+				}
+			}
+
+			return [dmg, emojitxt];
+		}
+	},
+
+	overheat: {
+		stackable: true,
+		forceturns: 3,
+		opposite: ["chilled"],
+		onturn: function(btl, char) {
+			char.overheat--;
+			if (char.overheat <= 0) delete char.overheat;
+		},
+		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
+			if (hasStatusAffinity(targ, 'overheat', 'weak')) {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("fire") || skill.type.includes("metal")) {
+						dmg = Math.round(dmg*1.75);
+						emojitxt += statusEmojis.overheat;
+					} else if (skill.type.includes("ice") || skill.type.includes("water")) {
+						dmg = Math.round(dmg*0.75);
+					}
+				} else {
+					if (skill.type === "fire" || skill.type === "metal") {
+						dmg = Math.round(dmg*1.75);
+						emojitxt += statusEmojis.overheat;
+					} else if (skill.type === "ice" || skill.type === "water") {
+						dmg = Math.round(dmg*0.75);
+					}
+				}
+			} else if (hasStatusAffinity(targ, 'overheat', 'resist')) {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("fire") || skill.type.includes("metal")) {
+						dmg = Math.round(dmg*1.25);
+						emojitxt += statusEmojis.chilled;
+					} else if (skill.type.includes("ice") || skill.type.includes("water")) {
+						dmg = Math.round(dmg/4);
+					}
+				} else {
+					if (skill.type === "fire" || skill.type === "metal") {
+						dmg = Math.round(dmg*1.25);
+						emojitxt += statusEmojis.overheat;
+					} else if (skill.type === "ice" || skill.type === "water") {
+						dmg = Math.round(dmg/4);
+					}
+				}
+			} else {
+				if (typeof skill.type === "object") {
+					if (skill.type.includes("fire") || skill.type.includes("metal")) {
+						dmg = Math.round(dmg*1.5);
+						emojitxt += statusEmojis.overheat;
+					} else if (skill.type.includes("ice") || skill.type.includes("water")) {
+						dmg = Math.round(dmg/2);
+					}
+				} else {
+					if (skill.type === "fire" || skill.type === "metal") {
+						dmg = Math.round(dmg*1.5);
+						emojitxt += statusEmojis.chilled;
+					} else if (skill.type === "ice" || skill.type === "water") {
+						dmg = Math.round(dmg/2);
+					}
+				}
+			}
+
+			return [dmg, emojitxt];
 		}
 	},
 }

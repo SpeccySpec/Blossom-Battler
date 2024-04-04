@@ -2180,6 +2180,32 @@ statusDescs = [
 					boss: "Affects them the same as non-bosses."
 				}
 			},
+			{
+				name: "chilled",
+				type: "physical",
+				desc: `Increases ${elementEmoji["ice"]}**ice** and ${elementEmoji["water"]}**water** damage. Decreases ${elementEmoji["fire"]}**fire** and ${elementEmoji["metal"]}**metal**.`,
+				ailments: {
+					nonboss: {
+						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
+						normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
+						resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
+			},
+			{
+				name: "overheat",
+				type: "physical",
+				desc: `Increases ${elementEmoji["fire"]}**fire** and ${elementEmoji["metal"]}**metal** damage. Decreases ${elementEmoji["ice"]}**ice** and ${elementEmoji["water"]}**water**.`,
+				ailments: {
+					nonboss: {
+						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
+						normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
+						resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
+			},
 		]
 	},
 	{

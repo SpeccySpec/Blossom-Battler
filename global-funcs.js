@@ -233,6 +233,8 @@ statusEffects = [
 	"heavy",
 	"enchanted",
 	"invisible",
+	"chilled",
+	"overheat",
 
 	// Positive Statusses
 	"happy",
@@ -282,6 +284,8 @@ statusNames = {
 	heavy: 'Heavy',
 	enchanted: 'Enchanted',
 	invisible: 'Invisible',
+	chilled: "Chilled",
+	overheat: "Overheating",
 
 	// Positive Statusses
 	happy: 'Happiness',
@@ -331,6 +335,8 @@ statusEmojis = {
 	heavy: '<:heavy:1224309198834372608>',
 	enchanted: '<:enchanted:1224285253170892851>',
 	invisible: '<:invisible:1224290091661394020>',
+	chilled: '<:chilled:1224993256299827271>',
+	overheat: '<:overheat:1224993287509905409>',
 
 	// Positive Statusses
 	mirror: '<:mirror:963413990229311588>',
