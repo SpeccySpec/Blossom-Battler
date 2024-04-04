@@ -2682,11 +2682,11 @@ statusEffectFuncs = {
 	blessed: {
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'blessed', 'resist')) {
-				char.statusturns = 2;
+				char.blessed = 2;
 			} else if (hasStatusAffinity(char, 'blessed', 'weak')) {
-				char.statusturns = 4;
+				char.blessed = 4;
 			} else {
-				char.statusturns = 3;
+				char.blessed = 3;
 			}
 		},
 		stackable: true,
