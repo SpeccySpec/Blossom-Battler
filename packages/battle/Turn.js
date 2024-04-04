@@ -1951,7 +1951,7 @@ doAction = (char, btl, action) => {
 	}
 
 	for (let i in stackable) {
-		if (char[stackable[i]] && statusEffectFuncs[stackable[i]] && statusEffectFuncs[stackable[i]].onturn) {
+		if (char[stackable[i]] && statusEffectFuncs[stackable[i]] && statusEffectFuncs[stackable[i]].endturn) {
 			onturntxt += statusEffectFuncs[stackable[i]].endturn(btl, char) ?? '';
 			if (onturntxt != '') onturntxt += '\n';
 
