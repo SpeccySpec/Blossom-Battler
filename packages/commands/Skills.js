@@ -2245,7 +2245,7 @@ statusDescs = [
 					nonboss: {
 						weak: "Lasts **2 turns**.",
 						normal: "Lasts **3 turns**.",
-						resist: "Lasts **4 turns.**.",
+						resist: "Lasts **4 turns**.",
 					},
 					boss: "Forced resistance."
 				}
