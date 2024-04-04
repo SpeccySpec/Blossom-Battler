@@ -989,7 +989,7 @@ commands.importfile = new Command({
 		if (!utilityFuncs.RPGBotAdmin(message.author.id)) return void message.channel.send("Only a super admin can use this.");
 
 		// Firstly, make sure if this file should be legal.
-		let files = ["armors.json", "characters.json", "chests.json", "enemies.json", "items.json", "shops.json"];
+		let files = ["armors.json", "characters.json", "chests.json", "enemies.json", "items.json", "shops.json", "skills.json"];
 		if (!files.includes(args[0].toLowerCase())) return void message.channel.send("That file either does not exist or is illegal.");
 
 		// get the file's URL
@@ -997,7 +997,11 @@ commands.importfile = new Command({
 		if (!file) return message.channel.send('There is no file here!');
 
 		// Download the file.
-		await downloadFile(message.attachments.first().url, `./data/json/${message.guild.id}/`, args[0]);
+		if (args[0].toLowerCase()) {
+			await downloadFile(message.attachments.first().url, `./data/json/`, "skills.json");
+		} else {
+			await downloadFile(message.attachments.first().url, `./data/json/${message.guild.id}/`, args[0].toLowerCase());
+		}
 
 		// Send a confirmation message.
 		message.channel.send({content: `Uploaded this file to the server data as ${args[0]}.`});

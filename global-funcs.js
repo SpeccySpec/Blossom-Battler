@@ -667,6 +667,35 @@ Targets = [
 	'randomwidespread' //target random target, effects spread to all targets on the same side based on distance
 ]
 
+TargetDesc = {
+	one: 'Targets one enemy.',
+	ally: 'Targets one ally.',
+	caster: 'Targets the user of the skill.',
+
+	randomopposing: 'Targets a random foe. Multi-hit skills will target a new enemy every hit rather than just attacking a single foe multiple times.',
+	randomallies: 'Targets a random ally. Multi-hit skills will target a new ally every hit rather than just being used on a single ally multiple times.',
+	random: 'Targets a random person on the battlefield exclusing the user. Multi-hit skills will target a new member on the battlefield every hit rather than just attacking a single fighter multiple times.',
+
+	allopposing: 'Targets all enemies.',
+	allallies: 'Targets all allies.',
+
+	everyone: 'Targets every person on the battlefield excluding the user without fail.',
+
+	spreadopposing: 'Targets one enemy, but the damage spreads to the 2 surrounding.',
+	spreadallies: 'Targets one ally, but the effects (or damage) spreads to the 2 surrounding, possibly including the user.',
+
+	randomspreadopposing: 'Targets a random enemy, but the damage spreads to the 2 surrounding. Multi-hit skills will target a new enemy every hit rather than just attacking a single foe multiple times.',
+	randomspreadallies: 'Targets a random ally, but the effects (or damage) spreads to the 2 surrounding, possibly including the user. Multi-hit skills will target a new ally every hit rather than just being used on a single ally multiple times.',
+	randomspread: 'Targets a random person on the battlefield exclusing the user, but the effects (or damage) spreads to the 2 surrounding, possibly including the user. Multi-hit skills will target a new member on the battlefield every hit rather than just attacking a single fighter multiple times.',
+
+	widespreadopposing: 'Targets one enemy, but the damage spreads to all enemies based on distance, i.e., the skill will affect a foe less the farther they are away from the target.',
+	widespreadallies: 'Targets one ally, but the effects spread to all allies based on distance, i.e., the skill will affect an ally less the farther they are away from the target.',
+
+	randomwidespreadopposing: 'Targets a random enemy, but the damage spreads to all enemies based on distance, i.e., the skill will affect a foe less the farther they are away from the target. Multi-hit skills will target a new enemy every hit rather than just attacking a single foe multiple times.',
+	randomwidespreadallies: 'Targets a random ally, but the effects spread to all allies based on distance, i.e., the skill will affect an ally less the farther they are away from the target. Multi-hit skills will target a new ally every hit rather than just being used on a single ally multiple times.',
+	randomwidespreadallies: 'Targets a random person on the battlefield exclusing the user, but the effects spread to all fighters on the side that was targetted based on distance, i.e., the skill will affect a fighter less the farther they are away from the target. Multi-hit skills will target a new member on the battlefield every hit rather than just being used on a single fighter multiple times.',
+}
+
 costTypes = [
 	'mp',
 	'mppercent',
