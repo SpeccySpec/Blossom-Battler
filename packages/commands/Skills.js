@@ -2243,9 +2243,9 @@ statusDescs = [
 				desc: "Cannot get afflicted by a **negative status effect** while this status effect is active.",
 				ailments: {
 					nonboss: {
-						weak: "Lasts **2 turns**.",
+						weak: "Lasts **4 turns**.",
 						normal: "Lasts **3 turns**.",
-						resist: "Lasts **4 turns**.",
+						resist: "Lasts **2 turns**.",
 					},
 					boss: "Forced resistance."
 				}
@@ -2256,9 +2256,9 @@ statusDescs = [
 				desc: "Boost the gain of the **Limit Break Meter**, by 1.5x. Has no effect if **Limit Breaks** are disabled on this server.",
 				ailments: {
 					nonboss: {
-						weak: "Lasts **2 turns**, 1.25x.",
+						weak: "Lasts **4 turns.**, 1.75x.",
 						normal: "Lasts **3 turns**, 1.5x.",
-						resist: "Lasts **4 turns.**, 1.75x.",
+						resist: "Lasts **2 turns**, 1.25x.",
 					},
 					boss: "Forced resistance."
 				}
@@ -2269,9 +2269,9 @@ statusDescs = [
 				desc: "Incapable of being targetted by single target or otherwise skills that require you to focus a single foe.",
 				ailments: {
 					nonboss: {
-						weak: "Lasts **1 turn**.",
+						weak: "Lasts **3 turns**.",
 						normal: "Lasts **2 turns**.",
-						resist: "Lasts **3 turns**.",
+						resist: "Lasts **1 turn**.",
 					},
 					boss: "Forced resistance."
 				}
