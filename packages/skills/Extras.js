@@ -3170,7 +3170,7 @@ customVariables = {
 	},
 
 	firespin: {
-		toembed: "<:firespin:1224283208888352780>",
+		toembed: "<:firespin:1225496120285855765>",
 		onturn: function(btl, char, v) {
 			char.hp = Math.max(0, char.hp-v.damage);
 

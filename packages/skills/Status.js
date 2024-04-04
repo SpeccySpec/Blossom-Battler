@@ -2044,25 +2044,32 @@ buildStatus = (message, extra, args, lb) => {
 // This file shares names with Status Effects anyway lol
 // We might as well shove some extra stuff in here
 // statusEffectFuncs will be an object that doe ufnnye status
-let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'airborne', 'drenched', 'staggered', 'shrouded'];
+let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed'];
 isPhysicalStatus = (status) => {
 	if (!status) return false;
 
 	return phys.includes(status.toLowerCase());
 }
 
-let stackable = ['confusion', 'infatuation', 'drenched', 'shrouded', 'blessed'];
+let stackable = ['confusion', 'infatuation', 'drenched', 'shrouded', 'blessed', 'lovable', 'light', 'heavy', 'dry', 'wet', 'doomed', 'weakened', 'drenched', 'shrouded'];
 isStackableStatus = (status) => {
 	if (!status) return false;
 
 	return stackable.includes(status.toLowerCase());
 }
 
-let positive = ['mirror', 'airborne', 'happy', 'blessed'];
+let positive = ['mirror', 'dragonscale', 'airborne', 'happy', 'blessed', 'brave', 'lovable'];
 isPositiveStatus = (status) => {
 	if (!status) return false;
 
 	return positive.includes(status.toLowerCase());
+}
+
+let neutral = ['dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible'];
+isNeutralStatus = (status) => {
+	if (!status) return false;
+
+	return neutral.includes(status.toLowerCase());
 }
 
 statusEffectFuncs = {
@@ -2625,7 +2632,7 @@ statusEffectFuncs = {
 	},
 
 	happy: {
-		opposite: 'apathy',
+		opposite: ['apathy'],
 		statmod: function(char, stats) {
 			stats.prc -= char.level/10;
 			if (hasStatusAffinity(char, 'happy', 'weak')) {
@@ -2680,7 +2687,15 @@ statusEffectFuncs = {
 	},
 
 	blessed: {
-		forceturns: 3,
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'blessed', 'resist')) {
+				char.blessed = 2;
+			} else if (hasStatusAffinity(char, 'blessed', 'weak')) {
+				char.blessed = 4;
+			} else {
+				char.blessed = 3;
+			}
+		},
 		stackable: true,
 		hardcoded: true,
 		onturn: function(btl, char) {
@@ -2877,20 +2892,20 @@ statusEffectFuncs = {
 	},
 
 	brave: {
-		opposite: 'apathy',
+		opposite: ['apathy'],
 		oninflict: function(char) {
-			if (hasStatusAffinity(char, 'brave', 'weak')) {
+			if (hasStatusAffinity(char, 'brave', 'resist')) {
 				char.statusturns = 2;
-			} else if (hasStatusAffinity(char, 'brave', 'resist')) {
+			} else if (hasStatusAffinity(char, 'brave', 'weak')) {
 				char.statusturns = 4;
 			} else {
 				char.statusturns = 3;
 			}
 		},
 		lbgain: function(char, targ, skill, lbgain, btl) {
-			if (hasStatusAffinity(char, 'brave', 'weak')) {
+			if (hasStatusAffinity(char, 'brave', 'resist')) {
 				lbgain = Math.round(lbgain*1.25);
-			} else if (hasStatusAffinity(char, 'brave', 'resist')) {
+			} else if (hasStatusAffinity(char, 'brave', 'weak')) {
 				lbgain = Math.round(lbgain*1.75);
 			} else {
 				lbgain = Math.round(lbgain*1.5);
@@ -2899,7 +2914,7 @@ statusEffectFuncs = {
 	},
 
 	apathy: {
-		opposite: 'brave',
+		opposite: ['brave', 'happy'],
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'apathy', 'weak')) {
 				char.statusturns = 4;
@@ -2924,6 +2939,7 @@ statusEffectFuncs = {
 	wet: {
 		stackable: true,
 		forceturns: 3,
+		opposite: ["dry"],
 		onturn: function(btl, char) {
 			char.wet--;
 			if (char.wet <= 0) delete char.wet;
@@ -2986,6 +3002,7 @@ statusEffectFuncs = {
 	dry: {
 		stackable: true,
 		forceturns: 3,
+		opposite: ["wet"],
 		onturn: function(btl, char) {
 			char.dry--;
 			if (char.dry <= 0) delete char.dry;
@@ -3046,7 +3063,7 @@ statusEffectFuncs = {
 	},
 
 	light: {
-		opposite: 'heavy',
+		opposite: ['heavy'],
 		stackable: true,
 		forceturns: 3,
 		onturn: function(btl, char) {
@@ -3109,7 +3126,7 @@ statusEffectFuncs = {
 	},
 
 	heavy: {
-		opposite: 'light',
+		opposite: ['light'],
 		stackable: true,
 		forceturns: 3,
 		onturn: function(btl, char) {
@@ -3172,7 +3189,7 @@ statusEffectFuncs = {
 
 	enchanted: {
 		hardcoded: true,
-		opposite: 'invisible',
+		opposite: ['invisible'],
 		forceturns: 2,
 		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if (skill.atktype === "physical" || skill.atktype === "ranged") {
@@ -3193,7 +3210,7 @@ statusEffectFuncs = {
 
 	invisible: {
 		hardcoded: true,
-		opposite: 'enchanted',
+		opposite: ['enchanted'],
 		forceturns: 2,
 		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if (skill.atktype === "magic") {
@@ -3215,7 +3232,7 @@ statusEffectFuncs = {
 
 	doomed: {
 		stackable: true,
-		opposite: 'weakened',
+		opposite: ['weakened'],
 		forceturns: 3,
 		onturn: function(btl, char) {
 			char.doomed--;
@@ -3252,7 +3269,7 @@ statusEffectFuncs = {
 
 	weakened: {
 		stackable: true,
-		opposite: 'doomed',
+		opposite: ['doomed'],
 		forceturns: 3,
 		onturn: function(btl, char) {
 			char.weakened--;
