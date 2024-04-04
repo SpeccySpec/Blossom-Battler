@@ -156,6 +156,8 @@ itemTypes = [
 	"key"
 ]
 
+consumableItems = ["heal","healall","healmp","healallmp","healhpmp","healallhpmp","revive"];
+
 itemTypeEmoji = {
 	skill: '<:physical:973077052129423411>',
 	
@@ -225,6 +227,7 @@ statusEffects = [
 	"doomed",
 	"weakened",
 	"grassimped",
+	"stuffed",
 
 	// Neutral Statusses
 	"dry",
@@ -276,6 +279,7 @@ statusNames = {
 	doomed: 'Doomed',
 	weakened: 'Weakened',
 	grassimped: 'Grassimped',
+	stuffed: 'Stuffed',
 
 	// Neutral Statusses
 	dry: 'Dried',
@@ -327,6 +331,7 @@ statusEmojis = {
 	doomed: '<:doomed:1224665169872027709>',
 	weakened: '<:weakened:1224662513031970956>',
 	grassimped: '<:grassimped:1224076081225531412>',
+	stuffed: '<:stuffed:1224993179657310369>',
 
 	// Neutral Statusses
 	dry: '<:dry:1224057395706204262>',
@@ -394,6 +399,7 @@ elementTechs = {
 	insanity: ['psychic', 'curse'],
 	stagger: ['strike', 'earth', 'gravity'],
 	grassimped: ['fire', "wind"],
+	stuffed: ['gravity', 'nuclear'],
 
 	// Neutral Statusses
 	enchanted: ['strike', 'slash', 'pierce'],

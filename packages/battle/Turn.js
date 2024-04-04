@@ -290,7 +290,11 @@ const menuStates = {
 			else if (item?.type === 'pacify') 
 				btncolor = 'blue';
 
-			comps[compins].push(makeButton(`${item?.name ?? i}: ${btl.teams[char.team].items[i]}`, itemTypeEmoji[item.type], btncolor, false, i))
+			let canSelect = true;
+
+			if (char.status && char.status.toLowerCase() == "stuffed" && consumableItems.includes(itemFile[i].type)) canSelect = false;
+
+			comps[compins].push(makeButton(`${item?.name ?? i}: ${btl.teams[char.team].items[i]}`, itemTypeEmoji[item.type], btncolor, false, i, !canSelect))
 			k++;
 		}
 	},

@@ -2044,7 +2044,7 @@ buildStatus = (message, extra, args, lb) => {
 // This file shares names with Status Effects anyway lol
 // We might as well shove some extra stuff in here
 // statusEffectFuncs will be an object that doe ufnnye status
-let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed', 'chilled', 'overheat'];
+let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed', 'chilled', 'overheat', 'stuffed'];
 isPhysicalStatus = (status) => {
 	if (!status) return false;
 
@@ -3459,5 +3459,18 @@ statusEffectFuncs = {
 
 			return [dmg, emojitxt];
 		}
+	},
+
+	stuffed: {
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'stuffed', 'weak')) {
+				char.statusturns = 3;
+			} else if (hasStatusAffinity(char, 'stuffed', 'resist') || isBoss(char)) {
+				char.statusturns = 1;
+			} else {
+				char.statusturns = 2;
+			}
+		},
+		hardcoded: true
 	},
 }

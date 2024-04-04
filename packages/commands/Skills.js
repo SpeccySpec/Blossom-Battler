@@ -1955,6 +1955,18 @@ statusDescs = [
 					nonboss: "You cannot have affinities toward this Status Ailment.",
 					boss: "Immune to this status ailment."
 				}
+			},
+			{
+				name: "stuffed",
+				desc: "Cannot use consumable items.",
+				ailments: {
+					nonboss: {
+						weak: `Lasts **3 turns**.`,
+						normal: `Lasts **2 turns**.`,
+						resist: `Lasts **1 turn**.`,
+					},
+					boss: `Lasts **1 turn**.`
+				}
 			}
 		]
 	},
