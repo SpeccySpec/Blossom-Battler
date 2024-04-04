@@ -2044,21 +2044,21 @@ buildStatus = (message, extra, args, lb) => {
 // This file shares names with Status Effects anyway lol
 // We might as well shove some extra stuff in here
 // statusEffectFuncs will be an object that doe ufnnye status
-let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'airborne', 'drenched', 'staggered', 'shrouded'];
+let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed'];
 isPhysicalStatus = (status) => {
 	if (!status) return false;
 
 	return phys.includes(status.toLowerCase());
 }
 
-let stackable = ['confusion', 'infatuation', 'drenched', 'shrouded', 'blessed'];
+let stackable = ['confusion', 'infatuation', 'drenched', 'shrouded', 'blessed', 'lovable', 'light', 'heavy', 'dry', 'wet', 'doomed', 'weakened', 'drenched', 'shrouded'];
 isStackableStatus = (status) => {
 	if (!status) return false;
 
 	return stackable.includes(status.toLowerCase());
 }
 
-let positive = ['mirror', 'airborne', 'happy', 'blessed'];
+let positive = ['mirror', 'dragonscale', 'airborne', 'happy', 'blessed', 'brave', 'lovable'];
 isPositiveStatus = (status) => {
 	if (!status) return false;
 
@@ -2924,6 +2924,7 @@ statusEffectFuncs = {
 	wet: {
 		stackable: true,
 		forceturns: 3,
+		opposite: "dry",
 		onturn: function(btl, char) {
 			char.wet--;
 			if (char.wet <= 0) delete char.wet;
@@ -2986,6 +2987,7 @@ statusEffectFuncs = {
 	dry: {
 		stackable: true,
 		forceturns: 3,
+		opposite: "wet",
 		onturn: function(btl, char) {
 			char.dry--;
 			if (char.dry <= 0) delete char.dry;
