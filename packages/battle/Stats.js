@@ -173,6 +173,12 @@ inflictStatus = (char, status, notxt) => {
 		char.statusturns = statusfuncs.forceturns ?? 3;
 	}
 
+	if (statusfuncs.opposite) {
+		for (i of statusfuncs.opposite) {
+			if (char[i]) delete char[i];
+		}
+	}
+
 	// OnInflict status hook
 	if (statusfuncs.oninflict) statusfuncs.oninflict(char);
 

@@ -2687,7 +2687,7 @@ statusEffectFuncs = {
 
 	infatuation: {
 		stackable: true,
-		opposite: 'guilt',
+		opposite: ['guilt'],
 		onturn: function(btl, char) {
 			if (randNum(1, 100) <= 50) return [`${char.name} is stopped in their tracks by lust, losing their turn!`, false];
 		}
@@ -2695,7 +2695,7 @@ statusEffectFuncs = {
 
 	guilt: {
 		stackable: true,
-		opposite: 'infatuation',
+		opposite: ['infatuation'],
 		onturn: function(btl, char) {
 			if (randNum(1, 100) <= 50) return [`${char.name} is held back by guilt...`, false];
 		}
@@ -3711,7 +3711,7 @@ statusEffectFuncs = {
 
 	haste: {
 		hardcoded: true,
-		opposite: 'leisure',
+		opposite: ['leisure'],
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'haste', 'weak')) {
 				char.statusturns = 4;
@@ -3728,7 +3728,7 @@ statusEffectFuncs = {
 
 	leisure: {
 		hardcoded: true,
-		opposite: 'haste',
+		opposite: ['haste'],
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'leisure', 'weak')) {
 				char.statusturns = 4;
