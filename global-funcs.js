@@ -201,6 +201,7 @@ statusEffects = [
     "burn", // 1/10th HP lost. [WEAK] 1/5th HP lost. [RESIST] 1/20th HP lost.
 	"bleed", // 1/10th HP lost. [WEAK] 1/5th HP lost. [RESIST] 1/20th HP lost.
     "freeze", // One turn lost. [WEAK] Two turns lost. [RESIST] Chance to have turn lost.
+	"petrified",
 	"stun",
 	"dissolved",
     "paralyze", // Turns can be lost. Chance for this to happen lowers over time. [WEAK] Doubled Length. [RESIST] Halved Length.
@@ -294,6 +295,7 @@ statusNames = {
 	disabled: "Disability",
 	leisure: 'Leisure',
 	guilt: 'Guilt',
+	petrified: 'Petrification',
 
 	// Neutral Statusses
 	dry: 'Dried',
@@ -355,6 +357,7 @@ statusEmojis = {
 	disabled: '<:disabled:1224663101962453042>',
 	leisure: '<:leisure:1224663103229268078>',
 	guilt: '<:guilt:1225856607750066318>',
+	petrified: '<:petrification:1224993134744698950>',
 
 	// Neutral Statusses
 	dry: '<:dry:1224057395706204262>',
@@ -431,6 +434,7 @@ elementTechs = {
 	tired: ['electric', 'sound', 'ice', 'explode'],
 	disabled: ['sound', 'acid', 'gravity', 'psychic'],
 	leisure: ['earth', 'gravity', 'acid'],
+	petrified: ['water', 'wind', 'strike', 'explode'],
 
 	// Neutral Statusses
 	enchanted: ['strike', 'slash', 'pierce'],

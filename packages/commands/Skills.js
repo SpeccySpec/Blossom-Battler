@@ -1806,6 +1806,18 @@ statusDescs = [
 				}
 			},
 			{
+				name: "petrified",
+				desc: `Immobilizes the afflicted for an **amount of turns**. Increases damage resistance **by an amount**, but sharply raises ${critEmoji}**critical** damage taken.`,
+				ailments: {
+					nonboss: {
+						weak: `Lasts **3 turns**, raises damage resistance by **3%** and raises ${critEmoji}**critical** damage taken by **40%**.`,
+						normal: `Lasts **2 turns**, raises damage resistance by **4%** and raises ${critEmoji}**critical** damage taken by **20%**.`,
+						resist: `Lasts **1 turn**, raises damage resistance by **5%** and raises ${critEmoji}**critical** damage taken by **10%**.`,
+					},
+					boss: `**Breaks out immediately**.`
+				}
+			},
+			{
 				name: "stun",
 				desc: "Immobilizes the afflicted for an **amount of turns**. Identical to <:freeze:963387466885259324>**Freeze**, except with flavour text.",
 				ailments: {

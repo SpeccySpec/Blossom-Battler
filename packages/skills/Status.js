@@ -2085,7 +2085,7 @@ buildStatus = (message, extra, args, lb) => {
 // This file shares names with Status Effects anyway lol
 // We might as well shove some extra stuff in here
 // statusEffectFuncs will be an object that doe ufnnye status
-let phys = ['burn', 'freeze', 'stun', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'cloud9', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed', 'chilled', 'overheat', 'stuffed', 'disabled', 'brimstone', 'tired', 'energized', 'haste'];
+let phys = ['burn', 'freeze', 'petrified', 'stun', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'cloud9', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed', 'chilled', 'overheat', 'stuffed', 'disabled', 'brimstone', 'tired', 'energized', 'haste'];
 isPhysicalStatus = (status) => {
 	if (!status) return false;
 
@@ -2262,6 +2262,53 @@ statusEffectFuncs = {
 				delete char.statuschance;
 				return `${char.name} thaws out!`;
 			}
+		}
+	},
+
+	petrified: {
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'petrified', 'weak'))
+				char.statusturns = 3;
+			else if (hasStatusAffinity(char, 'petrified', 'resist'))
+				char.statusturns = 1;
+			else
+				char.statusturns = 2;
+		},
+		onremove: function(btl, char) {
+			DiscordEmbed = new Discord.MessageEmbed()
+				.setColor("#ff1fa9")
+				.setTitle(`${char.name}'s turn!`)
+				.setDescription(`${char.name} breaks out!`);
+			btl.channel.send({embeds: [DiscordEmbed]});
+		},
+		onturn: function(btl, char) {
+			if (isBoss(char)) {
+				delete char.status;
+				delete char.statuschance;
+				return `${char.name} breaks out!`;
+			}
+
+			return [`${char.name} is petrified, losing their turn!`, false];
+		},
+		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
+			if (hasStatusAffinity(targ, 'petrified', 'weak'))
+				dmg *= 0.97;
+			else if (hasStatusAffinity(targ, 'petrified', 'resist'))
+				dmg *= 0.95;
+			else
+				dmg *= 0.96;
+
+			return dmg;
+		},
+		critmod: function(btl, targ, critRate, skill) {
+			if (hasStatusAffinity(targ, 'petrified', 'weak'))
+				critRate *= 1.4;
+			else if (hasStatusAffinity(targ, 'petrified', 'resist'))
+				critRate *= 1.1;
+			else
+				critRate *= 1.2;
+
+			return critRate;
 		}
 	},
 
@@ -2694,7 +2741,7 @@ statusEffectFuncs = {
 	},
 
 	sensitive: {
-		onremove: function(char) {
+		onremove: function(btl, char) {
 			killVar(char, 'sensitive');
 		},
 		oninflict: function(char) {

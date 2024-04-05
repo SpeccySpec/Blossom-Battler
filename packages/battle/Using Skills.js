@@ -794,12 +794,17 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 							}
 						}
 
+						//Critical Rate status effects
+						if (targ.status && statusEffectFuncs[targ.status] && statusEffectFuncs[targ.status].critmod) {
+							critRate = statusEffectFuncs[targ.status].critmod(btl, targ, critRate, skill);
+						}
+						
 						dmg *= critRate;
 
 						// Get rid of stagger
-						if (char.status && char.status === "stagger") {
-							delete char.status;
-							delete char.statusturns;
+						if (targ.status && targ.status === "stagger") {
+							delete targ.status;
+							delete targ.statusturns;
 						}
 					}
 				}
