@@ -2762,6 +2762,8 @@ customVariables = {
 						let affinity = getAffinity(inf, vars[5]);
 						let affinityTxt = affinityEmoji[affinity] ?? '';
 
+						let settings = setUpSettings(btl.guild.id);
+
 						switch(affinity) {
 							case 'deadly':
 								d *= settings.rates.affinities?.deadly ?? 4.2;
