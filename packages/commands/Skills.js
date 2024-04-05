@@ -1930,7 +1930,7 @@ statusDescs = [
 						normal: `Takes **1/10th** of max HP & **1/2s** the ${statusEmojis["enddown"]}**END** stat. Has a **10%** chance of dissolving the afflicted's armor.`,
 						resist: `Takes **1/20th** of max HP & **1/1.25s** the ${statusEmojis["enddown"]}**END** stat. Has a **5%** chance of dissolving the afflicted's armor.`,
 					},
-					boss: `Takes **5 HP** & **doesn't change ${statusEmojis["enddown"]}END stat**. Will **never** dissolve the afflicted's armor.`
+					boss: `Takes **5 HP** & **doesn't change ${statusEmojis["enddown"]}END stat**. Bosses can't wear armor in the first place.`
 				}
 			},
 			{
