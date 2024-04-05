@@ -2044,7 +2044,7 @@ buildStatus = (message, extra, args, lb) => {
 // This file shares names with Status Effects anyway lol
 // We might as well shove some extra stuff in here
 // statusEffectFuncs will be an object that doe ufnnye status
-let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed', 'chilled', 'overheat', 'stuffed'];
+let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed', 'chilled', 'overheat', 'stuffed', 'disabled'];
 isPhysicalStatus = (status) => {
 	if (!status) return false;
 
@@ -2058,7 +2058,7 @@ isStackableStatus = (status) => {
 	return stackable.includes(status.toLowerCase());
 }
 
-let positive = ['mirror', 'dragonscale', 'airborne', 'happy', 'blessed', 'brave', 'lovable'];
+let positive = ['mirror', 'dragonscale', 'airborne', 'happy', 'blessed', 'brave', 'lovable', 'energized'];
 isPositiveStatus = (status) => {
 	if (!status) return false;
 
@@ -2516,6 +2516,7 @@ statusEffectFuncs = {
 	},
 
 	hunger: {
+		opposite: ['stuffed'],
 		statmod: function(char, stats) {
 			if (hasStatusAffinity(char, 'hunger', 'weak')) {
 				stats.atk /= 4;
@@ -3310,7 +3311,7 @@ statusEffectFuncs = {
 			if (isBoss(char)) {
 				delete char.status;
 				delete char.statuschance;
-				return "${char.name} magically returns to their normal form.";
+				return `${char.name} magically returns to their normal form.`;
 			}
 
 			return [`${char.name} tries to waddle around... but as a **Grassimp**, they cannot do much.`, false];
@@ -3462,6 +3463,7 @@ statusEffectFuncs = {
 	},
 
 	stuffed: {
+		opposite: ['hunger'],
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'stuffed', 'weak')) {
 				char.statusturns = 3;
@@ -3473,4 +3475,29 @@ statusEffectFuncs = {
 		},
 		hardcoded: true
 	},
+
+	tired: {
+		opposite: ['energized'],
+		forceturns: 3,
+		hardcoded: true
+	},
+
+	energized: {
+		opposite: ['tired'],
+		forceturns: 3,
+		hardcoded: true
+	},
+
+	disabled: {
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'disabled', 'weak')) {
+				char.statusturns = 3;
+			} else if (hasStatusAffinity(char, 'disabled', 'resist') || isBoss(char)) {
+				char.statusturns = 1;
+			} else {
+				char.statusturns = 2;
+			}
+		},
+		hardcoded: true
+	}
 }
