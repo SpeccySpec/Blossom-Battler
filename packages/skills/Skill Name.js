@@ -32,6 +32,20 @@ canAfford = (char, skill) => {
 	let costtype = skill.costtype;
 	if (!costtype) costtype = 'mp';
 
+	if (char.status && ['tired', 'energized'].includes(char.status.toLowerCase())) {
+		if (char.status.toLowerCase() == 'tired') {
+			if (hasStatusAffinity(char, 'tired', 'resist') || isBoss(char)) cost *= 1.1;
+			else if (hasStatusAffinity(char, 'tired', 'weak')) cost *= 1.3;
+			else cost *= 1.2;
+		}
+
+		if (char.status.toLowerCase() == 'energized') {
+			if (hasStatusAffinity(char, 'energized', 'weak') || isBoss(char)) cost *= 0.7;
+			else if (hasStatusAffinity(char, 'energized', 'resist')) cost *= 0.9;
+			else cost *= 0.8;
+		}
+	}
+
 	switch(costtype.toLowerCase()) {
 		case 'hppercent':
 			if (isBoss(char)) return true;
@@ -90,6 +104,10 @@ canUseSkill = (char, skill, skillid) => {
 
 			case 'ego':
 				if (skill.type === "heal") return false;
+				break;
+
+			case 'disabled':
+				return false;
 				break;
 		}
 	}
