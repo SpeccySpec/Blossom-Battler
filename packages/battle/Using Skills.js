@@ -1214,10 +1214,16 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 	// Does this skill exist...?
 	if (!skill) {
+		char.guard = 0.45;
+
+		let mpget = Math.max(1, Math.round((char.maxmp/100*5)-5+randNum(1,10)));
+		char.mp = Math.min(char.maxmp, Math.round(char.mp+mpget));
+
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor(elementColors[char.mainElement] ?? elementColors.strike)
-			.setTitle(`__${char.name}__ => ???`)
-			.setDescription(`${char.name} tried to use a skill ...but nothing happened...?\n_(Something went wrong with the skill. Does it exist?)_`)
+			.setTitle(`__${char.name}__ => __Self__`)
+			.setDescription(`__${char.name}__ guards! This reduces damage, and restores **${mpget}${char.mpMeter ? char.mpMeter[1] : "MP"}**!`)
+			.setFooter("<:warning:878094052208296007>");
 		btl.channel.send({embeds: [DiscordEmbed]});
 
 		// return true or something
