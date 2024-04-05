@@ -2603,8 +2603,17 @@ statusEffectFuncs = {
 
 	infatuation: {
 		stackable: true,
+		opposite: 'guilt',
 		onturn: function(btl, char) {
 			if (randNum(1, 100) <= 50) return [`${char.name} is stopped in their tracks by lust, losing their turn!`, false];
+		}
+	},
+
+	guilt: {
+		stackable: true,
+		opposite: 'infatuation',
+		onturn: function(btl, char) {
+			if (randNum(1, 100) <= 50) return [`${char.name} is held back by guilt...`, false];
 		}
 	},
 

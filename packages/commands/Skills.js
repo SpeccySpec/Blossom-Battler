@@ -2095,6 +2095,10 @@ statusDescs = [
 				desc: `Has a 50% chance to hault attack for **3 turns**.`,
 			},
 			{
+				name: "guilt",
+				desc: `Has a 50% chance to hault attack for **3 turns**. Unlike <:infatuation:963413990195757107>**Infatuation**, the user may still use items.`,
+			},
+			{
 				name: "confusion",
 				desc: `Has a 50% chance for the afflicted to hit themselves for **3 turns**.`,
 			},
