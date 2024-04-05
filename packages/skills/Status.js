@@ -2265,6 +2265,33 @@ statusEffectFuncs = {
 		}
 	},
 
+	stun: {
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'stun', 'weak'))
+				char.statusturns = 2;
+			else
+				char.statusturns = 1;
+		},
+		onturn: function(btl, char) {
+			if (isBoss(char)) {
+				delete char.status;
+				delete char.statuschance;
+				return `__${char.name}__ shakes the <:stun:1225850856021168200>**stun** off!`;
+			}
+
+			let chance = 100;
+			if (hasStatusAffinity(char, 'stun', 'resist')) chance = 50;
+
+			if (randNum(1, 100) <= chance)
+				return [`__${char.name}__ is stunned, losing their turn!`, false];
+			else {
+				delete char.status;
+				delete char.statuschance;
+				return `__${char.name}__ shakes the <:stun:1225850856021168200>**stun** off!`;
+			}
+		}
+	},
+
 	paralyze: {
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'paralysis', 'weak')) {

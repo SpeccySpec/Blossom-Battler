@@ -1795,7 +1795,7 @@ statusDescs = [
 			},
 			{
 				name: "freeze",
-				desc: `Immobilizes the afflicted for an **amount of turns**.`,
+				desc: "Immobilizes the afflicted for an **amount of turns**. Identical to <:stun:1225850856021168200>**Stun**, except with flavour text.",
 				ailments: {
 					nonboss: {
 						weak: `Lasts **2 turns**.`,
@@ -1803,6 +1803,18 @@ statusDescs = [
 						resist: `Lasts **1 turn, but has a 50% chance of thawing out**.`,
 					},
 					boss: `**Thaws out immediately**.`
+				}
+			},
+			{
+				name: "stun",
+				desc: "Immobilizes the afflicted for an **amount of turns**. Identical to <:freeze:963387466885259324>**Freeze**, except with flavour text.",
+				ailments: {
+					nonboss: {
+						weak: `Lasts **2 turns**.`,
+						normal: `Lasts **1 turn**.`,
+						resist: `Lasts **1 turn, but has a 50% chance of shaking it off**.`,
+					},
+					boss: `*Shakes it off immediately*.`
 				}
 			},
 			{

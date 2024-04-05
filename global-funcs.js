@@ -201,6 +201,7 @@ statusEffects = [
     "burn", // 1/10th HP lost. [WEAK] 1/5th HP lost. [RESIST] 1/20th HP lost.
 	"bleed", // 1/10th HP lost. [WEAK] 1/5th HP lost. [RESIST] 1/20th HP lost.
     "freeze", // One turn lost. [WEAK] Two turns lost. [RESIST] Chance to have turn lost.
+	"stun",
 	"dissolved",
     "paralyze", // Turns can be lost. Chance for this to happen lowers over time. [WEAK] Doubled Length. [RESIST] Halved Length.
 	"dizzy", // 50% accuracy on moves [WEAK] 33% accuracy on moves [RESIST] 80% accuracy on moves
@@ -258,6 +259,7 @@ statusNames = {
     burn: 'Burning',
 	bleed: 'Bleeding',
     freeze: 'Freezing',
+    stun: 'Stun',
 	dissolved: 'Dissolving',
     paralyze: 'Paralysis',
 	sleep: 'Sleeping',
@@ -316,6 +318,7 @@ statusEmojis = {
 	bleed: "<:bleed:963413989281390612>",
     toxin: "<:toxin:963413990044737548>",
     freeze: "<:freeze:963413989960843324>",
+	stun: "<:stun:1225850856021168200>",
     paralyze: "<:paralyze:1224050178307260517>",
 	sleep: "<:sleep:980497282103390308>",
 	dizzy: "<:dizzy:963413989805662269>",
@@ -395,6 +398,7 @@ elementTechs = {
 	burn: ['explode', 'wind', 'grass', 'nuclear'],
 	bleed: ['slash', 'pierce', 'nuclear'],
 	freeze: ['strike', 'explode', 'fire', 'earth', 'gravity', 'nuclear', 'metal'],
+	stun: ['strike', 'earth', 'metal', 'electric'],
 	paralyze: ['strike', 'slash', 'pierce', 'gravity'],
 	dizzy: ['psychic', 'spirit', 'sound'],
 	sleep: ['all'],
