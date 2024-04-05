@@ -698,9 +698,23 @@ extrasList = {
 				return finaltext
 			}
 			if (targ.charms && targ.charms.includes("PureVision") && stat === 'prc') return `${targ.name}'s Pure Vision negated the change.`;
+
+			let brimstoneInfluenced = false;
+
+			if (targ.status && targ.status.toLowerCase() == 'brimstone') {
+				if (hasStatusAffinity(targ, 'brimstone', 'weak')) {
+					if (amount > 0) {amount *= -1; brimstoneInfluenced = 'debuff';}
+				} else if (hasStatusAffinity(targ, 'brimstone', 'resist') || isBoss(targ)) {
+					if (amount < 0) {amount *= -1; brimstoneInfluenced = 'buff';}
+				} else {
+					amount *= -1;
+					brimstoneInfluenced = 'yes';
+				}
+			}
+
 			let txt = amount > 0
-				? `__${targ.name}__'s _${stat ? stat.toUpperCase() : "???"}_ was buffed **${amount}** time(s)!`
-				: `__${targ.name}__'s _${stat ? stat.toUpperCase() : "???"}_ was debuffed **${absamount}** time(s)!`
+				? `__${targ.name}__'s _${stat ? stat.toUpperCase() : "???"}_ was ${['yes', 'buff'].includes(brimstoneInfluenced) ? statusEmojis['brimstone'] : ''}buffed **${amount}** time(s)!`
+				: `__${targ.name}__'s _${stat ? stat.toUpperCase() : "???"}_ was ${['yes', 'debuff'].includes(brimstoneInfluenced) ? statusEmojis['brimstone'] : ''}debuffed **${absamount}** time(s)!`
 
 			// Force Message
 			if (skill.extras && skill.extras.forcemsg) {
@@ -730,11 +744,30 @@ extrasList = {
 						if (!targ?.custom?.buffTurns) 
 							addCusVal(targ, "buffTurns", []);
 
+						let brimstoneProceed = false;
+						if (targ.status && targ.status.toLowerCase() == 'brimstone') {
+							if (!targ?.custom?.revertBuffTurns) addCusVal(targ, "revertBuffTurns", []);
+
+							if (hasStatusAffinity(targ, 'brimstone', 'weak')) {
+								if (!(amount < 0 && targ.custom.revertBuffTurns.filter(x => x[0] == stat && x[1] < 0).length >= 3)) brimstoneProceed = true;
+							} else if (hasStatusAffinity(targ, 'brimstone', 'resist') || isBoss(targ)) {
+								if (!(amount > 0 && targ.custom.revertBuffTurns.filter(x => x[0] == stat && x[1] > 0).length >= 3)) brimstoneProceed = true;
+							} else {
+								if (!((amount < 0 && targ.custom.revertBuffTurns.filter(x => x[0] == stat && x[1] < 0).length >= 3) || (amount > 0 && targ.custom.revertBuffTurns.filter(x => x[0] == stat && x[1] > 0).length >= 3))) brimstoneProceed = true;
+							}
+						}
+
 						for (let i = 0; i < absamount; i++) {
-							if (!((amount < 0&& targ.custom.buffTurns.filter(x => x[0] == stat && x[1] < 0).length >= 3) || (amount > 0 && targ.custom.buffTurns.filter(x => x[0] == stat && x[1] > 0).length >= 3))) {
+							if (!((amount < 0 && targ.custom.buffTurns.filter(x => x[0] == stat && x[1] < 0).length >= 3) || (amount > 0 && targ.custom.buffTurns.filter(x => x[0] == stat && x[1] > 0).length >= 3))) {
 								targ.custom.buffTurns.push([
 									stat, turns * (amount / absamount)
 								])
+
+								if (brimstoneProceed) {
+									targ.custom.revertBuffTurns.push([
+										stat, turns * (-1 * amount / absamount)
+									])
+								}
 							}
 						}
 
@@ -755,11 +788,30 @@ extrasList = {
 					if (!targ?.custom?.buffTurns) 
 						addCusVal(targ, "buffTurns", []);
 
+					let brimstoneProceed = false;
+					if (targ.status && targ.status.toLowerCase() == 'brimstone') {
+						if (!targ?.custom?.revertBuffTurns) addCusVal(targ, "revertBuffTurns", []);
+
+						if (hasStatusAffinity(targ, 'brimstone', 'weak')) {
+							if (!(amount < 0 && targ.custom.revertBuffTurns.filter(x => x[0] == stat && x[1] < 0).length >= 3)) brimstoneProceed = true;
+						} else if (hasStatusAffinity(targ, 'brimstone', 'resist') || isBoss(targ)) {
+							if (!(amount > 0 && targ.custom.revertBuffTurns.filter(x => x[0] == stat && x[1] > 0).length >= 3)) brimstoneProceed = true;
+						} else {
+							if (!((amount < 0 && targ.custom.revertBuffTurns.filter(x => x[0] == stat && x[1] < 0).length >= 3) || (amount > 0 && targ.custom.revertBuffTurns.filter(x => x[0] == stat && x[1] > 0).length >= 3))) brimstoneProceed = true;
+						}
+					}
+
 					for (let i = 0; i < absamount; i++) {
 						if (!((amount < 0 && targ.custom.buffTurns.filter(x => x[0] == stat && x[1] < 0).length >= 3) || (amount > 0 && targ.custom.buffTurns.filter(x => x[0] == stat && x[1] > 0).length >= 3))) {
 							targ.custom.buffTurns.push([
 								stat, turns * (amount / absamount)
 							])
+
+							if (brimstoneProceed) {
+								targ.custom.revertBuffTurns.push([
+									stat, turns * (-1 * amount / absamount)
+								])
+							}
 						}
 					}
 				}
@@ -2303,6 +2355,11 @@ extrasList = {
 			for (let i in targ.buffs) {
 				if (targ.buffs[i] > 0) targ.buffs[i] = 0;
 			}
+			if(targ?.custom?.revertBuffs) {
+				for (let i in targ.custom.revertBuffs) {
+					if (targ.custom.revertBuffs[i] < 0) targ.custom.revertBuffs[i] = 0;
+				}
+			}
 			if(targ?.custom?.buffTurns) {
 				for (i in targ.custom.buffTurns) {
 					if (targ.custom.buffTurns[i][1] >= 0) targ.custom.buffTurns[i] = ''
@@ -2313,8 +2370,18 @@ extrasList = {
 					killVar(targ, "buffTurns");
 				}
 			}
+			if(targ?.custom?.revertBuffTurns) {
+				for (i in targ.custom.revertBuffTurns) {
+					if (targ.custom.revertBuffTurns[i][1] <= 0) targ.custom.revertBuffTurns[i] = ''
+				}
+				targ.custom.revertBuffTurns = targ.custom.revertBuffTurns.filter(x => x.length != 0);
 
-			return `__${targ.name}__'s positive buffs were nullified$!`;
+				if (targ.custom.revertBuffTurns.length == 0) {
+					killVar(targ, "revertBuffTurns");
+				}
+			}
+
+			return `__${targ.name}__'s positive buffs were nullified!`;
 		},
 		getinfo(vars, skill) {
 			return "Removes the **target's** buffs";
@@ -2669,7 +2736,31 @@ customVariables = {
 			vars = vars.filter(x => x.length != 0);
 			if (vars.length == 0) {
 				killVar(char, "buffTurns");
+				killVar(char, 'revertBuffTurns');
 			}
+
+			if (text == '') return null;
+			return text;
+		}
+	},
+
+	revertBuffTurns: {
+		onturn(btl, char, vars) {
+			let text = ''
+
+			if (!char?.custom?.buffTurns) {
+				killVar(char, "revertBuffTurns");
+				return null;
+			}
+
+			for (i in vars) {
+				let wasPositive = vars[i][1] > 0;
+				vars[i][1] += vars[i][1] > 0 ? -1 : 1;
+
+				if (vars[i][1] == 0) vars[i] = ''
+			}
+			
+			vars = vars.filter(x => x.length != 0);
 
 			if (text == '') return null;
 			return text;

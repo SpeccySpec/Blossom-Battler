@@ -236,6 +236,11 @@ statusList = {
 			for (let i in targ.buffs) {
 				if (targ.buffs[i] > 0) targ.buffs[i] = change;
 			}
+			if(targ?.custom?.revertBuffs) {
+				for (let i in targ.custom.revertBuffs) {
+					if (targ.custom.revertBuffs[i] < 0) targ.custom.revertBuffs[i] = 0;
+				}
+			}
 			if(targ?.custom?.buffTurns) {
 				for (i in targ.custom.buffTurns) {
 					if (targ.custom.buffTurns[i][1] >= 0) targ.custom.buffTurns[i] = ''
@@ -244,6 +249,16 @@ statusList = {
 
 				if (targ.custom.buffTurns.length == 0) {
 					killVar(targ, "buffTurns");
+				}
+			}
+			if(targ?.custom?.revertBuffTurns) {
+				for (i in targ.custom.revertBuffTurns) {
+					if (targ.custom.revertBuffTurns[i][1] <= 0) targ.custom.revertBuffTurns[i] = ''
+				}
+				targ.custom.revertBuffTurns = targ.custom.revertBuffTurns.filter(x => x.length != 0);
+
+				if (targ.custom.revertBuffTurns.length == 0) {
+					killVar(targ, "revertBuffTurns");
 				}
 			}
 
@@ -295,7 +310,12 @@ statusList = {
 			}
 			
 			for (let i in targ.buffs) {
-				if (targ.buffs[i] > 0) targ.buffs[i] = change;
+				if (targ.buffs[i] < 0) targ.buffs[i] = change;
+			}
+			if(targ?.custom?.revertBuffs) {
+				for (let i in targ.custom.revertBuffs) {
+					if (targ.custom.revertBuffs[i] > 0) targ.custom.revertBuffs[i] = 0;
+				}
 			}
 			if(targ?.custom?.buffTurns) {
 				for (i in targ.custom.buffTurns) {
@@ -305,6 +325,16 @@ statusList = {
 
 				if (targ.custom.buffTurns.length == 0) {
 					killVar(targ, "buffTurns");
+				}
+			}
+			if(targ?.custom?.revertBuffTurns) {
+				for (i in targ.custom.revertBuffTurns) {
+					if (targ.custom.revertBuffTurns[i][1] >= 0) targ.custom.revertBuffTurns[i] = ''
+				}
+				targ.custom.revertBuffTurns = targ.custom.revertBuffTurns.filter(x => x.length != 0);
+
+				if (targ.custom.revertBuffTurns.length == 0) {
+					killVar(targ, "revertBuffTurns");
 				}
 			}
 
@@ -332,13 +362,24 @@ statusList = {
 
 			let charTurns = char?.custom?.buffTurns;
 			let targTurns = char?.custom?.buffTurns;
-			if (charTurns) {
+			let charRevertBuffs = char?.custom?.revertBuffs;
+			let targRevertBuffs = char?.custom?.revertBuffs;
+			let charRevertTurns = char?.custom?.revertBuffTurns;
+			let targRevertTurns = char?.custom?.revertBuffTurns;
+
+			if (charTurns || charRevertBuffs || charRevertTurns) {
 				if (!targ.custom) targ.custom = {};
-				targ.custom.buffTurns = charTurns;
+
+				if (charTurns) targ.custom.buffTurns = charTurns;
+				if (charRevertBuffs) targ.custom.revertBuffs = charRevertBuffs;
+				if (charRevertTurns) targ.custom.revertBuffTurns = charRevertTurns;
 			}
-			if (targTurns) {
+			if (targTurns || targRevertBuffs || targRevertTurns) {
 				if (!char.custom) char.custom = {};
-				char.custom.buffTurns = targTurns;
+
+				if (targTurns) char.custom.buffTurns = targTurns;
+				if (targRevertBuffs) char.custom.revertBuffs = targRevertBuffs;
+				if (targRevertTurns) targ.custom.revertBuffTurns = targRevertTurns;
 			}
 
 			let addText = ''
@@ -2044,7 +2085,7 @@ buildStatus = (message, extra, args, lb) => {
 // This file shares names with Status Effects anyway lol
 // We might as well shove some extra stuff in here
 // statusEffectFuncs will be an object that doe ufnnye status
-let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed', 'chilled', 'overheat', 'stuffed', 'disabled'];
+let phys = ['burn', 'freeze', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed', 'chilled', 'overheat', 'stuffed', 'disabled', 'brimstone'];
 isPhysicalStatus = (status) => {
 	if (!status) return false;
 
@@ -2065,7 +2106,7 @@ isPositiveStatus = (status) => {
 	return positive.includes(status.toLowerCase());
 }
 
-let neutral = ['dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'chilled', 'overheat'];
+let neutral = ['dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'chilled', 'overheat', 'brimstone'];
 isNeutralStatus = (status) => {
 	if (!status) return false;
 
@@ -3499,5 +3540,45 @@ statusEffectFuncs = {
 			}
 		},
 		hardcoded: true
-	}
+	},
+
+	brimstone: {
+		oninflict: function(char) {
+			char.statusturns = 3;
+
+			addCusVal(char, 'revertBuffs', objClone(char.buffs));
+			for (i in char.buffs) {
+				if (hasStatusAffinity(char, 'brimstone', 'weak')) {
+					if (char.buffs[i] > 0) char.buffs[i] *= -1;
+				} else if (hasStatusAffinity(char, 'brimstone', 'resist') || isBoss(char)) {
+					if (char.buffs[i] < 0) char.buffs[i] *= -1;
+				} else {
+					char.buffs[i] *= -1;
+				}
+			}
+
+			if (char?.custom?.buffTurns) {
+				addCusVal(char, 'revertBuffTurns', objClone(char.custom.buffTurns));
+				for (i in char.custom.buffTurns) {
+					if (hasStatusAffinity(char, 'brimstone', 'weak')) {
+						if (char.custom.buffTurns[i][1] < 0) char.custom.buffTurns[i][1] *= -1;
+					} else if (hasStatusAffinity(char, 'brimstone', 'resist') || isBoss(char)) {
+						if (char.custom.buffTurns[i][1] > 0) char.custom.buffTurns[i][1] *= -1;
+					} else {
+						char.custom.buffTurns[i][1] *= -1;
+					}
+				}
+			}
+		},
+		onremove: function(btl, char) {
+			char.buffs = objClone(char.custom.revertBuffs);
+			killVar(char, 'revertBuffs');
+
+			if (char?.custom?.buffTurns && char?.custom?.revertBuffTurns) {
+				char.custom.buffTurns = objClone(char.custom.revertBuffTurns);
+				killVar(char, 'revertBuffTurns');
+			}
+		},
+		hardcoded: true
+	},
 }

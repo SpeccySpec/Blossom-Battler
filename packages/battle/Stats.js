@@ -85,6 +85,29 @@ buffStat = (f, stat, amount, boosted) => {
 				else 
 					stat = Math.max(Math.min(stat, 3), -3);
 			}
+
+			if (f.status && f.status.toLowerCase() == 'brimstone') {
+				for (let revStat of f.custom.revertBuffs) {
+					let proceed = false;
+		
+					if (hasStatusAffinity(f, 'brimstone', 'weak')) {
+						if (amount < 0) proceed = true;
+					} else if (hasStatusAffinity(f, 'brimstone', 'resist') || isBoss(f)) {
+						if (amount > 0) proceed = true;
+					} else {
+						proceed = true;
+					}
+		
+					if (proceed) {
+						revStat += amount*-1;
+			
+						if (boosted || Math.abs(revStat) == 4) 
+							revStat = Math.max(Math.min(revStat, 4), -4);
+						else 
+							revStat = Math.max(Math.min(revStat, 3), -3);
+					}
+				}
+			}
 			break;
 
 		default:
@@ -96,6 +119,27 @@ buffStat = (f, stat, amount, boosted) => {
 				f.buffs[statBuff] = Math.max(Math.min(f.buffs[statBuff], 4), -4);
 			else 
 				f.buffs[statBuff] = Math.max(Math.min(f.buffs[statBuff], 3), -3);
+
+			if (f.status && f.status.toLowerCase() == 'brimstone') {
+				let proceed = false;
+
+				if (hasStatusAffinity(f, 'brimstone', 'weak')) {
+					if (amount < 0) proceed = true;
+				} else if (hasStatusAffinity(f, 'brimstone', 'resist') || isBoss(f)) {
+					if (amount > 0) proceed = true;
+				} else {
+					proceed = true;
+				}
+
+				if (proceed) {
+					f.custom.revertBuffs[statBuff] += amount*-1;
+
+					if (boosted || Math.abs(f.custom.revertBuffs[statBuff]) == 4) 
+						f.custom.revertBuffs[statBuff] = Math.max(Math.min(f.custom.revertBuffs[statBuff], 4), -4);
+					else 
+						f.custom.revertBuffs[statBuff] = Math.max(Math.min(f.custom.revertBuffs[statBuff], 3), -3);
+				}
+			}
 	}
 }
 

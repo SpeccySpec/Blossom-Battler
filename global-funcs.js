@@ -240,6 +240,7 @@ statusEffects = [
 	"invisible",
 	"chilled",
 	"overheat",
+	"brimstone",
 
 	// Positive Statusses
 	"happy",
@@ -295,6 +296,7 @@ statusNames = {
 	invisible: 'Invisible',
 	chilled: "Chilled",
 	overheat: "Overheating",
+	brimstone: 'Brimstone',
 
 	// Positive Statusses
 	happy: 'Happiness',
@@ -350,6 +352,7 @@ statusEmojis = {
 	invisible: '<:invisible:1224290091661394020>',
 	chilled: '<:chilled:1224993256299827271>',
 	overheat: '<:overheat:1224993287509905409>',
+	brimstone: '<:brimstone:1224663099794128916>',
 
 	// Positive Statusses
 	mirror: '<:mirror:963413990229311588>',
@@ -409,12 +412,13 @@ elementTechs = {
 	stagger: ['strike', 'earth', 'gravity'],
 	grassimped: ['fire', "wind"],
 	stuffed: ['gravity', 'nuclear'],
-	tired: ['electric', 'earth', 'wind', 'explode'],
+	tired: ['electric', 'sound', 'ice', 'explode'],
 	disabled: ['sound', 'acid', 'gravity', 'psychic'],
 
 	// Neutral Statusses
 	enchanted: ['strike', 'slash', 'pierce'],
 	invisible: ['curse', 'bless', 'psychic'],
+	brimstone: ['fire', 'earth', 'curse'],
 
 	// Positive Statusses
 	happy: ['psychic', 'bless', 'curse', 'spirit', 'sound'],

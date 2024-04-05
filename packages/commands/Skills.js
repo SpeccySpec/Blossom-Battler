@@ -1883,7 +1883,7 @@ statusDescs = [
 			},
 			{
 				name: "stagger",
-				desc: "The next attack is **guaranteed** a critical hit.",
+				desc: "The next attack dealt to the afflicted is a **guaranteed** critical hit.",
 			},
 			{
 				name: "shrouded",
@@ -2235,6 +2235,19 @@ statusDescs = [
 					boss: "Affects them the same as non-bosses."
 				}
 			},
+			{
+				name: "brimstone",
+				type: "physical",
+				desc: `Reverses buffs and debuffs for the duration of the effect.`,
+				ailments: {
+					nonboss: {
+						weak: `Reverses **only buffs**.`,
+						normal: `Acts like normal.`,
+						resist: `Reverses **only debuffs**.`,
+					},
+					boss: `Reverses **only debuffs**.`
+				}
+			}
 		]
 	},
 	{
