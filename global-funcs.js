@@ -228,6 +228,8 @@ statusEffects = [
 	"weakened",
 	"grassimped",
 	"stuffed",
+	"tired",
+	"disabled",
 
 	// Neutral Statusses
 	"dry",
@@ -246,7 +248,8 @@ statusEffects = [
 	"airborne",
 	"blessed",
 	"brave",
-	"lovable"
+	"lovable",
+	"energized"
 ]
 
 statusNames = {
@@ -270,7 +273,7 @@ statusNames = {
 	blind: 'Blindness',
 	confusion: 'Confusion',
 	irradiation: 'Irradiation',
-	sensitive: 'Sensitive',
+	sensitive: 'Sensitivity',
 	drenched: 'Drenched',
 	insanity: 'Insanity',
 	stagger: 'Staggering',
@@ -280,6 +283,8 @@ statusNames = {
 	weakened: 'Weakened',
 	grassimped: 'Grassimped',
 	stuffed: 'Stuffed',
+	tired: "Tiredness",
+	disabled: "Disability",
 
 	// Neutral Statusses
 	dry: 'Dried',
@@ -298,7 +303,8 @@ statusNames = {
 	airborne: 'Airborne',
 	blessed: 'Blessed',
 	brave: 'Brave',
-	lovable: 'Lovable'
+	lovable: 'Lovable',
+	energized: 'Energization'
 }
 
 statusEmojis = {
@@ -332,6 +338,8 @@ statusEmojis = {
 	weakened: '<:weakened:1224662513031970956>',
 	grassimped: '<:grassimped:1224076081225531412>',
 	stuffed: '<:stuffed:1224993179657310369>',
+	tired: '<:tired:1224663100918206576>',
+	disabled: '<:disabled:1224663101962453042>',
 
 	// Neutral Statusses
 	dry: '<:dry:1224057395706204262>',
@@ -351,6 +359,7 @@ statusEmojis = {
 	blessed: '<:blessed:1223966695241158666>',
 	brave: '<:brave:1223985925206446170>',
 	lovable: '<:lovable:1224346501237575833>',
+	energized: '<:energized:1225589766913785998>',
 
 	// Buffs
 	atkup: "<:atkup:990629395486089216>",
@@ -400,6 +409,8 @@ elementTechs = {
 	stagger: ['strike', 'earth', 'gravity'],
 	grassimped: ['fire', "wind"],
 	stuffed: ['gravity', 'nuclear'],
+	tired: ['electric', 'earth', 'wind', 'explode'],
+	disabled: ['sound', 'acid', 'gravity', 'psychic'],
 
 	// Neutral Statusses
 	enchanted: ['strike', 'slash', 'pierce'],
@@ -409,6 +420,7 @@ elementTechs = {
 	happy: ['psychic', 'bless', 'curse', 'spirit', 'sound'],
 	airborne: ['pierce', 'electric', 'metal', 'gravity'],
 	dragonscale: ['psychic', 'spirit', 'bless', 'curse', 'nuclear'],
+	energized: ['psychic', 'poison', 'curse', 'gravity'],
 }
 
 // Enemy Habitats

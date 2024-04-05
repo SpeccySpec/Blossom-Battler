@@ -242,6 +242,10 @@ const menuStates = {
 					case 'dazed':
 						if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'ranged') canselect = false;
 						break;
+
+					case 'disabled':
+						canselect = false;
+						break;
 				}
 			}
 

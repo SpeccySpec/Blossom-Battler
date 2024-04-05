@@ -1393,6 +1393,20 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		}
 	}
 
+	if (char.status && ['tired', 'energized'].includes(char.status.toLowerCase())) {
+		if (char.status.toLowerCase() == 'tired') {
+			if (hasStatusAffinity(char, 'tired', 'resist') || isBoss(char)) skillCost *= 1.1;
+			else if (hasStatusAffinity(char, 'tired', 'weak')) skillCost *= 1.3;
+			else skillCost *= 1.2;
+		}
+
+		if (char.status.toLowerCase() == 'energized') {
+			if (hasStatusAffinity(char, 'energized', 'weak') || isBoss(char)) skillCost *= 0.7;
+			else if (hasStatusAffinity(char, 'energized', 'resist')) skillCost *= 0.9;
+			else skillCost *= 0.8;
+		}
+	}
+
 	// Boost Rate Leader Skills
 	if (settings?.mechanics?.leaderskills && party?.leaderskill && party.leaderskill.type === 'boost') {
 		if (party.leaderskill.var1.toLowerCase() == 'all' || skill?.atktype == party.leaderskill.var1.toLowerCase() || (skill.type == party.leaderskill.var1.toLowerCase() || skill.type.includes(party.leaderskill.var1.toLowerCase()))) {

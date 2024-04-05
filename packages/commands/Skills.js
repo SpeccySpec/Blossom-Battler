@@ -1879,17 +1879,14 @@ statusDescs = [
 			},
 			{
 				name: "drenched",
-				type: "physical",
 				desc: `Nullifies status affinities for **3 turns**.`,
 			},
 			{
 				name: "stagger",
-				type: "physical",
 				desc: "The next attack is **guaranteed** a critical hit.",
 			},
 			{
 				name: "shrouded",
-				type: "physical",
 				desc: "Incapable of seeing the afflicted's current stats.",
 				ailments: {
 					nonboss: {
@@ -1902,7 +1899,6 @@ statusDescs = [
 			},
 			{
 				name: "dissolved",
-				type: "physical",
 				desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once 1 HP is reached**. May change the ${statusEmojis["enddown"]}**END** stat.`,
 				ailments: {
 					nonboss: {
@@ -1915,7 +1911,6 @@ statusDescs = [
 			},
 			{
 				name: "doomed",
-				type: "physical",
 				desc: `Take increased damage from ${elementEmoji["bless"]}**Bless** skills. *May change the ${statusEmojis["enddown"]}END stat*.`,
 				ailments: {
 					nonboss: {
@@ -1932,7 +1927,6 @@ statusDescs = [
 			},
 			{
 				name: "weakened",
-				type: "physical",
 				desc: `Take increased damage from ${elementEmoji["curse"]}**Curse** skills. *May change the ${statusEmojis["atkdown"]}ATK stat*.`,
 				ailments: {
 					nonboss: {
@@ -1949,7 +1943,6 @@ statusDescs = [
 			},
 			{
 				name: "grassimped",
-				type: "physical",
 				desc: "You're turned into a Grassimp! How do you do anything in this weird, bushy form?",
 				ailments: {
 					nonboss: "You cannot have affinities toward this Status Ailment.",
@@ -1966,6 +1959,18 @@ statusDescs = [
 						resist: `Lasts **1 turn**.`,
 					},
 					boss: `Lasts **1 turn**.`
+				}
+			},
+			{
+				name: "disabled",
+				desc: "Prevents afflicted from using any skills. Can only use the melee attack and items.",
+				ailments: {
+					nonboss: {
+						weak: "Lasts **3 turns**.",
+						normal: "Lasts **2 turns**.",
+						resist: "Lasts **1 turn**.",
+					},
+					boss: "Lasts **1 turn**."
 				}
 			}
 		]
@@ -2107,6 +2112,18 @@ statusDescs = [
 						resist: "Lasts **2 turns.**, 0.75x.",
 					},
 					boss: "Affects them the same as non-bosses."
+				}
+			},
+			{
+				name: "tired",
+				desc: `Increases skill cost **by an amount**.`,
+				ailments: {
+					nonboss: {
+						weak: `Increases cost by **30%**.`,
+						normal: `Increases cost by **20%**.`,
+						resist: `Increases cost by **10%**.`,
+					},
+					boss: `Increases cost by **10%**.`
 				}
 			}
 		]
@@ -2314,6 +2331,19 @@ statusDescs = [
 					boss: "Forced resistance."
 				}
 			},
+			{
+				name: "energized",
+				type: "mental",
+				desc: `Decreases skill cost **by an amount**.`,
+				ailments: {
+					nonboss: {
+						weak: `Decreases cost by **30%**.`,
+						normal: `Decreases cost by **20%**.`,
+						resist: `Decreases cost by **10%**.`,
+					},
+					boss: `Decreases cost by **30%**.`
+				}
+			}
 		]
 	}
 ]
