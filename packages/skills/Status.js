@@ -3624,4 +3624,20 @@ statusEffectFuncs = {
 		},
 		hardcoded: true
 	},
+
+	leisure: {
+		hardcoded: true,
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'leisure', 'weak')) {
+				char.statusturns = 4;
+			} else if (hasStatusAffinity(char, 'leisure', 'resist')) {
+				char.statusturns = 2;
+			} else {
+				char.statusturns = 3;
+			}
+		},
+		onturn: function(btl, char) {
+			return `__${char.name}__ is aloof, not paying attention.`;
+		}
+	},
 }

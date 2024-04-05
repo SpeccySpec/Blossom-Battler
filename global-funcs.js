@@ -231,6 +231,7 @@ statusEffects = [
 	"stuffed",
 	"tired",
 	"disabled",
+	"leisure",
 
 	// Neutral Statusses
 	"dry",
@@ -289,6 +290,7 @@ statusNames = {
 	stuffed: 'Stuffed',
 	tired: "Tiredness",
 	disabled: "Disability",
+	leisure: 'Leisure',
 
 	// Neutral Statusses
 	dry: 'Dried',
@@ -347,6 +349,7 @@ statusEmojis = {
 	stuffed: '<:stuffed:1224993179657310369>',
 	tired: '<:tired:1224663100918206576>',
 	disabled: '<:disabled:1224663101962453042>',
+	leisure: '<:leisure:1224663103229268078>',
 
 	// Neutral Statusses
 	dry: '<:dry:1224057395706204262>',
@@ -421,6 +424,7 @@ elementTechs = {
 	stuffed: ['gravity', 'nuclear'],
 	tired: ['electric', 'sound', 'ice', 'explode'],
 	disabled: ['sound', 'acid', 'gravity', 'psychic'],
+	leisure: ['earth', 'gravity', 'acid'],
 
 	// Neutral Statusses
 	enchanted: ['strike', 'slash', 'pierce'],

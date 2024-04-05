@@ -2141,6 +2141,18 @@ statusDescs = [
 					},
 					boss: "Affects them the same as non-bosses."
 				}
+			},
+			{
+				name: "leisure",
+				desc: "Always last in the turn order, no matter what. Overrides things such as <:psychic:1225515672646324366>**Psychic Terrain**.",
+				ailments: {
+					nonboss: {
+						weak: "Lasts **4 turns**.",
+						normal: "Lasts **3 turns**.",
+						resist: "Lasts **2 turns.**.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
 			}
 		]
 	},
