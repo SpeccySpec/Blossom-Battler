@@ -3630,9 +3630,9 @@ statusEffectFuncs = {
 		opposite: 'leisure',
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'haste', 'weak')) {
-				char.statusturns = 2;
-			} else if (hasStatusAffinity(char, 'haste', 'resist')) {
 				char.statusturns = 4;
+			} else if (hasStatusAffinity(char, 'haste', 'resist')) {
+				char.statusturns = 2;
 			} else {
 				char.statusturns = 3;
 			}
