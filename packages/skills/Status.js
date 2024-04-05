@@ -2085,7 +2085,7 @@ buildStatus = (message, extra, args, lb) => {
 // This file shares names with Status Effects anyway lol
 // We might as well shove some extra stuff in here
 // statusEffectFuncs will be an object that doe ufnnye status
-let phys = ['burn', 'freeze', 'stun', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'cloud9', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed', 'chilled', 'overheat', 'stuffed', 'disabled', 'brimstone', 'tired', 'energized'];
+let phys = ['burn', 'freeze', 'stun', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'cloud9', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed', 'chilled', 'overheat', 'stuffed', 'disabled', 'brimstone', 'tired', 'energized', 'haste'];
 isPhysicalStatus = (status) => {
 	if (!status) return false;
 
@@ -2099,7 +2099,7 @@ isStackableStatus = (status) => {
 	return stackable.includes(status.toLowerCase());
 }
 
-let positive = ['mirror', 'dragonscale', 'airborne', 'cloud9', 'happy', 'blessed', 'brave', 'lovable', 'energized'];
+let positive = ['mirror', 'dragonscale', 'airborne', 'cloud9', 'happy', 'blessed', 'brave', 'lovable', 'energized', 'haste'];
 isPositiveStatus = (status) => {
 	if (!status) return false;
 
@@ -3625,8 +3625,26 @@ statusEffectFuncs = {
 		hardcoded: true
 	},
 
+	haste: {
+		hardcoded: true,
+		opposite: 'leisure',
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'haste', 'weak')) {
+				char.statusturns = 2;
+			} else if (hasStatusAffinity(char, 'haste', 'resist')) {
+				char.statusturns = 4;
+			} else {
+				char.statusturns = 3;
+			}
+		},
+		onturn: function(btl, char) {
+			return `__${char.name}__ is hyperfocused, moving quickly.`;
+		}
+	},
+
 	leisure: {
 		hardcoded: true,
+		opposite: 'haste',
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'leisure', 'weak')) {
 				char.statusturns = 4;
@@ -3639,5 +3657,5 @@ statusEffectFuncs = {
 		onturn: function(btl, char) {
 			return `__${char.name}__ is aloof, not paying attention.`;
 		}
-	},
+	}
 }

@@ -39,8 +39,12 @@ getTurnOrder = (btl) => {
 			let agl2 = statWithBuff(b.stats.agl, b.buffs.agl);
 
 			// Leisure
-			if (a.status == "leisure") agl1 = 99999;
-			if (b.status == "leisure") agl2 = 99999;
+			if (a.status == "leisure") agl1 = 999999;
+			if (b.status == "leisure") agl2 = 999999;
+
+			// Haste
+			if (a.status == "haste") agl1 = -50;
+			if (b.status == "haste") agl2 = -50;
 
 			// Some stuff
 			return agl1 - agl2;
@@ -58,6 +62,10 @@ getTurnOrder = (btl) => {
 			// Leisure
 			if (a.status == "leisure") agl1 = -50;
 			if (b.status == "leisure") agl2 = -50;
+
+			// Haste
+			if (a.status == "haste") agl1 = 999999;
+			if (b.status == "haste") agl2 = 999999;
 
 			// Some stuff
 			return agl2 - agl1;

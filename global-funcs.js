@@ -254,7 +254,8 @@ statusEffects = [
 	"blessed",
 	"brave",
 	"lovable",
-	"energized"
+	"energized",
+	"haste"
 ]
 
 statusNames = {
@@ -314,7 +315,8 @@ statusNames = {
 	blessed: 'Blessed',
 	brave: 'Brave',
 	lovable: 'Lovable',
-	energized: 'Energization'
+	energized: 'Energization',
+	haste: 'Haste'
 }
 
 statusEmojis = {
@@ -375,6 +377,7 @@ statusEmojis = {
 	brave: '<:brave:1223985925206446170>',
 	lovable: '<:lovable:1224346501237575833>',
 	energized: '<:energized:1225589766913785998>',
+	haste: '<:haste:1224663098581975061>',
 
 	// Buffs
 	atkup: "<:atkup:990629395486089216>",
@@ -440,6 +443,7 @@ elementTechs = {
 	cloud9: ['wind', 'water', 'ice', 'nuclear'],
 	dragonscale: ['psychic', 'spirit', 'bless', 'curse', 'nuclear'],
 	energized: ['psychic', 'poison', 'curse', 'gravity'],
+	haste: ['electric', 'wind', 'metal']
 }
 
 // Enemy Habitats

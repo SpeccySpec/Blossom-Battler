@@ -2379,6 +2379,18 @@ statusDescs = [
 					},
 					boss: `Decreases cost by **30%**.`
 				}
+			},
+			{
+				name: "haste",
+				desc: "Always first in the turn order, no matter what. Overrides things such as <:psychic:1225515672646324366>**Psychic Terrain**.",
+				ailments: {
+					nonboss: {
+						weak: "Lasts **2 turns**.",
+						normal: "Lasts **3 turns**.",
+						resist: "Lasts **4 turns.**.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
 			}
 		]
 	}
