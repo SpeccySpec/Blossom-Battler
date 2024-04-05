@@ -2281,6 +2281,18 @@ statusDescs = [
 				}
 			},
 			{
+				name: "cloud9",
+				desc: `Disables effects of weather for the afflicted for **3 turns**, but **may expire if they use a magic skill**. Increases dodge chance *(magic -> may increase by 100%, other -> may increase by 10%)* and doubles afflicted's magic skill power.`,
+				ailments: {
+					nonboss: {
+						weak: `**Won't** expire if they use a magic skill and **doubles** dodge chance addition.`,
+						normal: `Dodge chance addition is **regular**.`,
+						resist: `**Halves** dodge chance addition.`,
+					},
+					boss: `**Won't** expire if they use a magic skill and **doubles** dodge chance addition.`
+				}
+			},
+			{
 				name: "happy",
 				desc: `Increases ${statusEmojis["critup"]}**LUK** & ${statusEmojis["aglup"]}**AGL** stats positively based on level for **3 turns**, but decreases the ${statusEmojis["prcdown"]}**PRC** stat by **1/10th** of the afflicted's level.`,
 				ailments: {

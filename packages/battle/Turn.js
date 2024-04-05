@@ -2006,7 +2006,7 @@ doAction = (char, btl, action) => {
 
 	// Lastly, weather and terrain.
 	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].onturn) {
-		let txt = weatherFuncs[btl.weather.type].onturn(char, btl);
+		let txt = (!char.status || (char.status && char.status != 'cloud9')) ? weatherFuncs[btl.weather.type].onturn(char, btl) : null;
 		if (txt != null) onturntxt += `\n${txt}`;
 
 		btl.weather.turns--;
@@ -2022,8 +2022,8 @@ doAction = (char, btl, action) => {
 		}
 	}
 
-	if (btl.terrain && terrainFuncs && terrainFuncs[btl.terrain.type] && terrainFuncs[btl.terrain.type].onturn && (!char.status || (char.status && char.status != 'airborne'))) {
-		let txt = terrainFuncs[btl.terrain.type].onturn(char, btl);
+	if (btl.terrain && terrainFuncs && terrainFuncs[btl.terrain.type] && terrainFuncs[btl.terrain.type].onturn) {
+		let txt = (!char.status || (char.status && char.status != 'airborne')) ? terrainFuncs[btl.terrain.type].onturn(char, btl) : null;
 		if (txt != null) onturntxt += `\n${txt}`;
 
 		btl.terrain.turns--;

@@ -54,6 +54,7 @@ let st = {
 	sensitive: 3,
 	happy: 1,
 	airborne: 1,
+	cloud9: 1,
 	insanity: 3,
 	tired: 3,
 	energized: 1,

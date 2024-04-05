@@ -247,6 +247,7 @@ statusEffects = [
 	"mirror",
 	"dragonscale",
 	"airborne",
+	"cloud9",
 	"blessed",
 	"brave",
 	"lovable",
@@ -303,6 +304,7 @@ statusNames = {
 	mirror: 'Mirror',
 	dragonscale: 'Dragon Scale',
 	airborne: 'Airborne',
+	cloud9: 'Cloud 9',
 	blessed: 'Blessed',
 	brave: 'Brave',
 	lovable: 'Lovable',
@@ -359,6 +361,7 @@ statusEmojis = {
 	dragonscale: '<:dragonscale:1224681842846994572>',
 	happy: '<:happy:973076333871644733>',
 	airborne: '<:airborne:1225491225495343155>',
+	cloud9: '<:cloud9:1224993225878802463>',
 	blessed: '<:blessed:1223966695241158666>',
 	brave: '<:brave:1223985925206446170>',
 	lovable: '<:lovable:1224346501237575833>',
@@ -423,6 +426,7 @@ elementTechs = {
 	// Positive Statusses
 	happy: ['psychic', 'bless', 'curse', 'spirit', 'sound'],
 	airborne: ['pierce', 'electric', 'metal', 'gravity'],
+	cloud9: ['wind', 'water', 'ice', 'nuclear'],
 	dragonscale: ['psychic', 'spirit', 'bless', 'curse', 'nuclear'],
 	energized: ['psychic', 'poison', 'curse', 'gravity'],
 }

@@ -63,14 +63,14 @@ genDmg = (char, targ, btl, skill) => {
 
 	// Weather StatMod.
 	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].statmod) {
-		charStats = weatherFuncs[btl.weather.type].statmod(char, charStats, btl) ?? charStats;
-		targStats = weatherFuncs[btl.weather.type].statmod(targ, targStats, btl) ?? targStats;
+		if (!char.status || (char.status && char.status != 'cloud9')) charStats = weatherFuncs[btl.weather.type].statmod(char, charStats, btl) ?? charStats;
+		if (!targ.status || (targ.status && targ.status != 'cloud9')) targStats = weatherFuncs[btl.weather.type].statmod(targ, targStats, btl) ?? targStats;
 	}
 
 	// Terrain StatMod.
 	if (btl.terrain && terrainFuncs && terrainFuncs[btl.terrain.type] && terrainFuncs[btl.terrain.type].statmod) {
-		charStats = terrainFuncs[btl.terrain.type].statmod(char, charStats, btl) ?? charStats;
-		targStats = terrainFuncs[btl.terrain.type].statmod(targ, targStats, btl) ?? targStats;
+		if (!char.status || (char.status && char.status != 'airborne')) charStats = terrainFuncs[btl.terrain.type].statmod(char, charStats, btl) ?? charStats;
+		if (!targ.status || (targ.status && targ.status != 'airborne')) targStats = terrainFuncs[btl.terrain.type].statmod(targ, targStats, btl) ?? targStats;
 	}
 
 	// Custom Variable StatMod.
@@ -580,6 +580,17 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					dodgeChance *= (!isBoss(targ) && hasStatusAffinity(targ, 'airborne', 'resist')) ? 0.5 : 0;
 				} else {
 					let dodgeRed = 0.1 * (hasStatusAffinity(targ, 'airborne', 'resist') ? 0.5 : (hasStatusAffinity(targ, 'airborne', 'weak') ? 2 : 1))
+					if (isBoss(targ)) dodgeRed = 0.1 * 2;
+					dodgeChance *= 1 - dodgeRed;
+				}
+			}
+
+			// Cloud 9 positive status
+			if (targ.status && targ.status == 'cloud9') {
+				if (skill.atktype == 'magic') {
+					dodgeChance *= (!isBoss(targ) && hasStatusAffinity(targ, 'cloud9', 'resist')) ? 0.5 : 0;
+				} else {
+					let dodgeRed = 0.1 * (hasStatusAffinity(targ, 'cloud9', 'resist') ? 0.5 : (hasStatusAffinity(targ, 'cloud9', 'weak') ? 2 : 1))
 					if (isBoss(targ)) dodgeRed = 0.1 * 2;
 					dodgeChance *= 1 - dodgeRed;
 				}
@@ -1353,12 +1364,12 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 	// Weather
 	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].onselect) {
-		weatherFuncs[btl.weather.type].onselect(char, skill, btl)
+		if (!char.status || (char.status && char.status != 'cloud9')) weatherFuncs[btl.weather.type].onselect(char, skill, btl)
 	}
 
 	// Terrain
 	if (btl.terrain && terrainFuncs && terrainFuncs[btl.terrain.type] && terrainFuncs[btl.terrain.type].onselect) {
-		terrainFuncs[btl.terrain.type].onselect(char, skill, btl)
+		if (!char.status || (char.status && char.status != 'airborne')) terrainFuncs[btl.terrain.type].onselect(char, skill, btl)
 	}
 
 	// more shit
@@ -1842,14 +1853,25 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// Airborne?
-	if ((skill.atktype == 'physical') && char.status && char.status == 'airborne' && (!isBoss(char) && !hasStatusAffinity(char, 'airborne', 'weak'))) {
+	if ((skill.atktype == 'physical') && char.status && char.status == 'airborne' && char.statusturns < 3 && (!isBoss(char) && !hasStatusAffinity(char, 'airborne', 'weak'))) {
 		finalText += `\n__${char.name}__ has landed on the floor.\n`
+		delete char.status;
+		delete char.statusturns;
+	}
+
+	// Cloud 9?
+	if ((skill.atktype == 'magic') && char.status && char.status == 'cloud9' && char.statusturns < 3 && (!isBoss(char) && !hasStatusAffinity(char, 'cloud9', 'weak'))) {
+		finalText += `\n__${char.name}__'s cloud has dispersed.\n`
 		delete char.status;
 		delete char.statusturns;
 	}
 
 	// Airborne?
 	if (btl.doknockdown && char.status && char.status == 'airborne') finalText += `\n__${char.name}__ was knocked down to the floor!\n`
+	delete btl.doknockdown;
+
+	// cloud 9?
+	if (btl.doknockdown && char.status && char.status == 'cloud 9') finalText += `\n__${char.name}__'s cloud was blasted away!\n`
 	delete btl.doknockdown;
 
 	// Now, send the embed!
