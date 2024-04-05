@@ -1972,6 +1972,18 @@ statusDescs = [
 					},
 					boss: "Lasts **1 turn**."
 				}
+			},
+			{
+				name: "tired",
+				desc: `Increases skill cost **by an amount**.`,
+				ailments: {
+					nonboss: {
+						weak: `Increases cost by **30%**.`,
+						normal: `Increases cost by **20%**.`,
+						resist: `Increases cost by **10%**.`,
+					},
+					boss: `Increases cost by **10%**.`
+				}
 			}
 		]
 	},
@@ -2113,18 +2125,6 @@ statusDescs = [
 					},
 					boss: "Affects them the same as non-bosses."
 				}
-			},
-			{
-				name: "tired",
-				desc: `Increases skill cost **by an amount**.`,
-				ailments: {
-					nonboss: {
-						weak: `Increases cost by **30%**.`,
-						normal: `Increases cost by **20%**.`,
-						resist: `Increases cost by **10%**.`,
-					},
-					boss: `Increases cost by **10%**.`
-				}
 			}
 		]
 	},
@@ -2133,7 +2133,6 @@ statusDescs = [
 		statuses: [
 			{
 				name: "dry",
-				type: "physical",
 				desc: `Increases ${elementEmoji["fire"]}**fire** and ${elementEmoji["earth"]}**earth** damage. Decreases ${elementEmoji["ice"]}**ice** and ${elementEmoji["electric"]}**electric**.`,
 				ailments: {
 					nonboss: {
@@ -2146,7 +2145,6 @@ statusDescs = [
 			},
 			{
 				name: "wet",
-				type: "physical",
 				desc: `Increases ${elementEmoji["ice"]}**ice** and ${elementEmoji["electric"]}**electric** damage. Decreases ${elementEmoji["fire"]}**fire** and ${elementEmoji["earth"]}**earth**.`,
 				ailments: {
 					nonboss: {
@@ -2159,7 +2157,6 @@ statusDescs = [
 			},
 			{
 				name: "light",
-				type: "physical",
 				desc: `Increases ${elementEmoji["wind"]}**wind** and ${elementEmoji["explode"]}**explode** damage. Decreases ${elementEmoji["strike"]}**strike** and ${elementEmoji["earth"]}**earth**.`,
 				ailments: {
 					nonboss: {
@@ -2172,7 +2169,6 @@ statusDescs = [
 			},
 			{
 				name: "heavy",
-				type: "physical",
 				desc: `Increases ${elementEmoji["strike"]}**strike** and ${elementEmoji["earth"]}**earth** damage. Decreases ${elementEmoji["wind"]}**wind** and ${elementEmoji["explode"]}**explode**.`,
 				ailments: {
 					nonboss: {
@@ -2185,7 +2181,6 @@ statusDescs = [
 			},
 			{
 				name: "enchanted",
-				type: "physical",
 				desc: "Immune to Magic. **Double Damage taken from Physical and Ranged attacks.**",
 				ailments: {
 					nonboss: {
@@ -2198,7 +2193,6 @@ statusDescs = [
 			},
 			{
 				name: "invisible",
-				type: "physical",
 				desc: "Immune to Physical and Ranged attacks. **Double Damage taken from Magic attacks.**",
 				ailments: {
 					nonboss: {
@@ -2211,7 +2205,6 @@ statusDescs = [
 			},
 			{
 				name: "chilled",
-				type: "physical",
 				desc: `Increases ${elementEmoji["ice"]}**ice** and ${elementEmoji["water"]}**water** damage. Decreases ${elementEmoji["fire"]}**fire** and ${elementEmoji["metal"]}**metal**.`,
 				ailments: {
 					nonboss: {
@@ -2224,7 +2217,6 @@ statusDescs = [
 			},
 			{
 				name: "overheat",
-				type: "physical",
 				desc: `Increases ${elementEmoji["fire"]}**fire** and ${elementEmoji["metal"]}**metal** damage. Decreases ${elementEmoji["ice"]}**ice** and ${elementEmoji["water"]}**water**.`,
 				ailments: {
 					nonboss: {
@@ -2237,7 +2229,6 @@ statusDescs = [
 			},
 			{
 				name: "brimstone",
-				type: "physical",
 				desc: `Reverses buffs and debuffs for the duration of the effect.`,
 				ailments: {
 					nonboss: {
@@ -2255,7 +2246,6 @@ statusDescs = [
 		statuses: [
 			{
 				name: "mirror",
-				type: "physical",
 				desc: `Immobilizes for **3 turns**. ${affinityEmoji["repel"]}**Repels** magic skills, but may make **${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode** skills more effective.`,
 				ailments: {
 					nonboss: {
@@ -2268,7 +2258,6 @@ statusDescs = [
 			},
 			{
 				name: "dragonscale",
-				type: "physical",
 				desc: `Immobilizes for **3 turns**. ${affinityEmoji["repel"]}**Repels** physical skills, but may make **${elementEmoji["psychic"]}Psychic, ${elementEmoji["spirit"]}Spirit, ${elementEmoji["bless"]}Bless, ${elementEmoji["curse"]}Curse and ${elementEmoji["nuclear"]}Nuclear** skills more effective.`,
 				ailments: {
 					nonboss: {
@@ -2281,7 +2270,6 @@ statusDescs = [
 			},
 			{
 				name: "airborne",
-				type: "physical",
 				desc: `Disables effects of terrain for the afflicted for **3 turns**, but **may expire if they use a physical skill**. Increases dodge chance *(physical -> may increase by 100%, other -> may increase by 10%)* and doubles afflicted's physical skill power.`,
 				ailments: {
 					nonboss: {
@@ -2294,7 +2282,6 @@ statusDescs = [
 			},
 			{
 				name: "happy",
-				type: "mental",
 				desc: `Increases ${statusEmojis["critup"]}**LUK** & ${statusEmojis["aglup"]}**AGL** stats positively based on level for **3 turns**, but decreases the ${statusEmojis["prcdown"]}**PRC** stat by **1/10th** of the afflicted's level.`,
 				ailments: {
 					nonboss: {
@@ -2307,7 +2294,6 @@ statusDescs = [
 			},
 			{
 				name: "blessed",
-				type: "physical",
 				desc: "Cannot get afflicted by a **negative status effect** while this status effect is active.",
 				ailments: {
 					nonboss: {
@@ -2320,7 +2306,6 @@ statusDescs = [
 			},
 			{
 				name: "brave",
-				type: "mental",
 				desc: "Boost the gain of the **Limit Break Meter**, by 1.5x. Has no effect if **Limit Breaks** are disabled on this server.",
 				ailments: {
 					nonboss: {
@@ -2333,7 +2318,6 @@ statusDescs = [
 			},
 			{
 				name: "lovable",
-				type: "mental",
 				desc: "Incapable of being targetted by single target or otherwise skills that require you to focus a single foe.",
 				ailments: {
 					nonboss: {
@@ -2346,7 +2330,6 @@ statusDescs = [
 			},
 			{
 				name: "energized",
-				type: "mental",
 				desc: `Decreases skill cost **by an amount**.`,
 				ailments: {
 					nonboss: {
@@ -2375,13 +2358,11 @@ commands.liststatus = new Command({
 	async func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id);
 
-		const genStatusDescription = (status, hideAffinities) => {
+		const genStatusDescription = (status, hideAffinities, page) => {
 			let text = '';
 
-			if (hideAffinities) {
-				if (status.type) text += `${status.type == 'physical' ? '*<:physical:973077052129423411> Physical' : '*<:mental:1004855144745291887> Mental'}*\n`
-			} else {
-				text += `${isPhysicalStatus(status.name) || status.type == 'physical' ? '*<:physical:973077052129423411> Physical' : '*<:mental:1004855144745291887> Mental'}*\n`
+			if (page == undefined || (hideAffinities && (page > 1))) {
+				text += `${isPhysicalStatus(status.name) ? '*<:physical:973077052129423411> Physical' : '*<:mental:1004855144745291887> Mental'}*\n`
 			}
 
 			if (settings.mechanics.technicaldamage) {
@@ -2472,7 +2453,7 @@ commands.liststatus = new Command({
 					fields: await Promise.all(
 						current.map(async arrayDefs => ({
 							name: `${statusEmojis[arrayDefs.name]}${statusNames[arrayDefs.name]} (${arrayDefs.name})`,
-							value: genStatusDescription(arrayDefs, true),
+							value: genStatusDescription(arrayDefs, true, page),
 							inline: true
 						}))
 					)
