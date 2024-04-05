@@ -36,6 +36,8 @@ let st = {
 	burn: 1,
 	bleed: 1,
 	freeze: 3,
+	petrified: 3,
+	dissolved: 2,
 	paralyze: 2,
 	dizzy: 2,
 	sleep: 2,
