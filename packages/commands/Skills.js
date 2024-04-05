@@ -1767,7 +1767,7 @@ commands.listelements = new Command({
 
 statusDescs = [
 	{
-		title: "<:physical:973077052129423411> Physical Negative Ailments",
+		title: "<:negative:1225860204118413435> Negative <:physical:973077052129423411>Physical Ailments",
 		statuses: [
 			{
 				name: "burn",
@@ -2000,7 +2000,7 @@ statusDescs = [
 		]
 	},
 	{
-		title: "<:mental:1004855144745291887> Mental Negative Ailments",
+		title: "<:negative:1225860204118413435> Negative <:mental:1004855144745291887>Mental Ailments",
 		statuses: [
 			{
 				name: "dizzy",
@@ -2157,7 +2157,7 @@ statusDescs = [
 		]
 	},
 	{
-		title: "<:sound:962465470403997846> Neutral Status Ailments",
+		title: "<:neutral:1225860206429208746> Neutral Status Ailments",
 		statuses: [
 			{
 				name: "dry",
@@ -2270,7 +2270,7 @@ statusDescs = [
 		]
 	},
 	{
-		title: "<:tick:973077052372701294> Positive Ailments",
+		title: "<:positive:1225860207964585994> Positive Ailments",
 		statuses: [
 			{
 				name: "mirror",
