@@ -232,6 +232,7 @@ statusEffects = [
 	"tired",
 	"disabled",
 	"leisure",
+	"guilt",
 
 	// Neutral Statusses
 	"dry",
@@ -291,6 +292,7 @@ statusNames = {
 	tired: "Tiredness",
 	disabled: "Disability",
 	leisure: 'Leisure',
+	guilt: 'Guilt',
 
 	// Neutral Statusses
 	dry: 'Dried',
@@ -350,6 +352,7 @@ statusEmojis = {
 	tired: '<:tired:1224663100918206576>',
 	disabled: '<:disabled:1224663101962453042>',
 	leisure: '<:leisure:1224663103229268078>',
+	guilt: '<:guilt:1225856607750066318>',
 
 	// Neutral Statusses
 	dry: '<:dry:1224057395706204262>',
