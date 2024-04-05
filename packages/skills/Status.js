@@ -2211,18 +2211,55 @@ statusEffectFuncs = {
 			let affinityTxt = '';
 
 			let dmg = Math.round(char.maxhp/10);
+			let chance = 10;
+
 			if (isBoss(char)) dmg = 5;
 
 			if (hasStatusAffinity(char, 'dissolved', 'weak')) {
 				dmg *= 2;
 				affinityTxt = affinityEmoji.weak;
+				chance = 20;
 			} else if (hasStatusAffinity(char, 'dissolved', 'resist')) {
 				dmg /= 2;
 				affinityTxt = affinityEmoji.resist;
+				chance = 5;
 			}
 
 			char.hp = Math.max(1, char.hp-Math.round(dmg));
-			return `${char.name} took ${dmg}${affinityTxt} damage from their caustic burns.`
+
+			let text = `${char.name} took ${dmg}${affinityTxt} damage from their caustic burns.`;
+
+			if (!isBoss(char) && char?.curarmor && !char.curarmor?.disabled && randNum(1, 100) <= chance) {
+				let boost = {
+					atk: char.curarmor.atk ?? 0,
+					mag: char.curarmor.mag ?? 0,
+					end: char.curarmor.end ?? 0,
+					agl: char.curarmor.agl ?? 0
+				}
+				for (let i in boost) {
+					if (char.basestats[i] > 7) boost[i] = Math.round(boost[i]*0.75);
+					char.stats[i] -= boost[i];
+				}
+		
+				if (char.curarmor.skill) char.skills.splice(char.skills.lastIndexOf(char.curarmor.skill), 1);
+		
+				// Wrong Armor Class Drawbacks
+				if (char.armorclass === 'none' && char.curarmor.class) {
+					if (char.curarmor.class === "light") {
+						char.stats.end = Math.max(1, char.stats.end+Math.round(char.level/10));
+					} else if (char.curarmor.class === "heavy") {
+						char.stats.agl = Math.max(1, char.stats.agl+Math.round(char.level/8));
+					} else if (char.curarmor.class === "magic") {
+						char.stats.atk = Math.max(1, char.stats.atk+Math.round(char.level/10));
+					}
+				}
+
+				char.curarmor.disabled = true;
+
+				text += `\n\n${char.name}'s ${char.curarmor.type ? elementEmoji[char.curarmor.type] : ''}${classEmoji.armor[char.curarmor.class ?? 'none']}__${char.curarmor.name}__ has been dissolved!`;
+			}
+
+			return text;
 		},
 		statmod: function(char, stats) {
 			if (isBoss(char)) return stats;
