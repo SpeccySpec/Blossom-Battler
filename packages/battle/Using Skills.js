@@ -1829,7 +1829,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// Another thing... Trust shit.
-	if (!skill.noassistance && (skill.target === 'one' || skill.target === 'allopposing') && targets.length <= 1 && !skill?.limitbreak && !skill?.teamcombo) {
+	if (!skill.noassistance && (skill.target === 'one' || skill.target === 'allopposing') && !['status', 'heal', 'passive'].includes(skill.type) && targets.length <= 1 && !skill?.limitbreak && !skill?.teamcombo) {
 		for (let i in party.members) {
 			let char2 = party.members[i];
 			if (char.id === char2.id) continue;
