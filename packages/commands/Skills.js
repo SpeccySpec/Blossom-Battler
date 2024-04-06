@@ -2197,7 +2197,7 @@ statusDescs = [
 			},
 			{
 				name: "wet",
-				desc: `Increases ${elementEmoji["ice"]}**ice** and ${elementEmoji["electric"]}**electric** damage. Decreases ${elementEmoji["fire"]}**fire** and ${elementEmoji["earth"]}**earth**.`,
+				desc: `Increases ${elementEmoji["ice"]}**ice** and ${elementEmoji["electric"]}**electric** damage. Decreases ${elementEmoji["fire"]}**fire** and ${elementEmoji["nuclear"]}**nuclear**.`,
 				ailments: {
 					nonboss: {
 						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
@@ -2269,7 +2269,7 @@ statusDescs = [
 			},
 			{
 				name: "overheat",
-				desc: `Increases ${elementEmoji["fire"]}**fire** and ${elementEmoji["grass"]}**grass** damage. Decreases ${elementEmoji["ice"]}**ice** and ${elementEmoji["water"]}**water**.`,
+				desc: `Increases ${elementEmoji["fire"]}**fire** and ${elementEmoji["metal"]}**metal** damage. Decreases ${elementEmoji["ice"]}**ice** and ${elementEmoji["water"]}**water**.`,
 				ailments: {
 					nonboss: {
 						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
@@ -2358,14 +2358,14 @@ statusDescs = [
 			},
 			{
 				name: "blessed",
-				desc: "Cannot get afflicted by a **negative status effect** while this status effect is active.",
+				desc: "Cannot get afflicted by a **negative status effect** while this status effect is active. Will remove the ones the afflicted already has.",
 				ailments: {
 					nonboss: {
 						weak: "Lasts **4 turns**.",
 						normal: "Lasts **3 turns**.",
 						resist: "Lasts **2 turns**.",
 					},
-					boss: "Forced resistance."
+					boss: "Affects them the same as non-bosses."
 				}
 			},
 			{
@@ -2377,7 +2377,7 @@ statusDescs = [
 						normal: "Lasts **3 turns**, 1.5x.",
 						resist: "Lasts **2 turns**, 1.25x.",
 					},
-					boss: "Forced resistance."
+					boss: "Affects them the same as non-bosses."
 				}
 			},
 			{
