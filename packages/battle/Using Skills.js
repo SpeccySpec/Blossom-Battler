@@ -238,6 +238,9 @@ function divideBy(val, nominator, denominator, times) {
 
 // Attack targ with skill using char's stats. noRepel disables repel affinities. noExtraArray disables certain extras. noVarsArray disables certain vars.
 attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, noMiss) => {
+	if (noExtraArray == undefined) noExtraArray = [];
+	if (noVarsArray == undefined) noVarsArray = [];
+
 	let settings = setUpSettings(btl.guild.id);
 
 	const result = {
@@ -522,7 +525,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 			skill.acc = 999; // Never miss a repel - just to be flashy :D
 
 			// Run this function again. Ban repelling to avoid infinite loops.
-			let newResults = attackWithSkill(char, char, skill, btl, true, noExtraArray);
+			let newResults = attackWithSkill(char, char, skill, btl, true, noExtraArray, noVarsArray);
 			result.oneMore = newResults.oneMore;
 			result.teamCombo = newResults.teamCombo;
 
@@ -544,7 +547,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					skill.acc = 999; // Never miss a repel - just to be flashy :D
 
 					// Run this function again. Ban repelling to avoid infinite loops.
-					let newResults = attackWithSkill(char, char, skill, btl, true, noExtraArray);
+					let newResults = attackWithSkill(char, char, skill, btl, true, noExtraArray, noVarsArray);
 					result.oneMore = newResults.oneMore;
 					result.teamCombo = newResults.teamCombo;
 
@@ -1785,7 +1788,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		let skillDefs = objClone(skill);
 		skillDefs.pow *= targets[i][1];
 
-		let result = attackWithSkill(char, targ, skillDefs, btl, null, noExtraArray);
+		let result = attackWithSkill(char, targ, skillDefs, btl, null, noExtraArray, noVarsArray);
 		if (!noEffectMsg) finalText += `${result.txt}`;
 
 		if (result.oneMore) btl.doonemore = true;
@@ -1844,7 +1847,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 					finalText += `\n__${char2.name}__ wants to assist __${char.name}__ with their attack!\n`;
 
-					let result = attackWithSkill(char2, targ, meleeAtk, btl, true, noExtraArray, true);
+					let result = attackWithSkill(char2, targ, meleeAtk, btl, true, noExtraArray, noVarsArray, true);
 					finalText += `${result.txt}\n`;
 
 					if (result.teamCombo) btl.canteamcombo = true;
