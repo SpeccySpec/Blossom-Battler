@@ -225,8 +225,9 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 		}
 		if (shortenAmount && char.affinities[affinity].length >= Math.floor((dividyBy/affinityAmount))) {
 			let others = char.affinities[affinity].length - Math.floor((dividyBy/affinityAmount));
-			charAffs += ` and ${others} other${others > 1 ? 's' : ''}...`;
-			tooMany = true;
+			if (others > 0) { charAffs += ` and ${others} other${others > 1 ? 's' : ''}...`;
+				tooMany = true;
+			}
 		}
 	}
 	let scorecomment = affinityScores[(affinityscore > 0 ? Math.ceil : Math.floor)(affinityscore)]
@@ -268,8 +269,9 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 
 				if (shortenAmount && char.statusaffinities[affinity].length >= Math.floor(6/affinityAmount)) {
 					let others = char.statusaffinities[affinity].length - Math.floor(6/affinityAmount);
-					statAffs += ` and ${others} other${others > 1 ? 's' : ''}...`;
-					tooMany = true;
+					if (others > 0) { statAffs += ` and ${others} other${others > 1 ? 's' : ''}...`;
+						tooMany = true;
+					}
 				}
 			}
 			if (statAffs != '') {
