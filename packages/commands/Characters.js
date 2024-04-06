@@ -1293,7 +1293,7 @@ commands.trustlevel = new Command({
 		let char1 = charFile[args[0]];
 		let char2 = charFile[args[1]];
 
-		if (!char1?.trust?.[args[1]]) {
+		if (!char1?.trust?.[args[1]] || !char2?.trust?.[args[0]]) {
 			char1.truename = args[0];
 			char2.truename = args[1];
 

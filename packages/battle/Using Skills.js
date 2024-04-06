@@ -573,6 +573,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 		// How many total hits
 		let totalHits = 0;
 		let dodgeChance = 0;
+		
 		for (let i = 0; i < skill.hits; i++) {
 			if (noMiss) {
 				totalHits++;
@@ -1824,7 +1825,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// Another thing... Trust shit.
-	if (!skill.noassistance && (skill.target === 'one' || skill.target === 'allopposing') && targets.length <= 1 && !skill.limitbreak && !skill.teamcombo) {
+	if (!skill.noassistance && (skill.target === 'one' || skill.target === 'allopposing') && targets.length <= 1 && !skill?.limitbreak && !skill?.teamcombo) {
 		for (let i in party.members) {
 			let char2 = party.members[i];
 			if (char.id === char2.id) continue;
@@ -1833,33 +1834,13 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 				let targ = getCharFromId(targets[0][0], btl);
 
 				if (targ.hp > 0) {
-					let atkType = 'physical'
-					let targType = 'one'
-					for (let skillName of char2.skills) {
-						let psv = skillFile[skillName];
-						if (psv.type != 'passive' || !psv.passive) continue;
-
-						if (psv.passive.magicmelee) atkType = 'magic';
-						if (psv.passive.meleetarget) targType = psv.passive.meleetarget[0][randNum(0, psv.passive.meleetarget[0].length - 1)];
-					}
-
-					let meleeAtk = {
-						name: char2.melee.name,
-						type: char2.melee.type,
-						pow: (char2.melee.pow+char2.level)*2.5,
-						acc: 9999,
-						crit: char2.melee.crit,
-						atktype: atkType,
-						target: targType,
-						melee: true,
-						noassistance: true,
-						assistSkill: true,
-					}
-
-					if (char2.melee.status) {
-						meleeAtk.status = char2.melee.status;
-						meleeAtk.statuschance = char2.melee.statuschance;
-					}
+					let meleeAtk = makeMelee(char2);
+					meleeAtk.assistSkill = true;
+					meleeAtk.noassistance = true;
+					meleeAtk.acc = 999;
+					meleeAtk.pow = (char2.melee.pow+char2.level)*2.5;
+					meleeAtk.target = 'one';
+					meleeAtk.hits = 1;
 
 					finalText += `\n__${char2.name}__ wants to assist __${char.name}__ with their attack!\n`;
 
