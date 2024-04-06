@@ -476,18 +476,26 @@ aiTypes = {
 
 // weather and terrain
 weathers = [
-	'none',
-	"rain", // 1.3x to water, 0.7x to fire. Also puts out burning fighters.
-	"thunderstorm", // 1.3x to elec, water skills become dualelement electric. 1.25x paralysis chance.
-	"sunlight", // 1.3x to fire, 1.1x to nuclear, 0.7x to water, grass. Also thaws freezing fighters.
-	"windy", // 1.3x to wind, physicals get dualelement wind.
-	"sandstorm", // -33% perception to non earth main elements.
-	"hail", // 10 ice based damage per turn to non ice main elements. Yes, that means this is affected by affinities.
-	"darkmoon", // 1.1x to psychic, 0.9x to all others. Chance to inflict confusion to non psy/spirit mains.
-	"eclipse", // 1.1x to magic.
-	"bloodmoon", // 1.4x to curse, 1.2x to phys, -25% MAG stat for bless mains.
-	"blizzard", // 1.5x to Ice, 0.5x to Fire, 1.25x Freeze Chance. Puts out burning fighters.
-	"supermoon" // 1.2x to Psychic, Bless, Curse, and Spirit. +15% Accuracy. -15% Luck.
+	'none', //
+	"rain", //
+	"acidrain", //
+	"thunderstorm", //
+	"sunlight", //
+	"windy", //
+	"sandstorm", //
+	"hail", //
+	"radiation", //
+	"earthquake", //
+	"smog", //
+	"airstrikes", //
+	"cherryblossoms",
+	"fallingash", //
+	"darkmoon", //
+	"eclipse", //
+	"bloodmoon", //
+	"blizzard", //
+	"supermoon", //
+	"bluemoon", //
 ]
 
 weatherDescs = {
@@ -499,7 +507,12 @@ weatherDescs = {
 	rain: {
 		name: "Rain",
 		emoji: "<:rain:1225501726073819187>",
-		desc: `Gives **30%** more skill power to ${elementEmoji['water']}**water** skills but reduces skill power of ${elementEmoji['fire']}**fire** skills by **30%**.\nWill put out the ${statusEmojis['burn']}**burning** fighters.`
+		desc: `Gives **30%** more skill power to ${elementEmoji['water']}**water** skills but reduces skill power of ${elementEmoji['fire']}**fire** skills by **30%**.\nWill put out the ${statusEmojis['burn']}**burning** fighters.\nWill make fighters ${statusEmojis['wet']}**wet**.`
+	},
+	acidrain: {
+		name: "Acid Rain",
+		emoji: "<:acidrain:1225866899502661715>",
+		desc: `Attacks **non-${elementEmoji['acid']}acid** main fighters with **10 ${elementEmoji['acid']}acid** damage.\nDoubles damage the weaker the fighter is.\nEvery turn there's a **10%** chance they get ${statusEmojis['dissolved']}**dissolved**.`
 	},
 	thunderstorm: {
 		name: "Thunderstorm",
@@ -509,7 +522,7 @@ weatherDescs = {
 	sunlight: {
 		name: "Sunlight",
 		emoji: "<:sunlight:1219375987255677031>",
-		desc: `Gives **30%** more skill power to ${elementEmoji['fire']}**fire** skills and **10%** more skill power to ${elementEmoji['nuclear']}**nuclear** skills, but reduces skill power of ${elementEmoji['water']}**water** and ${elementEmoji['grass']}**grass** skills by **30%**.\nWill thaw out the ${statusEmojis['freeze']}**freezing** fighters.`
+		desc: `Gives **30%** more skill power to ${elementEmoji['fire']}**fire** skills and **10%** more skill power to ${elementEmoji['nuclear']}**nuclear** skills, but reduces skill power of ${elementEmoji['water']}**water** and ${elementEmoji['grass']}**grass** skills by **30%**.\nWill thaw out the ${statusEmojis['freeze']}**freezing** fighters.\nWill make fighters ${statusEmojis['overheat']}**overheat**.`
 	},
 	windy: {
 		name: "Windy",
@@ -519,12 +532,42 @@ weatherDescs = {
 	sandstorm: {
 		name: "Sandstorm",
 		emoji: "<:sandstorm:1219379309920387162>",
-		desc: `Decreases perception by **30%** for **non-${elementEmoji['earth']}earth** main fighters.`
+		desc: `Decreases perception by **30%** for **non-${elementEmoji['earth']}earth** main fighters.\nWill make fighters ${statusEmojis['dry']}**dry**.`
 	},
 	hail: {
 		name: "Hail",
 		emoji: "<:hail:1225500528742760629>",
-		desc: `Attacks **non-${elementEmoji['ice']}ice** main fighters with **10 ${elementEmoji['ice']}ice** damage.\nDoubles damage the weaker the fighter is.`
+		desc: `Attacks **non-${elementEmoji['ice']}ice** main fighters with **10 ${elementEmoji['ice']}ice** damage.\nDoubles damage the weaker the fighter is.\nWill make fighters ${statusEmojis['chilled']}**chilled**.`
+	},
+	radiation: {
+		name: "Radiation",
+		emoji: "<:radiation:1225877694890115092>",
+		desc: `Inflicts a **random debuff** on a fighter between turns.\nEvery turn there's a **10%** chance they get ${statusEmojis['irradiation']}**irradiated**.`
+	},
+	earthquake: {
+		name: "Earthquake",
+		emoji: "<:earthquake:1225880581422710807>",
+		desc: `Gives **30%** more skill power to ${elementEmoji['earth']}**earth** skills.\nEvery turn there's a **10%** chance they get ${statusEmojis['stagger']}**staggered**.`
+	},
+	smog: {
+		name: "Smog",
+		emoji: "<:smog:1225870978404581386>",
+		desc: `Every turn there's a **20%** chance a fighter gets ${statusEmojis['shrouded']}**shrouded** and a **40%** that their raw ${statusEmojis['magdown']}**PRC** stat is lowered by **30%**.`
+	},
+	airstrikes: {
+		name: "Air Strikes",
+		emoji: "<:airstrikes:1225877692927311902>",
+		desc: `Every turn a random fighter is attacked with **10 ${elementEmoji['explode']}explode** damage.`
+	},
+	cherryblossoms: {
+		name: "Cherry Blossoms",
+		emoji: "<:cherryblossom:1225867080218443776>",
+		desc: `Has a **30%** chance to increase the raw ${statusEmojis['critup']}**LUK** stat by **25%**.\nEvery turn a random fighter becomes ${statusEmojis['blessed']}**blessed**.`
+	},
+	fallingash: {
+		name: "Falling Ash",
+		emoji: "<:fallingash:1225870976198115358>",
+		desc: `Every fighter has a **20%** chance of getting ${statusEmojis['burn']}**burned** every turn.`
 	},
 	darkmoon: {
 		name: "Dark Moon",
@@ -550,31 +593,42 @@ weatherDescs = {
 		name: "Super Moon",
 		emoji: "<:supermoon:1219385822521065502>",
 		desc: `Gives **20%** more skill power to **${elementEmoji['psychic']}psychic, ${elementEmoji['bless']}bless, ${elementEmoji['curse']}curse and ${elementEmoji['spirit']}spirit** skills.\n**Increases the raw ${statusEmojis['critup']}LUK stat by 15%**, but also cuts skill accuracy by **15%**.`
-	}
+	},
+	bluemoon: {
+		name: "Blue Moon",
+		emoji: "<:bluemoon:1225862772676628561>",
+		desc: `Increases **${elementEmoji['spirit']}spirit** damage by **20%** and increases the raw ${statusEmojis['magup']}**MAG** stat for ${elementEmoji['spirit']}**spirit** mains by **10%**.`
+	},
 }
 
 terrains = [
 	'none',
-	"flaming", // 10 damage with 10% chance of burn to non fire main elements. Also puts out freezing fighters.
-	"grassy", // 10% heal before turn. 17% for grass mains.
-	"light", // 1.3x to bless. 0.5x to curse.
-	"psychic", // reverse turn order.
-	"misty", // ignore status inflictions. Also removes all status effects on turn.
-	"sky", // 1.2x to wind. 0.9x to earth. +25% agl. +40% to wind mains.
-	"muddy", // 1.35x to earth, 0.8x accuracy to physicals, -33% agl to non earth mains.
-	"spiritual", // 1.25x to Spirit. +25% CHR. Spirit-based affinities are amplified.
-	"damned", // 1.25x to Physical. -75% magic.
-	"purged", // 1.25x to Magic and Ranged. -75% attack.
+	"flaming", //
+	"grassy", //
+	"light", //
+	"dark", //
+	"psychic", //
+	"misty", //
+	"sky", //
+	"underground", //
+	"muddy", //
+	"spiritual", //
+	"damned", //
+	"purged", //
+	"forest", //
+	"desert", //
+	"mountainside", //
+	"acidpools", //
 
 	// boss specific
-	"flooded", // 1.3x to water. Makes physical skills dualelement water.
-	"swamp", // 1.3x to earth and grass. Grass or Earth skills become dualelement with eachother.
-	"glacial", // 1.3x to ice, +20% freeze chance on ice skills. Water skills become ice.
-	"fairydomain", // 1.2x to Psychic and Bless. Psychic, Spirit skills become dualelement bless.
-	"graveyard", // 1.3x to Spirit. Curse Skills become DualElement Spirit.
-	"factory", // 1.5x to Metal.
-	"blindingradiance", // 1.5x to Bless. Curse Skills become unusable. Ignore Status Inflictions.
-	"eternaldarkness" //1.5x to Curse. Bless Skills become unusable. All Curse Skills get Feint.
+	"flooded", //
+	"swamp", // 
+	"glacial", //
+	"fairydomain", //
+	"graveyard", //
+	"factory", //
+	"blindingradiance", //
+	"eternaldarkness" //
 ]
 
 terrainDescs = {
@@ -598,6 +652,11 @@ terrainDescs = {
 		emoji: "<:light:1225520969628520448>",
 		desc: `Gives **30%** more skill power to ${elementEmoji['bless']}**bless** skills but reduces skill power of ${elementEmoji['curse']}**curse** skills by **50%**.`
 	},
+	dark: {
+		name: "Dark",
+		emoji: "<:dark:1225887008568905769>",
+		desc: `Gives **30%** more skill power to ${elementEmoji['curse']}**curse** skills but reduces skill power of ${elementEmoji['bless']}**bless** skills by **50%**.`
+	},
 	psychic: {
 		name: "Psychic",
 		emoji: "<:psychic:1225515672646324366>",
@@ -611,7 +670,12 @@ terrainDescs = {
 	sky: {
 		name: "Sky",
 		emoji: "<:sky:1219423963361443871>",
-		desc: `Gives **20%** more skill power to ${elementEmoji['wind']}**win**d skills but reduces skill power of ${elementEmoji['earth']}**earth** skills by **10%**.\n**Increases the raw ${statusEmojis['aglup']}AGL stat by 25% for non-${elementEmoji['wind']}wind mains, 40% otherwise**.`
+		desc: `Gives **20%** more skill power to ${elementEmoji['wind']}**wind** skills but reduces skill power of ${elementEmoji['earth']}**earth** skills by **10%**.\n**Increases the raw ${statusEmojis['aglup']}AGL stat by 25% for non-${elementEmoji['wind']}wind mains, 40% otherwise**.`
+	},
+	underground: {
+		name: "Underground",
+		emoji: "<:underground:1225896677525684245>",
+		desc: `Gives **50%** more skill power to ${elementEmoji['earth']}**earth** skills but reduces skill power of ${elementEmoji['wind']}**wind and ${elementEmoji['grass']}grass** skills by **30%**.`
 	},
 	muddy: {
 		name: "Muddy",
@@ -633,6 +697,26 @@ terrainDescs = {
 		emoji: "<:purged:1219685299156684900>",
 		desc: `Gives **25%** more skill power to <:ranged:1008794366648791161>**ranged** and <:magic:1008794362307674204>**magic** skills, but **cuts the raw ${statusEmojis['atkdown']}ATK stat by 75%**.`
 	},
+	forest: {
+		name: "Forest",
+		emoji: "<:forest:1225905414558847017>",
+		desc: `Gives **50%** more skill power to ${elementEmoji['grass']}**grass** skills and **30%** more skill power to ${elementEmoji['fire']}**fire** skills, but reduces skill power of ${elementEmoji['water']}**water** skills by **30%**.`
+	},
+	desert: {
+		name: "Desert",
+		emoji: "<:desert:1225905412877062185>",
+		desc: `Increases skill power of ${elementEmoji['fire']}**fire and ${elementEmoji['earth']}earth** skills, but reduces skill power of ${elementEmoji['ice']}**ice and ${elementEmoji['water']}water** skills by **30%**.`
+	},
+	mountainside: {
+		name: "Mountainside",
+		emoji: "<:mountainside:1225896675898429460>",
+		desc: `Gives **30%** more skill power to ${elementEmoji['earth']}**earth, ${elementEmoji['wind']}wind and ${elementEmoji['ice']}ice** skills.`
+	},
+	acidpools: {
+		name: "Acid Pools",
+		emoji: "<:acidpools:1225882996796821574>",
+		desc: `Attacks **non-${elementEmoji['acid']}acid** main fighters with **10 ${elementEmoji['acid']}acid** damage.\nEvery turn there's a **10%** chance they start ${statusEmojis['dissolved']}**dissolving**.`
+	},
 	flooded: {
 		name: "Flooded",
 		emoji: "<:flooded:1219426902888939600>",
@@ -649,7 +733,7 @@ terrainDescs = {
 		name: "Glacial",
 		emoji: "<:glacial:1219423956826853466>",
 		boss: true,
-		desc: `Gives **30%** more skill power and **20%** more ${statusEmojis['freeze']}**freezing** chance to ${elementEmoji['ice']}**ice**.\n${elementEmoji['water']}**Water** skills will become ${elementEmoji['ice']}**ice** skills while active.`
+		desc: `Gives **30%** more skill power and **20%** more ${statusEmojis['freeze']}**freezing** chance to ${elementEmoji['ice']}**ice**.\n${elementEmoji['water']}**Water** skills will become ${elementEmoji['ice']}**ice** skills and ${statusEmojis['wet']}**wet** affliction becomes ${statusEmojis['freeze']}**frozen** instead while active.`
 	},
 	fairydomain: {
 		name: "Fairy Domain",
