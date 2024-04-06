@@ -2420,177 +2420,183 @@ statusDescs = [
 	}
 ]
 
-commands.liststatus = new Command({
-	desc: 'Lists all the status effects.',
+const genStatusDescription = (status, hideAffinities, page, settings, message) => {
+	let text = '';
+
+	if (!hideAffinities) {
+		text += (isPositiveStatus(status.name) ? '<:positive:1225860207964585994> *Positive*' : (isNeutralStatus(status.name) ? '<:neutral:1225860206429208746> *Neutral*' : '<:negative:1225860204118413435> *Negative*'))+'\n';
+	}
+
+	if (page == undefined || (hideAffinities && (page > 1))) {
+		text += `${isPhysicalStatus(status.name) ? '*<:physical:973077052129423411> Physical' : '*<:mental:1004855144745291887> Mental'}*\n`
+	}
+
+	console.log(settings);
+	if (settings.mechanics.technicaldamage) {
+		text += '*Techs: ';
+
+		let techTxt = ''
+		for (const k in elementTechs[status.name]) {
+			if (elementTechs[status.name][k] === 'all') {
+				techTxt = 'ALL';
+				break;
+			} else
+				techTxt += elementEmoji[elementTechs[status.name][k]];
+		}
+		
+		if (techTxt === '') techTxt = 'NONE'
+
+		text += techTxt + '*\n\n';
+	}
+
+	text += status.desc;
+
+	if (statusEffectFuncs[status.name].stackable) {
+		text += "\n*Stacks with other Status Effects*";
+	}
+
+	text += '\n\n';
+
+	if (!hideAffinities) {
+		if (status.ailments) text += '**Status Affinity Changes:**\n'
+
+		for (affinity in status.ailments) {
+			text += affinity == 'nonboss' ? '**Non-Bosses:**' : '**Bosses:**';
+
+			if (typeof status.ailments[affinity] == "object") {
+				if (settings.mechanics.stataffinities) {
+					text += '\n';
+
+					for (side in status.ailments[affinity]) {
+						text += affinityEmoji[side] + ': ' + status.ailments[affinity][side] + '\n';
+					}
+				} else text += ' '+status.ailments[affinity]['normal']
+
+				text += '\n';
+			} else {
+				text += " "+status.ailments[affinity]+'\n';
+			}
+		}
+	} else {
+		if (status.ailments) text += `For full view, please refer to: __${getPrefix(message.guild.id)}liststatus ${status.name}__`
+	}
+
+	return text;
+}
+
+commands.getstatus = new Command({
+	desc: 'Shows all information on the status effect of your choosing',
 	section: "skills",
-	aliases: ['liststatuses', 'statuslist'],
 	args: [
 		{
 			name: "Status",
 			type: "Word",
-			forced: false,
+			forced: true,
 		}
 	],
 	async func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id);
+		if (!utilityFuncs.inArray(args[0].toLowerCase(), statusEffects)) return message.channel.send(`${args[0]} is not a valid status effect!`);
 
-		const genStatusDescription = (status, hideAffinities, page) => {
-			let text = '';
+		let statDef;
 
-			if (!hideAffinities) {
-				text += (isPositiveStatus(status.name) ? '<:positive:1225860207964585994> *Positive*' : (isNeutralStatus(status.name) ? '<:neutral:1225860206429208746> *Neutral*' : '<:negative:1225860204118413435> *Negative*'))+'\n';
-			}
-
-			if (page == undefined || (hideAffinities && (page > 1))) {
-				text += `${isPhysicalStatus(status.name) ? '*<:physical:973077052129423411> Physical' : '*<:mental:1004855144745291887> Mental'}*\n`
-			}
-
-			if (settings.mechanics.technicaldamage) {
-				text += '*Techs: ';
-
-				let techTxt = ''
-				for (const k in elementTechs[status.name]) {
-					if (elementTechs[status.name][k] === 'all') {
-						techTxt = 'ALL';
-						break;
-					} else
-						techTxt += elementEmoji[elementTechs[status.name][k]];
+		for (side in statusDescs) {
+			for (stat in statusDescs[side].statuses) {
+				if (statusDescs[side].statuses[stat].name == args[0].toLowerCase()) {
+					statDef = statusDescs[side].statuses[stat];
+					break;
 				}
-				
-				if (techTxt === '') techTxt = 'NONE'
-
-				text += techTxt + '*\n\n';
 			}
-
-			text += status.desc;
-
-			if (statusEffectFuncs[status.name].stackable) {
-				text += "\n*Stacks with other Status Effects*";
-			}
-
-			text += '\n\n';
-
-			if (!hideAffinities) {
-				if (status.ailments) text += '**Status Affinity Changes:**\n'
-
-				for (affinity in status.ailments) {
-					text += affinity == 'nonboss' ? '**Non-Bosses:**' : '**Bosses:**';
-
-					if (typeof status.ailments[affinity] == "object") {
-						if (settings.mechanics.stataffinities) {
-							text += '\n';
-
-							for (side in status.ailments[affinity]) {
-								text += affinityEmoji[side] + ': ' + status.ailments[affinity][side] + '\n';
-							}
-						} else text += ' '+status.ailments[affinity]['normal']
-
-						text += '\n';
-					} else {
-						text += " "+status.ailments[affinity]+'\n';
-					}
-				}
-			} else {
-				if (status.ailments) text += `For full view, please refer to: __${getPrefix(message.guild.id)}liststatus ${status.name}__`
-			}
-
-			return text;
+			if (statDef) break;
 		}
 
-		if (args[0]) {
-			if (!utilityFuncs.inArray(args[0].toLowerCase(), statusEffects)) return message.channel.send(`${args[0]} is not a valid status effect!`);
+		message.channel.send({
+			embeds: [new Discord.MessageEmbed({
+				color: '#0099ff',
+				title: `${statusEmojis[statDef.name]}${statusNames[statDef.name]} (${statDef.name})`,
+				description: genStatusDescription(statDef, false, undefined, settings, message),
+			})]
+		})
+	}
+})
 
-			let statDef;
 
-			for (side in statusDescs) {
-				for (stat in statusDescs[side].statuses) {
-					if (statusDescs[side].statuses[stat].name == args[0].toLowerCase()) {
-						statDef = statusDescs[side].statuses[stat];
-						break;
+commands.liststatus = new Command({
+	desc: 'Lists all the status effects.',
+	section: "skills",
+	aliases: ['liststatuses', 'statuslist'],
+	async func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id);
+
+		let page = 0;
+		let pageIndex = 0;
+
+		const generateEmbed = async (page) => {
+			const current = statusDescs[page].statuses.slice(pageIndex, pageIndex + 6);
+			return new Discord.MessageEmbed({
+				color: '#0099ff',
+				title: 'List of status effects:',
+				description: `Status affects will affect fighters in-battle and can be fatal if not cured, or beneficial.\n### ${statusDescs[page].title}`,
+				fields: await Promise.all(
+					current.map(async arrayDefs => ({
+						name: `${statusEmojis[arrayDefs.name]}${statusNames[arrayDefs.name]} (${arrayDefs.name})`,
+						value: genStatusDescription(arrayDefs, true, page, settings, message),
+						inline: true
+					}))
+				)
+			})
+		}
+
+		embedMessage = await message.channel.send({
+			embeds: [await generateEmbed(page)],
+			components: [new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]})]
+		})
+		
+		const collector = embedMessage.createMessageComponentCollector({
+			filter: ({user}) => user.id == message.author.id
+		})
+
+		collector.on('collect', async interaction => {
+			if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
+				if (interaction.customId === 'forward') {
+					pageIndex += 6
+
+					if (pageIndex >= statusDescs[page].statuses.length) {
+						page++
+
+						if (page >= statusDescs.length) {
+							page = 0
+						}
+						pageIndex = 0
+					}
+				} else if (interaction.customId === 'back') {
+					pageIndex -= 6
+
+					if (pageIndex < 0) {
+						page--
+
+						if (page < 0) {
+							page = statusDescs.length-1
+						}
+
+						pageIndex = statusDescs[page].statuses.length - (statusDescs[page].statuses.length % 6 != 0 ? statusDescs[page].statuses.length % 6 : 6)
 					}
 				}
-				if (statDef) break;
-			}
 
-			message.channel.send({
-				embeds: [new Discord.MessageEmbed({
-					color: '#0099ff',
-					title: `${statusEmojis[statDef.name]}${statusNames[statDef.name]} (${statDef.name})`,
-					description: genStatusDescription(statDef, false),
-				})]
-			})
-
-		} else {
-			let page = 0;
-			let pageIndex = 0;
-
-			const generateEmbed = async (page) => {
-				const current = statusDescs[page].statuses.slice(pageIndex, pageIndex + 6);
-				return new Discord.MessageEmbed({
-					color: '#0099ff',
-					title: 'List of status effects:',
-					description: `Status affects will affect fighters in-battle and can be fatal if not cured, or beneficial.\n### ${statusDescs[page].title}`,
-					fields: await Promise.all(
-						current.map(async arrayDefs => ({
-							name: `${statusEmojis[arrayDefs.name]}${statusNames[arrayDefs.name]} (${arrayDefs.name})`,
-							value: genStatusDescription(arrayDefs, true, page),
-							inline: true
-						}))
-					)
+				await interaction.update({
+					embeds: [await generateEmbed(page)],
+					components: [
+						new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]}),
+					]
+				})
+			} else {
+				collector.stop()
+				await interaction.update({
+				embeds: [await generateEmbed(page)],
+				components: []
 				})
 			}
-
-			embedMessage = await message.channel.send({
-				embeds: [await generateEmbed(page)],
-				components: [new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]})]
-			})
-		
-			const collector = embedMessage.createMessageComponentCollector({
-				filter: ({user}) => user.id == message.author.id
-			})
-
-			collector.on('collect', async interaction => {
-				if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
-					if (interaction.customId === 'forward') {
-						pageIndex += 6
-
-						if (pageIndex >= statusDescs[page].statuses.length) {
-							page++
-
-							if (page >= statusDescs.length) {
-								page = 0
-							}
-							pageIndex = 0
-						}
-					} else if (interaction.customId === 'back') {
-						pageIndex -= 6
-
-						if (pageIndex < 0) {
-							page--
-
-							if (page < 0) {
-								page = statusDescs.length-1
-							}
-							
-							pageIndex = statusDescs[page].statuses.length - (statusDescs[page].statuses.length % 6 != 0 ? statusDescs[page].statuses.length % 6 : 6)
-						}
-					}
-		
-					await interaction.update({
-						embeds: [await generateEmbed(page)],
-						components: [
-							new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]}),
-						]
-					})
-				} else {
-					collector.stop()
-					await interaction.update({
-					embeds: [await generateEmbed(page)],
-					components: []
-					})
-				}
-			})
-		}
+		})
 	}
 })
 
