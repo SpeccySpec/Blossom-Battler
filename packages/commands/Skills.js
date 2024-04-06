@@ -2257,7 +2257,7 @@ statusDescs = [
 			},
 			{
 				name: "chilled",
-				desc: `Increases ${elementEmoji["ice"]}**ice** and ${elementEmoji["water"]}**water** damage. Decreases ${elementEmoji["fire"]}**fire** and ${elementEmoji["metal"]}**metal**.`,
+				desc: `Increases ${elementEmoji["ice"]}**ice** and ${elementEmoji["water"]}**water** damage. Decreases ${elementEmoji["fire"]}**fire** and ${elementEmoji["grass"]}**grass**.`,
 				ailments: {
 					nonboss: {
 						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
@@ -2269,7 +2269,7 @@ statusDescs = [
 			},
 			{
 				name: "overheat",
-				desc: `Increases ${elementEmoji["fire"]}**fire** and ${elementEmoji["metal"]}**metal** damage. Decreases ${elementEmoji["ice"]}**ice** and ${elementEmoji["water"]}**water**.`,
+				desc: `Increases ${elementEmoji["fire"]}**fire** and ${elementEmoji["grass"]}**grass** damage. Decreases ${elementEmoji["ice"]}**ice** and ${elementEmoji["water"]}**water**.`,
 				ailments: {
 					nonboss: {
 						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
