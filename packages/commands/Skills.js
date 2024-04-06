@@ -2478,7 +2478,7 @@ const genStatusDescription = (status, hideAffinities, page, settings, message) =
 			}
 		}
 	} else {
-		if (status.ailments) text += `For full view, please refer to: __${getPrefix(message.guild.id)}liststatus ${status.name}__`
+		if (status.ailments) text += `For full view, please refer to: __${getPrefix(message.guild.id)}getstatus ${status.name}__`
 	}
 
 	return text;
