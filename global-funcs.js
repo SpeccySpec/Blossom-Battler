@@ -373,7 +373,7 @@ statusEmojis = {
 	// Positive Statusses
 	mirror: '<:mirror:963413990229311588>',
 	dragonscale: '<:dragonscale:1224681842846994572>',
-	happy: '<:happy:973076333871644733>',
+	happy: '<:happy:1224044692358828092>',
 	airborne: '<:airborne:1225491225495343155>',
 	cloud9: '<:cloud9:1224993225878802463>',
 	blessed: '<:blessed:1223966695241158666>',
