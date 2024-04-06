@@ -173,6 +173,7 @@ inflictStatus = (char, status, notxt) => {
 		char.statusturns = statusfuncs.forceturns ?? 3;
 	}
 
+	//remove opposites of the newly inflicted status
 	if (statusfuncs.opposite) {
 		for (i of statusfuncs.opposite) {
 			if (char[i]) delete char[i];

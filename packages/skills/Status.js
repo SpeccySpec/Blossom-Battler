@@ -2864,6 +2864,15 @@ statusEffectFuncs = {
 			} else {
 				char.blessed = 3;
 			}
+
+			let negStatuses = statusEffects.filter(x => !positive.includes(x) && !neutral.includes(x));
+			for (stat of negStatuses) {
+				if (char.status && char.status == stat) {
+					delete char.status;
+					delete char.statusturns;
+				}
+				if (char[stat]) delete char[stat];
+			}
 		},
 		stackable: true,
 		hardcoded: true,
@@ -3119,14 +3128,14 @@ statusEffectFuncs = {
 					if (skill.type.includes("ice") || skill.type.includes("electric")) {
 						dmg = Math.round(dmg*1.75);
 						emojitxt += statusEmojis.wet;
-					} else if (skill.type.includes("fire") || skill.type.includes("earth")) {
+					} else if (skill.type.includes("fire") || skill.type.includes("nuclear")) {
 						dmg = Math.round(dmg*0.75);
 					}
 				} else {
 					if (skill.type === "ice" || skill.type === "electric") {
 						dmg = Math.round(dmg*1.75);
 						emojitxt += statusEmojis.wet;
-					} else if (skill.type === "fire" || skill.type === "earth") {
+					} else if (skill.type === "fire" || skill.type === "nuclear") {
 						dmg = Math.round(dmg*0.75);
 					}
 				}
@@ -3135,14 +3144,14 @@ statusEffectFuncs = {
 					if (skill.type.includes("ice") || skill.type.includes("electric")) {
 						dmg = Math.round(dmg*1.25);
 						emojitxt += statusEmojis.wet;
-					} else if (skill.type.includes("fire") || skill.type.includes("earth")) {
+					} else if (skill.type.includes("fire") || skill.type.includes("nuclear")) {
 						dmg = Math.round(dmg/4);
 					}
 				} else {
 					if (skill.type === "ice" || skill.type === "electric") {
 						dmg = Math.round(dmg*1.25);
 						emojitxt += statusEmojis.wet;
-					} else if (skill.type === "fire" || skill.type === "earth") {
+					} else if (skill.type === "fire" || skill.type === "nuclear") {
 						dmg = Math.round(dmg/4);
 					}
 				}
@@ -3151,14 +3160,14 @@ statusEffectFuncs = {
 					if (skill.type.includes("ice") || skill.type.includes("electric")) {
 						dmg = Math.round(dmg*1.5);
 						emojitxt += statusEmojis.wet;
-					} else if (skill.type.includes("fire") || skill.type.includes("earth")) {
+					} else if (skill.type.includes("fire") || skill.type.includes("nuclear")) {
 						dmg = Math.round(dmg/2);
 					}
 				} else {
 					if (skill.type === "ice" || skill.type === "electric") {
 						dmg = Math.round(dmg*1.5);
 						emojitxt += statusEmojis.wet;
-					} else if (skill.type === "fire" || skill.type === "earth") {
+					} else if (skill.type === "fire" || skill.type === "nuclear") {
 						dmg = Math.round(dmg/2);
 					}
 				}
@@ -3598,14 +3607,14 @@ statusEffectFuncs = {
 		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if (hasStatusAffinity(targ, 'overheat', 'weak')) {
 				if (typeof skill.type === "object") {
-					if (skill.type.includes("fire") || skill.type.includes("grass")) {
+					if (skill.type.includes("fire") || skill.type.includes("metal")) {
 						dmg = Math.round(dmg*1.75);
 						emojitxt += statusEmojis.overheat;
 					} else if (skill.type.includes("ice") || skill.type.includes("water")) {
 						dmg = Math.round(dmg*0.75);
 					}
 				} else {
-					if (skill.type === "fire" || skill.type === "grass") {
+					if (skill.type === "fire" || skill.type === "metal") {
 						dmg = Math.round(dmg*1.75);
 						emojitxt += statusEmojis.overheat;
 					} else if (skill.type === "ice" || skill.type === "water") {
@@ -3614,14 +3623,14 @@ statusEffectFuncs = {
 				}
 			} else if (hasStatusAffinity(targ, 'overheat', 'resist')) {
 				if (typeof skill.type === "object") {
-					if (skill.type.includes("fire") || skill.type.includes("grass")) {
+					if (skill.type.includes("fire") || skill.type.includes("metal")) {
 						dmg = Math.round(dmg*1.25);
 						emojitxt += statusEmojis.chilled;
 					} else if (skill.type.includes("ice") || skill.type.includes("water")) {
 						dmg = Math.round(dmg/4);
 					}
 				} else {
-					if (skill.type === "fire" || skill.type === "grass") {
+					if (skill.type === "fire" || skill.type === "metal") {
 						dmg = Math.round(dmg*1.25);
 						emojitxt += statusEmojis.overheat;
 					} else if (skill.type === "ice" || skill.type === "water") {
@@ -3630,14 +3639,14 @@ statusEffectFuncs = {
 				}
 			} else {
 				if (typeof skill.type === "object") {
-					if (skill.type.includes("fire") || skill.type.includes("grass")) {
+					if (skill.type.includes("fire") || skill.type.includes("metal")) {
 						dmg = Math.round(dmg*1.5);
 						emojitxt += statusEmojis.overheat;
 					} else if (skill.type.includes("ice") || skill.type.includes("water")) {
 						dmg = Math.round(dmg/2);
 					}
 				} else {
-					if (skill.type === "fire" || skill.type === "grass") {
+					if (skill.type === "fire" || skill.type === "metal") {
 						dmg = Math.round(dmg*1.5);
 						emojitxt += statusEmojis.chilled;
 					} else if (skill.type === "ice" || skill.type === "water") {
