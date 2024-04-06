@@ -1,13 +1,18 @@
 weatherFuncs = {
 	rain: {
 		onturn(char, btl) {
+			let txt = '';
+
 			if (char.status && char.status === 'burn') {
 				delete char.status;
 				delete char.statusturns;
-				return `__${char.name}__ is put out by the **Rain**!`;
+				txt += `__${char.name}__ is put out by the **Rain**!`;
 			}
 
-			return null;
+			txt += `\n\n${inflictStatus(char, "wet")}`;
+
+			if (txt.trim() == '') txt = null;
+			return txt;
 		},
 		onselect(char, skill, btl) {
 			if (skill.type === "water") {
@@ -42,7 +47,13 @@ weatherFuncs = {
 			} else if (skill.type === "water" || skill.type === "grass") {
 				skill.pow *= 0.7;
 			}
-		}
+		},
+		onturn(char, btl) {
+			let txt = inflictStatus(char, "overheat");
+
+			if (txt.trim() == '') txt = null;
+			return txt
+		},
 	},
 
 	windy: {
@@ -63,14 +74,24 @@ weatherFuncs = {
 				stats.prc *= 2/3;
 
 			return stats;
-		}
+		},
+		onturn(char, btl) {
+			let txt = inflictStatus(char, "dry");
+
+			if (txt.trim() == '') txt = null;
+			return txt
+		},
 	},
 
 	hail: {
 		onturn(char, btl) {
+			let txt = '';
+
 			if (!isMainElement("ice", char)) {
 				let dmg = 10;
 				let affinity = '';
+
+				let ignore = false;
 
 				if (char.affinities.weak && char.affinities.weak.includes("ice")) {
 					dmg *= 2;
@@ -85,21 +106,28 @@ weatherFuncs = {
 					dmg *= 0.5;
 					affinity = affinityEmoji.resist;
 				} else if ((char.affinities.block && char.affinities.block.includes("ice")) || (char.affinities.repel && char.affinities.repel.includes("ice"))) {
-					return `__${char.name}__ is able to negate the hail damage.`;
+					txt += `__${char.name}__ is able to negate the hail damage.`;
+					ignore = true;
 				} else if (char.affinities.drain && char.affinities.drain.includes("ice")) {
 					char.hp = Math.min(char.maxhp, char.hp+dmg);
-					return `The __Hail__ heals __${char.name}__ by ${dmg}${affinityEmoji.drain} HP!`;
+					txt += `The __Hail__ heals __${char.name}__ by ${dmg}${affinityEmoji.drain} HP!`;
+					ignore = true;
 				}
 
-				char.hp = Math.max(0, char.hp-dmg);
+				if (!ignore) {
+					char.hp = Math.max(0, char.hp-dmg);
 
-				if (char.hp <= 0) {
-					return `__${char.name}__ was ___defeated${affinity}___ by the __Hail__!\n${selectQuote(char, 'death', null)}`;
-				} else {
-					return `__${char.name}__ took ___${dmg}${affinity}___ damage from the __Hail__!`;
+					if (char.hp <= 0) {
+						txt += `__${char.name}__ was ___defeated${affinity}___ by the __Hail__!\n${selectQuote(char, 'death', null)}`;
+					} else {
+						txt += `__${char.name}__ took ___${dmg}${affinity}___ damage from the __Hail__!`;
+						txt += `\n\n${inflictStatus(char, "chilled")}`;
+					}
 				}
 			}
-			return null;
+
+			if (txt.trim() == '') txt = null;
+			return txt;
 		}
 	},
 
@@ -183,6 +211,193 @@ weatherFuncs = {
 			return stats;
 		}
 	},
+
+	bluemoon: {
+		dmgmod(char, dmg, skill, btl, isTarget) {
+			if (!isTarget && skill.type == 'spirit') {
+				dmg *= 1.2;
+			}
+			return dmg;
+		},
+		statmod(char, stats, btl) {
+			if (isMainElement("spirit", char))
+				stats.mag *= 1.1;
+
+			return stats;
+		}
+	},
+
+	fallingash: {
+		onturn(char, btl) {
+			let txt = '';
+			if (randNum(1, 100) <= 20) txt = inflictStatus(char, "burn");
+
+			if (txt.trim() == '') txt = null;
+			return txt
+		},
+	},
+
+	acidrain: {
+		onturn(char, btl) {
+			let txt = '';
+
+			if (!isMainElement("acid", char)) {
+				let dmg = 10;
+				let affinity = '';
+
+				let ignore = false;
+
+				if (char.affinities.weak && char.affinities.weak.includes("acid")) {
+					dmg *= 2;
+					affinity = affinityEmoji.weak;
+				} else if (char.affinities.superweak && char.affinities.superweak.includes("acid")) {
+					dmg *= 4;
+					affinity = affinityEmoji.superweak;
+				} else if (char.affinities.deadly && char.affinities.deadly.includes("acid")) {
+					dmg *= 8;
+					affinity = affinityEmoji.deadly;
+				} else if (char.affinities.resist && char.affinities.resist.includes("acid")) {
+					dmg *= 0.5;
+					affinity = affinityEmoji.resist;
+				} else if ((char.affinities.block && char.affinities.block.includes("acid")) || (char.affinities.repel && char.affinities.repel.includes("acid"))) {
+					txt += `__${char.name}__ is able to negate the acid rain damage.`;
+					ignore = true;
+				} else if (char.affinities.drain && char.affinities.drain.includes("acid")) {
+					char.hp = Math.min(char.maxhp, char.hp+dmg);
+					txt += `The __Acid Rain__ heals __${char.name}__ by ${dmg}${affinityEmoji.drain} HP!`;
+					ignore = true;
+				}
+
+				if (!ignore) {
+					char.hp = Math.max(0, char.hp-dmg);
+
+					if (char.hp <= 0) {
+						txt += `__${char.name}__ was ___defeated${affinity}___ by the __Acid Rain__!\n${selectQuote(char, 'death', null)}`;
+					} else {
+						txt += `__${char.name}__ took ___${dmg}${affinity}___ damage from the __Acid Rain__!`;
+						if (randNum(1, 100) <= 10) txt += `\n\n${inflictStatus(char, "dissolved")}`;
+					}
+				}
+			}
+
+			if (txt.trim() == '') txt = null;
+			return txt;
+		}
+	},
+
+	radiation: {
+		onturn(char, btl) {
+			let txt = '';
+
+			txt += extrasList.buff.buffChange(char, char, {type: 'almighty'}, btl, ["target", "random", -1, 100], null);
+			if (randNum(1, 100) <= 10) txt += `\n\n${inflictStatus(char, "irradiation")}`;
+
+			if (txt.trim() == '') txt = null;
+			return txt;
+		}
+	},
+
+	earthquake: {
+		onselect(char, skill, btl) {
+			if (skill.type === "earth") {
+				skill.pow *= 1.3;
+			}
+		},
+		onturn(char, btl) {
+			let txt = '';
+
+			if (randNum(1, 100) <= 10) txt += `${inflictStatus(char, "stagger")}`;
+
+			if (txt.trim() == '') txt = null;
+			return txt;
+		}
+	},
+
+	smog: {
+		statmod(char, stats, btl) {
+			if (randNum(1, 100) <= 40)
+				stats.prc *= 0.7;
+
+			return stats;
+		},
+		onturn(char, btl) {
+			let txt = '';
+
+			if (randNum(1, 100) <= 20) txt += `${inflictStatus(char, "shrouded")}`;
+
+			if (txt.trim() == '') txt = null;
+			return txt;
+		}
+	},
+
+	airstrikes: {
+		onturn(char, btl) {
+			let txt = '';
+
+			let dmg = randNum(8, 17);
+			let affinity = '';
+
+			let possible = [];
+			for (let i in btl.teams) {
+				for (let k in btl.teams[i].members)
+					if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k]);
+			}
+			let f = possible[randNum(possible.length-1)];
+
+			if (f.affinities.weak && f.affinities.weak.includes("explode")) {
+				dmg *= 2;
+				affinity = affinityEmoji.weak;
+			} else if (f.affinities.superweak && f.affinities.superweak.includes("explode")) {
+				dmg *= 4;
+				affinity = affinityEmoji.superweak;
+			} else if (f.affinities.deadly && f.affinities.deadly.includes("explode")) {
+				dmg *= 8;
+				affinity = affinityEmoji.deadly;
+			} else if (f.affinities.resist && f.affinities.resist.includes("explode")) {
+				dmg *= 0.5;
+				affinity = affinityEmoji.resist;
+			} else if ((f.affinities.block && f.affinities.block.includes("explode")) || (f.affinities.repel && f.affinities.repel.includes("explode"))) {
+				return `__${f.name}__ is able to negate the air strike's explode damage.`;
+			} else if (f.affinities.drain && f.affinities.drain.includes("explode")) {
+				f.hp = Math.min(f.maxhp, f.hp+dmg);
+				return `The __Air Strike__ heals __${f.name}__ by ${dmg}${affinityEmoji.drain} HP!`;
+			}
+
+			f.hp = Math.max(0, f.hp-dmg);
+
+			if (f.hp <= 0) {
+				txt += `__${f.name}__ was ___defeated${affinity}___ by the __Air Strike__!\n${selectQuote(f, 'death', null)}`;
+			} else {
+				txt += `__${f.name}__ took ___${dmg}${affinity}___ damage from the __Air Strike__!`;
+			}
+
+			return txt;
+		}
+	},
+
+	cherryblossoms: {
+		onturn(char, btl) {
+			let txt = '';
+
+			let possible = [];
+			for (let i in btl.teams) {
+				for (let k in btl.teams[i].members)
+					if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k]);
+			}
+			let f = possible[randNum(possible.length-1)];
+
+			txt += `${inflictStatus(f, "blessed")}`
+
+			if (txt.trim() == '') txt = null;
+			return txt;
+		},
+		statmod(char, stats, btl) {
+			if (randNum(1, 100) <= 30)
+				stats.luk *= 1.25;
+
+			return stats;
+		},
+	}
 }
 
 terrainFuncs = {
@@ -202,16 +417,16 @@ terrainFuncs = {
 				if (char.affinities.weak.includes("fire")) {
 					dmg *= 2;
 					affinity = affinityEmoji.weak;
-				} else if (char.affinities.superweak.includes("fire")) {
+				} else if (char.affinities.superweak && char.affinities.superweak.includes("fire")) {
 					dmg *= 4;
 					affinity = affinityEmoji.superweak;
-				} else if (char.affinities.deadly?.includes("fire")) {
+				} else if (char.affinities.deadly && char.affinities.deadly.includes("fire")) {
 					dmg *= 8;
 					affinity = affinityEmoji.deadly;
-				} else if (char.affinities.resist.includes("fire")) {
+				} else if (char.affinities.resist && char.affinities.resist.includes("fire")) {
 					dmg *= 0.5;
 					affinity = affinityEmoji.resist;
-				} else if (char.affinities.block.includes("fire") || char.affinities.repel.includes("fire")) {
+				} else if ((char.affinities.block && char.affinities.block.includes("fire")) || (char.affinities.repel && char.affinities.repel.includes("fire"))) {
 					return `__${char.name}__ is able to negate the flaming terrain's damage.`;
 				} else if (char.affinities.drain.includes("fire")) {
 					char.hp = Math.min(char.maxhp, char.hp+dmg);
@@ -255,6 +470,16 @@ terrainFuncs = {
 		}
 	},
 
+	dark: {
+		onselect(char, skill, btl) {
+			if (skill.type === "curse") {
+				skill.pow *= 1.3;
+			} else if (skill.type === "bless") {
+				skill.pow *= 0.5;
+			}
+		}
+	},
+
 	psychic: {
 		hardcoded: true
 	},
@@ -290,6 +515,16 @@ terrainFuncs = {
 				skill.pow *= 1.2;
 			} else if (skill.type === "earth") {
 				skill.pow *= 0.9;
+			}
+		}
+	},
+
+	underground: {
+		onselect(char, skill, btl) {
+			if (skill.type === "earth") {
+				skill.pow *= 1.5;
+			} else if (skill.type === "wind" || skill.type === "grass") {
+				skill.pow *= 0.7;
 			}
 		}
 	},
@@ -335,6 +570,76 @@ terrainFuncs = {
 			if (!skill.atktype === "physical") skill.pow *= 1.25;
 		},
 	},
+
+	forest: {
+		onselect(char, skill, btl) {
+			if (skill.type === "grass") {
+				skill.pow *= 1.5;
+			} else if (skill.type === "fire") {
+				skill.pow *= 1.3;
+			} else if (skill.type === "water") {
+				skill.pow *= 0.7;
+			}
+		}
+	},
+
+	desert: {
+		onselect(char, skill, btl) {
+			if (skill.type === "fire" || skill.type === "earth") {
+				skill.pow *= 1.3;
+			} else if (skill.type === "ice" || skill.type === "water") {
+				skill.pow *= 0.7;
+			}
+		}
+	},
+
+	mountainside: {
+		onselect(char, skill, btl) {
+			if (skill.type === "earth" || skill.type === "wind" || skill.type === "ice") {
+				skill.pow *= 1.3;
+			}
+		}
+	},
+
+	acidpools: {
+		onturn(char, btl) {
+			let txt = '';
+			if (!isMainElement("acid", char)) {
+				let dmg = randNum(8, 17);
+				let affinity = '';
+
+				if (char.affinities.weak.includes("acid")) {
+					dmg *= 2;
+					affinity = affinityEmoji.weak;
+				} else if (char.affinities.superweak && char.affinities.superweak.includes("acid")) {
+					dmg *= 4;
+					affinity = affinityEmoji.superweak;
+				} else if (char.affinities.deadly && char.affinities.deadly.includes("acid")) {
+					dmg *= 8;
+					affinity = affinityEmoji.deadly;
+				} else if (char.affinities.resist && char.affinities.resist.includes("acid")) {
+					dmg *= 0.5;
+					affinity = affinityEmoji.resist;
+				} else if ((char.affinities.block && char.affinities.block.includes("acid")) || (char.affinities.repel && char.affinities.repel.includes("acid"))) {
+					return `__${char.name}__ is able to negate the acid pools terrain's damage.`;
+				} else if (char.affinities.drain.includes("acid")) {
+					char.hp = Math.min(char.maxhp, char.hp+dmg);
+					return `The __Acid Pools Terrain__ heals __${char.name}__ by ${dmg}${affinityEmoji.drain} HP!`;
+				}
+
+				char.hp = Math.max(0, char.hp-dmg);
+
+				if (char.hp <= 0) {
+					txt += `__${char.name}__ took ___${dmg}${affinity}___ damage and was defeated by the __Acid Pools Terrain__!\n${selectQuote(char, 'death', null)}`;
+				} else {
+					txt += `__${char.name}__ took ___${dmg}${affinity}___ damage from the __Acid Pools Terrain__!`;
+					if (randNum(1, 100) <= 10) txt += `\n${inflictStatus(char, "dissolved")}`;
+				}
+			}
+
+			return txt;
+		}
+	},
 	
 	/*
 		- BOSS EXCLUSIVE TERRAINS
@@ -373,6 +678,15 @@ terrainFuncs = {
 
 			if (skill.type === "water")
 				skill.type = "ice";
+
+			if (skill.status) {
+				if (typeof(skill.status) === "string" && skill.status == 'wet') skill.status = 'freeze';
+				if (typeof(skill.status) === "array") {
+					for (i of skill.status) {
+						if (i == 'wet') i = 'freeze';
+					}
+				}
+			}
 		}
 	},
 
