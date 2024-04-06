@@ -1464,6 +1464,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	if (skill.type === 'heal') quotetype = 'heal';
 	if (skill.limitbreak) quotetype = 'lb';
 	if (skill.teamcombo) quotetype = 'tc';
+	if (skill.melee) quotetype = 'melee';
 	let finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}`;
 	if (ally && ally.quotes) {
 		finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}${selectQuote(ally, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}`;
