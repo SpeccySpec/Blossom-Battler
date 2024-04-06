@@ -1847,7 +1847,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 					finalText += `\n__${char2.name}__ wants to assist __${char.name}__ with their attack!\n`;
 
-					let result = attackWithSkill(char2, targ, meleeAtk, btl, true, noExtraArray, noVarsArray, true);
+					let result = attackWithSkill(char2, targ, meleeAtk, btl, true, noExtraArray, null, true);
 					finalText += `${result.txt}\n`;
 
 					if (result.teamCombo) btl.canteamcombo = true;
