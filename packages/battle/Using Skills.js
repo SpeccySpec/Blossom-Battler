@@ -1788,7 +1788,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		let skillDefs = objClone(skill);
 		skillDefs.pow *= targets[i][1];
 
-		let result = attackWithSkill(char, targ, skillDefs, btl, null, noExtraArray, noVarsArray);
+		let result = attackWithSkill(char, targ, skillDefs, btl, null, noExtraArray);
 		if (!noEffectMsg) finalText += `${result.txt}`;
 
 		if (result.oneMore) btl.doonemore = true;
