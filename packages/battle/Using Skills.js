@@ -125,6 +125,19 @@ genDmg = (char, targ, btl, skill) => {
 	}
 	
 	if (isNaN(dmg) || dmg <= 0) dmg = 1;
+
+	// Weather dmgMod.
+	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].dmgmod) {
+		if (!char.status || (char.status && char.status != 'cloud9')) dmg = weatherFuncs[btl.weather.type].dmgmod(char, dmg, skill, btl, true) ?? dmg;
+		if (!targ.status || (targ.status && targ.status != 'cloud9')) dmg = weatherFuncs[btl.weather.type].dmgmod(targ, dmg, skill, btl, false) ?? dmg;
+	}
+
+	// Terrain dmgMod.
+	if (btl.terrain && terrainFuncs && terrainFuncs[btl.terrain.type] && terrainFuncs[btl.terrain.type].dmgmod) {
+		if (!char.status || (char.status && char.status != 'airborne')) dmg = terrainFuncs[btl.terrain.type].dmgmod(char, dmg, skill, btl, true) ?? dmg;
+		if (!targ.status || (targ.status && targ.status != 'airborne')) dmg = terrainFuncs[btl.terrain.type].dmgmod(targ, dmg, skill, btl, false) ?? dmg;
+	}
+
 	return dmg;
 }
 
@@ -734,6 +747,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				}
 
 				// Critical Hits
+				if (targ.status && targ.status === "stagger" && !skill.crit) skill.crit = 100;
+
 				if (skill.crit) {
 					let c = randNum(100);
 					if ((c <= skill.crit+((char.stats.luk-targ.stats.luk)/2)) || (targ.status && targ.status === "stagger")) {
