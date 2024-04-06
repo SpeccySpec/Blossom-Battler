@@ -385,7 +385,6 @@ specialList = {
 			let chance = vars[2];
 
 			target = targetUser == 'target' ? targ : char;
-			user = targetUser == 'target' ? char : targ;
 
 			let status;
 			if (typeof(statusses) === 'object') {
@@ -394,7 +393,9 @@ specialList = {
 				status = statusses;
 			}
 
-			return statusList.status.inflictStatus(user, target, {type: 'status', statuschane: chance}, status, btl);
+			if (randNum(1, 100) <= chance) return inflictStatus(target, status);
+
+			return "...But it failed!";
 		}
 	}),
 
