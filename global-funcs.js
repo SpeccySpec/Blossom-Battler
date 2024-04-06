@@ -232,6 +232,7 @@ statusEffects = [
 	"stuffed",
 	"tired",
 	"disabled",
+	"target",
 	"leisure",
 	"guilt",
 
@@ -293,6 +294,7 @@ statusNames = {
 	stuffed: 'Stuffed',
 	tired: "Tiredness",
 	disabled: "Disability",
+	target: "Target",
 	leisure: 'Leisure',
 	guilt: 'Guilt',
 	petrified: 'Petrification',
@@ -358,6 +360,7 @@ statusEmojis = {
 	leisure: '<:leisure:1224663103229268078>',
 	guilt: '<:guilt:1225856607750066318>',
 	petrified: '<:petrification:1224993134744698950>',
+	target: '<:target:1224663104575508481>',
 
 	// Neutral Statusses
 	dry: '<:dry:1224057395706204262>',

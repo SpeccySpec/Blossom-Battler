@@ -2165,7 +2165,19 @@ statusDescs = [
 					},
 					boss: "Affects them the same as non-bosses."
 				}
-			}
+			},
+			{
+				name: "target",
+				desc: "Becomes the only one targetted by single target or otherwise skills that require you to focus a single foe.",
+				ailments: {
+					nonboss: {
+						weak: "Lasts **3 turns**.",
+						normal: "Lasts **2 turns**.",
+						resist: "Lasts **1 turn**.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
+			},
 		]
 	},
 	{
@@ -2377,7 +2389,7 @@ statusDescs = [
 						normal: "Lasts **2 turns**.",
 						resist: "Lasts **1 turn**.",
 					},
-					boss: "Forced resistance."
+					boss: "Affects them the same as non-bosses."
 				}
 			},
 			{

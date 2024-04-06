@@ -2092,7 +2092,7 @@ isPhysicalStatus = (status) => {
 	return phys.includes(status.toLowerCase());
 }
 
-let stackable = ['confusion', 'infatuation', 'drenched', 'shrouded', 'blessed', 'lovable', 'light', 'heavy', 'dry', 'wet', 'doomed', 'weakened', 'overheat', 'chilled'];
+let stackable = ['confusion', 'infatuation', 'drenched', 'shrouded', 'blessed', 'lovable', 'light', 'heavy', 'dry', 'wet', 'doomed', 'weakened', 'overheat', 'chilled', 'target'];
 isStackableStatus = (status) => {
 	if (!status) return false;
 
@@ -3489,6 +3489,7 @@ statusEffectFuncs = {
 	lovable: {
 		hardcoded: true,
 		stackable: true,
+		opposite: ['target'],
 		onturn: function(btl, char) {
 			char.lovable--;
 			if (char.lovable <= 0) delete char.lovable;
@@ -3500,6 +3501,25 @@ statusEffectFuncs = {
 				char.lovable = 1;
 			} else {
 				char.lovable = 2;
+			}
+		}
+	},
+
+	target: {
+		hardcoded: true,
+		stackable: true,
+		opposite: ['lovable'],
+		onturn: function(btl, char) {
+			char.target--;
+			if (char.target <= 0) delete char.target;
+		},
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'target', 'weak')) {
+				char.target = 3;
+			} else if (hasStatusAffinity(char, 'target', 'resist')) {
+				char.target = 1;
+			} else {
+				char.target = 2;
 			}
 		}
 	},

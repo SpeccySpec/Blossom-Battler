@@ -370,6 +370,7 @@ const menuStates = {
 	},
 	[MENU_TARGET]: ({char, btl, comps}) => {
 		let members = btl.teams[btl.action.target[0]].members ?? btl.teams[char.team].members;
+		let checkForTarget = (members.filter(x => x.target).length != 0);
 
 		switch(btl.action.move) {
 			case 'melee':
@@ -379,10 +380,13 @@ const menuStates = {
 				for (const i in members) {
 					if (members[i].hp <= 0 || members[i].pacified) continue;
 
-					if (members[i].lovable) {
+					if (members[i].lovable && !['pacify', 'enemyinfo'].includes(btl.action.move)) {
 						comps[CalcCompins(comps, i)].push(makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString(), true))
 					} else {
-						comps[CalcCompins(comps, i)].push(makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString()))
+						if (!checkForTarget || (checkForTarget && ['pacify', 'enemyinfo'].includes(btl.action.move)))
+							comps[CalcCompins(comps, i)].push(makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString()))
+						else
+							comps[CalcCompins(comps, i)].push(makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString(), (!members[i].target)))
 					}
 				}
 				break;
@@ -420,6 +424,7 @@ const menuStates = {
 			case 'tc':
 				members = btl.teams[btl.action.target[0]].members;
 
+				checkForTarget = (members.filter(x => x?.target).length != 0);
 				for (const i in members) {
 					if (members[i].hp <= 0 || members[i].pacified) continue;
 
@@ -427,8 +432,13 @@ const menuStates = {
 						if (!hasTeamCombo(char, members[i])) continue;
 					}
 
+					let canSelect = true;
+
+					if (members[i].lovable) canSelect = false;
+					if (checkForTarget && !members[i].target) canSelect = false;
+
 					comps[CalcCompins(comps, i)].push(
-						makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString())
+						makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString(), !canSelect)
 					)
 				}
 				break;
@@ -436,6 +446,7 @@ const menuStates = {
 			default:
 				let skill = skillFile[btl.action.index];
 				let canSelect = true;
+
 				for (const i in members) {
 					if (!skill) continue;
 					if (members[i].pacified) continue;
@@ -453,6 +464,7 @@ const menuStates = {
 					} else {
 						if (members[i].hp <= 0) canSelect = false;
 						if (members[i].lovable) canSelect = false;
+						if (checkForTarget && !members[i].target) canSelect = false;
 					}
 
 					comps[CalcCompins(comps, i)].push(makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString(), !canSelect))

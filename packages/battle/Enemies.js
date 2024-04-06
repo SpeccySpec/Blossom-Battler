@@ -380,9 +380,12 @@ enemyThinker = (char, btl) => {
 								}
 
 								// Judge for all targets of skill.
+								let checkForTarget = (targets.filter(x => x?.target).length != 0);
+
 								for (let t of targets) {
 									if (t.hp <= 0) continue;
 									if (singletarg && t.lovable) continue;
+									if (checkForTarget && singletarg && !t.target) continue;
 
 									if (skill.type != 'almighty' && !skill.extras?.ohko && !skill.extras?.stealmp) {
 										if (!char.affinitycheck[t.id]) char.affinitycheck[t.id] = objClone(t.affinities);
@@ -619,9 +622,12 @@ enemyThinker = (char, btl) => {
 								}
 
 								// Judge for all targets of skill.
+								let checkForTarget = (targets.filter(x => x?.target).length != 0);
+
 								for (let t of targets) {
 									if (t.hp <= 0) continue;
 									if (singletarg && t.lovable) continue;
+									if (checkForTarget && singletarg && !t.target) continue;
 
 									// Judge based on target affinity. Only do this 85% of the time on hard.
 									if (skill.type != 'almighty' && !skill.extras?.ohko && !skill.extras?.stealmp) {
@@ -835,9 +841,12 @@ enemyThinker = (char, btl) => {
 								}
 
 								// Judge for all targets of skill.
+								let checkForTarget = (targets.filter(x => x?.target).length != 0);
+
 								for (let targ of targets) {
 									if (targ.hp <= 0) continue;
 									if (singletarg && targ.lovable) continue;
+									if (checkForTarget && singletarg && !targ.target) continue;
 
 									// Judge based on target affinity. Only do this 50% of the time on medium.
 									if (skill.type != 'almighty' && !skill.extras?.ohko && !skill.extras?.stealmp) {
@@ -894,6 +903,7 @@ enemyThinker = (char, btl) => {
 			for (let i in btl.teams) {
 				if (i == char.team) continue;
 
+				let checkForTarget = (btl.teams[i].members.filter(x => x?.target).length != 0);
 				for (let targ of btl.teams[i].members) {
 					// Select random skill.
 					let skill = char.skills[randNum(char.skills.length-1)];
@@ -908,6 +918,7 @@ enemyThinker = (char, btl) => {
 					}
 
 					if (skillFile[skill] && skillFile[skill].target === "one" && targ.lovable) continue;
+					if (skillFile[skill] && skillFile[skill].target === "one" && checkForTarget && !targ.target) continue;
 
 					// Melee as failsafe
 					if (loops >= 10) {
