@@ -184,7 +184,7 @@ inflictStatus = (char, status, notxt) => {
 	if (statusfuncs.oninflict) statusfuncs.oninflict(char);
 
 	// Status text.
-	return notxt ? '' : `${char.name} was inflicted with ${statusNames[status]}!`;
+	return notxt ? '' : `${char.name} was inflicted with ${statusEmojis[status]}${statusNames[status]}!`;
 }
 
 getCharFromId = (ID, btl) => {
