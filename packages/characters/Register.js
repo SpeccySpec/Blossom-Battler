@@ -181,6 +181,117 @@ const affinityScores = {
 	[30]: "Oh I get it now, you like creating almighty invincible gods."
 }
 
+renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, useguild) => {
+	let char = objClone(charDefs);
+
+	if (settings == null) settings = setUpFile(`${dataPath}/json/${message.guild.id}/settings.json`);
+
+	if (!DiscordEmbed) {
+		let dispLevel = '';
+	
+		let userTxt = useguild
+			? getServerUserFromGuild(char.owner, message)
+			: getServerUser(char.owner, message);
+	
+		if (char.ai) userTxt = "Automated";
+	
+		let tick = verifiedChar(char) ? '<:tick:973077052372701294>' : '';
+		DiscordEmbed = new Discord.MessageEmbed()
+			.setColor(!char.type ? elementColors[char.mainElement] : enemyTypeColors[char.type])
+			.setTitle(`${elementEmoji[char.mainElement]}${tick}${char.name} ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
+	}
+
+	let tooMany = false;
+
+	let affinityscore = 0
+	let totaffinities = 0
+	let charAffs = '';
+
+	let affinityAmount = 0;
+	let dividyBy = 18;
+	if (settings.mechanics.stataffinities && char.statusaffinities) dividyBy -= 12;
+
+	for (const affinity in char.affinities) {if (char.affinities[affinity].length > 0) affinityAmount++;}
+
+	for (const affinity in char.affinities) {
+		if (char.affinities[affinity].length == 0) continue;
+		charAffs += `\n${affinityEmoji[affinity]}: `
+
+		for (const i in char.affinities[affinity]) {
+			totaffinities++
+			affinityscore += affinityScores[affinity]
+			
+			if (!shortenAmount || (shortenAmount && i < (dividyBy/affinityAmount))) charAffs += `${elementEmoji[char.affinities[affinity][i]]}`;
+		}
+		if (shortenAmount && char.affinities[affinity].length >= Math.floor((dividyBy/affinityAmount))) {
+			let others = char.affinities[affinity].length - Math.floor((dividyBy/affinityAmount));
+			charAffs += ` and ${others} other${others > 1 ? 's' : ''}...`;
+			tooMany = true;
+		}
+	}
+	let scorecomment = affinityScores[(affinityscore > 0 ? Math.ceil : Math.floor)(affinityscore)]
+	if (scorecomment && affinityscore <= 3 && affinityscore >= -3 && totaffinities >= 9)
+		scorecomment += "\nOr at least that would be the case if you didn't have so many affinities."
+	if (totaffinities == 0)
+		scorecomment = `Your character has no affinities yet, add one with \`${getPrefix(message.guild.id)}setaffinity\`!`
+	if (totaffinities == 1)
+		scorecomment += "\nThey...probably should have more than 1 affinity though."
+	charAffs += `\n\nScore: **${affinityscore}**\n*${scorecomment ?? "..."}*`
+
+	// Status Affinities
+	if (settings.mechanics.stataffinities) {
+		if (char.statusaffinities) {
+			let statusaffinityscore = 0
+			let statustotaffinities = 0
+			let finaladdition = 0;
+			let statAffs = '';
+
+			affinityAmount = 0;
+			for (const affinity in char.statusaffinities) {if (char.statusaffinities[affinity].length > 0) affinityAmount++;}
+			
+			for (const affinity in char.statusaffinities) {
+				if (char.statusaffinities[affinity].length == 0) continue;
+				statAffs += `\n${affinityEmoji[affinity]}: `
+
+				for (const i in char.statusaffinities[affinity]) {
+					statustotaffinities++;
+
+					finaladdition = affinityScores[affinity];
+					if (isPositiveStatus(char.statusaffinities[affinity][i]))
+						finaladdition *= -1;
+					if (isNeutralStatus(char.statusaffinities[affinity][i]))
+						finaladdition *= 0;
+
+					statusaffinityscore += finaladdition
+					if (!shortenAmount || (shortenAmount && i < (6/affinityAmount))) statAffs += `${statusEmojis[char.statusaffinities[affinity][i]]}`;
+				}
+
+				if (shortenAmount && char.statusaffinities[affinity].length >= Math.floor(6/affinityAmount)) {
+					let others = char.statusaffinities[affinity].length - Math.floor(6/affinityAmount);
+					statAffs += ` and ${others} other${others > 1 ? 's' : ''}...`;
+					tooMany = true;
+				}
+			}
+			if (statAffs != '') {
+				let scorecomment = affinityScores[(statusaffinityscore > 0 ? Math.ceil : Math.floor)(statusaffinityscore)]
+				if (scorecomment && statusaffinityscore <= 3 && statusaffinityscore >= -3 && statustotaffinities >= 9)
+					scorecomment += "\nOr at least that would be the case if you didn't have so many affinities."
+				if (statustotaffinities == 1)
+					scorecomment += "\nThey...probably should have more than 1 affinity though."
+				charAffs += `\n${statAffs}\n\nScore: **${statusaffinityscore}**\n*${scorecomment ?? "..."}*`
+			};
+		}
+	}
+	if (tooMany) charAffs += `\n\nToo many affinities. To view them all, please refer to __${getPrefix(message.guild.id)}getaffinities.__`
+
+	if (charAffs != '') {
+		if (shortenAmount) DiscordEmbed.fields.push({ name: 'Affinities', value: charAffs, inline: true });
+		else DiscordEmbed.setDescription(charAffs);
+	}
+
+	return DiscordEmbed;
+}
+
 longDescription = (charDefs, level, server, message, useguild) => {
 	let char = objClone(charDefs);
 
@@ -299,59 +410,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 	DiscordEmbed.fields.push({ name: 'Skills', value: skillDesc, inline: true });
 
 	// Affinities
-	let affinityscore = 0
-	let totaffinities = 0
-	let charAffs = '';
-	for (const affinity in char.affinities) {
-		if (char.affinities[affinity].length > 0) charAffs += `\n${affinityEmoji[affinity]}: `
-		for (const i in char.affinities[affinity]) {
-			totaffinities++
-			affinityscore += affinityScores[affinity]
-			charAffs += `${elementEmoji[char.affinities[affinity][i]]}`;
-		}
-	}
-	let scorecomment = affinityScores[(affinityscore > 0 ? Math.ceil : Math.floor)(affinityscore)]
-	if (scorecomment && affinityscore <= 3 && affinityscore >= -3 && totaffinities >= 9)
-		scorecomment += "\nOr at least that would be the case if you didn't have so many affinities."
-	if (totaffinities == 0)
-		scorecomment = `Your character has no affinities yet, add one with \`${getPrefix(message.guild.id)}setaffinity\`!`
-	if (totaffinities == 1)
-		scorecomment += "\nThey...probably should have more than 1 affinity though."
-	charAffs += `\n\nScore: **${affinityscore}**\n*${scorecomment ?? "..."}*`
-
-	// Status Affinities
-	if (settings.mechanics.stataffinities) {
-		if (char.statusaffinities) {
-			let statusaffinityscore = 0
-			let statustotaffinities = 0
-			let finaladdition = 0;
-			let statAffs = '';
-			for (const affinity in char.statusaffinities) {
-				if (char.statusaffinities[affinity].length > 0) statAffs += `\n${affinityEmoji[affinity]}: `
-				for (const i in char.statusaffinities[affinity]) {
-					statustotaffinities++;
-
-					finaladdition = affinityScores[affinity];
-					if (isPositiveStatus(char.statusaffinities[affinity][i]))
-						finaladdition *= -1;
-					if (isNeutralStatus(char.statusaffinities[affinity][i]))
-						finaladdition *= 0;
-
-					statusaffinityscore += finaladdition
-					statAffs += `${statusEmojis[char.statusaffinities[affinity][i]]}`;
-				}
-			}
-			if (statAffs != '') {
-				let scorecomment = affinityScores[(statusaffinityscore > 0 ? Math.ceil : Math.floor)(statusaffinityscore)]
-				if (scorecomment && statusaffinityscore <= 3 && statusaffinityscore >= -3 && statustotaffinities >= 9)
-					scorecomment += "\nOr at least that would be the case if you didn't have so many affinities."
-				if (statustotaffinities == 1)
-					scorecomment += "\nThey...probably should have more than 1 affinity though."
-				charAffs += `\n${statAffs}\n\nScore: **${statusaffinityscore}**\n*${scorecomment ?? "..."}*`
-			};
-		}
-	}
-	if (charAffs != '') DiscordEmbed.fields.push({ name: 'Affinities', value: charAffs, inline: true });
+	DiscordEmbed = renderAffinities(true, char, DiscordEmbed, settings, message, useguild);
 
 	// Limit Breaks
 	if (settings.mechanics.limitbreaks) {

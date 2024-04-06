@@ -21,11 +21,13 @@ pvpWin = async(btl, i) => {
 			for (let team of btl.teams) {
 				for (let k in team.members) {
 					let char2 = team.members[k];
+
 					let DiscordEmbed2 = longDescription(char2, char2.level, btl.guild.id, btl.guild, true);
+					let DiscordEmbed3 = renderAffinities(false, char2, null, null, btl.guild, true)
 
 					user = client.users.fetch(char2.owner);
 					user.then(userobj => {
-						userobj.send({content: `Here were ${char2.name}'s stats during that Character Scramble match.`, embeds: [DiscordEmbed2]});
+						userobj.send({content: `Here were ${char2.name}'s stats during that Character Scramble match.`, embeds: [DiscordEmbed2, DiscordEmbed3]});
 					})
 				}
 			}

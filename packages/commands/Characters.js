@@ -309,6 +309,52 @@ commands.getchar = new Command({
 	}
 })
 
+commands.getaffinities = new Command({
+	desc: "Lists a character's affinities in full detail!",
+	aliases: ['findaffinities', 'charaffinities'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func(message, args, guilded) {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		let thingDefs = ''
+	
+		if (charFile[args[0]]) {
+			thingDefs = charFile;
+		} else if (enemyFile[args[0]]) {
+			thingDefs = enemyFile;
+
+			console.log('can you find');
+			if (!foundEnemy(args[0], message.guild.id)) {
+				console.log('hi');
+				var noEmbed = new Discord.MessageEmbed()
+					.setColor(enemyTypeColors[thingDefs[args[0]].type])
+					.setTitle(`${thingDefs[args[0]].name}`)
+					.setDescription("This enemy hasn't been seen yet, encounter it in battle to reveal it's full affinities.")
+	
+				message.channel.send({embeds: [noEmbed]})
+	
+				if (utilityFuncs.isAdmin(message)) {
+					message.author.send({content: `Since you're an administrator, I will send the affinities to you.`, embeds: [renderAffinities(false, thingDefs[args[0]], null, null, message)]});
+				}
+				return;
+			}
+		} else return message.channel.send(`${args[0]} doesn't exist!`);
+
+		// Alright, let's get the character!
+		let DiscordEmbed = renderAffinities(false, thingDefs[args[0]], null, null, message);
+		message.channel.send({embeds: [DiscordEmbed]});
+	}
+})
+
 commands.getgear = new Command({
 	desc: "Lists a character's gear and equipment, like held items, weapons, armor and more.",
 	aliases: ['getequipment'],
