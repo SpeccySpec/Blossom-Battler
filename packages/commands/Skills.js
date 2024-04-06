@@ -2437,6 +2437,10 @@ commands.liststatus = new Command({
 		const genStatusDescription = (status, hideAffinities, page) => {
 			let text = '';
 
+			if (!hideAffinities) {
+				text += (isPositiveStatus(status.name) ? '<:positive:1225860207964585994> Positive' : (isNeutralStatus(status.name) ? '<:neutral:1225860206429208746> Neutral' : '<:negative:1225860204118413435> Negative'))+'\n';
+			}
+
 			if (page == undefined || (hideAffinities && (page > 1))) {
 				text += `${isPhysicalStatus(status.name) ? '*<:physical:973077052129423411> Physical' : '*<:mental:1004855144745291887> Mental'}*\n`
 			}
