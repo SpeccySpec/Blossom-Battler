@@ -2438,7 +2438,7 @@ commands.liststatus = new Command({
 			let text = '';
 
 			if (!hideAffinities) {
-				text += (isPositiveStatus(status.name) ? '<:positive:1225860207964585994> Positive' : (isNeutralStatus(status.name) ? '<:neutral:1225860206429208746> Neutral' : '<:negative:1225860204118413435> Negative'))+'\n';
+				text += (isPositiveStatus(status.name) ? '<:positive:1225860207964585994> *Positive*' : (isNeutralStatus(status.name) ? '<:neutral:1225860206429208746> *Neutral*' : '<:negative:1225860204118413435> *Negative*'))+'\n';
 			}
 
 			if (page == undefined || (hideAffinities && (page > 1))) {
