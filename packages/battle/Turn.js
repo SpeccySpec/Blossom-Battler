@@ -2135,7 +2135,7 @@ doTurn = async(btl, noTurnEmbed) => {
 		let lowest = 9999999;
 		let lowestid = 0;
 		for (let i in party.members) {
-			if (party.members[i].hp <= lowest) {
+			if (party.members[i].hp > 0 && party.members[i].hp <= lowest) {
 				lowest = party.members[i].hp;
 				lowestid = i;
 			}
