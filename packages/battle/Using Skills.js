@@ -58,8 +58,8 @@ genDmg = (char, targ, btl, skill) => {
 	let settings = setUpSettings(btl.guild.id);
 
 	// Status Effect StatMod.
-	let charStats = (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].statmod) ? statusEffectFuncs[char.status].statmod(char, objClone(char.stats)) : objClone(char.stats);
-	let targStats = (targ.status && statusEffectFuncs[targ.status] && statusEffectFuncs[targ.status].statmod) ? statusEffectFuncs[targ.status].statmod(targ, objClone(targ.stats)) : objClone(targ.stats);
+	let charStats = (char.status && !(skill.extras?.soulless && skill.extras.soulless.includes(char.status)) && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].statmod) ? statusEffectFuncs[char.status].statmod(char, objClone(char.stats)) : objClone(char.stats);
+	let targStats = (targ.status && !(skill.extras?.soulless && skill.extras.soulless.includes(targ.status)) && statusEffectFuncs[targ.status] && statusEffectFuncs[targ.status].statmod) ? statusEffectFuncs[targ.status].statmod(targ, objClone(targ.stats)) : objClone(targ.stats);
 
 	// Weather StatMod.
 	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].statmod) {
@@ -688,7 +688,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				// Handle Final Affinities
 				let curAffinity = affinity
 				if (!char.guard){
-					if (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].affinitymod) {
+					if (char.status && !(skill.extras?.soulless && skill.extras.soulless.includes(char.status)) && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].affinitymod) {
 						curAffinity = statusEffectFuncs[char.status].affinitymod(char, targ, skill, btl, affinity);
 					}
 
@@ -1382,7 +1382,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// Status Effects
-	if (char.status && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].skillmod) {
+	if (char.status && !(skill.extras?.soulless && skill.extras.soulless.includes(char.status) && (randNum(1, 100) <= skill.extras.soulless[0])) && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].skillmod) {
 		statusEffectFuncs[char.status].skillmod(char, skill, btl);
 	}
 

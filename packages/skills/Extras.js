@@ -2485,7 +2485,152 @@ extrasList = {
 		getinfo(vars, skill) {
 			return `Element **${vars[0] ? "replaced" : "added"}** to the original element **from the user's weapon**.`;
 		}
-	})
+	}),
+
+	soulless: new Extra({
+		name: "Soulless (Original)",
+		desc: "<Chance%> to bypass a given status ailment",
+		hardcoded: true,
+		args: [
+			{
+				name: "Chance%",
+				type: "Num",
+				forced: true,
+			},
+			{
+				name: "Status Effects",
+				type: "Word",
+				forced: true,
+				multiple: true,
+			}
+		],
+		applyfunc(message, skill, args) {
+			for (let i in args) {
+				if (i <= 0) continue;
+				if (!statusEffects.includes(args[i])) return void message.channel.send(`${args[i]} is not a valid status effect. Use "liststatuseffects" to obtain a list of status ailments.`);
+			}
+
+			makeExtra(skill, "soulless", args);
+			return true;
+		},
+		getinfo(vars, skill) {
+			let txt = `**${vars[0]}% chance** to bypass `;
+			for (const i in vars) {
+				if (i > 0) {
+					txt += `**${statusEmojis[vars[i]]}${vars[i]}**`
+					if (i == vars.length-2)
+						txt += ' and ';
+					else if (i >= vars.length-1)
+						txt += ' when attacking an enemy';
+					else
+						txt += ', ';
+				}
+			}
+
+			return txt;
+		}
+	}),
+
+	weatherchange: new Extra({
+		name: "Weather Change (Original)",
+		desc: "Changes the weather to <Weather>, which will affect the battle.",
+		args: [
+			{
+				name: "Weather",
+				type: "Word",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (!weathers.includes(args[0].toLowerCase())) return void message.channel.send("That's not a valid weather!");
+
+			makeExtra(skill, "weatherchange", [args[0].toLowerCase()]);
+			return true;
+		},
+		ondamage(char, targ, dmg, skill, btl, vars) {
+			if (btl?.weather?.type) {
+				btl.weather.type = vars[0];
+				btl.weather.turns = randNum(8, 16);
+			} else {
+				btl.weather = {
+					type: vars[0],
+					turns: randNum(8, 16)
+				}
+			}
+			return `The weather has been changed to __${vars[0]}__!`;
+		},
+		getinfo(vars, skill) {
+			return `Changes **Weather** to **${vars[0]}**`
+		}
+	}),
+
+	terrainchange: new Extra({
+		name: "Terrain Change (Pokemon)",
+		desc: "Changes the terrain to <Terrain>, which will affect the battle.",
+		args: [
+			{
+				name: "Terrain",
+				type: "Word",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (!terrains.includes(args[0].toLowerCase())) return void message.channel.send("That's not a valid terrain!");
+
+			makeExtra(skill, "terrainchange", [args[0].toLowerCase()]);
+			return true;
+		},
+		ondamage(char, targ, dmg, skill, btl, vars) {
+			if (btl?.terrain?.type) {
+				btl.terrain.type = vars[0];
+				btl.terrain.turns = randNum(8, 16);
+			} else {
+				btl.terrain = {
+					type: vars[0],
+					turns: randNum(8, 16)
+				}
+			}
+
+			return `The terrain has been changed to __${vars[0]}__!`;
+		},
+		getinfo(vars, skill) {
+			return `Changes **Terrain** to **${vars[0]}**`
+		}
+	}),
+
+	steelroller: new Extra({
+		name: "Steel Roller (Pokemon)",
+		desc: "If the current terrain is <Terrain>, the skill will get a power multiplier, and remove the terrain.",
+		args: [
+			{
+				name: "Terrain",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Multiplier",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (![...terrains, "all"].includes(args[0].toLowerCase())) return void message.channel.send("That's not a valid terrain!");
+			makeExtra(skill, "steelroller", [args[0].toLowerCase(), args[1]]);
+			return true;
+		},
+		statmod(char, skill, vars, btl) {
+			if (btl.terrain && (vars[0].toLowerCase() === "all" || btl.terrain.type == vars[0].toLowerCase())) skill.pow *= vars[1];
+		},
+		onuseatendoffunc(char, targ, skill, btl, vars) {
+			if (btl.terrain && (vars[0].toLowerCase() === "all" || btl.terrain.type == vars[0].toLowerCase())) {
+				delete btl.terrain;
+				addAtkMsg(btl, "_The terrain was destroyed._");
+			}
+		},
+		getinfo(vars, skill) {
+			return `Consumes a **${vars[0]}** terrain to boost the attack power by **${vars[1]}x**`
+		}
+	}),
 }
 
 // Make an Extra for a skill. "func" should be an array of 1-5 values indicating what the extra does.

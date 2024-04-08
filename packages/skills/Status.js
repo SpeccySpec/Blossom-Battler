@@ -3499,10 +3499,10 @@ statusEffectFuncs = {
 		hardcoded: true,
 		stackable: true,
 		opposite: ['target'],
-		onturn: function(btl, char) {
-			char.lovable--;
-			if (char.lovable <= 0) delete char.lovable;
-		},
+//		onturn: function(btl, char) {
+//			char.lovable--;
+//			if (char.lovable <= 0) delete char.lovable;
+//		},
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'lovable', 'weak')) {
 				char.lovable = 3;

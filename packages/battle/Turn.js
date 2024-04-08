@@ -268,7 +268,7 @@ const menuStates = {
 			}
 
 			// Lovable
-			if (skillinfo.target && skillinfo.target === "one") {
+			if (skillinfo.target && skillinfo.target === "one" && !(skillinfo.extras?.soulless && skillinfo.extras.soulless.includes("lovable"))) {
 				let alivecount = 0;
 				let alivechar = {};
 				for (let k in btl.teams) {
@@ -2058,7 +2058,7 @@ doAction = (char, btl, action) => {
 
 		btl.terrain.turns--;
 		if (btl.terrain.turns == 0) {
-			onturntxt += `\nThe ${btl.weather.type} is clearing up.`;
+			onturntxt += `\nThe ${btl.terrain.type} is clearing up.`;
 	
 			if (btl.terrain.force) {
 				btl.terrain.type = btl.terrain.force
