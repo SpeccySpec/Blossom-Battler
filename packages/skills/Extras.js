@@ -2510,6 +2510,9 @@ extrasList = {
 				if (!statusEffects.includes(args[i])) return void message.channel.send(`${args[i]} is not a valid status effect. Use "liststatuseffects" to obtain a list of status ailments.`);
 			}
 
+			if ((args.includes("lovable") || args.includes("target")) && args[0] < 100) return void message.channel.send("If soulless is made to bypass lovable and target, then it must be guaranteed.");
+			if (args.includes("brainwash") || args.includes("infatuation") || args.includes("guilt") || args.includes("mirror") || args.includes("dragonscale")) return void message.channel.send("Soulless may not bypass Brainwash, Infatuation, Guilt, Mirror, or Dragon Scale.");
+
 			makeExtra(skill, "soulless", args);
 			return true;
 		},
