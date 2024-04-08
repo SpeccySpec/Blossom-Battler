@@ -250,7 +250,7 @@ healList = {
 
 	statusheal: new Extra({
 		name: "Status Heal",
-		desc: "Cures the target of the specified status. Accepts 'physical', 'mental' and 'all' as statuses.",
+		desc: "Cures the target of the specified status. Accepts 'physical', 'mental', 'positive', and 'neutral', and 'all' as statuses.",
 		args: [
 			{
 				name: "Status",
@@ -262,9 +262,10 @@ healList = {
 		diffflag: 0,
 		applyfunc(message, skill, args) {
 			const status = args[0]?.toLowerCase();
-			if (status != 'physical' && status != 'mental' && status != 'all') {
-				if (!statusEffects.includes(status)) return void message.channel.send("That's not a valid status!");
-			}
+
+			if (![...statusEffects, "all", "physical", "mental", "positive", "neutral"].includes(status))
+				return void message.channel.send("That's not a valid status effect.");
+
 			makeHeal(skill, "statusheal", [status]);
 			return true;
 		},
@@ -285,8 +286,7 @@ healList = {
 					}
 
 					return `__${targ.name}__ had physical status ailments cured!`;
-					break;
-			
+
 				case 'mental':
 					if (targ.infatuation) delete targ.infatuation;
 
@@ -296,17 +296,52 @@ healList = {
 					}
 
 					return `__${targ.name}__ had mental status ailments cured!`;
-					break;
+
+				case 'positive':
+					for (let i in statusEffectFuncs) {
+						if (isPositiveStatus(i) && statusEffectFuncs[i].stackable) delete targ[i];
+					}
+
+					if (isPositiveStatus(targ.status)) {
+						delete targ.status;
+						delete targ.statusturns;
+					} 
+
+					return `__${targ.name}__ had positive status ailments removed.`;
+
+				case 'neutral':
+					for (let i in statusEffectFuncs) {
+						if (isNeutralStatus(i) && statusEffectFuncs[i].stackable) delete targ[i];
+					}
+
+					if (isNeutralStatus(targ.status)) {
+						delete targ.status;
+						delete targ.statusturns;
+					}
+
+					return `__${targ.name}__ had neutral status ailments removed.`;
+
+				case 'negative':
+					for (let i in statusEffectFuncs) {
+						if ((!isNeutralStatus(i) || !isPositiveStatus(i)) && statusEffectFuncs[i].stackable) delete targ[i];
+					}
+
+					if (!isNeutralStatus(targ.status) || !isPositiveStatus(targ.status)) {
+						delete targ.status;
+						delete targ.statusturns;
+					}
+
+					return `__${targ.name}__ had negative status ailments removed.`;
 
 				case 'all':
-					if (targ.confusion) delete targ.confusion;
-					if (targ.infatuation) delete targ.infatuation;
-					if (targ.drenched) delete targ.drenched;
+					for (let i in statusEffectFuncs) {
+						if (statusEffectFuncs[i].stackable) delete targ[i];
+					}
+
 					delete targ.status;
 					delete targ.statusturns;
 
-					return `__${targ.name}__ had their status ailments cured!`;
-					break;
+					return `__${targ.name}__ had their status ailments removed.`;
 				
 				default:
 					if (vars[0] === 'confusion') {
@@ -325,20 +360,20 @@ healList = {
 					return `__${targ.name}__ had their ${statusEmojis[vars[0]]}**${vars[0]}** status effect cured!`;
 			}
 
-			return '...';
+			return 'But it failed! Somehow..?';
 		},
 		getinfo(vars, skill) {
-			let txt = `Cures **`
+			let txt = 'Cures **'
 
 			for (let i in vars) {
 				txt += `${statusEmojis[vars[i]] ?? ''}${vars[i]}`
 				if (i < vars.length - 2)
-				txt += `, `
+				txt += ', '
 				else if (i === vars.length - 2)
-				txt += ` and `
+				txt += ' and '
 			}
 
-			return txt + ` ailments**`;
+			return txt + ' ailments**';
 		}
 	}),
 
@@ -361,7 +396,7 @@ healList = {
 				}
 			}
 			if (!hasHeal) {
-				makeHeal(skill, "healstat", [60, 'hp']);
+				makeHeal(skill, "healstat", [60, "hp"]);
 			}
 			return true;
 		},
@@ -406,7 +441,7 @@ healList = {
 					break;
 				}
 			}
-			if (!hasHeal) makeHeal(skill, "healstat", [60, 'hp']);
+			if (!hasHeal) makeHeal(skill, "healstat", [60, "hp"]);
 
 			return true;
 		},
@@ -461,7 +496,7 @@ healList = {
 			if (less != "less" && less != "more") return void message.channel.send("You specify if the skill needs to be less or more of something, not whatever you said.");
 			if (percent < 1)
 				return void message.channel.send("You can't need less than 0%!");
-			if (stat != 'hp' && stat != 'mp' && stat != 'hppercent' && stat != 'mppercent' && stat != 'lb')
+			if (stat != "hp" && stat != "mp" && stat != "hppercent" && stat != "mppercent" && stat != "lb")
 				return void message.channel.send("You entered an invalid value for <Cost Type>! It can be either HP, HPPercent, MP, MPPercent, or LB.");
 			
 			makeHeal(skill, "need", [less, equal, percent, stat]);

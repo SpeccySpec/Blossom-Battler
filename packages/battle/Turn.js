@@ -2132,10 +2132,10 @@ doTurn = async(btl, noTurnEmbed) => {
 	// Heal Leader Skills
 	let party = btl.teams[char.team];
 	if (settings?.mechanics?.leaderskills && char.leader && party?.leaderskill && party.leaderskill.type === 'heal') {
-		let lowest = 9999999;
-		let lowestid = 0;
+		let lowest = 9999999; // lmao. I highly doubt you have over 9999999 HP.
+		let lowestid = 0; 
 		for (let i in party.members) {
-			if (party.members[i].hp > 0 && party.members[i].hp <= lowest) {
+			if (party.members[i].hp > 0 && !party.members[i].custom?.pinch && party.members[i].hp <= lowest) {
 				lowest = party.members[i].hp;
 				lowestid = i;
 			}
