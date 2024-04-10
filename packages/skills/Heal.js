@@ -451,7 +451,7 @@ healList = {
 
 			addCusVal(targ, "wishheal", {
 				turns: vars[0],
-				user: char,
+				user: objClone(char),
 				skill: skill
 			})
 
