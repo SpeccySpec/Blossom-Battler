@@ -1937,6 +1937,9 @@ doAction = (char, btl, action) => {
 					}
 
 					char.donetc = true;
+
+					let settings = setUpSettings(btl.guild.id);
+					changeTrust(ally, char, Math.round(30*(settings.rates.trustrate ?? 1)), true, btl.channel);
 				}
 				break;
 

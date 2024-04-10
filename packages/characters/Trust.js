@@ -43,7 +43,8 @@ changeTrust = (char, char2, i, send, channel, char1Name, char2Name) => {
 	let detectedLevelUp = false;
 	let previousLevel = char.trust[char2.truename].level;
 
-	char.trust[char2.truename].amount += i;
+	if (typeof char.trust[char2.truename].amount === "string") char.trust[char2.truename].amount = 0;
+	char.trust[char2.truename].amount += parseInt(i);
 
 	if ((char.trust[char2.truename].level == 20 && char.trust[char2.truename].amount >= char.trust[char2.truename].maximum) || (char.trust[char2.truename].level == -20 && char.trust[char2.truename].amount <= char.trust[char2.truename].maximum)) {
 		char.trust[char2.truename].amount = char.trust[char2.truename].maximum;

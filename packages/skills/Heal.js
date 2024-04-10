@@ -270,13 +270,13 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
-			if (targ.team == char.team && targ.id != char.id) {
-				settings = setUpSettings(btl.guild.id);
-				changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl.channel);
-			}
-
 			switch(vars[0]) {
 				case 'physical':
+					if (targ.team == char.team && targ.id != char.id) {
+						settings = setUpSettings(btl.guild.id);
+						changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl.channel);
+					}
+
 					if (targ.confusion) delete targ.confusion;
 					if (targ.drenched) delete targ.drenched;
 
@@ -288,6 +288,11 @@ healList = {
 					return `__${targ.name}__ had physical status ailments cured!`;
 
 				case 'mental':
+					if (targ.team == char.team && targ.id != char.id) {
+						settings = setUpSettings(btl.guild.id);
+						changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl.channel);
+					}
+
 					if (targ.infatuation) delete targ.infatuation;
 
 					if (!isPhysicalStatus(targ.status)) {
@@ -298,6 +303,11 @@ healList = {
 					return `__${targ.name}__ had mental status ailments cured!`;
 
 				case 'positive':
+					if (targ.team == char.team && targ.id != char.id) {
+						settings = setUpSettings(btl.guild.id);
+						changeTrust(targ, char, Math.round(-3*(settings.rates.trustrate ?? 1)), true, btl.channel);
+					}
+
 					for (let i in statusEffectFuncs) {
 						if (isPositiveStatus(i) && statusEffectFuncs[i].stackable) delete targ[i];
 					}
@@ -310,6 +320,11 @@ healList = {
 					return `__${targ.name}__ had positive status ailments removed.`;
 
 				case 'neutral':
+					if (targ.team == char.team && targ.id != char.id) {
+						settings = setUpSettings(btl.guild.id);
+						changeTrust(targ, char, Math.round(10*(settings.rates.trustrate ?? 1)), true, btl.channel);
+					}
+
 					for (let i in statusEffectFuncs) {
 						if (isNeutralStatus(i) && statusEffectFuncs[i].stackable) delete targ[i];
 					}
@@ -322,6 +337,11 @@ healList = {
 					return `__${targ.name}__ had neutral status ailments removed.`;
 
 				case 'negative':
+					if (targ.team == char.team && targ.id != char.id) {
+						settings = setUpSettings(btl.guild.id);
+						changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl.channel);
+					}
+
 					for (let i in statusEffectFuncs) {
 						if ((!isNeutralStatus(i) || !isPositiveStatus(i)) && statusEffectFuncs[i].stackable) delete targ[i];
 					}
@@ -334,6 +354,11 @@ healList = {
 					return `__${targ.name}__ had negative status ailments removed.`;
 
 				case 'all':
+					if (targ.team == char.team && targ.id != char.id) {
+						settings = setUpSettings(btl.guild.id);
+						changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl.channel);
+					}
+
 					for (let i in statusEffectFuncs) {
 						if (statusEffectFuncs[i].stackable) delete targ[i];
 					}
