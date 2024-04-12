@@ -997,7 +997,7 @@ commands.importfile = new Command({
 		if (!file) return message.channel.send('There is no file here!');
 
 		// Download the file.
-		if (args[0].toLowerCase()) {
+		if (args[0].toLowerCase() === "skills.json") {
 			await downloadFile(message.attachments.first().url, `./data/json/`, "skills.json");
 		} else {
 			await downloadFile(message.attachments.first().url, `./data/json/${message.guild.id}/`, args[0].toLowerCase());
