@@ -538,8 +538,8 @@ commands.exportbackup = new Command({
 			type: "Word",
 		}
 	],
-	async func(message) {
-		if (message, args) {
+	async func(message, args) {
+		if (message) {
 			if (!utilityFuncs.RPGBotAdmin(message.author.id))
 				return void message.channel.send("Only a super admin can use this.")
 			message.react('👍');
