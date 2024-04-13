@@ -796,7 +796,7 @@ commands.partytruename = new Command({
 })
 
 commands.useweapon = new Command({
-    desc: "Staches a weapon from the party into the Character's weapon inventory.",
+    desc: "Stashes a weapon from the party into the Character's weapon inventory.",
 	aliases: ['claimweapon', 'takeweapon', 'grabweapon', 'stealweapon'],
     section: 'items',
 	checkban: true,
