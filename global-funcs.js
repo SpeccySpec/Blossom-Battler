@@ -237,6 +237,7 @@ statusEffects = [
 	"guilt",
 	"cursed",
 	"dispelled",
+	"unstable",
 
 	// Neutral Statusses
 	"dry",
@@ -304,6 +305,7 @@ statusNames = {
 	petrified: 'Petrification',
 	cursed: 'Cursed',
 	dispelled: 'Dispelled',
+	unstable: 'Unstable',
 
 	// Neutral Statusses
 	dry: 'Dried',
@@ -371,6 +373,7 @@ statusEmojis = {
 	target: '<:target:1224663104575508481>',
 	cursed: '<:cursed:1228457914096681050>',
 	dispelled: '<:dispelled:1228457908531101706>',
+	unstable: '<:unstable:1228727138736410665>',
 
 	// Neutral Statusses
 	dry: '<:dry:1224057395706204262>',

@@ -42,6 +42,7 @@ loseBattle = (btl, i) => {
 	let parties = setUpFile(`${dataPath}/json/${btl.guild.id}/parties.json`, true);
 	let party = parties[btl.teams[i].name];
 
+	if (!badVal(btl.teams[i].currency)) party.currency = btl.teams[i].currency;
 	let lostmoney = randNum(Math.round(party.currency/2), party.currency);
 	party.currency -= lostmoney;
 
@@ -196,6 +197,7 @@ winBattle = (btl, i) => {
 
 	// Award Money!
 	embedtxt += `\nThe team got ${moneyamount} ${settings.currency_emoji}${settings.currency}s from the enemies!\n`;
+	if (!badVal(btl.teams[i].currency)) parties[btl.teams[i].name].currency = btl.teams[i].currency;
 	parties[btl.teams[i].name].currency += moneyamount;
 
 	// Alright, let's award XP!

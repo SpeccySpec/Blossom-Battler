@@ -198,6 +198,14 @@ inflictStatus = (char, status, notxt) => {
 	// OnInflict status hook
 	if (statusfuncs.oninflict) statusfuncs.oninflict(char);
 
+	// Unstabled's stabilization with a non-stackable status effect
+	console.log(char.statusturns, char.unstable, char.statusturns + char.unstable);
+	if (char.unstable && !statusfuncs.stackable) {
+		char.statusturns += char.unstable;
+		killVar(char, 'unstable');
+		delete char.unstable;
+	}
+
 	// Status text.
 	return notxt ? '' : `${char.name} was inflicted with ${statusEmojis[status]}${statusNames[status]}!`;
 }
