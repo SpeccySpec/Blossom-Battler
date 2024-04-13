@@ -2092,7 +2092,7 @@ isPhysicalStatus = (status) => {
 	return phys.includes(status.toLowerCase());
 }
 
-let stackable = ['confusion', 'infatuation', 'drenched', 'shrouded', 'blessed', 'lovable', 'light', 'heavy', 'dry', 'wet', 'doomed', 'weakened', 'overheat', 'chilled', 'target', 'cursed', 'neutralized', 'dispelled'];
+let stackable = ['confusion', 'infatuation', 'drenched', 'shrouded', 'blessed', 'lovable', 'light', 'heavy', 'dry', 'wet', 'doomed', 'weakened', 'overheat', 'chilled', 'target', 'cursed', 'neutralized', 'dispelled', 'unstable'];
 isStackableStatus = (status) => {
 	if (!status) return false;
 
@@ -2503,7 +2503,7 @@ statusEffectFuncs = {
 			
 			let usableskills = [];
 			for (let i in char.skills) {
-				if (canUseSkill(char, skillFile[char.skills[i]], char.skills[i])) usableskills.push(char.skills[i]);
+				if (canUseSkill(char, skillFile[char.skills[i]], char.skills[i], btl)) usableskills.push(char.skills[i]);
 			}
 			
 			if (usableskills.length <= 0) {
@@ -2690,7 +2690,7 @@ statusEffectFuncs = {
 		opposite: ['guilt'],
 		onturn: function(btl, char) {
 			if (randNum(1, 100) <= 50) return [`${char.name} is stopped in their tracks by lust, losing their turn!`, false];
-		}
+		},
 	},
 
 	guilt: {
@@ -2698,7 +2698,7 @@ statusEffectFuncs = {
 		opposite: ['infatuation'],
 		onturn: function(btl, char) {
 			if (randNum(1, 100) <= 50) return [`${char.name} is held back by guilt...`, false];
-		}
+		},
 	},
 
 	blind: {
@@ -2844,10 +2844,6 @@ statusEffectFuncs = {
 		stackable: true,
 		hardcoded: true,
 		forceturns: 3,
-		onturn: function(btl, char) {
-			char.drenched--;
-			if (char.drenched <= 0) delete char.drenched;
-		},
 	},
 
 	stagger: {
@@ -2877,10 +2873,6 @@ statusEffectFuncs = {
 		},
 		stackable: true,
 		hardcoded: true,
-		onturn: function(btl, char) {
-			char.blessed--;
-			if (char.blessed <= 0) delete char.blessed;
-		},
 	},
 
 	cursed: {
@@ -2905,10 +2897,6 @@ statusEffectFuncs = {
 		},
 		stackable: true,
 		hardcoded: true,
-		onturn: function(btl, char) {
-			char.cursed--;
-			if (char.cursed <= 0) delete char.cursed;
-		},
 	},
 
 	neutralized: {
@@ -2933,30 +2921,18 @@ statusEffectFuncs = {
 		},
 		stackable: true,
 		hardcoded: true,
-		onturn: function(btl, char) {
-			char.neutralized--;
-			if (char.neutralized <= 0) delete char.neutralized;
-		},
 	},
 
 	dispelled: {
 		forceturns: 3,
 		stackable: true,
 		hardcoded: true,
-		onturn: function(btl, char) {
-			char.dispelled--;
-			if (char.dispelled <= 0) delete char.dispelled;
-		},
 	},
 
 	shrouded: {
 		forceturns: 3,
 		hardcoded: true,
 		stackable: true,
-		onturn: function(btl, char) {
-			char.shrouded--;
-			if (char.shrouded <= 0) delete char.shrouded;
-		},
 	},
 
 	insanity: {
@@ -3003,7 +2979,7 @@ statusEffectFuncs = {
 			
 					let usableskills = [];
 					for (let i in char.skills) {
-						if (canUseSkill(char, skillFile[char.skills[i]], char.skills[i])) usableskills.push(char.skills[i]);
+						if (canUseSkill(char, skillFile[char.skills[i]], char.skills[i], btl)) usableskills.push(char.skills[i]);
 					}
 					
 					if (usableskills.length <= 0) {
@@ -3185,10 +3161,6 @@ statusEffectFuncs = {
 		stackable: true,
 		forceturns: 3,
 		opposite: ["dry"],
-		onturn: function(btl, char) {
-			char.wet--;
-			if (char.wet <= 0) delete char.wet;
-		},
 		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if (hasStatusAffinity(targ, 'wet', 'weak')) {
 				if (typeof skill.type === "object") {
@@ -3248,10 +3220,6 @@ statusEffectFuncs = {
 		stackable: true,
 		forceturns: 3,
 		opposite: ["wet"],
-		onturn: function(btl, char) {
-			char.dry--;
-			if (char.dry <= 0) delete char.dry;
-		},
 		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if (hasStatusAffinity(targ, 'dry', 'weak')) {
 				if (typeof skill.type === "object") {
@@ -3311,10 +3279,6 @@ statusEffectFuncs = {
 		opposite: ['heavy'],
 		stackable: true,
 		forceturns: 3,
-		onturn: function(btl, char) {
-			char.light--;
-			if (char.light <= 0) delete char.light;
-		},
 		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if (hasStatusAffinity(targ, 'light', 'weak')) {
 				if (typeof skill.type === "object") {
@@ -3374,10 +3338,6 @@ statusEffectFuncs = {
 		opposite: ['light'],
 		stackable: true,
 		forceturns: 3,
-		onturn: function(btl, char) {
-			char.heavy--;
-			if (char.heavy <= 0) delete char.heavy;
-		},
 		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if (hasStatusAffinity(targ, 'heavy', 'weak')) {
 				if (typeof skill.type === "object") {
@@ -3479,10 +3439,6 @@ statusEffectFuncs = {
 		stackable: true,
 		opposite: ['weakened'],
 		forceturns: 3,
-		onturn: function(btl, char) {
-			char.doomed--;
-			if (char.doomed <= 0) delete char.doomed;
-		},
 		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if ((typeof skill.type === "object" && skill.type.includes("bless")) || (skill.type === "bless")) {
 				let mult = 1.5;
@@ -3516,10 +3472,6 @@ statusEffectFuncs = {
 		stackable: true,
 		opposite: ['doomed'],
 		forceturns: 3,
-		onturn: function(btl, char) {
-			char.weakened--;
-			if (char.weakened <= 0) delete char.weakened;
-		},
 		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if ((typeof skill.type === "object" && skill.type.includes("curse")) || (skill.type === "curse")) {
 				let mult = 1.5;
@@ -3566,10 +3518,6 @@ statusEffectFuncs = {
 		hardcoded: true,
 		stackable: true,
 		opposite: ['target'],
-//		onturn: function(btl, char) {
-//			char.lovable--;
-//			if (char.lovable <= 0) delete char.lovable;
-//		},
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'lovable', 'weak')) {
 				char.lovable = 3;
@@ -3585,10 +3533,6 @@ statusEffectFuncs = {
 		hardcoded: true,
 		stackable: true,
 		opposite: ['lovable'],
-		onturn: function(btl, char) {
-			char.target--;
-			if (char.target <= 0) delete char.target;
-		},
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'target', 'weak')) {
 				char.target = 3;
@@ -3604,10 +3548,6 @@ statusEffectFuncs = {
 		stackable: true,
 		forceturns: 3,
 		opposite: ["overheat"],
-		onturn: function(btl, char) {
-			char.chilled--;
-			if (char.chilled <= 0) delete char.chilled;
-		},
 		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if (hasStatusAffinity(targ, 'chilled', 'weak')) {
 				if (typeof skill.type === "object") {
@@ -3667,10 +3607,6 @@ statusEffectFuncs = {
 		stackable: true,
 		forceturns: 3,
 		opposite: ["chilled"],
-		onturn: function(btl, char) {
-			char.overheat--;
-			if (char.overheat <= 0) delete char.overheat;
-		},
 		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
 			if (hasStatusAffinity(targ, 'overheat', 'weak')) {
 				if (typeof skill.type === "object") {
@@ -3844,5 +3780,59 @@ statusEffectFuncs = {
 		onturn: function(btl, char) {
 			return `__${char.name}__ is aloof, not paying attention.`;
 		}
-	}
+	},
+
+	unstable: {
+		oninflict: function(char) {
+			char.unstable = isBoss(char) ? 4 : 5;
+			addCusVal(char, 'unstable', {"hp": 0, "mp": 0, "lb": 0, "money": 0});
+		},
+		stackable: true,
+		hardcoded: true,
+		onremove: function(btl, char) {
+			let dmg = char.custom.unstable;
+
+			if (isBoss(char)) {for (i in dmg) dmg[i] *= 1.5;}
+
+			let txt = `__${char.name}'s__ **${statusEmojis['unstable']}Unstable** took effect!\n\n`;
+			let didSmth = false;
+
+			if (dmg.hp > 0) {
+				char.hp = Math.max(0, char.hp-Math.round(dmg.hp));
+				txt += `__${char.name}__ took **${Math.round(dmg.hp)}** HP${char.hp > 0 ? '' : ', and is defeated'}!\n`
+
+				didSmth = true;
+			}
+			if (dmg.mp > 0) {
+				char.mp = Math.max(0, char.mp-Math.round(dmg.mp));
+				txt += `__${char.name}__ took **${Math.round(dmg.mp)}** ${char.mpMeter ? char.mpMeter[1] : "MP"}${(char.hp > 0 && char.mp <= 0) ? ', and runs out of it, causing defeat' : ''}!\n`
+
+				if (char.hp > 0 && char.mp <= 0) char.hp = 0;
+				didSmth = true;
+			}
+			if (dmg.lb > 0) {
+				char.lbp -= Math.round(dmg.lb);
+				txt += `__${char.name}__ took **${Math.round(dmg.lb)}** LB%!\n`
+				didSmth = true;
+			}
+			if (dmg.money > 0) {
+				let team = btl.teams[char.team];
+				team.currency = Math.max(0, team.currency-Math.round(dmg.money));
+
+
+				txt += `__${char.name}'s__ team lost **${Math.round(dmg.money)}** ${getCurrency(btl.guild.id)}s!\n`
+				didSmth = true;
+			}
+
+			if (!didSmth) txt += `...But it did nothing!`;
+
+			killVar(char, 'unstable');
+
+			DiscordEmbed = new Discord.MessageEmbed()
+				.setColor("#ff1fa9")
+				.setTitle(`${char.name}'s turn!`)
+				.setDescription(txt);
+			btl.channel.send({embeds: [DiscordEmbed]});
+		},
+	},
 }
