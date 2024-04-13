@@ -545,10 +545,11 @@ commands.exportbackup = new Command({
 			message.react('👍');
 		}
 		if (args[0]) {
-			const path = `backups/${args[0].replace(/[\\/]/g, "")}`
 			message.channel.send(
-				`Here is the backup you requested (\`${path}\`):`,
-				{ files: [path] }
+				{
+					content: "Here is the backup you requested!",
+					files: [`backups/${args[0].replace(/[\\/]/g, "")}`]
+				}
 			)
 		} else {
 			fs.readdir("backups", (err, files) => {
