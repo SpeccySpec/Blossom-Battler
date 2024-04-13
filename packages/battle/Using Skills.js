@@ -1784,7 +1784,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 				}
 
 				// Take away the cost
-				useCost(char, Math.round(skillCost), skill.costtype);
+				useCost(char, Math.round(skillCost), skill.costtype, btl);
 
 				// Now, send the embed!
 				let DiscordEmbed = new Discord.MessageEmbed()
@@ -1832,7 +1832,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// Take away the cost
-	if (skillCost && !skill.forcefree) useCost(char, Math.round(skillCost), skill.costtype);
+	if (skillCost && !skill.forcefree) useCost(char, Math.round(skillCost), skill.costtype, btl);
 
 	// Do we have any final messages
 	if (btl.atkmsg && !noEffectMsg) {

@@ -539,6 +539,7 @@ commands.startbattle = new Command({
 		battle.teams[0].items = objClone(party.items);
 		battle.teams[0].pets = objClone(party.negotiateAllies);
 		battle.teams[0].id = args[0];
+		if (party.currency) battle.teams[0].currency = battle.teams[0].maxcur = party.currency
 
 		// Current pet
 		if (party.curpet) battle.teams[0].curpet = party.curpet;
@@ -848,6 +849,8 @@ commands.startpvp = new Command({
 				case 'skillfuck':
 				case 'randskills':
 					for (party of battle.teams) {
+						party.currency = party.maxcur = 200 + randNum(5000);
+						
 						for (let i in party.members) {
 							let char = party.members[i];
 	
@@ -863,6 +866,8 @@ commands.startpvp = new Command({
 				case 'charfuck':
 				case 'charscramble':
 					for (party of battle.teams) {
+						party.currency = party.maxcur = 200 + randNum(5000);
+
 						for (let i in party.members) {
 							let char = party.members[i];
 	
@@ -1215,7 +1220,6 @@ commands.testbattle = new Command({
 
 			parties[args[0]] = {
 				name: args[0],
-				currency: 0,
 				members: [args[0]],
 				backup: [],
 				items: {},
@@ -1325,6 +1329,7 @@ commands.testbattle = new Command({
 		battle.teams[0].items = objClone(party.items);
 		battle.teams[0].pets = objClone(party.negotiateAllies);
 		battle.teams[0].id = args[0];
+		if (party.currency) battle.teams[0].currency = battle.teams[0].maxcur = party.currency;
 
 		// Current pet
 		if (party.curpet) battle.teams[0].curpet = party.curpet;
@@ -1517,6 +1522,8 @@ commands.aibattle = new Command({
 				backup: [],
 				items: {},
 				pets: {},
+				currency: 1000,
+				maxcur: 1000
 			});
 		}
 

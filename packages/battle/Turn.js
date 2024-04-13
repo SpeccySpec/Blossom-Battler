@@ -245,7 +245,7 @@ const menuStates = {
 			let canselect = true;
 
 			// Afford/Status Effects
-			if (!canAfford(char, skillinfo)) {
+			if (!canAfford(char, skillinfo, btl)) {
 				canselect = false;
 			} else if (char.status) {
 				switch(char.status.toLowerCase()) {
@@ -685,6 +685,8 @@ sendCurTurnEmbed = (char, btl) => {
 
 	if (settings.mechanics.limitbreaks) statDesc += `, ${Math.round(char.lbp)}LB%`;
 	if (char.pet) statDesc = `${char.name} wants to assist the team in battle! Tell it to do something!\n`;
+
+	if (btl.teams[char.team].currency) statDesc += `\n${btl.teams[char.team].currency} ${getCurrency(btl.guild.id)}s`
 
 	let weatherTxt = '';
 	if (btl.weather) weatherTxt += `\n${weatherDescs[btl.weather.type].emoji}*${weatherDescs[btl.weather.type].name}* Weather.`;
@@ -1941,10 +1943,10 @@ doAction = (char, btl, action) => {
 					useSkill(avgchar, btl, action, tc, ally);
 
 					if (skillFile[skills[0][0]].cost && skillFile[skills[0][0]].costtype) {
-						useCost(char, skillFile[skills[0][0]].cost, skillFile[skills[0][0]].costtype);
+						useCost(char, skillFile[skills[0][0]].cost, skillFile[skills[0][0]].costtype, btl);
 					}
 					if (skillFile[skills[1][0]].cost && skillFile[skills[1][0]].costtype) {
-						useCost(ally, skillFile[skills[1][0]].cost, skillFile[skills[1][0]].costtype);
+						useCost(ally, skillFile[skills[1][0]].cost, skillFile[skills[1][0]].costtype, btl);
 					}
 
 					char.donetc = true;
@@ -1986,12 +1988,14 @@ doAction = (char, btl, action) => {
 			if (statusEffectFuncs[char.status.toLowerCase()].onremove) statusEffectFuncs[char.status.toLowerCase()].onremove(btl, char);
 			delete char.status;
 			delete char.statusturns;
-		} else if (!statusEffectFuncs[char.status.toLowerCase()].onturn) {
-			char.statusturns--;
-			if (char.statusturns <= 0) {
-				if (statusEffectFuncs[char.status.toLowerCase()]?.onremove) statusEffectFuncs[char.status.toLowerCase()].onremove(btl, char);
-				delete char.status;
-				delete char.statusturns;
+		} else {
+			if (!statusEffectFuncs[char.status.toLowerCase()].onturn) {
+				char.statusturns--;
+				if (char.statusturns <= 0) {
+					if (statusEffectFuncs[char.status.toLowerCase()]?.onremove) statusEffectFuncs[char.status.toLowerCase()].onremove(btl, char);
+					delete char.status;
+					delete char.statusturns;
+				}
 			}
 		}
 	}
@@ -2009,14 +2013,14 @@ doAction = (char, btl, action) => {
 
 			if (char.hp <= 0) {
 				if (statusEffectFuncs[stackable[i]].onremove) statusEffectFuncs[stackable[i]].onremove(btl, char);
-				delete char.status;
-				delete char.statusturns;
-			} else if (!statusEffectFuncs[stackable[i]].onturn) {
-				char.statusturns--;
-				if (char.statusturns <= 0) {
-					if (statusEffectFuncs[stackable[i]]?.onremove) statusEffectFuncs[stackable[i]].onremove(btl, char);
-					delete char.status;
-					delete char.statusturns;
+				delete char[stackable[i]];
+			} else {
+				if (!statusEffectFuncs[stackable[i]].onturn) {
+					char[stackable[i]]--;
+					if (char[stackable[i]] <= 0) {
+						if (statusEffectFuncs[stackable[i]]?.onremove) statusEffectFuncs[stackable[i]].onremove(btl, char);
+						delete char[stackable[i]];
+					}
 				}
 			}
 		}
@@ -2207,11 +2211,13 @@ doTurn = async(btl, noTurnEmbed) => {
 			delete char.status;
 			delete char.statusturns;
 		} else {
-			char.statusturns--;
-			if (char.statusturns <= 0) {
-				if (statusEffectFuncs[char.status]?.onremove) statusEffectFuncs[char.status].onremove(btl, char);
-				delete char.status;
-				delete char.statusturns;
+			if (!statusEffectFuncs[char.status].endturn) {
+				char.statusturns--;
+				if (char.statusturns <= 0) {
+					if (statusEffectFuncs[char.status]?.onremove) statusEffectFuncs[char.status].onremove(btl, char);
+					delete char.status;
+					delete char.statusturns;
+				}
 			}
 		}
 	}
@@ -2222,25 +2228,35 @@ doTurn = async(btl, noTurnEmbed) => {
 	}
 
 	for (let i in stackable) {
-		if (char[stackable[i]] && statusEffectFuncs[stackable[i]] && statusEffectFuncs[stackable[i]].onturn) {
-			let statusEff = (statusEffectFuncs[stackable[i]].onturn(btl, char) ?? '');
-
-			if (typeof statusEff === 'string')
-				statusTxt += statusEff
-			else if (typeof statusEff === 'object') {
-				if (!statusEff[1]) canMove = false;
-				statusTxt += statusEff[0]
+		if (char[stackable[i]] && statusEffectFuncs[stackable[i]]) {
+			if (statusEffectFuncs[stackable[i]].onturn) {
+				let statusEff = (statusEffectFuncs[stackable[i]].onturn(btl, char) ?? '');
+	
+				if (typeof(statusEff) === 'string')
+					statusTxt += statusEff
+				else if (typeof(statusEff) === 'object') {
+					if (!statusEff[1]) canMove = false;
+					statusTxt += statusEff[0]
+				}
+	
+				if (statusTxt != '') statusTxt += '\n';
+			} else if (statusEffectFuncs[stackable[i]].turnoverride) {
+				if (!statusEffectFuncs[stackable[i]].turnoverride(btl, char)) canMove = false;
 			}
 
 			if (char.hp <= 0) {
 				canMove = false;
+				if (statusEffectFuncs[stackable[i]]?.onremove) statusEffectFuncs[stackable[i]].onremove(btl, char);
 				delete char[stackable[i]];
 			} else {
-				char[stackable[i]]--;
-				if (char[stackable[i]] == 0) delete char[stackable[i]];
+				if (!statusEffectFuncs[stackable[i]].endturn) {
+					char[stackable[i]]--;
+					if (char[stackable[i]] <= 0) {
+						if (statusEffectFuncs[stackable[i]]?.onremove) statusEffectFuncs[stackable[i]].onremove(btl, char);
+						delete char[stackable[i]];
+					} 
+				}
 			}
-
-			if (statusTxt != '') statusTxt += '\n';
 		}
 	}
 
