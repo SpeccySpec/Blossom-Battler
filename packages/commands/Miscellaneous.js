@@ -545,11 +545,14 @@ commands.exportbackup = new Command({
 			message.react('👍');
 		}
 		if (args[0]) {
-
+			message.channel.send(
+				"Here is the backup you requested:",
+				{ files: [`backups/${args[0].replace(/[\\/\.]/g, "")}`] }
+			)
 		} else {
 			fs.readdir("backups", (err, files) => {
 				if (err) {
-					return void message.channel.send("Failed to read the backups directory!")
+					return void message.channel.send(`Failed to read the backups directory!\n${err}`)
 				}
 				message.channel.send(
 					"Please choose one of the following backups:\n```diff\n- " +
