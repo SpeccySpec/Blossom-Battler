@@ -369,17 +369,11 @@ healList = {
 					return `__${targ.name}__ had their status ailments removed.`;
 				
 				default:
-					if (vars[0] === 'confusion') {
-						if (targ.confusion) delete targ.confusion;
-					} else if (vars[0] === 'infatuation') {
-						if (targ.infatuation) delete targ.infatuation;
-					} else if (vars[0] === 'drenched') {
-						if (targ.drenched) delete targ.drenched;
-					} else {
-						if (targ.status === vars[0]) {
-							delete targ.status;
-							delete targ.statusturns;
-						}
+					if (targ.status === vars[0]) {
+						delete targ.status;
+						delete targ.statusturns;
+					} else if (targ[vars[0]]) {
+						delete targ[vars[0]];
 					}
 
 					return `__${targ.name}__ had their ${statusEmojis[vars[0]]}**${vars[0]}** status effect cured!`;
