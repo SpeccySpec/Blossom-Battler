@@ -526,3 +526,36 @@ commands.databackup = new Command({
 		SaveBackup()
 	}
 })
+
+const fs = require("fs")
+commands.exportbackup = new Command({
+	desc: "SUPERADMIN ONLY.",
+	section: "misc",
+	noslash: true,
+	args: [
+		{
+			name: "Name",
+			type: "Word",
+		}
+	],
+	async func(message) {
+		if (message, args) {
+			if (!utilityFuncs.RPGBotAdmin(message.author.id))
+				return void message.channel.send("Only a super admin can use this.")
+			message.react('👍');
+		}
+		if (args[0]) {
+
+		} else {
+			fs.readdir("backups", (err, files) => {
+				if (err) {
+					return void message.channel.send("Failed to read the backups directory!")
+				}
+				message.channel.send(
+					"Please choose one of the following backups:\n```diff\n- " +
+					files.join("\n- ") + "\n```"
+				)
+			})
+		}
+	}
+})
