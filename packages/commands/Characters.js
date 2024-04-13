@@ -975,6 +975,7 @@ commands.setaffinity = new Command({
 
 			if ((!utilityFuncs.inArray(args[2].toLowerCase(), Affinities) && args[2].toLowerCase() != 'normal') || args[2].toLowerCase() === 'superweak' || args[2].toLowerCase() === 'repel' || args[2].toLowerCase() === 'drain') return message.channel.send('Please enter a valid affinity!```diff\n+ Weak\n+ Normal\n+ Resist\n+ Block```');
 			if (['infatuation', 'confusion', 'drenched', 'stagger', 'grassimped', 'dizzy', 'guilt'].includes(args[1].toLowerCase()) && !['normal', 'block'].includes(args[2].toLowerCase())) return message.channel.send(`You can't set this kind of affinity for ${args[1]}, at most either normal or block!`);
+			if (['dispelled'].includes(args[1].toLowerCase())) return message.channel.send(`You can't set an affinity for ${args[1]}!`);
 
 			if (hasStatusAffinity(thingDefs[args[0]], args[1].toLowerCase(), args[2].toLowerCase())) return message.channel.send(`${thingDefs[args[0]].name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
 

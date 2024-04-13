@@ -998,7 +998,7 @@ passiveList = {
 			return true;
 		},
 		ondamage(char, inf, skill, dmg, passive, btl, vars) {
-			if (skill.atktype === 'physical' || skill.atktype === 'sorcery') {
+			if ((skill.atktype === 'physical' || skill.atktype === 'sorcery') && !char.dispelled) {
 				if (randNum(1, 100) <= vars[1]) return inflictStatus(inf, vars[0]);
 			}
 		},

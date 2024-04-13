@@ -623,8 +623,8 @@ healList = {
 				changeTrust(targ, char, Math.round(20*(settings.rates.trustrate ?? 1)), true, btl.channel);
 			}
 
-			let atkStat = statWithBuff(char.stats[vars[2]], char.buffs[vars[2]] ?? char.buffs.mag) ?? char.stats.mag;
-			let endStat = statWithBuff(targ.stats[vars[3]], targ.buffs[vars[3]] ?? targ.buffs.end) ?? targ.stats.end;
+			let atkStat = statWithBuff(char.stats[vars[2]], char.buffs[vars[2]] ?? char.buffs.mag, char) ?? char.stats.mag;
+			let endStat = statWithBuff(targ.stats[vars[3]], targ.buffs[vars[3]] ?? targ.buffs.end, targ) ?? targ.stats.end;
 
 			let def = (atkStat/endStat);
 

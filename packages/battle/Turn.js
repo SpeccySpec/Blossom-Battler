@@ -14,7 +14,7 @@ getTurnOrder = (btl) => {
 
 			if (!(f.reincarnate || f.clone) || ((f.reincarnate || f.clone) && f.hp > 0)) {
 				turnorder.push(objClone(f));
-				if (f.type && (f.type.includes('boss') || f.type.includes('bigboss') || f.type.includes('deity'))) turnorder.push(objClone(f));
+				if (isBoss(f)) turnorder.push(objClone(f));
 			}
 		}
 
@@ -23,7 +23,7 @@ getTurnOrder = (btl) => {
 
 			if (!(f.reincarnate || f.clone) || ((f.reincarnate || f.clone) && f.hp > 0)) {
 				turnorder.push(objClone(f));
-				if (f.type && (f.type.includes('boss') || f.type.includes('bigboss') || f.type.includes('deity'))) turnorder.push(objClone(f));
+				if (isBoss(f)) turnorder.push(objClone(f));
 			}
 		}
 	}
@@ -35,8 +35,8 @@ getTurnOrder = (btl) => {
 			if (b.status && statusEffectFuncs[b.status] && statusEffectFuncs[b.status].skillmod) statusEffectFuncs[b.status].skillmod(b, b.stats, btl);
 
 			// Buffs
-			let agl1 = statWithBuff(a.stats.agl, a.buffs.agl);
-			let agl2 = statWithBuff(b.stats.agl, b.buffs.agl);
+			let agl1 = statWithBuff(a.stats.agl, a.buffs.agl, a);
+			let agl2 = statWithBuff(b.stats.agl, b.buffs.agl, b);
 
 			// Leisure
 			if (a.status == "leisure") agl1 = 999999;
@@ -56,8 +56,8 @@ getTurnOrder = (btl) => {
 			if (b.status && statusEffectFuncs[b.status] && statusEffectFuncs[b.status].skillmod) statusEffectFuncs[b.status].skillmod(b, b.stats, btl);
 
 			// Buffs
-			let agl1 = statWithBuff(a.stats.agl, a.buffs.agl);
-			let agl2 = statWithBuff(b.stats.agl, b.buffs.agl);
+			let agl1 = statWithBuff(a.stats.agl, a.buffs.agl, a);
+			let agl2 = statWithBuff(b.stats.agl, b.buffs.agl, b);
 
 			// Leisure
 			if (a.status == "leisure") agl1 = -50;
@@ -540,7 +540,18 @@ function GetCharStatus(char) {
 		if (amount == 0)
 			continue
 		str += statusEmojis[buff + (amount > 0 ? "up" : "down")]
-		amount = Math.abs(amount)
+
+		if (char.status && char.status == 'trisagion') {
+			if (hasStatusAffinity(char, 'trisagion', 'weak') || isBoss(char)) {
+				if (amount > 0) amount *= 2;
+			} else if (hasStatusAffinity(char, 'trisagion', 'resist') ) {
+				if (amount < 0) amount *= 2;
+			} else {
+				amount *= 2;
+			}
+		}
+
+		amount = Math.abs(amount);
 		str += (amount >= 2 ? superscriptDictionary[amount] : '')
 	}
 	const custom = char.custom
@@ -1830,14 +1841,14 @@ doAction = (char, btl, action) => {
 
 					for (let k in btl.teams[i].members) {
 						if (btl.teams[i].members[k].hp > 0) {
-							avgSpd += statWithBuff(btl.teams[i].members[k].stats.agl, btl.teams[i].members[k].buffs.agl);
+							avgSpd += statWithBuff(btl.teams[i].members[k].stats.agl, btl.teams[i].members[k].buffs.agl, btl.teams[i].members[k]);
 							totalFoes++;
 						}
 					}
 				}
 				avgSpd /= totalFoes;
 
-				let runCheck = (90 + ((statWithBuff(char.stats.agl, char.buffs.agl) - avgSpd)/2));
+				let runCheck = (90 + ((statWithBuff(char.stats.agl, char.buffs.agl, char) - avgSpd)/2));
 				if (randNum(100) <= runCheck) {
 					DiscordEmbed = new Discord.MessageEmbed()
 						.setColor(elementColors[char.mainElement] ?? elementColors.strike)

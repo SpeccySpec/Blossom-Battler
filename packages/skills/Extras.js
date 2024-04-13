@@ -2207,7 +2207,7 @@ extrasList = {
 		onuse(char, targ, skill, btl, vars) {
 			if (targ.hp <= 0) return;
 			if (targ.custom?.flinch) return;
-			if (statWithBuff(char.stats.agl, char.buffs.agl) < statWithBuff(targ.stats.agl, targ.buffs.agl)) return;
+			if (statWithBuff(char.stats.agl, char.buffs.agl, char) < statWithBuff(targ.stats.agl, targ.buffs.agl, targ)) return;
 
 			if (isBoss(targ)) {
 				if (skill.extras.fakeout && skill.extras.fakeout[0] <= 1) {

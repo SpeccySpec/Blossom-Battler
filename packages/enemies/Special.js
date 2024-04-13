@@ -386,14 +386,16 @@ specialList = {
 
 			target = targetUser == 'target' ? targ : char;
 
-			let status;
-			if (typeof(statusses) === 'object') {
-				status = statusses[randNum(statusses.length-1)];
-			} else {
-				status = statusses;
-			}
+			if (!char.dispelled) {
+				let status;
+				if (typeof(statusses) === 'object') {
+					status = statusses[randNum(statusses.length-1)];
+				} else {
+					status = statusses;
+				}
 
-			if (randNum(1, 100) <= chance) return inflictStatus(target, status);
+				if (randNum(1, 100) <= chance) return inflictStatus(target, status);
+			}
 
 			return "...But it failed!";
 		}

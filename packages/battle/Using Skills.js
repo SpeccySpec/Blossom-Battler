@@ -85,17 +85,17 @@ genDmg = (char, targ, btl, skill) => {
 		}
 	}
 
-	let atkStat = (skill.atktype === 'physical' || skill.atktype === 'ranged') ? statWithBuff(charStats.atk ?? 1, char.buffs.atk ?? 0) : statWithBuff(charStats.mag ?? 1, char.buffs.mag ?? 0);
-	let endStat = statWithBuff(targStats.end, targ.buffs.end);
+	let atkStat = (skill.atktype === 'physical' || skill.atktype === 'ranged') ? statWithBuff(charStats.atk ?? 1, char.buffs.atk ?? 0, char) : statWithBuff(charStats.mag ?? 1, char.buffs.mag ?? 0, char);
+	let endStat = statWithBuff(targStats.end, targ.buffs.end, targ);
 	console.log(`Atk Checkpoint: ${atkStat}`);
 
 	if (skill.extras?.statcalc) {
-		atkStat = statWithBuff(charStats[skill.extras.statcalc[0].toLowerCase()], char.buffs[skill.extras.statcalc[0].toLowerCase()] ?? 1);
+		atkStat = statWithBuff(charStats[skill.extras.statcalc[0].toLowerCase()], char.buffs[skill.extras.statcalc[0].toLowerCase()] ?? 1, char);
 	} else if (skill.extras?.grassknot) {
-		atkStat = statWithBuff(targStats[skill.extras.grassknot[0].toLowerCase()], targ.buffs[skill.extras.grassknot[0].toLowerCase()] ?? 1);
+		atkStat = statWithBuff(targStats[skill.extras.grassknot[0].toLowerCase()], targ.buffs[skill.extras.grassknot[0].toLowerCase()] ?? 1, targ);
 	}
 	if (skill.extras?.hitcalc) {
-		endStat = statWithBuff(targStats[skill.extras.hitcalc[0].toLowerCase()], targ.buffs[skill.extras.hitcalc[0].toLowerCase()] ?? 1);
+		endStat = statWithBuff(targStats[skill.extras.hitcalc[0].toLowerCase()], targ.buffs[skill.extras.hitcalc[0].toLowerCase()] ?? 1, targ);
 	}
 
 	let def = atkStat/endStat;
@@ -311,14 +311,18 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 		// Lastly, Status Effects
 		if (skill.status && !targ.status) {
-			var status;
-			if (typeof(skill.status) === 'object') {
-				status = skill.status[randNum(skill.status.length-1)];
-			} else {
-				status = skill.status;
-			}
+			if (!char.dispelled) {
+				var status;
+				if (typeof(skill.status) === 'object') {
+					status = skill.status[randNum(skill.status.length-1)];
+				} else {
+					status = skill.status;
+				}
 
-			result.txt += statusList.status.inflictStatus(char, targ, skill, status ?? 'burn', btl, skill.pow);
+				result.txt += statusList.status.inflictStatus(char, targ, skill, status ?? 'burn', btl, skill.pow);
+			} else {
+				result.txt += '...But it failed!'
+			}
 		}
 	// Attacking Skills
 	} else {
@@ -1207,15 +1211,19 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 				// Lastly, Status Effects
 				if (skill.status && !targ.status) {
-					var status;
-					if (typeof(skill.status) === 'object') {
-						status = skill.status[randNum(skill.status.length-1)];
-					} else {
-						status = skill.status;
-					}
+					if (!char.dispelled) {
+						var status;
+						if (typeof(skill.status) === 'object') {
+							status = skill.status[randNum(skill.status.length-1)];
+						} else {
+							status = skill.status;
+						}
 
-					let txt = statusList.status.inflictStatus(char, targ, skill, status, btl, skill.pow);
-					if (txt && txt != '') result.txt += txt;
+						let txt = statusList.status.inflictStatus(char, targ, skill, status, btl, skill.pow);
+						if (txt && txt != '') result.txt += txt;
+					} else {
+						result.txt += '...But it failed!'
+					}
 				}
 
 				// OnUseAtEndOfFunc

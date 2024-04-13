@@ -235,6 +235,8 @@ statusEffects = [
 	"target",
 	"leisure",
 	"guilt",
+	"cursed",
+	"dispelled",
 
 	// Neutral Statusses
 	"dry",
@@ -246,6 +248,8 @@ statusEffects = [
 	"chilled",
 	"overheat",
 	"brimstone",
+	"trisagion",
+	"neutralized",
 
 	// Positive Statusses
 	"happy",
@@ -298,6 +302,8 @@ statusNames = {
 	leisure: 'Leisure',
 	guilt: 'Guilt',
 	petrified: 'Petrification',
+	cursed: 'Cursed',
+	dispelled: 'Dispelled',
 
 	// Neutral Statusses
 	dry: 'Dried',
@@ -309,6 +315,8 @@ statusNames = {
 	chilled: "Chilled",
 	overheat: "Overheating",
 	brimstone: 'Brimstone',
+	trisagion: 'Trisagion',
+	neutralized: 'Neutralized',
 
 	// Positive Statusses
 	happy: 'Happiness',
@@ -361,6 +369,8 @@ statusEmojis = {
 	guilt: '<:guilt:1225856607750066318>',
 	petrified: '<:petrification:1224993134744698950>',
 	target: '<:target:1224663104575508481>',
+	cursed: '<:cursed:1228457914096681050>',
+	dispelled: '<:dispelled:1228457908531101706>',
 
 	// Neutral Statusses
 	dry: '<:dry:1224057395706204262>',
@@ -372,6 +382,8 @@ statusEmojis = {
 	chilled: '<:chilled:1224993256299827271>',
 	overheat: '<:overheat:1224993287509905409>',
 	brimstone: '<:brimstone:1224663099794128916>',
+	trisagion: '<:trisagion:1228641515614634007>',
+	neutralized: '<:neutralized:1228719416884199476>',
 
 	// Positive Statusses
 	mirror: '<:mirror:963413990229311588>',
@@ -443,6 +455,7 @@ elementTechs = {
 	enchanted: ['strike', 'slash', 'pierce'],
 	invisible: ['curse', 'bless', 'psychic'],
 	brimstone: ['fire', 'earth', 'curse'],
+	trisagion: ['water', 'wind', 'bless'],
 
 	// Positive Statusses
 	happy: ['psychic', 'bless', 'curse', 'spirit', 'sound'],

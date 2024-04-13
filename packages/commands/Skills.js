@@ -1969,7 +1969,7 @@ statusDescs = [
 				name: "grassimped",
 				desc: "You're turned into a Grassimp! How do you do anything in this weird, bushy form?",
 				ailments: {
-					nonboss: "You cannot have affinities toward this Status Ailment.",
+					nonboss: "You cannot have affinities toward this Status Ailment short of blocking.",
 					boss: "Immune to this status ailment."
 				}
 			},
@@ -2008,7 +2008,27 @@ statusDescs = [
 					},
 					boss: `Increases cost by **10%**.`
 				}
-			}
+			},
+			{
+				name: "cursed",
+				desc: "Prevents **positive status ailments** from applying to the afflicted while this status effect is active. Will remove the ones the afflicted already has.",
+				ailments: {
+					nonboss: {
+						weak: "Lasts **4 turns**.",
+						normal: "Lasts **3 turns**.",
+						resist: "Lasts **2 turns**.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
+			},
+			{
+				name: "dispelled",
+				desc: "Cannot afflict **any status effect** to a target while this status effect is active.",
+				ailments: {
+					nonboss: "You cannot have affinities toward this Status Ailment at all.",
+					boss: "Affects them the same as non-bosses."
+				}
+			},
 		]
 	},
 	{
@@ -2290,7 +2310,31 @@ statusDescs = [
 					},
 					boss: `Reverses **only debuffs**.`
 				}
-			}
+			},
+			{
+				name: "trisagion",
+				desc: `Doubles the effectiveness of buffs and debuffs for the duration of the effect.`,
+				ailments: {
+					nonboss: {
+						weak: `Doubles the effectiveness of **only buffs**.`,
+						normal: `Acts like normal.`,
+						resist: `Doubles the effectiveness of **only debuffs**.`,
+					},
+					boss: `Doubles the effectiveness of **only buffs**.`
+				}
+			},
+			{
+				name: "neutralized",
+				desc: "Prevents **any status ailment** from applying to the afflicted while this status effect is active. Will remove the ones the afflicted already has.",
+				ailments: {
+					nonboss: {
+						weak: "Lasts **4 turns**.",
+						normal: "Lasts **3 turns**.",
+						resist: "Lasts **2 turns**.",
+					},
+					boss: "Affects them the same as non-bosses."
+				}
+			},
 		]
 	},
 	{
@@ -2358,7 +2402,7 @@ statusDescs = [
 			},
 			{
 				name: "blessed",
-				desc: "Cannot get afflicted by a **negative status effect** while this status effect is active. Will remove the ones the afflicted already has.",
+				desc: "Prevents **negative status ailments** from applying to the afflicted while this status effect is active. Will remove the ones the afflicted already has.",
 				ailments: {
 					nonboss: {
 						weak: "Lasts **4 turns**.",
@@ -2431,7 +2475,6 @@ const genStatusDescription = (status, hideAffinities, page, settings, message) =
 		text += `${isPhysicalStatus(status.name) ? '*<:physical:973077052129423411> Physical' : '*<:mental:1004855144745291887> Mental'}*\n`
 	}
 
-	console.log(settings);
 	if (settings.mechanics.technicaldamage) {
 		text += '*Techs: ';
 

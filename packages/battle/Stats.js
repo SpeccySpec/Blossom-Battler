@@ -64,8 +64,18 @@ setupBattleStats = (f) => {
 	return true;
 }
 
-statWithBuff = (stat, buff) => {
+statWithBuff = (stat, buff, char) => {
 	if (!buff || buff == 0) return stat;
+
+	if (char.status && char.status == 'trisagion') {
+		if (hasStatusAffinity(char, 'trisagion', 'weak') || isBoss(char)) {
+			if (buff > 0) buff *= 2;
+		} else if (hasStatusAffinity(char, 'trisagion', 'resist') ) {
+			if (buff < 0) buff *= 2;
+		} else {
+			buff *= 2;
+		}
+	}
 
 	return Math.round(stat + (buff*(stat/4.5)));
 }
@@ -161,6 +171,8 @@ inflictStatus = (char, status, notxt) => {
 
 	// Do we have blessed?
 	if (char.blessed && !isPositiveStatus(status)) return '';
+	if (char.cursed && (isPositiveStatus(status) || isNeutralStatus(status))) return '';
+	if (char.neutralized) return '';
 
 	// Inflict the status.
 	let statusfuncs = statusEffectFuncs[status.toLowerCase()];
@@ -176,7 +188,10 @@ inflictStatus = (char, status, notxt) => {
 	//remove opposites of the newly inflicted status
 	if (statusfuncs.opposite) {
 		for (i of statusfuncs.opposite) {
-			if (char[i]) delete char[i];
+			if (char[i]) {
+				if (statusfuncs.onremove) statusfuncs.onremove(char);
+				delete char[i];
+			}
 		}
 	}
 

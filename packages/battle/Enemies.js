@@ -62,6 +62,8 @@ let st = {
 	energized: 1,
 	stuffed: 4,
 	disabled: 4,
+	dispelled: 3,
+	cursed: 2
 }
 
 // Affinities

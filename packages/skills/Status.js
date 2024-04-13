@@ -2085,14 +2085,14 @@ buildStatus = (message, extra, args, lb) => {
 // This file shares names with Status Effects anyway lol
 // We might as well shove some extra stuff in here
 // statusEffectFuncs will be an object that doe ufnnye status
-let phys = ['burn', 'freeze', 'petrified', 'stun', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'cloud9', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed', 'chilled', 'overheat', 'stuffed', 'disabled', 'brimstone', 'tired', 'energized', 'haste'];
+let phys = ['burn', 'freeze', 'petrified', 'stun', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'cloud9', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed', 'chilled', 'overheat', 'stuffed', 'disabled', 'brimstone', 'tired', 'energized', 'haste', 'dispelled', 'cursed', 'neutralized', 'trisagion'];
 isPhysicalStatus = (status) => {
 	if (!status) return false;
 
 	return phys.includes(status.toLowerCase());
 }
 
-let stackable = ['confusion', 'infatuation', 'drenched', 'shrouded', 'blessed', 'lovable', 'light', 'heavy', 'dry', 'wet', 'doomed', 'weakened', 'overheat', 'chilled', 'target'];
+let stackable = ['confusion', 'infatuation', 'drenched', 'shrouded', 'blessed', 'lovable', 'light', 'heavy', 'dry', 'wet', 'doomed', 'weakened', 'overheat', 'chilled', 'target', 'cursed', 'neutralized', 'dispelled'];
 isStackableStatus = (status) => {
 	if (!status) return false;
 
@@ -2106,7 +2106,7 @@ isPositiveStatus = (status) => {
 	return positive.includes(status.toLowerCase());
 }
 
-let neutral = ['dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'chilled', 'overheat', 'brimstone'];
+let neutral = ['dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'chilled', 'overheat', 'brimstone', 'neutralized', 'trisagion'];
 isNeutralStatus = (status) => {
 	if (!status) return false;
 
@@ -2856,6 +2856,7 @@ statusEffectFuncs = {
 	},
 
 	blessed: {
+		opposite: ['cursed', 'neutralized'],
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'blessed', 'resist')) {
 				char.blessed = 2;
@@ -2879,6 +2880,72 @@ statusEffectFuncs = {
 		onturn: function(btl, char) {
 			char.blessed--;
 			if (char.blessed <= 0) delete char.blessed;
+		},
+	},
+
+	cursed: {
+		opposite: ['blessed', 'neutralized'],
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'cursed', 'resist')) {
+				char.cursed = 2;
+			} else if (hasStatusAffinity(char, 'cursed', 'weak')) {
+				char.cursed = 4;
+			} else {
+				char.cursed = 3;
+			}
+
+			let negStatuses = statusEffects.filter(x => positive.includes(x));
+			for (stat of negStatuses) {
+				if (char.status && char.status == stat) {
+					delete char.status;
+					delete char.statusturns;
+				}
+				if (char[stat]) delete char[stat];
+			}
+		},
+		stackable: true,
+		hardcoded: true,
+		onturn: function(btl, char) {
+			char.cursed--;
+			if (char.cursed <= 0) delete char.cursed;
+		},
+	},
+
+	neutralized: {
+		opposite: ['cursed', 'blessed'],
+		oninflict: function(char) {
+			if (hasStatusAffinity(char, 'neutralized', 'resist')) {
+				char.neutralized = 2;
+			} else if (hasStatusAffinity(char, 'neutralized', 'weak')) {
+				char.neutralized = 4;
+			} else {
+				char.neutralized = 3;
+			}
+
+			let negStatuses = statusEffects.filter(x => x != 'neutralized');
+			for (stat of negStatuses) {
+				if (char.status && char.status == stat) {
+					delete char.status;
+					delete char.statusturns;
+				}
+				if (char[stat]) delete char[stat];
+			}
+		},
+		stackable: true,
+		hardcoded: true,
+		onturn: function(btl, char) {
+			char.neutralized--;
+			if (char.neutralized <= 0) delete char.neutralized;
+		},
+	},
+
+	dispelled: {
+		forceturns: 3,
+		stackable: true,
+		hardcoded: true,
+		onturn: function(btl, char) {
+			char.dispelled--;
+			if (char.dispelled <= 0) delete char.dispelled;
 		},
 	},
 
@@ -3699,6 +3766,7 @@ statusEffectFuncs = {
 	},
 
 	brimstone: {
+		opposite: ['trisagion'],
 		oninflict: function(char) {
 			char.statusturns = 3;
 
@@ -3735,6 +3803,12 @@ statusEffectFuncs = {
 				killVar(char, 'revertBuffTurns');
 			}
 		},
+		hardcoded: true
+	},
+
+	trisagion: {
+		opposite: ['brimstone'],
+		forceturns: 3,
 		hardcoded: true
 	},
 
