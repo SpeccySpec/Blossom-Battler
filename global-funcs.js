@@ -888,7 +888,11 @@ weaponClasses = {
 	ranged: "Bow & Arrow, Ninja Stars.",
 	books: "Magical Books that allow one to cast spells.",
 	staff: "Staffs or Wands that cast magic.",
-	incorporeal: "Weapons formed by magic."
+	incorporeal: "Weapons formed by magic.",
+	polearms: "Spears, Halberds, Scythes, Naginatas.",
+	small: "Tasers, Stun Guns, Brass Knuckles.",
+	improvised: "Chains, Glass Bottles, Wood Boards.",
+	flail: "Flails, Chained Maces, Nunchucks, Whips.",
 }
 
 armorClasses = {
@@ -916,7 +920,11 @@ classEmoji = {
 		ranged: "<:ranged:1008794366648791161>",
 		books: "<:books:1008794354959269938>",
 		staff: "<:staff:1008794368750141540>",
-		incorporeal: "<:incorporeal:1085978225911533668>"
+		incorporeal: "<:incorporeal:1085978225911533668>",
+		polearms: '<:polearms:1228809460248608833>',
+		small: '<:small:1228809453902495856>',
+		flail: '<:flail:1228809456100315188>',
+		improvised: '<:improvised:1228809458617024593>',
 	},
 	armor: {
 		none: "<:golden:973077051751940138>",
