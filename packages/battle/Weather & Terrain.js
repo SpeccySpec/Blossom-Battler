@@ -486,13 +486,22 @@ terrainFuncs = {
 
 	misty: {
 		onturn(char, btl) {
+			let statRemove = false;
+
+			for (let i in statusEffectFuncs) {
+				if (statusEffectFuncs[i].stackable && char[i]) { 
+					delete char[i];
+					statRemove = true;
+				}
+			}
+
 			if (char.status) {
 				delete char.status;
 				delete char.statusturns;
-				return `${char.name}'s status was removed by the __Misty Terrain__!\n`;
+				statRemove = true;
 			}
 
-			return null;
+			return statRemove ? `${char.name}'s status was removed by the __Misty Terrain__!\n` : null;
 		},
 		onselect(char, skill, btl) {
 			if (skill.status) delete skill.status;
@@ -712,13 +721,22 @@ terrainFuncs = {
 
 	blindingradiance: {
 		onturn(char, btl) {
+			let statRemove = false;
+
+			for (let i in statusEffectFuncs) {
+				if (statusEffectFuncs[i].stackable && char[i]) { 
+					delete char[i];
+					statRemove = true;
+				}
+			}
+
 			if (char.status) {
 				delete char.status;
 				delete char.statusturns;
-				return `${char.name}'s status was removed by the __Blinding Radiance__!\n`;
+				statRemove = true;
 			}
 
-			return null;
+			return statRemove ? `${char.name}'s status was removed by the __Blinding Radiance__!\n` : null;
 		},
 		onselect(char, skill, btl) {
 			if (skill.type === "bless") skill.pow *= 1.5;

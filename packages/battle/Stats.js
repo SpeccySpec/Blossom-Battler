@@ -199,7 +199,6 @@ inflictStatus = (char, status, notxt) => {
 	if (statusfuncs.oninflict) statusfuncs.oninflict(char);
 
 	// Unstabled's stabilization with a non-stackable status effect
-	console.log(char.statusturns, char.unstable, char.statusturns + char.unstable);
 	if (char.unstable && !statusfuncs.stackable) {
 		char.statusturns += char.unstable;
 		killVar(char, 'unstable');
