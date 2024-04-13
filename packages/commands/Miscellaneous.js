@@ -547,7 +547,7 @@ commands.exportbackup = new Command({
 		if (args[0]) {
 			message.channel.send(
 				"Here is the backup you requested:",
-				{ files: [`backups/${args[0].replace(/[\\/\.]/g, "")}`] }
+				{ files: [`backups/${args[0].replace(/[\\/]/g, "")}`] }
 			)
 		} else {
 			fs.readdir("backups", (err, files) => {
