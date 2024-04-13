@@ -2198,6 +2198,18 @@ statusDescs = [
 					boss: "Affects them the same as non-bosses."
 				}
 			},
+			{
+				name: "unstable",
+				desc: "Tracks how much the afflicted spent for **5 turns**, and damages the afflicted once it expires **on its own**. Can be safely removed otherwise.\nIf a **non-stackable status ailment** is inflicted on the afflicted, it gets safely removed and its turn count **adds to the new status ailment**.",
+				ailments: {
+					nonboss: {
+						weak: "Tracks **100%** of HP/MP spent, **200%** of LB spent, **300%** of money spent.",
+						normal: "Tracks **50%** of HP/MP spent, **100%** of LB spent, **150%** of money spent.",
+						resist: "Tracks **25%** of HP/MP spent, **50%** of LB spent, **75%** of money spent.",
+					},
+					boss: "Damage is **multiplied by 1.5x** but duration is reduced to **4 turns**. Acts as normal otherwise."
+				}
+			},
 		]
 	},
 	{
