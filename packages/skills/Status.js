@@ -1716,6 +1716,11 @@ statusList = {
 
 			delete char.status;
 			delete char.statusturns;
+
+			for (let i in statusEffectFuncs) {
+				if (statusEffectFuncs[i].stackable && char[i]) delete char[i];
+			}
+
 			char.custom.regenheal[char.name + '-' + skill.name].push({
 				name: skill.name,
 				username: char.name,
