@@ -185,7 +185,7 @@ checkListArgument = (type, variable, validTypes, message, settings) => {
 			element: Elements,
 			status: statusEffects,
 			costtype: costTypes,
-			atktype: ['physical', 'magic', 'ranged'],
+			atktype: ['physical', 'sorcery', 'magic', 'ranged'],
 			target: Targets,
 			lock: ['party', 'character', 'money', 'pet', 'item', 'weapon', 'armor', 'password', 'none'],
 			extra: [...Object.keys(statusList), ...Object.keys(passiveList), ...Object.keys(healList), ...Object.keys(extrasList)],

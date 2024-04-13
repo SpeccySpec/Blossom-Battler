@@ -1266,7 +1266,7 @@ statusList = {
 			if (element == 'passive' || element == 'heal' || element == 'status')
 				return void message.channel.send("The counter must be an attack!");
 
-			if (atype != 'physical' && atype != 'magic' && atype != 'ranged') return void message.channel.send(`${atype} is an invalid form of contact! Try physical, magic or ranged.`);
+			if (atype != 'physical' && atype != 'magic' && atype != 'ranged' && atype != 'sorcery') return void message.channel.send(`${atype} is an invalid form of contact! Try physical, magic or ranged.`);
 
 			let definition = {
 				name: skill.name,
@@ -1774,7 +1774,7 @@ statusList = {
 			let canact = args[4] ?? false;
 			let target = args[5] ?? 'user';
 
-			if (![...Elements, 'all', 'physical', 'magic', 'ranged'].includes(element)) return void message.channel.send("You entered an invalid type for <Atk Type>.");
+			if (![...Elements, 'all', 'physical', 'magic', 'ranged', 'sorcery'].includes(element)) return void message.channel.send("You entered an invalid type for <Atk Type>.");
 			if (chance <= 0 || chance > 100) return void message.channel.send("You entered an invalid value for <Chance%>. This should be a value above 0 and below 100.");
 			if (activation <= 0) return void message.channel.send("You entered an invalid value for <Activation Limit>.");
 			if (turns <= 0) return void message.channel.send("You entered an invalid value for <Turns>.");
@@ -2829,7 +2829,7 @@ statusEffectFuncs = {
 	airborne: {
 		hardcoded: true,
 		skillmod: function(char, skill, btl) {
-			if (skill.atktype == 'physical') skill.pow *= 2;
+			if (skill.atktype == 'physical' || skill.atktype == 'sorcery') skill.pow *= 2;
 		}
 	},
 
@@ -3391,7 +3391,7 @@ statusEffectFuncs = {
 		opposite: ['enchanted'],
 		forceturns: 2,
 		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
-			if (skill.atktype === "magic") {
+			if (skill.atktype === "magic" || skill.atktype === "sorcery") {
 				let mult = 2;
 
 				if (hasStatusAffinity(targ, 'invisible', 'weak')) {

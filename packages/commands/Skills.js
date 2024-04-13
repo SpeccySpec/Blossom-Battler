@@ -101,7 +101,7 @@ commands.registerskill = new Command({
 		}
 
 		let atype = args[8].toLowerCase();
-		if (atype != 'physical' && atype != 'magic' && atype != 'ranged') return message.channel.send(`${atype} is an invalid form of contact! Try physical, magic or ranged.`);
+		if (atype != 'physical' && atype != 'magic' && atype != 'ranged' && atype != 'sorcery') return message.channel.send(`${atype} is an invalid form of contact! Try physical, magic or ranged.`);
 
 		if (!args[9] || !utilityFuncs.inArray(args[9].toLowerCase(), Targets)) return message.channel.send(`Please enter a valid target type for **Target**!\`\`\`diff\n- ${Targets.join('\n- ')}\`\`\``)
 
@@ -783,7 +783,7 @@ commands.editskill = new Command({
 				case 'skilltype':
 					if (skillFile[args[0]].type == 'status' || skillFile[args[0]].type == 'heal' || skillFile[args[0]].type == 'passive') return message.channel.send(`These skills cannot have an attack type!`);
 					let type = args[2].toLowerCase();
-					if (type != 'physical' && type != 'magic' && type != 'ranged') return message.channel.send(`${type} is an invalid form of contact! Try physical, magic or ranged.`);
+					if (type != 'physical' && type != 'magic' && type != 'ranged' && type != 'sorcery') return message.channel.send(`${type} is an invalid form of contact! Try physical, magic or ranged.`);
 					skillFile[args[0]].atktype = type;
 					break;
 

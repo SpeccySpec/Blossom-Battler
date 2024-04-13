@@ -95,7 +95,7 @@ canUseSkill = (char, skill, skillid) => {
 	if (char.status) {
 		switch(char.status) {
 			case 'silence':
-				if (skill.atktype === "magic") return false;
+				if (skill.atktype === "magic" || skill.atktype === "sorcery") return false;
 				break;
 
 			case 'dazed':

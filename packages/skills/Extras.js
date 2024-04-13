@@ -3078,9 +3078,9 @@ customVariables = {
 		},
 		dmgmod(btl, char, inf, dmg, skill, vars, multiplier) {
 			dmg = Math.round(modSkillResult(char, inf, dmg, skill, btl) / multiplier);
-			if (vars.stat == 'phys' && skill.atktype == 'physical') {
+			if (vars.stat == 'phys' && (skill.atktype == 'physical' || skill.atktype == 'ranged')) {
 				dmg = Math.round(dmg*vars.mult);
-			} else if (vars.stat == 'mag' && skill.atktype == 'magic') {
+			} else if (vars.stat == 'mag' && (skill.atktype == 'magic' || skill.atktype == 'sorcery')) {
 				dmg = Math.round(dmg*vars.mult);
 			}
 		},

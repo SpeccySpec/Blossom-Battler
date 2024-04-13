@@ -263,7 +263,7 @@ healList = {
 		applyfunc(message, skill, args) {
 			const status = args[0]?.toLowerCase();
 
-			if (![...statusEffects, "all", "physical", "mental", "positive", "neutral"].includes(status))
+			if (![...statusEffects, "all", "physical", "sorcery", "mental", "positive", "neutral"].includes(status))
 				return void message.channel.send("That's not a valid status effect.");
 
 			makeHeal(skill, "statusheal", [status]);

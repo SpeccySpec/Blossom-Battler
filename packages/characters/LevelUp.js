@@ -146,7 +146,7 @@ evoSkillMessageCollector = async (charDefs, toUpdate, channel, server, ind, fiel
 			btncolor = 'green'
 		else if (skillInfo?.type === 'status') 
 			btncolor = 'grey'
-		else if (skillInfo?.atktype === 'physical') 
+		else if (skillInfo?.atktype === 'physical' || skillInfo?.atktype === 'sorcery') 
 			btncolor = 'red'
 
 		let emoji1 = skillInfo ? elementEmoji[skillInfo.type] : elementEmoji.strike;

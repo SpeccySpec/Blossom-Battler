@@ -236,7 +236,7 @@ const menuStates = {
 				btncolor = 'green'
 			else if (skillinfo?.type === 'status') 
 				btncolor = 'grey'
-			else if (skillinfo?.atktype === 'physical') 
+			else if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'sorcery') 
 				btncolor = 'red'
 
 			let emoji1 = skillinfo ? elementEmoji[skillinfo.type] : elementEmoji.strike;
@@ -254,7 +254,7 @@ const menuStates = {
 						break;
 
 					case 'silence':
-						if (skillinfo?.atktype === 'magic') canselect = false;
+						if (skillinfo?.atktype === 'magic' || skillinfo?.atktype === 'sorcery') canselect = false;
 						break;
 
 					case 'dazed':

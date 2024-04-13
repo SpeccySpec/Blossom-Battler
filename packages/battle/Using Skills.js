@@ -85,7 +85,7 @@ genDmg = (char, targ, btl, skill) => {
 		}
 	}
 
-	let atkStat = (skill.atktype === 'physical') ? statWithBuff(charStats.atk ?? 1, char.buffs.atk ?? 0) : statWithBuff(charStats.mag ?? 1, char.buffs.mag ?? 0);
+	let atkStat = (skill.atktype === 'physical' || skill.atktype === 'ranged') ? statWithBuff(charStats.atk ?? 1, char.buffs.atk ?? 0) : statWithBuff(charStats.mag ?? 1, char.buffs.mag ?? 0);
 	let endStat = statWithBuff(targStats.end, targ.buffs.end);
 	console.log(`Atk Checkpoint: ${atkStat}`);
 
@@ -471,7 +471,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 		}
 
 		// Invisible and Enchanted
-		if ((targ.status === "enchanted" && skill.atktype === "magic") || (targ.status === "invisible" && (skill.atktype === "physical" || skill.atktype === "ranged")))
+		if ((targ.status === "enchanted" && (skill.atktype === "magic" || skill.atktype === "sorcery")) || (targ.status === "invisible" && (skill.atktype === "physical" || skill.atktype === "ranged")))
 			affinity = "block";
 
 		// Evasive State
@@ -486,6 +486,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 				case 'physical':
 					canevade = (skill.atktype == 'physical');
+					break;
+
+				case 'sorcery':
+					canevade = (skill.atktype == 'sorcery');
 					break;
 
 				case 'magic':
@@ -534,7 +538,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 		// reminder that physical shields repel physical/ranged and magic ones repel magic.
 		} else if (shieldtype && !noRepel) {
 			let repel = shieldtype == "reduce";
-			if (shieldtype === 'repelmag' && skill.atktype === 'magic')
+			if (shieldtype === 'repelmag' && (skill.atktype === 'magic' || skill.atktype === 'sorcery'))
 				repel = true;
 			else if (shieldtype === 'repelphys' && (skill.atktype === 'physical' || skill.atktype === 'ranged'))
 				repel = true;
@@ -593,7 +597,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 			// Airborne positive status
 			if (targ.status && targ.status == 'airborne') {
-				if (skill.atktype == 'physical') {
+				if (skill.atktype == 'physical' || skill.atktype == 'sorcery') {
 					dodgeChance *= (!isBoss(targ) && hasStatusAffinity(targ, 'airborne', 'resist')) ? 0.5 : 0;
 				} else {
 					let dodgeRed = 0.1 * (hasStatusAffinity(targ, 'airborne', 'resist') ? 0.5 : (hasStatusAffinity(targ, 'airborne', 'weak') ? 2 : 1))
@@ -1416,9 +1420,9 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			skillCost *= 1.5;
 		}
 
-		if (char.charms.includes("GrubberflysElegy") && skill.atktype != 'physical') skill.acc *= 1.5;
+		if (char.charms.includes("GrubberflysElegy") && skill.atktype != 'physical' && skill.atktype != 'sorcery') skill.acc *= 1.5;
 
-		if ((char.charms.includes("FragileStrength") || char.charms.includes("UnbreakableStrength")) && skill.atktype === 'physical') {
+		if ((char.charms.includes("FragileStrength") || char.charms.includes("UnbreakableStrength")) && (skill.atktype === 'physical' || skill.atktype === 'sorcery')) {
 			skill.pow *= 1.65;
 			skillCost *= 1.1;
 		}
@@ -1858,7 +1862,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// Airborne?
-	if ((skill.atktype == 'physical') && char.status && char.status == 'airborne' && char.statusturns < 3 && (!isBoss(char) && !hasStatusAffinity(char, 'airborne', 'weak'))) {
+	if ((skill.atktype == 'physical' || skill.atktype == 'sorcery') && char.status && char.status == 'airborne' && char.statusturns < 3 && (!isBoss(char) && !hasStatusAffinity(char, 'airborne', 'weak'))) {
 		finalText += `\n__${char.name}__ has landed on the floor.\n`
 		delete char.status;
 		delete char.statusturns;

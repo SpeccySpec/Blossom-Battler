@@ -62,7 +62,7 @@ weatherFuncs = {
 				skill.pow *= 1.3;
 			}
 
-			if (skill.atktype === "physical" && typeof(skill.type) === "string" && skill.type != "wind") {
+			if ((skill.atktype === "physical" || skill.atktype === "sorcery") && typeof(skill.type) === "string" && skill.type != "wind") {
 				skill.type = [skill.type, "wind"];
 			}
 		}
@@ -536,7 +536,7 @@ terrainFuncs = {
 		},
 		onselect(char, skill, btl) {
 			if (skill.type === "earth") skill.pow *= 1.35;
-			if (skill.atktype === "physical") skill.acc *= 0.8;
+			if (skill.atktype === "physical" || skill.atktype === "sorcery") skill.acc *= 0.8;
 		}
 	},
 
@@ -557,7 +557,7 @@ terrainFuncs = {
 			return stats;
 		},
 		onselect(char, skill, btl) {
-			if (skill.atktype === "physical") skill.pow *= 1.25;
+			if (skill.atktype === "physical" || skill.atktype === "sorcery") skill.pow *= 1.25;
 		},
 	},
 
@@ -567,7 +567,7 @@ terrainFuncs = {
 			return stats;
 		},
 		onselect(char, skill, btl) {
-			if (!skill.atktype === "physical") skill.pow *= 1.25;
+			if (!skill.atktype === "ranged" || skill.atktype === "magic") skill.pow *= 1.25;
 		},
 	},
 
@@ -649,7 +649,7 @@ terrainFuncs = {
 		onselect(char, skill, btl) {
 			if (skill.type === "water") {
 				skill.pow *= 1.3;
-			} else if (skill.atktype === "physical") {
+			} else if (skill.atktype === "physical" || skill.atktype === "sorcery") {
 				skill.type = [skill.type, "water"];
 			}
 		}

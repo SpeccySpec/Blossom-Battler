@@ -409,7 +409,7 @@ enemyThinker = (char, btl) => {
 											act.points += 3;
 										} else {
 											act.points -= 2;
-											if (t.custom.shield.type && ((t.custom.shield.type == 'repelphys' && (skill.atktype === "physical" || skill.atktype === "ranged")) || (t.custom.shield.type == 'repelmag' && skill.atktype === "magic"))) act.points--;
+											if (t.custom.shield.type && ((t.custom.shield.type == 'repelphys' && (skill.atktype === "physical" || skill.atktype === "ranged")) || (t.custom.shield.type == 'repelmag' && (skill.atktype === "magic" || skill.atktype === "sorcery")))) act.points--;
 										}
 									}
 
@@ -662,7 +662,7 @@ enemyThinker = (char, btl) => {
 											act.points += 3;
 										} else {
 											act.points -= 2;
-											if (t.custom.shield.type && ((t.custom.shield.type == 'repelphys' && (skill.atktype === "physical" || skill.atktype === "ranged")) || (t.custom.shield.type == 'repelmag' && skill.atktype === "magic"))) act.points--;
+											if (t.custom.shield.type && ((t.custom.shield.type == 'repelphys' && (skill.atktype === "physical" || skill.atktype === "ranged")) || (t.custom.shield.type == 'repelmag' && (skill.atktype === "magic" || skill.atktype === "sorcery")))) act.points--;
 										}
 									}
 
@@ -877,7 +877,7 @@ enemyThinker = (char, btl) => {
 											act.points += 2;
 										} else {
 											act.points--;
-											if (targ.custom.shield.type && ((targ.custom.shield.type == 'repelphys' && (skill.atktype === "physical" || skill.atktype === "ranged")) || (targ.custom.shield.type == 'repelmag' && skill.atktype === "magic"))) act.points--;
+											if (targ.custom.shield.type && ((targ.custom.shield.type == 'repelphys' && (skill.atktype === "physical" || skill.atktype === "ranged")) || (targ.custom.shield.type == 'repelmag' && (skill.atktype === "magic" || skill.atktype === "sorcery")))) act.points--;
 										}
 									}
 

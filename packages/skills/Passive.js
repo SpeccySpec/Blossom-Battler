@@ -89,7 +89,7 @@ passiveList = {
 			let usePercent = args[2] ?? true;
 			let boostDamage = args[3] ?? false;
 
-			if (![...Elements, ...Targets, ...statusEffects, 'all', 'magic', 'ranged', 'physical', 'multi-hit', 'nostatus', 'mainelement', 'crit', 'statuschance'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
+			if (![...Elements, ...Targets, ...statusEffects, 'all', 'magic', 'ranged', 'sorcery', 'physical', 'multi-hit', 'nostatus', 'mainelement', 'crit', 'statuschance'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
 			if (element == 'almighty' || element == 'passive') return void message.channel.send("You cannot boost the powers of almighty or passive skills!");
 			if (amount == 0) return void message.channel.send('With the amount being 0, it wouldn\'t change power at all.');
 
@@ -594,10 +594,10 @@ passiveList = {
 
 	damage: new Extra({
 		name: "Damage (Original)",
-		desc: "Inflicts <Damage> of <Element> damage to the target when attacked with a <Phys/Mag> skill.",
+		desc: "Inflicts <Damage> of <Element> damage to the target when attacked with a <Phys/Mag/Ranged/Sorcery> skill.",
 		args: [
 			{
-				name: "Phys/Mag/Ranged",
+				name: "Phys/Mag/Ranged/Sorcery",
 				type: "Word",
 				forced: true
 			},
@@ -619,7 +619,7 @@ passiveList = {
 			let damage = args[1];
 			let element = args[2]?.toLowerCase();
 
-			if (physmag != 'phys' && physmag != 'mag' && physmag != 'ranged')
+			if (physmag != 'phys' && physmag != 'mag' && physmag != 'ranged' && physmag != 'sorcery')
 				return void message.channel.send("You entered an invalid value for <Phys/Mag>! It can be either PHYS, MAG or RANGED.");
 
 			if (damage == 0) return void message.channel.send("What's the point if it's dealing no damage?");
@@ -635,7 +635,7 @@ passiveList = {
 			let affinityTxt = affinityEmoji[affinity] ?? '';
 			let d = vars[1];
 
-			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic') || (vars[0] === 'ranged' && skill.atktype === 'ranged')) {
+			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic') || (vars[0] === 'ranged' && skill.atktype === 'ranged') || (vars[0] === 'sorcery' && skill.atktype === 'sorcery')) {
 				if (vars[1] < 0) {
 					inf.hp -= vars[1];
 					return ` __${inf.name}__ had their HP restored by ***${-vars[1]}*** thanks to __${char.name}__'s _${passive.name}_.`;
@@ -693,7 +693,7 @@ passiveList = {
 			let txt = 'Inflicts '
 
 			for (i in vars) {
-				txt += `**${vars[i][1]} ${elementEmoji[vars[i][2]]}${vars[i][2].charAt(0).toUpperCase() + vars[i][2].slice(1)} damage** when struck with a **${vars[i][0] == 'phys' ? 'physical' : (vars[i][0] == 'ranged' ? 'ranged' : 'magic')}** skill`;
+				txt += `**${vars[i][1]} ${elementEmoji[vars[i][2]]}${vars[i][2].charAt(0).toUpperCase() + vars[i][2].slice(1)} damage** when struck with a **${vars[i][0] == 'sorcery' ? 'sorcery' : (vars[i][0] == 'phys' ? 'physical' : (vars[i][0] == 'ranged' ? 'ranged' : 'magic'))}** skill`;
 
 				if (i < vars.length - 2) {
 					txt += ', ';
@@ -708,10 +708,10 @@ passiveList = {
 
 	dodge: new Extra({
 		name: "Dodge (Original)",
-		desc: "Has a <Chance>% chance to dodge attacks from a <Phys/Mag/Ranged/Element> skill.",
+		desc: "Has a <Chance>% chance to dodge attacks from a <Phys/Mag/Ranged/Sorcery/Element> skill.",
 		args: [
 			{
-				name: "Phys/Mag/Ranged/Element",
+				name: "Phys/Mag/Ranged/Sorcery/Element",
 				type: "Word",
 				forced: true
 			},
@@ -728,7 +728,7 @@ passiveList = {
 			let chance = args[1];
 
 			if (physmag != 'phys' && physmag != 'mag' && physmag != 'ranged' && !Elements.includes(physmag))
-				return void message.channel.send("You entered an invalid value for <Phys/Mag/Ranged/Element>! The valid ones are: PHYS, MAG, RANGED, "+Elements.join(', ')+".");
+				return void message.channel.send("You entered an invalid value for <Phys/Mag/Ranged/Element>! The valid ones are: PHYS, MAG, RANGED, SORCERY, "+Elements.join(', ')+".");
 
 			if (chance < 1) return void message.channel.send("What's the point if it never dodges?");
 
@@ -736,7 +736,7 @@ passiveList = {
 			return true;
 		},
 		forcedodge(char, inf, skill, passive, btl, vars) {
-			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic') || (vars[0] === 'ranged' && skill.atktype === 'ranged') || (vars[0] === skill.type || skill.type.includes(vars[0]))) {
+			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic') || (vars[0] === 'ranged' && skill.atktype === 'ranged') || (vars[0] === 'sorcery' && skill.atktype === 'sorcery') || (vars[0] === skill.type || skill.type.includes(vars[0]))) {
 				if (randNum(1, 100) <= vars[1]) return true;
 				return false;
 			} else {
@@ -747,7 +747,7 @@ passiveList = {
 			let txt = 'Has'
 
 			for (i in vars) {
-				txt += ` a **${vars[i][1]}%** chance to dodge **${(vars[i][0] == 'phys' ? 'physical' : (vars[i][0] == 'mag' ? 'magic' : (vars[i][0] == 'ranged' ? 'ranged' : `${elementEmoji[vars[i][0]]}${vars[i][0]}`)))}** attacks`;
+				txt += ` a **${vars[i][1]}%** chance to dodge **${vars[i][0] == 'sorcery' ? 'sorcery' : (vars[i][0] == 'phys' ? 'physical' : (vars[i][0] == 'ranged' ? 'ranged' : 'magic'))}** attacks`;
 
 				if (i < vars.length - 2) {
 					txt += ', ';
@@ -762,7 +762,7 @@ passiveList = {
 
 	counter: new Extra({
 		name: "Counter (Persona)",
-		desc: "Has a <Chance>% chance to counter <Phys/Mag> attacks with an <Attack Type> skill named <Counter Name> with <Power> power, <Accuracy>% accuracy, {Critical Hit Chance}% crit chance, like a regular skill but the cost is optional and usually not necessary.",
+		desc: "Has a <Chance>% chance to counter <Phys/Mag> attacks with an <Attack Type> skill named <Counter Name> with <Power> power, <Accuracy>% accuracy, {Critical Hit Chance}% crit chance, like a regular skill but the cost is optional and usually not necessary. **Physical** and **Sorcery** attacks will be countered by _Phys_, **Magic** and **Ranged** attacks will be countered by _Mag_.",
 		args: [
 			{
 				name: "Phys/Mag",
@@ -922,7 +922,7 @@ passiveList = {
 			return true;
 		},
 		onaffinitycheck(char, inf, skill, passive, affinity, btl, vars, result) {
-			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic')) {
+			if ((vars[0] === 'phys' && (skill.atktype === 'physical' || skill.atktype === 'sorcery')) || (vars[0] === 'mag' && (skill.atktype === 'magic' || skill.atktype === 'ranged'))) {
 				if (randNum(1, 100) <= vars[1]) {
 					let cost = vars[2].cost
 					if (cost > 0) {
@@ -998,7 +998,7 @@ passiveList = {
 			return true;
 		},
 		ondamage(char, inf, skill, dmg, passive, btl, vars) {
-			if (skill.atktype === 'physical') {
+			if (skill.atktype === 'physical' || skill.atktype === 'sorcery') {
 				if (randNum(1, 100) <= vars[1]) return inflictStatus(inf, vars[0]);
 			}
 		},
@@ -1092,7 +1092,7 @@ passiveList = {
 			return true;
 		},
 		statmod(btl, char, skill, vars) {
-			if (skill.atktype === 'physical') {
+			if (skill.atktype === 'physical' || skill.atktype === 'sorcery') {
 				skill.pow *= 1+(userDefs.hp/userDefs.maxhp)/1.42857142-0.2;
 			}
 		},
@@ -1883,7 +1883,7 @@ passiveList = {
 			let percentage = args[1];
 			let hppercentage = args[2];
 
-			if ((!Elements.includes(element) && element != 'all' && element != 'magic' && element != 'physical') || element === 'almighty') return void message.channel.send("You entered an invalid element!");
+			if ((!Elements.includes(element) && element != 'all' && element != 'magic' && element != 'physical' && element != 'sorcery' && element != 'ranged') || element === 'almighty') return void message.channel.send("You entered an invalid element!");
 			if (hppercentage > 100 && hppercentage < 0) return void message.channel.send(`Please enter a value for <HPPercent> above 0 and below 100.`);
 
 			makePassive(skill, "finalpush", [element, percentage, hppercentage]);

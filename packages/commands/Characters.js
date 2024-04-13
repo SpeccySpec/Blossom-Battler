@@ -1723,7 +1723,7 @@ commands.leaderskill = new Command({
 			case 'discount':
 			case 'crit':
 			case 'endure':
-				if (args[3].toLowerCase() === "magic" || args[3].toLowerCase() === "physical" || args[3].toLowerCase() === "ranged" || args[3].toLowerCase() === "all") {
+				if (args[3].toLowerCase() === "magic" || args[3].toLowerCase() === "physical" || args[3].toLowerCase() === "sorcery" || args[3].toLowerCase() === "ranged" || args[3].toLowerCase() === "all") {
 					if (args[4] > 10) return message.channel.send(`${args[4]}% is too powerful for a leader skill like this! The maximum for a ${args[3]} affecting leader skill is 10%.`);
 				} else {
 					if (!utilityFuncs.inArray(args[3].toLowerCase(), Elements)) return message.channel.send({content: `${args[3]} is an invalid element! Try one of these.`, embeds: [elementList()]});
