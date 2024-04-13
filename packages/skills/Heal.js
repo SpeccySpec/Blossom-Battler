@@ -277,8 +277,9 @@ healList = {
 						changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl.channel);
 					}
 
-					if (targ.confusion) delete targ.confusion;
-					if (targ.drenched) delete targ.drenched;
+					for (let i in statusEffectFuncs) {
+						if (statusEffectFuncs[i].stackable && isPhysicalStatus(targ.status)) delete targ[i];
+					}
 
 					if (isPhysicalStatus(targ.status)) {
 						delete targ.status;
@@ -293,7 +294,9 @@ healList = {
 						changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl.channel);
 					}
 
-					if (targ.infatuation) delete targ.infatuation;
+					for (let i in statusEffectFuncs) {
+						if (statusEffectFuncs[i].stackable && !isPhysicalStatus(targ.status)) delete targ[i];
+					}
 
 					if (!isPhysicalStatus(targ.status)) {
 						delete targ.status;
