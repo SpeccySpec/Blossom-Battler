@@ -264,7 +264,7 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 
 	let emojiCount = charAffs.match(/<:.+?:\d+>/g);
 
-	if (shortenAmount && emojiCount.length > 23) {
+	if (shortenAmount && (emojiCount?.length ?? 0) > 23) {
 		charAffs += `\n\nToo many affinities. For the full view, refer to __${getPrefix(message.guild.id)}getaffinities.__`;
 
 		let remaining = emojiCount.length - 23;
