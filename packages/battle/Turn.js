@@ -2207,11 +2207,11 @@ doTurn = async(btl, noTurnEmbed) => {
 
 		if (char.hp <= 0) {
 			canMove = false;
-			if (statusEffectFuncs[char.status].onremove) statusEffectFuncs[char.status].onremove(btl, char);
+			if (statusEffectFuncs[char.status.toLowerCase()].onremove) statusEffectFuncs[char.status].onremove(btl, char);
 			delete char.status;
 			delete char.statusturns;
 		} else {
-			if (!statusEffectFuncs[char.status].endturn) {
+			if (!statusEffectFuncs[char.status.toLowerCase()].endturn) {
 				char.statusturns--;
 				if (char.statusturns <= 0) {
 					if (statusEffectFuncs[char.status]?.onremove) statusEffectFuncs[char.status].onremove(btl, char);
