@@ -201,17 +201,9 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 			.setTitle(`${elementEmoji[char.mainElement]}${tick}${char.name} ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
 	}
 
-	let tooMany = false;
-
 	let affinityscore = 0
 	let totaffinities = 0
 	let charAffs = '';
-
-	let affinityAmount = 0;
-	let dividyBy = 18;
-	if (settings.mechanics.stataffinities && char.statusaffinities) dividyBy -= 12;
-
-	for (const affinity in char.affinities) {if (char.affinities[affinity].length > 0) affinityAmount++;}
 
 	for (const affinity in char.affinities) {
 		if (char.affinities[affinity].length == 0) continue;
@@ -221,15 +213,10 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 			totaffinities++
 			affinityscore += affinityScores[affinity]
 			
-			if (!shortenAmount || (shortenAmount && i < (dividyBy/affinityAmount))) charAffs += `${elementEmoji[char.affinities[affinity][i]]}`;
-		}
-		if (shortenAmount && char.affinities[affinity].length >= Math.floor((dividyBy/affinityAmount))) {
-			let others = char.affinities[affinity].length - Math.floor((dividyBy/affinityAmount));
-			if (others > 0) { charAffs += ` and ${others} other${others > 1 ? 's' : ''}...`;
-				tooMany = true;
-			}
+			charAffs += `${elementEmoji[char.affinities[affinity][i]]}`;
 		}
 	}
+
 	let scorecomment = affinityScores[(affinityscore > 0 ? Math.ceil : Math.floor)(affinityscore)]
 	if (scorecomment && affinityscore <= 3 && affinityscore >= -3 && totaffinities >= 9)
 		scorecomment += "\nOr at least that would be the case if you didn't have so many affinities."
@@ -246,9 +233,6 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 			let statustotaffinities = 0
 			let finaladdition = 0;
 			let statAffs = '';
-
-			affinityAmount = 0;
-			for (const affinity in char.statusaffinities) {if (char.statusaffinities[affinity].length > 0) affinityAmount++;}
 			
 			for (const affinity in char.statusaffinities) {
 				if (char.statusaffinities[affinity].length == 0) continue;
@@ -264,14 +248,7 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 						finaladdition *= 0;
 
 					statusaffinityscore += finaladdition
-					if (!shortenAmount || (shortenAmount && i < (6/affinityAmount))) statAffs += `${statusEmojis[char.statusaffinities[affinity][i]]}`;
-				}
-
-				if (shortenAmount && char.statusaffinities[affinity].length >= Math.floor(6/affinityAmount)) {
-					let others = char.statusaffinities[affinity].length - Math.floor(6/affinityAmount);
-					if (others > 0) { statAffs += ` and ${others} other${others > 1 ? 's' : ''}...`;
-						tooMany = true;
-					}
+					statAffs += `${statusEmojis[char.statusaffinities[affinity][i]]}`;
 				}
 			}
 			if (statAffs != '') {
@@ -284,7 +261,41 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 			};
 		}
 	}
-	if (tooMany) charAffs += `\n\nToo many affinities. To view them all, please refer to __${getPrefix(message.guild.id)}getaffinities.__`
+
+	let emojiCount = charAffs.match(/<:.+?:\d+>/g);
+
+	if (shortenAmount && emojiCount.length > 23) {
+		charAffs += `\n\nToo many affinities. For the full view, refer to __${getPrefix(message.guild.id)}getaffinities.__`;
+
+		let remaining = emojiCount.length - 23;
+		let splitLines = charAffs.split('\n');
+
+		for (i in splitLines) {
+			splitLines[i] = [i, splitLines[i]];
+		}
+
+		while (remaining > 0) {
+			splitLines = splitLines.sort((a,b) => (b[1].match(/<:.+?:\d+>/g)?.length ?? 0) - (a[1].match(/<:.+?:\d+>/g)?.length ?? 0));
+
+			let curEmojiCount = splitLines[0][1].match(/<:.+?:\d+>/g);
+			if (curEmojiCount != null) {
+				splitLines[0][1] = splitLines[0][1].replace(curEmojiCount[curEmojiCount.length - 1], '[PP]');
+			}
+			remaining--;
+		}
+
+		splitLines = splitLines.sort((a,b) => a[0] - b[0]);
+		for (i in splitLines) {
+			splitLines[i] = splitLines[i][1];
+
+			let remainders = splitLines[i].match(/\[PP\]/g)?.length ?? 0;
+
+			splitLines[i] = splitLines[i].replace(/\[PP\]/, ` and ${remainders} other${remainders != 1 ? 's' : ''}`);
+			splitLines[i] = splitLines[i].replace(/\[PP\]/g, ``);
+		}
+
+		charAffs = splitLines.join('\n');
+	}
 
 	if (charAffs != '') {
 		if (shortenAmount) DiscordEmbed.fields.push({ name: 'Affinities', value: charAffs, inline: true });
