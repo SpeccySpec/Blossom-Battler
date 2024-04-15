@@ -156,7 +156,7 @@ const affinityScores = {
 	drain: 1.5,
 
 	[-999]: "Your local hacker.",
-	[-40]: "Literally the weakest character in the world, at least you'll stop now.",
+	[-30]: "Literally the weakest character in the world, at least you'll stop now.",
 	[-10]: "Please stop.",
 	[-9]: "A bunch of useless atoms.",
 	[-8]: "A corpse.",
@@ -218,6 +218,10 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 	}
 
 	let scorecomment = affinityScores[(affinityscore > 0 ? Math.ceil : Math.floor)(affinityscore)]
+
+	if (affinityscore == -69) scorecomment = "You'd think this is __nice__, but it really isn't."
+	if (affinityscore == 69) scorecomment = "Heh, __nice__. No but seriously, stop this nonsense."
+
 	if (scorecomment && affinityscore <= 3 && affinityscore >= -3 && totaffinities >= 9)
 		scorecomment += "\nOr at least that would be the case if you didn't have so many affinities."
 	if (totaffinities == 0)
@@ -285,6 +289,7 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 		}
 
 		splitLines = splitLines.sort((a,b) => a[0] - b[0]);
+
 		for (i in splitLines) {
 			splitLines[i] = splitLines[i][1];
 

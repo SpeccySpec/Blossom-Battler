@@ -2128,7 +2128,7 @@ buildStatus = (message, extra, args, lb) => {
 // This file shares names with Status Effects anyway lol
 // We might as well shove some extra stuff in here
 // statusEffectFuncs will be an object that doe ufnnye status
-let phys = ['burn', 'freeze', 'petrified', 'stun', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'cloud9', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed', 'chilled', 'overheat', 'stuffed', 'disabled', 'brimstone', 'tired', 'energized', 'haste', 'dispelled', 'cursed', 'neutralized', 'trisagion'];
+let phys = ['burn', 'freeze', 'petrified', 'stun', 'bleed', 'paralyze', 'toxin', 'dazed', 'hunger', 'blind', 'irradiation', 'mirror', 'dragonscale', 'airborne', 'cloud9', 'drenched', 'stagger', 'shrouded', 'dissolved', 'doomed', 'weakened', 'grassimped', 'dry', 'wet', 'light', 'heavy', 'enchanted', 'invisible', 'blessed', 'chilled', 'overheat', 'stuffed', 'disabled', 'brimstone', 'tired', 'energized', 'haste', 'dispelled', 'cursed', 'neutralized', 'trisagion', 'unstable'];
 isPhysicalStatus = (status) => {
 	if (!status) return false;
 
