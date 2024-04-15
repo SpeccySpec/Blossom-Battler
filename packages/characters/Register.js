@@ -366,9 +366,9 @@ longDescription = (charDefs, level, server, message, useguild) => {
 		statDesc += `\n${char.stats[i]}${i.toUpperCase()}${!char.type ? ` (${char.basestats['base'+i]} Base)` : ''}`;
 
 		if (char.curweapon && char.curweapon[i])
-			statDesc += ` **${(char.curweapon[i] > 0) ? '+' : '-'} ${Math.abs(char.curweapon[i])}${i.toUpperCase()}**`;
+			statDesc += ` **${(char.curweapon[i] > 0) ? '+' : '-'}${Math.abs(char.curweapon[i])}${i.toUpperCase()}**`;
 		if (char.curarmor && char.curarmor[i])
-			statDesc += ` **${(char.curarmor[i] > 0) ? '+' : '-'} ${Math.abs(char.curarmor[i])}${i.toUpperCase()}**`;
+			statDesc += ` **${(char.curarmor[i] > 0) ? '+' : '-'}${Math.abs(char.curarmor[i])}${i.toUpperCase()}**`;
 	}
 
 	DiscordEmbed.fields.push({ name: 'Stats', value: statDesc, inline: true });
