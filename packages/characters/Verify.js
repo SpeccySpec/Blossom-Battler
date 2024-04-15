@@ -1,3 +1,13 @@
+const affinityScores = {
+	deadly: -999,
+	superweak: -2,
+	weak: -1,
+	resist: 1,
+	block: 1.5,
+	repel: 1.5,
+	drain: 1.5
+}
+
 verifiedChar = (char, server) => {
 	let settings = setUpSettings(server);
 
