@@ -362,7 +362,14 @@ longDescription = (charDefs, level, server, message, useguild) => {
 	else 
 		statDesc += `Level ${char.level}\n${char.hp}HP\n${char.mp}${char.mpMeter ? char.mpMeter[1] : "MP"}\n${char.xp}XP\n`;
 
-	for (const i in char.stats) statDesc += `\n${char.stats[i]}${i.toUpperCase()}${!char.type ? ` (${char.basestats['base'+i]} Base)` : ''}`;
+	for (const i in char.stats) {
+		statDesc += `\n${char.stats[i]}${i.toUpperCase()}${!char.type ? ` (${char.basestats['base'+i]} Base)` : ''}`;
+
+		if (char.curweapon && char.curweapon[i])
+			statDesc += ` **+ ${char.curweapon[i]}${i.toUpperCase()}**`;
+		if (char.curarmor && char.curarmor[i])
+			statDesc += ` **+ ${char.curarmor[i]}${i.toUpperCase()}**`;
+	}
 
 	DiscordEmbed.fields.push({ name: 'Stats', value: statDesc, inline: true });
 
@@ -370,8 +377,23 @@ longDescription = (charDefs, level, server, message, useguild) => {
 	let skillDesc = '';
 	if (char.melee) {
 		skillDesc += `**Melee Attack**:\n`
-		if (char.melee.type) skillDesc += elementEmoji[char.melee.type]
-		skillDesc += `${char.melee.name}\n_${char.melee.pow}<:physical:973077052129423411>, ${char.melee.acc}% Accuracy,\n${char.melee.crit}%${critEmoji}`
+
+		if (char.melee.type) {
+			if (char.curweapon && char.curweapon.element) {
+				skillDesc += `${classEmoji.weapon[char.curweapon.class ?? 'none']}${elementEmoji[char.curweapon.element ?? 'strike']}`;
+			} else {
+				skillDesc += elementEmoji[char.melee.type];
+			}
+		}
+
+		skillDesc += `${char.melee.name}\n`;
+
+		if (char.curweapon && char.curweapon.melee)
+			skillDesc += `_${char.melee.pow}**+${char.curweapon.melee}**<:physical:973077052129423411>`;
+		else
+			skillDesc += `_${char.melee.pow}<:physical:973077052129423411>`;
+
+		skillDesc += `, ${char.melee.acc}% Accuracy,\n${char.melee.crit}%${critEmoji}`;
 		if (char.melee.status && char.melee.statuschance) skillDesc += `, ${char.melee.statuschance}%${statusEmojis[char.melee.status]}`;
 		skillDesc += '_\n\n';
 	}
