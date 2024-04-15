@@ -1979,6 +1979,44 @@ statusList = {
 			return "Target **disabled** from using last skill"
 		}
 	}),
+
+	reload: new Extra({
+		name: "Reload (Original)",
+		desc: "The user can reload the charges of a given skill that has the Charges extra. They will gain <Percent> of the maximum charges back.",
+		args: [
+			{
+				name: "Skill",
+				type: "Word",
+				forced: true,
+			},
+			{
+				name: "Percent",
+				type: "Decimal",
+				forced: false,
+			},
+		],
+		applyfunc(message, skill, args) {
+			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+
+			if (!skillFile[args[0]]) return void message.channel.send(`${args[0]} is not a valid skill.`);
+			if (args[1] <= 0) return void message.channel.send("What's the point?");
+
+			makeStatus(skill, "reload", [args[0], args[1]]);
+			return true;
+		},
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			if (!targ.custom.charges[vars[0]]) return "But it failed!";
+
+			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+
+			targ.custom.charges[vars[0]][0] += targ.custom.charges[vars[0]][3]*(vars[1]/100);
+			return `__${targ.name}__ regained _${char.custom.charges[vars[0]][3]*(vars[1]/100)}_ charges back for their **${getFullName(skillFile[vars[0]])}**!`;
+		},
+		getinfo(vars, skill) {
+			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+			return `The **target** regains __${vars[1]}%__ of their charges for **${getFullName(skillFile[vars[0]])}**`
+		}
+	}),
 }
 
 // Make a status type for a skill. "func" should be an array of 1-5 values indicating what the extra does.

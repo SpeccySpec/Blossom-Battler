@@ -1,5 +1,5 @@
 verifiedChar = (char, server) => {
-	let settings = setUpSettings(message.guild.id);
+	let settings = setUpSettings(server);
 
 	// Manual Verification
 	if (char.forceverified) return true;
