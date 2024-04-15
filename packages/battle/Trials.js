@@ -25,10 +25,10 @@ nextWave = (btl) => {
 			if (trials[btl.trial.id]) {
 				let verifiedchars = true;
 				for (let char of btl.teams[0].members) {
-					if (!verifiedChar(char)) verifiedchars = false;
+					if (!verifiedChar(char, btl.guild.id)) verifiedchars = false;
 				}
 				for (let char of btl.teams[0].backup) {
-					if (!verifiedChar(char)) verifiedchars = false;
+					if (!verifiedChar(char, btl.guild.id)) verifiedchars = false;
 				}
 
 				if (verifiedchars) {

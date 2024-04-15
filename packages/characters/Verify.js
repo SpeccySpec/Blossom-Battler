@@ -1,4 +1,6 @@
-verifiedChar = (char) => {
+verifiedChar = (char, server) => {
+	let settings = setUpSettings(message.guild.id);
+
 	// Manual Verification
 	if (char.forceverified) return true;
 	if (char.forceunverified) return false;
@@ -26,7 +28,8 @@ verifiedChar = (char) => {
 	for (let i of char.skills) {
 		let skill = skillFile[i];
 		if (!skill) return false;
-		if (skill.pow*(skill.hits ?? 1) > 1000) return false;
+		if (skill.pow*(skill.hits ?? 1) > 1200) return false;
+		if (skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return false;
 
 		if (typeof(skill.type) == 'object') {
 			for (let type of skill.type) {
@@ -56,6 +59,50 @@ verifiedChar = (char) => {
 	if (statusses > (char.mainElement === 'status' ? 3 : 2)) return false;
 	if (elements.length > 3) return false;
 	if (char.skills.length > 8) return false;
+
+	// Affinities: A score higher than 3 unverifies the character. No affinities unverifies the character. 9 or more affinities unverifies the character.
+	let affinityscore = 0
+	let totaffinities = 0
+
+	for (const affinity in char.affinities) {
+		if (char.affinities[affinity].length == 0) continue;
+
+		for (const i in char.affinities[affinity]) {
+			totaffinities++;
+			affinityscore += affinityScores[affinity];
+		}
+	}
+
+	if (totaffinities === 0 || totaffinities > 8) return false;
+	if (affinityscore > 3) return false;
+
+	// Status Affinities: The same, except, don't care if the character has none.
+	if (settings.mechanics.stataffinities) {
+		if (char.statusaffinities) {
+			let statusaffinityscore = 0
+			let statustotaffinities = 0
+			let finaladdition = 0;
+			
+			for (const affinity in char.statusaffinities) {
+				if (char.statusaffinities[affinity].length == 0) continue;
+
+				for (const i in char.statusaffinities[affinity]) {
+					statustotaffinities++;
+
+					finaladdition = affinityScores[affinity];
+					if (isPositiveStatus(char.statusaffinities[affinity][i]))
+						finaladdition *= -1;
+					if (isNeutralStatus(char.statusaffinities[affinity][i]))
+						finaladdition *= 0;
+
+					statusaffinityscore += finaladdition
+				}
+			}
+
+			if (statustotaffinities > 8) return false;
+			if (statusaffinityscore > 3) return false;
+		}
+	}
 
 	// Basic checks complete
 	return true;
