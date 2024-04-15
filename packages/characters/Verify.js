@@ -83,7 +83,7 @@ verifiedChar = (char, server) => {
 		}
 	}
 
-	if (totaffinities === 0 || totaffinities > 8) return false;
+	if (totaffinities === 0 || totaffinities > 15) return false;
 	if (affinityscore > 3) return false;
 
 	// Status Affinities: The same, except, don't care if the character has none.
@@ -109,7 +109,7 @@ verifiedChar = (char, server) => {
 				}
 			}
 
-			if (statustotaffinities > 8) return false;
+			if (statustotaffinities > 15) return false;
 			if (statusaffinityscore > 3) return false;
 		}
 	}
