@@ -2513,6 +2513,18 @@ const genStatusDescription = (status, hideAffinities, page, settings, message) =
 	text += '\n\n';
 
 	if (!hideAffinities) {
+		if (statusEffectFuncs[status.name].opposite) {
+			text += '**Opposite Status Ailments:** ';
+
+			let table = statusEffectFuncs[status.name].opposite.filter(x => statusEffectFuncs[x]);
+			for (i in table) {
+				text += `${statusEmojis[table[i]]} ${statusNames[table[i]]}`
+				if (i < table.length-1) text += ', ';
+			}
+
+			text += '\n\n';
+		}
+		
 		if (status.ailments) text += '**Status Affinity Changes:**\n'
 
 		for (affinity in status.ailments) {
