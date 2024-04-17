@@ -625,7 +625,7 @@ commands.listenemies = new Command({
 		let array = [];
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 
-		const validTypes = ['element', 'superweak', 'weak', 'resist', 'block', 'repel', 'drain', 'level', 'limitbreaks', 'skill', 'encountered', 'negotiable', 'pet', 'type', 'dreams', 'loot'];
+		const validTypes = ['element', 'superweak', 'weak', 'resist', 'block', 'repel', 'drain', 'level', 'limitbreaks', 'skill', 'encountered', 'negotiable', 'pet', 'type', 'loot'];
 
 		let settings = setUpSettings(message.guild.id);
 
@@ -1470,120 +1470,6 @@ commands.clearpetvalues = new Command({
 
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
 		message.channel.send(`${args[0]}'s pet values have been cleared.`);
-	}
-})
-
-commands.getenemydreams = new Command({
-	desc: "Gets an enemy's dreams.",
-	section: "enemies",
-	aliases: ['seeenemydreams', 'showenemydreams'],
-	args: [
-		{
-			name: "Enemy Name",
-			type: "Word",
-			forced: true
-		}
-	],
-	func(message, args, guilded) {
-		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
-		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
-
-		if (!enemyFile[args[0]].dreams || enemyFile[args[0]].dreams.length == 0) return message.channel.send(`${args[0]} doesn't have any dreams.`);
-
-		let array = [];
-		for (let i in enemyFile[args[0]].dreams) array.push({title: `**[${i}]**`, desc: `_"${enemyFile[args[0]].dreams[i]}"_`});
-
-		listArray(message.channel, array, message.author.id);
-	}
-})
-
-commands.setenemydream = new Command({
-	desc: "Sets an enemy's dream.",
-	section: "enemies",
-	aliases: ['setenemydream', 'setenemydreams', 'setenemydreams'],
-	args: [
-		{
-			name: "Enemy Name",
-			type: "Word",
-			forced: true
-		},
-		{
-			name: "Dream",
-			type: "Word",
-			forced: true
-		},
-		{
-			name: "Dream ID",
-			type: "Num",
-			forced: false
-		}
-	],
-	checkban: true,
-	admin: 'You do not have permission to set enemy dreams.',
-	func(message, args, guilded) {
-		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
-		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
-
-		if (!enemyFile[args[0]].dreams) enemyFile[args[0]].dreams = [];
-
-		if (args[2] && enemyFile[args[0]].dreams[args[2]]) enemyFile[args[0]].dreams[args[2]] = args[1];
-		else enemyFile[args[0]].dreams.push(args[1]);
-
-		message.react('👍');
-		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
-	}
-})
-
-commands.clearenemydream = new Command({
-	desc: 'Removes a dream from an enemy.',
-	aliases: ['clearenemydreams', 'cen'],
-	section: "enemies",
-	args: [
-		{
-			name: "Enemy Name",
-			type: "Word",
-			forced: true
-		},
-		{
-			name: "Dream ID",
-			type: "Num",
-			forced: false
-		}
-	],
-	checkban: true,
-	admin: 'You do not have permission to remove enemy dreams.',
-	func(message, args, guilded) {
-		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
-		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
-
-		if (!args[1]) {
-			message.channel.send('**[WARNING]**\nAre you sure? **YOU CANNOT GET THESE BACK!**')
-			
-			let givenResponce = false
-			let collector = message.channel.createMessageCollector({ time: 15000 });
-			collector.on('collect', m => {
-				if (m.author.id == message.author.id) {
-					if (m.content.toLowerCase() === 'yes' || m.content.toLowerCase() === 'y') {
-						m.react('👍');
-						message.react('👍');
-
-						enemyFile[args[0]].dreams = [];
-						fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
-					} else {
-						m.react('👍');
-						message.react('👍');
-						message.channel.send(`${args[0]} will not be cleansed of their dreams.`);
-					}
-				}
-			});
-			collector.on('end', c => {
-				if (givenResponce == false) message.channel.send("I'll... take that as a no.");
-			});
-		} else {
-			enemyFile[args[0]].dreams.splice(args[1], 1);
-			message.react('👍');
-			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
-		}
 	}
 })
 

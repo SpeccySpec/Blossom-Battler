@@ -59,9 +59,6 @@ writeEnemy = (creator, guild, name, mainelement, level, health, magicpoints, exp
         // Quotes
 		quotes: {},
 
-        // Dreams
-        dreams: [],
-
         // Negotiations
         negotiate: [],
 		negotiateDefs: {

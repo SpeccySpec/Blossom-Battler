@@ -170,7 +170,6 @@ function writeEnemy(author, server, name, lvl, hp, mp, xp, str, mag, prc, end, c
 		repel: [],
 		drain: [],
 		journal: j ? j : "???",
-		dreams: [],
 		awardxp: xp ? xp : 100
 	}
 
@@ -223,7 +222,6 @@ function writeRaidEnemy(author, server, name, lvl, hp, mp, str, mag, prc, end, c
 		repel: [],
 		drain: [],
 		journal: j ? j : "???",
-		dreams: []
 	}
 
 	if (!raidFile[name])

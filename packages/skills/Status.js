@@ -1102,7 +1102,6 @@ statusList = {
 			if (newchar.lbp) newchar.lbp = 0;
 			if (newchar.pacify) newchar.pacify = 0;
 
-			if (newchar.dreams) newchar.dreams = []
 			if (newchar.negotiate) newchar.negotiate = []
 			delete newchar.negotiateDefs
 
