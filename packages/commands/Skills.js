@@ -1767,725 +1767,699 @@ commands.listelements = new Command({
 
 statusDescs = [
 	{
-		title: "<:negative:1225860204118413435> Negative <:physical:973077052129423411>Physical Ailments",
-		statuses: [
-			{
-				name: "burn",
-				desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once 1 HP is reached**. May change the ${statusEmojis["atkdown"]}**ATK** stat.`,
-				ailments: {
-					nonboss: {
-						weak: `Takes **1/5th** of max HP & **1/4s** the ${statusEmojis["atkdown"]}**ATK** stat.`,
-						normal: `Takes **1/10th** of max HP & **1/2s** the ${statusEmojis["atkdown"]}**ATK** stat.`,
-						resist: `Takes **1/20th** of max HP & **1/1.25s** the ${statusEmojis["atkdown"]}**ATK** stat.`,
-					},
-					boss: `Takes **5 HP** & doesn't change ${statusEmojis["atkdown"]}**ATK** stat.`
-				}
+		name: "burn",
+		desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once 1 HP is reached**. May change the ${statusEmojis["atkdown"]}**ATK** stat.`,
+		ailments: {
+			nonboss: {
+				weak: `Takes **1/5th** of max HP & **1/4s** the ${statusEmojis["atkdown"]}**ATK** stat.`,
+				normal: `Takes **1/10th** of max HP & **1/2s** the ${statusEmojis["atkdown"]}**ATK** stat.`,
+				resist: `Takes **1/20th** of max HP & **1/1.25s** the ${statusEmojis["atkdown"]}**ATK** stat.`,
 			},
-			{
-				name: "bleed",
-				desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once the afflicted is defeated**.`,
-				ailments: {
-					nonboss: {
-						weak: `Takes **1/5th** of max HP.`,
-						normal: `Takes **1/10th** of max HP.`,
-						resist: `Takes **1/20th** of max HP.`,
-					},
-					boss: `Takes **10 HP**.`
-				}
-			},
-			{
-				name: "freeze",
-				desc: "Immobilizes the afflicted for an **amount of turns**. Identical to <:stun:1225850856021168200>**Stun**, except with flavour text.",
-				ailments: {
-					nonboss: {
-						weak: `Lasts **2 turns**.`,
-						normal: `Lasts **1 turn**.`,
-						resist: `Lasts **1 turn, but has a 50% chance of thawing out**.`,
-					},
-					boss: `**Thaws out immediately**.`
-				}
-			},
-			{
-				name: "petrified",
-				desc: `Immobilizes the afflicted for an **amount of turns**. Increases damage resistance **by an amount**, but sharply raises ${critEmoji}**critical** damage taken.`,
-				ailments: {
-					nonboss: {
-						weak: `Lasts **3 turns**, raises damage resistance by **3%** and raises ${critEmoji}**critical** damage taken by **40%**.`,
-						normal: `Lasts **2 turns**, raises damage resistance by **4%** and raises ${critEmoji}**critical** damage taken by **20%**.`,
-						resist: `Lasts **1 turn**, raises damage resistance by **5%** and raises ${critEmoji}**critical** damage taken by **10%**.`,
-					},
-					boss: `**Breaks out immediately**.`
-				}
-			},
-			{
-				name: "stun",
-				desc: "Immobilizes the afflicted for an **amount of turns**. Identical to <:freeze:963387466885259324>**Freeze**, except with flavour text.",
-				ailments: {
-					nonboss: {
-						weak: `Lasts **2 turns**.`,
-						normal: `Lasts **1 turn**.`,
-						resist: `Lasts **1 turn, but has a 50% chance of shaking it off**.`,
-					},
-					boss: `*Shakes it off immediately*.`
-				}
-			},
-			{
-				name: "paralyze",
-				desc: `Has **a chance** to immobilize the afflicted until expired. Halves chance each turn.`,
-				ailments: {
-					nonboss: {
-						weak: `Lasts **5 turns** and sets initial paralyze chance to **160%**.`,
-						normal: `Lasts **4 turns** and sets initial paralyze chance to **80%**.`,
-						resist: `Lasts **3 turns** and sets initial paralyze chance to **40%**.`,
-					},
-					boss: `*Shakes it off immediately*.`
-				}
-			},
-			{
-				name: "toxin",
-				desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once 1 HP is reached**. May change the ${statusEmojis["magdown"]}**MAG** stat.`,
-				ailments: {
-					nonboss: {
-						weak: `Takes **1/5th** of max HP & **1/4s** the ${statusEmojis["magdown"]}**MAG** stat.`,
-						normal: `Takes **1/10th** of max HP & **1/2s** the ${statusEmojis["magdown"]}**MAG** stat.`,
-						resist: `Takes **1/20th** of max HP & **1/1.25s** the ${statusEmojis["magdown"]}**MAG** stat.`,
-					},
-					boss: `Takes **5 HP** & doesn't change ${statusEmojis["magdown"]}**MAG** stat.`
-				}
-			},
-			{
-				name: "dazed",
-				desc: `Disables physical and ranged skill usage for **an amount of turns**.`,
-				ailments: {
-					nonboss: {
-						weak: `Lasts **3 turns**.`,
-						normal: `Lasts **2 turns**.`,
-						resist: `Lasts **1 turn**.`,
-					},
-					boss: `Lasts **1 turn**.`
-				}
-			},
-			{
-				name: "hunger",
-				desc: `May alter ${statusEmojis["atkdown"]}**ATK** & ${statusEmojis["magdown"]}**MAG** stats.`,
-				ailments: {
-					nonboss: {
-						weak: `**1/4s** ${statusEmojis["atkdown"]}**ATK** & ${statusEmojis["magdown"]}**MAG** stats.`,
-						normal: `**1/2s** ${statusEmojis["atkdown"]}**ATK** & ${statusEmojis["magdown"]}**MAG** stats.`,
-						resist: `**1/1.25s** ${statusEmojis["atkdown"]}A**TK** & ${statusEmojis["magdown"]}**MAG** stats.`,
-					},
-					boss: `Affects them the same as non-bosses.`
-				}
-			},
-			{
-				name: "blind",
-				desc: `May alter ${statusEmojis["prcdown"]}**PRC** & ${statusEmojis["agldown"]}**AGL** stats.`,
-				ailments: {
-					nonboss: {
-						weak: `**1/4s** ${statusEmojis["prcdown"]}**PRC** & ${statusEmojis["agldown"]}**AGL** stats.`,
-						normal: `**1/2s** ${statusEmojis["prcdown"]}**PRC** & ${statusEmojis["agldown"]}**AGL** stats.`,
-						resist: `**1/1.25s** ${statusEmojis["prcdown"]}**PRC** & ${statusEmojis["agldown"]}**AGL** stats.`,
-					},
-					boss: `Affects them the same as non-bosses.`
-				}
-			},
-			{
-				name: "irradiation",
-				desc: `Switches **an amount of random stats** for **an amount of turns**.`,
-				ailments: {
-					nonboss: {
-						weak: `Lasts **5 turns** and switches **3 stats**.`,
-						normal: `Lasts **3 turns** and switches **2 stats**.`,
-						resist: `Lasts **1 turn** and switches **2 stats**.`,
-					},
-					boss: `Affects them the same as non-bosses.`
-				}
-			},
-			{
-				name: "drenched",
-				desc: `Nullifies status affinities for **3 turns**.`,
-			},
-			{
-				name: "stagger",
-				desc: "The next attack dealt to the afflicted is a **guaranteed** critical hit.",
-			},
-			{
-				name: "shrouded",
-				desc: "Incapable of seeing the afflicted's current stats.",
-				ailments: {
-					nonboss: {
-						weak: "Lasts **4 turns**.",
-						normal: "Lasts **3 turns**.",
-						resist: "**Can see HP**.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
-			},
-			{
-				name: "dissolved",
-				desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once 1 HP is reached**. May change the ${statusEmojis["enddown"]}**END** stat. Has a chance to **dissolve the afflicted's armor**.`,
-				ailments: {
-					nonboss: {
-						weak: `Takes **1/5th** of max HP & **1/4s** the ${statusEmojis["enddown"]}**END** stat. Has a **20%** chance of dissolving the afflicted's armor.`,
-						normal: `Takes **1/10th** of max HP & **1/2s** the ${statusEmojis["enddown"]}**END** stat. Has a **10%** chance of dissolving the afflicted's armor.`,
-						resist: `Takes **1/20th** of max HP & **1/1.25s** the ${statusEmojis["enddown"]}**END** stat. Has a **5%** chance of dissolving the afflicted's armor.`,
-					},
-					boss: `Takes **5 HP** & **doesn't change ${statusEmojis["enddown"]}END stat**. Bosses can't wear armor in the first place.`
-				}
-			},
-			{
-				name: "doomed",
-				desc: `Take increased damage from ${elementEmoji["bless"]}**Bless** skills. *May change the ${statusEmojis["enddown"]}END stat*.`,
-				ailments: {
-					nonboss: {
-						weak: `Doubled damage from ${elementEmoji["bless"]}**Bless** skills. *1/2s* the ${statusEmojis["enddown"]}END stat.`,
-						normal: `1.5x damage from ${elementEmoji["bless"]}**Bless** skills. *1/2s* the ${statusEmojis["enddown"]}END stat.`,
-						resist: `1.25x damage from ${elementEmoji["bless"]}**Bless** skills. *0.75x* the ${statusEmojis["enddown"]}END stat.`,
-					},
-					boss: {
-						weak: `1.75x damage from ${elementEmoji["bless"]}**Bless** skills. *Doesn't change ${statusEmojis["enddown"]}END stat*.`,
-						normal: `1.5x damage from ${elementEmoji["bless"]}**Bless** skills. *Doesn't change ${statusEmojis["enddown"]}END stat*.`,
-						resist: `1.25x damage from ${elementEmoji["bless"]}**Bless** skills. *Doesn't change ${statusEmojis["enddown"]}END stat*.`,
-					},
-				}
-			},
-			{
-				name: "weakened",
-				desc: `Take increased damage from ${elementEmoji["curse"]}**Curse** skills. *May change the ${statusEmojis["atkdown"]}ATK stat*.`,
-				ailments: {
-					nonboss: {
-						weak: `Doubled damage from ${elementEmoji["curse"]}**Curse** skills. *1/2s* the ${statusEmojis["atkdown"]}ATK stat.`,
-						normal: `1.5x damage from ${elementEmoji["curse"]}**Curse** skills. *1/2s* the ${statusEmojis["atkdown"]}ATK stat.`,
-						resist: `1.25x damage from ${elementEmoji["curse"]}**Curse** skills. *0.75x* the ${statusEmojis["atkdown"]}ATK stat.`,
-					},
-					boss: {
-						weak: `1.75x damage from ${elementEmoji["curse"]}**Curse** skills. *Doesn't change ${statusEmojis["atkdown"]}ATK stat*.`,
-						normal: `1.5x damage from ${elementEmoji["curse"]}**Curse** skills. *Doesn't change ${statusEmojis["atkdown"]}ATK stat*.`,
-						resist: `1.25x damage from ${elementEmoji["curse"]}**Curse** skills. *Doesn't change ${statusEmojis["atkdown"]}ATK stat*.`,
-					},
-				}
-			},
-			{
-				name: "grassimped",
-				desc: "You're turned into a Grassimp! How do you do anything in this weird, bushy form?",
-				ailments: {
-					nonboss: "You cannot have affinities toward this Status Ailment short of blocking.",
-					boss: "Immune to this status ailment."
-				}
-			},
-			{
-				name: "stuffed",
-				desc: "Cannot use consumable items.",
-				ailments: {
-					nonboss: {
-						weak: `Lasts **3 turns**.`,
-						normal: `Lasts **2 turns**.`,
-						resist: `Lasts **1 turn**.`,
-					},
-					boss: `Lasts **1 turn**.`
-				}
-			},
-			{
-				name: "disabled",
-				desc: "Prevents afflicted from using any skills. Can only use the melee attack and items.",
-				ailments: {
-					nonboss: {
-						weak: "Lasts **3 turns**.",
-						normal: "Lasts **2 turns**.",
-						resist: "Lasts **1 turn**.",
-					},
-					boss: "Lasts **1 turn**."
-				}
-			},
-			{
-				name: "tired",
-				desc: `Increases skill cost **by an amount**.`,
-				ailments: {
-					nonboss: {
-						weak: `Increases cost by **30%**.`,
-						normal: `Increases cost by **20%**.`,
-						resist: `Increases cost by **10%**.`,
-					},
-					boss: `Increases cost by **10%**.`
-				}
-			},
-			{
-				name: "cursed",
-				desc: "Prevents **positive status ailments** from applying to the afflicted while this status effect is active. Will remove the ones the afflicted already has.",
-				ailments: {
-					nonboss: {
-						weak: "Lasts **4 turns**.",
-						normal: "Lasts **3 turns**.",
-						resist: "Lasts **2 turns**.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
-			},
-			{
-				name: "dispelled",
-				desc: "Cannot afflict **any status effect** to a target while this status effect is active.",
-				ailments: {
-					nonboss: "You cannot have affinities toward this Status Ailment at all.",
-					boss: "Affects them the same as non-bosses."
-				}
-			},
-		]
+			boss: `Takes **5 HP** & doesn't change ${statusEmojis["atkdown"]}**ATK** stat.`
+		}
 	},
 	{
-		title: "<:negative:1225860204118413435> Negative <:mental:1004855144745291887>Mental Ailments",
-		statuses: [
-			{
-				name: "dizzy",
-				desc: `Halves accuracy of all skills for **2 turns**.`,
+		name: "bleed",
+		desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once the afflicted is defeated**.`,
+		ailments: {
+			nonboss: {
+				weak: `Takes **1/5th** of max HP.`,
+				normal: `Takes **1/10th** of max HP.`,
+				resist: `Takes **1/20th** of max HP.`,
 			},
-			{
-				name: "sleep",
-				desc: `Immobilizes for **1 turn**. May restore **an amount of HP and MP** while affected.`,
-				ailments: {
-					nonboss: {
-						weak: `Does **not** restore HP and MP.`,
-						normal: `Restores **1/20th** of max HP and max MP`,
-						resist: `Restores **1/10th** of max HP and max MP`,
-					},
-					boss: `Let's them do their turn instead of immobilizing.`
-				}
-			},
-			{
-				name: "despair",
-				desc: `Takes **an amount of MP** each turn until **3 turns pass, cured, or until the afflected runs out of MP** which renders them defeated.`,
-				ailments: {
-					nonboss: {
-						weak: `Takes **1/5th** of max MP.`,
-						normal: `Takes **1/10th** of max MP.`,
-						resist: `Takes **1/20th** of max MP.`,
-					},
-					boss: `Takes **10 MP**.`
-				}
-			},
-			{
-				name: "brainwash",
-				desc: `Forces the afflicted to use a random move from their pool on the flipped target *(one -> ally)* for **an amount of turns. Will make afflicted hit themselves if no usable skills are detected.**`,
-				ailments: {
-					nonboss: {
-						weak: `Lasts **3 turns**.`,
-						normal: `Lasts **2 turns**.`,
-						resist: `Lasts **1 turn**.`,
-					},
-					boss: `Shakes it off immediately.`
-				}
-			},
-			{
-				name: "fear",
-				desc: `Has **a chance** to immobilize the afflicted, but will pass if **3 turns pass, cured, or takes effect**.`,
-				ailments: {
-					nonboss: {
-						weak: `**75%** chance to immobilize, **but will not remove itself once it takes effect.**.`,
-						normal: `**50%** chance to immobilize.`,
-						resist: `**25%** chance to immobilize.`,
-					},
-					boss: `Shakes it off immediately.`
-				}
-			},
-			{
-				name: "rage",
-				desc: `Forces the afflicted to use a stronger melee attack on a random target for **an amount of turns**`,
-				ailments: {
-					nonboss: {
-						weak: `Lasts **3 turns**.`,
-						normal: `Lasts **2 turns**.`,
-						resist: `Lasts **1 turn**.`,
-					},
-					boss: `Shakes it off immediately.`
-				}
-			},
-			{
-				name: "ego",
-				desc: `Disables healing skill usage for **an amount of turns**.`,
-				ailments: {
-					nonboss: {
-						weak: `Lasts **5 turns**.`,
-						normal: `Lasts **3 turns**.`,
-						resist: `Lasts **1 turn**.`,
-					},
-					boss: `Lasts **1 turn**.`
-				}
-			},
-			{
-				name: "silence",
-				desc: `Disables magical skill usage and prevents the afflicted from being healed for **an amount of turns**.`,
-				ailments: {
-					nonboss: {
-						weak: `Lasts **3 turns**.`,
-						normal: `Lasts **2 turns**.`,
-						resist: `Lasts **1 turn**.`,
-					},
-					boss: `Lasts **1 turn**.`
-				}
-			},
-			{
-				name: "infatuation",
-				desc: `Has a 50% chance to hault attack for **3 turns**.`,
-			},
-			{
-				name: "guilt",
-				desc: `Has a 50% chance to hault attack for **3 turns**. Unlike <:infatuation:963413990195757107>**Infatuation**, the user may still use items.`,
-			},
-			{
-				name: "confusion",
-				desc: `Has a 50% chance for the afflicted to hit themselves for **3 turns**.`,
-			},
-			{
-				name: "sensitive",
-				desc: `Debuffs a **random** stat once hit a single time per opponent *(2 hits from 2 opponents -> 2 debuffs, 2 hits from 1 opponent -> 1 debuff)* for **an amount of turns**.`,
-				ailments: {
-					nonboss: {
-						weak: `Lasts **2 turns** but debuffs **two** random statuses instead.`,
-						normal: `Lasts **2 turns**.`,
-						resist: `Lasts **1 turn**.`,
-					},
-					boss: `Lasts **1 turn**.`
-				}
-			},
-			{
-				name: "insanity",
-				desc: `May force the afflicted to take *one of multiple actions* for **an amount of turns**. The possible actions are:\n- Skip Turn\n- Random skill on a random target\n- Insanity Action (Buff random enemy's random stat once / Debuff the afflicted's random stat once / Heal a random target with 50 power)`,
-				ailments: {
-					nonboss: {
-						weak: `Lasts **3 turns**.`,
-						normal: `Lasts **3 turns** and **removes Insanity Action** from the effects pool.`,
-						resist: `Lasts **3 turns** and **removes Insanity Action and Random Skill** from the effects pool.`,
-					},
-					boss: {
-						weak: `Lasts **1 turn** and **removes Insanity Action** from the effects pool.`,
-						normal: `Lasts **1 turn** and **removes Insanity Action and Random Skill** from the effects pool`,
-						resist: `Shakes it off immediately.`,
-					}
-				}
-			},
-			{
-				name: "apathy",
-				desc: "Weaken the gain of the **Limit Break Meter**, to 0.5x. Has no effect if **Limit Breaks** are disabled on this server.",
-				ailments: {
-					nonboss: {
-						weak: "Lasts **4 turns**, 0.25x.",
-						normal: "Lasts **3 turns**, 0.5x.",
-						resist: "Lasts **2 turns.**, 0.75x.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
-			},
-			{
-				name: "leisure",
-				desc: "Always last in the turn order, no matter what. Overrides things such as <:psychic:1225515672646324366>**Psychic Terrain**.",
-				ailments: {
-					nonboss: {
-						weak: "Lasts **4 turns**.",
-						normal: "Lasts **3 turns**.",
-						resist: "Lasts **2 turns.**.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
-			},
-			{
-				name: "target",
-				desc: "Becomes the only one targetted by single target or otherwise skills that require you to focus a single foe.",
-				ailments: {
-					nonboss: {
-						weak: "Lasts **3 turns**.",
-						normal: "Lasts **2 turns**.",
-						resist: "Lasts **1 turn**.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
-			},
-			{
-				name: "unstable",
-				desc: "Tracks how much the afflicted spent for **5 turns**, and damages the afflicted once it expires **on its own**. Can be safely removed otherwise.\nIf a **non-stackable status ailment** is inflicted on the afflicted, it gets safely removed and its turn count **adds to the new status ailment**.",
-				ailments: {
-					nonboss: {
-						weak: "Tracks **100%** of HP/MP spent, **200%** of LB spent, **300%** of money spent.",
-						normal: "Tracks **50%** of HP/MP spent, **100%** of LB spent, **150%** of money spent.",
-						resist: "Tracks **25%** of HP/MP spent, **50%** of LB spent, **75%** of money spent.",
-					},
-					boss: "Damage is **multiplied by 1.5x** but duration is reduced to **4 turns**. Acts as normal otherwise."
-				}
-			},
-		]
+			boss: `Takes **10 HP**.`
+		}
 	},
 	{
-		title: "<:neutral:1225860206429208746> Neutral Status Ailments",
-		statuses: [
-			{
-				name: "dry",
-				desc: `Increases ${elementEmoji["fire"]}**fire** and ${elementEmoji["earth"]}**earth** damage. Decreases ${elementEmoji["ice"]}**ice** and ${elementEmoji["electric"]}**electric**.`,
-				ailments: {
-					nonboss: {
-						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
-						normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
-						resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
+		name: "freeze",
+		desc: "Immobilizes the afflicted for an **amount of turns**. Identical to <:stun:1225850856021168200>**Stun**, except with flavour text.",
+		ailments: {
+			nonboss: {
+				weak: `Lasts **2 turns**.`,
+				normal: `Lasts **1 turn**.`,
+				resist: `Lasts **1 turn, but has a 50% chance of thawing out**.`,
 			},
-			{
-				name: "wet",
-				desc: `Increases ${elementEmoji["ice"]}**ice** and ${elementEmoji["electric"]}**electric** damage. Decreases ${elementEmoji["fire"]}**fire** and ${elementEmoji["nuclear"]}**nuclear**.`,
-				ailments: {
-					nonboss: {
-						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
-						normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
-						resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
-			},
-			{
-				name: "light",
-				desc: `Increases ${elementEmoji["wind"]}**wind** and ${elementEmoji["explode"]}**explode** damage. Decreases ${elementEmoji["strike"]}**strike** and ${elementEmoji["earth"]}**earth**.`,
-				ailments: {
-					nonboss: {
-						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
-						normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
-						resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
-			},
-			{
-				name: "heavy",
-				desc: `Increases ${elementEmoji["strike"]}**strike** and ${elementEmoji["earth"]}**earth** damage. Decreases ${elementEmoji["wind"]}**wind** and ${elementEmoji["explode"]}**explode**.`,
-				ailments: {
-					nonboss: {
-						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
-						normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
-						resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
-			},
-			{
-				name: "enchanted",
-				desc: "Immune to Magic. **Double Damage taken from Physical and Ranged attacks.**",
-				ailments: {
-					nonboss: {
-						weak: "**3x** damage from physical attacks.",
-						normal: "**2x** damage from physical attacks.",
-						resist: "**1.5x** damage from physical attacks.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
-			},
-			{
-				name: "invisible",
-				desc: "Immune to Physical and Ranged attacks. **Double Damage taken from Magic attacks.**",
-				ailments: {
-					nonboss: {
-						weak: "**3x** damage from magic attacks.",
-						normal: "**2x** damage from magic attacks.",
-						resist: "**1.5x** damage from magic attacks.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
-			},
-			{
-				name: "chilled",
-				desc: `Increases ${elementEmoji["ice"]}**ice** and ${elementEmoji["water"]}**water** damage. Decreases ${elementEmoji["fire"]}**fire** and ${elementEmoji["grass"]}**grass**.`,
-				ailments: {
-					nonboss: {
-						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
-						normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
-						resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
-			},
-			{
-				name: "overheat",
-				desc: `Increases ${elementEmoji["fire"]}**fire** and ${elementEmoji["metal"]}**metal** damage. Decreases ${elementEmoji["ice"]}**ice** and ${elementEmoji["water"]}**water**.`,
-				ailments: {
-					nonboss: {
-						weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
-						normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
-						resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
-			},
-			{
-				name: "brimstone",
-				desc: `Reverses buffs and debuffs for the duration of the effect.`,
-				ailments: {
-					nonboss: {
-						weak: `Reverses **only buffs**.`,
-						normal: `Acts like normal.`,
-						resist: `Reverses **only debuffs**.`,
-					},
-					boss: `Reverses **only debuffs**.`
-				}
-			},
-			{
-				name: "trisagion",
-				desc: `Doubles the effectiveness of buffs and debuffs for the duration of the effect.`,
-				ailments: {
-					nonboss: {
-						weak: `Doubles the effectiveness of **only buffs**.`,
-						normal: `Acts like normal.`,
-						resist: `Doubles the effectiveness of **only debuffs**.`,
-					},
-					boss: `Doubles the effectiveness of **only buffs**.`
-				}
-			},
-			{
-				name: "neutralized",
-				desc: "Prevents **any status ailment** from applying to the afflicted while this status effect is active. Will remove the ones the afflicted already has.",
-				ailments: {
-					nonboss: {
-						weak: "Lasts **4 turns**.",
-						normal: "Lasts **3 turns**.",
-						resist: "Lasts **2 turns**.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
-			},
-		]
+			boss: `**Thaws out immediately**.`
+		}
 	},
 	{
-		title: "<:positive:1225860207964585994> Positive Ailments",
-		statuses: [
-			{
-				name: "mirror",
-				desc: `Immobilizes for **3 turns**. ${affinityEmoji["repel"]}**Repels** magic skills, but may make **${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode** skills more effective.`,
-				ailments: {
-					nonboss: {
-						weak: `Effectiveness of **${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode** skills is ${affinityEmoji["weak"]}**weak**.`,
-						normal: `Effectiveness of **${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode** skills is ${affinityEmoji["superweak"]}**superweak**.`,
-						resist: `Effectiveness of **${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode** skills is ${affinityEmoji["deadly"]}**deadly**.`,
-					},
-					boss: `Effectiveness of **${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode** skills is unchanged.`
-				}
+		name: "petrified",
+		desc: `Immobilizes the afflicted for an **amount of turns**. Increases damage resistance **by an amount**, but sharply raises ${critEmoji}**critical** damage taken.`,
+		ailments: {
+			nonboss: {
+				weak: `Lasts **3 turns**, raises damage resistance by **3%** and raises ${critEmoji}**critical** damage taken by **40%**.`,
+				normal: `Lasts **2 turns**, raises damage resistance by **4%** and raises ${critEmoji}**critical** damage taken by **20%**.`,
+				resist: `Lasts **1 turn**, raises damage resistance by **5%** and raises ${critEmoji}**critical** damage taken by **10%**.`,
 			},
-			{
-				name: "dragonscale",
-				desc: `Immobilizes for **3 turns**. ${affinityEmoji["repel"]}**Repels** physical skills, but may make **${elementEmoji["psychic"]}Psychic, ${elementEmoji["spirit"]}Spirit, ${elementEmoji["bless"]}Bless, ${elementEmoji["curse"]}Curse and ${elementEmoji["nuclear"]}Nuclear** skills more effective.`,
-				ailments: {
-					nonboss: {
-						weak: `Effectiveness of **${elementEmoji["psychic"]}Psychic, ${elementEmoji["spirit"]}Spirit, ${elementEmoji["bless"]}Bless, ${elementEmoji["curse"]}Curse and ${elementEmoji["nuclear"]}Nuclear** skills is ${affinityEmoji["weak"]}**Weak**.`,
-						normal: `Effectiveness of **${elementEmoji["psychic"]}Psychic, ${elementEmoji["spirit"]}Spirit, ${elementEmoji["bless"]}Bless, ${elementEmoji["curse"]}Curse and ${elementEmoji["nuclear"]}Nuclear** skills is ${affinityEmoji["superweak"]}**SuperWeak**.`,
-						resist: `Effectiveness of **${elementEmoji["psychic"]}Psychic, ${elementEmoji["spirit"]}Spirit, ${elementEmoji["bless"]}Bless, ${elementEmoji["curse"]}Curse and ${elementEmoji["nuclear"]}Nuclear** skills is ${affinityEmoji["deadly"]}**Deadly**.`,
-					},
-					boss: `Effectiveness of **${elementEmoji["psychic"]}Psychic, ${elementEmoji["spirit"]}Spirit, ${elementEmoji["bless"]}Bless, ${elementEmoji["curse"]}Curse and ${elementEmoji["nuclear"]}Nuclear** skills is unchanged.`
-				}
+			boss: `**Breaks out immediately**.`
+		}
+	},
+	{
+		name: "stun",
+		desc: "Immobilizes the afflicted for an **amount of turns**. Identical to <:freeze:963387466885259324>**Freeze**, except with flavour text.",
+		ailments: {
+			nonboss: {
+				weak: `Lasts **2 turns**.`,
+				normal: `Lasts **1 turn**.`,
+				resist: `Lasts **1 turn, but has a 50% chance of shaking it off**.`,
 			},
-			{
-				name: "airborne",
-				desc: `Disables effects of terrain for the afflicted for **3 turns**, but **may expire if they use a physical skill**. Increases dodge chance *(physical -> may increase by 100%, other -> may increase by 10%)* and doubles afflicted's physical skill power.`,
-				ailments: {
-					nonboss: {
-						weak: `**Won't** expire if they use a physical skill and **doubles** dodge chance addition.`,
-						normal: `Dodge chance addition is **regular**.`,
-						resist: `**Halves** dodge chance addition.`,
-					},
-					boss: `**Won't** expire if they use a physical skill and **doubles** dodge chance addition.`
-				}
+			boss: `*Shakes it off immediately*.`
+		}
+	},
+	{
+		name: "paralyze",
+		desc: `Has **a chance** to immobilize the afflicted until expired. Halves chance each turn.`,
+		ailments: {
+			nonboss: {
+				weak: `Lasts **5 turns** and sets initial paralyze chance to **160%**.`,
+				normal: `Lasts **4 turns** and sets initial paralyze chance to **80%**.`,
+				resist: `Lasts **3 turns** and sets initial paralyze chance to **40%**.`,
 			},
-			{
-				name: "cloud9",
-				desc: `Disables effects of weather for the afflicted for **3 turns**, but **may expire if they use a magic skill**. Increases dodge chance *(magic -> may increase by 100%, other -> may increase by 10%)* and doubles afflicted's magic skill power.`,
-				ailments: {
-					nonboss: {
-						weak: `**Won't** expire if they use a magic skill and **doubles** dodge chance addition.`,
-						normal: `Dodge chance addition is **regular**.`,
-						resist: `**Halves** dodge chance addition.`,
-					},
-					boss: `**Won't** expire if they use a magic skill and **doubles** dodge chance addition.`
-				}
+			boss: `*Shakes it off immediately*.`
+		}
+	},
+	{
+		name: "toxin",
+		desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once 1 HP is reached**. May change the ${statusEmojis["magdown"]}**MAG** stat.`,
+		ailments: {
+			nonboss: {
+				weak: `Takes **1/5th** of max HP & **1/4s** the ${statusEmojis["magdown"]}**MAG** stat.`,
+				normal: `Takes **1/10th** of max HP & **1/2s** the ${statusEmojis["magdown"]}**MAG** stat.`,
+				resist: `Takes **1/20th** of max HP & **1/1.25s** the ${statusEmojis["magdown"]}**MAG** stat.`,
 			},
-			{
-				name: "happy",
-				desc: `Increases ${statusEmojis["critup"]}**LUK** & ${statusEmojis["aglup"]}**AGL** stats positively based on level for **3 turns**, but decreases the ${statusEmojis["prcdown"]}**PRC** stat by **1/10th** of the afflicted's level.`,
-				ailments: {
-					nonboss: {
-						weak: `${statusEmojis["critup"]}**LUK** & ${statusEmojis["aglup"]}**AGL** increased by **1/7th** of afflicted's level`,
-						normal: `${statusEmojis["critup"]}**LUK** & ${statusEmojis["aglup"]}**AGL** increased by **1/10th** of afflicted's level`,
-						resist: `${statusEmojis["critup"]}**LUK** & ${statusEmojis["aglup"]}**AGL** increased by **1/15th** of afflicted's level`,
-					},
-					boss: `Affects them the same as non-bosses.`
-				}
+			boss: `Takes **5 HP** & doesn't change ${statusEmojis["magdown"]}**MAG** stat.`
+		}
+	},
+	{
+		name: "dazed",
+		desc: `Disables physical and ranged skill usage for **an amount of turns**.`,
+		ailments: {
+			nonboss: {
+				weak: `Lasts **3 turns**.`,
+				normal: `Lasts **2 turns**.`,
+				resist: `Lasts **1 turn**.`,
 			},
-			{
-				name: "blessed",
-				desc: "Prevents **negative status ailments** from applying to the afflicted while this status effect is active. Will remove the ones the afflicted already has.",
-				ailments: {
-					nonboss: {
-						weak: "Lasts **4 turns**.",
-						normal: "Lasts **3 turns**.",
-						resist: "Lasts **2 turns**.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
+			boss: `Lasts **1 turn**.`
+		}
+	},
+	{
+		name: "hunger",
+		desc: `May alter ${statusEmojis["atkdown"]}**ATK** & ${statusEmojis["magdown"]}**MAG** stats.`,
+		ailments: {
+			nonboss: {
+				weak: `**1/4s** ${statusEmojis["atkdown"]}**ATK** & ${statusEmojis["magdown"]}**MAG** stats.`,
+				normal: `**1/2s** ${statusEmojis["atkdown"]}**ATK** & ${statusEmojis["magdown"]}**MAG** stats.`,
+				resist: `**1/1.25s** ${statusEmojis["atkdown"]}A**TK** & ${statusEmojis["magdown"]}**MAG** stats.`,
 			},
-			{
-				name: "brave",
-				desc: "Boost the gain of the **Limit Break Meter**, by 1.5x. Has no effect if **Limit Breaks** are disabled on this server.",
-				ailments: {
-					nonboss: {
-						weak: "Lasts **4 turns.**, 1.75x.",
-						normal: "Lasts **3 turns**, 1.5x.",
-						resist: "Lasts **2 turns**, 1.25x.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
+			boss: `Affects them the same as non-bosses.`
+		}
+	},
+	{
+		name: "blind",
+		desc: `May alter ${statusEmojis["prcdown"]}**PRC** & ${statusEmojis["agldown"]}**AGL** stats.`,
+		ailments: {
+			nonboss: {
+				weak: `**1/4s** ${statusEmojis["prcdown"]}**PRC** & ${statusEmojis["agldown"]}**AGL** stats.`,
+				normal: `**1/2s** ${statusEmojis["prcdown"]}**PRC** & ${statusEmojis["agldown"]}**AGL** stats.`,
+				resist: `**1/1.25s** ${statusEmojis["prcdown"]}**PRC** & ${statusEmojis["agldown"]}**AGL** stats.`,
 			},
-			{
-				name: "lovable",
-				desc: "Incapable of being targetted by single target or otherwise skills that require you to focus a single foe.",
-				ailments: {
-					nonboss: {
-						weak: "Lasts **3 turns**.",
-						normal: "Lasts **2 turns**.",
-						resist: "Lasts **1 turn**.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
+			boss: `Affects them the same as non-bosses.`
+		}
+	},
+	{
+		name: "irradiation",
+		desc: `Switches **an amount of random stats** for **an amount of turns**.`,
+		ailments: {
+			nonboss: {
+				weak: `Lasts **5 turns** and switches **3 stats**.`,
+				normal: `Lasts **3 turns** and switches **2 stats**.`,
+				resist: `Lasts **1 turn** and switches **2 stats**.`,
 			},
-			{
-				name: "energized",
-				desc: `Decreases skill cost **by an amount**.`,
-				ailments: {
-					nonboss: {
-						weak: `Decreases cost by **30%**.`,
-						normal: `Decreases cost by **20%**.`,
-						resist: `Decreases cost by **10%**.`,
-					},
-					boss: `Decreases cost by **30%**.`
-				}
+			boss: `Affects them the same as non-bosses.`
+		}
+	},
+	{
+		name: "drenched",
+		desc: `Nullifies status affinities for **3 turns**.`,
+	},
+	{
+		name: "stagger",
+		desc: "The next attack dealt to the afflicted is a **guaranteed** critical hit.",
+	},
+	{
+		name: "shrouded",
+		desc: "Incapable of seeing the afflicted's current stats.",
+		ailments: {
+			nonboss: {
+				weak: "Lasts **4 turns**.",
+				normal: "Lasts **3 turns**.",
+				resist: "**Can see HP**.",
 			},
-			{
-				name: "haste",
-				desc: "Always first in the turn order, no matter what. Overrides things such as <:psychic:1225515672646324366>**Psychic Terrain**.",
-				ailments: {
-					nonboss: {
-						weak: "Lasts **4 turns**.",
-						normal: "Lasts **3 turns**.",
-						resist: "Lasts **2 turns.**.",
-					},
-					boss: "Affects them the same as non-bosses."
-				}
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "dissolved",
+		desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once 1 HP is reached**. May change the ${statusEmojis["enddown"]}**END** stat. Has a chance to **dissolve the afflicted's armor**.`,
+		ailments: {
+			nonboss: {
+				weak: `Takes **1/5th** of max HP & **1/4s** the ${statusEmojis["enddown"]}**END** stat. Has a **20%** chance of dissolving the afflicted's armor.`,
+				normal: `Takes **1/10th** of max HP & **1/2s** the ${statusEmojis["enddown"]}**END** stat. Has a **10%** chance of dissolving the afflicted's armor.`,
+				resist: `Takes **1/20th** of max HP & **1/1.25s** the ${statusEmojis["enddown"]}**END** stat. Has a **5%** chance of dissolving the afflicted's armor.`,
+			},
+			boss: `Takes **5 HP** & **doesn't change ${statusEmojis["enddown"]}END stat**. Bosses can't wear armor in the first place.`
+		}
+	},
+	{
+		name: "doomed",
+		desc: `Take increased damage from ${elementEmoji["bless"]}**Bless** skills. *May change the ${statusEmojis["enddown"]}END stat*.`,
+		ailments: {
+			nonboss: {
+				weak: `Doubled damage from ${elementEmoji["bless"]}**Bless** skills. *1/2s* the ${statusEmojis["enddown"]}END stat.`,
+				normal: `1.5x damage from ${elementEmoji["bless"]}**Bless** skills. *1/2s* the ${statusEmojis["enddown"]}END stat.`,
+				resist: `1.25x damage from ${elementEmoji["bless"]}**Bless** skills. *0.75x* the ${statusEmojis["enddown"]}END stat.`,
+			},
+			boss: {
+				weak: `1.75x damage from ${elementEmoji["bless"]}**Bless** skills. *Doesn't change ${statusEmojis["enddown"]}END stat*.`,
+				normal: `1.5x damage from ${elementEmoji["bless"]}**Bless** skills. *Doesn't change ${statusEmojis["enddown"]}END stat*.`,
+				resist: `1.25x damage from ${elementEmoji["bless"]}**Bless** skills. *Doesn't change ${statusEmojis["enddown"]}END stat*.`,
+			},
+		}
+	},
+	{
+		name: "weakened",
+		desc: `Take increased damage from ${elementEmoji["curse"]}**Curse** skills. *May change the ${statusEmojis["atkdown"]}ATK stat*.`,
+		ailments: {
+			nonboss: {
+				weak: `Doubled damage from ${elementEmoji["curse"]}**Curse** skills. *1/2s* the ${statusEmojis["atkdown"]}ATK stat.`,
+				normal: `1.5x damage from ${elementEmoji["curse"]}**Curse** skills. *1/2s* the ${statusEmojis["atkdown"]}ATK stat.`,
+				resist: `1.25x damage from ${elementEmoji["curse"]}**Curse** skills. *0.75x* the ${statusEmojis["atkdown"]}ATK stat.`,
+			},
+			boss: {
+				weak: `1.75x damage from ${elementEmoji["curse"]}**Curse** skills. *Doesn't change ${statusEmojis["atkdown"]}ATK stat*.`,
+				normal: `1.5x damage from ${elementEmoji["curse"]}**Curse** skills. *Doesn't change ${statusEmojis["atkdown"]}ATK stat*.`,
+				resist: `1.25x damage from ${elementEmoji["curse"]}**Curse** skills. *Doesn't change ${statusEmojis["atkdown"]}ATK stat*.`,
+			},
+		}
+	},
+	{
+		name: "grassimped",
+		desc: "You're turned into a Grassimp! How do you do anything in this weird, bushy form?",
+		ailments: {
+			nonboss: "You cannot have affinities toward this Status Ailment short of blocking.",
+			boss: "Immune to this status ailment."
+		}
+	},
+	{
+		name: "stuffed",
+		desc: "Cannot use consumable items.",
+		ailments: {
+			nonboss: {
+				weak: `Lasts **3 turns**.`,
+				normal: `Lasts **2 turns**.`,
+				resist: `Lasts **1 turn**.`,
+			},
+			boss: `Lasts **1 turn**.`
+		}
+	},
+	{
+		name: "disabled",
+		desc: "Prevents afflicted from using any skills. Can only use the melee attack and items.",
+		ailments: {
+			nonboss: {
+				weak: "Lasts **3 turns**.",
+				normal: "Lasts **2 turns**.",
+				resist: "Lasts **1 turn**.",
+			},
+			boss: "Lasts **1 turn**."
+		}
+	},
+	{
+		name: "tired",
+		desc: `Increases skill cost **by an amount**.`,
+		ailments: {
+			nonboss: {
+				weak: `Increases cost by **30%**.`,
+				normal: `Increases cost by **20%**.`,
+				resist: `Increases cost by **10%**.`,
+			},
+			boss: `Increases cost by **10%**.`
+		}
+	},
+	{
+		name: "cursed",
+		desc: "Prevents **positive status ailments** from applying to the afflicted while this status effect is active. Will remove the ones the afflicted already has.",
+		ailments: {
+			nonboss: {
+				weak: "Lasts **4 turns**.",
+				normal: "Lasts **3 turns**.",
+				resist: "Lasts **2 turns**.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "dispelled",
+		desc: "Cannot afflict **any status effect** to a target while this status effect is active.",
+		ailments: {
+			nonboss: "You cannot have affinities toward this Status Ailment at all.",
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "dizzy",
+		desc: `Halves accuracy of all skills for **2 turns**.`,
+	},
+	{
+		name: "sleep",
+		desc: `Immobilizes for **1 turn**. May restore **an amount of HP and MP** while affected.`,
+		ailments: {
+			nonboss: {
+				weak: `Does **not** restore HP and MP.`,
+				normal: `Restores **1/20th** of max HP and max MP`,
+				resist: `Restores **1/10th** of max HP and max MP`,
+			},
+			boss: `Let's them do their turn instead of immobilizing.`
+		}
+	},
+	{
+		name: "despair",
+		desc: `Takes **an amount of MP** each turn until **3 turns pass, cured, or until the afflected runs out of MP** which renders them defeated.`,
+		ailments: {
+			nonboss: {
+				weak: `Takes **1/5th** of max MP.`,
+				normal: `Takes **1/10th** of max MP.`,
+				resist: `Takes **1/20th** of max MP.`,
+			},
+			boss: `Takes **10 MP**.`
+		}
+	},
+	{
+		name: "brainwash",
+		desc: `Forces the afflicted to use a random move from their pool on the flipped target *(one -> ally)* for **an amount of turns. Will make afflicted hit themselves if no usable skills are detected.**`,
+		ailments: {
+			nonboss: {
+				weak: `Lasts **3 turns**.`,
+				normal: `Lasts **2 turns**.`,
+				resist: `Lasts **1 turn**.`,
+			},
+			boss: `Shakes it off immediately.`
+		}
+	},
+	{
+		name: "fear",
+		desc: `Has **a chance** to immobilize the afflicted, but will pass if **3 turns pass, cured, or takes effect**.`,
+		ailments: {
+			nonboss: {
+				weak: `**75%** chance to immobilize, **but will not remove itself once it takes effect.**.`,
+				normal: `**50%** chance to immobilize.`,
+				resist: `**25%** chance to immobilize.`,
+			},
+			boss: `Shakes it off immediately.`
+		}
+	},
+	{
+		name: "rage",
+		desc: `Forces the afflicted to use a stronger melee attack on a random target for **an amount of turns**`,
+		ailments: {
+			nonboss: {
+				weak: `Lasts **3 turns**.`,
+				normal: `Lasts **2 turns**.`,
+				resist: `Lasts **1 turn**.`,
+			},
+			boss: `Shakes it off immediately.`
+		}
+	},
+	{
+		name: "ego",
+		desc: `Disables healing skill usage for **an amount of turns**.`,
+		ailments: {
+			nonboss: {
+				weak: `Lasts **5 turns**.`,
+				normal: `Lasts **3 turns**.`,
+				resist: `Lasts **1 turn**.`,
+			},
+			boss: `Lasts **1 turn**.`
+		}
+	},
+	{
+		name: "silence",
+		desc: `Disables magical skill usage and prevents the afflicted from being healed for **an amount of turns**.`,
+		ailments: {
+			nonboss: {
+				weak: `Lasts **3 turns**.`,
+				normal: `Lasts **2 turns**.`,
+				resist: `Lasts **1 turn**.`,
+			},
+			boss: `Lasts **1 turn**.`
+		}
+	},
+	{
+		name: "infatuation",
+		desc: `Has a 50% chance to hault attack for **3 turns**.`,
+	},
+	{
+		name: "guilt",
+		desc: `Has a 50% chance to hault attack for **3 turns**. Unlike <:infatuation:963413990195757107>**Infatuation**, the user may still use items.`,
+	},
+	{
+		name: "confusion",
+		desc: `Has a 50% chance for the afflicted to hit themselves for **3 turns**.`,
+	},
+	{
+		name: "sensitive",
+		desc: `Debuffs a **random** stat once hit a single time per opponent *(2 hits from 2 opponents -> 2 debuffs, 2 hits from 1 opponent -> 1 debuff)* for **an amount of turns**.`,
+		ailments: {
+			nonboss: {
+				weak: `Lasts **2 turns** but debuffs **two** random statuses instead.`,
+				normal: `Lasts **2 turns**.`,
+				resist: `Lasts **1 turn**.`,
+			},
+			boss: `Lasts **1 turn**.`
+		}
+	},
+	{
+		name: "insanity",
+		desc: `May force the afflicted to take *one of multiple actions* for **an amount of turns**. The possible actions are:\n- Skip Turn\n- Random skill on a random target\n- Insanity Action (Buff random enemy's random stat once / Debuff the afflicted's random stat once / Heal a random target with 50 power)`,
+		ailments: {
+			nonboss: {
+				weak: `Lasts **3 turns**.`,
+				normal: `Lasts **3 turns** and **removes Insanity Action** from the effects pool.`,
+				resist: `Lasts **3 turns** and **removes Insanity Action and Random Skill** from the effects pool.`,
+			},
+			boss: {
+				weak: `Lasts **1 turn** and **removes Insanity Action** from the effects pool.`,
+				normal: `Lasts **1 turn** and **removes Insanity Action and Random Skill** from the effects pool`,
+				resist: `Shakes it off immediately.`,
 			}
-		]
+		}
+	},
+	{
+		name: "apathy",
+		desc: "Weaken the gain of the **Limit Break Meter**, to 0.5x. Has no effect if **Limit Breaks** are disabled on this server.",
+		ailments: {
+			nonboss: {
+				weak: "Lasts **4 turns**, 0.25x.",
+				normal: "Lasts **3 turns**, 0.5x.",
+				resist: "Lasts **2 turns.**, 0.75x.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "leisure",
+		desc: "Always last in the turn order, no matter what. Overrides things such as <:psychic:1225515672646324366>**Psychic Terrain**.",
+		ailments: {
+			nonboss: {
+				weak: "Lasts **4 turns**.",
+				normal: "Lasts **3 turns**.",
+				resist: "Lasts **2 turns.**.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "target",
+		desc: "Becomes the only one targetted by single target or otherwise skills that require you to focus a single foe.",
+		ailments: {
+			nonboss: {
+				weak: "Lasts **3 turns**.",
+				normal: "Lasts **2 turns**.",
+				resist: "Lasts **1 turn**.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "unstable",
+		desc: "Tracks how much the afflicted spent for **5 turns**, and damages the afflicted once it expires **on its own**. Can be safely removed otherwise.\nIf a **non-stackable status ailment** is inflicted on the afflicted, it gets safely removed and its turn count **adds to the new status ailment**.",
+		ailments: {
+			nonboss: {
+				weak: "Tracks **100%** of HP/MP spent, **200%** of LB spent, **300%** of money spent.",
+				normal: "Tracks **50%** of HP/MP spent, **100%** of LB spent, **150%** of money spent.",
+				resist: "Tracks **25%** of HP/MP spent, **50%** of LB spent, **75%** of money spent.",
+			},
+			boss: "Damage is **multiplied by 1.5x** but duration is reduced to **4 turns**. Acts as normal otherwise."
+		}
+	},
+	{
+		name: "dry",
+		desc: `Increases ${elementEmoji["fire"]}**fire** and ${elementEmoji["earth"]}**earth** damage. Decreases ${elementEmoji["ice"]}**ice** and ${elementEmoji["electric"]}**electric**.`,
+		ailments: {
+			nonboss: {
+				weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
+				normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
+				resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "wet",
+		desc: `Increases ${elementEmoji["ice"]}**ice** and ${elementEmoji["electric"]}**electric** damage. Decreases ${elementEmoji["fire"]}**fire** and ${elementEmoji["nuclear"]}**nuclear**.`,
+		ailments: {
+			nonboss: {
+				weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
+				normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
+				resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "light",
+		desc: `Increases ${elementEmoji["wind"]}**wind** and ${elementEmoji["explode"]}**explode** damage. Decreases ${elementEmoji["strike"]}**strike** and ${elementEmoji["earth"]}**earth**.`,
+		ailments: {
+			nonboss: {
+				weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
+				normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
+				resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "heavy",
+		desc: `Increases ${elementEmoji["strike"]}**strike** and ${elementEmoji["earth"]}**earth** damage. Decreases ${elementEmoji["wind"]}**wind** and ${elementEmoji["explode"]}**explode**.`,
+		ailments: {
+			nonboss: {
+				weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
+				normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
+				resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "enchanted",
+		desc: "Immune to Magic. **Double Damage taken from Physical and Ranged attacks.**",
+		ailments: {
+			nonboss: {
+				weak: "**3x** damage from physical attacks.",
+				normal: "**2x** damage from physical attacks.",
+				resist: "**1.5x** damage from physical attacks.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "invisible",
+		desc: "Immune to Physical and Ranged attacks. **Double Damage taken from Magic attacks.**",
+		ailments: {
+			nonboss: {
+				weak: "**3x** damage from magic attacks.",
+				normal: "**2x** damage from magic attacks.",
+				resist: "**1.5x** damage from magic attacks.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "chilled",
+		desc: `Increases ${elementEmoji["ice"]}**ice** and ${elementEmoji["water"]}**water** damage. Decreases ${elementEmoji["fire"]}**fire** and ${elementEmoji["grass"]}**grass**.`,
+		ailments: {
+			nonboss: {
+				weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
+				normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
+				resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "overheat",
+		desc: `Increases ${elementEmoji["fire"]}**fire** and ${elementEmoji["metal"]}**metal** damage. Decreases ${elementEmoji["ice"]}**ice** and ${elementEmoji["water"]}**water**.`,
+		ailments: {
+			nonboss: {
+				weak: "Increase the modifiers to **1.75x**, and **0.75x** respectively.",
+				normal: "Modifiers are at **1.5x**, and **0.5x** respectively.",
+				resist: "Increase the modifiers to **1.25x**, and **0.25x** respectively.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "brimstone",
+		desc: `Reverses buffs and debuffs for the duration of the effect.`,
+		ailments: {
+			nonboss: {
+				weak: `Reverses **only buffs**.`,
+				normal: `Acts like normal.`,
+				resist: `Reverses **only debuffs**.`,
+			},
+			boss: `Reverses **only debuffs**.`
+		}
+	},
+	{
+		name: "trisagion",
+		desc: `Doubles the effectiveness of buffs and debuffs for the duration of the effect.`,
+		ailments: {
+			nonboss: {
+				weak: `Doubles the effectiveness of **only buffs**.`,
+				normal: `Acts like normal.`,
+				resist: `Doubles the effectiveness of **only debuffs**.`,
+			},
+			boss: `Doubles the effectiveness of **only buffs**.`
+		}
+	},
+	{
+		name: "neutralized",
+		desc: "Prevents **any status ailment** from applying to the afflicted while this status effect is active. Will remove the ones the afflicted already has.",
+		ailments: {
+			nonboss: {
+				weak: "Lasts **4 turns**.",
+				normal: "Lasts **3 turns**.",
+				resist: "Lasts **2 turns**.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "mirror",
+		desc: `Immobilizes for **3 turns**. ${affinityEmoji["repel"]}**Repels** magic skills, but may make **${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode** skills more effective.`,
+		ailments: {
+			nonboss: {
+				weak: `Effectiveness of **${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode** skills is ${affinityEmoji["weak"]}**weak**.`,
+				normal: `Effectiveness of **${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode** skills is ${affinityEmoji["superweak"]}**superweak**.`,
+				resist: `Effectiveness of **${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode** skills is ${affinityEmoji["deadly"]}**deadly**.`,
+			},
+			boss: `Effectiveness of **${elementEmoji["strike"]}strike, ${elementEmoji["slash"]}slash, ${elementEmoji["pierce"]}pierce and ${elementEmoji["explode"]}explode** skills is unchanged.`
+		}
+	},
+	{
+		name: "dragonscale",
+		desc: `Immobilizes for **3 turns**. ${affinityEmoji["repel"]}**Repels** physical skills, but may make **${elementEmoji["psychic"]}Psychic, ${elementEmoji["spirit"]}Spirit, ${elementEmoji["bless"]}Bless, ${elementEmoji["curse"]}Curse and ${elementEmoji["nuclear"]}Nuclear** skills more effective.`,
+		ailments: {
+			nonboss: {
+				weak: `Effectiveness of **${elementEmoji["psychic"]}Psychic, ${elementEmoji["spirit"]}Spirit, ${elementEmoji["bless"]}Bless, ${elementEmoji["curse"]}Curse and ${elementEmoji["nuclear"]}Nuclear** skills is ${affinityEmoji["weak"]}**Weak**.`,
+				normal: `Effectiveness of **${elementEmoji["psychic"]}Psychic, ${elementEmoji["spirit"]}Spirit, ${elementEmoji["bless"]}Bless, ${elementEmoji["curse"]}Curse and ${elementEmoji["nuclear"]}Nuclear** skills is ${affinityEmoji["superweak"]}**SuperWeak**.`,
+				resist: `Effectiveness of **${elementEmoji["psychic"]}Psychic, ${elementEmoji["spirit"]}Spirit, ${elementEmoji["bless"]}Bless, ${elementEmoji["curse"]}Curse and ${elementEmoji["nuclear"]}Nuclear** skills is ${affinityEmoji["deadly"]}**Deadly**.`,
+			},
+			boss: `Effectiveness of **${elementEmoji["psychic"]}Psychic, ${elementEmoji["spirit"]}Spirit, ${elementEmoji["bless"]}Bless, ${elementEmoji["curse"]}Curse and ${elementEmoji["nuclear"]}Nuclear** skills is unchanged.`
+		}
+	},
+	{
+		name: "airborne",
+		desc: `Disables effects of terrain for the afflicted for **3 turns**, but **may expire if they use a physical skill**. Increases dodge chance *(physical -> may increase by 100%, other -> may increase by 10%)* and doubles afflicted's physical skill power.`,
+		ailments: {
+			nonboss: {
+				weak: `**Won't** expire if they use a physical skill and **doubles** dodge chance addition.`,
+				normal: `Dodge chance addition is **regular**.`,
+				resist: `**Halves** dodge chance addition.`,
+			},
+			boss: `**Won't** expire if they use a physical skill and **doubles** dodge chance addition.`
+		}
+	},
+	{
+		name: "cloud9",
+		desc: `Disables effects of weather for the afflicted for **3 turns**, but **may expire if they use a magic skill**. Increases dodge chance *(magic -> may increase by 100%, other -> may increase by 10%)* and doubles afflicted's magic skill power.`,
+		ailments: {
+			nonboss: {
+				weak: `**Won't** expire if they use a magic skill and **doubles** dodge chance addition.`,
+				normal: `Dodge chance addition is **regular**.`,
+				resist: `**Halves** dodge chance addition.`,
+			},
+			boss: `**Won't** expire if they use a magic skill and **doubles** dodge chance addition.`
+		}
+	},
+	{
+		name: "happy",
+		desc: `Increases ${statusEmojis["critup"]}**LUK** & ${statusEmojis["aglup"]}**AGL** stats positively based on level for **3 turns**, but decreases the ${statusEmojis["prcdown"]}**PRC** stat by **1/10th** of the afflicted's level.`,
+		ailments: {
+			nonboss: {
+				weak: `${statusEmojis["critup"]}**LUK** & ${statusEmojis["aglup"]}**AGL** increased by **1/7th** of afflicted's level`,
+				normal: `${statusEmojis["critup"]}**LUK** & ${statusEmojis["aglup"]}**AGL** increased by **1/10th** of afflicted's level`,
+				resist: `${statusEmojis["critup"]}**LUK** & ${statusEmojis["aglup"]}**AGL** increased by **1/15th** of afflicted's level`,
+			},
+			boss: `Affects them the same as non-bosses.`
+		}
+	},
+	{
+		name: "blessed",
+		desc: "Prevents **negative status ailments** from applying to the afflicted while this status effect is active. Will remove the ones the afflicted already has.",
+		ailments: {
+			nonboss: {
+				weak: "Lasts **4 turns**.",
+				normal: "Lasts **3 turns**.",
+				resist: "Lasts **2 turns**.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "brave",
+		desc: "Boost the gain of the **Limit Break Meter**, by 1.5x. Has no effect if **Limit Breaks** are disabled on this server.",
+		ailments: {
+			nonboss: {
+				weak: "Lasts **4 turns.**, 1.75x.",
+				normal: "Lasts **3 turns**, 1.5x.",
+				resist: "Lasts **2 turns**, 1.25x.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "lovable",
+		desc: "Incapable of being targetted by single target or otherwise skills that require you to focus a single foe.",
+		ailments: {
+			nonboss: {
+				weak: "Lasts **3 turns**.",
+				normal: "Lasts **2 turns**.",
+				resist: "Lasts **1 turn**.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
+	},
+	{
+		name: "energized",
+		desc: `Decreases skill cost **by an amount**.`,
+		ailments: {
+			nonboss: {
+				weak: `Decreases cost by **30%**.`,
+				normal: `Decreases cost by **20%**.`,
+				resist: `Decreases cost by **10%**.`,
+			},
+			boss: `Decreases cost by **30%**.`
+		}
+	},
+	{
+		name: "haste",
+		desc: "Always first in the turn order, no matter what. Overrides things such as <:psychic:1225515672646324366>**Psychic Terrain**.",
+		ailments: {
+			nonboss: {
+				weak: "Lasts **4 turns**.",
+				normal: "Lasts **3 turns**.",
+				resist: "Lasts **2 turns.**.",
+			},
+			boss: "Affects them the same as non-bosses."
+		}
 	}
 ]
 
-const genStatusDescription = (status, hideAffinities, page, settings, message) => {
+const genStatusDescription = (status, hideAffinities, settings, message) => {
 	let text = '';
 
-	if (!hideAffinities) {
-		text += (isPositiveStatus(status.name) ? '<:positive:1225860207964585994> *Positive*' : (isNeutralStatus(status.name) ? '<:neutral:1225860206429208746> *Neutral*' : '<:negative:1225860204118413435> *Negative*'))+'\n';
-	}
-
-	if (page == undefined || (hideAffinities && (page > 1))) {
-		text += `${isPhysicalStatus(status.name) ? '*<:physical:973077052129423411> Physical' : '*<:mental:1004855144745291887> Mental'}*\n`
-	}
+	text += (isPositiveStatus(status.name) ? '<:positive:1225860207964585994> *Positive*' : (isNeutralStatus(status.name) ? '<:neutral:1225860206429208746> *Neutral*' : '<:negative:1225860204118413435> *Negative*'))+`\n${isPhysicalStatus(status.name) ? '*<:physical:973077052129423411> Physical' : '*<:mental:1004855144745291887> Mental'}*\n`
 
 	if (settings.mechanics.technicaldamage) {
 		text += '*Techs: ';
@@ -2545,7 +2519,7 @@ const genStatusDescription = (status, hideAffinities, page, settings, message) =
 			}
 		}
 	} else {
-		if (status.ailments) text += `For full view, please refer to: __${getPrefix(message.guild.id)}getstatus ${status.name}__`
+		if (status.ailments || statusEffectFuncs[status.name].opposite) text += `Has more information. Use either *getstatus*, or *buttons*.`
 	}
 
 	return text;
@@ -2567,26 +2541,54 @@ commands.getstatus = new Command({
 
 		let statDef;
 
-		for (side in statusDescs) {
-			for (stat in statusDescs[side].statuses) {
-				if (statusDescs[side].statuses[stat].name == args[0].toLowerCase()) {
-					statDef = statusDescs[side].statuses[stat];
-					break;
-				}
+		for (stat in statusDescs) {
+			if (statusDescs[stat].name == args[0].toLowerCase()) {
+				statDef = statusDescs[stat];
+				break;
 			}
-			if (statDef) break;
 		}
 
 		message.channel.send({
 			embeds: [new Discord.MessageEmbed({
 				color: '#0099ff',
 				title: `${statusEmojis[statDef.name]}${statusNames[statDef.name]} (${statDef.name})`,
-				description: genStatusDescription(statDef, false, undefined, settings, message),
+				description: genStatusDescription(statDef, false, settings, message),
 			})]
 		})
 	}
 })
 
+const ailmentCategories = {
+	"No Filtration Option": "Everything is shown.",
+
+	//Stackability
+	"Non-stackable": "Occupies only one slot, usually has a major effect.",
+	"Stackable": "Works without boundaries, effects may be minor.",
+
+	//Type
+	"Physical": "Affects the physical body.",
+	"Mental": "Affects the mind of an individual.",
+
+	//Effect Type
+	"Negative": "Has an overall negative effect, despite potential positives.",
+	"Neutral": "Has both negative and positive effects in balance.",
+	"Positive": "Has an overall positive effect, despite potential negatives.",
+
+	//Opposites
+	"Without Opposites": "Won't usually be overridden by another ailment.",
+	"With Opposites": "Will be overridden by specific ailments.",
+
+	//Hooks
+	"End of Turn": "Takes effect after the afflicted's turn.",
+	"On Turn": "Takes effect on afflicted's turn.",
+	"Overrides Turn": "Replaces the turn of the afflicted with its effect.",
+	"Modifies Stats": "Affects stats of the afflicted.",
+	"Modifies Damage": "Affects the damage the afflicted takes.",
+	"Modifies Critical Rate": "Affects critical damage the afflicted takes.",
+	"Modifies Skill": "Affects the used skill of the afflicted.",
+	"Modifies Limit Break Gain": "Affects how much LB the afflicted gains.",
+	"Other": "Its effects are not typical of many statuses.",
+}
 
 commands.liststatus = new Command({
 	desc: 'Lists all the status effects.',
@@ -2595,28 +2597,66 @@ commands.liststatus = new Command({
 	async func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id);
 
-		let page = 0;
-		let pageIndex = 0;
+		let isPreviewingStatus = false;
 
-		const generateEmbed = async (page) => {
-			const current = statusDescs[page].statuses.slice(pageIndex, pageIndex + 6);
-			return new Discord.MessageEmbed({
+		let pageItems = statusDescs;
+		let page = 0;
+		let filter = 'No Filtration Option';
+		let curStatus = '';
+
+		const generateEmbed = async (page, pageItems) => {
+			const current = pageItems.slice(page, page + 5);
+			let embed = new Discord.MessageEmbed({
 				color: '#0099ff',
 				title: 'List of status effects:',
-				description: `Status affects will affect fighters in-battle and can be fatal if not cured, or beneficial.\n### ${statusDescs[page].title}`,
+				description: `Status affects will affect fighters in-battle and can be fatal if not cured, or beneficial.`,
 				fields: await Promise.all(
 					current.map(async arrayDefs => ({
 						name: `${statusEmojis[arrayDefs.name]}${statusNames[arrayDefs.name]} (${arrayDefs.name})`,
-						value: genStatusDescription(arrayDefs, true, page, settings, message),
+						value: genStatusDescription(arrayDefs, true, settings, message),
 						inline: true
 					}))
 				)
-			})
+			});
+			embed.setFooter({ text: `Page ${page/5+1}/${Math.ceil(pageItems.length/5)}`});
+			return embed;
+		}
+
+		const genStatButtons = (page, pageItems) => {
+			const current = pageItems.slice(page, page + 5);
+
+			let statusButtons = [];
+			for (ail of current) {
+				statusButtons.push(makeButton(statusNames[ail.name], statusEmojis[ail.name], "blue", null, "status_"+ail.name))
+			}
+
+			return statusButtons;
+		}
+
+		let selectionmenu = new Discord.MessageSelectMenu()
+			.setCustomId('filter')
+			.setPlaceholder('No Filtration Option')
+			
+		for (let ail in ailmentCategories) {
+			selectionmenu.addOptions([
+				{
+					label: ail,
+					description: ailmentCategories[ail],
+					value: ail.toLowerCase().toString()
+				}
+			])
 		}
 
 		embedMessage = await message.channel.send({
-			embeds: [await generateEmbed(page)],
-			components: [new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]})]
+			embeds: [await generateEmbed(page, pageItems)],
+			components: [
+				new Discord.MessageActionRow({components: genStatButtons(page, pageItems)}),
+				new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]}),
+				{
+					type: 1,
+					components: [selectionmenu]
+				}, 
+			]
 		})
 		
 		const collector = embedMessage.createMessageComponentCollector({
@@ -2624,44 +2664,119 @@ commands.liststatus = new Command({
 		})
 
 		collector.on('collect', async interaction => {
-			if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
-				if (interaction.customId === 'forward') {
-					pageIndex += 6
+			if (isPreviewingStatus) {
+				if (interaction.component.customId == 'back') {
+					await interaction.update({
+						embeds: [await generateEmbed(page, pageItems)],
+						components: [
+							new Discord.MessageActionRow({components: genStatButtons(page, pageItems)}),
+							new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]}),
+							{
+								type: 1,
+								components: [selectionmenu]
+							}, 
+						]
+					})
+					
+					isPreviewingStatus = false;
+				}
+			} else {
+				if (interaction.component.customId != 'cancel' && interaction.component.customId != 'filter' && !interaction.component.customId.includes('status')) {
+					if (interaction.customId === 'forward') {
+						page += 5
 
-					if (pageIndex >= statusDescs[page].statuses.length) {
-						page++
-
-						if (page >= statusDescs.length) {
+						if (page >= pageItems.length) {
 							page = 0
 						}
-						pageIndex = 0
-					}
-				} else if (interaction.customId === 'back') {
-					pageIndex -= 6
-
-					if (pageIndex < 0) {
-						page--
+					} else if (interaction.customId === 'back') {
+						page -= 5
 
 						if (page < 0) {
-							page = statusDescs.length-1
+							page = pageItems.length - (pageItems.length % 5 != 0 ? pageItems.length % 5 : 5)
 						}
-
-						pageIndex = statusDescs[page].statuses.length - (statusDescs[page].statuses.length % 6 != 0 ? statusDescs[page].statuses.length % 6 : 6)
 					}
+
+					await interaction.update({
+						embeds: [await generateEmbed(page, pageItems)],
+						components: [
+							new Discord.MessageActionRow({components: genStatButtons(page, pageItems)}),
+							new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]}),
+							{
+								type: 1,
+								components: [selectionmenu]
+							}, 
+						]
+					})
+				} else if (interaction.component.customId == 'cancel') {
+					collector.stop()
+					await interaction.update({
+					embeds: [await generateEmbed(page, pageItems)],
+					components: []
+					})
+				} else if (interaction.component.customId == 'filter') {
+					page = 0;
+					pageIndex = 0;
+					filter = interaction.values[0];
+
+					pageItems = statusDescs.filter(x => {
+						switch (filter) {
+							case "no filtration option": return x;
+
+							case "non-stackable": return !statusEffectFuncs[x.name].stackable;
+							case "stackable": return statusEffectFuncs[x.name].stackable;
+
+							case "physical": return isPhysicalStatus(x.name);
+							case "mental": return !isPhysicalStatus(x.name);
+
+							case "negative": return !isPositiveStatus(x.name) && !isNeutralStatus(x.name);
+							case "neutral": return isNeutralStatus(x.name);
+							case "positive": return isPositiveStatus(x.name);
+
+							case "without opposites": return !statusEffectFuncs[x.name].opposite;
+							case "with opposites": return statusEffectFuncs[x.name].opposite;
+
+							case "end of turn": return statusEffectFuncs[x.name].endturn;
+							case "on turn": return statusEffectFuncs[x.name].onturn;
+							case "overrides turn": return statusEffectFuncs[x.name].turnoverride;
+							case "modifies stats": return statusEffectFuncs[x.name].statmod;
+							case "modifies damage": return statusEffectFuncs[x.name].dmgmod;
+							case "modifies critical rate": return statusEffectFuncs[x.name].critmod;
+							case "modifies skill": return statusEffectFuncs[x.name].skillmod;
+							case "modifies limit break gain": return statusEffectFuncs[x.name].lbgain;
+							case "other": return statusEffectFuncs[x.name].hardcoded;
+						}
+					});
+
+					await interaction.update({
+						embeds: [await generateEmbed(page, pageItems)],
+						components: [
+							new Discord.MessageActionRow({components: genStatButtons(page, pageItems)}),
+							new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]}),
+							{
+								type: 1,
+								components: [selectionmenu]
+							}, 
+						]	
+					})
+				} else {
+					isPreviewingStatus = true;
 				}
+			}
+
+			if (isPreviewingStatus) {
+				curStatus = interaction.component.customId.replace('status_', '');
+				curStatus = statusDescs.filter(x => x.name == curStatus)[0];
 
 				await interaction.update({
-					embeds: [await generateEmbed(page)],
+					embeds: [new Discord.MessageEmbed({
+						color: '#0099ff',
+						title: `${statusEmojis[curStatus.name]}${statusNames[curStatus.name]} (${curStatus.name})`,
+						description: genStatusDescription(curStatus, false, settings, message),
+					})],
 					components: [
-						new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]}),
+						new Discord.MessageActionRow({components: [backButton]}),
 					]
-				})
-			} else {
-				collector.stop()
-				await interaction.update({
-				embeds: [await generateEmbed(page)],
-				components: []
-				})
+				});
 			}
 		})
 	}
