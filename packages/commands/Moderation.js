@@ -882,10 +882,9 @@ commands.reloadfile = new Command({
 
 		let validFiles = ['armors', 'characters', 'chests', 'enemies', 'items', 'loot', 'parties', 'settings', 'shops', 'weapons', 'trials']
 		let validGlobalFiles = ['pmdquestions', 'ships', 'skills']
-		let validFoodFiles = ['hamburger', 'icecream', 'pizza', 's_preferences', 's_privacy']
 		let validUserDataFiles = ['userdata']
 
-		if (!validFiles.includes(args[0].toLowerCase()) && !validGlobalFiles.includes(args[0].toLowerCase()) && !validFoodFiles.includes(args[0].toLowerCase()) && !validUserDataFiles.includes(args[0].toLowerCase())) return message.channel.send(`Invalid file!`)
+		if (!validFiles.includes(args[0].toLowerCase()) && !validGlobalFiles.includes(args[0].toLowerCase()) && !validUserDataFiles.includes(args[0].toLowerCase())) return message.channel.send(`Invalid file!`)
 
 		if (validFiles.includes(args[0].toLowerCase())) {
 			setUpFile(`${dataPath}/json/${message.guild.id}/${args[0].toLowerCase()}.json`, true)
@@ -899,18 +898,6 @@ commands.reloadfile = new Command({
 					break
 				case 'skills':
 					skillFile = setUpFile(`${dataPath}/json/skills.json`, true)
-					break
-			}
-		} else if (validFoodFiles.includes(args[0].toLowerCase())) {
-			switch (args[0].toLowerCase()) {
-				case 's_preferences':
-					userPreferences = setUpFile(`${dataPath}/json/food/s_preferences.json`, true)
-					break
-				case 's_privacy':
-					userPrivacy = setUpFile(`${dataPath}/json/food/s_privacy.json`, true)
-					break
-				default:
-					foodFiles[args[0].toLowerCase()] = setUpFile(`${dataPath}/json/food/${args[0].toLowerCase()}.json`, true)
 					break
 			}
 		} else if (validUserDataFiles.includes(args[0].toLowerCase())) {

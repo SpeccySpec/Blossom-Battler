@@ -4,7 +4,6 @@ const categories = {
 	misc: "Other things that don't fit into the other sections.",
 	moderation: "Every bot needs something to moderate the server.",
 	fun: "Fun things to use, come try them out!",
-	food: "Tasty, tasty food! All for you to try out!",
 	items: "Items that you can use to do things!",
 	loot: "Loot that you can get from killing or pacifying enemies!",
 	chests: "Chests for storing whatever item, weapon or armor you want! Or to get some goodies.",
