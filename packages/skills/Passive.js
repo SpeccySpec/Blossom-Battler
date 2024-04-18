@@ -1410,8 +1410,13 @@ passiveList = {
 			// Magic/Ranged, If type is an object then check for the first two, otherwise check for type itself as it should be a string.
 			if ((skill.atktype === 'magic' || skill.atktype === 'ranged') && ((typeof(skill.type) === 'object' && (vars[1].includes(skill.type[0]) || vars[1].includes(skill.type[1]))) || vars[1].includes(skill.type))) {
 				if (randNum(1, 100) <= vars[0]) {
-					affinity = 'repel';
-					result.txt += `\n__${char.name}__'s __${passive.name}__ repelled the attack!\n`;
+					// Run this function again... but with the repel. Ban repelling to avoid infinite loops, and avoid taking damage ourselves.
+					let newResults = attackWithSkill(inf, inf, skill, btl, true);
+					result.oneMore = newResults.oneMore;
+					result.teamCombo = newResults.teamCombo;
+
+					// Return this txt
+					return `\n__${char.name}__'s __${passive.name}__ repelled the attack!\n${newResults.txt}`;
 				}
 			}
 
@@ -2297,6 +2302,102 @@ passiveList = {
 			"- Dealing damage.\n" +
 			"- Taking damage.\n" +
 			"- Guarding"
+		}
+	}),
+
+	null: new Extra({
+		name: "Null (Persona)",
+		desc: "<Chance>% chance to change the user's affinity toward <Elements> upon attack.",
+		multiple: true,
+		args: [
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: false
+			},
+			{
+				name: "Affinity",
+				type: "Element",
+				forced: true
+			},
+			{
+				name: "Element #1",
+				type: "Element",
+				forced: true,
+				multiple: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let chance = args[0] ?? 100;
+			let affinity = args[1].toLowerCase();
+			let elements = args.slice(2);
+
+			if (chance < 1) return void message.channel.send("Why do this if it never happens?");
+			if (!Affinities.includes(affinity)) return void message.channel.send(`${affinity} is not a valid affinity.`);
+
+			for (let i in elements) {
+				if (elements[i] === "all") {
+					elements = "all";
+					break;
+				}
+
+				if (!Elements.includes(elements[i])) {
+					return void message.channel.send(`${elements[i]} is an invalid element!`);
+				}
+			}
+
+			makePassive(skill, "null", [chance, affinity, elements]);
+			return true;
+		},
+		affinitymod(char, inf, skill, passive, affinity, btl, vars, result) {
+			let shouldProc = (typeof vars[2] == "string" && vars[2] === "all");
+
+			if (!shouldProc) {
+				if (typeof skill.type == "string" && vars[2].includes(skill.type)) {
+					shouldProc = true;
+				} else if (typeof skill.type == "object") {
+					for (let i in skill.type) {
+						if (vars[2].includes(skill.type[i])) {
+							shouldProc = true;
+							break;
+						}
+					}
+				}
+			}
+
+			if (!shouldProc) return false;
+
+			let finalChance = vars[0]+inf.stats.luck-char.stats.luck
+			if (shouldProc && (vars[0] >= 100 || randNum(1, 1000) <= (finalChance*10))) {
+				result.txt += `__${char.name}'s__ **${getFullName(passive)}** caused their affinity toward **${getFullName(skill)}** to become ${affinityEmoji[vars[1]]}**${vars[1]}**!\n`;
+				return vars[1];
+			}
+
+			return false;
+		},
+		getinfo(varstbl, skill) {
+			let vars;
+			let txt = "";
+			for (let k in varstbl) {
+				vars = varstbl[k];
+				txt += `${(vars[0] >= 100) ? `Has a **${vars[0]}%** chance to` : "**Guaranteed** to"} change the affinity of **`
+
+				for (let i in vars[2]) {
+					txt += `${elementEmoji[vars[2][i]]}${vars[2][i].charAt(0).toUpperCase() + vars[2][i].slice(1)}`
+
+					if (i < vars[2].length - 2)
+						txt += ', ';
+					else if (i < vars[2].length - 1)
+						txt += ' and ';
+				}
+
+				txt += `** skills to ${affinityEmoji[vars[1]]}**${vars[1]}**`;
+
+				if (k < varstbl.length-1)
+					txt += '\n';
+			}
+
+			return txt;
 		}
 	})
 }

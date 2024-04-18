@@ -469,6 +469,24 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						}
 
 						if (endfunc) return result;
+					} else if (passiveList[k] && passiveList[k].affinitymod && !noRepel) {
+						if (noExtraArray && noExtraArray.includes(k)) continue;
+						const psv = passiveList[k];
+						const passive = skillFile[targ.skills[i]];
+
+						if (psv.multiple) {
+							for (let j in passive.passive[k]) {
+								let newaff = psv.affinitymod(targ, char, skill, passive, affinity, btl, passive.passive[k][j], result);
+
+								if (newaff) {
+									affinity = newaff;
+									break;
+								}
+							}
+						} else {
+							let newaff = psv.affinitymod(targ, char, skill, passive, affinity, btl, passive.passive[k], result);
+							if (newaff) affinity = newaff;
+						}
 					}
 				}
 			}
