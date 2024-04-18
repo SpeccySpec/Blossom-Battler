@@ -2175,9 +2175,9 @@ doTurn = async(btl, noTurnEmbed) => {
 				for (let i in skill.passive) {
 					if (passiveList[i] && passiveList[i].onturn) {
 						if (passiveList[i].multiple) {
-							for (let k in skill.passive[i]) statusTxt += (passiveList[i].onturn(btl, char, skill.passive[i][k]) ?? '');;
+							for (let k in skill.passive[i]) statusTxt += (passiveList[i].onturn(btl, char, skill.passive[i][k], skill) ?? '');;
 						} else
-							statusTxt += (passiveList[i].onturn(btl, char, skill.passive[i]) ?? '');
+							statusTxt += (passiveList[i].onturn(btl, char, skill.passive[i], skill) ?? '');
 
 						if (statusTxt != '') statusTxt += '\n';
 					}

@@ -648,6 +648,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 			break;
 		}
 
+		console.log(`${totalHits} hits.`);
+		console.log(result);
+
 		if (totalHits <= 0) {
 			// Force Message
 			if (skill.extras && skill.extras.forcemsg) {
@@ -661,6 +664,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				result.txt += dodgeTxt(char, targ);
 			}
 
+			console.log(result);
 			return result;
 		} else {
 			// SkillMod
@@ -1117,6 +1121,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					}
 				}
 
+				console.log(result);
 				// Limit Breaks
 				if (settings.mechanics.limitbreaks && !skill.limitbreak && !skill.teamcombo) {
 					if (!char.lbp) char.lbp = 0;

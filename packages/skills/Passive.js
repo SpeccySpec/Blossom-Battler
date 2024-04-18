@@ -43,7 +43,7 @@ let targetNames = {
 	statmod(btl, char, skill, vars)
 	- Freely change the character and skill's stats on use.
 
-	onturn(btl, char, vars)
+	onturn(btl, char, vars, passive)
 	- On the start of the turn, this runs.
 
 	dmgmod(char, targ, dmg, skill, btl, vars)
@@ -2341,9 +2341,13 @@ passiveList = {
 					break;
 				}
 
-				if (!Elements.includes(elements[i])) {
+				if (!Elements.includes(elements[i].toLowerCase()))
 					return void message.channel.send(`${elements[i]} is an invalid element!`);
-				}
+
+				if (elements[i].toLowerCase() === "almighty")
+					return void message.channel.send("Don't even try it.")
+
+				elements[i] = elements[i].toLowerCase(); // make lowercase.
 			}
 
 			makePassive(skill, "null", [chance, affinity, elements]);
@@ -2380,7 +2384,7 @@ passiveList = {
 			let txt = "";
 			for (let k in varstbl) {
 				vars = varstbl[k];
-				txt += `${(vars[0] >= 100) ? `Has a **${vars[0]}%** chance to` : "**Guaranteed** to"} change the affinity of **`
+				txt += `${(vars[0] < 100) ? `Has a **${vars[0]}%** chance to` : "**Guaranteed** to"} change the affinity of **`
 
 				for (let i in vars[2]) {
 					txt += `${elementEmoji[vars[2][i]]}${vars[2][i].charAt(0).toUpperCase() + vars[2][i].slice(1)}`
@@ -2399,7 +2403,100 @@ passiveList = {
 
 			return txt;
 		}
+	}),
+
+/*
+	chancecast: new Extra({
+		name: "Chance Cast (Original)",
+		desc: "{Chance}% chance to cast <Skill(s)> on a random target at the start of every turn.",
+		args: [
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: false
+			},
+			{
+				name: "Skill(s)",
+				type: "Word",
+				forced: true,
+				multiple: true,
+			}
+		],
+		applyfunc(message, skill, args) {
+			let chance = Math.min(100, args[0] ?? 100);
+			let skilllist = args.slice(1);
+
+			if (chance < 1) return void message.channel.send("Why do this if it never happens?");
+
+			for (let i in skilllist) {
+				if (!skillFile[skilllist[i]]) return void message.channel.send(`${skilllist[i]} is an invalid skill.`);
+				if (skillFile[skilllist[i]].extras?.metronome) return void message.channel.send(`Metronome skills are unsupported, so you may not use **${getFullName(skillFile[skilllist[i]])}** for this _ChanceCast_ skill.`);
+				if (!["one", "randomopposing", "ally", "randomallies", "random", "caster"].includes(skillFile[skilllist[i]].target)) return void message.channel.send(`You may only use single-target skills, so you may not use **${getFullName(skillFile[skilllist[i]])}** for this _ChanceCast_ skill.`);
+			}
+
+			makePassive(skill, "chancecast", [chance, skilllist]);
+			return true;
+		},
+		onturn(btl, char, vars, passive) {
+			if (randNum(1, 1000) <= (vars[0]*10) || vars[0] >= 100) {
+				let skill = skillFile[vars[1][randNum(0, vars[1].length-1)]];
+
+				if (skill) {
+					let targ;
+					let possible = [];
+					if (["one", "randomopposing"].includes(skill.target)) {
+						for (let i in btl.teams) {
+							if (char.team == i) continue;
+
+							for (let k in btl.teams[i].members)
+								if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k].id);
+						}
+
+						targ = getCharFromId(possible[randNum(possible.length-1)], btl);
+					} else if (["ally", "randomallies"].includes(skill.target)) {
+						for (let i in btl.teams[char.team].members)
+							if (btl.teams[char.team].members[i].hp > 0) possible.push(btl.teams[char.team].members[i].id);
+
+						targ = getCharFromId(possible[randNum(possible.length-1)], btl);
+					} else if (["random"].includes(skill.target)) {
+						for (let i in btl.teams) {
+							for (let k in btl.teams[i].members)
+								if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k].id);
+						}
+
+						targ = getCharFromId(possible[randNum(possible.length-1)], btl);
+					} else {
+						targ = char;
+					}
+
+					if (targ) {
+						let results = attackWithSkill(targ, char, skill, btl);
+						return `__${char.name}__'s _${getFullName(passive)}_ allowed them to cast **${getFullName(skill)}** on __${(targ.id == char.id) ? "themselves" : targ.name}__!\n${results.txt}`;
+					}
+				}
+			}
+		},
+		getinfo(vars, skill) {
+			let txt = `${(vars[0] < 100) ? `Has a **${vars[0]}%** chance to` : "**Guaranteed** to"} cast`
+
+			if (vars[1].length <= 1) {
+				txt += ` **${getFullName(skillFile[vars[1][0]])}**`;
+			} else {
+				txt += " either ";
+				for (let i in vars[1]) {
+					txt += `**${getFullName(skillFile[vars[1][i]])}**`;
+
+					if (i < vars[1].length - 2)
+						txt += ', ';
+					else if (i < vars[1].length - 1)
+						txt += ' or ';
+				}
+			}
+
+			return txt;
+		}
 	})
+*/
 }
 
 function dpDamage(char, decimal) {
