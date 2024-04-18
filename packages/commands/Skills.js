@@ -1757,7 +1757,7 @@ commands.listelements = new Command({
 
 		let elementList = '';
 		for (let element in Elements) {
-			elementList += `${elementEmoji[Elements[element]]} ${Elements[element]}\n`;
+			elementList += `${elementEmoji[Elements[element]]}**${Elements[element].charAt(0).toUpperCase()}${Elements[element].slice(1)}**\n`;
 		}
 
 		DiscordEmbed.setDescription(elementList)
