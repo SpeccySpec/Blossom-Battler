@@ -1,4 +1,6 @@
 setupBattleStats = (f) => {
+	f.oldskills = objClone(f.skills);
+
 	f.buffs = {
 		atk: 0,
 		mag: 0,
@@ -24,7 +26,11 @@ setupBattleStats = (f) => {
 			atk: f.curweapon.atk ?? 0,
 			mag: f.curweapon.mag ?? 0,
 			end: f.curweapon.end ?? 0,
-			agl: f.curweapon.agl ?? 0
+			agl: f.curweapon.agl ?? 0,
+            prc: f.curweapon.prc ?? 0,
+            luk: f.curweapon.luk ?? 0,
+            chr: f.curweapon.chr ?? 0,
+            int: f.curweapon.int ?? 0
 		}
 		for (let i in boost) {
 			if (f.basestats[i] > 7) boost[i] = Math.round(boost[i]*0.75);
@@ -40,25 +46,29 @@ setupBattleStats = (f) => {
 			atk: f.curarmor.atk ?? 0,
 			mag: f.curarmor.mag ?? 0,
 			end: f.curarmor.end ?? 0,
-			agl: f.curarmor.agl ?? 0
+			agl: f.curarmor.agl ?? 0,
+            prc: f.curarmor.prc ?? 0,
+            luk: f.curarmor.luk ?? 0,
+            chr: f.curarmor.chr ?? 0,
+            int: f.curarmor.int ?? 0
 		}
 		for (let i in boost) {
 			if (f.basestats[i] > 7) boost[i] = Math.round(boost[i]*0.75);
 			f.stats[i] += boost[i];
+
+			// Wrong Armor Class Drawbacks
+			if (f.armorclass === 'none' && f.curarmor.class) {
+				if (f.curarmor.class === "light") {
+					boost.end = Math.max(0, boost.end-Math.round(f.level/10));
+				} else if (f.curarmor.class === "heavy") {
+					boost.agl = Math.max(0, boost.agl-Math.round(f.level/8));
+				} else if (f.curarmor.class === "magic") {
+					boost.atk = Math.max(0, boost.atk-Math.round(f.level/10));
+				}
+			}
 		}
 
 		if (f.curarmor.skill) f.skills.push(f.curarmor.skill);
-
-		// Wrong Armor Class Drawbacks
-		if (f.armorclass === 'none' && f.curarmor.class) {
-			if (f.curarmor.class === "light") {
-				f.stats.end = Math.max(1, f.stats.end-Math.round(f.level/10));
-			} else if (f.curarmor.class === "heavy") {
-				f.stats.agl = Math.max(1, f.stats.agl-Math.round(f.level/8));
-			} else if (f.curarmor.class === "magic") {
-				f.stats.atk = Math.max(1, f.stats.atk-Math.round(f.level/10));
-			}
-		}
 	}
 
 	return true;

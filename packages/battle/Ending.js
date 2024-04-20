@@ -373,16 +373,18 @@ runFromBattle = (char, btl, i) => {
 
 	let parties = setUpFile(`${dataPath}/json/${btl.guild.id}/parties.json`);
 
-	if (btl.teams[0].items != parties[btl.teams[0].name].items)
-		parties[btl.teams[0].name].items = btl.teams[0].items;
+	if (parties[btl.teams[0].name]) {
+		if (btl.teams[0].items != parties[btl.teams[0].name].items)
+			parties[btl.teams[0].name].items = btl.teams[0].items;
 
-	if (btl.teams[0].weapons != parties[btl.teams[0].name].weapons)
-		parties[btl.teams[0].name].weapons = btl.teams[0].weapons;
+		if (btl.teams[0].weapons != parties[btl.teams[0].name].weapons)
+			parties[btl.teams[0].name].weapons = btl.teams[0].weapons;
 
-	if (btl.teams[0].armors != parties[btl.teams[0].name].armors)
-		parties[btl.teams[0].name].armors = btl.teams[0].armors;
+		if (btl.teams[0].armors != parties[btl.teams[0].name].armors)
+			parties[btl.teams[0].name].armors = btl.teams[0].armors;
 
-	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/parties.json`, JSON.stringify(parties, '	', 4))
+		fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/parties.json`, JSON.stringify(parties, '	', 4));
+	}
 
 	// Save HP, MP and trust.
 	let charFile = setUpFile(`${dataPath}/json/${btl.guild.id}/characters.json`);

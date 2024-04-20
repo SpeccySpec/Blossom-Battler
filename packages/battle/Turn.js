@@ -145,15 +145,18 @@ MENU_TEAMSEL = 4;
 MENU_TARGET = 5;
 MENU_PACIFY = 6;
 MENU_BACKUP = 7;
+MENU_EQUIPMENT = 8;
+MENU_WEAPONS = 9;
+MENU_ARMORS = 10;
 
 // Extra States (Misc. Shit like PVP)
-MENU_TRANSFORMATIONS = 8;
-MENU_ENEMYINFO = 9;
-MENU_FORFEIT = 10;
-MENU_ANYSEL = 11;
+MENU_TRANSFORMATIONS = 11;
+MENU_ENEMYINFO = 12;
+MENU_FORFEIT = 13;
+MENU_ANYSEL = 14;
 
 // States that require ne embeds
-MENU_QUESTION = 12;
+MENU_QUESTION = 15;
 
 function CalcCompins(comps, i) {
 	const compins = Math.min(Math.floor(Math.max(i - 0.1, 0) / 4), 3)
@@ -326,11 +329,13 @@ const menuStates = {
 		if (btl.pvp) {
 			comps[0] = [
 				makeButton('Forfeit', '<:boot:995268449154629699>', 'grey', true, 'run'),
+				makeButton('Equipment', '<:longbladed:1008794360676110457>', 'blue', true, 'equipment'),
 				makeButton('Backup', '<:mental:1004855144745291887>', 'blue')
 			]
 		} else if (btl.trial) {
 			comps[0] = [
 				makeButton('Save Trial', '📖', 'green', true, 'run'),
+				makeButton('Equipment', '<:longbladed:1008794360676110457>', 'blue', true, 'equipment'),
 				makeButton('Backup', '<:mental:1004855144745291887>', 'blue'),
 				makeButton('Pacify', itemTypeEmoji.pacify, 'green', null, null, true), // No Pacifying
 				makeButton('Enemy Info', statusEmojis.silence, 'red', true, 'enemyinfo', true) // No Enemy Info
@@ -338,6 +343,7 @@ const menuStates = {
 		} else {
 			comps[0] = [
 				makeButton('Run!', '<:boot:995268449154629699>', 'grey', true, 'run'),
+				makeButton('Equipment', '<:longbladed:1008794360676110457>', 'blue', true, 'equipment'),
 				makeButton('Backup', '<:mental:1004855144745291887>', 'blue'),
 				makeButton('Pacify', itemTypeEmoji.pacify, 'green'),
 				makeButton('Enemy Info', statusEmojis.silence, 'red', true, 'enemyinfo')
@@ -361,6 +367,48 @@ const menuStates = {
 			if (!comps[CalcCompins(comps, i)]) comps[CalcCompins(comps, i)] = [];
 			comps[CalcCompins(comps, i)].push(makeButton(`${members[i].name}`, `${i}️⃣`, 'blue', true, i.toString()))
 		}
+	},
+	[MENU_EQUIPMENT]: ({char, btl, comps}) => {
+		comps[0] = [];
+
+		if (!char.weapons || char.weapons == {}) {
+			comps[0].push(makeButton('Weapons', '<:bladed:1008794351591239842>', 'red', true, 'weapon', true))
+		} else {
+			comps[0].push(makeButton('Weapons', '<:bladed:1008794351591239842>', 'red', true, 'weapon'))
+		}
+
+		if (!char.armors || char.armors == {}) {
+			comps[0].push(makeButton('Armors', '<:light:1008794358637662338>', 'blue', true, 'armor', true))
+		} else {
+			comps[0].push(makeButton('Armors', '<:light:1008794358637662338>', 'blue', true, 'armor'))
+		}
+	},
+	[MENU_WEAPONS]: ({char, comps}) => {
+		let j = 0;
+		let classTxt = '';
+		for (let i in char.weapons) {
+			classTxt = classEmoji.weapon[char.weapons[i].class] ?? '<:bladed:1008794351591239842>';
+
+			if (!char.weaponclass || char.weaponclass == "none" || (typeof char.weaponclass == "object" && char.weaponclass.includes(char.weapons[i].class)) || char.weaponclass == char.weapons[i].class)
+				comps[CalcCompins(comps, j)].push(makeButton(char.weapons[i].name, classTxt, 'red', true, i));
+			else
+				comps[CalcCompins(comps, j)].push(makeButton(char.weapons[i].name, classTxt, 'red', true, i, true));
+
+			j++;
+		}
+
+		comps[CalcCompins(comps, j)].push(makeButton("Unequip", '<:atkdown:990629394236211230>', 'grey', true, 'unequip', !char.curweapon));
+	},
+	[MENU_ARMORS]: ({char, comps}) => {
+		let j = 0;
+		let classTxt = '';
+		for (let i in char.armors) {
+			classTxt = classEmoji.armor[char.armors[i].class] ?? '<:light:1008794358637662338>';
+			comps[CalcCompins(comps, i)].push(makeButton(`${char.armors[i].name}`, classTxt, 'red', true, i))
+			j++;
+		}
+
+		comps[CalcCompins(comps, j)].push(makeButton("Unequip", '<:enddown:990629399902695445>', 'grey', true, 'unequip', !char.curarmor));
 	},
 	[MENU_TEAMSEL]: ({char, btl, comps}) => {
 		for (const i in btl.teams) {
@@ -961,6 +1009,20 @@ sendCurTurnEmbed = (char, btl) => {
 			case 'pacify':
 				btl.action.move = 'pacify';
 				menustate = MENU_TEAMSEL;
+				break;
+
+			case 'equipment':
+				menustate = MENU_EQUIPMENT;
+				break;
+
+			case 'weapon':
+				btl.action.move = 'weapon';
+				menustate = MENU_WEAPONS;
+				break;
+
+			case 'armor':
+				btl.action.move = 'armor';
+				menustate = MENU_ARMORS;
 				break;
 
 			case 'backup':
@@ -1735,6 +1797,40 @@ sendCurTurnEmbed = (char, btl) => {
 							components: []
 						});
 					}
+				} else if (menustate == MENU_WEAPONS) {
+					if (char.weapons[i.customId]) {
+						btl.action.index = i.customId;
+					} else {
+						btl.action.index = 'unequip';
+						btl.action.unequip = true;
+					}
+
+					alreadyResponded = true;
+					doAction(char, btl, btl.action);
+					collector.stop();
+
+					await i.update({
+						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+						embeds: [DiscordEmbed],
+						components: []
+					});
+				} else if (menustate == MENU_ARMORS) {
+					if (char.armors[i.customId]) {
+						btl.action.index = i.customId;
+					} else {
+						btl.action.index = 'unequip';
+						btl.action.unequip = true;
+					}
+
+					alreadyResponded = true;
+					doAction(char, btl, btl.action);
+					collector.stop();
+
+					await i.update({
+						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+						embeds: [DiscordEmbed],
+						components: []
+					});
 				}
 		}
 
@@ -1832,10 +1928,66 @@ doAction = (char, btl, action) => {
 					.setDescription(`${char.name} guards! This reduces damage, and restores **${mpget}${char.mpMeter ? char.mpMeter[1] : "MP"}**!`)
 				btl.channel.send({embeds: [DiscordEmbed]});
 				break;
+
+			case 'weapon':
+				if (action.unequip) {
+					DiscordEmbed = new Discord.MessageEmbed()
+						.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+						.setTitle(`${char.name} => Self`)
+						.setDescription(`__${char.name}__ unequipped their ${classEmoji.weapon[char.curweapon.class] ?? '<:bladed:1008794351591239842>'}**${char.curweapon.name}**.`)
+					btl.channel.send({embeds: [DiscordEmbed]});
+
+					unequipWeapon(char, btl);
+				} else {
+					if (char.curweapon) {
+						DiscordEmbed = new Discord.MessageEmbed()
+							.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+							.setTitle(`${char.name} => Self`)
+							.setDescription(`__${char.name}__ unequipped their ${classEmoji.weapon[char.curweapon.class] ?? '<:bladed:1008794351591239842>'}**${char.curweapon.name}**, and equipped the ${classEmoji.weapon[char.weapons[action.index].class] ?? '<:bladed:1008794351591239842>'}**${char.weapons[action.index].name}**!`)
+						btl.channel.send({embeds: [DiscordEmbed]});
+					} else {
+						DiscordEmbed = new Discord.MessageEmbed()
+							.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+							.setTitle(`${char.name} => Self`)
+							.setDescription(`__${char.name}__ equipped the ${classEmoji.weapon[char.weapons[action.index].class] ?? '<:bladed:1008794351591239842>'}**${char.weapons[action.index].name}**!`)
+						btl.channel.send({embeds: [DiscordEmbed]});
+					}
+
+					equipWeapon(char, action.index, btl);
+				}
+
+				break;
+
+			case 'armor':
+				if (action.unequip) {
+					DiscordEmbed = new Discord.MessageEmbed()
+						.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+						.setTitle(`${char.name} => Self`)
+						.setDescription(`__${char.name}__ unequipped their ${classEmoji.armor[char.curarmor.class] ?? '<:bladed:1008794351591239842>'}**${char.curarmor.name}**.`)
+					btl.channel.send({embeds: [DiscordEmbed]});
+
+					unequipArmor(char, btl);
+				} else {
+					if (char.curweapon) {
+						DiscordEmbed = new Discord.MessageEmbed()
+							.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+							.setTitle(`${char.name} => Self`)
+							.setDescription(`__${char.name}__ unequipped their ${classEmoji.armor[char.curarmor.class] ?? '<:bladed:1008794351591239842>'}**${char.curarmor.name}**, and equipped the ${classEmoji.armor[char.armors[action.index].class] ?? '<:bladed:1008794351591239842>'}**${char.armors[action.index].name}**!`)
+						btl.channel.send({embeds: [DiscordEmbed]});
+					} else {
+						DiscordEmbed = new Discord.MessageEmbed()
+							.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+							.setTitle(`${char.name} => Self`)
+							.setDescription(`__${char.name}__ equipped the ${classEmoji.armor[char.armors[action.index].class] ?? '<:bladed:1008794351591239842>'}**${char.armors[action.index].name}**!`)
+						btl.channel.send({embeds: [DiscordEmbed]});
+					}
+
+					equipArmor(char, action.index, btl);
+				}
+
+				break;
 			
 			case 'run':
-				let runTxt = '';
-
 				let avgSpd = 0;
 				let totalFoes = 0;
 				for (let i in btl.teams) {
@@ -1852,10 +2004,35 @@ doAction = (char, btl, action) => {
 
 				let runCheck = (90 + ((statWithBuff(char.stats.agl, char.buffs.agl, char) - avgSpd)/2));
 				if (randNum(100) <= runCheck) {
+					// You know what... for fun...
+					let runTexts = [
+						// the most common one
+						"You escaped from the enemies!",
+						"You escaped from the enemies!",
+						"You escaped from the enemies!",
+						"You escaped from the enemies!",
+						"You escaped from the enemies!",
+						"You escaped from the enemies!",
+
+						// Now, here's where the fun starts!
+						"Get out, GET OUT!!",
+						"It's pizza time!",
+						"Like zoinks, we gotta get outta here!",
+						"If we Naruto Run, we can move faster than their attacks",
+						"YOU CAN ESCAPE",
+						"THY END IS LATER",
+						"sorry guys my mom called she said i have to go do the dishes",
+						"NIGERUNDAYOOOOOOOOOOOOOO",
+						"i realize now i have walked into the wrong room.",
+						"Aight i'mma head out",
+						"that really was a Blossom Battle",
+						"sonic: i gotta get out of here bro The newest spice runners dlc dropped and i gotta pla"
+					];
+
 					DiscordEmbed = new Discord.MessageEmbed()
 						.setColor(elementColors[char.mainElement] ?? elementColors.strike)
 						.setTitle('Running Away!')
-						.setDescription("You escaped from the enemies!")
+						.setDescription(runTexts[randNum(runTexts.length-1)])
 					btl.channel.send({embeds: [DiscordEmbed]});
 
 					runFromBattle(char, btl, 0)
