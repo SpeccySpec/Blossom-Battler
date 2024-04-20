@@ -2026,7 +2026,8 @@ doAction = (char, btl, action) => {
 						"i realize now i have walked into the wrong room.",
 						"Aight i'mma head out",
 						"that really was a Blossom Battle",
-						"sonic: i gotta get out of here bro The newest spice runners dlc dropped and i gotta pla"
+						"sonic: i gotta get out of here bro The newest spice runners dlc dropped and i gotta pla",
+						"blossom BLAST"
 					];
 
 					DiscordEmbed = new Discord.MessageEmbed()
