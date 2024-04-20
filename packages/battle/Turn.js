@@ -2027,7 +2027,22 @@ doAction = (char, btl, action) => {
 						"Aight i'mma head out",
 						"that really was a Blossom Battle",
 						"sonic: i gotta get out of here bro The newest spice runners dlc dropped and i gotta pla",
-						"blossom BLAST"
+						"blossom BLAST",
+
+						"Nah, I'd escape.",
+						"Let me out, let mE OUUUUUUU",
+						"OH MY GOD THEY'RE BALLING WE GOTTA GET OUTTA HE",
+						"Not today inconspicuously-shaped IRS agents!",
+						"No food or movies? I'm outta here!",
+						"Have a nice fall you stupid bi-",
+						"Don't stop me now.",
+						"WARRRRRP STARRRRRRRR",
+						"BeGONE!",
+						"You can escape!",
+
+						"You flee from the enemies, letting them kill again.",
+						"Youre sparing them. They beat you up, and youre sparing them.",
+						"You decide to flee from the innocent creatures you so rudely decided to kill."
 					];
 
 					DiscordEmbed = new Discord.MessageEmbed()
