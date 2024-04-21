@@ -1,7 +1,7 @@
 bbAchievements = [
 	// First achievements
-	{name: "New Beginings", stars: 1, desc: "Create your first character!", section: "beginings"},
-	{name: "First Encounter...!", stars: 1, desc: "Encounter your first enemy!", section: "beginings"},
+	{name: "New Beginnings", stars: 1, desc: "Create your first character!", section: "beginnings"},
+	{name: "First Encounter...!", stars: 1, desc: "Encounter your first enemy!", section: "beginnings"},
 
 	// Murder achievements
 	{name: "Murder, murder!", stars: 1, desc: "Defeat 1 enemy.", section: "battle"},
