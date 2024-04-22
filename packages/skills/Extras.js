@@ -2634,6 +2634,64 @@ extrasList = {
 			return `Consumes a **${vars[0]}** terrain to boost the attack power by **${vars[1]}x**`
 		}
 	}),
+
+	elementalrend: new Extra({
+		name: "Elemental Rend (Original)",
+		desc: "Increase the damage of skills by <Damage Boost>% on characters with <Element> as their main element.",
+		multiple: true,
+		args: [
+			{
+				name: "Damage Boost",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Element",
+				type: "Word",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let mult = args[0];
+			let element = args[1].toLowerCase();
+
+			if (element === "almighty") return void message.channel.send("It is normally impossible to set <:almighty:962465467316989962>**Almight** as a main element, anyway...")
+
+			if (!Elements.includes(element)) {
+				const DiscordEmbed = new Discord.MessageEmbed()
+				.setColor('#0099ff')
+				.setTitle('List of usable elements:');
+	
+				let elementList = '';
+				for (let i in Elements) elementList += `${elementEmoji[Elements[i]]}**${Elements[i].charAt(0).toUpperCase()}${Elements[i].slice(1)}**\n`;
+		
+				DiscordEmbed.setDescription(elementList);
+				return void message.channel.send({content: `${element} is an invalid element. Try one of these:`, embeds: [DiscordEmbed]})
+			}
+
+			makeExtra(skill, "elementalrend", [mult, element]);
+			return true
+		},
+		skillmod(char, targ, skill, btl, vars) {
+			if (targ.mainElement === vars[1]) skill.pow *= vars[0]/100;
+		},
+		getinfo(vars, skill) {
+			let txt = "Skill's power boosted by ";
+			
+			for (let i in vars) {
+				txt += `**${vars[i][0]}**% when used on ${elementEmoji[vars[i][1]]}**${vars[i][1].charAt(0).toUpperCase()}${vars[i][1].slice(1)}** elementals`;
+				
+				if (i == vars.length-2)
+					txt += ' and ';
+				else if (i >= vars.length-1)
+					txt += ' when attacking the enemy';
+				else
+					txt += ', ';
+			}
+
+			return txt;
+		}
+	}),
 }
 
 // Make an Extra for a skill. "func" should be an array of 1-5 values indicating what the extra does.
