@@ -334,7 +334,7 @@ beginGlobalTrial = (trial, trialid, party, partyid, channel) => {
 	let trials = setUpFile(`${dataPath}/json/${channel.guild.id}/trials.json`, true);
 
 	// Can't battle while another party is!
-	if (btl.battling) return message.channel.send("You can't battle in this channel while another battle is happening!");
+	if (btl.battling) return channel.send("You can't battle in this channel while another battle is happening!");
 
 	// Save this for errors!
 	if (!battleFiles) battleFiles = [];
@@ -343,7 +343,7 @@ beginGlobalTrial = (trial, trialid, party, partyid, channel) => {
 	// Set up Ally Side.
 	let battleid = 0;
 	let levellock = trial.levellock ?? 0;
-	let levelcap = trial.forcesettings.levelcap;
+	let levelcap = trial.forcesettings?.levelcap ?? 0;
 
 	if (!party.discoveries) party.discoveries = {};
 
