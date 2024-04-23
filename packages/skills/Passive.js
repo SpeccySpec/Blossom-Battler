@@ -1364,13 +1364,11 @@ passiveList = {
 		onaffinitycheck(char, inf, skill, passive, affinity, btl, vars, result) {
 			if (affinity === 'deadly' || affinity === 'superweak' || affinity === 'weak') {
 				affinity = 'deadly';
-				result.txt += `__${char.name}__'s __${passive.name}__ was surpassed!`;
+				result.txt += `__${char.name}__'s __${passive.name}__ was surpassed!\n`;
 			} else {
 				affinity = 'block';
-				result.txt += `__${char.name}__'s __${passive.name}__ nullified the skill!`;
+				return `__${char.name}__'s __${passive.name}__ nullified the skill!\n`;
 			}
-
-			return true;
 		},
 		getinfo(vars, skill) {
 			return `__Nullifies damage__ from attacks that the user is not <:effective:963413917038694401><:supereffective:963413917198082048><:deadly:963413916879319072>**weak** to`;
