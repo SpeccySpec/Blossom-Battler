@@ -2352,6 +2352,8 @@ passiveList = {
 			return true;
 		},
 		affinitymod(char, inf, skill, passive, affinity, btl, vars, result) {
+			if (!vars) return false;
+
 			let shouldProc = (typeof vars[2] == "string" && vars[2] === "all");
 
 			if (!shouldProc) {
