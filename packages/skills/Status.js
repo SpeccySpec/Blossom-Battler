@@ -2952,7 +2952,7 @@ statusEffectFuncs = {
 				char.neutralized = 3;
 			}
 
-			let negStatuses = statusEffects.filter(x => x != 'neutralized');
+			let negStatuses = statusEffects.filter(x => !neutral.includes(x));
 			for (stat of negStatuses) {
 				if (char.status && char.status == stat) {
 					delete char.status;

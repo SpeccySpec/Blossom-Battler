@@ -2337,7 +2337,7 @@ statusDescs = [
 			},
 			{
 				name: "neutralized",
-				desc: "Prevents **any status ailment** from applying to the afflicted while this status effect is active. Will remove the ones the afflicted already has.",
+				desc: "Prevents **non-neutral status ailments** from applying to the afflicted while this status effect is active. Will remove the ones the afflicted already has.",
 				ailments: {
 					nonboss: {
 						weak: "Lasts **4 turns**.",

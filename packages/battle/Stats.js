@@ -182,7 +182,7 @@ inflictStatus = (char, status, notxt) => {
 	// Do we have blessed?
 	if (char.blessed && !isPositiveStatus(status)) return '';
 	if (char.cursed && (isPositiveStatus(status) || isNeutralStatus(status))) return '';
-	if (char.neutralized) return '';
+	if (char.neutralized && !isNeutralStatus(status)) return '';
 
 	// Inflict the status.
 	let statusfuncs = statusEffectFuncs[status.toLowerCase()];
