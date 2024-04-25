@@ -11,16 +11,20 @@
 	This will do things once the pacify amount has been added to the target. Should return a string.
 */
 
+specialQuery = `There is a query you can use for automatic replacements. That is:
+**%PLAYER%:** Replaces itself with the name of the character that is pacifying the target.`
+
 specialList = {
     variable: new Extra({
         name: "Variable",
-		desc: "Gives the target the <Variable> variable that can be used as a requirement for other pacify options. Can be reverted after {Turns} turns if specified and use a {Revert Message} message to spice it up.",
+		desc: "Gives the target the <Variable> for use as a potential requirement for other pacify options. Can be reverted after {Turns} if specified, and use a {Revert Message} for flavor.",
         multiple: true,
 		args: [
 			{
 				name: "Variable",
 				type: "Word",
-                forced: true
+                forced: true,
+				preventBlank: true
 			},
 			{
 				name: "Turns",
@@ -28,16 +32,22 @@ specialList = {
 			},
 			{
 				name: "Revert Message",
-				type: "Word"
+				type: "Word",
+				maxlength: 256
 			}
 		],
+		doc: {
+			desc: `If you set *{Turns}* below 1, it will make the *<Variable>* last forever.
+			
+			${specialQuery}`
+		},
 		applyfunc(message, option, args) {
 			let variable = args[0];
 			let turns = args[1] ?? true;
 			let revert = args[2] ?? null;
 
 			if (variable.trim().length == 0) return void message.channel.send(`You can't set nothing as a variable.`);
-			if (parseInt(turns) < 1) return void message.channel.send(`You can't set an amount of turns lower than 1.`);
+			if (parseInt(turns) < 1) turns = true;
 			if (revert && revert.trim().length == 0) return void message.channel.send(`You can't have an empty message.`);
 
 			makeSpecial(option, "variable", [variable, turns, revert]);
@@ -65,7 +75,7 @@ specialList = {
 
 	requiredvar: new Extra({
 		name: "Required Variable",
-		desc: "Requires a <Variable> variable to be or not to be present to pacify with a specified option. Will prompt with a <Failure Message> message.",
+		desc: "Requires either presence or lack of <Variable> to pacify with a specified option. Will prompt with a <Failure Message>.",
         multiple: true,
 		args: [
 			{
@@ -81,6 +91,7 @@ specialList = {
 			{
 				name: "Failure Message",
 				type: "Word",
+				maxlength: 256
 			},
 		],
 		applyfunc(message, option, args) {
@@ -107,20 +118,33 @@ specialList = {
 
 	clearvar: new Extra({
 		name: "Clear Variable",
-		desc: "Clears <Variables> variables that were granted to the target. Can add {Clear Message} as flair.",
+		desc: "Clears <Variables> that were granted to the target. Can add {Clear Message} as flair.",
 		multiple: true,
 		args: [
 			{
 				name: "Clear Message",
-				type: "Word"
+				type: "Word",
+				maxlength: 256
 			},
 			{
 				name: "Variables",
 				type: "Word",
                 forced: true,
-				multiple: true
+				multiple: true,
 			}
 		],
+		doc: {
+			desc: `If you don't want to specify a *{Clear Message}*, type "none" into it.
+			
+			${specialQuery}`,
+			/*fields: [
+				{
+					name: "Field Placeholder",
+					value: "Field Description Placeholder",
+					inline: true,
+				},
+			],*/
+		},
 		applyfunc(message, option, args) {
 			let clear = args.shift();
 			let variables = args.filter(x => x.trim().length != 0);
@@ -159,7 +183,7 @@ specialList = {
 
 	failurespecial: new Extra({
 		name: "Failure Special",
-		desc: "Executes the specified <Special> special if pacification fails due to a <Requirement Special> requirement eg. required item.",
+		desc: "Executes the specified <Failure Special> if pacification fails due to a <Requirement Special> eg. required item.",
 		multiple: true,
 		args: [
 			{
@@ -168,16 +192,26 @@ specialList = {
                 forced: true,
 			},
 			{
-				name: "Special",
+				name: "Failure Special",
 				type: "Word",
                 forced: true,
-			},
-			{
-				name: "Variables",
-				type: "Word",
-				multiple: true
 			}
 		],
+		doc: {
+			//desc: `If you don't want to specify a {Clear Message}, type "none" into it.`,
+			fields: [
+				{
+					name: "Valid Requirement Specials:",
+					value: "Requiredvar, Math",
+					inline: false,
+				},
+				{
+					name: "Valid Failure Specials:",
+					value: "Variable, Clearvar, Status, Reset",
+					inline: false,
+				},
+			],
+		},
 		applyfunc(message, option, args) {
 			let requirement = args.shift();
 			let special = args.shift();
@@ -203,7 +237,7 @@ specialList = {
 
 	varboost: new Extra({
 		name: "Variable Boost",
-		desc: "Adds or multiplies the pacify amount given by <Amount> when target has the <Variable> variable present, or not present. Can add {Additional Message} message as flair.",
+		desc: "Adds or multiplies the pacify amount given by <Amount> with presence or lack of target's <Variable>. Can add {Additional Message} message as flair.",
 		multiple: true,
 		args: [
 			{
@@ -228,9 +262,13 @@ specialList = {
 			},
 			{
 				name: "Additional Message",
-				type: "Word"
+				type: "Word",
+				maxlength: 256
 			}
 		],
+		doc: {
+			desc: `${specialQuery}`
+		},
 		applyfunc(message, option, args) {
 			let variable = args[0];
 			let mustBePresent = args[1];
@@ -265,19 +303,24 @@ specialList = {
 
 	maximum: new Extra({
 		name: "Maximum",
-		desc: "Limits the pacify percentage to <Value> value if amount will exceed it. Can add an {Additional Message} message as flair when the limit is reached.",
+		desc: "Limits the total pacify percentage to <Value> if it exceeds. Can add an {Additional Message} message as flair when the limit is reached.",
 		args: [
 			{
-				name: "Amount",
+				name: "Value",
 				type: "Decimal",
                 forced: true,
 			},
 			{
 				name: "Additional Message",
-				type: "Word"
+				type: "Word",
+				maxlength: 256,
 			}
 		],
+		doc: {
+			desc: `${specialQuery}`
+		},
 		applyfunc(message, option, args) {
+			if (args[0] < 0) args[0] = 0;
 			if (args[0] >= 100) return void message.channel.send('It wouldn\'t matter. The target would already be fully pacified.')
 			if (args[1] && args[1].trim().length == 0) return void message.channel.send(`You can't have an empty message.`);
 
@@ -294,7 +337,7 @@ specialList = {
 
 	stagnant: new Extra({
 		name: "Stagnant",
-		desc: `Specified option won't be affected by ${elementEmoji['passive']}kindheart passives.`,
+		desc: `Specified option won't be affected by ${elementEmoji['passive']} Kind Heart passives.`,
 		applyfunc(message, option, args) {
 			makeSpecial(option, "stagnant", [true]);
 			return true
@@ -304,15 +347,15 @@ specialList = {
 
 	variance: new Extra({
 		name: "Variance",
-		desc: "Pacify amount can vary by an amount between the <Minimum Range>-<Maximum Range> range.",
+		desc: "Pacify amount can vary by an amount from <Minimum Value> to <Maximum Value>.",
 		args: [
 			{
-				name: "Minimum Range",
+				name: "Minimum Value",
 				type: "Decimal",
                 forced: true,
 			},
 			{
-				name: "Maximum Range",
+				name: "Maximum Value",
 				type: "Decimal",
                 forced: true,
 			}
@@ -403,7 +446,7 @@ specialList = {
 
 	math: new Extra({
 		name: 'Math',
-		desc: `The target will present the user with a math equation with a <Expression Amount> expression amount to answer in {Timer} seconds.`,
+		desc: `The target will present the user with a math equation with an <Expression Amount> to answer in {Seconds}.`,
 		args: [
 			{
 				name: 'Include addition?',
@@ -446,27 +489,34 @@ specialList = {
 				type: 'YesNo',
 			},
 			{
-				name: 'Maximum decimals (0-3)',
+				name: 'Maximum decimals',
 				type: 'Num',
 			},
 			{
-				name: 'Expression Amount (1-10)',
+				name: 'Expression Amount',
 				type: 'Num',
 				forced: true,
 			},
 			{
-				name: 'Timer (5-360)',
+				name: 'Seconds',
 				type: 'Num',
 			},
 			{
 				name: 'Success Message',
 				type: 'Word',
+				maxlength: 256
 			},
 			{
 				name: 'Failure Message',
 				type: 'Word',
+				maxlength: 256
 			}
 		],
+		doc: {
+			desc: `**Argument Notes:**
+			- You can have up to 3 decimals in *{Maximum decimals}*.\n- You can have from 1 to 10 expressions in *{Expression Amount}*.\n- The timer can only be set from 5 to 360 seconds in *{Seconds}*.\n**Message Notes:**
+			${specialQuery}`
+		},
 		applyfunc(message, option, args) {
 			let essentials = args.slice(0, 4);
 			args.splice(0, 4);

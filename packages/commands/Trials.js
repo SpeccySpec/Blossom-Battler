@@ -153,7 +153,9 @@ commands.registertrial = new Command({
         {
             name: "Name",
             type: "Word",
-            forced: true
+            forced: true,
+            preventBlank: true,
+            maxLegnth: 64
         },
         {
             name: "Is Endless?",
@@ -161,14 +163,14 @@ commands.registertrial = new Command({
         },
         {
             name: "Description",
-            type: "Word"
+            type: "Word",
+            maxLegnth: 128
         }
     ],
     func(message, args, guilded) {
         trialFile = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`)
 
         if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
-        if (args[0].length > 50) return message.channel.send(`${args[0]} is too long of a trial name.`);
 
         trialFile[args[0]] = {
             name: args[0],
@@ -178,7 +180,6 @@ commands.registertrial = new Command({
         }
 
         if (args[2]) {
-			if (args[2].length > 100) return void message.channel.send("This trial's description is too long!");
 			trialFile[args[0]].desc = args[2];
 		}
 
@@ -269,6 +270,9 @@ commands.listtrials = new Command({
             multiple: true
         }
     ],
+    doc: {
+        desc: "List filtration will be revamped eventually, but what you can search for are: Specific enemy names present in waves *<Enemy>*, Wave amounts *<Waves>*, and Endless *<Endless> (True/False)*.\nThe format for *<Type #1, Variable #1>* is **waves 13 endless true** etc."
+    },
     func(message, args, guilded) {
         let array = [];
         let trials = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`);
@@ -382,6 +386,9 @@ commands.trialwave = new Command({
         }
     ],
     admin: 'You don\'t have permission to add waves to a trial.',
+    doc: {
+        desc: "If you set *<Wave>* as an existing wave, it will overwrite it."
+    },
     checkban: true,
     func: async(message, args) => {
         trialFile = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`)
@@ -457,7 +464,9 @@ commands.trialtruename = new Command({
         {
             name: "New Name",
             type: "Word",
-            forced: true
+            forced: true,
+            preventBlank: true,
+            maxLegnth: 64
         }
     ],
     admin: 'You don\'t have permission to change the true name of a trial.',
@@ -489,7 +498,9 @@ commands.renametrial = new Command({
         {
             name: "New Name",
             type: "Word",
-            forced: true
+            forced: true,
+            preventBlank: true,
+            maxLegnth: 64
         }
     ],
     admin: 'You don\'t have permission to change the true name of a trial.',
@@ -550,7 +561,7 @@ commands.triallevel = new Command({
 })
 
 commands.uploadtrial = new Command({
-    desc: "Uploads the trial for all to see! You can force all users to use this server's current settings, or you can let them use their own. There is a criteria however!```diff\n- Be as sensible as possible please!\n-Don't make your trial impossible.\n- Do not copy another's trial!```",
+    desc: "Uploads the trial for all to see! You can force all users to use this server's current settings, or you can let them use their own.",
     section: 'trials',
     aliases: ['globaltrial', 'setglobaltrial'],
     args: [
@@ -566,6 +577,9 @@ commands.uploadtrial = new Command({
         }
     ],
     checkban: true,
+    doc: {
+        desc: "There are criteria to uploading trials!```diff\n- Be as sensible as possible please!\n-Don't make your trial impossible.\n- Do not copy another's trial!```"
+    },
     func(message, args, guilded) {
 		enemies = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`, true)
         trials = setUpFile(`${dataPath}/json/${message.guild.id}/trials.json`, true)
@@ -618,7 +632,7 @@ commands.uploadtrial = new Command({
 })
 
 commands.globaltrials = new Command({
-    desc: "Gets all currently uploaded global trials. Can be sorted by different methods:```diff\n+ Newest\n+ Oldest\n+ MostLiked\n+ MostDisliked\n+ MostPlayed\n+ MostCompleted```",
+    desc: "Gets all currently uploaded global trials.",
     section: 'trials',
     aliases: ['seeglobaltrials', 'listglobaltrials'],
     args: [
@@ -628,6 +642,9 @@ commands.globaltrials = new Command({
             forced: false
         }
     ],
+    doc: {
+        desc: "Can be sorted by different methods:```diff\n+ Newest\n+ Oldest\n+ MostLiked\n+ MostDisliked\n+ MostPlayed\n+ MostCompleted```"
+    },
     func(message, args, guilded) {
 		trialGlobals = setUpFile(`${dataPath}/json/globaltrials.json`, true);
 
@@ -709,6 +726,7 @@ commands.exporttrialjson = new Command({
 			forced: true
 		}
 	],
+    admin: 'You don\'t have permission to export a trial\'s definitions.',
 	checkban: true,
 	func: async(message, args) => {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid trial name! Please enter an actual name.');

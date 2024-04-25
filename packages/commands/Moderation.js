@@ -176,12 +176,13 @@ commands.settings = new Command({
 commands.prefix = new Command({
 	desc: 'Change the prefix for the server',
 	section: 'moderation',
-	aliases: ['serverprefix', 'setprefix'],
+	aliases: ['serverprefix', 'setprefix', 'setserverprefix', 'changeprefix', 'changeserverprefix'],
 	args: [
 		{
 			name: 'New Prefix',
 			type: 'Word',
-			forced: true
+			forced: true,
+			preventBlank: true
 		}
 	],
 	admin: "You do not have permission to change the prefix!",
@@ -207,7 +208,8 @@ commands.ban = new Command({
 		{
 			name: 'Reason',
 			type: 'Word',
-			forced: false
+			forced: false,
+			maxlength: 1024
 		}
 	],
 	admin: "You do not have permission to ban users!",
@@ -277,7 +279,9 @@ commands.currency = new Command({
 		{
 			name: 'Currency',
 			type: 'Word',
-			forced: true
+			forced: true,
+			preventBlank: true,
+			maxlength: 32
 		}
 	],
 	admin: "You do not have permission to change the currency!",
@@ -323,9 +327,13 @@ commands.currencyemoji = new Command({
 		{
 			name: 'Emoji',
 			type: 'Word',
-			forced: true
+			forced: true,
+			preventBlank: true
 		}
 	],
+	doc: {
+		desc: "You can either use the Discord default emojis, or emojis the server you're in uses."
+	},
 	admin: "You do not have permission to change the currency emoji!",
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
@@ -351,16 +359,14 @@ commands.description = new Command({
 		{
 			name: 'Description',
 			type: 'Word',
-			forced: true
+			forced: true,
+			maxlength: 1024
 		}
 	],
 	admin: "You do not have permission to change the description!",
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
-		if (args[0].length > 1024) {
-			return message.channel.send('Description is too long!')
-		}
 		if (args[0] == '' || args[0] == ' ' || args[0] == 'none') {
 			settings['desc'] = ''
 		} else {
@@ -380,12 +386,11 @@ commands.damageformula = new Command({
 			name: 'Damage Formula',
 			type: 'Word',
 			forced: true
-		},
-		{
-			name: 'Formula',
-			type: 'Word',
 		}
 	],
+	doc: {
+		desc: "The valid damage formulas are: persona, pokemon, lamonka, beta. Custom formulas are not supported as of now."
+	},
 	admin: "You do not have permission to change the damage formula!",
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
@@ -413,12 +418,11 @@ commands.levelupformula = new Command({
 			name: 'Level Up Formula',
 			type: 'Word',
 			forced: true
-		},
-		{
-			name: 'Formula',
-			type: 'Word',
 		}
 	],
+	doc: {
+		desc: "The valid level up formulas are: original, assist, percent. Custom formulas are not supported as of now."
+	},
 	admin: "You do not have permission to change the level up formula!",
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
@@ -444,7 +448,8 @@ commands.levelupformula = new Command({
 	}
 })
 
-commands.xprequirementformula = new Command({
+//THERE ARE NO FORMULAS AT THE MOMENT. BRING THIS BACK IF IT HAS MORE.
+/*commands.xprequirementformula = new Command({
 	desc: 'Change the xp requirement formula for the server.',
 	section: 'moderation',
 	aliases: ['setxprequirementformula', 'setxprequirementform', 'setxprequirement'],
@@ -453,10 +458,6 @@ commands.xprequirementformula = new Command({
 			name: 'XP Requirement Formula',
 			type: 'Word',
 			forced: true
-		},
-		{   
-			name: 'Formula',
-			type: 'Word',
 		}
 	],
 	admin: "You do not have permission to change the xp requirement formula!",
@@ -480,7 +481,7 @@ commands.xprequirementformula = new Command({
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 		message.channel.send('XP requirement formula set to ' + args[0].charAt(0).toUpperCase() + args[0].slice(1) + '\n\`' + xpCalcFormulas[args[0].toLowerCase()] + '\`')
 	}
-})
+})*/
 
 commands.xprate = new Command({
 	desc: 'Change the xp rate for the server.',
@@ -494,6 +495,9 @@ commands.xprate = new Command({
 		}
 	],
 	admin: "You do not have permission to change the xp rate!",
+	doc: {
+		desc: "XP rate works as a multiplier, so 100 would not mean 100%, but rather 100x as much."
+	},
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
@@ -518,6 +522,9 @@ commands.trustrate = new Command({
 			forced: true
 		}
 	],
+	doc: {
+		desc: "Trust rate works as a multiplier, so 100 would not mean 100%, but rather 100x as much."
+	},
 	admin: "You do not have permission to change the trust rate!",
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
@@ -543,6 +550,9 @@ commands.moneyrate = new Command({
 			forced: true
 		}
 	],
+	doc: {
+		desc: "Money rate works as a multiplier, so 100 would not mean 100%, but rather 100x as much."
+	},
 	admin: "You do not have permission to change the money rate!",
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
@@ -568,6 +578,9 @@ commands.goldenchance = new Command({
 			forced: true
 		}
 	],
+	doc: {
+		desc: "Trust rate works as a percentage, so 100 would mean 100%."
+	},
 	admin: "You do not have permission to change the golden enemy chance!",
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
@@ -593,6 +606,9 @@ commands.mainelementrate = new Command({
 			forced: true
 		}
 	],
+	doc: {
+		desc: "Main element damage rate works as a multiplier, so 100 would not mean 100%, but rather 100x as much."
+	},
 	admin: "You do not have permission to change the main element damage rate!",
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
@@ -618,6 +634,9 @@ commands.critrate = new Command({
 			forced: true
 		}
 	],
+	doc: {
+		desc: "Critical hit damage rate works as a multiplier, so 100 would not mean 100%, but rather 100x as much."
+	},
 	admin: "You do not have permission to change the critical hit damage rate!",
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
@@ -643,6 +662,9 @@ commands.techrate = new Command({
 			forced: true
 		}
 	],
+	doc: {
+		desc: "Technical damage rate works as a multiplier, so 100 would not mean 100%, but rather 100x as much."
+	},
 	admin: "You do not have permission to change the technical damage rate!",
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
@@ -670,6 +692,9 @@ commands.mechanics = new Command({
 		}
 	],
 	admin: "You do not have permission to change the mechanics!",
+	doc: {
+		desc: "Valid mechanics are: limitbreaks, teamcombos, onemores, stataffinities, charms, leaderskills, transformations."
+	},
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
@@ -720,6 +745,9 @@ commands.caps = new Command({
 			forced: true
 		}
 	],
+	doc: {
+		desc: "Valid caps are: levelcap, hpmpcap, statcap, basestatcap, bstcap, skillamount, teamsize."
+	},
 	admin: "You do not have permission to change the caps!",
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
@@ -779,6 +807,9 @@ commands.transformationcaps = new Command({
 			forced: true
 		}
 	],
+	doc: {
+		desc: "Valid caps are: hpcap, statcap, basestatmincap, basestatmaxcap, bstcap, level, transformationlimit."
+	},
 	admin: "You do not have permission to change the caps!",
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
@@ -830,6 +861,9 @@ commands.affinityrates = new Command({
 			forced: true
 		}
 	],
+	doc: {
+		desc: "Valid affinities are: deadly, superweak, weak, resist, repel, drain.\nAffinity rates work as multipliers, so 100 would not mean 100%, but rather 100x as much."
+	},
 	admin: "You do not have permission to change the affinity rates!",
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)

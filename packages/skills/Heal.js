@@ -9,7 +9,7 @@ let targetColors = {
 healList = {
 	healstat: new Extra({
 		name: "Heal Stat",
-		desc: "The default heal type. Restores <Meter> by <Amount>. _Negative values for <Heal Amount> will damage the target!_",
+		desc: "The default heal type. Restores <Meter> by <Amount>.",
 		multiple: true,
 		diffflag: 0,
 		args: [
@@ -24,6 +24,13 @@ healList = {
 				forced: true
 			}
 		],
+		doc: {
+			desc: `**Negative** *<Amount>* is allowed, and it will act accordingly, meaning it will damage the <Meter> of a target. There is no affinity involved.
+			
+			The valid meters are: **hp, hppercent, mp, mppercent & lb**.
+			
+			Will default to 60 *<Power>* if set to 0.`
+		},
 		applyfunc(message, skill, args) {
 			if (args[0] == 0) args[0] = 60;
 			if (!['hp', 'mp', 'hppercent', 'mppercent', 'lb'].includes(args[1].toLowerCase())) return void message.channel.send(`${args[1]} is an invalid meter to heal! Enter either HP, MP, HPPercent, MPPercent or LB.`);
@@ -101,7 +108,7 @@ healList = {
 
 	regenerate: new Extra({
 		name: "Regenerate",
-		desc: "Restores <Meter> by <Amount> over time for <Turns> turns. Can be inactive before last regeneration finishes, wait before start, and pause each turn for an amount of turns optionally. _Negative values for <Amount> will damage the target!_",
+		desc: "Restores <Meter> by <Amount> over time for <Turns>.",
 		multiple: true,
 		args: [
 			{
@@ -132,6 +139,15 @@ healList = {
 				type: "Num"
 			}
 		],
+		doc: {
+			desc: `*{Activate after last regeneration?}* will make it wait before the last one finishes before taking effect, essentially making a queue.
+			*{Turns before start}*, as self-explanatory as it is, will make regeneration wait before it's supposed to take effect. It happens when it's first in the queue.
+			*{Pause turns}* will make sure regeneration takes effect every amount of turns rather than every turn. Useful for more powerful effects or alternating effects.
+			
+			**Negative** *<Amount>* is allowed, and it will act accordingly, meaning it will damage the <Meter> of a target. There is no affinity involved.
+			
+			The valid meters are: **hp, hppercent, mp, mppercent & lb**.`
+		},
 		applyfunc(message, skill, args) {
 			let hp = args[0];
 			let meter = args[1].toLowerCase();
@@ -190,7 +206,7 @@ healList = {
 
 	revive: new Extra({
 		name: "Revive",
-		desc: "Revives the target to 1/<Amount> of their max HP. _Negative values are not permitted._",
+		desc: "Revives the target to 1/<Amount> of their max HP.",
 		args: [
 			{
 				name: "Amount",
@@ -198,6 +214,9 @@ healList = {
 				forced: true
 			}
 		],
+		doc: {
+			desc: `**Negative** <Amount> is not allowed for obvious reasons.`
+		},
 		applyfunc(message, skill, args) {
 			if (args[0] <= 0) return void message.channel.send("You can't revive to 0 or less!");
 			makeHeal(skill, "revive", [args[0]]);
@@ -250,20 +269,23 @@ healList = {
 
 	statusheal: new Extra({
 		name: "Status Heal",
-		desc: "Cures the target of the specified status. Accepts 'physical', 'mental', 'positive', and 'neutral', and 'all' as statuses.",
+		desc: "Cures the target of the specified status.",
 		args: [
 			{
-				name: "Status",
+				name: "Status Effect / Type",
 				type: "Word",
 				forced: true
 			}
 		],
+		doc: {
+			desc: `The extra accepts **Individual Status Effects, Physical or Mental ones only** *("physical" / "mental")*, **Negative, Neutral or Positive ones only** *("negative" / "neutral" / "positive")*, **or all at one** *("all")*.`	
+		},
 		multiple: true,
 		diffflag: 0,
 		applyfunc(message, skill, args) {
 			const status = args[0]?.toLowerCase();
 
-			if (![...statusEffects, "all", "physical", "sorcery", "mental", "positive", "neutral"].includes(status))
+			if (![...statusEffects, "all", "physical", "mental", "negative", "positive", "neutral"].includes(status))
 				return void message.channel.send("That's not a valid status effect.");
 
 			makeHeal(skill, "statusheal", [status]);
@@ -442,7 +464,7 @@ healList = {
 
 	wish: new Extra({
 		name: "Wish",
-		desc: "Will restore after <Turns> turns. _Negative values are not permitted._",
+		desc: "Will restore after <Turns> turns.",
 		args: [
 			{
 				name: "Turns",
@@ -509,6 +531,9 @@ healList = {
 				forced: true
 			}
 		],
+		doc: {
+			desc: `The valid cost types are: **hp, hppercent, mp, mppercent & lb**.`
+		},
 		applyfunc(message, skill, args) {
 			let less = args[0].toLowerCase()
 			let equal = (args[1] == 'true' || args[1] == 'yes' || args[1] == 'y' || args[1] == '1')
@@ -570,7 +595,7 @@ healList = {
 
 	powerheal: new Extra({
 		name: "Power-based Healing",
-		desc: "Restores <HP/MP> by <Amount>, but is calculated as if it were dealing damage. _Negative values for <Heal Amount> will damage the target!_",
+		desc: "Restores <HP/MP> by <Amount>, but is calculated as if it were dealing damage.",
 		multiple: true,
 		diffflag: 0,
 		args: [
@@ -595,6 +620,13 @@ healList = {
 				forced: true
 			},
 		],
+		doc: {
+			desc: `**Negative** *<Amount>* is allowed, and it will act accordingly, meaning it will damage the <Meter> of a target. There is no affinity involved.
+			
+			The valid stats for both *<User Stat>* and *<Target Stat>* are: **ATK, MAG, PRC, END, AGL, CHR, LUK, INT**.
+			
+			Will default to 60 *<Amount>* if set to 0.`
+		},
 		applyfunc(message, skill, args) {
 			let ustat = args[2].toLowerCase();
 			let ostat = args[3].toLowerCase();

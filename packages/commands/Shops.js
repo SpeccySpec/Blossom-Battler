@@ -4,12 +4,13 @@
 // The above comment did not age well - Maiori
 commands.openshop = new Command({
 	desc: 'Opens a shop with <Name> at <Channel>, selling all of the <Items> listed!',
-	aliases: ['registershop', 'shopopen'],
+	aliases: ['registershop', 'shopopen', 'shopregister', 'shopcreate', 'createshop'],
 	args: [
 		{
 			name: "Name",
 			type: "Word",
-			forced: true
+			forced: true,
+			maxlength: 64
 		},
 		{
 			name: "Channel",
@@ -27,6 +28,9 @@ commands.openshop = new Command({
 			multiple: true
 		}
 	],
+	doc: {
+		desc: `What are allowed for *<Type, Item #1>*, are armors, weapons, and items.\nThe format for *<Type, Item #1>* is: **armor "armor name" weapon "weapon name"** etc.`
+	},
 	section: "shops",
 	checkban: true,
 	admin: "Only admins can create shops!",
@@ -330,9 +334,9 @@ class Shop {
 	}
 }
 
-commands.getshop = new Command({
-	desc: "Enter the shop named <Name>!",
-	aliases: ["entershop"],
+commands.entershop = new Command({
+	desc: "Enter the <Name> shop!",
+	aliases: ["getshop", 'useshop', 'shopenter', 'shopuse', 'shopget'],
 	args: [
 		{
 			name: "Name",
@@ -365,7 +369,7 @@ commands.getshop = new Command({
 })
 
 commands.addshopdialogue = new Command({
-	desc: "Adds a dialogue in the given shop, the title must be at most 80 chars long while the text must be at most 4096 chars long.",
+	desc: "Adds a dialogue in the given shop.",
 	args: [
 		{
 			name: "Shop name",
@@ -381,11 +385,15 @@ commands.addshopdialogue = new Command({
 			name: "Dialogue title",
 			type: "Word",
 			forced: true,
+			maxlength: 80,
+			preventBlank: true
 		},
 		{
 			name: "Dialogue text",
 			type: "Word",
 			forced: true,
+			maxlength: 4096,
+			preventBlank: true
 		}
 	],
 	section: "shops",
@@ -403,14 +411,14 @@ commands.addshopdialogue = new Command({
 			shop.dialogues = []
 		if (shop.dialogues.length >= 5)
 			return void message.channel.send("A shop can't have more than 5 dialogues!")
-		shop.dialogues.push({title: args[2].slice(0, 80), text: args[3].slice(0, 4096)})
+		shop.dialogues.push({title: args[2], text: args[3]})
 		fs.writeFileSync(shopPath, JSON.stringify(shopData, '	', 4))
 		message.react('👍')
 	}
 })
 
 commands.setshopcolor = new Command({
-	desc: "Sets the color of the given shop, supports either #RRGGBB or element names.",
+	desc: "Sets the color of the given shop.",
 	args: [
 		{
 			name: "Shop name",
@@ -425,9 +433,13 @@ commands.setshopcolor = new Command({
 		{
 			name: "Color",
 			type: "Word",
-			forced: true
+			forced: true,
+			preventBlank: true
 		}
 	],
+	doc: {
+		desc: 'Preferred formats for *<Color>* are either in element names, or in the hexadecimal format *(#RRGGBB)*.'
+	},
 	section: "shops",
 	checkban: true,
 	admin: "Only admins can change a shop's color!",

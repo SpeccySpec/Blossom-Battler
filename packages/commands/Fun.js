@@ -1,7 +1,8 @@
 // Ping
 commands.ping = new Command({
-	desc: "Check for my Latency and API Latency.",
+	desc: "Checks for API and client latencies.",
 	section: "fun",
+	aliases: ['apilatency', 'latency'],
 	func(message, args, guilded) {
 		message.channel.send("Loading...").then((message2) => {
 			const latency = Math.round(client.ws.ping)
@@ -17,7 +18,7 @@ commands.ping = new Command({
 
 // Diceroll
 commands.diceroll = new Command({
-	desc: "Rolls the specified amount of dice with the specified amount of sides.",
+	desc: "Rolls an {Dice Count} of <Sides>-Sided dice.",
 	section: "fun",
 	aliases: ['dice'],
 	args: [
@@ -31,6 +32,9 @@ commands.diceroll = new Command({
 			type: "Num"
 		}
 	],
+	doc: {
+		desc: `*{Dice Count}* defaults to 1.`
+	},
 	func(message, args, guilded) {
 		const num1 = args[0]
 		const num2 = args[1] ?? 1
@@ -143,6 +147,7 @@ commands.scenario = new Command({
 			type: "Ping"
 		}
 	],
+	aliases: ['randscenario', 'randomscenario', 'userscenario', 'userscen', 'randomscen', 'scen', 'randscen'],
 	section: "fun",
 	func(message, args, guilded) {
 		const taggedUser = args[0]
@@ -350,7 +355,11 @@ commands.ship = new Command({
 			multiple: true
 		}
 	],
+	aliases: ['usership', 'charactership', 'pair', 'pairing', 'userpairing', 'characterpairing', 'charship', 'charpairing', 'userpair', 'characterpair', 'charpair', 'shipping', 'usershipping', 'charactershipping', 'charshipping'],
 	section: "fun",
+	doc: {
+		desc: "You can ship anything and anyone. If you're shipping real people, make sure they're fine with it. You will take responsibility if they feel discomfort. Similarly with creations made by people.\nIf there's only one person specified, you will be shipped with them automatically."
+	},
 	func(message, args, guilded) {
 		if (!args[0]) return message.channel.send(`Please specify at least one person who you want to ship yourself with, or two if you want to ship two different people.`);
 
@@ -385,11 +394,13 @@ commands.ship = new Command({
 commands.randship = new Command({
 	desc: "Ship random characters together.",
 	section: "roll",
-	aliases: ["randomship"],
-	args: [{
-		name: "Person #1",
-		type: "Word",
-	}],
+	aliases: ["randomship", 'randpair', 'randompair', 'randpairing', 'randompairing', 'randshipping', 'randomshipping'],
+	args: [
+		{
+			name: "Person #1",
+			type: "Word",
+		}
+	],
 	func(message, args, guilded) {
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
@@ -408,6 +419,7 @@ commands.randship = new Command({
 commands.dailyship = new Command({
 	desc: "Any ship can be set as a daily one! Test your luck to see if one you desire is here!",
 	section: "roll",
+	aliases: ['dailypair', 'dailypairing', 'dailishipping'],
 	args: [],
 	func(message, args, guilded) {
 		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
@@ -447,10 +459,10 @@ let inQuestion = {}
 commands.pmdquiz = new Command({
 	desc: "Play a PMD quiz!",
 	section: "fun",
-	aliases: ["pmd", "pokemonquiz", "pokemonmysterydungeon", "pokemonmysterydungeonquiz"],
+	aliases: ["pmd", "pokemonquiz", "pokemonmysterydungeon", "pokemonmysterydungeonquiz", 'pokequiz'],
 	args: [
 		{
-			name: "Category (Red/Blue, Time/Darkness, Sky, All)",
+			name: "Category",
 			type: "Word",
 			forced: true,
 		},
@@ -459,6 +471,9 @@ commands.pmdquiz = new Command({
 			type: "Num",
 		}
 	],
+	doc: {
+		desc: `The categories you can choose are:\n- **Red/Blue** (Red and Blue Rescue Team)\n- **Time/Darkness** (Explorers Of Time And Darkness)\n- **Sky** (Explorers Of Sky)\n- **All** (Will give you all at once)`
+	},
 	func(message, args, guilded) {
 		if (inQuestion[message.author.id]) return message.channel.send("Finish your current quiz first!");
 
@@ -629,7 +644,7 @@ function processQuestion(message, question, number) {
 dailies = ['dailyskill', 'dailyitem', 'dailyweapon', 'dailyarmor', 'dailychar', 'dailycharquote', 'dailyship', 'dailyenemy', 'dailyenemyquote']
 
 commands.dailyall = new Command({
-	desc: "Starts all commands for daily things.",
+	desc: "Starts all daily commands.",
 	section: "roll",
 	args: [],
 	func(message, args, guilded) {
@@ -641,7 +656,7 @@ commands.dailyall = new Command({
 
 // User Data
 commands.getuserdata = new Command({
-	desc: "List all the achievements that I have to offer! Completed achievements will be crossed out.",
+	desc: "Preview how many achevement stars you have obtained, and how many achievements you have finished.",
 	section: "fun",
 	func(message, args, guilded) {
 		let array = [];
@@ -666,7 +681,7 @@ commands.getuserdata = new Command({
 })
 
 commands.listachievements = new Command({
-	desc: "List all the achievements that I have to offer! Completed achievements will be crossed out.",
+	desc: "List all the achievements! Completed achievements will be crossed out.",
 	section: "fun",
 	func(message, args, guilded) {
 		let array = [];
