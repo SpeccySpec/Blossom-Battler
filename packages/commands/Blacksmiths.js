@@ -1,12 +1,14 @@
 // Alright alright... I'll implement blacksmiths.
 commands.openblacksmith = new Command({
-	desc: 'Opens a blacksmiths with <Name> at <Channel>. They should only be able to refine specific equipments. Set to "all" to ignore this.',
-	aliases: ['registerblacksmiths', 'blacksmithopen'],
+	desc: 'Opens a blacksmith with <Name> at <Channel>.',
+	aliases: ['registerblacksmith', 'blacksmithopen', 'blacksmithregister', 'createblacksmith', 'blacksmithcreate'],
 	args: [
 		{
 			name: "Name",
 			type: "Word",
-			forced: true
+			forced: true,
+			maxlength: 64,
+			preventBlank: true
 		},
 		{
 			name: "Channel",
@@ -20,6 +22,9 @@ commands.openblacksmith = new Command({
 			multiple: true
 		}
 	],
+	doc: {
+		desc: `What are allowed for *<Equipments>*, are armors, weapons, and 'all'.\nIf 'all' is set, the blacksmith will offer services for **every** weapon and armor in the server.`
+	},
 	section: "shops",
 	checkban: true,
 	admin: "Only admins can create blacksmiths!",
@@ -29,7 +34,7 @@ commands.openblacksmith = new Command({
 		const bsID = args[1].id;
 		const blacksmiths = setUpFile(`${dataPath}/json/${message.guild.id}/${bsID}/blacksmiths.json`, true);
 
-		if (blacksmiths[trueName]) return void message.channel.send('A blacksmiths with the ID of `' + trueName + '` already exists!');
+		if (blacksmiths[trueName]) return void message.channel.send('A blacksmith with the ID of `' + trueName + '` already exists!');
 
 		let blacksmith = {name: bsName}
 
@@ -57,7 +62,7 @@ commands.openblacksmith = new Command({
 		blacksmiths[trueName] = blacksmith;
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/${bsID}/blacksmiths.json`, JSON.stringify(blacksmiths, '	', 4));
 
-		message.channel.send(`The blacksmiths **${bsName}** is ready!`)
+		message.channel.send(`The blacksmith **${bsName}** is ready!`)
 
 		if (blacksmith.refine) {
 			listArray(message.channel, blacksmith.refine.map((equipment) => {
@@ -76,9 +81,9 @@ commands.openblacksmith = new Command({
 	}
 })
 
-commands.enterblacksmiths = new Command({
-	desc: "Enter the shop named <Name>!",
-	aliases: ["enterbs", "useblacksmiths", "usebs"],
+commands.enterblacksmith = new Command({
+	desc: "Enter the blacksmith named <Name>!",
+	aliases: ["useblacksmith", 'getblacksmith', 'blacksmithenter', 'blacksmithuse', 'blacksmithget'],
 	args: [
 		{
 			name: "Name",
