@@ -13,9 +13,12 @@ class ArgList {
 		const args = []
 		for (const arg of this.args) {
 			const rawarg = rawargs.shift()
+
 			if (rawarg) {
 				const parser = typeParsers[arg.type]
-				const parsedArg = parser ? parser({arg: rawarg, message}) : rawarg
+				let parsedArg = parser ? parser({arg: rawarg, message}) : rawarg
+				if (arg?.preventBlank && parsedArg.toString().trim() == '') parsedArg = undefined;
+
 				if (parsedArg === undefined) {
 					const DiscordEmbed = new Discord.MessageEmbed()
 						.setColor('#ff0000')
@@ -23,17 +26,33 @@ class ArgList {
 						.setDescription(`**Argument:** *${this.getArgs().join(" ").replace(
 								`${arg.type}: ${arg.name}`,
 								`__${arg.type}: ${arg.name}__`,
-							)}*\n**Offender:** __${rawarg}__` +
-							`${arg.multiple ? ` ${rawargs.join(" ")}` : ""}`
+							)}*\n**Offender:** __${rawarg.length > 256 ? `${rawarg.substring(0, 256)}...` : rawarg}__` +
+							`${arg.multiple ? ` ${rawargs.join(" ")}` : ""}${this.getDoc()}`
 					)
 
 					return void message.channel.send({embeds: [DiscordEmbed]});
 				}
 
+				if (arg?.maxlength && rawarg.toString().length > arg.maxlength) {
+					const DiscordEmbed = new Discord.MessageEmbed()
+					.setColor('#ff0000')
+					.setTitle(`The "${arg.name}" argument is too long. It should be no longer than ${arg.maxlength} characters.`)
+					.setDescription(`**Argument:** *${this.getArgs().join(" ").replace(
+							`${arg.type}: ${arg.name}`,
+							`__${arg.type}: ${arg.name}__`,
+						)}*\n**Offender:** __${rawarg.substring(0, arg.maxlength)}...__` +
+						`${this.getDoc()}`
+				)
+
+				return void message.channel.send({embeds: [DiscordEmbed]});
+				}
+
 				args.push(parsedArg)
 				if (arg.multiple) {
 					for (const rawarg of rawargs) {
-						const parsedExtraArg = parser ? parser({arg: rawarg, message}) : rawarg
+						let parsedExtraArg = parser ? parser({arg: rawarg, message}) : rawarg
+						if (arg?.preventBlank && parsedExtraArg.toString().trim() == '') parsedExtraArg = undefined;
+
 						if (!parsedExtraArg) {
 							const DiscordEmbed = new Discord.MessageEmbed()
 								.setColor('#ff0000')
@@ -44,12 +63,29 @@ class ArgList {
 									)}*\n**Offender:** ${
 									parsedArg +
 									" " +
-									rawargs.join(" ").replace(rawarg, `__${rawarg}__`)
-									}`
+									rawargs.join(" ").replace(rawarg, `__${rawarg.length > 256 ? `${rawarg.substring(0, 256)}...` : rawarg}__`)
+									}${this.getDoc()}`
 							)
 
 							return void message.channel.send({embeds: [DiscordEmbed]});
-						} 
+						}
+
+						if (arg?.maxlength && rawarg.toString().length > arg.maxlength) {
+							const DiscordEmbed = new Discord.MessageEmbed()
+							.setColor('#ff0000')
+							.setTitle(`The "${arg.name}" extra argument is too long. It should be no longer than ${arg.maxlength} characters.`)
+							.setDescription(`**Argument:** *${this.getArgs().join(" ").replace(
+									`${arg.type}: ${arg.name}`,
+									`__${arg.type}: ${arg.name}__`,
+								)}*\n**Offender:** ${
+								parsedArg +
+								" " +
+								rawargs.join(" ").replace(rawarg, `__${rawarg.substring(0, arg.maxlength)}...__`)
+								}${this.getDoc()}`
+							)
+
+							return void message.channel.send({embeds: [DiscordEmbed]});
+						}
 
 						args.push(parsedExtraArg)
 					}
@@ -62,7 +98,7 @@ class ArgList {
 					.setDescription(this.getFullDesc().replace(
 						`${arg.type}: ${arg.name}`,
 						`__${arg.type}: ${arg.name}__`,
-					)
+					) + this.getDoc()
 				)
 				return void message.channel.send({embeds: [DiscordEmbed]})
 			}
@@ -77,17 +113,37 @@ class ArgList {
 				(el) => el[1] || el[0] || "",
 			)[0])
 			.setDescription(this.getFullDesc() +
-			(this.doc != undefined
-				? `\n\n**DOCUMENTATION:**${
-					this.doc.desc != undefined ? `\n${this.doc.desc}` : ""
-				}`
-			: ""));
+			this.getDoc());
 
 		if (this?.doc?.fields != undefined) DiscordEmbed.addFields(this.doc.fields);
 
 		return void message.channel.send({
 			embeds: [DiscordEmbed]
 		});
+	}
+
+	getDoc() {
+		let txt = '';
+
+		let argLengths = this.args.filter(x => x?.maxlength);
+
+		if (argLengths.length > 0) txt += `\n\n### ARGUMENT LENGTHS:`
+
+		for (let i in argLengths) {
+			let argdesc = argLengths[i].name;
+			argdesc = argLengths[i].forced ? `<${argdesc}>` : `\{${argdesc}\}`;
+			argdesc = argLengths[i].long ? `"${argdesc}"` : argdesc;
+
+			txt += `\n*${argdesc}* can be up to **${argLengths[i].maxlength}** characters long.`
+		}
+
+		txt += (this.doc != undefined
+			? `\n### DOCUMENTATION:${
+				this.doc.desc != undefined ? `\n${this.doc.desc}` : ""
+			}`
+		: "");
+
+		return txt;
 	}
 
 	getArgs() {
