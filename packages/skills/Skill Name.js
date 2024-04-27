@@ -232,16 +232,18 @@ useCost = (char, cost, costtype, btl) => {
 // Get Tier
 skillTier = (skill) => {
 	if (skill.tier) return skill.tier;
+	if (["status", "passive", "heal"].includes(skill.type)) return 1; // you have to set these manually.
 
-	if (skill.pow <= 100)
+	let pow = (skill.pow * (skill.hits ?? 1));
+	if (pow <= 100)
 		return 1;
-	else if (skill.pow <= 250)
+	else if (pow <= 250)
 		return 2;
-	else if (skill.pow <= 400)
+	else if (pow <= 400)
 		return 3;
-	else if (skill.pow <= 650)
+	else if (pow <= 650)
 		return 4;
-	else if (skill.pow <= 1200)
+	else if (pow <= 1200)
 		return 5;
 	else
 		return 6;
