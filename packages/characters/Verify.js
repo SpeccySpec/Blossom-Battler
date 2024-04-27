@@ -40,6 +40,7 @@ verifiedChar = (char, server) => {
 		if (!skill) return false;
 		if (skill.pow*(skill.hits ?? 1) > 1200) return false;
 		if (skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return false;
+		if (skillTier(skill) > 5) return false;
 
 		if (typeof(skill.type) == 'object') {
 			for (let type of skill.type) {
