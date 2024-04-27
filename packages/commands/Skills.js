@@ -1286,7 +1286,7 @@ commands.settier = new Command({
 	section: "skills",
 	aliases: ['skilltier', 'tierskill', 'setskilltier'],
 	doc: {
-		desc: "```Tier 1 < 100 Power\nTier 2 < 250 Power\nTier 3 < 400 Power\nTier 4 < 650 Power\nTier 5 < 1200 Power\nTier 6 < 2000 Power```These are the default tiers for autocalculation. You can use this to determine **skill evolution**.",
+		desc: "```Tier 1 ≤ 100 Power\nTier 2 ≤ 250 Power\nTier 3 ≤ 400 Power\nTier 4 ≤ 650 Power\nTier 5 ≤ 1200 Power\nTier 6 ≤ 2000 Power```These are the default tiers for autocalculation. You can use this to determine **skill evolution**.",
 	},
 	args: [
 		{
@@ -1306,7 +1306,7 @@ commands.settier = new Command({
 				return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
 
 			if (args[1] < 1 || args[1] > 6)
-				return message.channel.send(args[1] + " is an invalid skill tier. The skill tiers must be between 1-6. Here are some guidelines:```Tier 1 < 100 Power\nTier 2 < 250 Power\nTier 3 < 400 Power\nTier 4 < 650 Power\nTier 5 < 1200 Power\nTier 6 < 2000 Power```");
+				return message.channel.send(args[1] + " is an invalid skill tier. The skill tiers must be between 1-6. Here are some guidelines:```Tier 1 ≤ 100 Power\nTier 2 ≤ 250 Power\nTier 3 ≤ 400 Power\nTier 4 ≤ 650 Power\nTier 5 ≤ 1200 Power\nTier 6 ≤ 2000 Power```");
 
 			skillFile[args[0]].tier = args[1];
 
