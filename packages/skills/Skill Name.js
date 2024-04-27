@@ -228,3 +228,21 @@ useCost = (char, cost, costtype, btl) => {
 			}
 	}
 }
+
+// Get Tier
+skillTier = (skill) => {
+	if (skill.tier) return skill.tier;
+
+	if (skill.pow <= 100)
+		return 1;
+	else if (skill.pow <= 250)
+		return 2;
+	else if (skill.pow <= 400)
+		return 3;
+	else if (skill.pow <= 650)
+		return 4;
+	else if (skill.pow <= 1200)
+		return 5;
+	else
+		return 6;
+}

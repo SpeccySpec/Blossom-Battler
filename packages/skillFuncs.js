@@ -61,8 +61,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(color)
-		.setTitle(`${type}${skillDefs.name ? skillDefs.name : skillName} *(${userTxt})*`)
-	
+		.setTitle(`${type}${skillDefs.name ? skillDefs.name : skillName} [${tierEmojis[(skillTier(skillDefs) ?? 6)-1]}] *(${userTxt})*`)
 	
 	let settings = setUpSettings(message.guild.id);
 	var finalText = ``;

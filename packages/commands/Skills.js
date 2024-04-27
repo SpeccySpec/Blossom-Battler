@@ -1281,6 +1281,43 @@ commands.removeevoskill = new Command({
 	}
 })
 
+commands.settier = new Command({
+	desc: "Force the skill's tier. Normally, it is automatically calculated. A skill's tier can be 1-6, but all skills at tier 6 **will unverify your character**.",
+	section: "skills",
+	aliases: ['skilltier', 'tierskill', 'setskilltier'],
+	doc: {
+		desc: "```Tier 1 < 100 Power\nTier 2 < 250 Power\nTier 3 < 400 Power\nTier 4 < 650 Power\nTier 5 < 1200 Power\nTier 6 < 2000 Power```These are the default tiers for autocalculation. You can use this to determine **skill evolution**.",
+	},
+	args: [
+		{
+			name: "Skill Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Skill Tier (1-6)",
+			type: "Num",
+			forced: true
+		}
+	],
+	func(message, args, guilded) {
+		if (skillFile[args[0]]) {
+			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skillFile[args[0]].originalAuthor != message.author.id)
+				return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
+
+			if (args[1] < 1 || args[1] > 6)
+				return message.channel.send(args[1] + " is an invalid skill tier. The skill tiers must be between 1-6. Here are some guidelines:```Tier 1 < 100 Power\nTier 2 < 250 Power\nTier 3 < 400 Power\nTier 4 < 650 Power\nTier 5 < 1200 Power\nTier 6 < 2000 Power```");
+
+			skillFile[args[0]].tier = args[1];
+
+			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+			message.react('👍');
+		} else {
+			return message.channel.send(`${args[0]} is an invalid Skill Name!`)
+		}
+	}
+})
+
 /*
 	SKILL LISTING
 					*/
