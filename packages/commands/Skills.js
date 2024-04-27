@@ -1353,7 +1353,7 @@ commands.listskills = new Command({
 	func(message, args, guilded) {
 		let array = []
 
-		const validTypes = ['user', 'element', 'cost', 'costtype', 'pow', 'acc', 'crit', 'hits', 'atktype', 'target', 'status', 'statuschance', 'preskill', 'evoskill', 'levellock', 'extra']
+		const validTypes = ['user', 'element', 'cost', 'costtype', 'pow', 'tier', 'acc', 'crit', 'hits', 'atktype', 'target', 'status', 'statuschance', 'preskill', 'evoskill', 'levellock', 'extra']
 
         if (args[0]) {
 			if (args.length % 2 != 0) {
@@ -1423,6 +1423,10 @@ commands.listskills = new Command({
 						case 'hits':
 							args[a] = parseInt(args[a]);
 							isConditionMet = (skillFile[i][args[a-1]] && skillFile[i][args[a-1]] == args[a])
+							break;
+						case 'tier':
+							args[a] = parseInt(args[a]);
+							isConditionMet = (skillTier(skillFile[i]) == args[a]);
 							break;
 						case 'acc':
 						case 'crit':
