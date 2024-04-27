@@ -235,6 +235,8 @@ skillTier = (skill) => {
 	if (["status", "passive", "heal"].includes(skill.type)) return 1; // you have to set these manually.
 
 	let pow = (skill.pow * (skill.hits ?? 1));
+	if (skill.hits && skill.hits > 1) pow *= 1.1;
+
 	if (pow <= 100)
 		return 1;
 	else if (pow <= 250)
