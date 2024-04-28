@@ -674,7 +674,7 @@ healList = {
 			if (turns && turns <= 0)
 				return void message.channel.send("You can't have a turn amount less than 0, as then it would revert to normal too soon.");
 
-			makeStatus(skill, "buff", [target, stat, stages, chance, turns])
+			makeHeal(skill, "buff", [target, stat, stages, chance, turns])
 			return true
 		},
 		onselect(char, skill, btl, vars, multiplier) {
@@ -697,7 +697,7 @@ healList = {
 			let rate = args[1] ?? 0
 			if (charges < 1)
 				return void message.channel.send("What's the point of a skill that you can never use?")
-			makeStatus(skill, "charges", [charges, rate]);
+			makeHeal(skill, "charges", [charges, rate]);
 			return true
 		},
 		canuse: extrasList.charges.canuse,
