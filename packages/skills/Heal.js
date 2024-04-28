@@ -647,6 +647,63 @@ healList = {
 			return `${text}, using the **Damage Formula**`
 		}
 	}),
+
+	buff: new Extra({
+		name: "Stat Buff",
+		desc: extrasList.buff.desc,
+		args: extrasList.buff.args,
+		multiple: true,
+		diffflag: [0, 1, 2],
+		applyfunc(message, skill, args) {
+			const target = args[0].toLowerCase()
+			const stat = args[1].toLowerCase()
+			const stages = args[2] ?? 1
+			const chance = Math.min(args[3] ?? 100, 100)
+			const turns = args[4] ?? null
+
+			if (target != 'user' && target != 'target') 
+				return void message.channel.send(`You typed ${target} as the target. It must be either \`user\` or \`target\`.`)
+			if (![...stats, "crit", "all"].includes(stat))
+				return void message.channel.send("That's not a valid stat!");
+			if (stages == 0)
+				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
+			if (Math.abs(stages) > 3) 
+				return void message.channel.send("The maximum amount of stages is 3!");
+			if (chance <= 0)
+				return void message.channel.send("You can't have a percentage less than 0, as then it would never happen!");
+			if (turns && turns <= 0)
+				return void message.channel.send("You can't have a turn amount less than 0, as then it would revert to normal too soon.");
+
+			makeStatus(skill, "buff", [target, stat, stages, chance, turns])
+			return true
+		},
+		onselect(char, skill, btl, vars, multiplier) {
+			if (vars[0] != 'user') return '';
+			return extrasList.buff.buffChange(char, char, skill, btl, vars, multiplier);
+		},
+		onuse(char, targ, skill, btl, vars, multiplier) {
+			if (vars[0] != 'target') return '';
+			return extrasList.buff.buffChange(char, targ, skill, btl, vars, multiplier);
+		},
+		getinfo: buffText
+	}),
+
+	charges: new Extra({
+		name: extrasList.charges.name,
+		desc: extrasList.charges.desc,
+		args: extrasList.charges.args,
+		applyfunc(message, skill, args) {
+			let charges = args[0]
+			let rate = args[1] ?? 0
+			if (charges < 1)
+				return void message.channel.send("What's the point of a skill that you can never use?")
+			makeStatus(skill, "charges", [charges, rate]);
+			return true
+		},
+		canuse: extrasList.charges.canuse,
+		onuse: extrasList.charges.onuse,
+		getinfo: extrasList.charges.getinfo,
+	}),
 }
 
 modSkillResult = (char, targ, result, skill, btl) => {
