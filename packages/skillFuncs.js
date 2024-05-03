@@ -342,7 +342,18 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 
 	if (knownBy != "") DiscordEmbed.fields.push({name: 'Known By:', value: knownBy, inline: false})
 
-	DiscordEmbed.setDescription(finalText ?? 'Invalid Description :(')
+	DiscordEmbed.setDescription(finalText ?? 'Invalid Description :(');
+
+	let footerText = ``;
+	if (skillDefs.creationtime)
+		footerText += `Skill created at ${new Date(skillDefs.creationtime).toLocaleString()}`;
+	else
+		footerText += `Skill created before ${new Date(Date.UTC(2024, 4, 3, 18, 3, 31)).toLocaleString()}`
+
+	if (skillDefs.edittime) footerText += `\nSkill last edited at ${new Date(skillDefs.edittime).toLocaleString()}`;
+
+	if (footerText != ``) DiscordEmbed.setFooter(footerText);
+
 	if (additionalMessage)
 		message.channel.send({content: additionalMessage, embeds: [DiscordEmbed]})
 	else

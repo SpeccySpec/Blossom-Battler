@@ -779,6 +779,7 @@ buildHeal = (message, extra, args) => {
 		cost: args[1],
 		costtype: args[2],
 		target: args[3],
+		creationtime: Date.now(),
 		originalAuthor: message.author.id
 	}
 

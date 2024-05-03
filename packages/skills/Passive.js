@@ -2548,6 +2548,7 @@ buildPassive = (message, extra, args) => {
 	let skill = {
 		name: args[0],
 		type: 'passive',
+		creationtime: Date.now(),
 		originalAuthor: message.author.id
 	}
 

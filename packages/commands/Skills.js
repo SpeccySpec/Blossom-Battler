@@ -115,6 +115,7 @@ commands.registerskill = new Command({
 			cost: cost,
 			costtype: costtype,
 			target: args[9].toLowerCase(),
+			creationtime: Date.now(),
 			originalAuthor: message.author.id
 		}
 
@@ -580,6 +581,8 @@ commands.applyextra = new Command({
 					break;
 			}
 
+			skilldata.edittime = Date.now();
+
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 		} else {
 			return message.channel.send(`${skillname} is an invalid Skill Name!`)
@@ -638,6 +641,8 @@ commands.clearextras = new Command({
 					delete skilldata.extras[args[1].toLowerCase()];
 					break;
 			}
+
+			skilldata.edittime = Date.now();
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
@@ -932,6 +937,8 @@ commands.editskill = new Command({
 					return message.channel.send(`${editField} is an invalid field!`);
 			}
 
+			skillFile[args[0]].edittime = Date.now();
+
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
 		} else {
@@ -994,6 +1001,8 @@ commands.levellock = new Command({
 				}
 				fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/characters.json`, JSON.stringify(charFile, null, '    '));
 			}
+
+			skillFile[args[0]].edittime = Date.now();
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
@@ -1062,6 +1071,8 @@ commands.preskill = new Command({
 				}
 			}
 
+			skillFile[args[0]].edittime = Date.now();
+
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
 		} else {
@@ -1121,6 +1132,8 @@ commands.removepreskill = new Command({
 					removeEvoSkill(skillFile[args[1]], args[0]);
 				}
 			}
+
+			skillFile[args[0]].edittime = Date.now();
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
@@ -1217,6 +1230,8 @@ commands.evoskill = new Command({
 				}
 			}
 
+			skillFile[args[0]].edittime = Date.now();
+
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
 		} else {
@@ -1273,6 +1288,8 @@ commands.removeevoskill = new Command({
 				}
 			}
 
+			skillFile[args[0]].edittime = Date.now();
+
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
 		} else {
@@ -1309,6 +1326,7 @@ commands.settier = new Command({
 				return message.channel.send(args[1] + " is an invalid skill tier. The skill tiers must be between 1-6. Here are some guidelines:```Tier 1 ≤ 100 Power\nTier 2 ≤ 250 Power\nTier 3 ≤ 400 Power\nTier 4 ≤ 650 Power\nTier 5 ≤ 1200 Power\nTier 6 ≤ 2000 Power```");
 
 			skillFile[args[0]].tier = args[1];
+			skillFile[args[0]].edittime = Date.now();
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');

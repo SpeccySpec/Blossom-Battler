@@ -2098,6 +2098,7 @@ buildStatus = (message, extra, args, lb) => {
 			cost: args[4],
 			limitbreak: true,
 			target: args[6],
+			creationtime: Date.now(),
 			originalAuthor: message.author.id
 		}
 
@@ -2109,6 +2110,7 @@ buildStatus = (message, extra, args, lb) => {
 			cost: args[1],
 			costtype: args[2].toLowerCase(),
 			target: args[3],
+			creationtime: Date.now(),
 			originalAuthor: message.author.id
 		}
 
