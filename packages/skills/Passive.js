@@ -2470,7 +2470,7 @@ passiveList = {
 					}
 
 					if (targ) {
-						let results = attackWithSkill(targ, char, skill, btl);
+						let results = attackWithSkill(char, targ, skill, btl);
 						return `__${char.name}__'s _${getFullName(passive)}_ allowed them to cast **${getFullName(skill)}** on __${(targ.id == char.id) ? "themselves" : targ.name}__!\n${results.txt}`;
 					}
 				}
