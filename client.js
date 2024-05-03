@@ -5,6 +5,8 @@
 
 //Discord.JS initiation.
 Discord = require('discord.js');
+Voice = require('@discordjs/voice');
+Opus = require('@discordjs/opus');
 Builders = require('@discordjs/builders');
 Rest = require('@discordjs/rest');
 ApiTypes = require('discord-api-types/v9');
@@ -43,6 +45,10 @@ Canvas = require('canvas');
 //FS, for writing files.
 fs = require('fs');
 fsP = require("fs/promises");
+
+// Voice Shit
+ffmpeg = require('ffmpeg-static');
+ytdl = require('ytdl-core');
 
 // File modules.
 request = require('request');
@@ -392,6 +398,7 @@ let cmdcats = {
 	parties: "Can't battle without parties now, can ya?",
 	battle: "The main part of Blossom Battler is well... the battles of course!",
 	trials: "Trials! Where you test yourself against waves of enemies!",
+	music: "Music, music! Set battle themes, play music casually, and more!",
 	roll: "Random and Daily things! Dailies reroll every day! Roll away!",
 	all: "All of the existing commands"
 }
@@ -458,7 +465,7 @@ const rest = new Rest.REST({ version: '9' }).setToken(process.env.TOKEN);
 */
 
 // Run this shit
-let folders = ['skills', 'characters', 'enemies', 'party', 'battle', 'items', 'campaign'] // i TOLD YOU there WILL EEEVEN be moreee
+let folders = ['skills', 'characters', 'enemies', 'party', 'battle', 'items', 'campaign', 'music'] // i TOLD YOU there WILL EEEVEN be moreee
 
 for (const i in folders) {
 	let files = fs.readdirSync(`${packPath}/${folders[i]}`).filter(file => file.endsWith('.js'));
