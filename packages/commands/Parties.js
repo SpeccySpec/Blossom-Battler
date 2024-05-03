@@ -891,6 +891,104 @@ commands.usearmor = new Command({
     }
 })
 
+commands.putweapon = new Command({
+    desc: "Stashes a weapon from a character into the party's weapon inventory.",
+	aliases: ['placeweapon', 'stashweapon'],
+    section: 'items',
+	checkban: true,
+    args: [
+        {
+            name: "Character",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Party",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Weapon",
+            type: "Word",
+            forced: true
+        }
+    ],
+    func(message, args, guilded) {
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		if (!parties[args[1]]) return message.channel.send(`${args[1]} is not a valid party name.`);
+
+		if (parties[args[1]].members.includes(args[0]) || parties[args[1]].backup.includes(args[0])) {
+			let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+			let char = charFile[args[0]];
+
+			if (!char.weapons) char.weapons = {};
+			if (!parties[args[1]].weapons) parties[args[1]].weapons = {};
+
+			if (char.weapons[args[2]]) {
+				parties[args[1]].weapons[args[2]] = objClone(char.weapons[args[2]]);
+				delete char.weapons[args[2]];
+
+				message.channel.send(`${char.name} has placed the ${args[2]} back into the party's inventory.`);
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, 4));
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, 4));
+			} else {
+				return message.channel.send(`${char.name} does not possess a ${args[2]}.`);
+			}
+		} else {
+			return message.channel.send(`${args[0]} is not in Team ${parties[args[0]].name}`);
+		}
+    }
+})
+
+commands.putarmor = new Command({
+    desc: "Stashes a weapon from a character into the party's weapon inventory.",
+	aliases: ['placearmor', 'stasharmor'],
+    section: 'items',
+	checkban: true,
+    args: [
+        {
+            name: "Character",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Party",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Weapon",
+            type: "Word",
+            forced: true
+        }
+    ],
+    func(message, args, guilded) {
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		if (!parties[args[1]]) return message.channel.send(`${args[1]} is not a valid party name.`);
+
+		if (parties[args[1]].members.includes(args[0]) || parties[args[1]].backup.includes(args[0])) {
+			let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+			let char = charFile[args[0]];
+
+			if (!char.armors) char.armors = {};
+			if (!parties[args[1]].armors) parties[args[1]].armors = {};
+
+			if (char.armors[args[2]]) {
+				parties[args[1]].armors[args[2]] = objClone(char.armors[args[2]]);
+				delete char.armors[args[2]];
+
+				message.channel.send(`${char.name} has placed the ${args[2]} back into the party's inventory.`);
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, 4));
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, 4));
+			} else {
+				return message.channel.send(`${char.name} does not possess a ${args[2]}.`);
+			}
+		} else {
+			return message.channel.send(`${args[0]} is not in Team ${parties[args[0]].name}`);
+		}
+    }
+})
+
 commands.setpet = new Command({
 	desc: "Sets this party's pet. Pets can help with extra damage output, defense of even healing. Essentially, they're lesser characters.",
 	aliases: ['usepet'],
