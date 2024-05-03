@@ -2438,6 +2438,7 @@ passiveList = {
 		},
 		onturn(btl, char, vars, passive) {
 			if (randNum(1, 1000) <= (vars[0]*10) || vars[0] >= 100) {
+				skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
 				let skill = skillFile[vars[1][randNum(0, vars[1].length-1)]];
 
 				if (skill) {
