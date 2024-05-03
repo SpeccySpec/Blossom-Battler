@@ -2405,7 +2405,6 @@ passiveList = {
 		}
 	}),
 
-/*
 	chancecast: new Extra({
 		name: "Chance Cast (Original)",
 		desc: "{Chance}% chance to cast <Skill(s)> on a random target at the start of every turn.",
@@ -2496,7 +2495,6 @@ passiveList = {
 			return txt;
 		}
 	})
-*/
 }
 
 function dpDamage(char, decimal) {
