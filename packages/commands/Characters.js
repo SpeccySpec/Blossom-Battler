@@ -2580,12 +2580,29 @@ commands.setquote = new Command({
 
 		if (args[2].length > 120) return message.channel.send('This quote is too long!');
 
-		if (!utilityFuncs.inArray(args[1].toLowerCase(), quoteTypes)) {
-			let quoteStr = '```diff\n';
-			for (let quote of quoteTypes) quoteStr += `- ${quoteTypes}`;
-			quoteStr += '```';
+		if (!quoteTypes.includes(args[1].toLowerCase())) {
+			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
 
-			return message.channel.send(`Invalid Quote Type! Try one of these:${quoteTypes}`);
+			if (!skillFile[args[1]]) {
+				let quoteStr = '```diff\n';
+				for (let quote of quoteTypes) quoteStr += `- ${quoteTypes}`;
+				quoteStr += '```';
+
+				return message.channel.send(`Invalid Quote Type! Try one of these:${quoteTypes}`);
+			} else {
+				if (!thingDefs[args[0]].quotes[`${args[1]}quote`]) thingDefs[args[0]].quotes[`${args[1]}quote`] = [];
+				if (args[3] && thingDefs[args[0]].quotes[`${args[1]}quote`][args[3]]) thingDefs[args[0]].quotes[`${args[1]}quote`][args[3]] = args[2];
+				else thingDefs[args[0]].quotes[`${args[1]}quote`].push(args[2]);
+
+				message.react('👍');
+				if (thingDefs[args[0]].type) {
+					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+				} else {
+					fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+				}
+
+				return;
+			}
 		}
 
 		if (!thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`]) thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`] = [];
@@ -2666,19 +2683,26 @@ commands.clearquote = new Command({
 				if (givenResponce == false) message.channel.send("I'll... take that as a no.");
 			});
 		} else {
+			let quoteinput = args[1].toLowerCase();
 			if (!utilityFuncs.inArray(args[1].toLowerCase(), quoteTypes)) {
-				let quoteStr = '```diff\n';
-				for (let quote of quoteTypes) quoteStr += `- ${quoteTypes}`;
-				quoteStr += '```';
+				let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+	
+				if (!skillFile[args[1]]) {
+					let quoteStr = '```diff\n';
+					for (let quote of quoteTypes) quoteStr += `- ${quoteTypes}`;
+					quoteStr += '```';
 
-				return message.channel.send(`Invalid Quote Type! Try one of these:${quoteTypes}`);
+					return message.channel.send(`Invalid Quote Type! Try one of these:${quoteTypes}`);
+				} else {
+					quoteinput = args[1];
+				}
 			}
 
 			if (args[2]) {
-				if (!thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`]) thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`] = [];
-				thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`].splice(args[2], 1);
+				if (!thingDefs[args[0]].quotes[`${quoteinput}quote`]) thingDefs[args[0]].quotes[`${quoteinput}quote`] = [];
+				thingDefs[args[0]].quotes[`${quoteinput}quote`].splice(args[2], 1);
 			} else {
-				thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`] = [];
+				thingDefs[args[0]].quotes[`${quoteinput}quote`] = [];
 			}
 
 			message.react('👍');
@@ -2724,11 +2748,19 @@ commands.getquotes = new Command({
 
 		if (args[1]) {
 			if (!utilityFuncs.inArray(args[1].toLowerCase(), quoteTypes)) {
-				let quoteStr = '```diff\n';
-				for (let quote of quoteTypes) quoteStr += `- ${quoteTypes}`;
-				quoteStr += '```';
+				if (thingDefs[args[0]].quotes[`${args[1]}quote`] && skillFile[args[1]]) {
+					let array = [];
+					for (let i in thingDefs[args[0]].quotes[`${args[1]}quote`])
+						array.push({title: `**[${i}]**`, desc: `_"${thingDefs[args[0]].quotes[`${args[1]}quote`][i]}"_`});
 
-				return message.channel.send(`Invalid Quote Type! Try one of these:${quoteTypes}`);
+					listArray(message.channel, array, message.author.id);
+					return;
+				} else {
+					let quoteStr = '```diff\n';
+					for (let quote of quoteTypes) quoteStr += `- ${quoteTypes}`;
+					quoteStr += '```';
+					return message.channel.send(`Invalid Quote Type! Try one of these:${quoteTypes}`);
+				}
 			}
 
 			if (!thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`] || !thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`][0]) return message.channel.send('This Quote Type has no quotes!');
@@ -2750,6 +2782,14 @@ commands.getquotes = new Command({
 				array.push({title: `${quote.charAt(0).toUpperCase()+quote.slice(1)}`, desc: quoteTxt});
 			}
 
+			for (let i in skillFile) {
+				let quoteTxt = '';
+				if (thingDefs[args[0]].quotes[`${i}quote`]) {
+					quoteTxt = selectQuote(thingDefs[args[0]], i, true);
+					array.push({title: `Using ${getFullName(skillFile[i])}`, desc: quoteTxt});
+				}
+			}
+
 			listArray(message.channel, array, message.author.id);
 		}
 	}
@@ -2765,6 +2805,7 @@ commands.randcharquote = new Command({
 		if (Object.keys(charFile).length == 0) return message.channel.send(`No characters have been added yet!`);
 
 		let possibleQuotes = []
+
 		for (const i in quoteTypes) {
 			for (const k in charFile) {
 				if (!charFile[k].hidden && charFile[k][`quotes`] && charFile[k][`quotes`][`${quoteTypes[i]}quote`] && charFile[k][`quotes`][`${quoteTypes[i]}quote`].length > 1) {
@@ -2772,6 +2813,14 @@ commands.randcharquote = new Command({
 				}
 			}
 		}
+		for (const i in skillFile) {
+			for (const k in charFile) {
+				if (!charFile[k].hidden && charFile[k][`quotes`] && charFile[k][`quotes`][`${i}quote`] && charFile[k][`quotes`][`${i}quote`].length > 1) {
+					possibleQuotes.push([k, i, charFile[k][`quotes`][`${i}quote`][utilityFuncs.randNum(charFile[k][`quotes`][`${i}quote`].length-1)]])
+				}
+			}
+		}
+
 		if (possibleQuotes.length == 0) return message.channel.send(`No quotes found!`);
 
 		let quoteData = possibleQuotes[utilityFuncs.randNum(possibleQuotes.length-1)]   
@@ -2793,7 +2842,7 @@ commands.dailycharquote = new Command({
 		charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`)
 		if (Object.keys(charFile).length == 0) return message.channel.send(`No characters have been added yet!`);
 
-		let possibleQuotes = []
+		let possibleQuotes = [];
 		for (const i in quoteTypes) {
 			for (const k in charFile) {
 				if (!charFile[k].hidden && charFile[k][`quotes`] && charFile[k][`quotes`][`${quoteTypes[i]}quote`] && charFile[k][`quotes`][`${quoteTypes[i]}quote`].length > 1) {
@@ -2801,7 +2850,15 @@ commands.dailycharquote = new Command({
 				}
 			}
 		}
-		if (possibleQuotes.length == 0) return message.channel.send(`No quotes found!`);
+		for (const i in skillFile) {
+			for (const k in charFile) {
+				if (!charFile[k].hidden && charFile[k][`quotes`] && charFile[k][`quotes`][`${i}quote`] && charFile[k][`quotes`][`${i}quote`].length > 1) {
+					possibleQuotes.push([k, i, charFile[k][`quotes`][`${i}quote`][utilityFuncs.randNum(charFile[k][`quotes`][`${i}quote`].length-1)]])
+				}
+			}
+		}
+
+		if (possibleQuotes.length == 0) return message.channel.send(`No quotes found! ...Guess that means no daily.`);
 
 		if (!dailyQuote) dailyQuote = {};
 
