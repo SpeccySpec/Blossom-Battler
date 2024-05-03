@@ -1301,6 +1301,19 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		return;
 	}
 
+	// Start with the final text.
+	let quotetype = 'phys';
+	if (skill.atktype === 'magic') quotetype = 'mag';
+	if (skill.type === 'heal') quotetype = 'heal';
+	if (skill.limitbreak) quotetype = 'lb';
+	if (skill.teamcombo) quotetype = 'tc';
+	if (skill.melee) quotetype = 'melee';
+	if (char.quotes[`${getSkillID(skill)}quote`]) quotetype = getSkillID(skill);
+	let finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}`;
+	if (ally && ally.quotes) {
+		finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}${selectQuote(ally, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}`;
+	}
+
 	// Enemies should learn the skills we use.
 	for (let i in btl.teams) {
 		for (let k in btl.teams[i].members) {
@@ -1492,18 +1505,6 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	
 	// Double melee power when inflicted with rage.
 	if (skill.melee && char.status && char.status === 'rage') skill.pow *= 2;
-
-	// Final Text
-	let quotetype = 'phys';
-	if (skill.atktype === 'magic') quotetype = 'mag';
-	if (skill.type === 'heal') quotetype = 'heal';
-	if (skill.limitbreak) quotetype = 'lb';
-	if (skill.teamcombo) quotetype = 'tc';
-	if (skill.melee) quotetype = 'melee';
-	let finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}`;
-	if (ally && ally.quotes) {
-		finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}${selectQuote(ally, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}`;
-	}
 
 	// Trust
 	for (let i in party.members) {
