@@ -442,7 +442,7 @@ elementTechs = {
 	dazed: ['psychic', 'wind', 'gravity', 'sound'],
 	hunger: ['poison', 'nuclear'],
 	mirror: ['strike', 'slash', 'pierce', 'explode', 'sound'],
-	blind: ['all'],
+	blind: ['strike', 'slash', 'pierce', 'explode'],
 	irradiation: ['fire', 'nuclear', 'water'],
 	sensitive: ['strike', 'slash', 'pierce', 'explode', 'spirit', 'wind'],
 	insanity: ['psychic', 'curse'],
