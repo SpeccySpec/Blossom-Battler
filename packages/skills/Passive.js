@@ -2315,12 +2315,12 @@ passiveList = {
 			},
 			{
 				name: "Affinity",
-				type: "Element",
+				type: "Word",
 				forced: true
 			},
 			{
 				name: "Element #1",
-				type: "Element",
+				type: "Word",
 				forced: true,
 				multiple: true
 			}
