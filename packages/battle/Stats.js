@@ -1,3 +1,36 @@
+setupSkills = (char) => {
+	char.skills = objClone(char.oldskills);
+
+	let extratypes = ["extras", "statusses", "heal", "passive"];
+
+	// MoveLink Extra
+	let skill;
+	let movelinks = [];
+	for (let i in char.skills) {
+		if (!skillFile[char.skills[i]]) continue;
+		skill = skillFile[char.skills[i]];
+
+		for (let k in extratypes) {
+			if (skill[extratypes[k]] && skill[extratypes[k]].movelink)
+				for (let j in skill[extratypes[k]].movelink) movelinks.push(skill[extratypes[k]].movelink[j]);
+		}
+
+		for (let k in movelinks) {
+			if (skillFile[movelinks[k]]) {
+				// Just shadow add passives to our skill list.
+				if (skillFile[movelinks[k]].type === "passive") {
+					char.skills.push(movelinks[k]);
+				}
+			}
+		}
+	}
+
+	// No running from simple beam
+	if (char.custom?.simplebeam) {
+		char.skills.push(char.custom.simplebeam[3]);
+	}
+}
+
 setupBattleStats = (f) => {
 	f.oldskills = objClone(f.skills);
 
