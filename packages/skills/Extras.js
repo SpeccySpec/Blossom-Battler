@@ -2695,7 +2695,7 @@ extrasList = {
 
 	movelink: new Extra({
 		name: "Move Link (Pokémon)",
-		desc: "Skills with this extra will act as multiple skills when a character has them in possession.",
+		desc: `Skills with this extra will act as multiple skills when a character has them in possession. May not call **Metronome** skills.`,
 		hardcoded: true,
 		args: [
 			{
