@@ -2444,7 +2444,7 @@ passiveList = {
 				if (skill) {
 					let targ;
 					let possible = [];
-					if (["one", "randomopposing"].includes(skill.target)) {
+					if (["one", "randomopposing", "allopposing"].includes(skill.target)) {
 						for (let i in btl.teams) {
 							if (char.team == i) continue;
 
@@ -2453,7 +2453,7 @@ passiveList = {
 						}
 
 						targ = getCharFromId(possible[randNum(possible.length-1)], btl);
-					} else if (["ally", "randomallies"].includes(skill.target)) {
+					} else if (["ally", "randomallies", "allallies"].includes(skill.target)) {
 						for (let i in btl.teams[char.team].members)
 							if (btl.teams[char.team].members[i].hp > 0) possible.push(btl.teams[char.team].members[i].id);
 
