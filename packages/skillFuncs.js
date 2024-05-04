@@ -202,6 +202,21 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 			case "randomwidespreadallies":
 				finalText += "Targets **a random ally in-battle and spreads to all allies based on distance**.\n";
 				break;
+			case "casterandfoe":
+				finalText += "Targets **the user** and **a foe**.\n";
+				break;
+			case "casterandally":
+				finalText += "Targets **the user** and **an ally**.\n";
+				break;
+			case "casterandrandom":
+				finalText += "Targets **the user** and **a random fighter in-battle**.\n";
+				break;
+			case "casterandrandomfoe":
+				finalText += "Targets **the user** and **a random foe**.\n";
+				break;
+			case "casterandrandomally":
+				finalText += "Targets **the user** and **a random ally**.\n";
+				break;
 			default:
 				finalText += "Targets **one foe**.\n";
 		}

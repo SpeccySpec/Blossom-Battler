@@ -868,7 +868,7 @@ sendCurTurnEmbed = (char, btl) => {
 				btl.action.move = 'melee';
 				btl.action.melee = makeMelee(char);
 
-				if ((btl.action.melee.target === "one" || btl.action.melee.target === "spreadopposing" || btl.action.melee.target === "widespreadopposing")) {
+				if ((btl.action.melee.target === "one" || btl.action.melee.target === "spreadopposing" || btl.action.melee.target === "widespreadopposing" || btl.action.melee.target === "casterandfoe")) {
 					let alivecount = 0;
 					let alivenum = [0, 0];
 
@@ -898,7 +898,7 @@ sendCurTurnEmbed = (char, btl) => {
 					} else {
 						menustate = MENU_TEAMSEL;
 					}
-				} else if (btl.action.melee.target === "ally" || btl.action.melee.target === "spreadallies" || btl.action.melee.target === "widespreadallies") {
+				} else if (btl.action.melee.target === "ally" || btl.action.melee.target === "spreadallies" || btl.action.melee.target === "widespreadallies" || btl.action.melee.target === "casterandally") {
 					btl.action.target[0] = char.team;
 					if (btl.teams[char.team].members.length == 1) {
 						alreadyResponded = true;
@@ -1311,7 +1311,7 @@ sendCurTurnEmbed = (char, btl) => {
 
 					if (hasStatus(skill, 'mimic')) {
 						menustate = MENU_ANYSEL;
-					} else if ((skill.target === "one" || skill.target === "spreadopposing" || skill.target === "widespreadopposing")) {
+					} else if ((skill.target === "one" || skill.target === "spreadopposing" || skill.target === "widespreadopposing" || skill.target === "casterandfoe")) {
 						let alivecount = 0;
 						let alivenum = [0, 0];
 
@@ -1340,7 +1340,7 @@ sendCurTurnEmbed = (char, btl) => {
 						} else {
 							menustate = MENU_TEAMSEL;
 						}
-					} else if (skill.target === "ally" || skill.target === "spreadallies" || skill.target === "widespreadallies") {
+					} else if (skill.target === "ally" || skill.target === "spreadallies" || skill.target === "widespreadallies" || skill.target === "casterandally") {
 						btl.action.target[0] = char.team;
 						if (btl.teams[char.team].members.length == 1) {
 							alreadyResponded = true;
@@ -1393,9 +1393,9 @@ sendCurTurnEmbed = (char, btl) => {
 						});
 					}
 
-					if (!itemdta.target || itemdta.target === "one" || itemdta.target === "spreadopposing") {
+					if (!itemdta.target || itemdta.target === "one" || itemdta.target === "spreadopposing" || itemdta.target === "casterandfoe") {
 						menustate = MENU_TEAMSEL;
-					} else if (itemdta.target === "ally" || itemdta.target === "spreadallies") {
+					} else if (itemdta.target === "ally" || itemdta.target === "spreadallies" || itemdta.target === "casterandally") {
 						btl.action.target[0] = char.team;
 						menustate = MENU_TARGET;
 					} else if (itemdta.target === "caster") {

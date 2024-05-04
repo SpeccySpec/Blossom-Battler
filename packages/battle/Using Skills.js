@@ -1747,6 +1747,51 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			skill.hits = 1; // make the skill one hit now.
 			break;
 
+		case 'casterandally':
+		case 'casterandfoe':
+			let targ2 = (btl.teams[act.target[0]] && btl.teams[act.target[0]].members[act.target[1]]) ? btl.teams[act.target[0]].members[act.target[1]] : btl.teams[0].members[0];
+			targets.push([char.id, 1]);
+			targets.push([targ2.id, 1]);
+			break;
+
+		case 'casterandrandomfoe':
+			for (let i in btl.teams) {
+				if (char.team == i) continue;
+				
+				for (let k in btl.teams[i].members)
+					if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k].id);
+			}
+
+			for (let i = 0; i < skill.hits; i++)
+				targets.push([possible[randNum(possible.length-1)] ?? possible[0], 1]);
+
+			targets.push([char.id, 1]);
+			skill.hits = 1; // make the skill one hit now.
+			break;
+
+		case 'casterandrandomally':
+			while (targets.length < skill.hits) {
+				let charDefs = party.members[randNum(party.members.length-1)];
+				if (charDefs && charDefs.hp > 0 && charDefs.id != char.id) targets.push([charDefs.id, 1]);
+			}
+
+			targets.push([char.id, 1]);
+			skill.hits = 1; // make the skill one hit now.
+			break;
+
+		case 'casterandrandom':
+			for (let i in btl.teams) {
+				for (let k in btl.teams[i].members)
+					if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) possible.push(btl.teams[i].members[k].id);
+			}
+
+			for (let i = 0; i < skill.hits; i++)
+				targets.push([possible[randNum(possible.length-1)] ?? possible[0], 1]);
+
+			targets.push([char.id, 1]);
+			skill.hits = 1; // make the skill one hit now.
+			break;
+
 		// Target ourselves as a failsafe.
 		default:
 			targets.push([char.id, 1]);
@@ -1983,7 +2028,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					case 'widespreadallies':
 						let targetValue2 = btl.teams[char.team].members[act.target[1]] ? act.target[1] : char.id;
 						for (let i = 0; i < btl.teams[char.team].members.length; i++) {
-							if (btl.teams[char.team].members[i] && btl.teams[char.team].members[i].hp > 0) targets2.push([btl.teams[act.target[0]].members[i].id, 1 - (Math.abs(i - targetValue)) / btl.teams[act.target[0]].members.length]);
+							if (btl.teams[char.team].members[i] && btl.teams[char.team].members[i].hp > 0) targets2.push([btl.teams[act.target[0]].members[i].id, 1 - (Math.abs(i - targetValue2)) / btl.teams[act.target[0]].members.length]);
 						}
 			
 						targets2.sort((a, b) => b[1] - a[1]);
@@ -2082,6 +2127,51 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 						}
 			
 						skillLink.hits = 1; // make the skill one hit now.
+						break;
+
+					case 'casterandally':
+					case 'casterandfoe':
+						let targ3 = (btl.teams[act.target[0]] && btl.teams[act.target[0]].members[act.target[1]]) ? btl.teams[act.target[0]].members[act.target[1]] : btl.teams[0].members[0];
+						targets2.push([char.id, 1]);
+						targets2.push([targ3.id, 1]);
+						break;
+			
+					case 'casterandrandomfoe':
+						for (let i in btl.teams) {
+							if (char.team == i) continue;
+							
+							for (let k in btl.teams[i].members)
+								if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k].id);
+						}
+			
+						for (let i = 0; i < skill.hits; i++)
+							targets2.push([possible[randNum(possible.length-1)] ?? possible[0], 1]);
+			
+						targets2.push([char.id, 1]);
+						skill.hits = 1; // make the skill one hit now.
+						break;
+			
+					case 'casterandrandomally':
+						while (targets2.length < skill.hits) {
+							let charDefs = party.members[randNum(party.members.length-1)];
+							if (charDefs && charDefs.hp > 0 && charDefs.id != char.id) targets.push([charDefs.id, 1]);
+						}
+			
+						targets2.push([char.id, 1]);
+						skill.hits = 1; // make the skill one hit now.
+						break;
+			
+					case 'casterandrandom':
+						for (let i in btl.teams) {
+							for (let k in btl.teams[i].members)
+								if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) possible.push(btl.teams[i].members[k].id);
+						}
+			
+						for (let i = 0; i < skill.hits; i++)
+							targets2.push([possible[randNum(possible.length-1)] ?? possible[0], 1]);
+			
+						targets2.push([char.id, 1]);
+						skill.hits = 1; // make the skill one hit now.
 						break;
 			
 					// Target ourselves as a failsafe.

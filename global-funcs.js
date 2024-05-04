@@ -818,7 +818,14 @@ Targets = [
 	//RANDOM ENTIRE SIDE SPREADS
 	'randomwidespreadopposing', //target random foe, damage spread to all foes based on distance
 	'randomwidespreadallies', //target random ally, effects spread to all allies based on distance
-	'randomwidespread' //target random target, effects spread to all targets on the same side based on distance
+	'randomwidespread', //target random target, effects spread to all targets on the same side based on distance
+
+	//CASTER + TARGET
+	'casterandfoe', //target caster and foe.
+	'casterandally', //target caster and ally.
+	'casterandrandom', //target caster and a random fighter.
+	'casterandrandomfoe', //target caster and a random enemy.
+	'casterandrandomally' //target caster and a random ally.
 ]
 
 TargetDesc = {
@@ -848,6 +855,12 @@ TargetDesc = {
 	randomwidespreadopposing: 'Targets a random enemy, but the damage spreads to all enemies based on distance, i.e., the skill will affect a foe less the farther they are away from the target. Multi-hit skills will target a new enemy every hit rather than just attacking a single foe multiple times.',
 	randomwidespreadallies: 'Targets a random ally, but the effects spread to all allies based on distance, i.e., the skill will affect an ally less the farther they are away from the target. Multi-hit skills will target a new ally every hit rather than just being used on a single ally multiple times.',
 	randomwidespreadallies: 'Targets a random person on the battlefield exclusing the user, but the effects spread to all fighters on the side that was targetted based on distance, i.e., the skill will affect a fighter less the farther they are away from the target. Multi-hit skills will target a new member on the battlefield every hit rather than just being used on a single fighter multiple times.',
+
+	casterandfoe: 'Targets the user of the skill, and a chosen enemy.',
+	casterandally: 'Targets the user of the skill, and a chosen ally.',
+	casterandrandom: 'Targets the user of the skill, and a random fighter. Multi-hit skills will target a new member on the battlefield every hit rather than just attacking a single fighter multiple times.',
+	casterandrandomfoe: 'Targets the user of the skill, and a random foe. Multi-hit skills will target a new enemy on the battlefield every hit rather than just attacking a single enemy multiple times.',
+	casterandrandomally: 'Targets the user of the skill, and a random foe. Multi-hit skills will target a new ally on the battlefield every hit rather than just being used on a single ally multiple times.'
 }
 
 costTypes = [
