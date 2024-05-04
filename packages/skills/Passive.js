@@ -2495,7 +2495,24 @@ passiveList = {
 
 			return txt;
 		}
-	})
+	}),
+
+	movelink: new Extra({
+		name: extrasList.movelink.name,
+		desc: extrasList.movelink.desc,
+		hardcoded: extrasList.movelink.hardcoded,
+		args: extrasList.movelink.args,
+		getinfo: extrasList.movelink.getinfo,
+		applyfunc(message, skill, args) {
+			for (let i in args) {
+				if (!skillFile[args[i]]) return void message.channel.send(`${args[i]} is not an existing skill.`);
+				if (skillFile[args[i]] === skill) return void message.channel.send("You may not have skills link with themselves.");
+			}
+
+			makeExtra(skill, "movelink", args);
+			return true
+		}
+	}),
 }
 
 function dpDamage(char, decimal) {

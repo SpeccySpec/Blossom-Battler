@@ -1858,7 +1858,7 @@ extrasList = {
 		},
 		hardcoded: true,
 		getinfo(vars, skill) {
-			return 'Use a completely random skill..';
+			return 'Use a completely random skill.';
 		}
 	}),
 
@@ -2687,6 +2687,43 @@ extrasList = {
 					txt += ' when attacking the enemy';
 				else
 					txt += ', ';
+			}
+
+			return txt;
+		}
+	}),
+
+	movelink: new Extra({
+		name: "Move Link (Pokémon)",
+		desc: "Skills with this extra will act as multiple skills when a character has them in possession.",
+		hardcoded: true,
+		args: [
+			{
+				name: "Skill #1",
+				type: "Word",
+				forced: false,
+				multiple: true,
+			}
+		],
+		applyfunc(message, skill, args) {
+			for (let i in args) {
+				if (!skillFile[args[i]]) return void message.channel.send(`${args[i]} is not an existing skill.`);
+				if (skillFile[args[i]] === skill) return void message.channel.send("You may not have skills link with themselves.");
+			}
+
+			makeExtra(skill, "movelink", args);
+			return true
+		},
+		getinfo(vars, skill) {
+			let txt = "Linked with "
+
+			for (let i in vars) {
+				txt += `**${getFullName(skillFile[vars[i]])}**`;
+
+				if (i < vars.length - 2)
+					txt += ', ';
+				else if (i < vars.length - 1)
+					txt += ' and ';
 			}
 
 			return txt;

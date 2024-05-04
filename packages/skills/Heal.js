@@ -37,7 +37,8 @@ healList = {
 			if (!vars[0] || vars[0] == null || vars[0] == 0) return '';
 
 			vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
-			vars[0] = Math.round(vars[0] * multiplier);
+//			vars[0] = Math.round(vars[0] * multiplier);
+			console.log(`healed ${vars[1]} by ${vars[0]}`)
 
 			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
 				settings = setUpSettings(btl.guild.id);
@@ -692,6 +693,9 @@ healList = {
 		name: extrasList.charges.name,
 		desc: extrasList.charges.desc,
 		args: extrasList.charges.args,
+		canuse: extrasList.charges.canuse,
+		onuse: extrasList.charges.onuse,
+		getinfo: extrasList.charges.getinfo,
 		applyfunc(message, skill, args) {
 			let charges = args[0]
 			let rate = args[1] ?? 0
@@ -700,9 +704,23 @@ healList = {
 			makeHeal(skill, "charges", [charges, rate]);
 			return true
 		},
-		canuse: extrasList.charges.canuse,
-		onuse: extrasList.charges.onuse,
-		getinfo: extrasList.charges.getinfo,
+	}),
+
+	movelink: new Extra({
+		name: extrasList.movelink.name,
+		desc: extrasList.movelink.desc,
+		hardcoded: extrasList.movelink.hardcoded,
+		args: extrasList.movelink.args,
+		getinfo: extrasList.movelink.getinfo,
+		applyfunc(message, skill, args) {
+			for (let i in args) {
+				if (!skillFile[args[i]]) return void message.channel.send(`${args[i]} is not an existing skill.`);
+				if (skillFile[args[i]] === skill) return void message.channel.send("You may not have skills link with themselves.");
+			}
+
+			makeHeal(skill, "movelink", args);
+			return true
+		}
 	}),
 }
 

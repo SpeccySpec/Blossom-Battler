@@ -1,3 +1,5 @@
+let extratypes = ["extras", "statusses", "heal", "passive"];
+
 // Can we use a LB
 canUseLb = (char, btl) => {
 	let settings = setUpSettings(btl.guild.id);
@@ -47,9 +49,9 @@ isTech = (char, element) => {
 // im lazy
 dodgeTxt = (char, targ) => {
 	if (targ) {
-		return `${targ.name} dodged it!\n${selectQuote(targ, 'dodge', null, "%ENEMY%", char.name)}${selectQuote(char, 'miss', null, "%ENEMY%", char.name)}`;
+		return `__${targ.name}__ dodged it!\n${selectQuote(targ, 'dodge', null, "%ENEMY%", char.name)}${selectQuote(char, 'miss', null, "%ENEMY%", char.name)}`;
 	} else {
-		return `${char.name} dodged it!\n${selectQuote(char, 'dodge', null, "%ENEMY%", "them")}`;
+		return `__${char.name}__ dodged it!\n${selectQuote(char, 'dodge', null, "%ENEMY%", "them")}`;
 	}
 }
 
@@ -269,6 +271,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 					if (healList[i].multiple) {
 						for (let k in skill.heal[i]) {
+							console.log(skill.heal[i][k]);
 							result.txt += `\n${healList[i].onuse(char, targ, skill, btl, skill.heal[i][k], skill.pow) ?? ''}`;
 						}
 					} else {
@@ -661,7 +664,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					}
 				}
 			} else {
-				result.txt += dodgeTxt(char, targ);
+				result.txt += `${dodgeTxt(char, targ)}\n`;
 			}
 
 			console.log(result);
@@ -1820,9 +1823,11 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		}
 	}
 
+	let targ;
+	let skillDefs;
 	for (let i in targets) {
-		let targ = getCharFromId(targets[i][0], btl);
-		let skillDefs = objClone(skill);
+		targ = getCharFromId(targets[i][0], btl);
+		skillDefs = objClone(skill);
 		skillDefs.pow *= targets[i][1];
 
 		let result = attackWithSkill(char, targ, skillDefs, btl, null, noExtraArray);
@@ -1830,6 +1835,272 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 		if (result.oneMore) btl.doonemore = true;
 		if (result.teamCombo) btl.canteamcombo = true;
+	}
+
+	// Move Links
+	let movelinks = [];
+	for (let i in extratypes) {
+		if (skill[extratypes[i]] && skill[extratypes[i]].movelink)
+			for (let k in skill[extratypes[i]].movelink) movelinks.push(skill[extratypes[i]].movelink[k]);
+	}
+
+	if (movelinks.length > 0) {
+		finalText += "\n\n";
+
+		let result2;
+		let targets2 = [];
+		for (let j in movelinks) {
+			if (skillFile[movelinks[j]]) {
+				let skillLink = objClone(skillFile[movelinks[j]]);
+				if (skillLink.type == "passive") continue;
+			
+				// Insert IDs into the target.
+				targets2 = [];
+				switch(skillLink.target ? skillLink.target.toLowerCase() : 'one') {
+					case 'one':
+						let targ = (btl.teams[act.target[0]] && btl.teams[act.target[0]].members[act.target[1]]) ? btl.teams[act.target[0]].members[act.target[1]] : btl.teams[0].members[0];
+						targets2.push([targ.id, 1]);
+						break;
+
+					case 'ally':
+						let targ2 = btl.teams[char.team].members[act.target[1]] ?? char;
+						targets2.push([targ2.id, 1]);
+						break;
+
+					case 'caster':
+						targets2.push([char.id, 1]);
+						break;
+
+					case 'allopposing':
+						for (let i in btl.teams) {
+							if (char.team == i) continue;
+							
+							for (let k in btl.teams[i].members)
+								if (btl.teams[i].members[k].hp > 0) targets2.push([btl.teams[i].members[k].id, 1]);
+						}
+						break;
+
+					case 'allallies':
+						for (let i in party.members)
+							if (party.members[i].hp > 0) targets2.push([party.members[i].id, 1]);
+						break;
+
+					case 'randomopposing':
+						for (let i in btl.teams) {
+							if (char.team == i) continue;
+							
+							for (let k in btl.teams[i].members)
+								if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k].id);
+						}
+			
+						for (let i = 0; i < skillLink.hits; i++)
+							targets2.push([possible[randNum(possible.length-1)] ?? possible[0], 1]);
+			
+						skillLink.hits = 1; // make the skill one hit now.
+						break;
+			
+					case 'randomallies':
+						while (targets2.length < skillLink.hits) {
+							let charDefs = party.members[randNum(party.members.length-1)];
+							if (charDefs && charDefs.hp > 0) targets2.push([charDefs.id, 1]);
+						}
+			
+						skillLink.hits = 1; // make the skill one hit now.
+						break;
+			
+					case 'random':
+						for (let i in btl.teams) {
+							for (let k in btl.teams[i].members)
+								if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) possible.push(btl.teams[i].members[k].id);
+						}
+			
+						for (let i = 0; i < skillLink.hits; i++)
+							targets2.push([possible[randNum(possible.length-1)] ?? possible[0], 1]);
+			
+						skillLink.hits = 1; // make the skill one hit now.
+						break;
+			
+					case 'everyone':
+						for (let i in btl.teams) {
+							for (let k in btl.teams[i].members)
+								if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) targets2.push([btl.teams[i].members[k].id, 1]);
+						}
+						break;
+			
+					case 'spreadopposing':
+						targets2.push([btl.teams[act.target[0]].members[act.target[1]].id, 1]);
+						if (btl.teams[act.target[0]].members[act.target[1]-1] && btl.teams[act.target[0]].members[act.target[1]-1].hp > 0) targets2.push([btl.teams[act.target[0]].members[act.target[1]-1].id, 0.6666666666666666]);
+						if (btl.teams[act.target[0]].members[act.target[1]+1] && btl.teams[act.target[0]].members[act.target[1]+1].hp > 0) targets2.push([btl.teams[act.target[0]].members[act.target[1]+1].id, 0.6666666666666666]);
+						break;
+
+					case 'spreadallies':
+						targets2.push([(btl.teams[char.team].members[act.target[1]] ? btl.teams[char.team].members[act.target[1]].id : char.id), 1]);
+						if (btl.teams[act.target[0]].members[act.target[1]-1] && btl.teams[act.target[0]].members[act.target[1]-1].hp > 0) targets2.push([btl.teams[act.target[0]].members[act.target[1]-1].id, 0.6666666666666666]);
+						if (btl.teams[act.target[0]].members[act.target[1]+1] && btl.teams[act.target[0]].members[act.target[1]+1].hp > 0) targets2.push([btl.teams[act.target[0]].members[act.target[1]+1].id, 0.6666666666666666]);
+						break;
+			
+					case 'randomspreadopposing':
+						for (let i in btl.teams) {
+							if (char.team == i) continue;
+							
+							for (let k in btl.teams[i].members)
+								if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k]);
+						}
+			
+						for (let i = 0; i < skillLink.hits; i++) {
+							let randNumber = randNum(possible.length-1);
+							let initChoice = possible[randNumber]?.id ? randNumber : 0;
+			
+							targets2.push([possible[initChoice].id, 1]);
+							if (possible[initChoice-1] && possible[initChoice-1].hp > 0) targets2.push([possible[initChoice-1].id, 0.6666666666666666]);
+							if (possible[initChoice+1] && possible[initChoice+1].hp > 0) targets2.push([possible[initChoice+1].id, 0.6666666666666666]);
+						}
+			
+						skillLink.hits = 1; // make the skill one hit now.
+						break;
+			
+					case 'randomspreadallies':
+						while (targets2.length < skillLink.hits) {
+							let initChoice = randNum(party.members.length-1);
+			
+							if (party.members[initChoice] && party.members[initChoice].hp > 0) targets2.push([party.members[initChoice].id, 1]);
+							if (party.members[initChoice-1] && party.members[initChoice-1].hp > 0) targets2.push([party.members[initChoice-1].id, 0.6666666666666666]);
+							if (party.members[initChoice+1] && party.members[initChoice+1].hp > 0) targets2.push([party.members[initChoice+1].id, 0.6666666666666666]);
+						}
+			
+						skillLink.hits = 1; // make the skill one hit now.
+						break;
+
+					case 'widespreadopposing':
+						let targetValue = act.target[1];
+						for (let i = 0; i < btl.teams[act.target[0]].members.length; i++) {
+							if (btl.teams[act.target[0]].members[i] && btl.teams[act.target[0]].members[i].hp > 0) targets2.push([btl.teams[act.target[0]].members[i].id, 1 - (Math.abs(i - targetValue)) / btl.teams[act.target[0]].members.length]);
+						}
+			
+						targets2.sort((a, b) => b[1] - a[1]);
+						break;
+
+					case 'widespreadallies':
+						let targetValue2 = btl.teams[char.team].members[act.target[1]] ? act.target[1] : char.id;
+						for (let i = 0; i < btl.teams[char.team].members.length; i++) {
+							if (btl.teams[char.team].members[i] && btl.teams[char.team].members[i].hp > 0) targets2.push([btl.teams[act.target[0]].members[i].id, 1 - (Math.abs(i - targetValue)) / btl.teams[act.target[0]].members.length]);
+						}
+			
+						targets2.sort((a, b) => b[1] - a[1]);
+						break;
+			
+					case 'randomwidespreadopposing':
+						for (let i in btl.teams) {
+							if (char.team == i) continue;
+							
+							for (let k in btl.teams[i].members)
+								if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k]);
+						}
+			
+						for (let i = 0; i < skillLink.hits; i++) {
+							let randNumber = randNum(possible.length-1);
+							let initChoice = possible[randNumber]?.id ? randNumber : 0;
+			
+							let targArray = [];
+							for (let i = 0; i < possible.length; i++) {
+								targArray.push([possible[randNumber][i].id, 1 - (Math.abs(i - initChoice)) / possible[randNumber].length]);
+							}
+							
+							targArray.sort((a, b) => b[1] - a[1]);
+							for (let i in targArray) {
+								targets2.push(targArray[i]);
+							}
+						}
+			
+						skillLink.hits = 1; // make the skill one hit now.
+						break;
+			
+					case 'randomwidespreadallies':
+						while (targets2.length < skillLink.hits) {
+							let initChoice = randNum(party.members.length-1);
+			
+							for (let i = 0; i < party.members.length; i++) {
+								if (party.members[i] && party.members[i].hp > 0) targets2.push([party.members[i].id, 1 - (Math.abs(i - initChoice)) / party.members.length]);
+							}
+				
+							targets2.sort((a, b) => b[1] - a[1]);
+						}
+			
+						skillLink.hits = 1; // make the skill one hit now.
+						break;
+			
+					case 'randomspread':
+						for (let i in btl.teams) {
+							possible[i] = [];
+							for (let k in btl.teams[i].members)
+								if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) possible[i].push(btl.teams[i].members[k]);
+						}
+			
+						for (let i = 0; i < skillLink.hits; i++) {
+							let randTeam = randNum(possible.length-1);
+							while (possible[randTeam].length == 0) {
+								randTeam++;
+								if (randTeam >= possible.length) randTeam = 0;
+							}
+			
+							let randNumber = randNum(possible[randTeam].length-1);
+							let initChoice = possible[randTeam][randNumber]?.id ? randNumber : 0;
+			
+							targets2.push([possible[randTeam][initChoice].id, 1]);
+							if (possible[randTeam][initChoice-1] && possible[randTeam][initChoice-1].hp > 0) targets2.push([possible[randTeam][initChoice-1].id, 0.6666666666666666]);
+							if (possible[randTeam][initChoice+1] && possible[randTeam][initChoice+1].hp > 0) targets2.push([possible[randTeam][initChoice+1].id, 0.6666666666666666]);
+						}
+			
+						skillLink.hits = 1; // make the skill one hit now.
+						break;
+					case 'randomwidespread':
+						for (let i in btl.teams) {
+							possible[i] = [];
+							for (let k in btl.teams[i].members)
+								if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) possible[i].push(btl.teams[i].members[k]);
+						}
+			
+						for (let i = 0; i < skillLink.hits; i++) {
+							let randTeam = randNum(possible.length-1);
+							while (possible[randTeam].length == 0) {
+								randTeam++;
+								if (randTeam >= possible.length) randTeam = 0;
+							}
+			
+							let randNumber = randNum(possible[randTeam].length-1);
+							let initChoice = possible[randTeam][randNumber]?.id ? randNumber : 0;
+			
+							let targArray = [];
+							for (let i = 0; i < possible[randTeam].length; i++) {
+								targArray.push([possible[randTeam][i].id, 1 - (Math.abs(i - initChoice)) / possible[randTeam].length]);
+							}
+							
+							targArray.sort((a, b) => b[1] - a[1]);
+							for (let i in targArray) {
+								targets2.push(targArray[i]);
+							}
+						}
+			
+						skillLink.hits = 1; // make the skill one hit now.
+						break;
+			
+					// Target ourselves as a failsafe.
+					default:
+						targets2.push([char.id, 1]);
+				}
+
+				for (let k in targets2) {
+					targ = getCharFromId(targets2[k][0], btl);
+					skillLink.pow *= targets2[k][1];
+
+					result2 = attackWithSkill(char, targ, skillLink, btl, null, noExtraArray);
+					if (!noEffectMsg) finalText += `${result2.txt}`;
+			
+					if (result2.oneMore) btl.doonemore = true;
+					if (result2.teamCombo) btl.canteamcombo = true;
+				}
+			}
+		}
 	}
 
 	// OnSelect

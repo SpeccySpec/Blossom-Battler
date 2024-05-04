@@ -1877,7 +1877,7 @@ statusList = {
 
 				if (vars[1] > 0) {
 					if (!char.custom?.simplebeam) addCusVal(char, "simplebeam", []);
-					char.custom.simplebeam.push([skillnum, vars[1]+1, getFullName(skillFile[vars[0]])]);
+					char.custom.simplebeam.push([skillnum, vars[1]+1, getFullName(skillFile[vars[0]]), vars[0]]);
 					str += `, for _**${vars[1]}** turns_`;
 				}
 			}
@@ -1902,7 +1902,7 @@ statusList = {
 
 				if (vars[1] > 0) {
 					if (!targ.custom?.simplebeam) addCusVal(targ, "simplebeam", []);
-					targ.custom.simplebeam.push([skillnum, vars[1]+1, getFullName(skillFile[vars[0]])]);
+					targ.custom.simplebeam.push([skillnum, vars[1]+1, getFullName(skillFile[vars[0]]), vars[0]]);
 					str += `, for _**${vars[1]}** turns_`;
 				}
 			}
@@ -2014,6 +2014,23 @@ statusList = {
 		getinfo(vars, skill) {
 			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
 			return `The **target** regains __${vars[1]}%__ of their charges for **${getFullName(skillFile[vars[0]])}**`
+		}
+	}),
+
+	movelink: new Extra({
+		name: extrasList.movelink.name,
+		desc: extrasList.movelink.desc,
+		hardcoded: extrasList.movelink.hardcoded,
+		args: extrasList.movelink.args,
+		getinfo: extrasList.movelink.getinfo,
+		applyfunc(message, skill, args) {
+			for (let i in args) {
+				if (!skillFile[args[i]]) return void message.channel.send(`${args[i]} is not an existing skill.`);
+				if (skillFile[args[i]] === skill) return void message.channel.send("You may not have skills link with themselves.");
+			}
+
+			makeStatus(skill, "movelink", args);
+			return true
 		}
 	}),
 }

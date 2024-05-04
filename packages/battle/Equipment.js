@@ -1,6 +1,6 @@
 equipWeapon = (char, id, btl) => {
     if (!char.weapons || !char.weapons[id]) return;
-    char.skills = objClone(char.oldskills);
+    setupSkills(char);
 
     if (char.curweapon) {
         let oldweapon = objClone(char.curweapon);
@@ -34,7 +34,7 @@ equipWeapon = (char, id, btl) => {
 
 equipArmor = (char, id, btl) => {
     if (!char.armors || !char.armors[id]) return;
-    char.skills = objClone(char.oldskills);
+    setupSkills(char);
 
     if (char.curarmor) {
         let oldarmor = objClone(char.curarmor);
@@ -68,7 +68,7 @@ equipArmor = (char, id, btl) => {
 
 unequipWeapon = (char, btl) => {
     if (!char.curweapon) return;
-    char.skills = objClone(char.oldskills);
+    setupSkills(char);
 
     if (!char.weapons) char.weapons = {}
     let oldweapon = objClone(char.curweapon);
@@ -78,7 +78,7 @@ unequipWeapon = (char, btl) => {
 
 unequipArmor = (char, btl) => {
     if (!char.curweapon) return;
-    char.skills = objClone(char.oldskills);
+    setupSkills(char);
 
     if (!char.weapons) char.weapons = {}
     let oldweapon = objClone(char.curweapon);

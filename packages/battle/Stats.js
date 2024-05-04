@@ -1,7 +1,7 @@
+let extratypes = ["extras", "statusses", "heal", "passive"];
+
 setupSkills = (char) => {
 	char.skills = objClone(char.oldskills);
-
-	let extratypes = ["extras", "statusses", "heal", "passive"];
 
 	// MoveLink Extra
 	let skill;
@@ -10,6 +10,7 @@ setupSkills = (char) => {
 		if (!skillFile[char.skills[i]]) continue;
 		skill = skillFile[char.skills[i]];
 
+		movelinks = [];
 		for (let k in extratypes) {
 			if (skill[extratypes[k]] && skill[extratypes[k]].movelink)
 				for (let j in skill[extratypes[k]].movelink) movelinks.push(skill[extratypes[k]].movelink[j]);
@@ -33,6 +34,7 @@ setupSkills = (char) => {
 
 setupBattleStats = (f) => {
 	f.oldskills = objClone(f.skills);
+	setupSkills(f);
 
 	f.buffs = {
 		atk: 0,
