@@ -2042,7 +2042,17 @@ doAction = (char, btl, action) => {
 
 						"You flee from the enemies, letting them kill again.",
 						"Youre sparing them. They beat you up, and youre sparing them.",
-						"You decide to flee from the innocent creatures you so rudely decided to kill."
+						"You decide to flee from the innocent creatures you so rudely decided to kill.",
+
+						"Well, we'll be back!",
+						"Sorry, but this is the wrong number.",
+						"Hold on, we left the oven on...",
+						"Wait, I forgot I wasn't supposed to be here...",
+						"Bro, you smell awful and i'm leaving",
+						"I got places to be!",
+						"Gonna schmoove my way outta here!",
+
+						"I've got places to beeeeeeeeeee. I'm outta here!",
 					];
 
 					DiscordEmbed = new Discord.MessageEmbed()
