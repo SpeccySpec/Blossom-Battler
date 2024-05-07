@@ -8,6 +8,8 @@ const affinityScores = {
 	drain: 1.5
 }
 
+let extratypes = ["extras", "statusses", "heal", "passive"];
+
 verifiedChar = (char, server) => {
 	let settings = setUpSettings(server);
 
@@ -35,8 +37,10 @@ verifiedChar = (char, server) => {
 	let almighty = 0;
 	let passives = 0;
 	let statusses = 0;
+	let skill;
+	let movelinks = [];
 	for (let i of char.skills) {
-		let skill = skillFile[i];
+		skill = skillFile[i];
 		if (!skill) return false;
 		if (skill.pow*(skill.hits ?? 1) > 1200) return false;
 		if (skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return false;
@@ -61,6 +65,45 @@ verifiedChar = (char, server) => {
 			else {
 				if (!elements.includes(skill.type)) elements.push(skill.type);
 				if (skill.type === 'almighty') almighty++;
+			}
+		}
+
+		// Move Link
+		movelinks = [];
+		for (let k in extratypes) {
+			if (skill[extratypes[k]] && skill[extratypes[k]].movelink)
+				for (let j in skill[extratypes[k]].movelink) movelinks.push(skill[extratypes[k]].movelink[j]);
+		}
+
+		for (let k in movelinks) {
+			if (skillFile[movelinks[k]]) {
+				skill = skillFile[movelinks[k]];
+				if (!skill) return false;
+				if (skill.pow*(skill.hits ?? 1) > 1200) return false;
+				if (skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return false;
+				if (skillTier(skill) > 5) return false;
+		
+				if (typeof(skill.type) == 'object') {
+					for (let type of skill.type) {
+						if (type === 'status')
+							statusses++;
+						else if (type === 'passive')
+							passives++;
+						else {
+							if (!elements.includes(type)) elements.push(type);
+							if (type === 'almighty') almighty++;
+						}
+					}
+				} else {
+					if (skill.type === 'status')
+						statusses++;
+					else if (skill.type === 'passive')
+						passives++;
+					else {
+						if (!elements.includes(skill.type)) elements.push(skill.type);
+						if (skill.type === 'almighty') almighty++;
+					}
+				}
 			}
 		}
 	}
