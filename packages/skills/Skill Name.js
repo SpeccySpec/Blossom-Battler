@@ -1,3 +1,5 @@
+let extratypes = ["extras", "statusses", "heal", "passive"];
+
 // Get full name of skill including elements.
 getFullName = (skillDefs) => {
 	if (!skillDefs) return "[INVALID SKILL]";
@@ -230,11 +232,28 @@ useCost = (char, cost, costtype, btl) => {
 }
 
 // Get Tier
-skillTier = (skill) => {
+skillTier = (skillData) => {
+	let skill = objClone(skillData);
+
 	if (skill.tier) return skill.tier;
 	if (["status", "passive", "heal"].includes(skill.type)) return 1; // you have to set these manually.
 
+	// Base Power.
 	let pow = (skill.pow * (skill.hits ?? 1));
+
+	// Move Link
+	movelinks = [];
+	for (let k in extratypes) {
+		if (skill[extratypes[k]] && skill[extratypes[k]].movelink)
+			for (let j in skill[extratypes[k]].movelink) movelinks.push(skill[extratypes[k]].movelink[j]);
+	}
+
+	for (let k in movelinks) {
+		if (skillFile[movelinks[k]] && skillFile[movelinks[k]].pow && !["passive", "heal", "status"].includes(skillFile[movelinks[k]].type))
+			pow += (skillFile[movelinks[k]].pow * (skillFile[movelinks[k]].hits ?? 1));
+	}
+
+	// Multi Hits
 	if (skill.hits && skill.hits > 1) pow *= 1.1;
 
 	if (pow <= 100)
