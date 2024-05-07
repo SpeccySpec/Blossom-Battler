@@ -3119,6 +3119,7 @@ customVariables = {
 								inf.hp = Math.min(inf.maxhp, inf.hp+d);
 
 								txt += `\nBut ${inf.name} drained it. Their HP was restored by ${d}${affinityTxt}!`;
+								killVar(char, 'trap');
 								return void addAtkMsg(btl, txt);
 						}
 
@@ -3131,6 +3132,8 @@ customVariables = {
 					addAtkMsg(btl, txt);
 					break;
 			}
+
+			killVar(char, 'trap');
 		}
 	},
 
