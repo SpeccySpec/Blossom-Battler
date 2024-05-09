@@ -1274,15 +1274,23 @@ passiveList = {
 
 	magicmelee: new Extra({
 		name: "Magic Melee (Original)",
-		desc: "Turns user's melee attack into a magic attack.",
-		args: [],
+		desc: "Turns user's melee attack into a a given <Attack Type>. This can either be *magic*, *ranged*, or *sorcery*.",
+		args: [
+			{
+				name: "Attack Type",
+				type: "Word",
+				forced: true
+			}
+		],
 		applyfunc(message, skill, args) {
-			makePassive(skill, "magicmelee", [true]);
+			if (!["magic", "ranged", "sorcery"].includes(args[0].toLowerCase())) return void message.channel.send("Magic, Ranged, or Sorcery, are the only valid fields.");
+
+			makePassive(skill, "magicmelee", [args[0].toLowerCase()]);
 			return true;
 		},
 		hardcoded: true,
 		getinfo(vars, skill) {
-			return `Turns user's melee attack into **a magic attack**`
+			return `Turns user's melee attack into **a ${vars[0] ?? "magic"} attack**`
 		}
 	}),
 
