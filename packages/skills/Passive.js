@@ -1925,7 +1925,7 @@ passiveList = {
 
 	neutralisinggas: new Extra({
 		name: "Neutralising Gas (Pokémon)",
-		desc: "Nullifies all passives in battle.",
+		desc: "Nullifies all passives in battle until the user is defeated.",
 		args: [],
 		applyfunc(message, skill, args) {
 			makePassive(skill, "neutralisinggas", [true]);
