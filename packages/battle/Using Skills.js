@@ -707,6 +707,16 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					}
 				}
 
+				// Power Hit passive
+				if (totalHits > 1) {
+					if (skill.extras?.powhit) {
+						console.log(`If ${skill.extras.powhit}.includes(${i+1})`)
+						if ((typeof skill.extras.powhit == "object" && skill.extras.powhit.includes(i+1)) || skill.extras.powhit == (i+1)) {
+							dmg *= 1.5;
+						}
+					}
+				}
+
 				// Extrahit Passive
 				if (skill?.custom?.multipower) {
 					if (i >= skill.custom.multipower[0] && i <= skill.custom.multipower[1]) {

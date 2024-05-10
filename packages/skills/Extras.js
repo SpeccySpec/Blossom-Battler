@@ -1680,7 +1680,7 @@ extrasList = {
 
 	sustain: new Extra({
 		name: "Sustain (Original)",
-		desc: "Multi-Hits do not have power altered as hits go on.",
+		desc: "Multi-Hits do not have power altered as hits go on. **Overrides the reverse extra.**",
 		args: [],
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "sustain", [true]);
