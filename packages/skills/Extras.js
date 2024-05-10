@@ -1731,7 +1731,7 @@ extrasList = {
 		],
 		applyfunc(message, skill, args) {
 			if (args[0] <= 0) return void message.channel.send("You can't use a multiplier less than 0!");
-			if (args.some(arg => arg < 1)) return void message.channel.send("You can't use a hit less than 1!");
+			if (args.slice(1).some(arg => arg < 1)) return void message.channel.send("You can't use a hit less than 1!");
 
 			makeExtra(skill, "powhit", [args]);
 			return true;
