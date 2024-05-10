@@ -710,9 +710,11 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				// Power Hit passive
 				if (totalHits > 1) {
 					if (skill.extras?.powhit) {
-						console.log(`If ${skill.extras.powhit}.includes(${i+1})`)
-						if ((typeof skill.extras.powhit == "object" && skill.extras.powhit.includes(i+1)) || skill.extras.powhit == (i+1)) {
-							dmg *= 1.5;
+						for (const k in skill.extras.powhit) {
+							if (typeof skill.extras.powhit[k][0] == "object" && skill.extras.powhit[k][0].slice(1).includes(i+1)) {
+								dmg *= skill.extras.powhit[k][0][0];
+								console.log(`damage from hit ${i+1} multiplied by ${skill.extras.powhit[k][0][0]}.`)
+							}
 						}
 					}
 				}

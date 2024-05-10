@@ -1714,8 +1714,14 @@ extrasList = {
 
 	powhit: new Extra({
 		name: "Power Hit (Original)",
-		desc: "With multi-hits, specific hits will have their power increased.",
+		desc: "With multi-hits, specific hits will have their power increased, by a given <Multiplier>.",
+		multiple: true,
 		args: [
+			{
+				name: "Multiplier",
+				type: "Decimal",
+				forced: true
+			},
 			{
 				name: "Hit #1",
 				type: "Num",
@@ -1724,23 +1730,34 @@ extrasList = {
 			}
 		],
 		applyfunc(message, skill, args) {
+			if (args[0] <= 0) return void message.channel.send("You can't use a multiplier less than 0!");
 			if (args.some(arg => arg < 1)) return void message.channel.send("You can't use a hit less than 1!");
 
 			makeExtra(skill, "powhit", [args]);
 			return true;
 		},
 		getinfo(vars, skill) {
+			if (!vars[0][0][0])
+				return "**THIS SKILL'S _POWHIT_ EXTRA HAS BEEN BROKEN BY RECENT UPDATES.\n__RE-REGISTER THIS SKILL'S _POWHIT_ EXTRA__**";
+
 			if (skill.hits && skill.hits > 1) {
 				let txt = 'Hits ';
 
-				for (const i in vars) {
-					txt += `**#${vars[i]}**`
-					if (i == vars.length-2)
-						txt += ' and ';
-					else if (i >= vars.length-1)
-						txt += ' will deal extra damage';
-					else
-						txt += ', ';
+				for (const k in vars) {
+					for (const i in vars[k][0]) {
+						if (i > 0) {
+							txt += `**#${vars[k][0][i]}**`
+							if (i == vars[k][0].length-2)
+								txt += ' and ';
+							else if (i >= vars[k][0].length-1)
+								txt += ` will deal ${vars[k][0][0]}x damage`;
+							else
+								txt += ', ';
+						}
+					}
+
+					if (k < vars.length-1)
+						txt += ', whereas, hits ';
 				}
 
 				return txt;
