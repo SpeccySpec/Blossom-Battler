@@ -2603,7 +2603,12 @@ statusEffectFuncs = {
 				widespreadopposing: 'widespreadallies',
 				widespreadallies: 'widespreadopposing',
 				randomwidespreadopposing: 'randomwidespreadallies',
-				randomwidespreadallies: 'randomwidespreadopposing'
+				randomwidespreadallies: 'randomwidespreadopposing',
+				casterandfoe: 'casterandally',
+				casterandally: 'casterandfoe',
+				casterandrandom: 'casterandrandom',
+				casterandrandomfoe: 'casterandrandomally',
+				casterandrandomally: 'casterandrandomfoe'
 			}
 
 			if (!skillDefs.target)
@@ -3027,7 +3032,7 @@ statusEffectFuncs = {
 				DiscordEmbed = new Discord.MessageEmbed()
 					.setColor("#ff1fa9")
 					.setTitle(`${char.name}'s turn!`)
-					.setDescription(`...But it failed! ${isBoss(char) ? `${char.name} shakes it off immediately!` : ''}`);
+					.setDescription(`...But it failed! ${isBoss(char) ? `${char.name} shakes it off immediately.` : ''}`);
 				btl.channel.send({embeds: [DiscordEmbed]});
 				return true;
 			}
@@ -3074,7 +3079,12 @@ statusEffectFuncs = {
 						widespreadopposing: 'randomwidespread',
 						widespreadallies: 'randomwidespread',
 						randomwidespreadopposing: 'randomwidespread',
-						randomwidespreadallies: 'randomwidespread'
+						randomwidespreadallies: 'randomwidespread',
+						casterandfoe: 'casterandrandom',
+						casterandally: 'casterandrandom',
+						casterandrandom: 'casterandrandom',
+						casterandrandomfoe: 'casterandrandom',
+						casterandrandomally: 'casterandrandom'
 					}
 
 					if (!skillDefs.target)
