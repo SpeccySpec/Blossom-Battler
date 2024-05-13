@@ -1351,7 +1351,7 @@ commands.trustlevel = new Command({
 
 // Melee Attacks!
 commands.setmelee = new Command({
-	desc: "A melee attack is a basic, low power skill, that you can use to save on resources or test a potentially risky plan.",
+	desc: "A melee attack is a basic skill, usable as a last resort. They get stronger based on your level, and are always free to use, requiring no resources.",
 	aliases: ['meleeattack', 'melee', 'changemelee'],
 	section: "characters",
 	args: [
@@ -1371,7 +1371,7 @@ commands.setmelee = new Command({
 			forced: true
 		},
 		{
-			name: "Power",
+			name: "Base Power",
 			type: "Num",
 			forced: true
 		},
