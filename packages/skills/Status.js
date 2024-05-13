@@ -2528,7 +2528,7 @@ statusEffectFuncs = {
 			}
 
 			char.mp = Math.max(0, char.mp-dmg);
-			if (char.mp <= 0) {
+			if (char.mp <= 0 && !isBoss(char)) {
 				char.hp = 0;
 				return `${char.name} lost ${dmg}${affinityTxt}${char.mpMeter ? char.mpMeter[1] : "MP"} from their despair, running out of ${char.mpMeter ? char.mpMeter[1] : "MP"} and therefore being defeated!`;
 			}
