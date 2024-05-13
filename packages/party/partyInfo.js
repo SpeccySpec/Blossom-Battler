@@ -21,7 +21,7 @@ partyDesc = (party, message) => {
 	let leaderSkill = settings.mechanics.leaderskills ? 'No Leader Skill...?' : '';
 	if (chars[party.members[0]]) {
 		let char = chars[party.members[0]];
-		embedColor = elementColors[char.mainElement] ?? '#e36b2b';
+		embedColor = charColor(char) ?? '#e36b2b';
 
 		if (char.leaderskill && settings.mechanics.leaderskills) leaderSkill = `**${[char.leaderskill.name.toUpperCase()]}**\n_${leaderSkillTxt[char.leaderskill.type]}_\n${char.leaderskill.var2}${(usesPercent[char.leaderskill.type] == true) ? '%' : ''} ${char.leaderskill.type} ${char.leaderskill.var1 ? `toward ${elementEmoji[char.leaderskill.var1] ?? ''}${char.leaderskill.var1.toUpperCase()}` : ''}`;
 	}

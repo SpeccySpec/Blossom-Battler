@@ -32,23 +32,30 @@ healList = {
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
+			let settings = setUpSettings(btl.guild.id);
+
 			if (targ.custom?.pinch)
 				return `__${targ.name}__ cannot be healed while they are in a pinch!`
 			if (!vars[0] || vars[0] == null || vars[0] == 0) return '';
 
 			vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
 //			vars[0] = Math.round(vars[0] * multiplier);
-			console.log(`healed ${vars[1]} by ${vars[0]}`)
 
 			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
-				settings = setUpSettings(btl.guild.id);
 				changeTrust(targ, char, Math.round(20*(settings.rates.trustrate ?? 1)), true, btl.channel);
 			}
+
+			let mainElementRate = settings?.rates?.mainelement ?? 1.2;
+			let dualMainElementRate = settings?.rates?.dualmainelement ?? 1.1;
 
 			switch(vars[1]) {
 				case 'hp':
 				case 'mp':
 					let heal = vars[0] + (-8+randNum(16));
+
+					if (isMainElement("heal", char))
+						heal *= (typeof char.mainElement === "object") ? dualMainElementRate : mainElementRate;
+
 					targ[vars[1]] = Math.max(Math.min(targ[`max${vars[1]}`], targ[vars[1]]+heal), 0);
 					return `__${targ.name}__'s ${vars[1] == "hp" ? "HP" : (char.mpMeter ? char.mpMeter[1] : "MP")} was restored by **${heal}**!`;
 

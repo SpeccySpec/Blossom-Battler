@@ -1,8 +1,14 @@
 pvpWin = async(btl, i) => {
+	let color = elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike;
+	if (typeof btl.teams[i].members[0].mainElement === "object") {
+		color = elementColors[btl.teams[i].members[0].mainElement[0]] ?? elementColors.strike;
+	}
+
 	let DiscordEmbed = new Discord.MessageEmbed()
-		.setColor(elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike)
+		.setColor(color)
 		.setTitle("__Battle Results__")
 		.setDescription(`**[BATTLE RESULTS]**\nThe winner is **Team #${i}**!\nCongratulations, each member recieves 1<:golden:973077051751940138>!`)
+
 	btl.channel.send({embeds: [DiscordEmbed]}).then(message => {
 		// Award stars
 		let users = [];
@@ -57,8 +63,13 @@ loseBattle = (btl, i) => {
 	}
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/characters.json`, JSON.stringify(charFile, null, 4));
 
+	let color = elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike;
+	if (typeof btl.teams[i].members[0].mainElement === "object") {
+		color = elementColors[btl.teams[i].members[0].mainElement[0]] ?? elementColors.strike;
+	}
+
 	let DiscordEmbed = new Discord.MessageEmbed()
-		.setColor(elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike)
+		.setColor(color)
 		.setTitle("__Battle Results__")
 		.setDescription(`**[BATTLE LOST...]**\nThe enemies defeated you...\nYou lost all of your items and ${lostmoney} ${settings.currency_emoji}${settings.currency}s...`)
 	btl.channel.send({embeds: [DiscordEmbed]}).then(message => {
@@ -355,8 +366,13 @@ winBattle = (btl, i) => {
 	// Save character shit.
 	fs.writeFileSync(`${dataPath}/json/${btl.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 
+	let color = elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike;
+	if (typeof btl.teams[i].members[0].mainElement === "object") {
+		color = elementColors[btl.teams[i].members[0].mainElement[0]] ?? elementColors.strike;
+	}
+
 	let DiscordEmbed = new Discord.MessageEmbed()
-		.setColor(elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike)
+		.setColor(color)
 		.setTitle("__Battle Results__")
 		.setDescription(embedtxt)
 	btl.channel.send({embeds: [DiscordEmbed]})
@@ -365,8 +381,13 @@ winBattle = (btl, i) => {
 }
 
 runFromBattle = (char, btl, i) => {
+	let color = elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike;
+	if (typeof btl.teams[i].members[0].mainElement === "object") {
+		color = elementColors[btl.teams[i].members[0].mainElement[0]] ?? elementColors.strike;
+	}
+
 	let DiscordEmbed = new Discord.MessageEmbed()
-		.setColor(elementColors[btl.teams[i].members[0].mainElement] ?? elementColors.strike)
+		.setColor(color)
 		.setTitle("__Battle Results__")
 		.setDescription("**[RAN AWAY!]**\nYou ran from battle!\n_(All rewards you would have gotten are not obtained.)_")
 	btl.channel.send({embeds: [DiscordEmbed]})

@@ -1233,6 +1233,7 @@ setUpSettings = (guild) => {
 				moneyrate: 1,
 				goldchance: 0.01,
 				mainelement: 1.2,
+				dualmainelement: 1.1,
 				crit: 1.5,
 				tech: 1.2,
 				affinities: {

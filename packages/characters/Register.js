@@ -125,9 +125,20 @@ briefDescription = (char) => {
 		statDesc += `\n${char.stats[i]}${i.toUpperCase()}`
 	}
 
+	let prefix = elementEmoji[char.mainElement] ?? elementEmoji.strike;
+	let color = elementColors[char.mainElement] ?? elementColors.strike;
+
+	if (typeof char.mainElement === "object") {
+		prefix = "";
+		for (let i in char.mainElement)
+			prefix += elementEmoji[char.mainElement[i]] ?? elementEmoji.strike;
+
+		color = elementColors[char.mainElement[0]] ?? elementColors.strike;
+	}
+
 	return new Discord.MessageEmbed()
-		.setColor(!char.type ? elementColors[char.mainElement] : enemyTypeColors[char.type])
-		.setTitle(`${!char.type ? elementEmoji[char.mainElement] : ''}${char.name}'s Stats:`)
+		.setColor(!char.type ? color : enemyTypeColors[char.type])
+		.setTitle(`${!char.type ? prefix : ''}${char.name}'s Stats:`)
 		.setDescription(statDesc)
 }
 
@@ -186,6 +197,17 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 
 	if (settings == null) settings = setUpFile(`${dataPath}/json/${message.guild.id}/settings.json`);
 
+	let prefix = elementEmoji[char.mainElement] ?? elementEmoji.strike;
+	let color = elementColors[char.mainElement] ?? elementColors.strike;
+
+	if (typeof char.mainElement === "object") {
+		prefix = "";
+		for (let i in char.mainElement)
+			prefix += elementEmoji[char.mainElement[i]] ?? elementEmoji.strike;
+
+		color = elementColors[char.mainElement[0]] ?? elementColors.strike;
+	}
+
 	if (!DiscordEmbed) {
 		let dispLevel = '';
 	
@@ -197,8 +219,8 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 	
 		let tick = verifiedChar(char, message.guild.id) ? '<:tick:973077052372701294>' : '';
 		DiscordEmbed = new Discord.MessageEmbed()
-			.setColor(!char.type ? elementColors[char.mainElement] : enemyTypeColors[char.type])
-			.setTitle(`${elementEmoji[char.mainElement]}${tick}${char.name} ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
+			.setColor(!char.type ? color : enemyTypeColors[char.type])
+			.setTitle(`${prefix}${tick}${char.name} ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
 	}
 
 	let affinityscore = 0
@@ -329,10 +351,21 @@ longDescription = (charDefs, level, server, message, useguild) => {
 
 	if (char.ai) userTxt = "Automated";
 
-	let tick = verifiedChar(char, server) ? '<:tick:973077052372701294>' : '';
+	let prefix = elementEmoji[char.mainElement] ?? elementEmoji.strike;
+	let color = elementColors[char.mainElement] ?? elementColors.strike;
+
+	if (typeof char.mainElement === "object") {
+		prefix = "";
+		for (let i in char.mainElement)
+			prefix += elementEmoji[char.mainElement[i]] ?? elementEmoji.strike;
+
+		color = elementColors[char.mainElement[0]] ?? elementColors.strike;
+	}
+
+	let tick = verifiedChar(char, server) ? '(<:tick:973077052372701294>) ' : '';
 	let DiscordEmbed = new Discord.MessageEmbed()
-		.setColor(!char.type ? elementColors[char.mainElement] : enemyTypeColors[char.type])
-		.setTitle(`${elementEmoji[char.mainElement]}${tick}${char.name} ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
+		.setColor(!char.type ? color : enemyTypeColors[char.type])
+		.setTitle(`${prefix}${char.name} ${tick}${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
 
 	let desc = ''
 	if (char.curweapon && char.curweapon.name) {
@@ -623,4 +656,22 @@ imageFile = (char) => {
 		let file = new Discord.MessageAttachment(`${dataPath}/images/enemies/${char.image}.png`);
 		return file
 	}
+}
+
+charColor = (char) => {
+	let color = elementColors[char.mainElement] ?? elementColors.strike;
+	if (typeof char.mainElement === "object") color = elementColors[char.mainElement[0]] ?? elementColors.strike;
+	return color;
+}
+
+charPrefix = (char) => {
+	let prefix = elementEmoji[char.mainElement] ?? "";
+
+	if (typeof char.mainElement === "object") {
+		prefix = "";
+		for (let i in char.mainElement)
+			prefix += elementEmoji[char.mainElement[i]] ?? "";
+	}
+
+	return prefix;
 }

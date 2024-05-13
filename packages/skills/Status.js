@@ -2571,7 +2571,7 @@ statusEffectFuncs = {
 				let dmg = char.stats.atk + (-8 + randNum(16));
 
 				DiscordEmbed = new Discord.MessageEmbed()
-					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setColor(charColor(char))
 					.setTitle(`${char.name} => Self`)
 					.setDescription(`__${char.name}__ has no usable skills! __${char.name}__ strikes themselves, taking ${dmg} damage!`);
 				btl.channel.send({embeds: [DiscordEmbed]});

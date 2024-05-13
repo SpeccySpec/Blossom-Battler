@@ -2690,7 +2690,11 @@ extrasList = {
 			return true
 		},
 		skillmod(char, targ, skill, btl, vars) {
-			if (targ.mainElement === vars[1]) skill.pow *= vars[0]/100;
+			if (typeof targ.mainElement === "object") {
+				if (targ.mainElement.includes(vars[1])) skill.pow *= vars[0]/100;
+			} else {
+				if (targ.mainElement === vars[1]) skill.pow *= vars[0]/100;
+			}
 		},
 		getinfo(vars, skill) {
 			let txt = "Skill's power boosted by ";

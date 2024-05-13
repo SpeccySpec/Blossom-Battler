@@ -157,10 +157,21 @@ evoSkillMessageCollector = async (charDefs, toUpdate, channel, server, ind, fiel
 
 	descText += `\nWhich one do you choose?`
 
+	let prefix = elementEmoji[charDefs.mainElement];
+	let color = elementColors[charDefs.mainElement] ?? elementColors.strike;
+
+	if (typeof charDefs.mainElement === "object") {
+		prefix = "";
+		for (let i in charDefs.mainElement)
+			prefix += elementEmoji[charDefs.mainElement[i]] ?? elementEmoji.strike;
+
+		color = elementColors[charDefs.mainElement[0]] ?? elementColors.strike;
+	}
+
 	let DiscordEmbed = new Discord.MessageEmbed()
-	.setColor(elementColors[charDefs.mainElement])
-	.setTitle(`__${elementEmoji[charDefs.mainElement]}${charDefs.name}__'s ${field.preskills.length > 1 ? 'preskill' : 'evoskill'} choice: ${skillDefs.name}`)
-	.setDescription(descText);
+		.setColor(color)
+		.setTitle(`__${prefix}${charDefs.name}__'s ${field.preskills.length > 1 ? 'preskill' : 'evoskill'} choice: ${skillDefs.name}`)
+		.setDescription(descText);
 
 	let embedMessage = ''
 	embedMessage = await channel.send({

@@ -318,13 +318,23 @@ module.exports = {
 					})
 					charFile[char].skills.reverse()
 					
-					let mainElement = charFile[char].mainElement
+					let mainElement = charFile[char].mainElement;
 
-					charFile[char].skills.sort(function(a, b) {
-						if (skillObj[a].type.includes(mainElement)) return -1
-						else if (skillObj[b].type.includes(mainElement)) return 1
-						else return 0
-					})
+					if (typeof mainElement === "object") {
+						charFile[char].skills.sort(function(a, b) {
+							for (let k in mainElement) {
+								if (skillObj[a].type.includes(mainElement[k])) return -1
+								else if (skillObj[b].type.includes(mainElement[k])) return 1
+								else return 0
+							}
+						})
+					} else {
+						charFile[char].skills.sort(function(a, b) {
+							if (skillObj[a].type.includes(mainElement)) return -1
+							else if (skillObj[b].type.includes(mainElement)) return 1
+							else return 0
+						})
+					}
 				}
 			}
 			fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/characters.json`, JSON.stringify(charFile))
@@ -339,11 +349,21 @@ module.exports = {
 
 					let mainElement = enemyFile[enemy].mainElement
 
-					enemyFile[enemy].skills.sort(function(a, b) {
-						if (skillObj[a].type.includes(mainElement)) return -1
-						else if (skillObj[b].type.includes(mainElement)) return 1
-						else return 0
-					})
+					if (typeof mainElement === "object") {
+						enemyFile[enemy].skills.sort(function(a, b) {
+							for (let k in mainElement) {
+								if (skillObj[a].type.includes(mainElement[k])) return -1
+								else if (skillObj[b].type.includes(mainElement[k])) return 1
+								else return 0
+							}
+						})
+					} else {
+						enemyFile[enemy].skills.sort(function(a, b) {
+							if (skillObj[a].type.includes(mainElement)) return -1
+							else if (skillObj[b].type.includes(mainElement)) return 1
+							else return 0
+						})
+					}
 				}
 			}
 			fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/enemies.json`, JSON.stringify(enemyFile))

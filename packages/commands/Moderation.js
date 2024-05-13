@@ -99,6 +99,9 @@ commands.settings = new Command({
 				case 'mainelement':
 					rateText += `**Main Element Damage Rate**: ${settings['rates'][i]}x\n`
 					break
+				case 'dualmainelement':
+					rateText += `**Dual Main Element Damage Rate**: ${settings['rates'][i]}x\n`
+					break
 				case 'crit':
 					rateText += `**Critical Damage Rate**: ${settings['rates'][i]}x\n`
 					break
@@ -604,6 +607,31 @@ commands.mainelementrate = new Command({
 		settings['rates']['mainelement'] = args[0]
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 		message.channel.send('Main element damage rate set to ' + args[0] + '%')
+	}
+})
+
+commands.dualmainelementrate = new Command({
+	desc: 'Change the character main element damage rate in battles for the server.',
+	section: 'moderation',
+	aliases: ['setdualmainelementrate', 'setdualmainelement', 'setdualmain', 'setdualmainrate', 'setdualmainelementrate', 'setdualmainelement'],
+	args: [
+		{
+			name: 'Main Element Damage Rate',
+			type: 'Decimal',
+			forced: true
+		}
+	],
+	admin: "You do not have permission to change the main element damage rate!",
+	func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id)
+
+		if (args[0] < 1) {
+			return message.channel.send('Main element damage rate cannot be less than 1!')
+		}
+
+		settings['rates']['dualmainelement'] = args[0]
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+		message.channel.send('Dual main element damage rate set to ' + args[0] + '%')
 	}
 })
 

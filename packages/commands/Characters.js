@@ -373,10 +373,12 @@ commands.getgear = new Command({
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 
 		let char = charFile[args[0]];
+		let prefix = charPrefix(char);
+		let color = charColor(char);
 
 		let DiscordEmbed = new Discord.MessageEmbed()
-			.setColor(elementColors[char.mainElement])
-			.setTitle(`__${elementEmoji[char.mainElement]}${char.name}'s__ Gear:`);
+			.setColor(color)
+			.setTitle(`__${prefix}${char.name}'s__ Gear:`);
 
 		if (char.curweapon) {
 			var desc = '';
@@ -490,7 +492,7 @@ commands.listchars = new Command({
 					switch (args[a-1].toLowerCase()) {
 						case 'element':
 							args[a] = args[a].toLowerCase();
-							isConditionMet = (charFile[i].mainElement == args[a])
+							isConditionMet = ((typeof charFile[i].mainElement === "object") ? charFile[i].mainElement.includes(args[a]) : charFile[i].mainElement == args[a])
 							break;
 						case 'superweak':
 						case 'weak':
@@ -603,7 +605,8 @@ commands.listchars = new Command({
 			let descTxt = `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}${charFile[i].mpMeter ? charFile[i].mpMeter[1] : "MP"}`;
 
 			let tick = verifiedChar(charFile[i], message.guild.id) ? '<:tick:973077052372701294>' : '';
-			array.push({title: `${elementEmoji[charFile[i].mainElement]}${tick}${charFile[i].name} (${i})`, desc: descTxt});
+			let prefix = charPrefix(charFile[i]);
+			array.push({title: `${prefix}${tick}${charFile[i].name} (${i})`, desc: descTxt});
 		}
 		if (array.length == 0) return message.channel.send('No characters found!');
 
@@ -627,8 +630,11 @@ commands.searchchars = new Command({
 
 		for (const i in charFile) {
 			if (charFile[i].hidden) continue;
+
+			let prefix = charPrefix(charFile[i]);
+
 			if (charFile[i].name.toLowerCase().includes(args[0].toLowerCase()) || i.toLowerCase().includes(args[0].toLowerCase())) {
-				array.push({title: `${elementEmoji[charFile[i].mainElement]}${charFile[i].name} (${i})`, desc: `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}${charFile[i].mpMeter ? charFile[i].mpMeter[1] : "MP"}`});
+				array.push({title: `${prefix}${charFile[i].name} (${i})`, desc: `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}${charFile[i].mpMeter ? charFile[i].mpMeter[1] : "MP"}`});
 			}
 		}
 
@@ -735,7 +741,7 @@ commands.mpmeter = new Command({
 })
 
 commands.mainelement = new Command({
-	desc: "Changes the character's Main Element. A Main Element is an element that the character is proficient in. Skills with the main element as it's **sole** type will deal 1.1x damage when attacking enemies.",
+	desc: "Changes the character's Main Element. A Main Element is an element that the character is proficient in. Skills with the main element as it's **sole** type will deal increased damage when attacking enemies, however, _some characters can have 2 main elements._ Generally, characters with 2 main elements will gain the benefit to both of them, but a reduced benefit, however, it can be different per server.",
 	aliases: ['setelement', 'setmainelement', 'changeelement', 'element', 'maintype', 'settype'],
 	section: "characters",
 	args: [
@@ -748,6 +754,11 @@ commands.mainelement = new Command({
 			name: "Main Element",
 			type: "Word",
 			forced: true
+		},
+		{
+			name: "Main Element #2",
+			type: "Word",
+			forced: false
 		}
 	],
 	checkban: true,
@@ -756,22 +767,45 @@ commands.mainelement = new Command({
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
-		let thingDefs = ''
+		let thingDefs = {};
 
+		// Can we edit this character?
 		if (charFile[args[0]]) {
 			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
 			thingDefs = charFile;
 		} else if (enemyFile[args[0]]) {
 			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to assign a main element to ${args[0]}.`);
 			thingDefs = enemyFile;
-		} else return message.channel.send(`${args[0]} doesn't exist!`);
+		} else {
+			return message.channel.send(`${args[0]} doesn't exist!`);
+		}
 
-		if (!utilityFuncs.inArray(args[1].toLowerCase(), Elements)) return message.channel.send({content: 'Please enter a valid element for **Main Element!**', embeds: [elementList()]});
-		if (args[1].toLowerCase() == 'almighty' && !thingDefs[args[0]].type) return message.channel.send(`${args[0]} can't have Almighty as their main element!`);
+		// The element, and restrictions.
+		let element = args[1].toLowerCase();
 
-		thingDefs[args[0]].mainElement = args[1].toLowerCase();
-		message.channel.send(`👍 ${thingDefs[args[0]].name}'s main element is now ${args[1].charAt(0).toUpperCase()+args[1].slice(1)}`);
-		
+		if (!Elements.includes(element))
+			return message.channel.send({content: 'Please enter a valid element for **Main Element!**', embeds: [elementList()]});
+
+		if (element == 'almighty' && !thingDefs[args[0]].type)
+			return message.channel.send(`${args[0]} can't have Almighty as their main element!`);
+
+		thingDefs[args[0]].mainElement = element;
+
+		if (args[2]) {
+			let element2 = args[2].toLowerCase();
+
+			if (!Elements.includes(element2))
+				return message.channel.send({content: 'Please enter a valid element for **Main Element #2!**', embeds: [elementList()]});
+
+			if (element2 == 'almighty' && !thingDefs[args[0]].type)
+				return message.channel.send(`${args[0]} can't have Almighty as an main element!`);
+	
+			thingDefs[args[0]].mainElement = [element, element2];
+			message.channel.send(`👍 __${thingDefs[args[0]].name}__'s main elements are now **${args[1].charAt(0).toUpperCase()+args[1].slice(1)}** and **${args[2].charAt(0).toUpperCase()+args[2].slice(1)}**!`);
+		} else {
+			message.channel.send(`👍 __${thingDefs[args[0]].name}__'s main element is now **${args[1].charAt(0).toUpperCase()+args[1].slice(1)}**!`);
+		}
+
 		if (thingDefs[args[0]].type) {
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
 		} else {
@@ -3235,7 +3269,7 @@ commands.settransformation = new Command({
 
         const DiscordEmbed = new Discord.MessageEmbed()
             .setColor('#f2c055')
-			.setTitle(`${charFile[args[0]].name}'s __${elementEmoji[transDefs.mainElement]}${transDefs.name}__  Transformation's Stats:`)
+			.setTitle(`${charFile[args[0]].name}'s __${elementEmoji[transDefs.mainElement] ?? elementEmoji.spirit}${transDefs.name}__  Transformation's Stats:`)
             .setDescription(`${transDefs.desc ? `*` + transDefs.desc + '*\n\n' : ''}**Stats:**\n${transDefs.hp}HP++\n${transDefs.mp}${charFile[args[0]].mpMeter ? charFile[args[0]].mpMeter[1] : "MP"}++\n\n${transDefs.atk}ATK++\n${transDefs.mag}MAG++\n${transDefs.prc}PRC++\n${transDefs.end}END++\n${transDefs.chr}CHR++\n${transDefs.int}INT++\n${transDefs.agl}AGL++\n${transDefs.luk}LUK++`)
         message.channel.send({content: `👍 ${charFile[args[0]].name}'s ${transDefs.name} transformation has been registered!`, embeds: [DiscordEmbed]});
 	}
@@ -3411,7 +3445,7 @@ commands.edittransformation = new Command({
 
         const DiscordEmbed = new Discord.MessageEmbed()
             .setColor('#f2c055')
-			.setTitle(`${charFile[args[0]].name}'s __${elementEmoji[transDefs.mainElement]}${transDefs.name}__ Transformation's Stats:`)
+			.setTitle(`${charFile[args[0]].name}'s __${elementEmoji[transDefs.mainElement] ?? elementEmoji.spirit}${transDefs.name}__ Transformation's Stats:`)
             .setDescription(`${transDefs.desc ? `*` + transDefs.desc + '*\n\n' : ''}**Stats:**\n${transDefs.hp}HP++\n${transDefs.mp}${charFile[args[0]].mpMeter ? charFile[args[0]].mpMeter[1] : "MP"}++\n\n${transDefs.atk}ATK++\n${transDefs.mag}MAG++\n${transDefs.prc}PRC++\n${transDefs.end}END++\n${transDefs.chr}CHR++\n${transDefs.int}INT++\n${transDefs.agl}AGL++\n${transDefs.luk}LUK++`)
         message.channel.send({content: `👍 ${charFile[args[0]].name}'s ${transDefs.name} transformation has been changed!`, embeds: [DiscordEmbed]});
 	}

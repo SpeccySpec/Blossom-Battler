@@ -626,7 +626,20 @@ function GetCharStatus(char) {
 
 function GetCharName(char) {
 	let str = char.name;
-	if (char.transformed) str = `${elementEmoji[char.transformations[char.transformed].mainElement ?? "spirit"]}**__${char.name}__**`;
+
+	if (char.transformed) {
+		let element = char.transformations[char.transformed].mainElement;
+
+		if (typeof element === "object") {
+			str = "";
+			for (let k in element) {
+				str += elementEmoji[char.transformations[char.transformed].mainElement[k] ?? "spirit"];
+			}
+			str += `**__${char.name}__**`;
+		} else {
+			str = `${elementEmoji[char.transformations[char.transformed].mainElement ?? "spirit"]}**__${char.name}__**`;
+		}
+	}
 
 	return str;
 }
@@ -636,8 +649,12 @@ sendStateEmbed = (char, btl) => {
 
 	let menustate = btl.intendedstate;
 
+	let color = elementColors[char.mainElement] ?? elementColors.strike;
+	if (typeof char.mainElement === "object")
+		color = elementColors[char.mainElement[0]] ?? elementColors.strike;
+
 	let DiscordEmbed = new Discord.MessageEmbed()
-		.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+		.setColor(color)
 		.setTitle(`PLACEHOLDER`)
 		.setDescription('PLACEHOLDER')
 
@@ -809,8 +826,12 @@ sendCurTurnEmbed = (char, btl) => {
 	if (teamDesc == '') teamDesc = "No opponents.";
 	if (myTeamDesc == '') myTeamDesc = "No allies.";
 
+	let color = elementColors[char.mainElement] ?? elementColors.strike;
+	if (typeof char.mainElement === "object")
+		color = elementColors[char.mainElement[0]] ?? elementColors.strike;
+
 	let DiscordEmbed = new Discord.MessageEmbed()
-		.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+		.setColor(color)
 		.setTitle(`Turn #${btl.turn} - ${char.name}'s turn${testtxt}`)
 		.setDescription(statDesc)
 		.addFields({name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true})
@@ -857,8 +878,12 @@ sendCurTurnEmbed = (char, btl) => {
 			return;
 		}
 
+		let color = elementColors[char.mainElement] ?? elementColors.strike;
+		if (typeof char.mainElement === "object")
+			color = elementColors[char.mainElement[0]] ?? elementColors.strike;
+
 		DiscordEmbed = new Discord.MessageEmbed()
-			.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+			.setColor(color)
 			.setTitle(`Turn #${btl.turn} - ${char.name}'s turn`)
 			.setDescription(statDesc)
 			.addFields({name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true})
@@ -1864,6 +1889,10 @@ sendCurTurnEmbed = (char, btl) => {
 doAction = (char, btl, action) => {
 	let party = btl.teams[char.team];
 	var DiscordEmbed;
+	
+	let color = elementColors[char.mainElement] ?? elementColors.strike;
+	if (typeof char.mainElement === "object")
+		color = elementColors[char.mainElement[0]] ?? elementColors.strike;
 
 	delete btl.canteamcombo;
 
@@ -1874,7 +1903,7 @@ doAction = (char, btl, action) => {
 		char.mp = Math.min(char.maxmp, Math.round(char.mp+mpget));
 
 		DiscordEmbed = new Discord.MessageEmbed()
-			.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+			.setColor(color)
 			.setTitle(`${char.name} => Self`)
 			.setDescription(`${char.name} guards! This reduces damage, and restores **${mpget}${char.mpMeter ? char.mpMeter[1] : "MP"}**!`)
 		btl.channel.send({embeds: [DiscordEmbed]});
@@ -1910,7 +1939,7 @@ doAction = (char, btl, action) => {
 
 				// Now, send the embed!
 				DiscordEmbed = new Discord.MessageEmbed()
-					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setColor(color)
 					.setTitle('Using Item...')
 					.setDescription(itemTxt.replace(/\n{3,}/, () => "\n\n"))
 				btl.channel.send({embeds: [DiscordEmbed]});
@@ -1923,7 +1952,7 @@ doAction = (char, btl, action) => {
 				char.mp = Math.min(char.maxmp, Math.round(char.mp+mpget));
 
 				DiscordEmbed = new Discord.MessageEmbed()
-					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setColor(color)
 					.setTitle(`${char.name} => Self`)
 					.setDescription(`${char.name} guards! This reduces damage, and restores **${mpget}${char.mpMeter ? char.mpMeter[1] : "MP"}**!`)
 				btl.channel.send({embeds: [DiscordEmbed]});
@@ -1932,7 +1961,7 @@ doAction = (char, btl, action) => {
 			case 'weapon':
 				if (action.unequip) {
 					DiscordEmbed = new Discord.MessageEmbed()
-						.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+						.setColor(color)
 						.setTitle(`${char.name} => Self`)
 						.setDescription(`__${char.name}__ unequipped their ${classEmoji.weapon[char.curweapon.class] ?? '<:bladed:1008794351591239842>'}**${char.curweapon.name}**.`)
 					btl.channel.send({embeds: [DiscordEmbed]});
@@ -1941,13 +1970,13 @@ doAction = (char, btl, action) => {
 				} else {
 					if (char.curweapon) {
 						DiscordEmbed = new Discord.MessageEmbed()
-							.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+							.setColor(color)
 							.setTitle(`${char.name} => Self`)
 							.setDescription(`__${char.name}__ unequipped their ${classEmoji.weapon[char.curweapon.class] ?? '<:bladed:1008794351591239842>'}**${char.curweapon.name}**, and equipped the ${classEmoji.weapon[char.weapons[action.index].class] ?? '<:bladed:1008794351591239842>'}**${char.weapons[action.index].name}**!`)
 						btl.channel.send({embeds: [DiscordEmbed]});
 					} else {
 						DiscordEmbed = new Discord.MessageEmbed()
-							.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+							.setColor(color)
 							.setTitle(`${char.name} => Self`)
 							.setDescription(`__${char.name}__ equipped the ${classEmoji.weapon[char.weapons[action.index].class] ?? '<:bladed:1008794351591239842>'}**${char.weapons[action.index].name}**!`)
 						btl.channel.send({embeds: [DiscordEmbed]});
@@ -1961,7 +1990,7 @@ doAction = (char, btl, action) => {
 			case 'armor':
 				if (action.unequip) {
 					DiscordEmbed = new Discord.MessageEmbed()
-						.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+						.setColor(color)
 						.setTitle(`${char.name} => Self`)
 						.setDescription(`__${char.name}__ unequipped their ${classEmoji.armor[char.curarmor.class] ?? '<:bladed:1008794351591239842>'}**${char.curarmor.name}**.`)
 					btl.channel.send({embeds: [DiscordEmbed]});
@@ -1970,13 +1999,13 @@ doAction = (char, btl, action) => {
 				} else {
 					if (char.curweapon) {
 						DiscordEmbed = new Discord.MessageEmbed()
-							.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+							.setColor(color)
 							.setTitle(`${char.name} => Self`)
 							.setDescription(`__${char.name}__ unequipped their ${classEmoji.armor[char.curarmor.class] ?? '<:bladed:1008794351591239842>'}**${char.curarmor.name}**, and equipped the ${classEmoji.armor[char.armors[action.index].class] ?? '<:bladed:1008794351591239842>'}**${char.armors[action.index].name}**!`)
 						btl.channel.send({embeds: [DiscordEmbed]});
 					} else {
 						DiscordEmbed = new Discord.MessageEmbed()
-							.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+							.setColor(color)
 							.setTitle(`${char.name} => Self`)
 							.setDescription(`__${char.name}__ equipped the ${classEmoji.armor[char.armors[action.index].class] ?? '<:bladed:1008794351591239842>'}**${char.armors[action.index].name}**!`)
 						btl.channel.send({embeds: [DiscordEmbed]});
@@ -2056,7 +2085,7 @@ doAction = (char, btl, action) => {
 					];
 
 					DiscordEmbed = new Discord.MessageEmbed()
-						.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+						.setColor(color)
 						.setTitle('Running Away!')
 						.setDescription(runTexts[randNum(runTexts.length-1)])
 					btl.channel.send({embeds: [DiscordEmbed]});
@@ -2065,7 +2094,7 @@ doAction = (char, btl, action) => {
 					return;
 				} else {
 					DiscordEmbed = new Discord.MessageEmbed()
-						.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+						.setColor(color)
 						.setTitle('Running Away!')
 						.setDescription("You couldn't get away!")
 					btl.channel.send({embeds: [DiscordEmbed]});
@@ -2074,7 +2103,7 @@ doAction = (char, btl, action) => {
 
 			case 'forfeit':
 				DiscordEmbed = new Discord.MessageEmbed()
-					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setColor(color)
 					.setTitle('Forfeiting!')
 					.setDescription(`Team ${btl.teams[char.team].name} is forfeiting the match!`)
 				btl.channel.send({embeds: [DiscordEmbed]});
@@ -2091,7 +2120,7 @@ doAction = (char, btl, action) => {
 				btl.teams[char.team].members[action.target[1]] = objClone(char2);
 
 				DiscordEmbed = new Discord.MessageEmbed()
-					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setColor(color)
 					.setTitle(`__${char.name}__ => __${char1.name}__, __${char2.name}__`)
 					.setDescription(`__${char.name}__ decided to swap __${char1.name}__ for __${char2.name}__.\n___${char2.name}__ will fight in __${char1.name}'s__ place._`.replace(/\n{3,}/, () => "\n\n"))
 				btl.channel.send({embeds: [DiscordEmbed]});
@@ -2120,7 +2149,7 @@ doAction = (char, btl, action) => {
 
 				if (!hasTeamCombo(char, ally)) {
 					DiscordEmbed = new Discord.MessageEmbed()
-						.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+						.setColor(color)
 						.setTitle(`__${char.name}__ => __${ally.name}__`)
 						.setDescription(`__${char.name}__ tried to attack with __${ally.name}__... but it failed...?`.replace(/\n{3,}/, () => "\n\n"))
 					btl.channel.send({embeds: [DiscordEmbed]});
@@ -2163,7 +2192,7 @@ doAction = (char, btl, action) => {
 				doTransformation(char, btl.action.index, btl);
 
 				DiscordEmbed = new Discord.MessageEmbed()
-					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setColor(color)
 					.setTitle(`${char.name} => Self`)
 					.setDescription(`${char.name} undergoes a transformation, taking their ${btl.action.index} form!`)
 				btl.channel.send({embeds: [DiscordEmbed]});
@@ -2171,7 +2200,7 @@ doAction = (char, btl, action) => {
 
 			case 'save':
 				DiscordEmbed = new Discord.MessageEmbed()
-					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setColor(color)
 					.setTitle('Saving trial...')
 					.setDescription('You can resume this trial by using the "resumetrial" command.')
 				btl.channel.send({embeds: [DiscordEmbed]});

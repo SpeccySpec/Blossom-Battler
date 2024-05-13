@@ -40,6 +40,17 @@ changeTrust = (char, char2, i, send, channel, char1Name, char2Name) => {
 	}
 	setUpTrust(char, char2);
 
+	let prefix = elementEmoji[char.mainElement] ?? elementEmoji.strike;
+	let color = elementColors[char.mainElement] ?? elementColors.strike;
+
+	if (typeof char.mainElement === "object") {
+		prefix = "";
+		for (let i in char.mainElement)
+			prefix += elementEmoji[char.mainElement[i]] ?? elementEmoji.strike;
+
+		color = elementColors[char.mainElement[0]] ?? elementColors.strike;
+	}
+
 	let detectedLevelUp = false;
 	let previousLevel = char.trust[char2.truename].level;
 
@@ -109,7 +120,7 @@ changeTrust = (char, char2, i, send, channel, char1Name, char2Name) => {
 			
 			if (send) {
 				let DiscordEmbed = new Discord.MessageEmbed()
-					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setColor(color)
 					.setTitle(`${trustemoji} ${char.name} & ${char2.name} grow closer... ${trustemoji}`)
 					.setDescription(`${char.name} & ${char2.name} reached _Trust Level __${char.trust[char2.truename].level}___!`)
 				return void channel.send({embeds: [DiscordEmbed]});
@@ -122,7 +133,7 @@ changeTrust = (char, char2, i, send, channel, char1Name, char2Name) => {
 
 			if (send) {
 				let DiscordEmbed = new Discord.MessageEmbed()
-					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setColor(color)
 					.setTitle(`${trustemoji} ${char.name} & ${char2.name} draw farther away... ${trustemoji}`)
 					.setDescription(`${char.name} & ${char2.name} reached _Trust Level __${char.trust[char2.truename].level}___!`)
 				return void channel.send({embeds: [DiscordEmbed]});
@@ -195,11 +206,14 @@ trustBio = async (char, channel, author) => {
 	let index = 0;
 	let currentCategory = 0;
 
+	let prefix = charPrefix(char);
+	let color = charColor(char);
+
 	const generateEmbed = async => {
 		const current = trustGroups[Object.keys(trustGroups)[currentCategory]][index];
 		let DiscordEmbed = new Discord.MessageEmbed()
-			.setColor(elementColors[char.mainElement] ?? elementColors.strike)
-			.setTitle(`${char.name}'s Trust`)
+			.setColor(color)
+			.setTitle(`${prefix}__${char.name}__'s Trust`)
 			.setDescription(`**${trustEmojis[Object.keys(trustGroups)[currentCategory]]} ${Object.keys(trustGroups)[currentCategory]} (lv ${trustRanges[Object.keys(trustGroups)[currentCategory]][0]} - ${trustRanges[Object.keys(trustGroups)[currentCategory]][1]})**:\n\n${current.join('\n')}`);
 
 		return DiscordEmbed;

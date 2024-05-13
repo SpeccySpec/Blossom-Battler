@@ -1297,6 +1297,10 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	let settings = setUpSettings(btl.guild.id);
 	let skill = objClone(forceskill) ?? objClone(skillFile[act.index]);
 
+	let color = elementColors[char.mainElement] ?? elementColors.strike;
+	if (typeof char.mainElement === "object")
+		color = elementColors[char.mainElement[0]] ?? elementColors.strike;
+
 	// Does this skill exist...?
 	if (!skill) {
 		char.guard = 0.45;
@@ -1305,7 +1309,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		char.mp = Math.min(char.maxmp, Math.round(char.mp+mpget));
 
 		let DiscordEmbed = new Discord.MessageEmbed()
-			.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+			.setColor(color)
 			.setTitle(`__${char.name}__ => __Self__`)
 			.setDescription(`__${char.name}__ guards! This reduces damage, and restores **${mpget}${char.mpMeter ? char.mpMeter[1] : "MP"}**!`)
 			.setFooter("<:warning:878094052208296007>");
@@ -1396,9 +1400,15 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 	// Main Elements
 	let mainElementRate = settings?.rates?.mainelement ?? 1.2;
-	if (char.transformed) mainElementRate+0.2;
+	let dualMainElementRate = settings?.rates?.dualmainelement ?? 1.1;
 
-	if (isMainElement(skill, char)) skill.pow *= mainElementRate;
+	if (char.transformed) {
+		mainElementRate += 0.2;
+		dualMainElementRate += 0.1;
+	}
+
+	if (isMainElement(skill, char))
+		skill.pow *= (typeof char.mainElement === "object") ? dualMainElementRate : mainElementRate;
 
 	// Passives
 	if (doPassives(btl)) {
@@ -1872,7 +1882,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 				// Now, send the embed!
 				let DiscordEmbed = new Discord.MessageEmbed()
-					.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+					.setColor(color)
 					.setTitle(targTxt)
 					.setDescription(finalText.replace(/\n{3,}/g, () => "\n\n"))
 				return btl.channel.send({embeds: [DiscordEmbed]});
@@ -2290,7 +2300,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 	// Now, send the embed!
 	let DiscordEmbed = new Discord.MessageEmbed()
-		.setColor(elementColors[char.mainElement] ?? elementColors.strike)
+		.setColor(color)
 		.setTitle(targTxt)
 		.setDescription(finalText.replace(/\n{3,}/g, () => "\n\n"))
 	btl.channel.send({embeds: [DiscordEmbed]});

@@ -28,9 +28,20 @@ newTransformation = (char, trnsName, mainelement, req, hpBuff, mpBuff, atkBuff, 
 transformationDesc = (char, name, server, message) => {
 	let settings = setUpFile(`${dataPath}/json/${server}/settings.json`);
 
+	let prefix = elementEmoji[char.mainElement] ?? elementEmoji.strike;
+	let color = elementColors[char.mainElement] ?? elementColors.strike;
+
+	if (typeof char.mainElement === "object") {
+		prefix = "";
+		for (let i in char.mainElement)
+			prefix += elementEmoji[char.mainElement[i]] ?? elementEmoji.strike;
+
+		color = elementColors[char.mainElement[0]] ?? elementColors.strike;
+	}
+
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor('#FFBA00')
-		.setTitle(`${name}'s __${char.mainElement ? elementEmoji[char.mainElement] : ''}${char.name}__ Transformation`)
+		.setTitle(`${name}'s __${prefix}${char.name}__ Transformation`)
 
 	if (char.desc != '') DiscordEmbed.setDescription(`*${char.desc}*`);
 

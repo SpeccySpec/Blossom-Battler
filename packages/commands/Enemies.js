@@ -667,7 +667,7 @@ commands.listenemies = new Command({
 					switch (args[a-1].toLowerCase()) {
 						case 'element':
 							args[a] = args[a].toLowerCase();
-							isConditionMet = (enemyFile[i].mainElement == args[a])
+							isConditionMet = ((typeof enemyFile[i].mainElement === "object") ? enemyFile[i].mainElement.includes(args[a]) : enemyFile[i].mainElement == args[a])
 							break;
 						case 'superweak':
 						case 'weak':
@@ -741,8 +741,9 @@ commands.listenemies = new Command({
 			}
 			if (isConditionMet == false || isConditionMet == undefined) continue;
 
+			let prefix = charPrefix(enemyFile[i]);
 			let descTxt = `${enemyFile[i].hp}HP, ${enemyFile[i].mp}MP`;
-			let title = `${elementEmoji[enemyFile[i].mainElement]}${enemyFile[i].name} (${i})`;
+			let title = `${prefix}${enemyFile[i].name} (${i})`;
 
 			if (!foundEnemy(i, message.guild.id)) {
 				title = `||${title}||`;
