@@ -139,6 +139,7 @@ passiveList = {
 		critmod(char, targ, dmg, crit, skill, btl, vars) {
 			let type = vars[0];
 			if (type == 'crit') crit += vars[1];
+			return crit;
 		},
 		getinfo(vars, skill) {
 			let txt = `Boosts `;

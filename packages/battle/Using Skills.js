@@ -826,10 +826,12 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 								if (extrasList[i].multiple) {
 									for (let k in skill.extras[i]) {
-										extrasList[i].critmod(char, targ, dmg, critRate, skill, btl, skill.extras[i][k]);
+										let critData = extrasList[i].critmod(char, targ, dmg, critRate, skill, btl, skill.extras[i][k]);
+										if (critData) critRate = Math.max(0, Math.min(999, critRate));
 									}
 								} else {
-									extrasList[i].critmod(char, targ, dmg, critRate, skill, btl, skill.extras[i]);
+									let critData = extrasList[i].critmod(char, targ, dmg, critRate, skill, btl, skill.extras[i]);
+									if (critData) critRate = Math.max(0, Math.min(999, critRate));
 								}
 							}
 						}
@@ -848,10 +850,12 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 										if (passiveList[i].multiple) {
 											for (let k in psv.passive[i]) {
-												passiveList[i].critmod(char, targ, dmg, critRate, skill, btl, psv.passive[i][k]);
+												let critData = passiveList[i].critmod(char, targ, dmg, critRate, skill, btl, psv.passive[i][k]);
+												if (critData) critRate = Math.max(0, Math.min(999, critRate));
 											}
 										} else {
-											passiveList[i].critmod(char, targ, dmg, critRate, skill, btl, psv.passive[i][k]);
+											let critData = passiveList[i].critmod(char, targ, dmg, critRate, skill, btl, psv.passive[i][k]);
+											if (critData) critRate = Math.max(0, Math.min(999, critRate));
 										}
 									}
 								}
