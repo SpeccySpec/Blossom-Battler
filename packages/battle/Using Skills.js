@@ -835,7 +835,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 								}
 							}
 						}
-						
+
 						// Critical rate passives
 						if (doPassives(btl)) {
 							for (let skillName of char.skills) {
