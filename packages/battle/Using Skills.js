@@ -913,6 +913,22 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 							dmg = extrasList[i].dmgmod(char, targ, dmg, skill, btl, skill.extras[i], emojis[i]) ?? dmg;
 						}
 					}
+
+					if (crits[i]) {
+						for (let i in skill.extras) {
+							if (!extrasList[i]) continue;
+							if (!extrasList[i].critdmgmod) continue;
+							if (noExtraArray && noExtraArray.includes(i)) continue;
+
+							if (extrasList[i].multiple) {
+								for (let k in skill.extras[i]) {
+									dmg = extrasList[i].critdmgmod(char, targ, dmg, skill, btl, skill.extras[i][k], emojis[i]) ?? dmg;
+								}
+							} else {
+								dmg = extrasList[i].critdmgmod(char, targ, dmg, skill, btl, skill.extras[i], emojis[i]) ?? dmg;
+							}
+						}
+					}
 				}
 
 				if (doPassives(btl)) {
@@ -922,12 +938,23 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						let psv = skillFile[skillName];
 						if (psv.type != 'passive' || !psv.passive) continue;
 			
-						for (let i in psv.passive) {
-							if (passiveList[i] && passiveList[i].dmgmod) {
-								if (noExtraArray && noExtraArray.includes(i)) continue;
-								if (passiveList[i].multiple) {
-									for (let k in psv.passive[i]) {
-										ret = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i][k], emojis[i]) ?? dmg;
+						for (let j in psv.passive) {
+							if (passiveList[j]) {
+								if (passiveList[j].dmgmod) {
+									if (noExtraArray && noExtraArray.includes(i)) continue;
+									if (passiveList[j].multiple) {
+										for (let k in psv.passive[i]) {
+											ret = passiveList[j].dmgmod(char, targ, dmg, skill, btl, psv.passive[i][k], emojis[i]) ?? dmg;
+
+											if (typeof ret == "object") {
+												dmg = ret[0];
+												emojis[i] = ret[1];
+											} else {
+												dmg = ret;
+											}
+										}
+									} else {
+										ret = passiveList[j].dmgmod(char, targ, dmg, skill, btl, psv.passive[i], emojis[i]) ?? dmg;
 
 										if (typeof ret == "object") {
 											dmg = ret[0];
@@ -936,14 +963,28 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 											dmg = ret;
 										}
 									}
-								} else {
-									ret = passiveList[i].dmgmod(char, targ, dmg, skill, btl, psv.passive[i], emojis[i]) ?? dmg;
+								} else if (passiveList[j].critdmgmod && crits[i]) {
+									if (noExtraArray && noExtraArray.includes(i)) continue;
+									if (passiveList[j].multiple) {
+										for (let k in psv.passive[i]) {
+											ret = passiveList[j].critdmgmod(char, targ, dmg, skill, btl, psv.passive[i][k], emojis[i]) ?? dmg;
 
-									if (typeof ret == "object") {
-										dmg = ret[0];
-										emojis[i] = ret[1];
+											if (typeof ret == "object") {
+												dmg = ret[0];
+												emojis[i] = ret[1];
+											} else {
+												dmg = ret;
+											}
+										}
 									} else {
-										dmg = ret;
+										ret = passiveList[j].critdmgmod(char, targ, dmg, skill, btl, psv.passive[i], emojis[i]) ?? dmg;
+
+										if (typeof ret == "object") {
+											dmg = ret[0];
+											emojis[i] = ret[1];
+										} else {
+											dmg = ret;
+										}
 									}
 								}
 							}

@@ -63,7 +63,7 @@ passiveList = {
 		desc: "Boosts the powers/damage of skills of a specific element/attack type/cost type/target, of user's main element, multi-hit skills, skills that inflict or don't inflict a status effect, or all skills in general.",
 		args: [
 			{
-				name: "Element / 'All' / Attack Type / 'Multi-hit' / Cost Type / Target / Status Effect / 'NoStatus' / 'MainElement' / 'Crit' / StatusChance",
+				name: "Element / 'All' / Attack Type / 'Multi-hit' / Cost Type / Target / Status Effect / 'NoStatus' / 'MainElement' / 'Crit' / 'CritDmg' / StatusChance",
 				type: "Word",
 				forced: true
 			},
@@ -89,7 +89,7 @@ passiveList = {
 			let usePercent = args[2] ?? true;
 			let boostDamage = args[3] ?? false;
 
-			if (![...Elements, ...Targets, ...statusEffects, 'all', 'magic', 'ranged', 'sorcery', 'physical', 'multi-hit', 'nostatus', 'mainelement', 'crit', 'statuschance'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
+			if (![...Elements, ...Targets, ...statusEffects, 'all', 'magic', 'ranged', 'sorcery', 'physical', 'multi-hit', 'nostatus', 'mainelement', 'crit', 'critdmg', 'statuschance'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
 			if (element == 'almighty' || element == 'passive') return void message.channel.send("You cannot boost the powers of almighty or passive skills!");
 			if (amount == 0) return void message.channel.send('With the amount being 0, it wouldn\'t change power at all.');
 
@@ -139,6 +139,16 @@ passiveList = {
 		critmod(char, targ, dmg, crit, skill, btl, vars) {
 			let type = vars[0];
 			if (type == 'crit') crit += vars[1];
+			return crit;
+		},
+		critdmgmod(char, targ, dmg, skill, btl, vars) {
+			let type = vars[0];
+			if (type == 'critdmg') {
+				if (vars[2])
+					dmg *= (vars[1]/100) + 1;
+				else
+					dmg += vars[1];
+			}
 			return crit;
 		},
 		getinfo(vars, skill) {
