@@ -624,8 +624,10 @@ function GetCharStatus(char) {
 	return str
 }
 
-function GetCharName(char) {
+function GetCharName(char, btl) {
 	let str = char.name;
+	if (isBlessed(char, btl))
+		str = `_${char.name}_`;
 
 	if (char.transformed) {
 		let element = char.transformations[char.transformed].mainElement;
@@ -790,7 +792,7 @@ sendCurTurnEmbed = (char, btl) => {
 				teamDesc += `~~${l}: ${c.name} _(DOWN)_~~\n`;
 			} else {
 				let s = GetCharStatus(c);
-				let n = GetCharName(c);
+				let n = GetCharName(c, btl);
 
 				if (c.shrouded) {
 					teamDesc += `${l}: ${n} _(???/???HP, ???/???${c.mpMeter ? c.mpMeter[1] : "MP"})_\n`;
@@ -810,7 +812,7 @@ sendCurTurnEmbed = (char, btl) => {
 			myTeamDesc += `~~${l}: ${c.name} _(DOWN)_~~\n`;
 		} else {
 			let s = GetCharStatus(c)
-			let n = GetCharName(c);
+			let n = GetCharName(c, btl);
 
 			if (c.shrouded) {
 				myTeamDesc += `${l}: **?**${n} _(???/???HP, ???/???${c.mpMeter ? c.mpMeter[1] : "MP"})_\n`;

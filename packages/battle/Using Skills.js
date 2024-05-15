@@ -341,6 +341,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 			char.hp = Math.max(0, char.hp-dmg);
 			return result;
+		} else if (isBlessed(targ, btl)) {
+			result.txt += `The attack bounced right off of ___${targ.name}___...\n\n${selectQuote(char, 'hurt', null, "%ENEMY%", targ.name, "%SKILL%", "Decieve")}`;
+			return result;
 		}
 
 		// Override

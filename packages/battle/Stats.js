@@ -296,3 +296,14 @@ resetEffects = (char) => {
 		killVar(char, 'revert');
 	}
 }
+
+isBlessed = (char, btl) => {
+	if (char.hp < 0) return false;
+	if (char.enemyextras?.blessed) return false;
+
+	for (let targ of btl.teams[char.team].members) {
+		if (targ.enemyextras?.blessed && targ.hp > 0) return true;
+	}
+
+	return false;
+}
