@@ -39,3 +39,6 @@ manager.spawn();
 
 // Let's set up guilded... TODO: uncomment this once guilded is added...if ever <.<
 //require("./guilded.js")
+
+// Start the website
+require("./website/backend.js")
