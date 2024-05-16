@@ -937,7 +937,7 @@ commands.editskill = new Command({
 					return message.channel.send(`${editField} is an invalid field!`);
 			}
 
-			skillFile[args[0]].edittime = Date.now();
+			skillFile[args[editField == 'truename' ? 2 : 0]].edittime = Date.now();
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
