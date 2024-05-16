@@ -1148,7 +1148,7 @@ extrasList = {
 					turns: vars[1]
 				});
 
-				if (vars[2]) {
+				if (vars[2] && typeof vars[2] === "string") {
 					let txt = vars[2];
 					while (txt.includes('%SKILL%')) txt = txt.replace('%SKILL%', skill.name);
 					while (txt.includes('%USER%')) txt = txt.replace('%USER%', char.name);
