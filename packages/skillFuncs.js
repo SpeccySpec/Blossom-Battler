@@ -62,9 +62,29 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(color)
 		.setTitle(`${type}${skillDefs.name ? skillDefs.name : skillName} [${tierEmojis[(skillTier(skillDefs) ?? 6)-1]}] *(${userTxt})*`)
-	
+
 	let settings = setUpSettings(message.guild.id);
-	var finalText = ``;
+
+	// Handle fusion skills first.
+	if (skillDefs.fusionskill) {
+		let fusionText = `May increase trust up to ${skillDefs.trustgain}${statusEmojis.lovable}.\n_Requires:_\n`;
+		if (!skillDefs.trustgain || skillDefs.trustgain === 0)
+			fusionText = `_Requires:_\n`;
+
+		for (let i in skillDefs.fusionskill) {
+			if (skillDefs.fusionskill[i][0] == true) {
+				fusionText += `- **A ${elementEmoji[skillDefs.fusionskill[i][1].toLowerCase()]}${skillDefs.fusionskill[i][1].toLowerCase()} skill**\n`;
+			} else {
+				if (skillFile[skillDefs.fusionskill[i][1]])
+					fusionText += `- **${getFullName(skillFile[skillDefs.fusionskill[i][1]])}**\n`;
+			}
+		}
+
+		DiscordEmbed.fields.push({name: 'Fusion Skill', value: fusionText, inline: false})
+	}
+
+	// Basic Damage
+	var finalText = '';
 	if (skillDefs.type != "status" && skillDefs.type != "passive") {
 		if (hasExtra(skillDefs, 'ohko')) {
 			for (i in skillDefs.extras.ohko) {

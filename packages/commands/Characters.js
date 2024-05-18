@@ -1509,6 +1509,8 @@ commands.learnskill = new Command({
 					if (!thingDefs[args[0]].type && thingDefs[args[0]].level < skillFile[args[i]].levellock) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but must be level ${skillFile[args[i]].levellock} to learn ${skillFile[args[i]].name}!`);
 				}
 
+				if (skillFile[args[i]].fusionskill) return message.channel.send(`**${getFullName(skillFile[args[i]])}** is a fusion skill. **Characters cannot learn fusion skills.**`);
+
 				learnString += (skillFile[args[i]].name ? skillFile[args[i]].name : args[i])
 				thingDefs[args[0]].skills.push(args[i])
 				skillLearn.push(args[i])

@@ -563,6 +563,8 @@ commands.getpartyitems = new Command({
 		let itemname;
 		let itemtotal;
         for (let i in partydata.items) {
+			if (partydata.items[i] <= 0) continue;
+
 			itemname = i;
 			if (itemFile[i]) itemname = `${itemRarityEmoji[itemFile[i].rarity ?? 'common']}**${itemFile[i].name ?? i}**`
 

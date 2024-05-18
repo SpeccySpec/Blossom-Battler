@@ -1336,6 +1336,77 @@ commands.settier = new Command({
 	}
 })
 
+commands.fusionskill = new Command({
+	desc: "Turns the given skill into a fusion skill.",
+	section: "skills",
+	aliases: ['makefusion', 'dofusion', 'makefusionskill', 'dofusionskill', 'assignfusion', 'assignfusionskills'],
+	doc: {
+		desc: "**Fusion Skills** are a mechanic that can be disabled per server. They allow 2 users",
+	},
+	args: [
+		{
+			name: "Skill ID",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Trust Gain",
+			type: "Num",
+			forced: false
+		},
+		{
+			name: "Skills/Elements",
+			type: "Word",
+			multiple: true,
+			forced: true
+		}
+	],
+	func(message, args, guilded) {
+		skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+
+		if (skillFile[args[0]]) {
+			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skillFile[args[0]].originalAuthor != message.author.id)
+				return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
+
+			if (["passive"].includes(skillFile[args[0]].type))
+				return message.channel.send(`${elementEmoji.passive}**Passive** skills may not be Fusion Skills.`);
+
+			skillFile[args[0]].trustgain = args[1];
+			skillFile[args[0]].fusionskill = [];
+
+			for (let i of args.splice(2)) {
+				if (!skillFile[i]) {
+					if (!Elements.includes(i.toLowerCase())) return message.channel.send(`${i} is not a valid skill or element.`);
+					if (["passive"].includes(i.toLowerCase())) return message.channel.send(`You cannot ask for ${elementEmoji.passive}**Passive** skills.`);
+
+					// Handle elements
+					skillFile[args[0]].fusionskill.push([true, i.toLowerCase()]);
+				} else {
+					// Handle Skills
+					if (skillFile[i].fusionskill) return message.channel.send(`${getFullName(skillFile[i])} is already a fusion skill. You cannot ask for fusion skills.`);
+					if (skillFile[i].type === "passive") return message.channel.send(`${getFullName(skillFile[i])} is a passive skill. You cannot ask for ${elementEmoji.passive}**Passive** skills.`);
+					if (skillTier(skillFile[i]) < (skillTier(skillFile[args[0]])-1)) return message.channel.send(`**${getFullName(skillFile[args[0]])}** is **Tier **${tierEmojis[(skillTier(skillFile[args[0]]) ?? 6)-1]}, which means all the skills required must be **Tier **${tierEmojis[(skillTier(skillFile[args[0]]) ?? 6)-2]} or lower. **${getFullName(skillFile[i])}** is **Tier **${tierEmojis[(skillTier(skillFile[i]) ?? 6)-1]}.`);
+					skillFile[args[0]].fusionskill.push([false, i]);
+				}
+			}
+
+			let skill;
+			for (let i in skillFile) {
+				if (i == args[0]) continue;
+
+				skill = skillFile[i];
+				if (skill.fusionskill && skill.fusionskill == skillFile[args[0]].fusionskill) return message.channel.send(`The fusion skill **${getFullName(skill)}** already has the fusion requirements you're trying to set for **${getFullName(skillFile[args[0]])}**. _No need for clones!_`);
+			}
+
+			skillFile[args[0]].edittime = Date.now();
+			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+			message.react('👍');
+		} else {
+			return message.channel.send(`${args[0]} is an invalid Skill Name!`)
+		}
+	}
+})
+
 /*
 	SKILL LISTING
 					*/
