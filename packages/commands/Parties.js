@@ -539,6 +539,45 @@ commands.getparty = new Command({
 	}
 })
 
+commands.getpartyitems = new Command({
+    desc: "Gets a given party's items, in pages if there are too many.",
+    section: 'trials',
+    aliases: ['searchtrial', 'searchtrials'],
+    args: [
+		{
+			name: "Party ID",
+			type: "Word",
+			forced: true
+		}
+    ],
+    func(message, args, guilded) {
+        let array = [];
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
+
+		if (!parties[args[0]]) return message.channel.send(`${args[0]} is not a valid party.`);
+		let partydata = parties[args[0]];
+
+		if (!partydata.items || partydata.items == {}) return message.channel.send(`Team ${partydata.name} has no items.`);
+
+		let itemname;
+		let itemtotal;
+        for (let i in partydata.items) {
+			itemname = i;
+			if (itemFile[i]) itemname = `${itemRarityEmoji[itemFile[i].rarity ?? 'common']}**${itemFile[i].name ?? i}**`
+
+			itemtotal = "Unsellable.";
+			if (itemFile[i] && itemFile[i].cost) itemtotal = `Totals up to ${itemFile[i].cost*partydata.items[i]}${setUpSettings(message.channel.guild.id).currency_emoji ?? '<:token:981579648993460355>'}`;
+
+			array.push({title: itemname, desc: `Owns ${partydata.items[i]}, ${itemtotal}`});
+		}
+
+        if (array.length == 0) return message.channel.send(`Team ${partydata.name} has no items.`)
+        
+        listArray(message.channel, array, message.author.id);
+    }
+})
+
 commands.listparty = new Command({
 	desc: "Lists all the parties in the server.",
 	aliases: ['listparties', 'listteam', 'listteams'],

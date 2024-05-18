@@ -7,3 +7,4 @@ backups/
 env.zip
 old.env
 music/
+yarn.lock
