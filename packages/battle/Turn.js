@@ -307,6 +307,7 @@ const menuStates = {
 
 			let item = itemFile[i];
 			if (btl.teams[char.team].items[i] <= 0) continue;
+			if (['material', 'key'].includes(item.type)) continue;
 
 			const compins = CalcCompins(comps, k)
 			let btncolor = 'green';
@@ -415,6 +416,10 @@ const menuStates = {
 			if (char.team == i) continue;
 			comps[CalcCompins(comps, i)].push(makeButton(`Team ${btl.teams[i].name}`, '#️⃣', 'blue', true, i.toString()))
 		}
+
+//		if (btl.action.move === 'skills' && canFusionSkill(char, btl, skillFile[btl.action.index])) {
+//			comps[CalcCompins(comps, i)].push(makeButton("Fusion Spell", '<:books:1008794354959269938>', 'blue', true, 'bb-fusionskill'))
+//		}
 	},
 	[MENU_TARGET]: ({char, btl, comps}) => {
 		let members = btl.teams[btl.action.target[0]].members ?? btl.teams[char.team].members;
@@ -517,6 +522,10 @@ const menuStates = {
 
 					comps[CalcCompins(comps, i)].push(makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString(), !canSelect))
 				}
+
+//				if (canFusionSkill(char, btl, skillFile[btl.action.index])) {
+//					comps[CalcCompins(comps, i)].push(makeButton("Fusion Spell", '<:books:1008794354959269938>', 'blue', true, 'bb-fusionskill'))
+//				}
 		}
 	},
 
