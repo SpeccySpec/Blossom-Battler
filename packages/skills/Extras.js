@@ -222,6 +222,10 @@ extrasList = {
 			{
 				name: "Recharge Rate",
 				type: "Decimal",
+			},
+			{
+				name: "Prevent negative?",
+				type: "YesNo",
 			}
 		],
 		applyfunc(message, skill, args) {
@@ -229,7 +233,7 @@ extrasList = {
 			let rate = args[1] ?? 0
 			if (charges < 1)
 				return void message.channel.send("What's the point of a skill that you can never use?")
-			makeExtra(skill, "charges", [charges, rate]);
+			makeExtra(skill, "charges", [charges, rate, args[2]]);
 			return true
 		},
 		canuse(char, skill, btl, vars) {
@@ -246,6 +250,9 @@ extrasList = {
 			let charges = char.custom.charges[skill.name] ?? [1, 5, skill.name, 1, 1];
 			charges[0] -= 1;
 			charges[0] = parseFloat(charges[0].toFixed(2))
+			if (vars[2] && charges[0] < 0) {
+				charges[0] = 0
+			}
 			
 			if (skill.type == 'status' && multiplier && multiplier != 1 && charges[4] == 1) charges[4] = multiplier
 			return `*(${Math.floor(charges[0])}/${vars[0]}) charges left.*`
