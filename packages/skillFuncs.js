@@ -67,7 +67,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 
 	// Handle fusion skills first.
 	if (skillDefs.fusionskill) {
-		let fusionText = `May increase trust up to ${skillDefs.trustgain}${statusEmojis.lovable}.\n_Requires:_\n`;
+		let fusionText = `May increase trust up to ${skillDefs.trustgain ?? 0}${statusEmojis.lovable}.\n_Requires:_\n`;
 		if (!skillDefs.trustgain || skillDefs.trustgain === 0)
 			fusionText = `_Requires:_\n`;
 
