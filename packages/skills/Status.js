@@ -1686,7 +1686,7 @@ statusList = {
 			let rate = args[1] ?? 0
 			if (charges < 1)
 				return void message.channel.send("What's the point of a skill that you can never use?")
-			makeStatus(skill, "charges", [charges, rate]);
+			makeStatus(skill, "charges", [charges, rate, args[2]]);
 			return true
 		},
 		canuse: extrasList.charges.canuse,
