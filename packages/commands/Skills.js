@@ -1042,9 +1042,11 @@ commands.preskill = new Command({
 		if (skillFile[args[0]] && (skillFile[args[1]] || args[1].toLowerCase() === "remove")) {
 			if (skillFile[args[0]]?.preskills && skillFile[args[0]].preskills.length == 5) return message.channel.send(`${skillFile[args[0]].name} already has enough preskills. There's no need to add more.`);
 
-			if (hasPreSkill(skillFile[args[0]], args[1])) {
-				return message.channel.send(`${skillFile[args[0]].name} already has a pre-skill for ${args[1]}!`)
-			}
+			if (hasPreSkill(skillFile[args[0]], args[1]))
+				return message.channel.send(`${skillFile[args[0]].name} already has a pre-skill for ${args[1]}!`);
+
+			if (skillFile[args[1]].fusionskill)
+				return message.channel.send("Skills may not evolve into fusion skills.");
 
 			if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
 				if (skillFile[args[0]].originalAuthor != message.author.id && args[1].toLowerCase() === "remove") {
@@ -1178,9 +1180,11 @@ commands.evoskill = new Command({
 		if (skillFile[args[0]] && skillFile[args[1]]) {
 			if (skillFile[args[0]]?.evoskills && skillFile[args[0]].evoskills.length == 5) return message.channel.send(`${skillFile[args[0]].name} already has enough evoskills. There's no need to add more.`);
 
-			if (hasEvoSkill(skillFile[args[0]], args[1])) {
-				return message.channel.send(`${skillFile[args[0]].name} already has an evo-skill for ${args[1]}!`)
-			}
+			if (hasEvoSkill(skillFile[args[0]], args[1]))
+				return message.channel.send(`${skillFile[args[0]].name} already has an evo-skill for ${args[1]}!`);
+
+			if (skillFile[args[1]].fusionskill)
+				return message.channel.send("Skills may not evolve into fusion skills.");
 
 			if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
 				if (skillFile[args[0]].originalAuthor != message.author.id && skillFile[args[1]].originalAuthor != message.author.id) {
