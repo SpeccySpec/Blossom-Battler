@@ -1106,8 +1106,25 @@ truncNum = (x, n) => {
 
 // setUpFile
 fileStore = {};
+let fusionpath = `${dataPath}/json/fusionskills.json`;
+
 setUpFile = (file, force) => {
 	if (fileStore[file] && !force) return fileStore[file];
+
+	// we love hacking
+	if (file === fusionpath) {
+		let filedata = setUpFile(`${dataPath}/json/skills.json`, true);
+
+		let obj = Object.keys(filedata)
+			.filter(key => filedata[key].fusionskill)
+			.reduce((obj, key) => {
+				obj[key] = filedata[key];
+				return obj;
+			}, {});
+
+		fileStore[file] = obj;
+		return obj;
+	}
 
 	// check if the directories before this file exists
 	let dir = file.split("/");

@@ -1,3 +1,5 @@
+let hardcodedskills = ['bb-fusionskill'];
+
 // Handle Skills
 commands.registerskill = new Command({
 	desc: `Register a skill to use in-battle! Characters can learn skills, items can utilize skills too. Skills can also have a number of extras, apply them with "rpg!applyextra".`,
@@ -75,7 +77,8 @@ commands.registerskill = new Command({
 		if (args[0].length > 50) return message.channel.send(`${args[0]} is too long of a skill name.`);
 
 		if (skillFile[args[0]] && message.author.id != skillFile[args[0]].originalAuthor && !utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send(`${args[0]} exists already and cannot be overwritten because you don't own it!`)
-		
+		if (hardcodedskills.includes(args[0])) return message.channel.send(`${args[0]} is a hardcoded Blossom Battler skill ID and cannot be used.`);
+
 		let cost = 0;
 		let costtype = 'mp';
 		if (args[1] && args[1] > 0) {
@@ -797,6 +800,8 @@ commands.editskill = new Command({
 						return message.channel.send(`A skill called ${args[2]} (${skillFile[args[2]].name}) already exists!`)
 					} else {
 						if (args[0] == args[2]) return message.channel.send(`What's the point...?`);
+						if (hardcodedskills.includes(args[2])) return message.channel.send(`${args[2]} is a hardcoded Blossom Battler skill ID and cannot be used.`);
+
 						skillFile[args[2]] = utilityFuncs.cloneObj(skillFile[args[0]])
 						delete skillFile[args[0]]
 
@@ -1403,6 +1408,7 @@ commands.fusionskill = new Command({
 			}
 
 			skillFile[args[0]].edittime = Date.now();
+
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 			message.react('👍');
 		} else {

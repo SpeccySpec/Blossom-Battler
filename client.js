@@ -317,6 +317,7 @@ function midnightInMS() {
 
 // Global JSONs
 skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+fusionFile = setUpFile(`${dataPath}/json/fusionskills.json`, true);
 shipFile = setUpFile(`${dataPath}/json/ships.json`, true);
 pmdFile = setUpFile(`${dataPath}/json/pmdquestions.json`, true);
 trialGlobals = setUpFile(`${dataPath}/json/globaltrials.json`, true)

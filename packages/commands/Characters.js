@@ -1583,6 +1583,9 @@ commands.replaceskill = new Command({
 			if (!thingDefs[args[0]].type && thingDefs[args[0]].level < skillFile[args[2]].levellock) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but must be level ${skillFile[args[2]].levellock} to learn ${skillFile[args[2]].name}!`);
 		}
 
+		// Fusion Skills.
+		if (skillFile[args[2]].fusionskill) return message.channel.send(`**${getFullName(skillFile[args[2]])}** is a fusion skill. **Characters cannot learn fusion skills.**`);
+
 		// Let's replace it
 		let num = knowsSkill(thingDefs[args[0]], args[1])
 		thingDefs[args[0]].skills[num] = args[2]

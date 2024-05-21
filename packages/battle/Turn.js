@@ -227,75 +227,141 @@ const menuStates = {
 		}
 	},
 	[MENU_SKILL]: ({char, btl, comps}) => {
-		for (const i in char.skills) {
-			const skillname = char.skills[i]
-			const skillinfo = skillFile[skillname]
-			if (!skillinfo) continue;
-			if (skillinfo?.type === 'passive') continue;
+		switch(btl.action.move) {
+			case 'bb-fusionskill':
+				let data = canFusionSkill(char, btl, skillFile[btl.action.index], true);
 
-			const compins = CalcCompins(comps, i)
-			let btncolor = 'blue'
-			if (skillinfo?.type === 'heal') 
-				btncolor = 'green'
-			else if (skillinfo?.type === 'status') 
-				btncolor = 'grey'
-			else if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'sorcery') 
-				btncolor = 'red'
+				if (btl.teams[char.team].members[btl.action.ally] && data[btl.action.ally]) {
+					let char2 = btl.teams[char.team].members[btl.action.ally];
+					for (let i in data[btl.action.ally]) {
+						const skillname = data[btl.action.ally][i]
+						const skillinfo = skillFile[skillname]
+						if (!skillinfo) continue;
 
-			let emoji1 = skillinfo ? elementEmoji[skillinfo.type] : elementEmoji.strike;
-			if (typeof(skillinfo?.type) === 'object') emoji1 = skillinfo ? elementEmoji[skillinfo.type[0]] : elementEmoji.strike;
-
-			let canselect = true;
-
-			// Afford/Status Effects
-			if (!canAfford(char, skillinfo, btl)) {
-				canselect = false;
-			} else if (char.status) {
-				switch(char.status.toLowerCase()) {
-					case 'ego':
-						if (skillinfo?.type === 'heal') canselect = false;
-						break;
-
-					case 'silence':
-						if (skillinfo?.atktype === 'magic' || skillinfo?.atktype === 'sorcery') canselect = false;
-						break;
-
-					case 'dazed':
-						if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'ranged') canselect = false;
-						break;
-
-					case 'disabled':
-						canselect = false;
-						break;
-				}
-			}
-
-			// Lovable
-			if (skillinfo.target && skillinfo.target === "one" && !(skillinfo.extras?.soulless && skillinfo.extras.soulless.includes("lovable"))) {
-				let alivecount = 0;
-				let alivechar = {};
-				for (let k in btl.teams) {
-					if (k == char.team) continue;
-
-					for (let j in btl.teams[k].members) {
-						if (btl.teams[k].members[j].hp > 0) {
-							alivechar = btl.teams[k].members[j];
-							alivecount++;
+						let compins = CalcCompins(comps, i)
+						let btncolor = 'blue'
+						if (skillinfo?.type === 'heal') 
+							btncolor = 'green'
+						else if (skillinfo?.type === 'status' || skillinfo?.type === 'passive') 
+							btncolor = 'grey'
+						else if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'sorcery') 
+							btncolor = 'red'
+			
+						let emoji1 = skillinfo ? elementEmoji[skillinfo.type] : elementEmoji.strike;
+						if (typeof(skillinfo?.type) === 'object') emoji1 = skillinfo ? elementEmoji[skillinfo.type[0]] : elementEmoji.strike;
+			
+						let canselect = true;
+			
+						// Afford/Status Effects
+						if (!canAfford(char2, skillinfo, btl)) {
+							canselect = false;
+						} else if (char2.status) {
+							switch(char.status.toLowerCase()) {
+								case 'ego':
+									if (skillinfo?.type === 'heal') canselect = false;
+									break;
+			
+								case 'silence':
+									if (skillinfo?.atktype === 'magic' || skillinfo?.atktype === 'sorcery') canselect = false;
+									break;
+			
+								case 'dazed':
+									if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'ranged') canselect = false;
+									break;
+			
+								case 'disabled':
+									canselect = false;
+									break;
+							}
 						}
+			
+						// Disable.
+						if (char2.custom?.disable) {
+							if (char2.custom.disable[0] == skillname) canselect = false;
+						}
+			
+						comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
 					}
 				}
+				break;
 
-				if (alivecount == 1) {
-					if (alivechar.lovable) canselect = false;
+			default:
+				for (const i in char.skills) {
+					const skillname = char.skills[i]
+					const skillinfo = skillFile[skillname]
+					if (!skillinfo) continue;
+					if (skillinfo?.type === 'passive') continue;
+		
+					const compins = CalcCompins(comps, i)
+					let btncolor = 'blue'
+					if (skillinfo?.type === 'heal') 
+						btncolor = 'green'
+					else if (skillinfo?.type === 'status') 
+						btncolor = 'grey'
+					else if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'sorcery') 
+						btncolor = 'red'
+		
+					let emoji1 = skillinfo ? elementEmoji[skillinfo.type] : elementEmoji.strike;
+					if (typeof(skillinfo?.type) === 'object') emoji1 = skillinfo ? elementEmoji[skillinfo.type[0]] : elementEmoji.strike;
+		
+					let canselect = true;
+		
+					// Afford/Status Effects
+					if (!canAfford(char, skillinfo, btl)) {
+						canselect = false;
+					} else if (char.status) {
+						switch(char.status.toLowerCase()) {
+							case 'ego':
+								if (skillinfo?.type === 'heal') canselect = false;
+								break;
+		
+							case 'silence':
+								if (skillinfo?.atktype === 'magic' || skillinfo?.atktype === 'sorcery') canselect = false;
+								break;
+		
+							case 'dazed':
+								if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'ranged') canselect = false;
+								break;
+		
+							case 'disabled':
+								canselect = false;
+								break;
+						}
+					}
+
+					// Lovable
+					if (skillinfo.target && skillinfo.target === "one" && !(skillinfo.extras?.soulless && skillinfo.extras.soulless.includes("lovable"))) {
+						let alivecount = 0;
+						let alivechar = {};
+						for (let k in btl.teams) {
+							if (k == char.team) continue;
+		
+							for (let j in btl.teams[k].members) {
+								if (btl.teams[k].members[j].hp > 0) {
+									alivechar = btl.teams[k].members[j];
+									alivecount++;
+								}
+							}
+						}
+		
+						if (alivecount == 1) {
+							if (alivechar.lovable) canselect = false;
+						}
+					}
+		
+					// Disable.
+					if (char.custom?.disable) {
+						if (char.custom.disable[0] == skillname) canselect = false;
+					}
+
+					// Fusion Skill limitations.
+					if (char.fusionskill) {
+						let noelement = (typeof skillFile[char.fusionskill].type === "object") ? skillFile[char.fusionskill].type : [skillFile[char.fusionskill].type];
+						if (noelement.includes(skillinfo?.type)) canselect = false;
+					}
+
+					comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
 				}
-			}
-
-			// Disable.
-			if (char.custom?.disable) {
-				if (char.custom.disable[0] == skillname) canselect = false;
-			}
-
-			comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
 		}
 	},
 	[MENU_ITEM]: ({char, btl, comps}) => {
@@ -417,9 +483,9 @@ const menuStates = {
 			comps[CalcCompins(comps, i)].push(makeButton(`Team ${btl.teams[i].name}`, '#️⃣', 'blue', true, i.toString()))
 		}
 
-//		if (btl.action.move === 'skills' && canFusionSkill(char, btl, skillFile[btl.action.index])) {
-//			comps[CalcCompins(comps, i)].push(makeButton("Fusion Spell", '<:books:1008794354959269938>', 'blue', true, 'bb-fusionskill'))
-//		}
+		if (btl.action.move === 'skills' && canFusionSkill(char, btl, skillFile[btl.action.index])) {
+			comps[CalcCompins(comps, i)].push(makeButton("Fusion Spell", '<:books:1008794354959269938>', 'blue', true, 'bb-fusionskill'))
+		}
 	},
 	[MENU_TARGET]: ({char, btl, comps}) => {
 		let members = btl.teams[btl.action.target[0]].members ?? btl.teams[char.team].members;
@@ -496,36 +562,94 @@ const menuStates = {
 				}
 				break;
 
+			case 'bb-fusionskill':
+			case 'bb-fusionspell': // i mistype alot
+				if (btl.action.fusionskill) {
+					let skill = skillFile[btl.action.fusionskill];
+					let canSelect = true;
+					let j = 0;
+	
+					if (!canChooseTarget(skill.target)) {
+						comps[CalcCompins(comps, j)].push(makeButton("Use Skill", '<:physical:973077052129423411>', 'red', true, '1'));
+						j++;
+					} else {
+						for (const i in members) {
+							if (!skill) continue;
+							if (members[i].pacified) continue;
+
+							canSelect = true;
+							if (skill.type === 'heal') {
+								if (skill.heal.revive) {
+									if (members[i].hp > 0) canSelect = false;
+								}
+								if (members[i]?.status === 'ego') canSelect = false;
+							} else if (skill.type === 'status' && skill.statusses?.mimic) {
+								if (members[i].hp <= 0) canSelect = false;
+								if (members[i].id === char.id) canSelect = false;
+								if (isBoss(members[i])) canSelect = false;
+							} else {
+								if (members[i].hp <= 0) canSelect = false;
+								if (members[i].lovable) canSelect = false;
+								if (checkForTarget && !members[i].target) canSelect = false;
+							}
+	
+							comps[CalcCompins(comps, j)].push(makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString(), !canSelect))
+							j++;
+						}
+					}
+				} else {
+					members = btl.teams[char.team].members;
+					let data = canFusionSkill(char, btl, skillFile[btl.action.index], true);
+					console.log(data);
+
+					let l = 0;
+					for (let i in data) {
+						if (!members[i]) continue;
+						if (members[i].hp <= 0 || members[i].pacified) continue;
+						comps[CalcCompins(comps, l)].push(makeButton(`${members[i].name}`, elementEmoji[(typeof skillFile[data[i][0]].type == "object") ? skillFile[data[i][0]].type[0] : skillFile[data[i][0]].type], 'blue', true, i.toString()))
+						l++;
+					}
+				}
+				break;
+
 			default:
 				let skill = skillFile[btl.action.index];
 				let canSelect = true;
+				let j = 0;
 
-				for (const i in members) {
-					if (!skill) continue;
-					if (members[i].pacified) continue;
+				if (!canChooseTarget(skill.target)) {
+					comps[CalcCompins(comps, j)].push(makeButton("Use Skill", '<:physical:973077052129423411>', 'red', true, '1'));
+					j++;
+				} else {
+					for (const i in members) {
+						if (!skill) continue;
+						if (members[i].pacified) continue;
 
-					canSelect = true;
-					if (skill.type === 'heal') {
-						if (skill.heal.revive) {
-							if (members[i].hp > 0) canSelect = false;
+						canSelect = true;
+						if (skill.type === 'heal') {
+							if (skill.heal.revive) {
+								if (members[i].hp > 0) canSelect = false;
+							}
+							if (members[i]?.status === 'ego') canSelect = false;
+						} else if (skill.type === 'status' && skill.statusses?.mimic) {
+							if (members[i].hp <= 0) canSelect = false;
+							if (members[i].id === char.id) canSelect = false;
+							if (isBoss(members[i])) canSelect = false;
+						} else {
+							if (members[i].hp <= 0) canSelect = false;
+							if (members[i].lovable) canSelect = false;
+							if (checkForTarget && !members[i].target) canSelect = false;
 						}
-						if (members[i]?.status === 'ego') canSelect = false;
-					} else if (skill.type === 'status' && skill.statusses?.mimic) {
-						if (members[i].hp <= 0) canSelect = false;
-						if (members[i].id === char.id) canSelect = false;
-						if (isBoss(members[i])) canSelect = false;
-					} else {
-						if (members[i].hp <= 0) canSelect = false;
-						if (members[i].lovable) canSelect = false;
-						if (checkForTarget && !members[i].target) canSelect = false;
-					}
 
-					comps[CalcCompins(comps, i)].push(makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString(), !canSelect))
+						comps[CalcCompins(comps, j)].push(makeButton(`${members[i].name}`, `${i}️⃣`, (btl.action.target[0] == char.team) ? 'green' : 'red', true, i.toString(), !canSelect))
+						j++;
+					}
 				}
 
-//				if (canFusionSkill(char, btl, skillFile[btl.action.index])) {
-//					comps[CalcCompins(comps, i)].push(makeButton("Fusion Spell", '<:books:1008794354959269938>', 'blue', true, 'bb-fusionskill'))
-//				}
+				if (canFusionSkill(char, btl, skill)) {
+					comps[CalcCompins(comps, j)].push(makeButton("Fusion Skill", '<:books:1008794354959269938>', 'blue', true, 'bb-fusionskill'))
+					j++;
+				}
 		}
 	},
 
@@ -1146,18 +1270,110 @@ sendCurTurnEmbed = (char, btl) => {
 				break;
 
 			default:
-				if (menustate == MENU_SKILL && skillFile[i.customId] && char.skills.includes(i.customId)) {
-					btl.action.index = i.customId;
+				if (menustate == MENU_SKILL && skillFile[i.customId] && (btl.action.move === 'bb-fusionskill' || char.skills.includes(i.customId))) {
 					let skill = skillFile[i.customId];
 
-					if (skill.extras) {
-						for (let k in skill.extras) {
-							if (!extrasList[k]) continue;
-							if (!extrasList[k].canuse) continue;
+					if (btl.action.move === 'bb-fusionskill') {
+						btl.action.skills = [btl.action.index, i.customId];
+						btl.action.fusionskill = targFusionSkill(btl.action.index, i.customId, btl);
+						skill = skillFile[btl.action.fusionskill];
+						console.log(btl.action.index, i.customId, btl.action.fusionskill);
 
-							if (extrasList[k].multiple) {
-								for (let l in skill.extras[k]) {
-									let txt = extrasList[k].canuse(char, skill, btl, skill.extras[k][l]);
+						if (skill.statusses && hasStatus(skill, 'mimic')) {
+							menustate = MENU_ANYSEL;
+						} else if ((skill.target === "one" || skill.target === "spreadopposing" || skill.target === "widespreadopposing" || skill.target === "casterandfoe")) {
+							let alivecount = 0;
+							let alivenum = [0, 0];
+
+							for (let k in btl.teams) {
+								if (k == char.team) continue;
+
+								for (let j in btl.teams[k].members) {
+									if (btl.teams[k].members[j].hp > 0) {
+										alivenum = [k, j];
+										alivecount++;
+									}
+								}
+							}
+
+							if (alivecount == 1) {
+								btl.action.target = alivenum;
+								alreadyResponded = true;
+								doAction(char, btl, btl.action);
+
+								collector.stop();
+								return i.update({
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: []
+								});
+							} else {
+								menustate = MENU_TEAMSEL;
+							}
+						} else if (skill.target === "ally" || skill.target === "spreadallies" || skill.target === "widespreadallies" || skill.target === "casterandally") {
+							btl.action.target[0] = char.team;
+							if (btl.teams[char.team].members.length == 1) {
+								alreadyResponded = true;
+
+								doAction(char, btl, btl.action);
+								collector.stop();
+
+								return i.update({
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: []
+								});
+							} else
+								menustate = MENU_TARGET;
+						} else if (skill.target === "caster") {
+							btl.action.target = [char.team, char.pos];
+							alreadyResponded = true;
+							doAction(char, btl, btl.action);
+							collector.stop();
+
+							await i.update({
+								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+								embeds: [DiscordEmbed],
+								components: []
+							});
+						} else {
+							btl.action.target = [undefined, undefined];
+							doAction(char, btl, btl.action);
+							collector.stop();
+							alreadyResponded = true;
+
+							await i.update({
+								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+								embeds: [DiscordEmbed],
+								components: []
+							});
+						}
+					} else {
+						delete btl.action.fusionskill;
+
+						btl.action.index = i.customId;
+
+						if (skill.extras) {
+							for (let k in skill.extras) {
+								if (!extrasList[k]) continue;
+								if (!extrasList[k].canuse) continue;
+
+								if (extrasList[k].multiple) {
+									for (let l in skill.extras[k]) {
+										let txt = extrasList[k].canuse(char, skill, btl, skill.extras[k][l]);
+										if (txt !== true) {
+											DiscordEmbed.title = txt;
+											alreadyResponded = true;
+
+											return i.update({
+												content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+												embeds: [DiscordEmbed],
+												components: []
+											});
+										}
+									}
+								} else {
+									let txt = extrasList[k].canuse(char, skill, btl, skill.extras[k]);
 									if (txt !== true) {
 										DiscordEmbed.title = txt;
 										alreadyResponded = true;
@@ -1165,32 +1381,31 @@ sendCurTurnEmbed = (char, btl) => {
 										return i.update({
 											content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 											embeds: [DiscordEmbed],
-											components: []
+											components: setUpComponents(char, btl, menustate)
 										});
 									}
 								}
-							} else {
-								let txt = extrasList[k].canuse(char, skill, btl, skill.extras[k]);
-								if (txt !== true) {
-									DiscordEmbed.title = txt;
-									alreadyResponded = true;
-
-									return i.update({
-										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-										embeds: [DiscordEmbed],
-										components: setUpComponents(char, btl, menustate)
-									});
-								}
 							}
-						}
-					} else if (skill.heal) {
-						for (let k in skill.heal) {
-							if (!healList[k]) continue;
-							if (!healList[k].canuse) continue;
+						} else if (skill.heal) {
+							for (let k in skill.heal) {
+								if (!healList[k]) continue;
+								if (!healList[k].canuse) continue;
 
-							if (healList[k].multiple) {
-								for (let l in skill.heal[k]) {
-									let txt = healList[k].canuse(char, skill, btl, skill.heal[k][l]);
+								if (healList[k].multiple) {
+									for (let l in skill.heal[k]) {
+										let txt = healList[k].canuse(char, skill, btl, skill.heal[k][l]);
+										if (txt !== true) {
+											DiscordEmbed.title = txt;
+											alreadyResponded = true;
+
+											return i.update({
+												content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+												embeds: [DiscordEmbed],
+											});
+										}
+									}
+								} else {
+									let txt = healList[k].canuse(char, skill, btl, skill.heal[k]);
 									if (txt !== true) {
 										DiscordEmbed.title = txt;
 										alreadyResponded = true;
@@ -1198,38 +1413,39 @@ sendCurTurnEmbed = (char, btl) => {
 										return i.update({
 											content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 											embeds: [DiscordEmbed],
+											components: setUpComponents(char, btl, menustate)
 										});
 									}
 								}
-							} else {
-								let txt = healList[k].canuse(char, skill, btl, skill.heal[k]);
-								if (txt !== true) {
-									DiscordEmbed.title = txt;
-									alreadyResponded = true;
-
-									return i.update({
-										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-										embeds: [DiscordEmbed],
-										components: setUpComponents(char, btl, menustate)
-									});
-								}
 							}
 						}
-					}
 
-					// CanUseSkill passives
-					if (doPassives(btl)) {
-						for (let s of char.skills) {
-							let pskill = skillFile[s];
+						// CanUseSkill passives
+						if (doPassives(btl)) {
+							for (let s of char.skills) {
+								let pskill = skillFile[s];
 
-							if (pskill && pskill.type == 'passive') {
-								for (let k in pskill.passive) {
-									if (!passiveList[k]) continue;
-									if (!passiveList[k].canuseskill) continue;
+								if (pskill && pskill.type == 'passive') {
+									for (let k in pskill.passive) {
+										if (!passiveList[k]) continue;
+										if (!passiveList[k].canuseskill) continue;
 
-									if (passiveList[k].multiple && pskill.passive[k]) {
-										for (let l in pskill.passive[k]) {
-											let txt = passiveList[k].canuseskill(char, skill, pskill, btl, pskill.passive[k][l]);
+										if (passiveList[k].multiple && pskill.passive[k]) {
+											for (let l in pskill.passive[k]) {
+												let txt = passiveList[k].canuseskill(char, skill, pskill, btl, pskill.passive[k][l]);
+
+												if (txt !== true) {
+													DiscordEmbed.title = txt;
+													alreadyResponded = true;
+
+													return i.update({
+														content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+														embeds: [DiscordEmbed],
+													});
+												}
+											}
+										} else {
+											let txt = passiveList[k].canuseskill(char, skill, pskill, btl, pskill.passive[k]);
 
 											if (txt !== true) {
 												DiscordEmbed.title = txt;
@@ -1238,95 +1454,33 @@ sendCurTurnEmbed = (char, btl) => {
 												return i.update({
 													content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 													embeds: [DiscordEmbed],
+													components: setUpComponents(char, btl, menustate)
 												});
 											}
-										}
-									} else {
-										let txt = passiveList[k].canuseskill(char, skill, pskill, btl, pskill.passive[k]);
-
-										if (txt !== true) {
-											DiscordEmbed.title = txt;
-											alreadyResponded = true;
-
-											return i.update({
-												content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-												embeds: [DiscordEmbed],
-												components: setUpComponents(char, btl, menustate)
-											});
 										}
 									}
 								}
 							}
 						}
-					}
 
-					if (btl.terrain && btl.terrain.type === "blindingradiance" && ((typeof(skill.type) === "string" && skill.type === "curse") || (typeof(skill.type) === "object" && skill.type.includes("curse")))) {
-						DiscordEmbed.title = "The cursed energy dissapears as soon as it appears...";
-						alreadyResponded = true;
+						if (btl.terrain && btl.terrain.type === "blindingradiance" && ((typeof(skill.type) === "string" && skill.type === "curse") || (typeof(skill.type) === "object" && skill.type.includes("curse")))) {
+							DiscordEmbed.title = "The cursed energy dissapears as soon as it appears...";
+							alreadyResponded = true;
 
-						return i.update({
-							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-							embeds: [DiscordEmbed],
-							components: setUpComponents(char, btl, menustate)
-						});
-					} else if (btl.terrain && btl.terrain.type === "eternaldarkness" && ((typeof(skill.type) === "string" && skill.type === "bless") || (typeof(skill.type) === "object" && skill.type.includes("bless")))) {
-						DiscordEmbed.title = "The blessed energy dissapears as soon as it appears...";
-						alreadyResponded = true;
-
-						return i.update({
-							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-							embeds: [DiscordEmbed],
-							components: setUpComponents(char, btl, menustate)
-						});
-					}
-
-					if (char.status && statusEffectFuncs[char.status.toLowerCase()] && statusEffectFuncs[char.status.toLowerCase()].canuse) {
-						let canUse = statusEffectFuncs[char.status.toLowerCase()].canuse(char, skill, btl)
-
-						if (canUse && canUse[1] != true) {
-						DiscordEmbed.title = canUse[0];
-						alreadyResponded = true;
-
-							await i.update({
+							return i.update({
 								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 								embeds: [DiscordEmbed],
 								components: setUpComponents(char, btl, menustate)
 							});
-						}
-					}
+						} else if (btl.terrain && btl.terrain.type === "eternaldarkness" && ((typeof(skill.type) === "string" && skill.type === "bless") || (typeof(skill.type) === "object" && skill.type.includes("bless")))) {
+							DiscordEmbed.title = "The blessed energy dissapears as soon as it appears...";
+							alreadyResponded = true;
 
-					if (skill.statusses) {
-						for (let k in skill.statusses) {
-							if (!statusList[k]) continue;
-							if (!statusList[k].canuse) continue;
-
-							if (statusList[k].multiple) {
-								for (let l in skill.statusses[k]) {
-									let txt = statusList[k].canuse(char, skill, btl, skill.statusses[k][l]);
-									if (txt !== true) {
-										DiscordEmbed.title = txt;
-										alreadyResponded = true;
-
-										return i.update({
-											content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-											embeds: [DiscordEmbed],
-											components: []
-										});
-									}
-								}
-							} else {
-								let txt = statusList[k].canuse(char, skill, btl, skill.statusses[k]);
-								if (txt !== true) {
-									DiscordEmbed.title = txt;
-									alreadyResponded = true;
-
-									return i.update({
-										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-										embeds: [DiscordEmbed],
-										components: setUpComponents(char, btl, menustate)
-									});
-								}
-							}
+							return i.update({
+								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+								embeds: [DiscordEmbed],
+								components: setUpComponents(char, btl, menustate)
+							});
 						}
 
 						if (char.status && statusEffectFuncs[char.status.toLowerCase()] && statusEffectFuncs[char.status.toLowerCase()].canuse) {
@@ -1343,76 +1497,133 @@ sendCurTurnEmbed = (char, btl) => {
 								});
 							}
 						}
-					}
 
-					if (hasStatus(skill, 'mimic')) {
-						menustate = MENU_ANYSEL;
-					} else if ((skill.target === "one" || skill.target === "spreadopposing" || skill.target === "widespreadopposing" || skill.target === "casterandfoe")) {
-						let alivecount = 0;
-						let alivenum = [0, 0];
+						if (skill.statusses) {
+							for (let k in skill.statusses) {
+								if (!statusList[k]) continue;
+								if (!statusList[k].canuse) continue;
 
-						for (let k in btl.teams) {
-							if (k == char.team) continue;
+								if (statusList[k].multiple) {
+									for (let l in skill.statusses[k]) {
+										let txt = statusList[k].canuse(char, skill, btl, skill.statusses[k][l]);
+										if (txt !== true) {
+											DiscordEmbed.title = txt;
+											alreadyResponded = true;
 
-							for (let j in btl.teams[k].members) {
-								if (btl.teams[k].members[j].hp > 0) {
-									alivenum = [k, j];
-									alivecount++;
+											return i.update({
+												content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+												embeds: [DiscordEmbed],
+												components: []
+											});
+										}
+									}
+								} else {
+									let txt = statusList[k].canuse(char, skill, btl, skill.statusses[k]);
+									if (txt !== true) {
+										DiscordEmbed.title = txt;
+										alreadyResponded = true;
+
+										return i.update({
+											content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+											embeds: [DiscordEmbed],
+											components: setUpComponents(char, btl, menustate)
+										});
+									}
+								}
+							}
+
+							if (char.status && statusEffectFuncs[char.status.toLowerCase()] && statusEffectFuncs[char.status.toLowerCase()].canuse) {
+								let canUse = statusEffectFuncs[char.status.toLowerCase()].canuse(char, skill, btl)
+
+								if (canUse && canUse[1] != true) {
+									DiscordEmbed.title = canUse[0];
+									alreadyResponded = true;
+
+									await i.update({
+										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+										embeds: [DiscordEmbed],
+										components: setUpComponents(char, btl, menustate)
+									});
 								}
 							}
 						}
 
-						if (alivecount == 1) {
-							btl.action.target = alivenum;
-							alreadyResponded = true;
-							doAction(char, btl, btl.action);
+						if (hasStatus(skill, 'mimic')) {
+							menustate = MENU_ANYSEL;
+						} else if ((skill.target === "one" || skill.target === "spreadopposing" || skill.target === "widespreadopposing" || skill.target === "casterandfoe")) {
+							let alivecount = 0;
+							let alivenum = [0, 0];
 
-							collector.stop();
-							return i.update({
-								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-								embeds: [DiscordEmbed],
-								components: []
-							});
+							for (let k in btl.teams) {
+								if (k == char.team) continue;
+
+								for (let j in btl.teams[k].members) {
+									if (btl.teams[k].members[j].hp > 0) {
+										alivenum = [k, j];
+										alivecount++;
+									}
+								}
+							}
+
+							console.log(btl.action.move);
+							if (alivecount == 1 && !canFusionSkill(char, btl, skill)) {
+								btl.action.target = alivenum;
+								alreadyResponded = true;
+								doAction(char, btl, btl.action);
+
+								collector.stop();
+								return i.update({
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: []
+								});
+							} else {
+								menustate = MENU_TEAMSEL;
+							}
+						} else if (skill.target === "ally" || skill.target === "spreadallies" || skill.target === "widespreadallies" || skill.target === "casterandally") {
+							btl.action.target[0] = char.team;
+							if (btl.teams[char.team].members.length == 1 && !canFusionSkill(char, btl, skill)) {
+								alreadyResponded = true;
+
+								doAction(char, btl, btl.action);
+								collector.stop();
+
+								return i.update({
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: []
+								});
+							} else
+								menustate = MENU_TARGET;
+						} else if (skill.target === "caster") {
+							if (!canFusionSkill(char, btl, skill)) {
+								btl.action.target = [char.team, char.pos];
+								alreadyResponded = true;
+								doAction(char, btl, btl.action);
+								collector.stop();
+
+								await i.update({
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: []
+								});
+							} else
+								menustate = MENU_TARGET;
 						} else {
-							menustate = MENU_TEAMSEL;
+							if (!canFusionSkill(char, btl, skill)) {
+								btl.action.target = [undefined, undefined];
+								doAction(char, btl, btl.action);
+								collector.stop();
+								alreadyResponded = true;
+
+								await i.update({
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: []
+								});
+							} else
+								menustate = MENU_TARGET;
 						}
-					} else if (skill.target === "ally" || skill.target === "spreadallies" || skill.target === "widespreadallies" || skill.target === "casterandally") {
-						btl.action.target[0] = char.team;
-						if (btl.teams[char.team].members.length == 1) {
-							alreadyResponded = true;
-
-							doAction(char, btl, btl.action);
-							collector.stop();
-
-							return i.update({
-								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-								embeds: [DiscordEmbed],
-								components: []
-							});
-						} else
-							menustate = MENU_TARGET;
-					} else if (skill.target === "caster") {
-						btl.action.target = [char.team, char.pos];
-						alreadyResponded = true;
-						doAction(char, btl, btl.action);
-						collector.stop();
-
-						await i.update({
-							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-							embeds: [DiscordEmbed],
-							components: []
-						});
-					} else {
-						btl.action.target = [undefined, undefined];
-						doAction(char, btl, btl.action);
-						collector.stop();
-						alreadyResponded = true;
-
-						await i.update({
-							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-							embeds: [DiscordEmbed],
-							components: []
-						});
 					}
 				} else if (menustate == MENU_ITEM && itemFile[i.customId]) {
 					btl.action.index = i.customId;
@@ -1477,73 +1688,63 @@ sendCurTurnEmbed = (char, btl) => {
 
 						DiscordEmbed.fields = [{name: 'Opponents', value: teamDesc, inline: true}, {name: 'Allies', value: myTeamDesc, inline: true}];
 					}
-				} else if (menustate == MENU_TARGET && btl.teams[btl.action.target[0]] && btl.teams[btl.action.target[0]].members[i.customId]) {
+				} else if (menustate == MENU_TARGET && btl.teams[btl.action.target[0]]) {
 					btl.action.target[1] = parseInt(i.customId);
 					let targ;
 
 					switch(btl.action.move) {
 						case 'pacify':
-							targ = btl.teams[btl.action.target[0]].members[i.customId];
+							if (btl.teams[btl.action.target[0]].members[i.customId]) {
+								targ = btl.teams[btl.action.target[0]].members[i.customId];
 
-							if (!targ.negotiate || targ?.negotiate == [] || targ?.negotiate?.length <= 0) {
-								DiscordEmbed.title = `${targ.name} seems adamant on attacking and will not listen to reason.`;
-								alreadyResponded = true;
+								if (!targ.negotiate || targ?.negotiate == [] || targ?.negotiate?.length <= 0) {
+									DiscordEmbed.title = `${targ.name} seems adamant on attacking and will not listen to reason.`;
+									alreadyResponded = true;
 
-								await i.update({
-									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-									embeds: [DiscordEmbed],
-									components: setUpComponents(char, btl, menustate)
-								})
-							} else {
-								DiscordEmbed = new Discord.MessageEmbed()
-									.setColor('#fcba03')
-									.setTitle(`__${char.name}__ => __${targ.name}__`)
-									.setDescription(`Try pacifying __${targ.name}__ to calm it down! _So far, __${targ.name}__ is **${targ.pacify}% pacified**_!`)
-									.addFields()
+									await i.update({
+										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+										embeds: [DiscordEmbed],
+										components: setUpComponents(char, btl, menustate)
+									})
+								} else {
+									DiscordEmbed = new Discord.MessageEmbed()
+										.setColor('#fcba03')
+										.setTitle(`__${char.name}__ => __${targ.name}__`)
+										.setDescription(`Try pacifying __${targ.name}__ to calm it down! _So far, __${targ.name}__ is **${targ.pacify}% pacified**_!`)
+										.addFields()
 
-								for (let k in targ.negotiate)
-									DiscordEmbed.fields.push({name: `**[${k}]** __${targ.negotiate[k].name}__`, value: targ.negotiate[k].desc ?? 'No description.', inline: true});
+									for (let k in targ.negotiate)
+										DiscordEmbed.fields.push({name: `**[${k}]** __${targ.negotiate[k].name}__`, value: targ.negotiate[k].desc ?? 'No description.', inline: true});
 
-								menustate = MENU_PACIFY;
-								alreadyResponded = true;
+									menustate = MENU_PACIFY;
+									alreadyResponded = true;
 
-								await i.update({
-									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-									embeds: [DiscordEmbed],
-									components: setUpComponents(char, btl, menustate)
-								})
+									await i.update({
+										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+										embeds: [DiscordEmbed],
+										components: setUpComponents(char, btl, menustate)
+									})
+								}
 							}
+
 							break;
 						
 						case 'backup':
-							targ = btl.teams[char.team].members[i.customId];
-							btl.action.target[1] = parseInt(i.customId);
+							if (btl.teams[char.team].members[i.customId]) {
+								targ = btl.teams[char.team].members[i.customId];
+								btl.action.target[1] = parseInt(i.customId);
 
-							DiscordEmbed = new Discord.MessageEmbed()
-								.setColor('#fcba03')
-								.setTitle(`__${char.name}__ => __${targ.name}__`)
-								.setDescription(`Select one of your allies to replace ${targ.name} with.`)
-								.addFields()
+								DiscordEmbed = new Discord.MessageEmbed()
+									.setColor('#fcba03')
+									.setTitle(`__${char.name}__ => __${targ.name}__`)
+									.setDescription(`Select one of your allies to replace ${targ.name} with.`)
+									.addFields()
 
-							for (let k in btl.teams[char.team].backup) {
-								let f = btl.teams[char.team].backup[k];
-								DiscordEmbed.fields.push({name: `**[${k}]** __${f.name}__`, value: `${f.hp}/${f.maxhp}HP\n${f.mp}/${f.maxmp}${f.mpMeter ? f.mpMeter[1] : "MP"}`, inline: true});
-							}
-							menustate = MENU_BACKUP;
-							alreadyResponded = true;
-
-							await i.update({
-								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-								embeds: [DiscordEmbed],
-								components: setUpComponents(char, btl, menustate)
-							});
-							break;
-						
-						case 'enemyinfo':
-							targ = btl.teams[btl.action.target[0]].members[i.customId];
-
-							if (!targ.enemy) {
-								DiscordEmbed.title = `${targ.name} isn't an enemy!`;
+								for (let k in btl.teams[char.team].backup) {
+									let f = btl.teams[char.team].backup[k];
+									DiscordEmbed.fields.push({name: `**[${k}]** __${f.name}__`, value: `${f.hp}/${f.maxhp}HP\n${f.mp}/${f.maxmp}${f.mpMeter ? f.mpMeter[1] : "MP"}`, inline: true});
+								}
+								menustate = MENU_BACKUP;
 								alreadyResponded = true;
 
 								await i.update({
@@ -1551,26 +1752,45 @@ sendCurTurnEmbed = (char, btl) => {
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
 								});
-							} else if (!foundEnemy(targ.truename, btl.guild.id)) {
-								DiscordEmbed.title = `We've yet to learn about ${targ.name}.`;
-								alreadyResponded = true;
-
-								await i.update({
-									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-									embeds: [DiscordEmbed],
-									components: setUpComponents(char, btl, menustate)
-								})
-							} else {
-								let enemyFile = setUpFile(`${dataPath}/json/${btl.guild.id}/enemies.json`);
-								alreadyResponded = true;
-								menustate = MENU_ENEMYINFO;
-
-								await i.update({
-									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-									embeds: [longDescription(enemyFile[targ.truename], enemyFile[targ.truename].level, btl.guild.id, i)],
-									components: setUpComponents(char, btl, menustate)
-								})
 							}
+
+							break;
+						
+						case 'enemyinfo':
+							if (btl.teams[btl.action.target[0]].members[i.customId]) {
+								targ = btl.teams[btl.action.target[0]].members[i.customId];
+
+								if (!targ.enemy) {
+									DiscordEmbed.title = `${targ.name} isn't an enemy!`;
+									alreadyResponded = true;
+
+									await i.update({
+										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+										embeds: [DiscordEmbed],
+										components: setUpComponents(char, btl, menustate)
+									});
+								} else if (!foundEnemy(targ.truename, btl.guild.id)) {
+									DiscordEmbed.title = `We've yet to learn about ${targ.name}.`;
+									alreadyResponded = true;
+
+									await i.update({
+										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+										embeds: [DiscordEmbed],
+										components: setUpComponents(char, btl, menustate)
+									})
+								} else {
+									let enemyFile = setUpFile(`${dataPath}/json/${btl.guild.id}/enemies.json`);
+									alreadyResponded = true;
+									menustate = MENU_ENEMYINFO;
+
+									await i.update({
+										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+										embeds: [longDescription(enemyFile[targ.truename], enemyFile[targ.truename].level, btl.guild.id, i)],
+										components: setUpComponents(char, btl, menustate)
+									})
+								}
+							}
+
 							break;
 						
 						case 'tc':
@@ -1604,17 +1824,31 @@ sendCurTurnEmbed = (char, btl) => {
 								});
 							}
 							break;
-					
-						default:
-							doAction(char, btl, btl.action);
-							alreadyResponded = true;
-							collector.stop();
 
-							await i.update({
-								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-								embeds: [DiscordEmbed],
-								components: []
-							});
+						case 'bb-fusionskill':
+						case 'bb-fusionspell':
+							if (btl.teams[char.team].members[i.customId]) {
+								btl.action.ally = parseInt(i.customId);
+								menustate = MENU_SKILL;
+							}
+							break;
+
+						default:
+							if (i.customId == 'bb-fusionskill') {
+								console.log("hi");
+								btl.action.move = 'bb-fusionskill';
+								menustate = MENU_TARGET;
+							} else {
+								doAction(char, btl, btl.action);
+								alreadyResponded = true;
+								collector.stop();
+
+								await i.update({
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: []
+								});
+							}
 					}
 				} else if (menustate == MENU_FORFEIT) {
 					if (i.customId === 'forfeit') {
@@ -1900,12 +2134,13 @@ sendCurTurnEmbed = (char, btl) => {
 doAction = (char, btl, action) => {
 	let party = btl.teams[char.team];
 	var DiscordEmbed;
-	
+
 	let color = elementColors[char.mainElement] ?? elementColors.strike;
 	if (typeof char.mainElement === "object")
 		color = elementColors[char.mainElement[0]] ?? elementColors.strike;
 
 	delete btl.canteamcombo;
+	if (char.fusionskill) delete char.fusionskill;
 
 	if (!action) {
 		char.guard = 0.45;
@@ -1933,6 +2168,31 @@ doAction = (char, btl, action) => {
 					char.lastskill = action.index;
 				}
 
+
+				break;
+
+			case 'bb-fusionskill':
+			case 'bb-fusionspell':
+				action.index = action.fusionskill;
+
+				// Buffed up character. Average of both stats*1.5.
+				let char3 = btl.teams[char.team].members[action.ally];
+				let charf = objClone(char);
+				for (let i in charf.stats) charf.stats[i] = ((char.stats[i]+char3.stats[i])/2)*1.5;
+
+				// Use the skill.
+				useSkill(charf, btl, action, objClone(skillFile[action.fusionskill]), char3);
+
+				if (skillFile[action.skills[0]].cost && skillFile[action.skills[0]].costtype)
+					useCost(char, skillFile[action.skills[0]].cost, skillFile[action.skills[0]].costtype, btl);
+				if (skillFile[action.skills[1]].cost && skillFile[action.skills[1]].costtype)
+					useCost(char3, skillFile[action.skills[1]].cost, skillFile[action.skills[1]].costtype, btl);
+
+				char.fusionskill = action.skills[0];
+				char3.fusionskill = action.skills[1];
+
+				let settings = setUpSettings(btl.guild.id);
+				changeTrust(char3, char, Math.round((skillFile[action.fusionskill].trustgain ?? 30)*(settings.rates.trustrate ?? 1)));
 				break;
 
 			case 'item':

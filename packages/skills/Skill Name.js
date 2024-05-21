@@ -269,3 +269,8 @@ skillTier = (skillData) => {
 	else
 		return 6;
 }
+
+// Target type does not allow choosing.
+canChooseTarget = (target) => {
+	return ['one', 'ally', 'spreadopposing', 'spreadallies', 'casterandfoe', 'casterandally'].includes(target.toLowerCase());
+}

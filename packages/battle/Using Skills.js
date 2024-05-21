@@ -1874,6 +1874,8 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		finalText += `__${char.name}__ concentrates, and strikes with their **strongest attack** at full power!\n## **__${skill.name}__!**\n\n`;
 	} else if (skill.teamcombo) {
 		finalText += `__${char.name}__ ${ally ? ("and __" + ally.name + "__") : ""} struck with a powerful skill: **__${skill.name}__**!\n\n`;
+	} else if (skill.fusionskill) {
+		finalText += `__${char.name}__ used **${getFullName(skillFile[act.skills[0]])}**!\n__${ally.name}__ used **${getFullName(skillFile[act.skills[1]])}**!\nThe two skills fused together to become __**${getFullName(skill)}**__!\n\n`;
 	} else {
 		let didreplace = false;
 		if (skill.extras && skill.extras.forcemsg) {
@@ -2300,6 +2302,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		for (let i in party.members) {
 			let char2 = party.members[i];
 			if (char.id === char2.id) continue;
+			if (char2.hp <= 0) continue;
 
 			if ((trustLevel(char, char2) > trustLvl.meleeatk) && (randNum(1, 100) <= 20*(trustLevel(char, char2)/5))) {
 				let targ = getCharFromId(targets[0][0], btl);
