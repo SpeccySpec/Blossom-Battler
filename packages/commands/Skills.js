@@ -1408,9 +1408,39 @@ commands.fusionskill = new Command({
 				if (i == args[0]) continue;
 
 				skill = skillFile[i];
-				if (skill.fusionskill && skill.fusionskill == skillFile[args[0]].fusionskill) return message.channel.send(`The fusion skill **${getFullName(skill)}** already has the fusion requirements you're trying to set for **${getFullName(skillFile[args[0]])}**. _No need for clones!_`);
+				if (skill.fusionskill && JSON.stringify(skill.fusionskill) == JSON.stringify(skillFile[args[0]].fusionskill)) return message.channel.send(`The fusion skill **${getFullName(skill)}** already has the fusion requirements you're trying to set for **${getFullName(skillFile[args[0]])}**. _No need for clones!_`);
 			}
 
+			skillFile[args[0]].edittime = Date.now();
+
+			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
+			message.react('👍');
+		} else {
+			return message.channel.send(`${args[0]} is an invalid Skill Name!`)
+		}
+	}
+})
+
+commands.clearfusionskill = new Command({
+	desc: "Clears fusion skill data from a fusion skill.",
+	section: "skills",
+	aliases: ['removefusionskill', 'clearfusion', 'removefusion', 'fuckfusionskill', 'fuckfusion'],
+	args: [
+		{
+			name: "Skill ID",
+			type: "Word",
+			forced: true
+		}
+	],
+	func(message, args, guilded) {
+		skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+
+		if (skillFile[args[0]]) {
+			if (!utilityFuncs.RPGBotAdmin(message.author.id) && skillFile[args[0]].originalAuthor != message.author.id) return message.channel.send(`You don't own ${skillFile[args[0]].name}!`);
+			if (!skillFile[args[0]].fusionskill) return message.channel.send(`**${getFullName(skillFile[args[0]])}** is not a fusion skill.`);
+
+			delete skillFile[args[0]].fusionskill;
+			delete skillFile[args[0]].trustgain;
 			skillFile[args[0]].edittime = Date.now();
 
 			fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
