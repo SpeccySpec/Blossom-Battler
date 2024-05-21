@@ -35,6 +35,15 @@ targFusionSkill = (skill1, skill2, btl) => {
             console.log(i);
             if (!skillFile[i]) continue;
 
+            if (skilldata[i] != 'bb-fusionskill') {
+                if (skilldata.includes(i)) {
+                    console.log(`checks out for ${skill.name}!! (skill id ${h})`);
+                    skillhas[h] = true;
+                    h++;
+                    continue;
+                }
+            }
+
             if (elementdata[i] != 'bb-fusionskill') {
                 if (typeof skillFile[i].type === "object") {
                     for (let j in skillFile[i].type) {
@@ -52,15 +61,6 @@ targFusionSkill = (skill1, skill2, btl) => {
                         h++;
                         continue;
                     }
-                }
-            }
-
-            if (skilldata[i] != 'bb-fusionskill') {
-                if (skilldata.includes(i)) {
-                    console.log(`checks out for ${skill.name}!! (skill id ${h})`);
-                    skillhas[h] = true;
-                    h++;
-                    continue;
                 }
             }
 
@@ -128,6 +128,16 @@ fusionSkills = (char, party, userskill, skill, btl) => {
     }
 
     for (let i in fusiondata) {
+        if (skilldata[i] != 'bb-fusionskill') {
+            if (skilldata[i] == getSkillID(userskill)) {
+                console.log(`User skill acknowledged (${userskill.name})`);
+                elementdata.splice(i, 1);
+                skilldata.splice(i, 1);
+                skillhassomething = true;
+                break;
+            }
+        }
+
         if (elementdata[i] != 'bb-fusionskill') {
             if (typeof userskill.type === "object") {
                 for (let j in userskill.type) {
@@ -147,16 +157,6 @@ fusionSkills = (char, party, userskill, skill, btl) => {
                     skillhassomething = true;
                     break;
                 }
-            }
-        }
-
-        if (skilldata[i] != 'bb-fusionskill') {
-            if (skilldata[i] == getSkillID(userskill)) {
-                console.log(`User skill acknowledged (${userskill.name})`);
-                elementdata.splice(i, 1);
-                skilldata.splice(i, 1);
-                skillhassomething = true;
-                break;
             }
         }
     }
@@ -179,6 +179,16 @@ fusionSkills = (char, party, userskill, skill, btl) => {
             console.log(i);
             if (!skillFile[i]) continue;
 
+            if (skilldata[i] != 'bb-fusionskill') {
+                if (skilldata.includes(i)) {
+                    console.log(`checks out!! (skill id, ${i})`);
+                    if (!skills[l]) skills[l] = [];
+                    if (!skills[l].includes(i)) skills[l].push(i);
+                    addedsomething = true;
+                    continue;
+                }
+            }
+
             if (elementdata[i] != 'bb-fusionskill') {
                 if (typeof skillFile[i].type === "object") {
                     for (let j in skillFile[i].type) {
@@ -198,16 +208,6 @@ fusionSkills = (char, party, userskill, skill, btl) => {
                         addedsomething = true;
                         continue;
                     }
-                }
-            }
-
-            if (skilldata[i] != 'bb-fusionskill') {
-                if (skilldata.includes(i)) {
-                    console.log(`checks out!! (skill id, ${i})`);
-                    if (!skills[l]) skills[l] = [];
-                    if (!skills[l].includes(i)) skills[l].push(i);
-                    addedsomething = true;
-                    continue;
                 }
             }
         }

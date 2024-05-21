@@ -1615,6 +1615,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 		case 'caster':
 			targets.push([char.id, 1]);
+			if (ally) targets.push([ally.id, 1]);
 			break;
 
 		case 'allopposing':
@@ -1821,6 +1822,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		case 'casterandfoe':
 			let targ2 = (btl.teams[act.target[0]] && btl.teams[act.target[0]].members[act.target[1]]) ? btl.teams[act.target[0]].members[act.target[1]] : btl.teams[0].members[0];
 			targets.push([char.id, 1]);
+			if (ally) targets.push([ally.id, 1]);
 			targets.push([targ2.id, 1]);
 			break;
 
@@ -1836,6 +1838,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 				targets.push([possible[randNum(possible.length-1)] ?? possible[0], 1]);
 
 			targets.push([char.id, 1]);
+			if (ally) targets.push([ally.id, 1]);
 			skill.hits = 1; // make the skill one hit now.
 			break;
 
@@ -1846,6 +1849,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			}
 
 			targets.push([char.id, 1]);
+			if (ally) targets.push([ally.id, 1]);
 			skill.hits = 1; // make the skill one hit now.
 			break;
 
@@ -1859,6 +1863,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 				targets.push([possible[randNum(possible.length-1)] ?? possible[0], 1]);
 
 			targets.push([char.id, 1]);
+			if (ally) targets.push([ally.id, 1]);
 			skill.hits = 1; // make the skill one hit now.
 			break;
 

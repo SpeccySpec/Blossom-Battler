@@ -1350,7 +1350,7 @@ commands.fusionskill = new Command({
 	section: "skills",
 	aliases: ['makefusion', 'dofusion', 'makefusionskill', 'dofusionskill', 'assignfusion', 'assignfusionskills'],
 	doc: {
-		desc: "**Fusion Skills** are a mechanic that can be disabled per server. They allow 2 users to use two different skills at the same time to get a completely new skill instead. This will disable usage of the contributing elements for the next turn on the two users that participated. This command can be used on an existing skill to turn it into a fusion skill.",
+		desc: "**Fusion Skills** are a mechanic that can be disabled per server. They allow 2 users to use two different skills at the same time to get a completely new skill instead. This will disable usage of the contributing elements for the next turn on the two users that participated. This command can be used on an existing skill to turn it into a fusion skill. {Auto Create} will have the fusion skill be a generic skill with the power of the two skills participating.",
 	},
 	args: [
 		{
@@ -1372,7 +1372,12 @@ commands.fusionskill = new Command({
 			name: "Skill/Element 2",
 			type: "Word",
 			forced: true
-		}
+		},
+//		{
+//			name: "Auto Create",
+//			type: "YesNo",
+//			forced: false
+//		}
 	],
 	func(message, args, guilded) {
 		skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
@@ -1387,7 +1392,8 @@ commands.fusionskill = new Command({
 			skillFile[args[0]].trustgain = args[1];
 			skillFile[args[0]].fusionskill = [];
 
-			for (let i of args.splice(2)) {
+			let skillargs = [args[2], args[3]]
+			for (let i of skillargs) {
 				if (!skillFile[i]) {
 					if (!Elements.includes(i.toLowerCase())) return message.channel.send(`${i} is not a valid skill or element.`);
 					if (["passive"].includes(i.toLowerCase())) return message.channel.send(`You cannot ask for ${elementEmoji.passive}**Passive** skills.`);
