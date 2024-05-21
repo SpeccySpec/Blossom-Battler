@@ -1364,9 +1364,13 @@ commands.fusionskill = new Command({
 			forced: false
 		},
 		{
-			name: "Skills/Elements",
+			name: "Skill/Element 1",
 			type: "Word",
-			multiple: true,
+			forced: true
+		},
+		{
+			name: "Skill/Element 2",
+			type: "Word",
 			forced: true
 		}
 	],
