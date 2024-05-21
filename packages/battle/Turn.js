@@ -231,56 +231,117 @@ const menuStates = {
 			case 'bb-fusionskill':
 				let data = canFusionSkill(char, btl, skillFile[btl.action.index], true);
 
+				let c = 0;
 				if (btl.teams[char.team].members[btl.action.ally] && data[btl.action.ally]) {
 					let char2 = btl.teams[char.team].members[btl.action.ally];
+					let data2 = [];
+					let skillname;
+					let skillinfo;
 					for (let i in data[btl.action.ally]) {
-						const skillname = data[btl.action.ally][i]
-						const skillinfo = skillFile[skillname]
-						if (!skillinfo) continue;
+						skillname = data[btl.action.ally][i]
 
-						let compins = CalcCompins(comps, i)
-						let btncolor = 'blue'
-						if (skillinfo?.type === 'heal') 
-							btncolor = 'green'
-						else if (skillinfo?.type === 'status' || skillinfo?.type === 'passive') 
-							btncolor = 'grey'
-						else if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'sorcery') 
-							btncolor = 'red'
-			
-						let emoji1 = skillinfo ? elementEmoji[skillinfo.type] : elementEmoji.strike;
-						if (typeof(skillinfo?.type) === 'object') emoji1 = skillinfo ? elementEmoji[skillinfo.type[0]] : elementEmoji.strike;
-			
-						let canselect = true;
-			
-						// Afford/Status Effects
-						if (!canAfford(char2, skillinfo, btl)) {
-							canselect = false;
-						} else if (char2.status) {
-							switch(char.status.toLowerCase()) {
-								case 'ego':
-									if (skillinfo?.type === 'heal') canselect = false;
-									break;
-			
-								case 'silence':
-									if (skillinfo?.atktype === 'magic' || skillinfo?.atktype === 'sorcery') canselect = false;
-									break;
-			
-								case 'dazed':
-									if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'ranged') canselect = false;
-									break;
-			
-								case 'disabled':
+						if (typeof skillname === "object") {
+							data2 = objClone(skillname);
+
+							for (let k in data2) {
+								skillname = data2[k];
+								skillinfo = skillFile[skillname];
+								if (!skillinfo) continue;
+	
+								let compins = CalcCompins(comps, c)
+								let btncolor = 'blue'
+								if (skillinfo?.type === 'heal') 
+									btncolor = 'green'
+								else if (skillinfo?.type === 'status' || skillinfo?.type === 'passive') 
+									btncolor = 'grey'
+								else if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'sorcery') 
+									btncolor = 'red'
+					
+								let emoji1 = skillinfo ? elementEmoji[skillinfo.type] : elementEmoji.strike;
+								if (typeof(skillinfo?.type) === 'object') emoji1 = skillinfo ? elementEmoji[skillinfo.type[0]] : elementEmoji.strike;
+
+								let canselect = true;
+					
+								// Afford/Status Effects
+								if (!canAfford(char2, skillinfo, btl)) {
 									canselect = false;
-									break;
+								} else if (char2.status) {
+									switch(char.status.toLowerCase()) {
+										case 'ego':
+											if (skillinfo?.type === 'heal') canselect = false;
+											break;
+					
+										case 'silence':
+											if (skillinfo?.atktype === 'magic' || skillinfo?.atktype === 'sorcery') canselect = false;
+											break;
+					
+										case 'dazed':
+											if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'ranged') canselect = false;
+											break;
+					
+										case 'disabled':
+											canselect = false;
+											break;
+									}
+								}
+					
+								// Disable.
+								if (char2.custom?.disable) {
+									if (char2.custom.disable[0] == skillname) canselect = false;
+								}
+
+								comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
+								c++;
 							}
+						} else {
+							skillinfo = skillFile[skillname]
+							if (!skillinfo) continue;
+
+							let compins = CalcCompins(comps, c)
+							let btncolor = 'blue'
+							if (skillinfo?.type === 'heal') 
+								btncolor = 'green'
+							else if (skillinfo?.type === 'status' || skillinfo?.type === 'passive') 
+								btncolor = 'grey'
+							else if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'sorcery') 
+								btncolor = 'red'
+				
+							let emoji1 = skillinfo ? elementEmoji[skillinfo.type] : elementEmoji.strike;
+							if (typeof(skillinfo?.type) === 'object') emoji1 = skillinfo ? elementEmoji[skillinfo.type[0]] : elementEmoji.strike;
+				
+							let canselect = true;
+				
+							// Afford/Status Effects
+							if (!canAfford(char2, skillinfo, btl)) {
+								canselect = false;
+							} else if (char2.status) {
+								switch(char.status.toLowerCase()) {
+									case 'ego':
+										if (skillinfo?.type === 'heal') canselect = false;
+										break;
+				
+									case 'silence':
+										if (skillinfo?.atktype === 'magic' || skillinfo?.atktype === 'sorcery') canselect = false;
+										break;
+				
+									case 'dazed':
+										if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'ranged') canselect = false;
+										break;
+				
+									case 'disabled':
+										canselect = false;
+										break;
+								}
+							}
+				
+							// Disable.
+							if (char2.custom?.disable) {
+								if (char2.custom.disable[0] == skillname) canselect = false;
+							}
+				
+							comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
+							c++;
 						}
-			
-						// Disable.
-						if (char2.custom?.disable) {
-							if (char2.custom.disable[0] == skillname) canselect = false;
-						}
-			
-						comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
 					}
 				}
 				break;
