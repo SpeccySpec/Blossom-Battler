@@ -1350,7 +1350,7 @@ commands.fusionskill = new Command({
 	section: "skills",
 	aliases: ['makefusion', 'dofusion', 'makefusionskill', 'dofusionskill', 'assignfusion', 'assignfusionskills'],
 	doc: {
-		desc: "**Fusion Skills** are a mechanic that can be disabled per server. They allow 2 users",
+		desc: "**Fusion Skills** are a mechanic that can be disabled per server. They allow 2 users to use two different skills at the same time to get a completely new skill instead. This will disable usage of the contributing elements for the next turn on the two users that participated. This command can be used on an existing skill to turn it into a fusion skill.",
 	},
 	args: [
 		{
