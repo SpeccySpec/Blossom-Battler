@@ -1,4 +1,4 @@
-let hardcodedskills = ['bb-fusionskill'];
+let hardcodedskills = [...Elements, 'bb-fusionskill'];
 
 // Handle Skills
 commands.registerskill = new Command({
@@ -1398,7 +1398,7 @@ commands.fusionskill = new Command({
 					// Handle Skills
 					if (skillFile[i].fusionskill) return message.channel.send(`${getFullName(skillFile[i])} is already a fusion skill. You cannot ask for fusion skills.`);
 					if (skillFile[i].type === "passive") return message.channel.send(`${getFullName(skillFile[i])} is a passive skill. You cannot ask for ${elementEmoji.passive}**Passive** skills.`);
-					if (skillTier(skillFile[i]) < (skillTier(skillFile[args[0]])-1)) return message.channel.send(`**${getFullName(skillFile[args[0]])}** is **Tier **${tierEmojis[(skillTier(skillFile[args[0]]) ?? 6)-1]}, which means all the skills required must be **Tier **${tierEmojis[(skillTier(skillFile[args[0]]) ?? 6)-2]} or lower. **${getFullName(skillFile[i])}** is **Tier **${tierEmojis[(skillTier(skillFile[i]) ?? 6)-1]}.`);
+					if (skillTier(skillFile[i]) < (skillTier(skillFile[args[0]])-1)) return message.channel.send(`**${getFullName(skillFile[args[0]])}** is **Tier **${tierEmojis[(skillTier(skillFile[args[0]]) ?? 6)-1]}, which means all the skills required must be **Tier **${tierEmojis[(skillTier(skillFile[args[0]]) ?? 6)-2]} or higher. **${getFullName(skillFile[i])}** is **Tier **${tierEmojis[(skillTier(skillFile[i]) ?? 6)-1]}.`);
 					skillFile[args[0]].fusionskill.push([false, i]);
 				}
 			}
