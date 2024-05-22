@@ -32,7 +32,6 @@ targFusionSkill = (skill1, skill2, btl) => {
 
         h = 0;
         for (let i of skillsinvolved) {
-            console.log(i);
             if (!skillFile[i]) continue;
 
             if (skilldata[i] != 'bb-fusionskill') {
@@ -84,8 +83,6 @@ canFusionSkill = (char, btl, skill, ignore) => {
     let fullData;
     let targskill = {};
     for (let k in fusionFile) {
-        console.log(`Checking ${k}`);
-
         targskill = fusionFile[k];        
         if (!targskill.fusionskill) continue;
 
@@ -163,8 +160,6 @@ fusionSkills = (char, party, userskill, skill, btl) => {
 
     if (!skillhassomething) return null;
 
-    console.log(elementdata);
-
     let char2;
     let skills = {};
     let addedsomething = false;
@@ -174,9 +169,7 @@ fusionSkills = (char, party, userskill, skill, btl) => {
         if (char2.hp <= 0) continue;
         if (char2.status && immobilized.includes(char2.status)) continue;
 
-        console.log(char2.name);
         for (let i of char2.skills) {
-            console.log(i);
             if (!skillFile[i]) continue;
 
             if (skilldata[i] != 'bb-fusionskill') {
