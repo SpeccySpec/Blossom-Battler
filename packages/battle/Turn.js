@@ -421,6 +421,11 @@ const menuStates = {
 						if (noelement.includes(skillinfo?.type)) canselect = false;
 					}
 
+					// Don't allow selections of fusion skills at all.
+					if (skillinfo?.fusionskill)
+						canselect = false;
+
+					// Lmao.
 					comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
 				}
 		}
