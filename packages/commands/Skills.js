@@ -142,7 +142,7 @@ commands.registerskill = new Command({
 		skillFile[args[0]] = skillDefs;
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
-		if (Object.keys(skillFile).length == 6000) {
+		if (Object.keys(skillFile).length == 7000) {
 			var c = client.channels.cache.get('874697575746383953');
 			if (c) c.send(`**[NOTICE]**\n${message.author} is the one who registered the **6000th skill**, **${args[0]}**!\nThey will recieve 60<:golden:973077051751940138> as a prize!`);
 
@@ -211,7 +211,7 @@ commands.registerstatus = new Command({
 		if (args[4].toLowerCase != 'none') skillFile[args[0]].desc = args[4];
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
-		if (Object.keys(skillFile).length == 6000) {
+		if (Object.keys(skillFile).length == 7000) {
 			var c = client.channels.cache.get('874697575746383953');
 			if (c) c.send(`**[NOTICE]**\n${message.author} is the one who registered the **6000th skill**, **${args[0]}**!\nThey will recieve 60<:golden:973077051751940138> as a prize!`);
 
@@ -280,7 +280,7 @@ commands.registerheal = new Command({
 		if (args[4].toLowerCase != 'none') skillFile[args[0]].desc = args[4];
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
-		if (Object.keys(skillFile).length == 6000) {
+		if (Object.keys(skillFile).length == 7000) {
 			var c = client.channels.cache.get('874697575746383953');
 			if (c) c.send(`**[NOTICE]**\n${message.author} is the one who registered the **6000th skill**, **${args[0]}**!\nThey will recieve 60<:golden:973077051751940138> as a prize!`);
 
@@ -334,7 +334,7 @@ commands.registerpassive = new Command({
 		if (args[1].toLowerCase != 'none') skillFile[args[0]].desc = args[1];
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
-		if (Object.keys(skillFile).length == 6000) {
+		if (Object.keys(skillFile).length == 7000) {
 			var c = client.channels.cache.get('874697575746383953');
 			if (c) c.send(`**[NOTICE]**\n${message.author} is the one who registered the **6000th skill**, **${args[0]}**!\nThey will recieve 60<:golden:973077051751940138> as a prize!`);
 
