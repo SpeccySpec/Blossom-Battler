@@ -195,7 +195,7 @@ const affinityScores = {
 renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, useguild) => {
 	let char = objClone(charDefs);
 
-	if (settings == null) settings = setUpFile(`${dataPath}/json/${message.guild.id}/settings.json`);
+	if (settings == null) settings = setUpFile(`${dataPath}/json/${useguild ?? message.guild.id}/settings.json`);
 
 	let prefix = elementEmoji[char.mainElement] ?? elementEmoji.strike;
 	let color = elementColors[char.mainElement] ?? elementColors.strike;
@@ -217,7 +217,7 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 	
 		if (char.ai) userTxt = "Automated";
 	
-		let tick = verifiedChar(char, message.guild.id) ? '<:tick:973077052372701294>' : '';
+		let tick = verifiedChar(char, useguild ?? message.guild.id) ? '<:tick:973077052372701294>' : '';
 		DiscordEmbed = new Discord.MessageEmbed()
 			.setColor(!char.type ? color : enemyTypeColors[char.type])
 			.setTitle(`${prefix}${tick}${char.name} ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
@@ -247,13 +247,13 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 	if (scorecomment && affinityscore <= 3 && affinityscore >= -3 && totaffinities >= 9)
 		scorecomment += "\nOr at least that would be the case if you didn't have so many affinities."
 	if (totaffinities == 0)
-		scorecomment = `Your character has no affinities yet, add one with \`${getPrefix(message.guild.id)}setaffinity\`!`
+		scorecomment = `Your character has no affinities yet, add one with \`${getPrefix(useguild ?? message.guild.id)}setaffinity\`!`
 	if (totaffinities == 1)
 		scorecomment += "\nThey...probably should have more than 1 affinity though."
 	charAffs += `\n\nScore: **${affinityscore}**\n*${scorecomment ?? "..."}*`
 
 	// Status Affinities
-	if (settings.mechanics.stataffinities) {
+	if (settings.mechanics?.stataffinities) {
 		if (char.statusaffinities) {
 			let statusaffinityscore = 0
 			let statustotaffinities = 0
