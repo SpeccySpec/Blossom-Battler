@@ -86,6 +86,8 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 	// Basic Damage
 	var finalText = '';
 	if (skillDefs.type != "status" && skillDefs.type != "passive") {
+		let powTxt = (skillDefs.generic && skillDefs.fusionskill) ? 'variable' : skillDefs.pow;
+
 		if (hasExtra(skillDefs, 'ohko')) {
 			for (i in skillDefs.extras.ohko) {
 				let curOHKO = skillDefs.extras.ohko[i];
@@ -149,7 +151,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 					}
 				}
 
-				finalText += (OHKOfailDamage && ((OHKOchance < 100 && OHKOconditions.length == 0) || OHKOconditions.length > 0)) ? `, that **attacks on failure with ${skillDefs.pow} power**${i > skillDefs.extras.ohko.length - 2 ? ',' : ''}` : ''
+				finalText += (OHKOfailDamage && ((OHKOchance < 100 && OHKOconditions.length == 0) || OHKOconditions.length > 0)) ? `, that **attacks on failure with ${powTxt} power**${i > skillDefs.extras.ohko.length - 2 ? ',' : ''}` : ''
 
 				if (i < skillDefs.extras.ohko.length - 2) finalText += ', ';
 				else if (i == skillDefs.extras.ohko.length - 2) finalText += ', and ';
@@ -157,7 +159,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 			finalText += ` in **one shot**!`;
 		} else {
 			if (skillDefs.type != "heal")
-				finalText += `Has **${skillDefs.pow}** Power${skillDefs?.hits == 1 ? '.' : ''}`;
+				finalText += `Has **${powTxt}** power${skillDefs?.hits == 1 ? '.' : ''}`;
 		}
 
 		if (skillDefs.hits && skillDefs.hits > 1 && skillDefs.type != "heal" && !hasExtra(skillDefs, 'ohko')) 
