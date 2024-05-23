@@ -2262,6 +2262,18 @@ doAction = (char, btl, action) => {
 				let charf = objClone(char);
 				for (let i in charf.stats) charf.stats[i] = ((char.stats[i]+char3.stats[i])/2)*1.5;
 
+				let fusionSkill = objClone(skillFile[action.fusionskill]);
+
+				if (fusionSkill.generic) {
+					fusionSkill.pow = 0
+
+					for (let i in action.skills) {
+						if (skillFile[action.skills[i]]) fusionSkill.pow += (skillFile[action.skills[i]] ?? (100*skillTier(skillFile[action.skills[i]])));
+					}
+
+					if (char.trust[char3.truename] && char.trust[char3.truename].level) fusionSkill.pow *= Math.min(1.5, 1 + (char.trust[char3.truename].level/30));
+				}
+
 				// Use the skill.
 				useSkill(charf, btl, action, objClone(skillFile[action.fusionskill]), char3);
 
