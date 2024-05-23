@@ -1350,7 +1350,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		color = elementColors[char.mainElement[0]] ?? elementColors.strike;
 
 	// Does this skill exist...?
-	if (!skill) {
+	if (!skill || (skill.fusionskill && !ally)) {
 		char.guard = 0.45;
 
 		let mpget = Math.max(1, Math.round((char.maxmp/100*5)-5+randNum(1,10)));
