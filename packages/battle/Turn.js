@@ -2208,6 +2208,10 @@ doAction = (char, btl, action) => {
 	delete btl.canteamcombo;
 	if (char.fusionskill) delete char.fusionskill;
 
+	// Let's see here...
+	console.log(action);
+
+	// Okay, let's run this code.
 	if (!action) {
 		char.guard = 0.45;
 
