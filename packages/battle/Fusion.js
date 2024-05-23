@@ -1,7 +1,7 @@
 let immobilized = ['freeze', 'blind', 'infatuation'];
 
 targFusionSkill = (skill1, skill2, btl) => {
-    let fusionFile = setUpFile(`${dataPath}/json/fusionskills.json`, true);
+    let fusionFile = setUpFile(`${dataPath}/json/fusionskills.json`);
 
     let h = 0;
     let skill = [];
@@ -73,7 +73,7 @@ targFusionSkill = (skill1, skill2, btl) => {
 }
 
 canFusionSkill = (char, btl, skill, ignore) => {
-    let fusionFile = setUpFile(`${dataPath}/json/fusionskills.json`, true);
+    let fusionFile = setUpFile(`${dataPath}/json/fusionskills.json`);
     let settings = setUpSettings(btl.guild.id);
 
     if (btl.action.move != 'skills' && btl.action.move != 'skill' && !ignore) return false;
@@ -104,7 +104,7 @@ canFusionSkill = (char, btl, skill, ignore) => {
 }
 
 fusionSkills = (char, party, userskill, skill, btl) => {
-    let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
+    let skillFile = setUpFile(`${dataPath}/json/skills.json`);
     let settings = setUpSettings(btl.guild.id);
 
     if (!settings.mechanics.fusionskills) return {};

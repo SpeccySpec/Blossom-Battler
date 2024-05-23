@@ -237,6 +237,8 @@ const menuStates = {
 					let data2 = [];
 					let skillname;
 					let skillinfo;
+
+					let skillnames = [];
 					for (let i in data[btl.action.ally]) {
 						skillname = data[btl.action.ally][i]
 
@@ -246,7 +248,17 @@ const menuStates = {
 							for (let k in data2) {
 								skillname = data2[k];
 								skillinfo = skillFile[skillname];
+
 								if (!skillinfo) continue;
+
+								// Just incase, to avoid dupes.
+								if (skillnames.includes(skillname)) {
+									console.log(`Duped occurance. (${skillname})`);
+									continue; // just in case.
+								} else {
+									console.log(`First occurance. (${skillname})`);
+									skillnames.push(skillname);
+								}
 	
 								let compins = CalcCompins(comps, c)
 								let btncolor = 'blue'
