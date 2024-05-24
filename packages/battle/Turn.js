@@ -2291,7 +2291,7 @@ doAction = (char, btl, action) => {
 						if (skillFile[action.skills[i]]) fusionSkill.pow += (skillFile[action.skills[i]].pow ?? (100*skillTier(skillFile[action.skills[i]])));
 					}
 
-					if (char.trust && char.trust[char3.truename] && char.trust[char3.truename].level) fusionSkill.pow *= Math.min(1.5, 1 + (char.trust[char3.truename].level/30));
+//					if (char.trust && char.trust[char3.truename] && char.trust[char3.truename].level) fusionSkill.pow *= Math.min(1.5, 1 + (char.trust[char3.truename].level/30));
 				}
 
 				// Use the skill.
