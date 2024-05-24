@@ -969,7 +969,7 @@ commands.exportfile = new Command({
 	checkban: true,
 	func: async(message, args) => {
 		// Firstly, make sure if this file should be legal.
-		let files = ["weapons.json", "armors.json", "characters.json", "chests.json", "enemies.json", "items.json", "shops.json", "skills.json"];
+		let files = ["weapons.json", "armors.json", "characters.json", "chests.json", "enemies.json", "items.json", "shops.json", "skills.json", "trials.json"];
 		if (!files.includes(args[0].toLowerCase())) return void message.channel.send("That file either does not exist or is illegal.");
 
 		// Upload content.
@@ -1006,7 +1006,7 @@ commands.importfile = new Command({
 		if (!utilityFuncs.RPGBotAdmin(message.author.id)) return void message.channel.send("Only a super admin can use this.");
 
 		// Firstly, make sure if this file should be legal.
-		let files = ["weapons.json", "armors.json", "characters.json", "chests.json", "enemies.json", "items.json", "shops.json", "skills.json"];
+		let files = ["weapons.json", "armors.json", "characters.json", "chests.json", "enemies.json", "items.json", "shops.json", "skills.json", "trials.json"];
 		if (!files.includes(args[0].toLowerCase())) return void message.channel.send("That file either does not exist or is illegal.");
 
 		// get the file's URL
