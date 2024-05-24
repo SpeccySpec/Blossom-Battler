@@ -479,7 +479,7 @@ for (const i in folders) {
 collectors = {}
 makeCollector = (channel, vars) => {
 	if (collectors[channel.id]) collectors[channel.id].stop();
-	collectors[channel.id] = channel.createMessageComponentCollector(vars);
+	collectors[channel.id] = channel.createMessageComponentCollector(vars, 15000);
 	return collectors[channel.id]
 }
 
