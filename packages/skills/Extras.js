@@ -1309,7 +1309,7 @@ extrasList = {
 				});
 
 				if (vars[2]) {
-					let txt = vars[2];
+					let txt = vars[2].toString();
 					while (txt.includes('%SKILL%')) txt = txt.replace('%SKILL%', skill.name);
 					while (txt.includes('%USER%')) txt = txt.replace('%USER%', char.name);
 					while (txt.includes('%ENEMY%')) txt = txt.replace('%ENEMY%', targ.name);
