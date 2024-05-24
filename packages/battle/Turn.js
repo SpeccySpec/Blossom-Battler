@@ -238,7 +238,7 @@ const menuStates = {
 					let skillname;
 					let skillinfo;
 
-					let skillnames = [];
+					let skillnamesdata = [];
 					for (let i in data[btl.action.ally]) {
 						skillname = data[btl.action.ally][i]
 
@@ -252,12 +252,12 @@ const menuStates = {
 								if (!skillinfo) continue;
 
 								// Just incase, to avoid dupes.
-								if (skillnames.includes(skillname)) {
+								if (skillnamesdata.includes(skillname)) {
 									console.log(`Duped occurance. (${skillname})`);
 									continue; // just in case.
 								} else {
 									console.log(`First occurance. (${skillname})`);
-									skillnames.push(skillname);
+									skillnamesdata.push(skillname);
 								}
 	
 								let compins = CalcCompins(comps, c)
@@ -305,9 +305,20 @@ const menuStates = {
 								comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
 								c++;
 							}
+
+							console.log(comps);
 						} else {
 							skillinfo = skillFile[skillname]
 							if (!skillinfo) continue;
+
+							// Just incase, to avoid dupes.
+							if (skillnamesdata.includes(skillname)) {
+								console.log(`Duped occurance. (${skillname})`);
+								continue; // just in case.
+							} else {
+								console.log(`First occurance. (${skillname})`);
+								skillnamesdata.push(skillname);
+							}
 
 							let compins = CalcCompins(comps, c)
 							let btncolor = 'blue'
@@ -1351,7 +1362,7 @@ sendCurTurnEmbed = (char, btl) => {
 				if (menustate == MENU_SKILL && skillFile[i.customId] && (btl.action.move === 'bb-fusionskill' || char.skills.includes(i.customId))) {
 					let skill = skillFile[i.customId];
 
-					if (btl.action.move === 'bb-fusionskill') {
+					if (btl.action.move === 'bb-fusionskill' && !btl.action.fusionskill) {
 						btl.action.skills = [btl.action.index, i.customId];
 						btl.action.fusionskill = targFusionSkill(btl.action.index, i.customId, btl);
 						skill = skillFile[btl.action.fusionskill];
@@ -1905,7 +1916,17 @@ sendCurTurnEmbed = (char, btl) => {
 
 						case 'bb-fusionskill':
 						case 'bb-fusionspell':
-							if (btl.teams[char.team].members[i.customId]) {
+							if (btl.action.fusionskill) {
+								doAction(char, btl, btl.action);
+								alreadyResponded = true;
+								collector.stop();
+
+								await i.update({
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: []
+								});
+							} else if (btl.teams[char.team].members[i.customId]) {
 								btl.action.ally = parseInt(i.customId);
 								menustate = MENU_SKILL;
 							}
@@ -1913,7 +1934,6 @@ sendCurTurnEmbed = (char, btl) => {
 
 						default:
 							if (i.customId == 'bb-fusionskill') {
-								console.log("hi");
 								btl.action.move = 'bb-fusionskill';
 								menustate = MENU_TARGET;
 							} else {
@@ -2249,7 +2269,6 @@ doAction = (char, btl, action) => {
 					useSkill(char, btl, action);
 					char.lastskill = action.index;
 				}
-
 
 				break;
 
