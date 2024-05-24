@@ -305,8 +305,6 @@ const menuStates = {
 								comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
 								c++;
 							}
-
-							console.log(comps);
 						} else {
 							skillinfo = skillFile[skillname]
 							if (!skillinfo) continue;
@@ -689,7 +687,6 @@ const menuStates = {
 				} else {
 					members = btl.teams[char.team].members;
 					let data = canFusionSkill(char, btl, skillFile[btl.action.index], true);
-					console.log(data);
 
 					let l = 0;
 					for (let i in data) {
@@ -1366,7 +1363,6 @@ sendCurTurnEmbed = (char, btl) => {
 						btl.action.skills = [btl.action.index, i.customId];
 						btl.action.fusionskill = targFusionSkill(btl.action.index, i.customId, btl);
 						skill = skillFile[btl.action.fusionskill];
-						console.log(btl.action.index, i.customId, btl.action.fusionskill);
 
 						if (skill.statusses && hasStatus(skill, 'mimic')) {
 							menustate = MENU_ANYSEL;
@@ -1654,7 +1650,6 @@ sendCurTurnEmbed = (char, btl) => {
 								}
 							}
 
-							console.log(btl.action.move);
 							if (alivecount == 1 && !canFusionSkill(char, btl, skill)) {
 								btl.action.target = alivenum;
 								alreadyResponded = true;
@@ -1969,7 +1964,6 @@ sendCurTurnEmbed = (char, btl) => {
 					btl.action.index = parseInt(i.customId);
 					alreadyResponded = true;
 
-					console.log(btl.action);
 					let targ = btl.teams[btl.action.target[0]].members[btl.action.target[1]];
 					let negotiation = targ.negotiate[btl.action.index];
 
@@ -2239,9 +2233,6 @@ doAction = (char, btl, action) => {
 
 	delete btl.canteamcombo;
 	if (char.fusionskill) delete char.fusionskill;
-
-	// Let's see here...
-	console.log(action);
 
 	// Okay, let's run this code.
 	if (!action) {
