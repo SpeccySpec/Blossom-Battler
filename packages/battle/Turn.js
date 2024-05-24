@@ -336,7 +336,7 @@ const menuStates = {
 							if (!canAfford(char2, skillinfo, btl)) {
 								canselect = false;
 							} else if (char2.status) {
-								switch(char.status.toLowerCase()) {
+								switch(char2.status.toLowerCase()) {
 									case 'ego':
 										if (skillinfo?.type === 'heal') canselect = false;
 										break;
