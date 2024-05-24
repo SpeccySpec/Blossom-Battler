@@ -2519,7 +2519,7 @@ passiveList = {
 
 function dpDamage(char, decimal) {
 	let amount = Math.floor(decimal * char.maxmp)
-	char.mp += amount
+	char.mp = Math.min(char.maxmp, char.mp+amount);
 	return `__${char.name}__'s ${char.mpMeter ? char.mpMeter[1] : "MP"} was restored by **${amount}**!`
 }
 
