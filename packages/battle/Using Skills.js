@@ -31,7 +31,7 @@ addAtkMsg = (btl, str) => {
 // Is this a tech
 isTech = (char, element) => {
 	if (!char.status) return false;
-	if (char.status === 'sleep' || char.status === 'blind') return true;
+	if (char.status === 'sleep') return true;
 
 	if (elementTechs[char.status]) {
 		if (typeof element == 'string') {
