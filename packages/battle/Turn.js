@@ -2285,7 +2285,7 @@ doAction = (char, btl, action) => {
 				// Buffed up character. Average of both stats*1.5.
 				let char3 = btl.teams[char.team].members[action.ally];
 				let charf = objClone(char);
-				for (let i in charf.stats) charf.stats[i] = ((char.stats[i]+char3.stats[i])/2)*1.5;
+				for (let i in charf.stats) charf.stats[i] = (char.stats[i]+char3.stats[i])/2;
 
 				// Set up the fusion skill.
 				let fusionSkill = objClone(skillFile[action.fusionskill]);
@@ -2294,10 +2294,14 @@ doAction = (char, btl, action) => {
 				if (fusionSkill.generic) {
 					fusionSkill.pow = 0;
 
+					let skilldata;
 					for (let i in action.skills) {
-						if (skillFile[action.skills[i]]) fusionSkill.pow += (skillFile[action.skills[i]].pow ?? (100*skillTier(skillFile[action.skills[i]])));
+						if (skillFile[action.skills[i]]) {
+							skilldata = skillFile[action.skills[i]];
+							fusionSkill.pow += (skilldata.pow ? parseInt(skilldata.pow*(skilldata.hits ?? 1)) : (100*skillTier(skilldata)));
+						}
 					}
-//
+
 //					if (char.trust && char.trust[char3.truename] && char.trust[char3.truename].level) fusionSkill.pow *= Math.min(1.5, 1 + (char.trust[char3.truename].level/30));
 				}
 
