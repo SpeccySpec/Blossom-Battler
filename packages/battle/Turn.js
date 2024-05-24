@@ -867,8 +867,8 @@ function GetCharName(char, btl) {
 
 let updateMsg = async(i, data) => {
 	i.update(data)
-		.then(console.log)
-		.catch(console.error);
+//		.then(console.log)
+//		.catch(console.error);
 
 	return i;
 }
