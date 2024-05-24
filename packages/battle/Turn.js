@@ -368,6 +368,8 @@ const menuStates = {
 				break;
 
 			default:
+				delete btl.action.fusionskill;
+
 				for (const i in char.skills) {
 					const skillname = char.skills[i]
 					const skillinfo = skillFile[skillname]
@@ -699,6 +701,8 @@ const menuStates = {
 				break;
 
 			default:
+				if (btl.action.fusionskill) delete btl.action.fusionskill;
+
 				let skill = skillFile[btl.action.index];
 				let canSelect = true;
 				let j = 0;
@@ -867,8 +871,11 @@ function GetCharName(char, btl) {
 
 let updateMsg = async(i, data) => {
 	i.update(data)
-//		.then(console.log)
-//		.catch(console.error);
+		.then(console.log)
+		.catch(() => {
+			i.message.edit(data);
+			console.log(console.error);
+		});
 
 	return i;
 }
@@ -1144,7 +1151,7 @@ sendCurTurnEmbed = async(char, btl) => {
 						doAction(char, btl, btl.action);
 						collector.stop();
 
-						return i.update({
+						return updateMsg(i, {
 							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
 							components: []
@@ -1160,7 +1167,7 @@ sendCurTurnEmbed = async(char, btl) => {
 						doAction(char, btl, btl.action);
 						collector.stop();
 
-						return i.update({
+						return updateMsg(i, {
 							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
 							components: []
@@ -1223,7 +1230,7 @@ sendCurTurnEmbed = async(char, btl) => {
 				doAction(char, btl, btl.action);
 				collector.stop();
 
-				return i.update({
+				return updateMsg(i, {
 					content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 					embeds: [DiscordEmbed],
 					components: []
@@ -1254,7 +1261,7 @@ sendCurTurnEmbed = async(char, btl) => {
 				}
 
 				alreadyResponded = true;
-				return i.update({
+				return updateMsg(i, {
 					content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 					embeds: [DiscordEmbed],
 					components: setUpComponents(char, btl, menustate)
@@ -1350,7 +1357,7 @@ sendCurTurnEmbed = async(char, btl) => {
 					doAction(char, btl, btl.action);
 					collector.stop();
 
-					return i.update({
+					return updateMsg(i, {
 						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 						embeds: [DiscordEmbed],
 						components: []
@@ -1395,7 +1402,7 @@ sendCurTurnEmbed = async(char, btl) => {
 								doAction(char, btl, btl.action);
 
 								collector.stop();
-								return i.update({
+								return updateMsg(i, {
 									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: []
@@ -1411,7 +1418,7 @@ sendCurTurnEmbed = async(char, btl) => {
 								doAction(char, btl, btl.action);
 								collector.stop();
 
-								return i.update({
+								return updateMsg(i, {
 									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: []
@@ -1442,7 +1449,7 @@ sendCurTurnEmbed = async(char, btl) => {
 							});
 						}
 					} else {
-						delete btl.action.fusionskill;
+						if (btl.action.fusionskill) delete btl.action.fusionskill;
 
 						btl.action.index = i.customId;
 
@@ -1458,7 +1465,7 @@ sendCurTurnEmbed = async(char, btl) => {
 											DiscordEmbed.title = txt;
 											alreadyResponded = true;
 
-											return i.update({
+											return updateMsg(i, {
 												content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 												embeds: [DiscordEmbed],
 												components: []
@@ -1471,7 +1478,7 @@ sendCurTurnEmbed = async(char, btl) => {
 										DiscordEmbed.title = txt;
 										alreadyResponded = true;
 
-										return i.update({
+										return updateMsg(i, {
 											content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 											embeds: [DiscordEmbed],
 											components: setUpComponents(char, btl, menustate)
@@ -1491,7 +1498,7 @@ sendCurTurnEmbed = async(char, btl) => {
 											DiscordEmbed.title = txt;
 											alreadyResponded = true;
 
-											return i.update({
+											return updateMsg(i, {
 												content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 												embeds: [DiscordEmbed],
 											});
@@ -1503,7 +1510,7 @@ sendCurTurnEmbed = async(char, btl) => {
 										DiscordEmbed.title = txt;
 										alreadyResponded = true;
 
-										return i.update({
+										return updateMsg(i, {
 											content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 											embeds: [DiscordEmbed],
 											components: setUpComponents(char, btl, menustate)
@@ -1531,7 +1538,7 @@ sendCurTurnEmbed = async(char, btl) => {
 													DiscordEmbed.title = txt;
 													alreadyResponded = true;
 
-													return i.update({
+													return updateMsg(i, {
 														content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 														embeds: [DiscordEmbed],
 													});
@@ -1544,7 +1551,7 @@ sendCurTurnEmbed = async(char, btl) => {
 												DiscordEmbed.title = txt;
 												alreadyResponded = true;
 
-												return i.update({
+												return updateMsg(i, {
 													content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 													embeds: [DiscordEmbed],
 													components: setUpComponents(char, btl, menustate)
@@ -1560,7 +1567,7 @@ sendCurTurnEmbed = async(char, btl) => {
 							DiscordEmbed.title = "The cursed energy dissapears as soon as it appears...";
 							alreadyResponded = true;
 
-							return i.update({
+							return updateMsg(i, {
 								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 								embeds: [DiscordEmbed],
 								components: setUpComponents(char, btl, menustate)
@@ -1569,7 +1576,7 @@ sendCurTurnEmbed = async(char, btl) => {
 							DiscordEmbed.title = "The blessed energy dissapears as soon as it appears...";
 							alreadyResponded = true;
 
-							return i.update({
+							return updateMsg(i, {
 								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 								embeds: [DiscordEmbed],
 								components: setUpComponents(char, btl, menustate)
@@ -1603,7 +1610,7 @@ sendCurTurnEmbed = async(char, btl) => {
 											DiscordEmbed.title = txt;
 											alreadyResponded = true;
 
-											return i.update({
+											return updateMsg(i, {
 												content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 												embeds: [DiscordEmbed],
 												components: []
@@ -1616,7 +1623,7 @@ sendCurTurnEmbed = async(char, btl) => {
 										DiscordEmbed.title = txt;
 										alreadyResponded = true;
 
-										return i.update({
+										return updateMsg(i, {
 											content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 											embeds: [DiscordEmbed],
 											components: setUpComponents(char, btl, menustate)
@@ -1664,7 +1671,7 @@ sendCurTurnEmbed = async(char, btl) => {
 								doAction(char, btl, btl.action);
 
 								collector.stop();
-								return i.update({
+								return updateMsg(i, {
 									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: []
@@ -1680,7 +1687,7 @@ sendCurTurnEmbed = async(char, btl) => {
 								doAction(char, btl, btl.action);
 								collector.stop();
 
-								return i.update({
+								return updateMsg(i, {
 									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: []
@@ -1725,7 +1732,7 @@ sendCurTurnEmbed = async(char, btl) => {
 					if (!itemdta) {
 						DiscordEmbed.title = "Something went wrong... Please try something else!";
 
-						return i.update({
+						return updateMsg(i, {
 							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
 							components: []
