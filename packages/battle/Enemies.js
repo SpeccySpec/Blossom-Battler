@@ -908,35 +908,85 @@ enemyThinker = (char, btl) => {
 
 				let checkForTarget = (btl.teams[i].members.filter(x => x?.target).length != 0);
 				for (let targ of btl.teams[i].members) {
-					// Select random skill.
-					let skill = char.skills[randNum(char.skills.length-1)];
-
 					if (targ.hp <= 0) continue;
 
-					// Can we actually use this skill?
-					let loops = 0;
-					while (!canUseSkill(char, skillFile[skill], skill, btl) && willNotDieFromSkill(char, skillFile[skill]) && loops < 10) {
-						skill = char.skills[randNum(char.skills.length-1)];
-						loops++;
-					}
+					// Low chance for a fusion spell instead.
+					if (randNum(1, 10) == 6) {
+						let ally;
+						let fusionSkills = [];
+						for (let i in btl.teams[char.team].members) {
+							ally = btl.teams[char.team].members[i];
 
-					if (skillFile[skill] && skillFile[skill].target === "one" && targ.lovable) continue;
-					if (skillFile[skill] && skillFile[skill].target === "one" && checkForTarget && !targ.target) continue;
+							for (let skill1 of char.skills) {
+								for (let skill2 of ally.skills) {
+									if (targFusionSkill(skill1, skill2, btl)) fusionSkills.push([targFusionSkill(skill1, skill2, btl), i, skill1, skill2]);
+								}
+							}
+						}
 
-					// Melee as failsafe
-					if (loops >= 10) {
-						ai.push({
-							move: 'melee',
-							target: [i, targ.pos],
-							points: randNum(1, 20000)
-						})
+						// Select random skill.
+						let skilldata = fusionSkills[randNum(fusionSkills.length-1)];
+
+						// Can we actually use this skill?
+						let loops = 0;
+						while (!canUseSkill(char, skillFile[skilldata[0]], skilldata[0], btl) && willNotDieFromSkill(char, skillFile[skilldata[0]]) && loops < 10) {
+							skilldata = fusionSkills[randNum(fusionSkills.length-1)];
+							loops++;
+						}
+
+						let allyid = skilldata[1];
+						ally = btl.teams[char.team].members[allyid];
+
+						if (skillFile[skilldata[0]] && skillFile[skilldata[0]].target === "one" && targ.lovable) continue;
+						if (skillFile[skilldata[0]] && skillFile[skilldata[0]].target === "one" && checkForTarget && !targ.target) continue;
+
+						// Melee as failsafe
+						if (loops >= 10) {
+							ai.push({
+								move: 'melee',
+								target: [i, targ.pos],
+								points: randNum(1, 20000)
+							})
+						} else {
+							ai.push({
+								move: 'bb-fusionskill',
+								index: skilldata[0],
+								skills: [skilldata[2], skilldata[3]],
+								fusionskill: skilldata[0],
+								target: [i, targ.pos],
+								ally: allyid,
+								points: randNum(1, 20000)
+							})
+						}
 					} else {
-						ai.push({
-							move: 'skills',
-							index: skill,
-							target: [i, targ.pos],
-							points: randNum(1, 20000)
-						})
+						// Select random skill.
+						let skill = char.skills[randNum(char.skills.length-1)];
+
+						// Can we actually use this skill?
+						let loops = 0;
+						while (!canUseSkill(char, skillFile[skill], skill, btl) && willNotDieFromSkill(char, skillFile[skill]) && loops < 10) {
+							skill = char.skills[randNum(char.skills.length-1)];
+							loops++;
+						}
+
+						if (skillFile[skill] && skillFile[skill].target === "one" && targ.lovable) continue;
+						if (skillFile[skill] && skillFile[skill].target === "one" && checkForTarget && !targ.target) continue;
+
+						// Melee as failsafe
+						if (loops >= 10) {
+							ai.push({
+								move: 'melee',
+								target: [i, targ.pos],
+								points: randNum(1, 20000)
+							})
+						} else {
+							ai.push({
+								move: 'skills',
+								index: skill,
+								target: [i, targ.pos],
+								points: randNum(1, 20000)
+							})
+						}
 					}
 				}
 			}
