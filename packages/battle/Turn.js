@@ -865,6 +865,14 @@ function GetCharName(char, btl) {
 	return str;
 }
 
+let updateMsg = async(i, data) => {
+	i.update(data)
+		.then(console.log)
+		.catch(console.error);
+
+	return i;
+}
+
 sendStateEmbed = (char, btl) => {
 	let settings = setUpSettings(btl.guild.id);
 
@@ -906,7 +914,7 @@ sendStateEmbed = (char, btl) => {
 			collector.stop();
 			alreadyResponded = true;
 
-			await i.update({
+			await updateMsg(i, {
 				content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 				embeds: [DiscordEmbed],
 				components: setUpComponents(char, btl, menustate, [MENU_QUESTION].includes(menustate))
@@ -927,7 +935,7 @@ sendStateEmbed = (char, btl) => {
 		if (alreadyResponded) {
 			collector.stop();
 
-			await i.update({
+			await updateMsg(i, {
 				content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 				embeds: [DiscordEmbed],
 				components: []
@@ -935,7 +943,7 @@ sendStateEmbed = (char, btl) => {
 			return;
 		}
 
-		await i.update({
+		await updateMsg(i, {
 			content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 			embeds: [DiscordEmbed],
 			components: setUpComponents(char, btl, menustate, [MENU_QUESTION].includes(menustate))
@@ -955,7 +963,7 @@ sendStateEmbed = (char, btl) => {
 	});
 }
 
-sendCurTurnEmbed = (char, btl) => {
+sendCurTurnEmbed = async(char, btl) => {
 	if (btl.intendedstate) return sendStateEmbed(char, btl);
 
 	let settings = setUpSettings(btl.guild.id);
@@ -1090,7 +1098,7 @@ sendCurTurnEmbed = (char, btl) => {
 			collector.stop();
 			alreadyResponded = true;
 
-			await i.update({
+			await updateMsg(i, {
 				content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 				embeds: [DiscordEmbed],
 				components: setUpComponents(char, testbtl, menustate)
@@ -1165,7 +1173,7 @@ sendCurTurnEmbed = (char, btl) => {
 					doAction(char, btl, btl.action);
 					collector.stop();
 
-					await i.update({
+					await updateMsg(i, {
 						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 						embeds: [DiscordEmbed],
 						components: []
@@ -1176,7 +1184,7 @@ sendCurTurnEmbed = (char, btl) => {
 					collector.stop();
 					alreadyResponded = true;
 
-					await i.update({
+					await updateMsg(i, {
 						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 						embeds: [DiscordEmbed],
 						components: []
@@ -1276,7 +1284,7 @@ sendCurTurnEmbed = (char, btl) => {
 					DiscordEmbed.title = "Only the leader can change party members!";
 					alreadyResponded = true;
 
-					await i.update({
+					await updateMsg(i, {
 						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 						embeds: [DiscordEmbed],
 						components: setUpComponents(char, btl, menustate)
@@ -1306,7 +1314,7 @@ sendCurTurnEmbed = (char, btl) => {
 							doAction(char, btl, btl.action);
 							collector.stop();
 
-							await i.update({
+							await updateMsg(i, {
 								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 								embeds: [DiscordEmbed],
 								components: []
@@ -1416,7 +1424,7 @@ sendCurTurnEmbed = (char, btl) => {
 							doAction(char, btl, btl.action);
 							collector.stop();
 
-							await i.update({
+							await updateMsg(i, {
 								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 								embeds: [DiscordEmbed],
 								components: []
@@ -1427,7 +1435,7 @@ sendCurTurnEmbed = (char, btl) => {
 							collector.stop();
 							alreadyResponded = true;
 
-							await i.update({
+							await updateMsg(i, {
 								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 								embeds: [DiscordEmbed],
 								components: []
@@ -1575,7 +1583,7 @@ sendCurTurnEmbed = (char, btl) => {
 								DiscordEmbed.title = canUse[0];
 								alreadyResponded = true;
 
-								await i.update({
+								await updateMsg(i, {
 									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
@@ -1624,7 +1632,7 @@ sendCurTurnEmbed = (char, btl) => {
 									DiscordEmbed.title = canUse[0];
 									alreadyResponded = true;
 
-									await i.update({
+									await updateMsg(i, {
 										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 										embeds: [DiscordEmbed],
 										components: setUpComponents(char, btl, menustate)
@@ -1686,7 +1694,7 @@ sendCurTurnEmbed = (char, btl) => {
 								doAction(char, btl, btl.action);
 								collector.stop();
 
-								await i.update({
+								await updateMsg(i, {
 									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: []
@@ -1700,7 +1708,7 @@ sendCurTurnEmbed = (char, btl) => {
 								collector.stop();
 								alreadyResponded = true;
 
-								await i.update({
+								await updateMsg(i, {
 									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: []
@@ -1735,7 +1743,7 @@ sendCurTurnEmbed = (char, btl) => {
 						doAction(char, btl, btl.action);
 						collector.stop();
 
-						await i.update({
+						await updateMsg(i, {
 							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
 							components: []
@@ -1746,7 +1754,7 @@ sendCurTurnEmbed = (char, btl) => {
 						doAction(char, btl, btl.action);
 						collector.stop();
 
-						await i.update({
+						await updateMsg(i, {
 							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
 							components: []
@@ -1785,7 +1793,7 @@ sendCurTurnEmbed = (char, btl) => {
 									DiscordEmbed.title = `${targ.name} seems adamant on attacking and will not listen to reason.`;
 									alreadyResponded = true;
 
-									await i.update({
+									await updateMsg(i, {
 										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 										embeds: [DiscordEmbed],
 										components: setUpComponents(char, btl, menustate)
@@ -1803,7 +1811,7 @@ sendCurTurnEmbed = (char, btl) => {
 									menustate = MENU_PACIFY;
 									alreadyResponded = true;
 
-									await i.update({
+									await updateMsg(i, {
 										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 										embeds: [DiscordEmbed],
 										components: setUpComponents(char, btl, menustate)
@@ -1831,7 +1839,7 @@ sendCurTurnEmbed = (char, btl) => {
 								menustate = MENU_BACKUP;
 								alreadyResponded = true;
 
-								await i.update({
+								await updateMsg(i, {
 									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
@@ -1848,7 +1856,7 @@ sendCurTurnEmbed = (char, btl) => {
 									DiscordEmbed.title = `${targ.name} isn't an enemy!`;
 									alreadyResponded = true;
 
-									await i.update({
+									await updateMsg(i, {
 										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 										embeds: [DiscordEmbed],
 										components: setUpComponents(char, btl, menustate)
@@ -1857,7 +1865,7 @@ sendCurTurnEmbed = (char, btl) => {
 									DiscordEmbed.title = `We've yet to learn about ${targ.name}.`;
 									alreadyResponded = true;
 
-									await i.update({
+									await updateMsg(i, {
 										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 										embeds: [DiscordEmbed],
 										components: setUpComponents(char, btl, menustate)
@@ -1867,7 +1875,7 @@ sendCurTurnEmbed = (char, btl) => {
 									alreadyResponded = true;
 									menustate = MENU_ENEMYINFO;
 
-									await i.update({
+									await updateMsg(i, {
 										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 										embeds: [longDescription(enemyFile[targ.truename], enemyFile[targ.truename].level, btl.guild.id, i)],
 										components: setUpComponents(char, btl, menustate)
@@ -1889,7 +1897,7 @@ sendCurTurnEmbed = (char, btl) => {
 									btl.action.target[0] = op;
 								}
 
-								await i.update({
+								await updateMsg(i, {
 									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: setUpComponents(char, btl, menustate)
@@ -1901,7 +1909,7 @@ sendCurTurnEmbed = (char, btl) => {
 								doAction(char, btl, btl.action);
 								collector.stop();
 
-								await i.update({
+								await updateMsg(i, {
 									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: []
@@ -1916,7 +1924,7 @@ sendCurTurnEmbed = (char, btl) => {
 								alreadyResponded = true;
 								collector.stop();
 
-								await i.update({
+								await updateMsg(i, {
 									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: []
@@ -1936,7 +1944,7 @@ sendCurTurnEmbed = (char, btl) => {
 								alreadyResponded = true;
 								collector.stop();
 
-								await i.update({
+								await updateMsg(i, {
 									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 									embeds: [DiscordEmbed],
 									components: []
@@ -1954,7 +1962,7 @@ sendCurTurnEmbed = (char, btl) => {
 						doAction(char, btl, btl.action);
 						collector.stop();
 
-						await i.update({
+						await updateMsg(i, {
 							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
 							components: []
@@ -2130,7 +2138,7 @@ sendCurTurnEmbed = (char, btl) => {
 
 					alreadyResponded = true;
 					collector.stop();
-					await i.update({
+					await updateMsg(i, {
 						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 						embeds: [DiscordEmbed],
 						components: []
@@ -2141,7 +2149,7 @@ sendCurTurnEmbed = (char, btl) => {
 					doAction(char, btl, btl.action);
 					collector.stop();
 
-					await i.update({
+					await updateMsg(i, {
 						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 						embeds: [DiscordEmbed],
 						components: []
@@ -2153,7 +2161,7 @@ sendCurTurnEmbed = (char, btl) => {
 						doAction(char, btl, btl.action);
 						collector.stop();
 
-						await i.update({
+						await updateMsg(i, {
 							content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 							embeds: [DiscordEmbed],
 							components: []
@@ -2171,7 +2179,7 @@ sendCurTurnEmbed = (char, btl) => {
 					doAction(char, btl, btl.action);
 					collector.stop();
 
-					await i.update({
+					await updateMsg(i, {
 						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 						embeds: [DiscordEmbed],
 						components: []
@@ -2188,7 +2196,7 @@ sendCurTurnEmbed = (char, btl) => {
 					doAction(char, btl, btl.action);
 					collector.stop();
 
-					await i.update({
+					await updateMsg(i, {
 						content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 						embeds: [DiscordEmbed],
 						components: []
@@ -2215,7 +2223,7 @@ sendCurTurnEmbed = (char, btl) => {
 
 		if (alreadyResponded) return;
 
-		await i.update({
+		await updateMsg(i, {
 			content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
 			embeds: [DiscordEmbed],
 			components: setUpComponents(char, btl, menustate)
