@@ -527,7 +527,6 @@ commands.listchars = new Command({
 							isConditionMet = (charFile[i].owner == args[a])
 							break;
 						case 'level':
-							args[a] = args[a].toLowerCase();
 							args[a] = parseInt(args[a]);
 							isConditionMet = (charFile[i].level == args[a])
 							break;
