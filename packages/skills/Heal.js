@@ -38,7 +38,7 @@ healList = {
 				return `__${targ.name}__ cannot be healed while they are in a pinch!`
 			if (!vars[0] || vars[0] == null || vars[0] == 0) return '';
 
-//			vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
+			vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
 //			vars[0] = Math.round(vars[0] * multiplier);
 
 			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
@@ -744,7 +744,7 @@ modSkillResult = (char, targ, result, skill, btl) => {
 					if (passiveList[i].multiple) {
 						for (let k in psv.passive[i]) result = passiveList[i].dmgmod(char, targ, result, skill, btl, psv.passive[i][k]) ?? result;
 					} else
-					result = passiveList[i].dmgmod(char, targ, result, skill, btl, psv.passive[i][k]) ?? result;
+						result = passiveList[i].dmgmod(char, targ, result, skill, btl, psv.passive[i]) ?? result;
 				}
 			}
 		}
