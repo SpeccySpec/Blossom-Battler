@@ -2786,7 +2786,7 @@ commands.getquotes = new Command({
 
 		if (args[1]) {
 			if (!utilityFuncs.inArray(args[1].toLowerCase(), quoteTypes)) {
-				if (thingDefs[args[0]].quotes[`${args[1]}quote`] && skillFile[args[1]]) {
+				if (thingDefs[args[0]].quotes && thingDefs[args[0]].quotes[`${args[1]}quote`] && skillFile[args[1]]) {
 					let array = [];
 					for (let i in thingDefs[args[0]].quotes[`${args[1]}quote`])
 						array.push({title: `**[${i}]**`, desc: `_"${thingDefs[args[0]].quotes[`${args[1]}quote`][i]}"_`});
@@ -2801,7 +2801,7 @@ commands.getquotes = new Command({
 				}
 			}
 
-			if (!thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`] || !thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`][0]) return message.channel.send('This Quote Type has no quotes!');
+			if (!thingDefs[args[0]].quotes || !thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`] || !thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`][0]) return message.channel.send('This Quote Type has no quotes!');
 
 			let array = [];
 			for (let i in thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`])
@@ -2812,7 +2812,7 @@ commands.getquotes = new Command({
 			let array = [];
 			for (let quote of quoteTypes) {
 				let quoteTxt = '';
-				if (!thingDefs[args[0]].quotes[`${quote}quote`])
+				if (!thingDefs[args[0]].quotes || !thingDefs[args[0]].quotes[`${quote}quote`])
 					quoteTxt = 'No quotes for this section!';
 				else
 					quoteTxt = selectQuote(thingDefs[args[0]], quote, true);
