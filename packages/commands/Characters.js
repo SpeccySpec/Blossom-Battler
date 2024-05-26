@@ -2820,11 +2820,13 @@ commands.getquotes = new Command({
 				array.push({title: `${quote.charAt(0).toUpperCase()+quote.slice(1)}`, desc: quoteTxt});
 			}
 
-			for (let i in skillFile) {
-				let quoteTxt = '';
-				if (thingDefs[args[0]].quotes[`${i}quote`]) {
-					quoteTxt = selectQuote(thingDefs[args[0]], i, true);
-					array.push({title: `Using ${getFullName(skillFile[i])}`, desc: quoteTxt});
+			if (thingDefs[args[0]].quotes) {
+				for (let i in skillFile) {
+					let quoteTxt = '';
+					if (thingDefs[args[0]].quotes[`${i}quote`]) {
+						quoteTxt = selectQuote(thingDefs[args[0]], i, true);
+						array.push({title: `Using ${getFullName(skillFile[i])}`, desc: quoteTxt});
+					}
 				}
 			}
 
