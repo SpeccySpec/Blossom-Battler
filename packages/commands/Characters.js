@@ -2563,6 +2563,7 @@ selectQuote = (char, quote, neverEmpty, ...rep) => {
 
 	let emptyTxt = neverEmpty ? 'No quotes in this section!' : '';
 
+	if (!char.quotes) return emptyTxt;
 	if (!char.quotes[`${quote}quote`]) return emptyTxt;
 	if (char.quotes[`${quote}quote`].length < 1) return emptyTxt;
 
