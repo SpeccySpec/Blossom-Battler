@@ -2644,6 +2644,7 @@ commands.setquote = new Command({
 			}
 		}
 
+		if (!thingDefs[args[0]].quotes) thingDefs[args[0]].quotes = {};
 		if (!thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`]) thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`] = [];
 		if (args[3] && thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`][args[3]]) thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`][args[3]] = args[2];
 		else thingDefs[args[0]].quotes[`${args[1].toLowerCase()}quote`].push(args[2]);
