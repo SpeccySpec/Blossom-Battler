@@ -524,22 +524,10 @@ const menuStates = {
 			comps[CalcCompins(comps, i)].push(makeButton(`${members[i].name}`, `${i}️⃣`, 'blue', true, i.toString()))
 		}
 	},
-	[MENU_EQUIPMENT]: ({char, btl, comps}) => {
-		comps[0] = [];
-
-		if (!char.weapons || char.weapons == {}) {
-			comps[0].push(makeButton('Weapons', '<:bladed:1008794351591239842>', 'red', true, 'weapon', true))
-		} else {
-			comps[0].push(makeButton('Weapons', '<:bladed:1008794351591239842>', 'red', true, 'weapon'))
-		}
-
-		if (!char.armors || char.armors == {}) {
-			comps[0].push(makeButton('Armors', '<:light:1008794358637662338>', 'blue', true, 'armor', true))
-		} else {
-			comps[0].push(makeButton('Armors', '<:light:1008794358637662338>', 'blue', true, 'armor'))
-		}
+	[MENU_EQUIPMENT]: ({comps}) => {
+		comps[0] = [makeButton('Weapons', '<:bladed:1008794351591239842>', 'red', true, 'weapon'), makeButton('Armors', '<:light:1008794358637662338>', 'blue', true, 'armor')];
 	},
-	[MENU_WEAPONS]: ({char, comps}) => {
+	[MENU_WEAPONS]: ({char, btl, comps}) => {
 		let j = 0;
 		let classTxt = '';
 		for (let i in char.weapons) {
@@ -553,14 +541,33 @@ const menuStates = {
 			j++;
 		}
 
+		let party = btl.teams[char.team] ?? btl.teams[0];
+		for (let i in party.weapons) {
+			classTxt = classEmoji.weapon[party.weapons[i].class] ?? '<:bladed:1008794351591239842>';
+
+			if (!char.weaponclass || char.weaponclass == "none" || (typeof char.weaponclass == "object" && char.weaponclass.includes(party.weapons[i].class)) || char.weaponclass == party.weapons[i].class)
+				comps[CalcCompins(comps, j)].push(makeButton(party.weapons[i].name, classTxt, 'red', true, i));
+			else
+				comps[CalcCompins(comps, j)].push(makeButton(party.weapons[i].name, classTxt, 'red', true, i, true));
+
+			j++;
+		}
+
 		comps[CalcCompins(comps, j)].push(makeButton("Unequip", '<:atkdown:990629394236211230>', 'grey', true, 'unequip', !char.curweapon));
 	},
-	[MENU_ARMORS]: ({char, comps}) => {
+	[MENU_ARMORS]: ({char, btl, comps}) => {
 		let j = 0;
 		let classTxt = '';
 		for (let i in char.armors) {
 			classTxt = classEmoji.armor[char.armors[i].class] ?? '<:light:1008794358637662338>';
-			comps[CalcCompins(comps, i)].push(makeButton(`${char.armors[i].name}`, classTxt, 'red', true, i))
+			comps[CalcCompins(comps, j)].push(makeButton(`${char.armors[i].name}`, classTxt, 'red', true, i))
+			j++;
+		}
+
+		let party = btl.teams[char.team] ?? btl.teams[0];
+		for (let i in party.armors) {
+			classTxt = classEmoji.armor[party.armors[i].class] ?? '<:light:1008794358637662338>';
+			comps[CalcCompins(comps, j)].push(makeButton(`${party.armors[i].name}`, classTxt, 'red', true, i))
 			j++;
 		}
 
@@ -2175,7 +2182,7 @@ sendCurTurnEmbed = async(char, btl) => {
 						});
 					}
 				} else if (menustate == MENU_WEAPONS) {
-					if (char.weapons[i.customId]) {
+					if ((char.weapons && char.weapons[i.customId]) || (btl.teams[char.team].weapons && btl.teams[char.team].weapons[i.customId])) {
 						btl.action.index = i.customId;
 					} else {
 						btl.action.index = 'unequip';
@@ -2192,7 +2199,7 @@ sendCurTurnEmbed = async(char, btl) => {
 						components: []
 					});
 				} else if (menustate == MENU_ARMORS) {
-					if (char.armors[i.customId]) {
+					if ((char.armors && char.armors[i.customId]) || (btl.teams[char.team].armors && btl.teams[char.team].armors[i.customId])) {
 						btl.action.index = i.customId;
 					} else {
 						btl.action.index = 'unequip';
@@ -2364,17 +2371,23 @@ doAction = (char, btl, action) => {
 
 					unequipWeapon(char, btl);
 				} else {
+					let weapontbl;
+					if (char.weapons && char.weapons[action.index])
+						weapontbl = char.weapons;
+					else
+						weapontbl = btl.teams[char.team].weapons;
+
 					if (char.curweapon) {
 						DiscordEmbed = new Discord.MessageEmbed()
 							.setColor(color)
 							.setTitle(`${char.name} => Self`)
-							.setDescription(`__${char.name}__ unequipped their ${classEmoji.weapon[char.curweapon.class] ?? '<:bladed:1008794351591239842>'}**${char.curweapon.name}**, and equipped the ${classEmoji.weapon[char.weapons[action.index].class] ?? '<:bladed:1008794351591239842>'}**${char.weapons[action.index].name}**!`)
+							.setDescription(`__${char.name}__ unequipped their ${classEmoji.weapon[char.curweapon.class] ?? '<:bladed:1008794351591239842>'}**${char.curweapon.name}**, and equipped the ${classEmoji.weapon[weapontbl[action.index].class] ?? '<:bladed:1008794351591239842>'}**${weapontbl[action.index].name}**!`)
 						btl.channel.send({embeds: [DiscordEmbed]});
 					} else {
 						DiscordEmbed = new Discord.MessageEmbed()
 							.setColor(color)
 							.setTitle(`${char.name} => Self`)
-							.setDescription(`__${char.name}__ equipped the ${classEmoji.weapon[char.weapons[action.index].class] ?? '<:bladed:1008794351591239842>'}**${char.weapons[action.index].name}**!`)
+							.setDescription(`__${char.name}__ equipped the ${classEmoji.weapon[weapontbl[action.index].class] ?? '<:bladed:1008794351591239842>'}**${weapontbl[action.index].name}**!`)
 						btl.channel.send({embeds: [DiscordEmbed]});
 					}
 
@@ -2393,17 +2406,23 @@ doAction = (char, btl, action) => {
 
 					unequipArmor(char, btl);
 				} else {
+					let armortbl;
+					if (char.armors && char.armors[action.index])
+						armortbl = char.armors;
+					else
+						armortbl = btl.teams[char.team].armors;
+
 					if (char.curweapon) {
 						DiscordEmbed = new Discord.MessageEmbed()
 							.setColor(color)
 							.setTitle(`${char.name} => Self`)
-							.setDescription(`__${char.name}__ unequipped their ${classEmoji.armor[char.curarmor.class] ?? '<:bladed:1008794351591239842>'}**${char.curarmor.name}**, and equipped the ${classEmoji.armor[char.armors[action.index].class] ?? '<:bladed:1008794351591239842>'}**${char.armors[action.index].name}**!`)
+							.setDescription(`__${char.name}__ unequipped their ${classEmoji.armor[char.curarmor.class] ?? '<:bladed:1008794351591239842>'}**${char.curarmor.name}**, and equipped the ${classEmoji.armor[armortbl[action.index].class] ?? '<:bladed:1008794351591239842>'}**${armortbl[action.index].name}**!`)
 						btl.channel.send({embeds: [DiscordEmbed]});
 					} else {
 						DiscordEmbed = new Discord.MessageEmbed()
 							.setColor(color)
 							.setTitle(`${char.name} => Self`)
-							.setDescription(`__${char.name}__ equipped the ${classEmoji.armor[char.armors[action.index].class] ?? '<:bladed:1008794351591239842>'}**${char.armors[action.index].name}**!`)
+							.setDescription(`__${char.name}__ equipped the ${classEmoji.armor[armortbl[action.index].class] ?? '<:bladed:1008794351591239842>'}**${armortbl[action.index].name}**!`)
 						btl.channel.send({embeds: [DiscordEmbed]});
 					}
 

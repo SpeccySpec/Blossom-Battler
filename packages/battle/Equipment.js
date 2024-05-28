@@ -1,5 +1,11 @@
 equipWeapon = (char, id, btl) => {
-    if (!char.weapons || !char.weapons[id]) return;
+    let weapontbl;
+    if (char.weapons && char.weapons[id])
+        weapontbl = char.weapons;
+    else
+        weapontbl = btl.teams[char.team].weapons;
+
+    if (!weapontbl || !weapontbl[id]) return;
     setupSkills(char);
 
     if (char.curweapon) {
@@ -8,8 +14,8 @@ equipWeapon = (char, id, btl) => {
     }
 
     updateStats(char, btl.guild.id);
-    char.curweapon = objClone(char.weapons[id]);
-    delete char.weapons[id];
+    char.curweapon = objClone(weapontbl[id]);
+    delete weapontbl[id];
 
     if (char.curweapon) {
 		let boost = {
@@ -33,7 +39,13 @@ equipWeapon = (char, id, btl) => {
 }
 
 equipArmor = (char, id, btl) => {
-    if (!char.armors || !char.armors[id]) return;
+    let armortbl;
+    if (char.armors && char.armors[id])
+        armortbl = char.armors;
+    else
+        armortbl = btl.teams[char.team].armors;
+
+    if (!armortbl || !armortbl[id]) return;
     setupSkills(char);
 
     if (char.curarmor) {
@@ -42,8 +54,8 @@ equipArmor = (char, id, btl) => {
     }
 
     updateStats(char, btl.guild.id);
-    char.curarmor = objClone(char.armors[id]);
-    delete char.armors[id];
+    char.curarmor = objClone(armortbl[id]);
+    delete armortbl[id];
 
     if (char.curarmor) {
 		let boost = {
