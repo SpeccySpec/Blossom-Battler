@@ -538,6 +538,8 @@ commands.startbattle = new Command({
 		battle.teams[0].name = args[0];
 		battle.teams[0].items = objClone(party.items);
 		battle.teams[0].pets = objClone(party.negotiateAllies);
+		battle.teams[0].weapons = objClone(party.weapons);
+		battle.teams[0].armors = objClone(party.armors);
 		battle.teams[0].id = args[0];
 		if (party.currency) battle.teams[0].currency = battle.teams[0].maxcur = party.currency
 
@@ -799,6 +801,8 @@ commands.startpvp = new Command({
 			}
 
 			battle.teams[i-2].name = party.name;
+			battle.teams[i-2].weapons = objClone(party.weapons);
+			battle.teams[i-2].armors = objClone(party.armors);
 			battle.teams[i-2].id = args[i];
 		}
 
@@ -1069,6 +1073,8 @@ commands.starttrial = new Command({
 
 		battle.teams[0].name = args[0];
 		battle.teams[0].pets = objClone(party.negotiateAllies);
+		battle.teams[0].weapons = objClone(party.weapons);
+		battle.teams[0].armors = objClone(party.armors);
 		battle.teams[0].id = args[0];
 
 		// Set up Enemy Side, This will be the first wave of the colosseum.
@@ -1328,6 +1334,8 @@ commands.testbattle = new Command({
 		battle.teams[0].name = args[0];
 		battle.teams[0].items = objClone(party.items);
 		battle.teams[0].pets = objClone(party.negotiateAllies);
+		battle.teams[0].weapons = objClone(party.weapons);
+		battle.teams[0].armors = objClone(party.armors);
 		battle.teams[0].id = args[0];
 		if (party.currency) battle.teams[0].currency = battle.teams[0].maxcur = party.currency;
 
