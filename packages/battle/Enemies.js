@@ -911,7 +911,7 @@ enemyThinker = (char, btl) => {
 					if (targ.hp <= 0) continue;
 
 					// Low chance for a fusion spell instead.
-					if (randNum(1, 10) == 6) {
+					if ((isBoss(char) || btl.teams[i].members.length > 1) && randNum(1, 10) == 6) {
 						let ally;
 						let fusionSkills = [];
 						for (let i in btl.teams[char.team].members) {
@@ -926,6 +926,39 @@ enemyThinker = (char, btl) => {
 
 						// Select random skill.
 						let skilldata = fusionSkills[randNum(fusionSkills.length-1)];
+
+						if (skilldata.length <= 0) {
+							// Select random skill.
+							let skill = char.skills[randNum(char.skills.length-1)];
+
+							// Can we actually use this skill?
+							let loops = 0;
+							while (!canUseSkill(char, skillFile[skill], skill, btl) && willNotDieFromSkill(char, skillFile[skill]) && loops < 10) {
+								skill = char.skills[randNum(char.skills.length-1)];
+								loops++;
+							}
+
+							if (skillFile[skill] && skillFile[skill].target === "one" && targ.lovable) continue;
+							if (skillFile[skill] && skillFile[skill].target === "one" && checkForTarget && !targ.target) continue;
+
+							// Melee as failsafe
+							if (loops >= 10) {
+								ai.push({
+									move: 'melee',
+									target: [i, targ.pos],
+									points: randNum(1, 20000)
+								})
+							} else {
+								ai.push({
+									move: 'skills',
+									index: skill,
+									target: [i, targ.pos],
+									points: randNum(1, 20000)
+								})
+							}
+
+							continue;
+						}
 
 						// Can we actually use this skill?
 						let loops = 0;
