@@ -802,7 +802,7 @@ buildHeal = (message, extra, args) => {
 		name: args[0],
 		type: 'heal',
 		cost: args[1],
-		costtype: args[2],
+		costtype: args[2].toLowerCase(),
 		target: args[3],
 		creationtime: Date.now(),
 		originalAuthor: message.author.id
