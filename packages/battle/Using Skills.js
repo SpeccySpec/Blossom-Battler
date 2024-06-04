@@ -1,7 +1,7 @@
 let extratypes = ["extras", "statusses", "heal", "passive"];
 
 // Can we use a LB
-canUseLb = (char, btl) => {
+canUseLb = (char, btl, level) => {
 	let settings = setUpSettings(btl.guild.id);
 	if (!settings.mechanics.limitbreaks) return false;
 
@@ -14,7 +14,12 @@ canUseLb = (char, btl) => {
 	if (possible.length == 1) return char.lb[possible[0]];
 
 	possible.sort(function(a, b) {return char.lb[b].cost - char.lb[a].cost});
-	return char.lb[possible[0]];
+
+	if (level) {
+		return possible[0] ?? 1;
+	} else {
+		return char.lb[possible[0]];
+	}
 }
 
 // Add this message to the end of an array.
@@ -1127,7 +1132,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 				// Death.
 				if (targ.hp <= 0) {
-					result.txt += `${dmgTxt} damage and was defeated!_\n${selectQuote(char, 'kill', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'death', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
+					result.txt += `${dmgTxt} damage and was defeated!_`;
 
 					// Force Message
 					if (skill.extras && skill.extras.forcemsg) {
@@ -1139,8 +1144,18 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						}
 					}
 
-					// Endure Leader Skills
+					result.txt += `\n${selectQuote(char, 'kill', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'death', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
+
 					let party = btl.teams[targ.team];
+
+					// AllyDeath quotes
+					for (let char2 of party.members) {
+						if (char2.id != char.id && char2.trust[char.truename] && char2.trust[char.truename].level > 5) {
+							result.txt += selectQuote(char2, 'allydeath', null, "%ALLY%", targ.name, "%ENEMY%", char.name, "%SKILL%", skill.name);
+						}
+					}
+
+					// Endure Leader Skills
 					if (settings?.mechanics?.leaderskills && party?.leaderskill && party.leaderskill.type === 'endure' && !party.leaderskill.disabled) {
 						if (party.leaderskill.var1.toLowerCase() == 'all' || skill?.atktype == party.leaderskill.var1.toLowerCase() || (skill.type == party.leaderskill.var1.toLowerCase() || skill.type.includes(party.leaderskill.var1.toLowerCase()))) {
 							targ.hp = Math.round(targ.maxhp * party.leaderskill.var2/100)
@@ -1178,6 +1193,17 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						for (let i in skill.extras.forcemsg) {
 							if (skill.extras.forcemsg[i][0] == 'onhit') {
 								result.txt = replaceTxt(skill.extras.forcemsg[i][1], '%USER%', char.name, '%ENEMY%', targ.name, '%DAMAGE%', dmgTxt);
+								break;
+							}
+						}
+					}
+
+					// Console
+					if (['weak', 'superweak', 'deadly'].includes(affinity)) {
+						for (let char2 of party.members) {
+							if (randNum(1, 100) <= 45 && char2.id != char.id && char2.trust[char.truename] && char2.trust[char.truename].level > 5) {
+								result.txt += selectQuote(char2, 'console', null, "%ALLY%", targ.name, "%ENEMY%", char.name, "%SKILL%", skill.name);
+								result.txt += selectQuote(targ, 'imfine', null, "%ALLY%", char2.name, "%ENEMY%", char.name, "%SKILL%", skill.name);
 								break;
 							}
 						}
@@ -1296,7 +1322,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				result.txt += `\n${selectQuote(targ, quotetype, null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 
 				// Lastly, Status Effects
-				if (skill.status && !targ.status) {
+				if (targ.hp > 0 && skill.status && !targ.status) {
 					if (!char.dispelled) {
 						var status;
 						if (typeof(skill.status) === 'object') {
@@ -1368,14 +1394,29 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		return;
 	}
 
-	// Start with the final text.
+	// Get the quote type
+	// Attack Type
 	let quotetype = 'phys';
 	if (skill.atktype === 'magic') quotetype = 'mag';
+	if (skill.atktype === 'ranged') quotetype = 'ranged';
+	if (skill.atktype === 'sorcery') quotetype = 'sorcery';
+
+	// Heals
 	if (skill.type === 'heal') quotetype = 'heal';
-	if (skill.limitbreak) quotetype = 'lb';
+
+	// Limit Breaks
+	if (skill.limitbreak) quotetype = `lb${skill.limitbreak}`;
+
+	// Team Combos
 	if (skill.teamcombo) quotetype = 'tc';
+
+	// Melee Attack
 	if (skill.melee) quotetype = 'melee';
-	if (char.quotes && char.quotes[`${getSkillID(skill)}quote`]) quotetype = getSkillID(skill);
+
+	// Unique skill quotes.
+	if (!skill.melee && !skill.limitbreak && !skill.teamcombo && char.quotes && char.quotes[`${getSkillID(skill)}quote`]) quotetype = getSkillID(skill);
+
+	// Start final text.
 	let finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}`;
 	if (ally && ally.quotes) {
 		finalText = `${selectQuote(char, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}${selectQuote(ally, quotetype, null, "%SKILL%", skill.name, "%ATKTYPE%", skill.atktype, "%ELEMENT%", skill.type)}`;
