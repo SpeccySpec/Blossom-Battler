@@ -626,7 +626,7 @@ function processQuestion(message, question, number) {
 	]}
 }
 
-dailies = ['dailyskill', 'dailyitem', 'dailyweapon', 'dailyarmor', 'dailychar', 'dailycharquote', 'dailyship', 'dailyenemy', 'dailyenemyquote']
+dailies = ['dailyskill', 'dailyfusionskill', 'dailyitem', 'dailyweapon', 'dailyarmor', 'dailychar', 'dailycharquote', 'dailyship', 'dailyenemy', 'dailyenemyquote']
 
 commands.dailyall = new Command({
 	desc: "Starts all commands for daily things.",
