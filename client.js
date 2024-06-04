@@ -221,70 +221,68 @@ listArray = async(channel, theArray, author, forceIndex) => {
 
 // Daily Quote - Resets at midnight
 dailyQuote = {}
-
 let tempQuote = fs.readFileSync(dataPath+'/dailyquote.txt', {flag: 'as+'});
 if (tempQuote && tempQuote != '')
 	dailyQuote = JSON.parse(tempQuote);
 
 // Daily Skill - Resets at midnight
-dailySkill = 'none'
-
+dailySkill = 'none';
 let tempSkill = fs.readFileSync(dataPath+'/dailyskill.txt', {flag: 'as+'});
 if (tempSkill && tempSkill != '')
 	dailySkill = tempSkill.toString();
 
+// Daily Fusion Skill - Resets at Midnight
+dailyFusionSkill = 'none';
+let tempFusionSkill = fs.readFileSync(dataPath+'/dailyfusionskill.txt', {flag: 'as+'});
+if (tempFusionSkill && tempFusionSkill != '')
+	dailyFusionSkill = tempFusionSkill.toString();
+
 // Daily Item - Resets at midnight
 dailyItem = {}
-
 let tempItem = fs.readFileSync(dataPath+'/dailyitem.txt', {flag: 'as+'});
 if (tempItem && tempItem != '')
 	dailyItem = JSON.parse(tempItem);
 
 // Daily Weapon - Resets at midnight
 dailyWeapon = {}
-
 let tempWeapon = fs.readFileSync(dataPath+'/dailyweapon.txt', {flag: 'as+'});
 if (tempWeapon && tempWeapon != '')
 	dailyWeapon = JSON.parse(tempWeapon);
 
 // Daily Armor - Resets at midnight
 dailyArmor = {}
-
 let tempArmor = fs.readFileSync(dataPath+'/dailyarmor.txt', {flag: 'as+'});
 if (tempArmor && tempArmor != '')
 	dailyArmor = JSON.parse(tempArmor);
 
 // Daily Character - Resets at midnight
 dailyChar = {}
-
 let tempCharacter = fs.readFileSync(dataPath+'/dailycharacter.txt', {flag: 'as+'});
 if (tempCharacter && tempCharacter != '')
 dailyChar = JSON.parse(tempCharacter);
 
 // Daily Enemy - Resets at midnight
 dailyEnemy = {}
-
 let tempEnemy = fs.readFileSync(dataPath+'/dailyenemy.txt', {flag: 'as+'});
 if (tempEnemy && tempEnemy != '')
-dailyEnemy = JSON.parse(tempEnemy);
+	dailyEnemy = JSON.parse(tempEnemy);
 
 // Daily Enemy Quote - Resets at midnight
 dailyEnemyQuote = {}
-
 let tempEnemyQuote = fs.readFileSync(dataPath+'/dailyenemyquote.txt', {flag: 'as+'});
 if (tempEnemyQuote && tempEnemyQuote != '')
-dailyEnemyQuote = JSON.parse(tempEnemyQuote);
+	dailyEnemyQuote = JSON.parse(tempEnemyQuote);
 
 // Daily Ship - Resets at midnight
 dailyShip = {}
-
 let tempShip = fs.readFileSync(dataPath+'/dailyship.txt', {flag: 'as+'});
 if (tempShip && tempShip != '')
-dailyShip = JSON.parse(tempShip);
+	dailyShip = JSON.parse(tempShip);
 
 function resetDailies() {
 	dailyQuote = {};
 	dailySkill = 'none';
+	dailyFusionSkill = 'none';
 	dailyItem = {};
 	dailyWeapon = {};
 	dailyArmor = {};
@@ -295,6 +293,7 @@ function resetDailies() {
 
 	fs.writeFileSync(dataPath+'/dailyquote.txt', '');
 	fs.writeFileSync(dataPath+'/dailyskill.txt', '');
+	fs.writeFileSync(dataPath+'/dailyfusionskill.txt', '');
 	fs.writeFileSync(dataPath+'/dailyitem.txt', '');
 	fs.writeFileSync(dataPath+'/dailyweapon.txt', '');
 	fs.writeFileSync(dataPath+'/dailyarmor.txt', '');

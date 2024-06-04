@@ -280,8 +280,12 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 		}
 	}
 	
-	if (skillDefs.acc && skillDefs.type != "heal" && skillDefs.type != "passive")
-		finalText += `Has **${skillDefs.acc}%** Accuracy.\n`;
+	if (skillDefs.acc && skillDefs.type != "heal" && skillDefs.type != "passive") {
+		if (skillDefs.acc >= 199) // The point in which accuracy calculation cannot be below 100.
+			finalText += `_Will **not** miss regardless of perception stat changes._\n`;
+		else
+			finalText += `Has **${skillDefs.acc}%** Accuracy.\n`;
+	}
 
 	if (skillDefs.crit && skillDefs.type != "heal" && skillDefs.type != "status" && skillDefs.type != "passive")
 		finalText += `**${skillDefs.crit}%**<:crit:973077052083286056>\n`;

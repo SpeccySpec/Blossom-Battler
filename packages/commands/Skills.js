@@ -1871,7 +1871,7 @@ commands.dailyskill = new Command({
 		if (!dailySkill) dailySkill = 'none';
 
 		let notice = 'Here is the daily skill, again.'
-		if (dailySkill === 'none') {
+		if (dailySkill === 'none' || !skillFile[dailySkill]) {
 			dailySkill = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
 
 			let authorTxt = skillFile[dailySkill].originalAuthor ? `<@!${skillFile[dailySkill].originalAuthor}>` : '<@776480348757557308>'
@@ -1901,6 +1901,50 @@ commands.randskill = new Command({
 
 		let skill = Object.keys(skillFile)[Math.floor(Math.random() * Object.keys(skillFile).length)];
 		skillFuncs.skillDesc(skillFile[skill], skillFile[skill].name, message)
+	}
+})
+
+commands.dailyfusionskill = new Command({
+	desc: 'Any random fusion skill can be set as a daily one! Test your luck to see if yours is here!',
+	section: "roll",
+	args: [],
+	func(message, args, guilded) {
+		let fusionFile = setUpFile(`${dataPath}/json/fusionskills.json`);
+
+		if (Object.keys(fusionFile).length == 0) return message.channel.send(`No fusion skills have been added yet! This is a really rare occurance.`);
+		if (!dailyFusionSkill) dailyFusionSkill = 'none';
+
+		let notice = 'Here is the daily fusion skill, again.'
+		if (dailyFusionSkill === 'none' || !fusionFile[dailyFusionSkill]) {
+			dailyFusionSkill = Object.keys(fusionFile)[Math.floor(Math.random() * Object.keys(fusionFile).length)];
+
+			let authorTxt = fusionFile[dailyFusionSkill].originalAuthor ? `<@!${fusionFile[dailyFusionSkill].originalAuthor}>` : '<@776480348757557308>'
+			notice = `${authorTxt}, your skill is the daily fusion skill for today!`;
+		}
+
+		setTimeout(function() {
+			if (fusionFile[dailyFusionSkill]) {
+				let today = getCurrentDate();
+
+				fs.writeFileSync(dataPath+'/dailyfusionskill.txt', dailyFusionSkill.toString());
+
+				let skillTxt = `**[${today}]**\n${notice}`
+				skillFuncs.skillDesc(fusionFile[dailyFusionSkill], fusionFile[dailyFusionSkill].name, message, skillTxt);	
+			}
+		}, 500);
+	}
+})
+
+commands.randfusionskill = new Command({
+	desc: 'Gets a random fusion skill.',
+	section: "roll",
+	aliases: ['randomfusionskill'],
+	args: [],
+	func(message, args, guilded) {
+		if (Object.keys(fusionFile).length == 0) return message.channel.send(`No fusion skills have been added yet.`);
+
+		let skill = Object.keys(fusionFile)[Math.floor(Math.random() * Object.keys(fusionFile).length)];
+		skillFuncs.skillDesc(fusionFile[skill], fusionFile[skill].name, message)
 	}
 })
 
