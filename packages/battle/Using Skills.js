@@ -656,10 +656,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 			}
 
 			// Passives
-			for (let i in targ.skills) {
-				if (!skillFile[targ.skills[i]]) continue;
-				if (skillFile[targ.skills[i]].type != 'passive') continue;
-				passive = skillFile[targ.skills[i]];
+			for (let j in targ.skills) {
+				if (!skillFile[targ.skills[j]]) continue;
+				if (skillFile[targ.skills[j]].type != 'passive') continue;
+				passive = skillFile[targ.skills[j]];
 
 				for (let k in passive.passive) {
 					switch(k) {
