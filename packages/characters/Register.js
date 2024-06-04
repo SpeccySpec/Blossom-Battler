@@ -111,7 +111,7 @@ writeChar = (creator, guild, name, element, health, magicpoints, attack, magic, 
     };
 
 	//im lazy
-	for (const i in quoteTypes) charFile[name].quotes[`${quoteTypes[i]}quote`] = [];
+	for (const i in quoteTypes) charFile[name].quotes[`${i}quote`] = [];
 
     fs.writeFileSync(`${dataPath}/json/${guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	return charFile[name];

@@ -883,7 +883,47 @@ trustLvl = {
 	morehealbuff: 20
 }
 
-quoteTypes = ['melee', 'phys', 'mag', 'allyatk', 'lb', 'tc', 'strong', 'badatk', 'landed', 'miss', 'superweak', 'weak', 'hurt', 'resist', 'block', 'repel', 'drain', 'dodge', 'death', 'kill', 'pacify', 'allydeath', 'heal', 'helped', 'console', 'imfine', 'lvl']
+quoteTypes = {
+	melee: 'Used upon using a melee attack.',
+	phys: 'Used upon using a <:physical:973077052129423411>**Physical Attack**.',
+	mag: 'Used upon using a **Magical Attack**.',
+	ranged: 'Used upon using a **Ranged Attack**.',
+	sorcery: 'Used upon using a **Sorcery Attack**.',
+	allyatk: 'Used when assisting a trusted ally with a powered up melee attack in battle.',
+	lb1: 'Used when using a Level 1 Limit Break.',
+	lb2: 'Used when using a Level 2 Limit Break.',
+	lb3: 'Used when using a Level 3 Limit Break.',
+	lb4: 'Used when using a Level 4 Limit Break.',
+	tc: 'Used when using a Team Combo.',
+	strong: `Used when landing a ${affinityEmoji.weak}**Weakness**, ${affinityEmoji.superweak}**Super Weakness**, or ${affinityEmoji.deadly}**Deadly** attack.`,
+	badatk: `Used when landing a ${affinityEmoji.resist}**Resist**, or worse attack.`,
+	landed: '_Might_ be used when landing a normal attack.',
+	miss: 'Used when missing an attack.',
+	deadly: `Used when being hit by a move with ${affinityEmoji.deadly}**Deadly** effectiveness.`,
+	superweak: `Used when being hit by a move with ${affinityEmoji.superweak}**Super Weak** effectiveness.`,
+	weak: `Used when being hit by a move with ${affinityEmoji.weak}**Weak** effectiveness.`,
+	hurt: '_Might_ be used when hit by an attack.',
+	resist: `Used when being hit by a move with ${affinityEmoji.resist}**Resist** effectiveness.`,
+	block: `Used when being hit by a move with ${affinityEmoji.block}**Block** effectiveness.`,
+	repel: `Used when being hit by a move with ${affinityEmoji.repel}**Repel** effectiveness.`,
+	drain: `Used when being hit by a move with ${affinityEmoji.drain}**Drain** effectiveness.`,
+	dodge: 'Used when dodging a move.',
+	death: 'Used upon death.',
+	kill: 'Used upon killing a foe.',
+	pacify: 'Used upon pacifying an enemy.',
+	heal: 'Used when healing allies.',
+	helped: 'Used when being helped by an ally (heal or buff)',
+	lvl: 'Used on level up.',
+
+	allydeath: 'Used when a trusted ally dies. Banter text.',
+	console: `Used when a trusted ally takes ${affinityEmoji.weak}**Weak**, ${affinityEmoji.superweak}**Super Weak**, or ${affinityEmoji.deadly}**Deadly** damage. Banter text.`,
+	imfine: 'Used in response to "console" quotes. Banter text.',
+	cheer: `Used when a trusted ally deals ${affinityEmoji.weak}**Weakness**, ${affinityEmoji.superweak}**Super Weakness**, or ${affinityEmoji.deadly}**Deadly** damage, or lands a critical hit. Banter text.`,
+	response: 'Used in response to "cheer" quotes. Banter text.',
+	killpraise: 'Used when a trusted ally kills a foe. Banter text.',
+	killresponse: 'Used in response to "killpraise" quotes. Banter text.',
+}
+
 
 enemyTypes = [
 	'miniboss',

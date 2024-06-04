@@ -256,6 +256,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 		teamCombo: false
 	}
 
+	// Party
+	let party = btl.teams[targ.team];
+	let party2 = btl.teams[char.team];
+
 	// Healing Skills
 	if (skill.type === 'heal' || (skill.limitbreak && skill.class == 'heal')) {
 		if (skill.heal) {
@@ -1146,11 +1150,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 					result.txt += `\n${selectQuote(char, 'kill', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'death', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 
-					let party = btl.teams[targ.team];
-
 					// AllyDeath quotes
 					for (let char2 of party.members) {
-						if (char2.id != char.id && char2.trust[char.truename] && char2.trust[char.truename].level > 5) {
+						if (randNum(1, 100) <= 50 && char2.id != targ.id && char2.trust && char2.trust[targ.truename] && char2.trust[targ.truename].level > 5) {
 							result.txt += selectQuote(char2, 'allydeath', null, "%ALLY%", targ.name, "%ENEMY%", char.name, "%SKILL%", skill.name);
 						}
 					}
@@ -1197,20 +1199,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 							}
 						}
 					}
-
-					// Console
-					if (['weak', 'superweak', 'deadly'].includes(affinity)) {
-						for (let char2 of party.members) {
-							if (randNum(1, 100) <= 45 && char2.id != char.id && char2.trust[char.truename] && char2.trust[char.truename].level > 5) {
-								result.txt += selectQuote(char2, 'console', null, "%ALLY%", targ.name, "%ENEMY%", char.name, "%SKILL%", skill.name);
-								result.txt += selectQuote(targ, 'imfine', null, "%ALLY%", char2.name, "%ENEMY%", char.name, "%SKILL%", skill.name);
-								break;
-							}
-						}
-					}
 				}
 
 				console.log(result);
+
 				// Limit Breaks
 				if (settings.mechanics.limitbreaks && !skill.limitbreak && !skill.teamcombo) {
 					if (!char.lbp) char.lbp = 0;
@@ -1312,14 +1304,46 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				// Quotes
 				let quotetype = affinity;
 				if (affinity === 'normal') quotetype = 'hurt';
-				if (affinity === 'resist') result.txt += `\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name, "%AFFINITY%", affinity)}`;
-
-				if (targ.hp <= 0)
-					quotetype = 'dead';
-				else
-					result.txt += `\n${selectQuote(char, 'landed', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}`;
+				if (targ.hp <= 0) quotetype = 'dead';
 
 				result.txt += `\n${selectQuote(targ, quotetype, null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
+
+				if (affinity === 'resist') {
+					result.txt += `${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name, "%AFFINITY%", affinity)}`;
+				} else if (randNum(1, 100) <= 20) {
+					result.txt += `${selectQuote(char, 'landed', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}`;
+				}
+
+				// Console and ImFine, Cheer and Respond, KillPraise and KillRespond
+				if (targ.hp > 0 && ['weak', 'superweak', 'deadly'].includes(affinity)) {
+					for (let char2 of party.members) {
+						if (char2.hp > 0 && randNum(1, 100) <= 50 && char2.id != targ.id && char2.trust && char2.trust[targ.truename] && char2.trust[targ.truename].level > 5) {
+							result.txt += selectQuote(char2, 'console', null, "%ALLY%", targ.name, "%ENEMY%", char.name, "%SKILL%", skill.name);
+							result.txt += selectQuote(targ, 'imfine', null, "%ALLY%", char2.name, "%ENEMY%", char.name, "%SKILL%", skill.name);
+							break;
+						}
+					}
+
+					if (char.team != targ.team) {
+						for (let char2 of party2.members) {
+							if (char2.hp > 0 && randNum(1, 100) <= 50 && char2.id != char.id && char2.trust && char2.trust[char.truename] && char2.trust[char.truename].level > 5) {
+								result.txt += selectQuote(char2, 'cheer', null, "%ALLY%", char.name, "%ENEMY%", targ.name, "%SKILL%", skill.name);
+								result.txt += selectQuote(char, 'response', null, "%ALLY%", char2.name, "%ENEMY%", targ.name, "%SKILL%", skill.name);
+								break;
+							}
+						}
+					}
+				} else if (targ.hp <= 0) {
+					if (char.team != targ.team) {
+						for (let char2 of party2.members) {
+							if (char2.hp > 0 && randNum(1, 100) <= 50 && char2.id != char.id && char2.trust && char2.trust[char.truename] && char2.trust[char.truename].level > 5) {
+								result.txt += selectQuote(char2, 'killpraise', null, "%ALLY%", char.name, "%ENEMY%", targ.name, "%SKILL%", skill.name);
+								result.txt += selectQuote(char, 'killresponse', null, "%ALLY%", char2.name, "%ENEMY%", targ.name, "%SKILL%", skill.name);
+								break;
+							}
+						}
+					}
+				}
 
 				// Lastly, Status Effects
 				if (targ.hp > 0 && skill.status && !targ.status) {

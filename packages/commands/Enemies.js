@@ -249,7 +249,7 @@ commands.updateenemies = new Command({
 			// Quotes
 			if (!enemyFile[i].quotes) enemyFile[i].quotes = {};
 			for (const k in quoteTypes) {
-				enemyFile[i].quotes[`${quoteTypes[k]}quote`] = enemyFile[i][`${quoteTypes[k]}quote`];
+				enemyFile[i].quotes[`${k}quote`] = enemyFile[i][`${k}quote`];
 			}
 
 			if (!enemyFile[i].lb) enemyFile[i].lb = {};
@@ -276,7 +276,7 @@ commands.updateenemies = new Command({
 				for (let k of stats) delete enemyFile[i][k];
 				for (let k of Affinities) delete enemyFile[i][k];
 				for (let k = 1; k < 4; k++) delete enemyFile[i][`lb${k}`];
-				for (let k of quoteTypes) delete enemyFile[i][`${k}quote`];
+				for (let k in quoteTypes) delete enemyFile[i][`${k}quote`];
 				for (let k of enemyTypes) delete enemyFile[i][k];
 			}
 
@@ -1058,8 +1058,8 @@ commands.randenemyquote = new Command({
 		let possibleQuotes = []
 		for (const i in quoteTypes) {
 			for (const k in enemyFile) {
-				if (foundEnemy(k, message.guild.id) && enemyFile[k]['quotes'] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`].length > 1) {
-					possibleQuotes.push([k, quoteTypes[i], enemyFile[k]['quotes'][`${quoteTypes[i]}quote`][utilityFuncs.randNum(enemyFile[k]['quotes'][`${quoteTypes[i]}quote`].length-1)]])
+				if (foundEnemy(k, message.guild.id) && enemyFile[k]['quotes'] && enemyFile[k]['quotes'][`${i}quote`] && enemyFile[k]['quotes'][`${i}quote`].length > 1) {
+					possibleQuotes.push([k, i, enemyFile[k]['quotes'][`${i}quote`][utilityFuncs.randNum(enemyFile[k]['quotes'][`${i}quote`].length-1)]])
 				}
 			}
 		}
@@ -1087,8 +1087,8 @@ commands.dailyenemyquote = new Command({
 		let possibleQuotes = []
 		for (const i in quoteTypes) {
 			for (const k in enemyFile) {
-				if (foundEnemy(k, message.guild.id) && enemyFile[k]['quotes'] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`] && enemyFile[k]['quotes'][`${quoteTypes[i]}quote`].length > 1) {
-					possibleQuotes.push([k, quoteTypes[i], enemyFile[k]['quotes'][`${quoteTypes[i]}quote`][utilityFuncs.randNum(enemyFile[k]['quotes'][`${quoteTypes[i]}quote`].length-1)]])
+				if (foundEnemy(k, message.guild.id) && enemyFile[k]['quotes'] && enemyFile[k]['quotes'][`${i}quote`] && enemyFile[k]['quotes'][`${i}quote`].length > 1) {
+					possibleQuotes.push([k, i, enemyFile[k]['quotes'][`${i}quote`][utilityFuncs.randNum(enemyFile[k]['quotes'][`${i}quote`].length-1)]])
 				}
 			}
 		}

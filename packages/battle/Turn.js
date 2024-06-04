@@ -2547,7 +2547,7 @@ doAction = (char, btl, action) => {
 				lbDefs.acc = 100;
 				lbDefs.crit = 0;
 				lbDefs.costtype = 'lb';
-				lbDefs.limitbreak = true;
+				lbDefs.limitbreak = canUseLb(char, btl, true);
 				lbDefs.atktype = aType;
 				lbDefs.cost = char.lbp;
 

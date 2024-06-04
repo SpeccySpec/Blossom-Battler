@@ -76,7 +76,7 @@ writeEnemy = (creator, guild, name, mainelement, level, health, magicpoints, exp
     }
 
     //im lazy
-	for (const i in quoteTypes) enemyFile[name].quotes[`${quoteTypes[i]}quote`] = [];
+	for (const i in quoteTypes) enemyFile[name].quotes[`${i}quote`] = [];
 
     fs.writeFileSync(`${dataPath}/json/${guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
 	return enemyFile[name];
