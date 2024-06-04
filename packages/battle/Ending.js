@@ -284,6 +284,25 @@ winBattle = (btl, i) => {
 			winAchievement(user, 14);
 		else if (userdata.vars.pacifycount >= 1000)
 			winAchievement(user, 15);
+
+		// Money
+		if (!userdata.vars.totalmoney) 
+			userdata.vars.totalmoney = moneyamount;
+		else
+			userdata.vars.totalmoney += moneyamount;
+
+		if (userdata.vars.totalmoney >= 100)
+			winAchievement(user, 16);
+		else if (userdata.vars.totalmoney >= 5000)
+			winAchievement(user, 17);
+		else if (userdata.vars.totalmoney >= 10000)
+			winAchievement(user, 18);
+		else if (userdata.vars.totalmoney >= 20000)
+			winAchievement(user, 19);
+		else if (userdata.vars.totalmoney >= 40000)
+			winAchievement(user, 20);
+
+		fs.writeFileSync(`${dataPath}/userdata/${user}.json`, JSON.stringify(userdata, '	', 4))
 	}
 
 	// Loot

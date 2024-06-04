@@ -20,6 +20,13 @@ bbAchievements = [
 	{name: "...when you get to know them!", stars: 7, desc: "Pacify 350 enemies", section: "battle"},
 	{name: "Good friends!", stars: 8, desc: "Pacify 500 enemies", section: "battle"},
 	{name: "Best friends!", stars: 10, desc: "Pacify 1000 enemies", section: "battle"},
+
+	// Money
+	{name: "Paycheck?", stars: 1, desc: "Obtain 100<:token:1007649168426287236>. (currency independant)", section: "battle"},
+	{name: "Shiny...", stars: 2, desc: "Obtain 5000<:token:1007649168426287236>. (currency independant)", section: "battle"},
+	{name: "Sparkly...", stars: 4, desc: "Obtain 10000<:token:1007649168426287236>. (currency independant)", section: "battle"},
+	{name: "Dubloons...", stars: 7, desc: "Obtain 20000<:token:1007649168426287236>. (currency independant)", section: "battle"},
+	{name: "Rich! I'm Rich!", stars: 10, desc: "Obtain 40000<:token:1007649168426287236>. (currency independant)", section: "battle"},
 ]
 
 winAchievement = async(user, id) => {

@@ -660,7 +660,7 @@ commands.getuserdata = new Command({
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#006937')
 			.setTitle(`${message.author.username}'s User Data`)
-			.addFields({name: 'Stars', value: `${user.stars}<:golden:973077051751940138>`, inline: true}, {name: 'Achievements', value: `${doneAchievements}/${totalAchievements}`, inline: true})
+			.addFields({name: 'Stars', value: `${user.stars}<:golden:973077051751940138>`, inline: true}, {name: 'Achievements', value: `${doneAchievements}/${totalAchievements}`}, {name: 'Stats', value: `**[Enemies Killed]** ${user.vars.enemykills ?? 0}\n**[Enemies Pacified]** ${user.vars.pacifycount ?? 0}\n**[Total Money Obtained]** ${user.vars.totalmoney ?? '0 (Updated Over Time)'}`, inline: true})
 		message.channel.send({embeds: [DiscordEmbed]});
 	}
 })
