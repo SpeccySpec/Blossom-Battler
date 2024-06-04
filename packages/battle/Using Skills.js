@@ -1503,6 +1503,8 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		let vars = ['members', 'backup'];
 		for (let k of vars) {
 			for (let char2 of btl.teams[char.team][k]) {
+				if (char2.id == char.id) continue;
+
 				for (let i of char2.skills) {
 					if (skillFile[i].type != 'passive') {
 						possible.push(i);
