@@ -617,7 +617,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 		// How many total hits
 		let totalHits = 0;
 		let dodgeChance = 0;
-		
+
+		let passive;
 		for (let i = 0; i < skill.hits; i++) {
 			if (noMiss) {
 				totalHits++;
@@ -651,6 +652,21 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					let dodgeRed = 0.1 * (hasStatusAffinity(targ, 'cloud9', 'resist') ? 0.5 : (hasStatusAffinity(targ, 'cloud9', 'weak') ? 2 : 1))
 					if (isBoss(targ)) dodgeRed = 0.1 * 2;
 					dodgeChance *= 1 - dodgeRed;
+				}
+			}
+
+			// Passives
+			for (let i in targ.skills) {
+				if (!skillFile[targ.skills[i]]) continue;
+				if (skillFile[targ.skills[i]].type != 'passive') continue;
+				passive = skillFile[targ.skills[i]];
+
+				for (let k in passive.passive) {
+					switch(k) {
+						case "guarddodge":
+							if (targ.guard) dodgeChance -= passive.passive[k][0];
+							break;
+					}
 				}
 			}
 

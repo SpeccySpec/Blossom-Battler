@@ -926,7 +926,6 @@ quoteTypes = {
 	killresponse: 'Used in response to "killpraise" quotes. Banter text.',
 }
 
-
 enemyTypes = [
 	'miniboss',
 	'boss',
