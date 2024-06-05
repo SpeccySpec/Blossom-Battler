@@ -1998,9 +1998,9 @@ statusDescs = [
 				desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once 1 HP is reached**. May change the ${statusEmojis["atkdown"]}**ATK** stat.`,
 				ailments: {
 					nonboss: {
-						weak: `Takes **1/5th** of max HP & **1/4s** the ${statusEmojis["atkdown"]}**ATK** stat.`,
-						normal: `Takes **1/10th** of max HP & **1/2s** the ${statusEmojis["atkdown"]}**ATK** stat.`,
-						resist: `Takes **1/20th** of max HP & **1/1.25s** the ${statusEmojis["atkdown"]}**ATK** stat.`,
+						weak: `Takes **1/5th** of max HP & **-75%** to the ${statusEmojis["atkdown"]}**ATK** stat.`,
+						normal: `Takes **1/10th** of max HP & **halves** the ${statusEmojis["atkdown"]}**ATK** stat.`,
+						resist: `Takes **1/20th** of max HP & **-20%** to the ${statusEmojis["atkdown"]}**ATK** stat.`,
 					},
 					boss: `Takes **5 HP** & doesn't change ${statusEmojis["atkdown"]}**ATK** stat.`
 				}
@@ -2058,7 +2058,7 @@ statusDescs = [
 				desc: `Has **a chance** to immobilize the afflicted until expired. Halves chance each turn.`,
 				ailments: {
 					nonboss: {
-						weak: `Lasts **5 turns** and sets initial paralyze chance to **160%**.`,
+						weak: `Lasts **5 turns** and sets initial paralyze chance to **160%**... which is guaranteed.`,
 						normal: `Lasts **4 turns** and sets initial paralyze chance to **80%**.`,
 						resist: `Lasts **3 turns** and sets initial paralyze chance to **40%**.`,
 					},
@@ -2070,9 +2070,9 @@ statusDescs = [
 				desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once 1 HP is reached**. May change the ${statusEmojis["magdown"]}**MAG** stat.`,
 				ailments: {
 					nonboss: {
-						weak: `Takes **1/5th** of max HP & **1/4s** the ${statusEmojis["magdown"]}**MAG** stat.`,
-						normal: `Takes **1/10th** of max HP & **1/2s** the ${statusEmojis["magdown"]}**MAG** stat.`,
-						resist: `Takes **1/20th** of max HP & **1/1.25s** the ${statusEmojis["magdown"]}**MAG** stat.`,
+						weak: `Takes **1/5th** of max HP & **-75%** to the ${statusEmojis["magdown"]}**MAG** stat.`,
+						normal: `Takes **1/10th** of max HP & **halves** the ${statusEmojis["magdown"]}**MAG** stat.`,
+						resist: `Takes **1/20th** of max HP & **-20%** to the ${statusEmojis["magdown"]}**MAG** stat.`,
 					},
 					boss: `Takes **5 HP** & doesn't change ${statusEmojis["magdown"]}**MAG** stat.`
 				}
@@ -2094,9 +2094,9 @@ statusDescs = [
 				desc: `May alter ${statusEmojis["atkdown"]}**ATK** & ${statusEmojis["magdown"]}**MAG** stats.`,
 				ailments: {
 					nonboss: {
-						weak: `**1/4s** ${statusEmojis["atkdown"]}**ATK** & ${statusEmojis["magdown"]}**MAG** stats.`,
-						normal: `**1/2s** ${statusEmojis["atkdown"]}**ATK** & ${statusEmojis["magdown"]}**MAG** stats.`,
-						resist: `**1/1.25s** ${statusEmojis["atkdown"]}A**TK** & ${statusEmojis["magdown"]}**MAG** stats.`,
+						weak: `**-75%** ${statusEmojis["atkdown"]}**ATK** & ${statusEmojis["magdown"]}**MAG** stats.`,
+						normal: `**Halves** ${statusEmojis["atkdown"]}**ATK** & ${statusEmojis["magdown"]}**MAG** stats.`,
+						resist: `**-20%** to ${statusEmojis["atkdown"]}A**TK** & ${statusEmojis["magdown"]}**MAG** stats.`,
 					},
 					boss: `Affects them the same as non-bosses.`
 				}
@@ -2106,9 +2106,9 @@ statusDescs = [
 				desc: `May alter ${statusEmojis["prcdown"]}**PRC** & ${statusEmojis["agldown"]}**AGL** stats.`,
 				ailments: {
 					nonboss: {
-						weak: `**1/4s** ${statusEmojis["prcdown"]}**PRC** & ${statusEmojis["agldown"]}**AGL** stats.`,
-						normal: `**1/2s** ${statusEmojis["prcdown"]}**PRC** & ${statusEmojis["agldown"]}**AGL** stats.`,
-						resist: `**1/1.25s** ${statusEmojis["prcdown"]}**PRC** & ${statusEmojis["agldown"]}**AGL** stats.`,
+						weak: `**-75%** to ${statusEmojis["prcdown"]}**PRC** & ${statusEmojis["agldown"]}**AGL** stats.`,
+						normal: `**Halves** ${statusEmojis["prcdown"]}**PRC** & ${statusEmojis["agldown"]}**AGL** stats.`,
+						resist: `**-20%** to ${statusEmojis["prcdown"]}**PRC** & ${statusEmojis["agldown"]}**AGL** stats.`,
 					},
 					boss: `Affects them the same as non-bosses.`
 				}
@@ -2162,9 +2162,9 @@ statusDescs = [
 				desc: `Take increased damage from ${elementEmoji["bless"]}**Bless** skills. *May change the ${statusEmojis["enddown"]}END stat*.`,
 				ailments: {
 					nonboss: {
-						weak: `Doubled damage from ${elementEmoji["bless"]}**Bless** skills. *1/2s* the ${statusEmojis["enddown"]}END stat.`,
-						normal: `1.5x damage from ${elementEmoji["bless"]}**Bless** skills. *1/2s* the ${statusEmojis["enddown"]}END stat.`,
-						resist: `1.25x damage from ${elementEmoji["bless"]}**Bless** skills. *0.75x* the ${statusEmojis["enddown"]}END stat.`,
+						weak: `Doubled damage from ${elementEmoji["bless"]}**Bless** skills. *halves* the ${statusEmojis["enddown"]}END stat.`,
+						normal: `1.5x damage from ${elementEmoji["bless"]}**Bless** skills. *halves* the ${statusEmojis["enddown"]}END stat.`,
+						resist: `1.25x damage from ${elementEmoji["bless"]}**Bless** skills. *-25%* to the ${statusEmojis["enddown"]}END stat.`,
 					},
 					boss: {
 						weak: `1.75x damage from ${elementEmoji["bless"]}**Bless** skills. *Doesn't change ${statusEmojis["enddown"]}END stat*.`,
@@ -2178,9 +2178,9 @@ statusDescs = [
 				desc: `Take increased damage from ${elementEmoji["curse"]}**Curse** skills. *May change the ${statusEmojis["atkdown"]}ATK stat*.`,
 				ailments: {
 					nonboss: {
-						weak: `Doubled damage from ${elementEmoji["curse"]}**Curse** skills. *1/2s* the ${statusEmojis["atkdown"]}ATK stat.`,
-						normal: `1.5x damage from ${elementEmoji["curse"]}**Curse** skills. *1/2s* the ${statusEmojis["atkdown"]}ATK stat.`,
-						resist: `1.25x damage from ${elementEmoji["curse"]}**Curse** skills. *0.75x* the ${statusEmojis["atkdown"]}ATK stat.`,
+						weak: `Doubled damage from ${elementEmoji["curse"]}**Curse** skills. *halves* the ${statusEmojis["atkdown"]}ATK stat.`,
+						normal: `1.5x damage from ${elementEmoji["curse"]}**Curse** skills. *halves* the ${statusEmojis["atkdown"]}ATK stat.`,
+						resist: `1.25x damage from ${elementEmoji["curse"]}**Curse** skills. *-25%* of the ${statusEmojis["atkdown"]}ATK stat.`,
 					},
 					boss: {
 						weak: `1.75x damage from ${elementEmoji["curse"]}**Curse** skills. *Doesn't change ${statusEmojis["atkdown"]}ATK stat*.`,
