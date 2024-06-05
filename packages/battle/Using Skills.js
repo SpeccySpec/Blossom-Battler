@@ -1062,7 +1062,6 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				} else if (targ.charms && targ.charms.includes("ImperishableMettle")) {
 					dmg *= 0.95;
 				}
-	
 
 				// Guarding
 				if (targ.guard && affinity != 'drain') {
@@ -1134,6 +1133,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 					total += damages[i];
 					if (i < damages.length-1) dmgTxt += ' + ';
+
+					// Keep track of total damage dealt and taken.
+					if (char.owner && !btl.testing) addData(char.owner, "dmgdealt", damages[i]);
+					if (targ.owner && !btl.testing) addData(char.owner, "dmgtaken", damages[i]);
 				}
 
 				if (dmgTxt.length > 1000) {
@@ -1205,6 +1208,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 							}
 						}
 					}
+
+					// Is our HP still 0? Then we count as a kill.
+					if (targ.hp <= 0 && !btl.testing) addData(targ.owner, "deaths", 1);
 				} else {
 					result.txt += `${dmgTxt} damage!_`;
 					if (skill.extras && skill.extras.forcemsg) {

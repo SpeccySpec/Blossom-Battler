@@ -510,6 +510,8 @@ commands.startbattle = new Command({
 			}
 
 			char.team = 0;
+			if (char.owner) addData(char.owner, "totalbattles", 1);
+
 			battle.teams[0].members.push(char);
 		}
 

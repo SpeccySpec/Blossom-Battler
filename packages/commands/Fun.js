@@ -660,7 +660,19 @@ commands.getuserdata = new Command({
 		let DiscordEmbed = new Discord.MessageEmbed()
 			.setColor('#006937')
 			.setTitle(`${message.author.username}'s User Data`)
-			.addFields({name: 'Stars', value: `${user.stars}<:golden:973077051751940138>`, inline: true}, {name: 'Achievements', value: `${doneAchievements}/${totalAchievements}`}, {name: 'Stats', value: `**[Enemies Killed]** ${user.vars.enemykills ?? 0}\n**[Enemies Pacified]** ${user.vars.pacifycount ?? 0}\n**[Total Money Obtained]** ${user.vars.totalmoney ?? '0 (Updated Over Time)'}`, inline: true})
+			.addFields(
+				{name: 'Stars', value: `${user.stars}<:golden:973077051751940138>`, inline: true},
+				{name: 'Achievements', value: `${doneAchievements}/${totalAchievements}`},
+				{name: 'Stats', value: 
+					`**[Total Battles Participated In]** ${user.vars.totalbattles ?? 0}\n
+					**[Enemies Killed]** ${user.vars.enemykills ?? 0}
+					**[Enemies Pacified]** ${user.vars.pacifycount ?? 0}\n
+					**[Total Damage Dealt]** ${user.vars.dmgdealt ?? 0}
+					**[Total Damage Taken]** ${user.vars.dmgtaken ?? 0}
+					**[Total Deaths]** ${user.vars.deaths ?? 0}\n
+					**[Total Money Obtained]** ${user.vars.totalmoney ?? '0 (Updated Over Time)'}`, 
+				inline: true}
+			)
 		message.channel.send({embeds: [DiscordEmbed]});
 	}
 })
