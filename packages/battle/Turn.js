@@ -2914,8 +2914,8 @@ doTurn = async(btl, noTurnEmbed) => {
 		if (char.hp > 0 && char.custom) {
 			for (let i in char.custom) {
 				if (customVariables[i] && customVariables[i].onturn) {
-					statusTxt += (customVariables[i].onturn(btl, char, char.custom[i]) ?? '');
 					if (statusTxt != '') statusTxt += '\n';
+					statusTxt += (customVariables[i].onturn(btl, char, char.custom[i]) ?? '');
 
 					// Some other things...
 					if (char.status === 'sleep') canMove = false;

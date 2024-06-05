@@ -1229,9 +1229,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				if (settings.mechanics.limitbreaks && !skill.limitbreak && !skill.teamcombo) {
 					if (!char.lbp) char.lbp = 0;
 
-					let lbgain = truncNum(total/(skill.hits*((skill.target === 'one' || skill.target === 'ally') ? 8 : 64)), 2)
+					let lbgain = truncNum(total/(skill.hits*(['one', 'ally', 'caster'].includes(skill.target) ? 6 : 24)), 2)
 
-					// LbGain
+					// LbGain Extras
 					if (skill.extras) {
 						for (let i in skill.extras) {
 							if (!extrasList[i]) continue;
@@ -1248,12 +1248,18 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						}
 					}
 
+					// LbGain Status Ailments.
 					if (statusEffectFuncs[char.status] && statusEffectFuncs[char.status].lbgain) {
 						lbgain = statusEffectFuncs[char.status].lbgain(char, targ, skill, lbgain, btl);
 					}
 
-					// Statusses
-					char.lbp += lbgain;
+					char.lbp += truncNum(lbgain, 2);
+					targ.lbp += truncNum(lbgain/3, 2);
+					
+					if (!btl.battlefooter)
+						btl.battlefooter = `${char.name} gained ${truncNum(lbgain, 2)}LB%.`;
+					else
+						btl.battlefooter += ` ${char.name} also gained ${truncNum(lbgain, 2)}LB%.`;
 				}
 
 				// Full Combo!
@@ -2447,11 +2453,19 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	if (btl.doknockdown && char.status && char.status == 'cloud 9') finalText += `\n__${char.name}__'s cloud was blasted away!\n`
 	delete btl.doknockdown;
 
-	// Now, send the embed!
+	// Create the embed.
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(color)
 		.setTitle(targTxt)
 		.setDescription(finalText.replace(/\n{3,}/g, () => "\n\n"))
+
+	// Footers
+	if (btl.battlefooter) {
+		DiscordEmbed.setFooter(btl.battlefooter);
+		delete btl.battlefooter;
+	}
+
+	// Send the embed!
 	btl.channel.send({embeds: [DiscordEmbed]});
 
 	// return true or something
