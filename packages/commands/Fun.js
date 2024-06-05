@@ -664,7 +664,7 @@ commands.getuserdata = new Command({
 				{name: 'Stars', value: `${user.stars}<:golden:973077051751940138>`, inline: true},
 				{name: 'Achievements', value: `${doneAchievements}/${totalAchievements}`},
 				{name: 'Stats', value: 
-					`**[Total Battles Participated In]** ${user.vars.totalbattles ?? 0}\n
+					`**[Total Battles Characters Participated In]** ${user.vars.totalbattles ?? 0}\n
 					**[Enemies Killed]** ${user.vars.enemykills ?? 0}
 					**[Enemies Pacified]** ${user.vars.pacifycount ?? 0}\n
 					**[Total Damage Dealt]** ${user.vars.dmgdealt ?? 0}
