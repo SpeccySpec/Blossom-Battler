@@ -249,9 +249,11 @@ extrasList = {
 			return allcharges[name][0] < 1 ? `${name} ran out of charges!` : true
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
-			if (!char.custom.charges) {
+			if (!char.custom || !char.custom.charges) {
+				if (!char.custom.charges) char.custom.charges = {};
 				char.custom.charges[skill.name] = [vars[0], vars[1], skill.name, vars[0], 1]
 			}
+
 			charges = char.custom.charges[skill.name]
 			charges[0] -= 1;
 			charges[0] = parseFloat(charges[0].toFixed(2))
