@@ -193,6 +193,8 @@ extrasList = {
 			return true
 		},
 		onuse(char, targ, skill, btl, vars) {
+			if (isBlessed(char, btl)) return `__${char.name}__ is unnable to sacrifice themselves...?`;
+
 			if (!vars[0])
 				char.hp = 0;
 			else {
