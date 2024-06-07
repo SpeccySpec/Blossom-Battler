@@ -1268,6 +1268,8 @@ setUpSettings = (guild) => {
 				leaderskills: false,
 				transformations: false,
 				technicaldamage: false,
+				fusionskills: false,
+				powerlevels: false,
 			},
 			caps: {
 				levelcap: 99,

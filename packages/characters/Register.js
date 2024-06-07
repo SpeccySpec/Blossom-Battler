@@ -194,8 +194,8 @@ const affinityScores = {
 
 renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, useguild) => {
 	let char = objClone(charDefs);
-
-	if (settings == null) settings = setUpFile(`${dataPath}/json/${useguild ?? message.guild.id}/settings.json`);
+	
+	if (!settings) settings = setUpFile(`${dataPath}/json/${useguild ?? message.guild.id}/settings.json`);
 
 	let prefix = elementEmoji[char.mainElement] ?? elementEmoji.strike;
 	let color = elementColors[char.mainElement] ?? elementColors.strike;
@@ -344,6 +344,9 @@ longDescription = (charDefs, level, server, message, useguild) => {
 
 		dispLevel = `(At Level ${level})`;
 	}
+
+	if (settings.mechanics?.powerlevels)
+		dispLevel += ` (POW: ${calcPowerLevel(char)})`;
 
 	let userTxt = useguild
 		? getServerUserFromGuild(char.owner, message)

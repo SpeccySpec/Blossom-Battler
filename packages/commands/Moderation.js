@@ -710,7 +710,8 @@ commands.mechanics = new Command({
 			'leaderskills': 'Leader Skills',
 			'transformations': 'Transformations',
 			'technicaldamage': 'Technical Damage',
-			'fusionskills': 'Fusion Skills'
+			'fusionskills': 'Fusion Skills',
+			'powerlevels': 'Power Levels',
 		}
 
 		switch (args[0].toLowerCase()) {
@@ -723,6 +724,7 @@ commands.mechanics = new Command({
 			case 'transformations':
 			case 'technicaldamage':
 			case 'fusionskills':
+			case 'powerlevels':
 				settings['mechanics'][args[0].toLowerCase()] = !settings['mechanics'][args[0].toLowerCase()]
 				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 				message.channel.send(fullNames[args[0].toLowerCase()] + ' are now ' + (settings['mechanics'][args[0].toLowerCase()] ? 'enabled' : 'disabled'))
