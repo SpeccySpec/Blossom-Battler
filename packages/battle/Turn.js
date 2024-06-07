@@ -403,7 +403,10 @@ const menuStates = {
 									if (char2.custom.disable[0] == skillname) canselect = false;
 								}
 
-								if (canselect) canselect = canSelectSkill(char2, skillinfo, btl);
+								if (canselect) {
+									btncolor = 'grey';
+									canselect = canSelectSkill(char2, skillinfo, btl);
+								}
 
 								comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
 								c++;
@@ -462,8 +465,11 @@ const menuStates = {
 							if (char2.custom?.disable) {
 								if (char2.custom.disable[0] == skillname) canselect = false;
 							}
-9
-							if (canselect) canselect = canSelectSkill(char, skillinfo, btl);
+
+							if (canselect) {
+								btncolor = 'grey';
+								canselect = canSelectSkill(char2, skillinfo, btl);
+							}
 				
 							comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
 							c++;
@@ -554,7 +560,10 @@ const menuStates = {
 						canselect = false;
 
 					// CanUse extra
-					if (canselect) canselect = canSelectSkill(char, skillinfo, btl);
+					if (canselect) {
+						btncolor = 'grey';
+						canselect = canSelectSkill(char, skillinfo, btl);
+					}
 
 					// Lmao.
 					comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
