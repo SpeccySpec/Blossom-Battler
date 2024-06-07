@@ -492,7 +492,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 	if (settings.mechanics.limitbreaks) {
 		if (char.lb && char.lb[1]) {
 			for (const i in char.lb) {
-				let lbDesc = `${char.lb[i].name}**\n__[${char.lb[i].class.toUpperCase()} CLASS]__\nCosts **${char.lb[i].cost}%** of the Limit Break Gauge\n`;
+				let lbDesc = `__**${char.lb[i].name}**__\n__[${char.lb[i].class.toUpperCase()} CLASS]__\nCosts **${char.lb[i].cost}%** of the Limit Break Gauge\n`;
 
 				switch(char.lb[i].class) {
 					case 'attack':
