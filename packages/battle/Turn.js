@@ -992,7 +992,7 @@ sendCurTurnEmbed = async(char, btl) => {
 	}
 
 	if (settings.mechanics.limitbreaks) statDesc += `, ${Math.round(char.lbp)}LB%`;
-	if (settings.mechanics.powerlevels) statDesc += `, Power Level: ${Math.round(calcPowerLevels(char))}`;
+	if (settings.mechanics.powerlevels) statDesc += `, Power Level: ${Math.round(calcPowerLevel(char))}`;
 	if (char.pet) statDesc = `${char.name} wants to assist the team in battle! Tell it to do something!\n`;
 
 	if (btl.teams[char.team].currency) statDesc += `\n${btl.teams[char.team].currency} ${getCurrency(btl.guild.id)}s`
