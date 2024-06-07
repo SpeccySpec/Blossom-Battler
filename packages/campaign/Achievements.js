@@ -1,9 +1,9 @@
 bbAchievements = [
-	// First achievements
+	// First achievements.
 	{name: "New Beginnings", stars: 1, desc: "Create your first character!", section: "beginnings"},
 	{name: "First Encounter...!", stars: 1, desc: "Encounter your first enemy!", section: "beginnings"},
 
-	// Murder achievements
+	// Murder achievements.
 	{name: "Murder, murder!", stars: 1, desc: "Defeat 1 enemy.", section: "battle"},
 	{name: "That was tough...", stars: 2, desc: "Defeat 50 enemies", section: "battle"},
 	{name: "Getting better!", stars: 3, desc: "Defeat 100 enemies", section: "battle"},
@@ -12,7 +12,7 @@ bbAchievements = [
 	{name: "Stabby stabby!", stars: 8, desc: "Defeat 500 enemies", section: "battle"},
 	{name: "Die.", stars: 10, desc: "Defeat 1000 enemies", section: "battle"},
 
-	// Friendship achievements
+	// Friendship achievements.
 	{name: "My first friend!", stars: 1, desc: "Pacify 1 enemy.", section: "battle"},
 	{name: "Adorable...", stars: 2, desc: "Pacify 50 enemies", section: "battle"},
 	{name: "So cute!", stars: 3, desc: "Pacify 100 enemies", section: "battle"},
@@ -21,12 +21,18 @@ bbAchievements = [
 	{name: "Good friends!", stars: 8, desc: "Pacify 500 enemies", section: "battle"},
 	{name: "Best friends!", stars: 10, desc: "Pacify 1000 enemies", section: "battle"},
 
-	// Money
+	// Money.
 	{name: "Paycheck?", stars: 1, desc: "Obtain 100<:token:1007649168426287236>. (currency independant)", section: "battle"},
 	{name: "Shiny...", stars: 2, desc: "Obtain 5000<:token:1007649168426287236>. (currency independant)", section: "battle"},
 	{name: "Sparkly...", stars: 4, desc: "Obtain 10000<:token:1007649168426287236>. (currency independant)", section: "battle"},
-	{name: "Dubloons...", stars: 7, desc: "Obtain 20000<:token:1007649168426287236>. (currency independant)", section: "battle"},
+	{name: "Doubloons...", stars: 7, desc: "Obtain 20000<:token:1007649168426287236>. (currency independant)", section: "battle"},
 	{name: "Rich! I'm Rich!", stars: 10, desc: "Obtain 40000<:token:1007649168426287236>. (currency independant)", section: "battle"},
+
+	// Death achievements.
+	{name: "Ouch...", stars: 1, desc: "Die once.", section: "battle"},
+	{name: "Learning...", stars: 2, desc: "Die 5 times.", section: "battle"},
+	{name: "Tch!!", stars: 3, desc: "Die 20 times.", section: "battle"},
+	{name: "Rise from the dead", stars: 4, desc: "Die 50 times.", section: "battle"}
 ]
 
 winAchievement = async(user, id) => {
