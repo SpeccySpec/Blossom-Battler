@@ -33,7 +33,7 @@ calcPowerLevel = (char) => {
         }
     }
 
-    let T_USESTAT = (["magic", "sorcery"].includes(skill.atktype ?? "physical")) ? T_MAG : T_STR;
+    let T_USESTAT = (["magic", "sorcery"].includes(g?.atktype ?? "physical")) ? T_MAG : T_STR;
 
     let T_MPOW = 5*Math.sqrt(g?.pow ?? 0) // (Strongest move power with hits accounted for)
     let POW = T_MPOW/38 * Math.sqrt(T_USESTAT) * ((100 + amp)/100) // (Scaling the variable down so the powerlevel doesn't inflate too much off of a stronger move)
