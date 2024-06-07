@@ -328,6 +328,7 @@ const menuStates = {
 		}
 	},
 	[MENU_SKILL]: ({char, btl, comps}) => {
+		let dogrey = false;
 		switch(btl.action.move) {
 			case 'bb-fusionskill':
 				let data = canFusionSkill(char, btl, skillFile[btl.action.index], true);
@@ -374,6 +375,7 @@ const menuStates = {
 								if (typeof(skillinfo?.type) === 'object') emoji1 = skillinfo ? elementEmoji[skillinfo.type[0]] : elementEmoji.strike;
 
 								let canselect = true;
+								dogrey = false;
 					
 								// Afford/Status Effects
 								if (!canAfford(char2, skillinfo, btl)) {
@@ -404,11 +406,13 @@ const menuStates = {
 								}
 
 								if (canselect) {
-									btncolor = 'grey';
+									dogrey = true;
 									canselect = canSelectSkill(char2, skillinfo, btl);
+								} else {
+									dogrey = false;
 								}
 
-								comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
+								comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, dogrey ? 'grey' : btncolor, true, skillname, !canselect))
 								c++;
 							}
 						} else {
@@ -437,6 +441,7 @@ const menuStates = {
 							if (typeof(skillinfo?.type) === 'object') emoji1 = skillinfo ? elementEmoji[skillinfo.type[0]] : elementEmoji.strike;
 				
 							let canselect = true;
+							dogrey = false;
 				
 							// Afford/Status Effects
 							if (!canAfford(char2, skillinfo, btl)) {
@@ -467,11 +472,13 @@ const menuStates = {
 							}
 
 							if (canselect) {
-								btncolor = 'grey';
-								canselect = canSelectSkill(char2, skillinfo, btl);
+								dogrey = true;
+								canselect = canSelectSkill(char2, skillinfo, 9);
+							} else {
+								dogrey = false;
 							}
 				
-							comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
+							comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, dogrey ? 'grey' : btncolor, true, skillname, !canselect))
 							c++;
 						}
 					}
@@ -500,6 +507,7 @@ const menuStates = {
 					if (typeof(skillinfo?.type) === 'object') emoji1 = skillinfo ? elementEmoji[skillinfo.type[0]] : elementEmoji.strike;
 		
 					let canselect = true;
+					dogrey = false;
 		
 					// Afford/Status Effects
 					if (!canAfford(char, skillinfo, btl)) {
@@ -561,12 +569,14 @@ const menuStates = {
 
 					// CanUse extra
 					if (canselect) {
-						btncolor = 'grey';
+						dogrey = true;
 						canselect = canSelectSkill(char, skillinfo, btl);
+					} else {
+						dogrey = false;
 					}
 
 					// Lmao.
-					comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
+					comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, dogrey ? 'grey' : btncolor, true, skillname, !canselect))
 				}
 		}
 	},
