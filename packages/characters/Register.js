@@ -492,7 +492,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 	if (settings.mechanics.limitbreaks) {
 		if (char.lb && char.lb[1]) {
 			for (const i in char.lb) {
-				let lbDesc = `**${i}: ${char.lb[i].name}**\n__[${char.lb[i].class.toUpperCase()} CLASS]__\nCosts **${char.lb[i].cost}%** of the Limit Break Gauge\n`;
+				let lbDesc = `${char.lb[i].name}**\n__[${char.lb[i].class.toUpperCase()} CLASS]__\nCosts **${char.lb[i].cost}%** of the Limit Break Gauge\n`;
 
 				switch(char.lb[i].class) {
 					case 'attack':
@@ -511,7 +511,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 				}
 
 				lbDesc += `\n_${char.lb[i].desc ?? "A full power attack."}_\n\n`;
-				DiscordEmbed.fields.push({ name: `__Limit Break ${i}__`, value: lbDesc, inline: false });
+				DiscordEmbed.fields.push({ name: `__Limit Break: Level ${i}__`, value: lbDesc, inline: false });
 			}
 		}
 	}
