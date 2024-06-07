@@ -1,3 +1,5 @@
+const { default: ffmpegPath } = require("ffmpeg-static");
+
 forceEndBattles = {};
 
 getCharFromTurn = (btl) => {
@@ -165,6 +167,105 @@ function CalcCompins(comps, i) {
 	return compins
 }
 
+function canSelectSkill(char, skill, btl) {
+	if (skill.extras) {
+		for (let k in skill.extras) {
+			if (!extrasList[k]) continue;
+			if (!extrasList[k].canuse) continue;
+
+			if (extrasList[k].multiple) {
+				for (let l in skill.extras[k]) {
+					let txt = extrasList[k].canuse(char, skill, btl, skill.extras[k][l]);
+					if (txt !== true) return false;
+				}
+			} else {
+				let txt = extrasList[k].canuse(char, skill, btl, skill.extras[k]);
+				if (txt !== true) return false;
+			}
+		}
+	} else if (skill.heal) {
+		for (let k in skill.heal) {
+			if (!healList[k]) continue;
+			if (!healList[k].canuse) continue;
+
+			if (healList[k].multiple) {
+				for (let l in skill.heal[k]) {
+					let txt = healList[k].canuse(char, skill, btl, skill.heal[k][l]);
+					if (txt !== true) return false;
+				}
+			} else {
+				let txt = healList[k].canuse(char, skill, btl, skill.heal[k]);
+				if (txt !== true) return false;
+			}
+		}
+	}
+
+	// CanUseSkill passives
+	if (doPassives(btl)) {
+		for (let s of char.skills) {
+			let pskill = skillFile[s];
+
+			if (pskill && pskill.type == 'passive') {
+				for (let k in pskill.passive) {
+					if (!passiveList[k]) continue;
+					if (!passiveList[k].canuseskill) continue;
+
+					if (passiveList[k].multiple && pskill.passive[k]) {
+						for (let l in pskill.passive[k]) {
+							let txt = passiveList[k].canuseskill(char, skill, pskill, btl, pskill.passive[k][l]);
+							if (txt !== true) return false;
+						}
+					} else {
+						let txt = passiveList[k].canuseskill(char, skill, pskill, btl, pskill.passive[k]);
+						if (txt !== true) return false;
+					}
+				}
+			}
+		}
+	}
+
+	if (btl.terrain && btl.terrain.type === "blindingradiance" && ((typeof(skill.type) === "string" && skill.type === "curse") || (typeof(skill.type) === "object" && skill.type.includes("curse")))) {
+		return false;
+	} else if (btl.terrain && btl.terrain.type === "eternaldarkness" && ((typeof(skill.type) === "string" && skill.type === "bless") || (typeof(skill.type) === "object" && skill.type.includes("bless")))) {
+		return false;
+	}
+
+	if (char.status && statusEffectFuncs[char.status.toLowerCase()] && statusEffectFuncs[char.status.toLowerCase()].canuse) {
+		let canUse = statusEffectFuncs[char.status.toLowerCase()].canuse(char, skill, btl)
+
+		if (canUse && canUse[1] != true) {
+			return false;
+		}
+	}
+
+	if (skill.statusses) {
+		for (let k in skill.statusses) {
+			if (!statusList[k]) continue;
+			if (!statusList[k].canuse) continue;
+
+			if (statusList[k].multiple) {
+				for (let l in skill.statusses[k]) {
+					let txt = statusList[k].canuse(char, skill, btl, skill.statusses[k][l]);
+					if (txt !== true) return false;
+				}
+			} else {
+				let txt = statusList[k].canuse(char, skill, btl, skill.statusses[k]);
+				if (txt !== true) return false;
+			}
+		}
+
+		if (char.status && statusEffectFuncs[char.status.toLowerCase()] && statusEffectFuncs[char.status.toLowerCase()].canuse) {
+			let canUse = statusEffectFuncs[char.status.toLowerCase()].canuse(char, skill, btl)
+
+			if (canUse && canUse[1] != true) {
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
 const menuEmbeds = {
 	[MENU_QUESTION]: ({char, btl, DiscordEmbed}) => {
 		DiscordEmbed.title = btl.action.question.title;
@@ -302,6 +403,8 @@ const menuStates = {
 									if (char2.custom.disable[0] == skillname) canselect = false;
 								}
 
+								if (canselect) canselect = canSelectSkill(char2, skillinfo, btl);
+
 								comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
 								c++;
 							}
@@ -359,6 +462,8 @@ const menuStates = {
 							if (char2.custom?.disable) {
 								if (char2.custom.disable[0] == skillname) canselect = false;
 							}
+9
+							if (canselect) canselect = canSelectSkill(char, skillinfo, btl);
 				
 							comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
 							c++;
@@ -447,6 +552,9 @@ const menuStates = {
 					// Don't allow selections of fusion skills at all.
 					if (skillinfo?.fusionskill)
 						canselect = false;
+
+					// CanUse extra
+					if (canselect) canselect = canSelectSkill(char, skillinfo, btl);
 
 					// Lmao.
 					comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, btncolor, true, skillname, !canselect))
@@ -1460,201 +1568,6 @@ sendCurTurnEmbed = async(char, btl) => {
 						if (btl.action.fusionskill) delete btl.action.fusionskill;
 
 						btl.action.index = i.customId;
-
-						if (skill.extras) {
-							for (let k in skill.extras) {
-								if (!extrasList[k]) continue;
-								if (!extrasList[k].canuse) continue;
-
-								if (extrasList[k].multiple) {
-									for (let l in skill.extras[k]) {
-										let txt = extrasList[k].canuse(char, skill, btl, skill.extras[k][l]);
-										if (txt !== true) {
-											DiscordEmbed.title = txt;
-											alreadyResponded = true;
-
-											return updateMsg(i, {
-												content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-												embeds: [DiscordEmbed],
-												components: []
-											});
-										}
-									}
-								} else {
-									let txt = extrasList[k].canuse(char, skill, btl, skill.extras[k]);
-									if (txt !== true) {
-										DiscordEmbed.title = txt;
-										alreadyResponded = true;
-
-										return updateMsg(i, {
-											content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-											embeds: [DiscordEmbed],
-											components: setUpComponents(char, btl, menustate)
-										});
-									}
-								}
-							}
-						} else if (skill.heal) {
-							for (let k in skill.heal) {
-								if (!healList[k]) continue;
-								if (!healList[k].canuse) continue;
-
-								if (healList[k].multiple) {
-									for (let l in skill.heal[k]) {
-										let txt = healList[k].canuse(char, skill, btl, skill.heal[k][l]);
-										if (txt !== true) {
-											DiscordEmbed.title = txt;
-											alreadyResponded = true;
-
-											return updateMsg(i, {
-												content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-												embeds: [DiscordEmbed],
-											});
-										}
-									}
-								} else {
-									let txt = healList[k].canuse(char, skill, btl, skill.heal[k]);
-									if (txt !== true) {
-										DiscordEmbed.title = txt;
-										alreadyResponded = true;
-
-										return updateMsg(i, {
-											content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-											embeds: [DiscordEmbed],
-											components: setUpComponents(char, btl, menustate)
-										});
-									}
-								}
-							}
-						}
-
-						// CanUseSkill passives
-						if (doPassives(btl)) {
-							for (let s of char.skills) {
-								let pskill = skillFile[s];
-
-								if (pskill && pskill.type == 'passive') {
-									for (let k in pskill.passive) {
-										if (!passiveList[k]) continue;
-										if (!passiveList[k].canuseskill) continue;
-
-										if (passiveList[k].multiple && pskill.passive[k]) {
-											for (let l in pskill.passive[k]) {
-												let txt = passiveList[k].canuseskill(char, skill, pskill, btl, pskill.passive[k][l]);
-
-												if (txt !== true) {
-													DiscordEmbed.title = txt;
-													alreadyResponded = true;
-
-													return updateMsg(i, {
-														content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-														embeds: [DiscordEmbed],
-													});
-												}
-											}
-										} else {
-											let txt = passiveList[k].canuseskill(char, skill, pskill, btl, pskill.passive[k]);
-
-											if (txt !== true) {
-												DiscordEmbed.title = txt;
-												alreadyResponded = true;
-
-												return updateMsg(i, {
-													content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-													embeds: [DiscordEmbed],
-													components: setUpComponents(char, btl, menustate)
-												});
-											}
-										}
-									}
-								}
-							}
-						}
-
-						if (btl.terrain && btl.terrain.type === "blindingradiance" && ((typeof(skill.type) === "string" && skill.type === "curse") || (typeof(skill.type) === "object" && skill.type.includes("curse")))) {
-							DiscordEmbed.title = "The cursed energy dissapears as soon as it appears...";
-							alreadyResponded = true;
-
-							return updateMsg(i, {
-								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-								embeds: [DiscordEmbed],
-								components: setUpComponents(char, btl, menustate)
-							});
-						} else if (btl.terrain && btl.terrain.type === "eternaldarkness" && ((typeof(skill.type) === "string" && skill.type === "bless") || (typeof(skill.type) === "object" && skill.type.includes("bless")))) {
-							DiscordEmbed.title = "The blessed energy dissapears as soon as it appears...";
-							alreadyResponded = true;
-
-							return updateMsg(i, {
-								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-								embeds: [DiscordEmbed],
-								components: setUpComponents(char, btl, menustate)
-							});
-						}
-
-						if (char.status && statusEffectFuncs[char.status.toLowerCase()] && statusEffectFuncs[char.status.toLowerCase()].canuse) {
-							let canUse = statusEffectFuncs[char.status.toLowerCase()].canuse(char, skill, btl)
-
-							if (canUse && canUse[1] != true) {
-								DiscordEmbed.title = canUse[0];
-								alreadyResponded = true;
-
-								await updateMsg(i, {
-									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-									embeds: [DiscordEmbed],
-									components: setUpComponents(char, btl, menustate)
-								});
-							}
-						}
-
-						if (skill.statusses) {
-							for (let k in skill.statusses) {
-								if (!statusList[k]) continue;
-								if (!statusList[k].canuse) continue;
-
-								if (statusList[k].multiple) {
-									for (let l in skill.statusses[k]) {
-										let txt = statusList[k].canuse(char, skill, btl, skill.statusses[k][l]);
-										if (txt !== true) {
-											DiscordEmbed.title = txt;
-											alreadyResponded = true;
-
-											return updateMsg(i, {
-												content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-												embeds: [DiscordEmbed],
-												components: []
-											});
-										}
-									}
-								} else {
-									let txt = statusList[k].canuse(char, skill, btl, skill.statusses[k]);
-									if (txt !== true) {
-										DiscordEmbed.title = txt;
-										alreadyResponded = true;
-
-										return updateMsg(i, {
-											content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-											embeds: [DiscordEmbed],
-											components: setUpComponents(char, btl, menustate)
-										});
-									}
-								}
-							}
-
-							if (char.status && statusEffectFuncs[char.status.toLowerCase()] && statusEffectFuncs[char.status.toLowerCase()].canuse) {
-								let canUse = statusEffectFuncs[char.status.toLowerCase()].canuse(char, skill, btl)
-
-								if (canUse && canUse[1] != true) {
-									DiscordEmbed.title = canUse[0];
-									alreadyResponded = true;
-
-									await updateMsg(i, {
-										content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
-										embeds: [DiscordEmbed],
-										components: setUpComponents(char, btl, menustate)
-									});
-								}
-							}
-						}
 
 						if (hasStatus(skill, 'mimic')) {
 							menustate = MENU_ANYSEL;
