@@ -119,14 +119,27 @@ commands.skip = new Command({
 	}
 })
 
+// FuckOff and LeaveVC are aliases but with different functions.
 commands.leavevc = new Command({
 	desc: 'Makes me leave the voice chat.\n**[THIS IS DEPRICATED AND WILL BE REMOVED.]**',
 	section: 'music',
-	aliases: ['fuckoff'],
+	aliases: ['goodbye', 'exitvc'],
 	args: [],
 	func: async(message, args, guilded) => {
 		forceStop(message.guild.id);
 		leaveVC(message.guild.id);
 		message.react('👍');
+	}
+})
+
+commands.fuckoff = new Command({
+	desc: 'Makes me leave the voice chat.\n**[THIS IS DEPRICATED AND WILL BE REMOVED.]**',
+	section: 'music',
+	aliases: [],
+	args: [],
+	func: async(message, args, guilded) => {
+		forceStop(message.guild.id);
+		leaveVC(message.guild.id);
+		message.react('<:cry:973077051852607559>');
 	}
 })
