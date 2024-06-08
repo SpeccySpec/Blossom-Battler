@@ -38,6 +38,6 @@ calcPowerLevel = (char) => {
     let T_MPOW = 5*Math.sqrt(g?.pow ?? 0) // (Strongest move power with hits accounted for)
     let POW = T_MPOW/38 * Math.sqrt(T_USESTAT) * ((100 + amp)/100) // (Scaling the variable down so the powerlevel doesn't inflate too much off of a stronger move)
 
-    let powerlevel = truncNum(((T_STR + T_MAG)*T_DEF/32)*(char.maxhp/52)+(POW) ?? 0, 2)
+    let powerlevel = truncNum(((T_STR + T_MAG)*T_DEF/32)*((char.maxhp ?? (char.hp ?? 0))/52)+(POW) ?? 0, 2)
     return isNaN(powerlevel) ? 0 : powerlevel;
 }
