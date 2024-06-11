@@ -652,7 +652,7 @@ commands.resetdaily = new Command({
 	noslash: true,
 	desc: "SUPERADMIN ONLY",
 	section: "roll",
-	args: ['resetdailies', 'rerolldaily', 'rerolldailies'],
+	args: [],
 	func(message, args, guilded) {
 		if (!utilityFuncs.RPGBotAdmin(message.author.id)) return void message.channel.send("Only a super admin can use this.");
 		resetDailies();

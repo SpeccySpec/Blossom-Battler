@@ -187,6 +187,7 @@ winBattle = (btl, i) => {
 
 	// Inteligence added to XP
 	for (let char of btl.teams[i].members) enemyxp += char.stats.int;
+	for (let char of btl.teams[i].backup) enemyxp += char.stats.int;
 
 	// XP Rate
 	enemyxp = Math.round(enemyxp*(settings.rates.xprate ?? 1));
@@ -226,6 +227,59 @@ winBattle = (btl, i) => {
 			if (!char.trust) char.trust = {};
 
 			for (let char2 of btl.teams[i].members) {
+				if (char2.id  == char.id) continue;
+				if (!charFile[char2.truename]) continue;
+
+				if (!charFile[char.truename].trust) charFile[char.truename].trust = {};
+				if (!charFile[char2.truename].trust) charFile[char2.truename].trust = {};
+
+				embedtxt += `${changeTrust(char, char2, Math.round(35*settings.rates.trustrate), false)}`;
+				charFile[char.truename].trust = char.trust;
+				charFile[char2.truename].trust = char2.trust;
+			}
+
+			for (let char2 of btl.teams[i].backup) {
+				if (char2.id  == char.id) continue;
+				if (!charFile[char2.truename]) continue;
+
+				if (!charFile[char.truename].trust) charFile[char.truename].trust = {};
+				if (!charFile[char2.truename].trust) charFile[char2.truename].trust = {};
+
+				embedtxt += `${changeTrust(char, char2, Math.round(35*settings.rates.trustrate), false)}`;
+				charFile[char.truename].trust = char.trust;
+				charFile[char2.truename].trust = char2.trust;
+			}
+
+			if (enemyxp > 0) gainXp(btl.channel, charFile[char.truename], enemyxp, true, btl.channel.guildId);
+
+			// Also, get the USERS that participated in this battle
+			if (!users.includes(char.owner)) users.push(char.owner);
+		}
+	}
+
+	for (let char of btl.teams[i].backup) {
+		if (charFile[char.truename]) {
+			charFile[char.truename].hp = Math.min(charFile[char.truename].maxhp, char.hp);
+			charFile[char.truename].mp = Math.min(charFile[char.truename].maxmp, char.mp);
+			charFile[char.truename].status = char.status;
+			charFile[char.truename].statusturns = char.statusturns;
+
+			// While I'm here... why don't I sort out Trust!
+			if (!char.trust) char.trust = {};
+
+			for (let char2 of btl.teams[i].members) {
+				if (char2.id  == char.id) continue;
+				if (!charFile[char2.truename]) continue;
+
+				if (!charFile[char.truename].trust) charFile[char.truename].trust = {};
+				if (!charFile[char2.truename].trust) charFile[char2.truename].trust = {};
+
+				embedtxt += `${changeTrust(char, char2, Math.round(35*settings.rates.trustrate), false)}`;
+				charFile[char.truename].trust = char.trust;
+				charFile[char2.truename].trust = char2.trust;
+			}
+
+			for (let char2 of btl.teams[i].backup) {
 				if (char2.id  == char.id) continue;
 				if (!charFile[char2.truename]) continue;
 
