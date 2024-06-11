@@ -291,7 +291,7 @@ winBattle = (btl, i) => {
 				charFile[char2.truename].trust = char2.trust;
 			}
 
-			if (enemyxp > 0) gainXp(btl.channel, charFile[char.truename], enemyxp, true, btl.channel.guildId);
+			if (enemyxp > 0) gainXp(btl.channel, charFile[char.truename], enemyxp/2, true, btl.channel.guildId);
 
 			// Also, get the USERS that participated in this battle
 			if (!users.includes(char.owner)) users.push(char.owner);

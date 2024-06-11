@@ -690,7 +690,7 @@ commands.getuserdata = new Command({
 					**[Total Damage Dealt]** ${user.vars.dmgdealt ?? 0}
 					**[Total Damage Taken]** ${user.vars.dmgtaken ?? 0}
 					**[Total Deaths]** ${user.vars.deaths ?? 0}\n
-					**[Total ${settings.currency} Obtained]** ${settings.currency_emoji}${user.vars.totalmoney ?? '0 (Updated Over Time)'}`, 
+					**[Total ${settings.currency}s Obtained]** ${settings.currency_emoji}${user.vars.totalmoney ?? '0 (Updated Over Time)'}`, 
 				inline: true}
 			)
 		message.channel.send({embeds: [DiscordEmbed]});
