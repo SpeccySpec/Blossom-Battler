@@ -1386,7 +1386,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						let txt = statusList.status.inflictStatus(char, targ, skill, status, btl, skill.pow);
 
 						if (txt && txt != '') {
-							result.txt += `${txt}\n${selectQuote(char, 'status', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}`;
+							result.txt += `${txt}\n${selectQuote(char, isPositiveStatus(status) ? 'positivestatus' : 'status', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}`;
 						}
 					} else {
 						result.txt += '...But it failed!'
