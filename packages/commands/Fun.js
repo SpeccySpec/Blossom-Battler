@@ -665,8 +665,7 @@ commands.getuserdata = new Command({
 	desc: "List all the achievements that I have to offer! Completed achievements will be crossed out.",
 	section: "fun",
 	func(message, args, guilded) {
-		let array = [];
-
+		let settings = setUpSettings(message.guild.id);
 		let user = setUpUserData(message.author.id);
 		if (!user.vars) user.vars = {};
 		if (!user.achievements) user.achievements = [];
@@ -691,7 +690,7 @@ commands.getuserdata = new Command({
 					**[Total Damage Dealt]** ${user.vars.dmgdealt ?? 0}
 					**[Total Damage Taken]** ${user.vars.dmgtaken ?? 0}
 					**[Total Deaths]** ${user.vars.deaths ?? 0}\n
-					**[Total Money Obtained]** ${user.vars.totalmoney ?? '0 (Updated Over Time)'}`, 
+					**[Total ${settings.currency} Obtained]** ${settings.currency_emoji}${user.vars.totalmoney ?? '0 (Updated Over Time)'}`, 
 				inline: true}
 			)
 		message.channel.send({embeds: [DiscordEmbed]});
