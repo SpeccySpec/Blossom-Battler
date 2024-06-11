@@ -79,7 +79,16 @@ let tradePkmn = [
 	"Dracovish",
 	"Pikachu",
 	"Pichu",
-	"Eevee"
+	"Eevee",
+	"Meowscarada",
+	"Tatsugiri",
+	"Dondozo",
+	"Mareep",
+	"Vaporeon",
+	"Leavanny",
+	"Lopunny",
+	"Lucario",
+	"Mew"
 ]
 
 let soloScenarios = [
@@ -636,6 +645,18 @@ commands.dailyall = new Command({
 		for (let i in dailies) {
 			commands[dailies[i]].call(message, args)
 		}
+	}
+})
+
+commands.resetdaily = new Command({
+	noslash: true,
+	desc: "SUPERADMIN ONLY",
+	section: "roll",
+	args: ['resetdailies', 'rerolldaily', 'rerolldailies'],
+	func(message, args, guilded) {
+		if (!utilityFuncs.RPGBotAdmin(message.author.id)) return void message.channel.send("Only a super admin can use this.");
+		resetDailies();
+		message.react('👍');
 	}
 })
 

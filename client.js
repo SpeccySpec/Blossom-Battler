@@ -279,7 +279,7 @@ let tempShip = fs.readFileSync(dataPath+'/dailyship.txt', {flag: 'as+'});
 if (tempShip && tempShip != '')
 	dailyShip = JSON.parse(tempShip);
 
-function resetDailies() {
+resetDailies = () => {
 	dailyQuote = {};
 	dailySkill = 'none';
 	dailyFusionSkill = 'none';
