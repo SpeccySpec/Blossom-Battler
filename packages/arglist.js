@@ -14,8 +14,9 @@ class ArgList {
 		for (const arg of this.args) {
 			const rawarg = rawargs.shift()
 			if (rawarg) {
-				const parser = typeParsers[arg.type]
-				const parsedArg = parser ? parser({arg: rawarg, message}) : rawarg
+				const parser = typeParsers[arg.type];
+				const parsedArg = (rawarg === "-") ? null : (parser ? parser({arg: rawarg, message}) : rawarg);
+
 				if (parsedArg === undefined) {
 					const DiscordEmbed = new Discord.MessageEmbed()
 						.setColor('#ff0000')
