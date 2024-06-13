@@ -293,19 +293,28 @@ commands.getchar = new Command({
 			type: "Num",
 			intcap: 1000,
 			forced: false
-		}
+		},
+		{
+			name: "Form",
+			type: "Word",
+			forced: false
+		},
 	],
 	func(message, args, guilded) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
-		if (args[1] > 1000) return message.channel.send('We do not support anything above level 1000.');
-		if (args[1] < 1) return message.channel.send('We do not support anything below level 1.');
+		if (args[1] && args[1] > 1000) return message.channel.send('We do not support anything above level 1000.');
+		if (args[1] && args[1] < 1) return message.channel.send('We do not support anything below level 1.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
 
 		// Alright, let's get the character!
-		let DiscordEmbed = longDescription(charFile[args[0]], args[1] ?? charFile[args[0]].level, message.guild.id, message);
-		message.channel.send({embeds: [DiscordEmbed]});
+		if (args[2] && charFile[args[0]] && charFile[args[0]].forms && charFile[args[0]].forms[args[2]]) {
+			message.channel.send({embeds: [formDesc(charFile[args[0]], args[2], true, message)]});
+		} else {
+			let DiscordEmbed = longDescription(charFile[args[0]], args[1] ?? charFile[args[0]].level, message.guild.id, message);
+			message.channel.send({embeds: [DiscordEmbed]});
+		}
 	}
 })
 
@@ -958,6 +967,11 @@ commands.setaffinity = new Command({
 			name: "Affinity",
 			type: "Word",
 			forced: true
+		},
+		{
+			name: "Form",
+			type: "Word",
+			forced: false
 		}
 	],
 	checkban: true,
@@ -982,24 +996,50 @@ commands.setaffinity = new Command({
 			if (!utilityFuncs.inArray(args[2].toLowerCase(), Affinities) && args[2].toLowerCase() != 'normal') return message.channel.send('Please enter a valid affinity!```diff\n+ SuperWeak\n+ Weak\n+ Normal\n+ Resist\n+ Block\n+ Repel\n+ Drain```');
 			if (args[1].toLowerCase() == 'almighty' || args[1].toLowerCase() == 'status' || args[1].toLowerCase() == 'passive' || args[1].toLowerCase() == 'heal') return message.channel.send(`You can't set ${args[1]} affinities!`);
 
-			if (hasAffinity(thingDefs[args[0]], args[1].toLowerCase(), args[2].toLowerCase())) return message.channel.send(`${thingDefs[args[0]].name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
+			if (args[3]) {
+				if (!thingDefs[args[0]].forms) return void message.channel.send(`__${thingDefs[args[0]].name}__ has no alternate forms!`);
+				if (!thingDefs[args[0]].forms[args[3]]) return void message.channel.send(`${args[3]} is not a valid form for __${thingDefs[args[0]].name}__.`);
+				let form = thingDefs[args[0]].forms[args[3]];
 
-			// Clear Affinities
-			for (let a of Affinities) {
-				if (a && thingDefs[args[0]].affinities[a]) {
-					for (const k in thingDefs[args[0]].affinities[a]) {
-						if (thingDefs[args[0]].affinities[a][k].toLowerCase() === args[1].toLowerCase()) {
-							thingDefs[args[0]].affinities[a].splice(k, 1);
-							break;
+				if (hasAffinity(form, args[1].toLowerCase(), args[2].toLowerCase())) return message.channel.send(`__${thingDefs[args[0]].name}__'s _${form.name}_ already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
+
+				// Clear Affinities
+				for (let a of Affinities) {
+					if (a && form.affinities[a]) {
+						for (const k in form.affinities[a]) {
+							if (form.affinities[a][k].toLowerCase() === args[1].toLowerCase()) {
+								form.affinities[a].splice(k, 1);
+								break;
+							}
 						}
 					}
 				}
-			}
 
-			// Apply Affinities (ignore if normal)
-			if (args[2].toLowerCase() != 'normal') {
-				if (!thingDefs[args[0]].affinities[args[2].toLowerCase()]) thingDefs[args[0]].affinities[args[2].toLowerCase()] = [];
-				thingDefs[args[0]].affinities[args[2].toLowerCase()].push(args[1].toLowerCase());
+				// Apply Affinities (ignore if normal)
+				if (args[2].toLowerCase() != 'normal') {
+					if (!form.affinities[args[2].toLowerCase()]) form.affinities[args[2].toLowerCase()] = [];
+					form.affinities[args[2].toLowerCase()].push(args[1].toLowerCase());
+				}
+			} else {
+				if (hasAffinity(thingDefs[args[0]], args[1].toLowerCase(), args[2].toLowerCase())) return message.channel.send(`${thingDefs[args[0]].name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
+
+				// Clear Affinities
+				for (let a of Affinities) {
+					if (a && thingDefs[args[0]].affinities[a]) {
+						for (const k in thingDefs[args[0]].affinities[a]) {
+							if (thingDefs[args[0]].affinities[a][k].toLowerCase() === args[1].toLowerCase()) {
+								thingDefs[args[0]].affinities[a].splice(k, 1);
+								break;
+							}
+						}
+					}
+				}
+
+				// Apply Affinities (ignore if normal)
+				if (args[2].toLowerCase() != 'normal') {
+					if (!thingDefs[args[0]].affinities[args[2].toLowerCase()]) thingDefs[args[0]].affinities[args[2].toLowerCase()] = [];
+					thingDefs[args[0]].affinities[args[2].toLowerCase()].push(args[1].toLowerCase());
+				}
 			}
 		// Status Affinities
 		} else if (utilityFuncs.inArray(args[1].toLowerCase(), statusEffects)) {
@@ -1010,26 +1050,54 @@ commands.setaffinity = new Command({
 			if (['infatuation', 'confusion', 'drenched', 'stagger', 'grassimped', 'dizzy', 'guilt'].includes(args[1].toLowerCase()) && !['normal', 'block'].includes(args[2].toLowerCase())) return message.channel.send(`You can't set this kind of affinity for ${args[1]}, at most either normal or block!`);
 			if (['dispelled'].includes(args[1].toLowerCase())) return message.channel.send(`You can't set an affinity for ${args[1]}!`);
 
-			if (hasStatusAffinity(thingDefs[args[0]], args[1].toLowerCase(), args[2].toLowerCase())) return message.channel.send(`${thingDefs[args[0]].name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
+			if (args[3]) {
+				if (!thingDefs[args[0]].forms) return void message.channel.send(`__${thingDefs[args[0]].name}__ has no alternate forms!`);
+				if (!thingDefs[args[0]].forms[args[3]]) return void message.channel.send(`${args[3]} is not a valid form for __${thingDefs[args[0]].name}__.`);
+				let form = thingDefs[args[0]].forms[args[3]];
 
-			// Clear Affinities
-			for (let a of Affinities) {
-				if (thingDefs[args[0]].statusaffinities[a]) {
-					if (a && thingDefs[args[0]].statusaffinities[a]) {
-						for (const k in thingDefs[args[0]].statusaffinities[a]) {
-							if (thingDefs[args[0]].statusaffinities[a][k].toLowerCase() === args[1].toLowerCase()) {
-								thingDefs[args[0]].statusaffinities[a].splice(k, 1);
-								break;
+				if (hasStatusAffinity(form, args[1].toLowerCase(), args[2].toLowerCase())) return message.channel.send(`${form.name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
+
+				// Clear Affinities
+				for (let a of Affinities) {
+					if (form.statusaffinities[a]) {
+						if (a && form.statusaffinities[a]) {
+							for (const k in form.statusaffinities[a]) {
+								if (form.statusaffinities[a][k].toLowerCase() === args[1].toLowerCase()) {
+									form.statusaffinities[a].splice(k, 1);
+									break;
+								}
 							}
 						}
 					}
 				}
-			}
 
-			// Apply Affinities (ignore if normal)
-			if (args[2].toLowerCase() != 'normal') {
-				if (!thingDefs[args[0]].statusaffinities[args[2].toLowerCase()]) thingDefs[args[0]].statusaffinities[args[2].toLowerCase()] = [];
-				thingDefs[args[0]].statusaffinities[args[2].toLowerCase()].push(args[1].toLowerCase());
+				// Apply Affinities (ignore if normal)
+				if (args[2].toLowerCase() != 'normal') {
+					if (!form.statusaffinities[args[2].toLowerCase()]) form.statusaffinities[args[2].toLowerCase()] = [];
+					form.statusaffinities[args[2].toLowerCase()].push(args[1].toLowerCase());
+				}
+			} else {
+				if (hasStatusAffinity(thingDefs[args[0]], args[1].toLowerCase(), args[2].toLowerCase())) return message.channel.send(`${thingDefs[args[0]].name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
+
+				// Clear Affinities
+				for (let a of Affinities) {
+					if (thingDefs[args[0]].statusaffinities[a]) {
+						if (a && thingDefs[args[0]].statusaffinities[a]) {
+							for (const k in thingDefs[args[0]].statusaffinities[a]) {
+								if (thingDefs[args[0]].statusaffinities[a][k].toLowerCase() === args[1].toLowerCase()) {
+									thingDefs[args[0]].statusaffinities[a].splice(k, 1);
+									break;
+								}
+							}
+						}
+					}
+				}
+
+				// Apply Affinities (ignore if normal)
+				if (args[2].toLowerCase() != 'normal') {
+					if (!thingDefs[args[0]].statusaffinities[args[2].toLowerCase()]) thingDefs[args[0]].statusaffinities[args[2].toLowerCase()] = [];
+					thingDefs[args[0]].statusaffinities[args[2].toLowerCase()].push(args[1].toLowerCase());
+				}
 			}
 		// Neither entered.
 		} else {
@@ -1037,7 +1105,13 @@ commands.setaffinity = new Command({
 		}
 
 		// Display Message
-		message.channel.send(`👍 ${thingDefs[args[0]].name} has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}`);
+		if (args[3]) {
+			message.channel.send(`👍 ${thingDefs[args[0]].name}'s ${thingDefs[args[0]].forms[args[3]].name} has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}`);
+		} else {
+			message.channel.send(`👍 ${thingDefs[args[0]].name} has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}`);
+		}
+
+		// Save files
 		if (thingDefs[args[0]].type) {
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
 		} else {
@@ -1393,6 +1467,11 @@ commands.setmelee = new Command({
 			name: "Status Chance",
 			type: "Num",
 			forced: false
+		},
+		{
+			name: "Form",
+			type: "Word",
+			forced: false
 		}
 	],
 	checkban: true,
@@ -1412,36 +1491,74 @@ commands.setmelee = new Command({
 		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		// Some element and balancing checks
-		if (args[2].toLowerCase() != 'strike' && args[2].toLowerCase() != 'slash' && args[2].toLowerCase() != 'pierce' && args[2].toLowerCase() != 'explode') return message.channel.send('You can only use Physical Elements in melee attacks! _(Strike, Slash, Pierce, Explode)_');
-		if (args[3] > 60) return message.channel.send('Melee Attacks cannot go above **60 power**!')
-		if (args[5] > 15) return message.channel.send('Melee Attacks cannot go above **15% Critical Hit Chance**!')
+		if (["status", "support", "heal", "passive"].includes(args[2].toLowerCase())) return message.channel.send(`${args[2]} moves are excluded from melee attacks.`);
+		if (args[3] > 60) return message.channel.send('Melee Attacks cannot go above **60 power**!');
+		if (args[5] > 15) return message.channel.send('Melee Attacks cannot go above **15% Critical Hit Chance**!');
 
 		// Make the Melee Attack
-		thingDefs[args[0]].melee = {
-			name: args[1],
-			type: args[2].toLowerCase(),
-			pow: args[3],
-			acc: args[4],
-			crit: args[5],
-		}
-
-		// Status Effects
-		if (args[6] && args[6].toLowerCase() != 'none') {
-			if (!utilityFuncs.inArray(args[6].toLowerCase(), statusEffects)) {
-				let str = `${args[6]} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
-				for (let i in statusEffects) str += `\n-${statusEffects[i]}`;
-				str += '```'
-
-				return message.channel.send(str)
+		if (args[8]) {
+			if (!thingDefs[args[0]].forms) return message.channel.send(`${thingDefs[args[0]].name} has no forms!`);
+			if (!thingDefs[args[0]].forms[args[8]]) return message.channel.send(`${args[8]} is not a valid form for ${thingDefs[args[0]].name}`);
+	
+			// Make the Melee Attack
+			thingDefs[args[0]].forms[args[8]].melee = {
+				name: args[1],
+				type: args[2].toLowerCase(),
+				pow: args[3],
+				acc: args[4],
+				crit: args[5],
 			}
 
-			thingDefs[args[0]].melee.status = args[6].toLowerCase();
-			statusChance = args[7] ?? 1;
-			if (!isNaN(args[7]) && parseInt(args[7]) > 0) thingDefs[args[0]].melee.statuschance = Math.max(Math.min(parseInt(args[7]), 100), 1);
+			// Status Effects
+			if (args[6] && args[6].toLowerCase() != 'none') {
+				if (!utilityFuncs.inArray(args[6].toLowerCase(), statusEffects)) {
+					let str = `${args[7]} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
+					for (let i in statusEffects) str += `\n-${statusEffects[i]}`;
+					str += '```'
+	
+					return message.channel.send(str)
+				}
+	
+				thingDefs[args[0]].forms[args[8]].melee.status = args[6].toLowerCase();
+				statusChance = args[7] ?? 1;
+				if (!isNaN(args[7]) && parseInt(args[7]) > 0) thingDefs[args[0]].forms[args[8]].melee.statuschance = Math.max(Math.min(parseInt(args[7]), 100), 1);
+			}
+	
+			// Display Message
+			message.channel.send(`👍 ${thingDefs[args[0]].name}'s ${thingDefs[args[0]].forms[args[8]].name} Melee Attack has been changed to **${elementEmoji[args[2].toLowerCase()]}${args[2]}**!`);
+			if (thingDefs[args[0]].type) {
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+			} else {
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+			}
+		} else {
+			thingDefs[args[0]].melee = {
+				name: args[1],
+				type: args[2].toLowerCase(),
+				pow: args[3],
+				acc: args[4],
+				crit: args[5],
+			}
+
+			// Status Effects
+			if (args[6] && args[6].toLowerCase() != 'none') {
+				if (!utilityFuncs.inArray(args[6].toLowerCase(), statusEffects)) {
+					let str = `${args[6]} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
+					for (let i in statusEffects) str += `\n-${statusEffects[i]}`;
+					str += '```'
+
+					return message.channel.send(str)
+				}
+
+				thingDefs[args[0]].melee.status = args[6].toLowerCase();
+				statusChance = args[7] ?? 1;
+				if (!isNaN(args[7]) && parseInt(args[7]) > 0) thingDefs[args[0]].melee.statuschance = Math.max(Math.min(parseInt(args[7]), 100), 1);
+			}
+
+			// Display Message
+			message.channel.send(`👍 ${thingDefs[args[0]].name}'s Melee Attack has been changed to **${elementEmoji[args[2].toLowerCase()]}${args[1]}**!`);
 		}
 
-		// Display Message
-		message.channel.send(`👍 ${thingDefs[args[0]].name}'s Melee Attack has been changed to **${elementEmoji[args[2].toLowerCase()]}${args[1]}**!`);
 		if (thingDefs[args[0]].type) {
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
 		} else {
@@ -1468,6 +1585,11 @@ commands.learnskill = new Command({
 			name: "Character Name",
 			type: "Word",
 			forced: true
+		},
+		{
+			name: "Form Name",
+			type: "Word",
+			forced: false
 		},
 		{
 			name: "Skill Names",
@@ -1499,29 +1621,58 @@ commands.learnskill = new Command({
 		let learnString = `👍 ${args[0]} learned `;
 		let skillLearn = [];
 
-		for (let i = 1; i < args.length; i++) {
-			if (knowsSkill(thingDefs[args[0]], args[i])) return message.channel.send(`${args[0]} already knows ${args[i]}!\n\n**[TIP]**\n_Don't enter two of the same skill!_`);
+		if (args[1] && thingDefs[args[0]].forms && thingDefs[args[0]].forms[args[1]]) {
+			learnString = `👍 ${args[0]}'s ${args[1]} can now use `;
 
-			if (skillFile[args[i]]) {
-				if (skillFile[args[i]].levellock) {
-					if (!thingDefs[args[0]].type && skillFile[args[i]].levellock == 'unobtainable') return message.channel.send(`${args[i]} is unobtainable!`);
-					if (!thingDefs[args[0]].type && thingDefs[args[0]].level < skillFile[args[i]].levellock) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but must be level ${skillFile[args[i]].levellock} to learn ${skillFile[args[i]].name}!`);
-				}
+			for (let i = 2; i < args.length; i++) {
+				if (knowsSkill(thingDefs[args[0]].forms[args[1]], args[i])) return message.channel.send(`${args[0]}'s ${args[1]} can already use ${args[i]}!\n\n**[TIP]**\n_Don't enter two of the same skill!_`);
 
-				if (skillFile[args[i]].fusionskill) return message.channel.send(`**${getFullName(skillFile[args[i]])}** is a fusion skill. **Characters cannot learn fusion skills.**`);
+				if (skillFile[args[i]]) {
+					if (skillFile[args[i]].levellock) {
+						if (!thingDefs[args[0]].type && skillFile[args[i]].levellock == 'unobtainable') return message.channel.send(`${args[i]} is unobtainable!`);
+						if (!thingDefs[args[0]].type && thingDefs[args[0]].level < skillFile[args[i]].levellock) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but must be level ${skillFile[args[i]].levellock} to learn ${skillFile[args[i]].name}!`);
+					}
 
-				learnString += (skillFile[args[i]].name ? skillFile[args[i]].name : args[i])
-				thingDefs[args[0]].skills.push(args[i])
-				skillLearn.push(args[i])
+					if (skillFile[args[i]].fusionskill) return message.channel.send(`**${getFullName(skillFile[args[i]])}** is a fusion skill. **Characters cannot learn fusion skills.**`);
 
-				if (i == args.length-2)
-					learnString += ' and '
-				else if (i >= args.length-1)
-					learnString += '!'
-				else
-					learnString += ', '
-			} else
-				return message.channel.send(`${args[i]} isn't a valid skill.`);
+					learnString += (skillFile[args[i]].name ? skillFile[args[i]].name : args[i])
+					thingDefs[args[0]].forms[args[1]].skills.push(args[i])
+					skillLearn.push(args[i])
+
+					if (i == args.length-2)
+						learnString += ' and '
+					else if (i >= args.length-1)
+						learnString += '!'
+					else
+						learnString += ', '
+				} else
+					return message.channel.send(`${args[i]} isn't a valid skill.`);
+			}
+		} else {
+			for (let i = 2; i < args.length; i++) {
+				if (knowsSkill(thingDefs[args[0]], args[i])) return message.channel.send(`${args[0]} already knows ${args[i]}!\n\n**[TIP]**\n_Don't enter two of the same skill!_`);
+
+				if (skillFile[args[i]]) {
+					if (skillFile[args[i]].levellock) {
+						if (!thingDefs[args[0]].type && skillFile[args[i]].levellock == 'unobtainable') return message.channel.send(`${args[i]} is unobtainable!`);
+						if (!thingDefs[args[0]].type && thingDefs[args[0]].level < skillFile[args[i]].levellock) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but must be level ${skillFile[args[i]].levellock} to learn ${skillFile[args[i]].name}!`);
+					}
+
+					if (skillFile[args[i]].fusionskill) return message.channel.send(`**${getFullName(skillFile[args[i]])}** is a fusion skill. **Characters cannot learn fusion skills.**`);
+
+					learnString += (skillFile[args[i]].name ? skillFile[args[i]].name : args[i])
+					thingDefs[args[0]].skills.push(args[i])
+					skillLearn.push(args[i])
+
+					if (i == args.length-2)
+						learnString += ' and '
+					else if (i >= args.length-1)
+						learnString += '!'
+					else
+						learnString += ', '
+				} else
+					return message.channel.send(`${args[i]} isn't a valid skill.`);
+			}
 		}
 
 		message.channel.send(learnString);
@@ -1553,6 +1704,11 @@ commands.replaceskill = new Command({
 			name: "New Skill Name",
 			type: "Word",
 			forced: true
+		},
+		{
+			name: "Form Name",
+			type: "Word",
+			forced: false
 		}
 	],
 	checkban: true,
@@ -1609,6 +1765,11 @@ commands.forgetskill = new Command({
 			forced: true
 		},
 		{
+			name: "Form Name",
+			type: "Word",
+			forced: false
+		},
+		{
 			name: "Skill Name",
 			type: "Word",
 			forced: true,
@@ -1633,13 +1794,25 @@ commands.forgetskill = new Command({
 			thingdef = enemyFile[name];
 		} else return message.channel.send(`${name} doesn't exist!`);
 
-		// Do we know the skill
+		// Get rid of the name.
 		args.shift()
-		for (const skill of args) {
-			if (!knowsSkill(thingdef, skill))
-				return void message.channel.send(`${thingdef.name} doesn't know ${skill}!`)
-			const num = knowsSkill(thingdef, skill)
-			thingdef.skills.splice(num, 1)
+
+		if (args[0] && thingdef.forms && thingdef.forms[args[0]]) {
+			args.shift()
+			for (const skill of args) {
+				if (!knowsSkill(thingdef.forms[args[0]], skill))
+					return void message.channel.send(`${thingdef.name}'s ${thingdef.forms[args[0]].name} doesn't have ${skill}!`)
+				const num = knowsSkill(thingdef.forms[args[0]], skill)
+				thingdef.forms[args[0]].skills.splice(num, 1)
+			}
+		} else {
+			args.shift()
+			for (const skill of args) {
+				if (!knowsSkill(thingdef, skill))
+					return void message.channel.send(`${thingdef.name} doesn't know ${skill}!`)
+				const num = knowsSkill(thingdef, skill)
+				thingdef.skills.splice(num, 1)
+			}
 		}
 
 		message.react('👍');
@@ -3321,7 +3494,7 @@ commands.settransformation = new Command({
 
 		let BST = 0;
 		let allowedMore = 0;
-		for (let i = 6; i < 13; i++) {
+		for (let i = 6; i <= 13; i++) {
 			if (args[i] > settings.caps.transformations.basestatmaxcap) return message.channel.send(`${args[i]} cannot be greater than ${settings.caps.transformations.statbuff}!`);
 			if (args[i] < settings.caps.transformations.basestatmincap) return message.channel.send(`${args[i]} cannot be less than ${settings.caps.transformations.basestatmincap}!`);
 
@@ -3849,6 +4022,132 @@ commands.cleartransformationskill = new Command({
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 
 		message.channel.send(`${args[0]}'s ${args[1]} no longer has a signature skill!`);
+	}
+})
+
+////////////////////////////////////////
+// FORMS - Not quite transformations. //
+////////////////////////////////////////
+commands.registerform = new Command({
+	desc: `Register a character to use in-battle! Characters can learn skills, use items, and initiate in combat, along with wayyy more!\nUse 'rpg!guide 1' to get more information on this command.`,
+	aliases: ['registercharacter', 'makechar', 'regchar', 'regcharacter', 'charmake'],
+	section: "characters",
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Form Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Main Element",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Base HP",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base MP",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Strength",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Magic",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Perception",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Endurance",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Charisma",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Intelligence",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Agility",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Base Luck",
+			type: "Num",
+			forced: true
+		},
+		{
+			name: "Form Description",
+			type: "Word",
+			forced: true
+		}
+	],
+	checkban: true,
+	func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id)
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid name! Please enter an actual name.');
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+
+		let thingDefs = ''
+		if (charFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+			thingDefs = charFile[args[0]];
+		} else if (enemyFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to rename ${args[0]}.`);
+			thingDefs = enemyFile[args[0]];
+		} else return message.channel.send(`${args[0]} doesn't exist!`);
+
+		if (Elements.includes(args[2])) return message.channel.send({content: 'Please enter a valid element for **Main Element!**', embeds: [elementList()]});
+		if (args[2].toLowerCase() === 'passive' || args[2].toLowerCase() === 'almighty') return message.channel.send('You cannot use **Passive** or **Almighty** as your main element.');
+
+		if ((args[3] + args[4]) > settings.caps.hpmpcap) return message.channel.send(`The maximum total points for HP and MP is ${settings.caps.hpmpcap}! Currently, you have ${args[3]+args[4]}.`);
+
+		let bst = 0;
+		for (let i = 5; i < args.length; i++) {
+			if (args[i]) {
+				if (args[i] <= 0) return message.channel.send("You can't have a stat that is less than 0!");
+				if (args[i] > settings.caps.basestatcap) return message.channel.send("You can't have a stat that is more than 10!");
+				bst += args[i];
+			}
+		}
+
+		if (bst > settings.caps.bstcap) return message.channel.send(`${settings.caps.bstcap} is the maximum amount of points across stats! Currently, you have ${bst}.`)
+		if (bst < 30) message.channel.send(`${bst}BST is... sort of concerning. I-I won't stop you.`)
+
+		if (!thingDefs.forms) thingDefs.forms = {};
+
+		thingDefs.forms[args[1]] = createForm(args);
+		message.channel.send({content: `**__${thingDefs.name}'s__** _${args[1]}_ has been registered!`, embeds: [formDesc(thingDefs, args[1], true, message)]});
+
+		if (thingDefs[args[0]].type) {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+		} else {
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		}
 	}
 })
 
