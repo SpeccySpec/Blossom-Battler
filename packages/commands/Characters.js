@@ -4047,7 +4047,7 @@ commands.cleartransformationskill = new Command({
 // FORMS - Not quite transformations. //
 ////////////////////////////////////////
 commands.registerform = new Command({
-	desc: `Register a character to use in-battle! Characters can learn skills, use items, and initiate in combat, along with wayyy more!\nUse 'rpg!guide 1' to get more information on this command.`,
+	desc: `Register an alternative form for your character! Chracters can change form during a battle to have different stats, affinities and skills!`,
 	aliases: ['registercharacter', 'makechar', 'regchar', 'regcharacter', 'charmake'],
 	section: "characters",
 	args: [
