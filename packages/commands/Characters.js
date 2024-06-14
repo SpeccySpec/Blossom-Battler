@@ -1730,25 +1730,47 @@ commands.replaceskill = new Command({
 		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		// Do we know the skill
-		if (!skillFile[args[2]]) return message.channel.send('Invalid skill to replace with! Remember that these are case sensitive.');
-		if (!knowsSkill(thingDefs[args[0]], args[1])) return message.channel.send(`${thingDefs[args[0]].name} doesn't know ${args[1]}!`);
-		if (knowsSkill(thingDefs[args[0]], args[2])) return message.channel.send(`${thingDefs[args[0]].name} already knows ${args[2]}!`);
+		let char = thingDefs[args[0]];
 
-		// Level Lock
-		if (skillFile[args[2]].levellock) {
-			if (!thingDefs[args[0]].type && skillFile[args[2]].levellock == 'unobtainable') return message.channel.send(`${args[2]} is unobtainable!`);
-			if (!thingDefs[args[0]].type && thingDefs[args[0]].level < skillFile[args[2]].levellock) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but must be level ${skillFile[args[2]].levellock} to learn ${skillFile[args[2]].name}!`);
+		if (args[3] && char.forms && char.forms[args[3]]) {
+			let form = char.forms[args[3]];
+			if (!skillFile[args[2]]) return message.channel.send('Invalid skill to replace with! Remember that these are case sensitive.');
+			if (!knowsSkill(form, args[1])) return message.channel.send(`${char.name}'s ${form.name} doesn't know ${args[1]}!`);
+			if (knowsSkill(char, args[2])) return message.channel.send(`${char.name}'s ${form.name} already knows ${args[2]}!`);
+
+			// Level Lock
+			if (skillFile[args[2]].levellock) {
+				if (!char.type && skillFile[args[2]].levellock == 'unobtainable') return message.channel.send(`${args[2]} is unobtainable!`);
+				if (!char.type && char.level < skillFile[args[2]].levellock) return message.channel.send(`${char.name} is level ${char.level}, but must be level ${skillFile[args[2]].levellock} to learn ${skillFile[args[2]].name}!`);
+			}
+
+			// Fusion Skills.
+			if (skillFile[args[2]].fusionskill) return message.channel.send(`**${getFullName(skillFile[args[2]])}** is a fusion skill. **Characters cannot learn fusion skills.**`);
+
+			// Let's replace it
+			let num = knowsSkill(form, args[1]);
+			form.skills[num] = args[2];
+		} else {
+			if (!skillFile[args[2]]) return message.channel.send('Invalid skill to replace with! Remember that these are case sensitive.');
+			if (!knowsSkill(char, args[1])) return message.channel.send(`${char.name} doesn't know ${args[1]}!`);
+			if (knowsSkill(char, args[2])) return message.channel.send(`${char.name} already knows ${args[2]}!`);
+
+			// Level Lock
+			if (skillFile[args[2]].levellock) {
+				if (!char.type && skillFile[args[2]].levellock == 'unobtainable') return message.channel.send(`${args[2]} is unobtainable!`);
+				if (!char.type && char.level < skillFile[args[2]].levellock) return message.channel.send(`${char.name} is level ${char.level}, but must be level ${skillFile[args[2]].levellock} to learn ${skillFile[args[2]].name}!`);
+			}
+
+			// Fusion Skills.
+			if (skillFile[args[2]].fusionskill) return message.channel.send(`**${getFullName(skillFile[args[2]])}** is a fusion skill. **Characters cannot learn fusion skills.**`);
+
+			// Let's replace it
+			let num = knowsSkill(char, args[1]);
+			char.skills[num] = args[2];
 		}
 
-		// Fusion Skills.
-		if (skillFile[args[2]].fusionskill) return message.channel.send(`**${getFullName(skillFile[args[2]])}** is a fusion skill. **Characters cannot learn fusion skills.**`);
-
-		// Let's replace it
-		let num = knowsSkill(thingDefs[args[0]], args[1])
-		thingDefs[args[0]].skills[num] = args[2]
-
 		message.react('👍');
-		if (thingDefs[args[0]].type) {
+		if (char.type) {
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
 		} else {
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
