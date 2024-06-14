@@ -22,6 +22,7 @@ createForm = (char, args) => {
         skills: char.skills,
         quotes: char.quotes,
         affinities: char.affinities,
+		statusaffinities: char.statusaffinities,
 		autolearn: char.autolearn,
     }
 
@@ -188,6 +189,7 @@ formChange = (char, form, btl) => {
 		char.melee = char.origform.melee;
 		char.stats = char.origform.stats;
 		char.affinities = char.origform.affinities;
+		char.statusaffinities = char.origform.statusaffinities;
 		char.quotes = char.origform.quotes;
 		char.skills = char.origform.skills;
 		char.maxhp = char.origform.hp;
@@ -209,6 +211,7 @@ formChange = (char, form, btl) => {
 		melee: char.melee,
 		stats: char.stats,
 		affinities: char.affinities,
+		statusaffinities: char.statusaffinities,
 		quotes: char.quotes,
 		skills: char.skills,
 	}
@@ -223,6 +226,7 @@ formChange = (char, form, btl) => {
 	char.quotes = formData.quotes;
 	char.skills = formData.skills;
 	char.affinities = formData.affinities;
+	char.statusaffinities = formData.statusaffinities;
 	if (char.hp > char.maxhp) char.hp = char.maxhp;
 	if (char.mp > char.maxmp) char.mp = char.maxmp;
 	return true;

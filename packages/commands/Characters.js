@@ -1615,14 +1615,14 @@ commands.learnskill = new Command({
 			thingDefs = enemyFile;
 		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
-		if (!thingDefs[args[0]].type && thingDefs[args[0]].skills.length >= settings.caps.skillamount) return message.channel.send(`You cannot have more than ${settings.caps.skillamount} skills!`);
-
 		// Let's learn skills!
 		let learnString = `👍 ${args[0]} learned `;
 		let skillLearn = [];
 
 		if (args[1] && thingDefs[args[0]].forms && thingDefs[args[0]].forms[args[1]]) {
 			learnString = `👍 ${args[0]}'s ${args[1]} can now use `;
+
+			if (!thingDefs[args[0]].type && thingDefs[args[0]].forms[args[1]].skills.length >= settings.caps.skillamount) return message.channel.send(`You cannot have more than ${settings.caps.skillamount} skills!`);
 
 			for (let i = 2; i < args.length; i++) {
 				if (knowsSkill(thingDefs[args[0]].forms[args[1]], args[i])) return message.channel.send(`${args[0]}'s ${args[1]} can already use ${args[i]}!\n\n**[TIP]**\n_Don't enter two of the same skill!_`);
@@ -1649,6 +1649,8 @@ commands.learnskill = new Command({
 					return message.channel.send(`${args[i]} isn't a valid skill.`);
 			}
 		} else {
+			if (!thingDefs[args[0]].type && thingDefs[args[0]].skills.length >= settings.caps.skillamount) return message.channel.send(`You cannot have more than ${settings.caps.skillamount} skills!`);
+
 			for (let i = 2; i < args.length; i++) {
 				if (knowsSkill(thingDefs[args[0]], args[i])) return message.channel.send(`${args[0]} already knows ${args[i]}!\n\n**[TIP]**\n_Don't enter two of the same skill!_`);
 
