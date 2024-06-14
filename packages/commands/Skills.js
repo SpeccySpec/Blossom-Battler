@@ -1981,6 +1981,7 @@ commands.listelements = new Command({
 
 		let elementList = '';
 		for (let element in Elements) {
+			if (Elements[element] == 'status') continue
 			elementList += `${elementEmoji[Elements[element]]}**${Elements[element].charAt(0).toUpperCase()}${Elements[element].slice(1)}**\n`;
 		}
 

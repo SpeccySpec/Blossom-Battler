@@ -59,6 +59,7 @@ Elements = [
 	"sound",
     "almighty",
 
+	"status",
     "support",
     "heal",
     "passive"
