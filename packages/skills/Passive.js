@@ -478,13 +478,13 @@ passiveList = {
 			if (!Elements.includes(usertype))
 				return void message.channel.send(`${args[0]} is an invalid element!`);
 
-			if (usertype == 'support' || usertype == 'passive' || usertype == 'heal')
+			if (usertype == 'support' || usertype == 'status' || usertype == 'passive' || usertype == 'heal')
 				return void message.channel.send(`You can't change skills from ${args[0]} type!`);
 
 			if (!Elements.includes(targtype))
 				return void message.channel.send(`${args[1]} is an invalid element!`);
 
-			if (targtype == 'almighty' || targtype == 'support' || targtype == 'passive' || targtype == 'heal')
+			if (targtype == 'almighty' || targtype == 'support' || usertype == 'status' || targtype == 'passive' || targtype == 'heal')
 				return void message.channel.send(`You can't change skills to ${args[1]} type!`);
 
 			if (dmgmod && (dmgmod <= 0 || dmgmod >= 500))
@@ -642,7 +642,7 @@ passiveList = {
 			if (damage == 0) return void message.channel.send("What's the point if it's dealing no damage?");
 
 			if (!Elements.includes(element)) return void message.channel.send("You entered an invalid value for <Element>!");
-			if (element == 'support' || element == 'heal' || element == 'passive') return void message.channel.send("You can't use this element!");
+			if (element == 'support' || element == 'status' || element == 'heal' || element == 'passive') return void message.channel.send("You can't use this element!");
 			
 			makePassive(skill, "damage", [physmag, damage, element]);
 			return true;
@@ -888,7 +888,7 @@ passiveList = {
 				return void message.channel.send('Counters with 0 hits or less will not function!');
 			if (!Elements.includes(element))
 				return void message.channel.send({content: 'Please enter a valid element for **Element!**', embeds: [elementList()]})
-			if (element == 'passive' || element == 'heal' || element == 'support')
+			if (element == 'passive' || element == 'heal' || element == 'support' || element == 'status')
 				return void message.channel.send("The counter must be an attack!");
 			if (atype != 'physical' && atype != 'magic' && atype != 'ranged' && atype != 'sorcery')
 				return void message.channel.send(`${atype} is an invalid form of contact! Try physical, magic, sorcery or ranged.`);
@@ -1423,7 +1423,7 @@ passiveList = {
 
 			if (chance < 1) return void message.channel.send("Why do this if it never happens?");
 
-			elements = elements.filter(e => (Elements.includes(e) && e !== 'passive' && e !== 'heal' && e !== 'support' && e !== 'almighty'));
+			elements = elements.filter(e => (Elements.includes(e) && e !== 'passive' && e !== 'heal' && e !== 'support' && e !== 'status' && e !== 'almighty'));
 
 			if (elements.length < 1) return void message.channel.send("You didn't supply any valid elements!");
 			makePassive(skill, "repelmag", [chance, elements]);
@@ -1734,7 +1734,7 @@ passiveList = {
 			let chance = args[2];
 
 			if (!Elements.includes(element)) return void message.channel.send("You didn't supply a valid element!");
-			if (element === "heal" || element === "support" || element === "passive") return void message.channel.send("This element doesn't deal damage!");
+			if (element === "heal" || element === "support" || element === "status"  || element === "passive") return void message.channel.send("This element doesn't deal damage!");
 			if (damage == 0) return void message.channel.send("Why do this if it never changes anything?");
 			if (chance <= 0) return void message.channel.send("When you're trying to store damage, you need to have it happen at least once!");
 

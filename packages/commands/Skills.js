@@ -754,10 +754,10 @@ commands.editskill = new Command({
 				case 'type':
 				case 'element':
 					if (!utilityFuncs.inArray(args[2].toLowerCase(), Elements)) return message.channel.send(`${args[2].toLowerCase()} is an invalid element!`);
-					if (skillFile[args[0]].statusses && args[2].toLowerCase() != 'support') {
+					if (skillFile[args[0]].statusses && args[2].toLowerCase() != 'support' || args[2].toLowerCase() != 'status') {
 						delete skillFile[args[0]].statusses;
 					}
-					if (skillFile[args[0]].extras && (args[2].toLowerCase() == 'support' || args[2].toLowerCase() == 'passive' || args[2].toLowerCase() == 'heal')) {
+					if (skillFile[args[0]].extras && (args[2].toLowerCase() == 'support' || args[2].toLowerCase() == 'status' || args[2].toLowerCase() == 'passive' || args[2].toLowerCase() == 'heal')) {
 						delete skillFile[args[0]].extras;
 					}
 					if (skillFile[args[0]].heal && args[2].toLowerCase() != 'heal') {
