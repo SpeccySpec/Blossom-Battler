@@ -729,6 +729,19 @@ healList = {
 			return true
 		}
 	}),
+
+	formchange: new Extra({
+		name: extrasList.formchange.name,
+		desc: extrasList.formchange.desc,
+		args: extrasList.formchange.args,
+		onselect: extrasList.formchange.onselect,
+		onuse: extrasList.formchange.onuse,
+		getinfo: extrasList.formchange.getinfo,
+		applyfunc(message, skill, args) {
+			makeHeal(skill, "formchange", [args[0], Math.min(100, Math.max(0, parseInt(args[1] ?? 100))), args[2] ?? false, args[3] ?? undefined]);
+			return true
+		}
+	}),
 }
 
 modSkillResult = (char, targ, result, skill, btl) => {

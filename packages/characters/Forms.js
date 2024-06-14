@@ -1,7 +1,7 @@
-createForm = (args) => {
+createForm = (char, args) => {
     let formData = {
         name: args[1],
-        mainElement: args[2],
+        mainElement: args[2].toLowerCase(),
         desc: args[13],
 
         hp: parseInt(args[3]),
@@ -18,9 +18,11 @@ createForm = (args) => {
             luk: parseInt(args[12]),
         },
 
-        skills: [],
-        quotes: {},
-        affinities: {}
+		melee: char.melee,
+        skills: char.skills,
+        quotes: char.quotes,
+        affinities: char.affinities,
+		autolearn: char.autolearn,
     }
 
     return formData;
@@ -84,8 +86,9 @@ modForm = (char, formName, server) => {
 }
 
 formDesc = (char, formName, modStats, message) => {
-    let form = modStats ? modForm(char, formName, message.guild.id) : char.forms[formName];
+	let settings = setUpSettings(message.guild.id);
 
+    let form = modStats ? modForm(char, formName, message.guild.id) : char.forms[formName];
     let prefix = elementEmoji[form.mainElement] ?? elementEmoji.strike;
     let color = elementColors[form.mainElement] ?? elementColors.strike;
 
@@ -97,6 +100,13 @@ formDesc = (char, formName, modStats, message) => {
         color = elementColors[form.mainElement[0]] ?? elementColors.strike;
     }
 
+    let prefix2 = elementEmoji[char.mainElement] ?? elementEmoji.strike;
+    if (typeof char.mainElement === "object") {
+        prefix2 = "";
+        for (let i in char.mainElement)
+            prefix2 += elementEmoji[char.mainElement[i]] ?? elementEmoji.strike;
+    }
+
     let statDesc = ''
     if (!char.type)
         statDesc += `${form.hp}HP\n${form.mp}${char.mpMeter ? char.mpMeter[1] : "MP"}\n`;
@@ -105,7 +115,7 @@ formDesc = (char, formName, modStats, message) => {
 
     let DiscordEmbed = new Discord.MessageEmbed()
         .setColor(color)
-        .setTitle(`__${char.name}__'s _${prefix}${form.name}_`)
+        .setTitle(`${prefix2}__${char.name}__'s _${prefix}${form.name}_`)
         .setDescription(`${statDesc}\n_${form.desc}_`)
         .addFields()
 
@@ -167,5 +177,59 @@ formDesc = (char, formName, modStats, message) => {
 	if (skillDesc.length > 1000) skillDesc = `${skillDesc.slice(0, 1000)}_..._`;
     if (skillDesc.length > 0) DiscordEmbed.fields.push({ name: 'Skills', value: skillDesc, inline: true });
 
+	// Affinities
+	DiscordEmbed = renderAffinities(true, form, DiscordEmbed, settings, message, message.guild.id);
+
     return DiscordEmbed
+}
+
+formChange = (char, form, btl) => {
+	if (char.transformed) return
+	if (char.notransform) return;
+	if (char.mimic) return;
+	if (char.ragesoul) return;
+	if (char.custom?.orgiamode) return;
+
+	if (char.origform) {
+		char.melee = char.origform.melee;
+		char.stats = char.origform.stats;
+		char.affinities = char.origform.affinities;
+		char.quotes = char.origform.quotes;
+		char.skills = char.origform.skills;
+		char.maxhp = char.origform.hp;
+		char.maxmp = char.origform.mp;
+		delete char.origform;
+	}
+
+	if (form === "normal") {
+		if (char.curform) delete char.curform;
+		if (char.hp > char.maxhp) char.hp = char.maxhp;
+		if (char.mp > char.maxmp) char.mp = char.maxmp;
+		return true;
+	}
+
+	char.curform = form;
+	char.origform = {
+		hp: char.maxhp,
+		mp: char.maxmp,
+		melee: char.melee,
+		stats: char.stats,
+		affinities: char.affinities,
+		quotes: char.quotes,
+		skills: char.skills,
+	}
+
+	if (!char.forms || !char.forms[form]) return;
+
+	let formData = objClone(modForm(char, form, btl.guild.id));
+	char.maxhp = formData.hp;
+	char.maxmp = formData.mp;
+	char.melee = formData.melee;
+	char.stats = formData.stats;
+	char.quotes = formData.quotes;
+	char.skills = formData.skills;
+	char.affinities = formData.affinities;
+	if (char.hp > char.maxhp) char.hp = char.maxhp;
+	if (char.mp > char.maxmp) char.mp = char.maxmp;
+	return true;
 }

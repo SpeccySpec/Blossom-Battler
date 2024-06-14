@@ -54,6 +54,12 @@ let targetNames = {
 
 	endturn(btl, char, action, skill)
 	- onturn() but after the player has moved, including action.
+
+	onweather(char, weather, psv, btl, vars)
+	- Every time the weather is changed.
+
+	onterrain(char, terrain, psv, btl, vars)
+	- Every time the terrain is changed.
 */
 
 passiveList = {
@@ -2515,8 +2521,94 @@ passiveList = {
 			return txt;
 		}
 	}),
+
+	formchange: new Extra({
+		name: "Form Change (Original)",
+		desc: "Changes the form of the user to <Form> on select, with a {Chance}% chance. If {Transform on Failure Anyway} is Yes, then the move will allow transformation on block, repel, or other forms of failure. {Custom Message} is the message that would be displayed on transformation. _These skills should be character specific as forms are character specific and may not persist between characters._",
+		args: [
+			{
+				name: "Form",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Condition",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Variable for Condition",
+				type: "Any",
+				forced: false
+			},
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: false
+			},
+			{
+				name: "Custom Message",
+				type: "Word",
+				forced: false
+			}
+		],
+		applyfunc(message, skill, args) {
+			let cond = args[1].toLowerCase();
+			let variable = args[2];
+
+			switch(cond) {
+				case 'weather':
+					if (!weathers.includes(variable.toLowerCase())) return void message.channel.send(`${variable} is an invalid weather.`);
+					variable = variable.toLowerCase();
+					break;
+
+				case 'terrain':
+					if (!terrains.includes(variable.toLowerCase())) return void message.channel.send(`${variable} is an invalid terrain.`);
+					variable = variable.toLowerCase();
+					break;
+
+				default:
+					return void message.channel.send(`${cond} is an invalid condition.`);
+			}
+
+			makePassive(skill, "formchange", [args[0], cond, variable, Math.min(100, Math.max(0, parseInt(args[3] ?? 100))), args[4] ?? undefined]);
+			return true
+		},
+		onweather(char, weather, psv, btl, vars) {
+			console.log(`the weather is ${weather}`);
+			if (vars[1] === 'weather' && weather.toLowerCase() === vars[2].toLowerCase() && (vars[3] >= 100 || randNum(1, 100) <= vars[3])) {
+				return extrasList.formchange.onselect(char, null, btl, [vars[0], 999, true, vars[4]]);
+			}
+		},
+		onterrain(char, terrain, psv, btl, vars) {
+			if (vars[1] === 'terrain' && terrain.toLowerCase() === vars[2].toLowerCase() && (vars[3] >= 100 || randNum(1, 100) <= vars[3])) {
+				return extrasList.formchange.onselect(char, null, btl, [vars[0], 999, true, vars[4]]);
+			}
+		},
+		getinfo(vars, skill) {
+			let str = '';
+
+			switch(vars[1]) {
+				case 'weather':
+					str = `On the change to ${weatherDescs[vars[2]].emoji}**${vars[2]}** weather, `;
+					break;
+
+				case 'terrain':
+					str = `On the change to ${terrainDescs[vars[2]].emoji}**${vars[2]}** terrain, `;
+					break;
+			}
+
+			if (vars[1] ?? vars[1] < 100)
+				str += `has a **${vars[3]}%** chance to change into their **${(vars[0] === "normal") ? "Regular Form from any form they may be in now" : vars[0]}**`;
+			else
+				str += `may change into their **${(vars[0] === "normal") ? "Regular Form from any form they may be in now" : vars[0]}**`;
+
+			return str;
+		}
+	}),
 }
 
+// Determination Points extra.
 function dpDamage(char, decimal) {
 	let amount = Math.floor(decimal * char.maxmp)
 	char.mp = Math.min(char.maxmp, char.mp+amount);
@@ -2584,4 +2676,30 @@ buildPassive = (message, extra, args) => {
 	} else {
 		return false
 	}
+}
+
+runPassiveHook = (char, hook, btl, ...parameters) => {
+	let result = '';
+	if (doPassives(btl)) {
+		let psv = null;
+		for (let i in char.skills) {
+			if (!skillFile[char.skills[i]]) continue;
+			if (skillFile[char.skills[i]].type != 'passive') continue;
+
+			psv = skillFile[char.skills[i]];
+			for (let k in psv.passive) {
+				if (passiveList[k] && passiveList[k][hook]) {
+					if (passiveList[k].multiple) {
+						for (let j in psv.passive[k]) {
+							result += `${passiveList[k][hook](...parameters, psv, btl, psv.passive[k][j])}\n`;
+						}
+					} else {
+						result += `${passiveList[k][hook](...parameters, psv, btl, psv.passive[k])}\n`;
+					}
+				}
+			}
+		}
+	}
+
+	return result
 }

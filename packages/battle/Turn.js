@@ -406,10 +406,11 @@ const menuStates = {
 								}
 
 								if (canselect) {
-									dogrey = true;
-									canselect = canSelectSkill(char2, skillinfo, btl);
-								} else {
 									dogrey = false;
+									canselect = canSelectSkill(char2, skillinfo, btl);
+									if (!canselect) dogrey = true;
+								} else {
+									dogrey = true;
 								}
 
 								comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, dogrey ? 'grey' : btncolor, true, skillname, !canselect))
@@ -472,10 +473,11 @@ const menuStates = {
 							}
 
 							if (canselect) {
-								dogrey = true;
-								canselect = canSelectSkill(char2, skillinfo, 9);
-							} else {
 								dogrey = false;
+								canselect = canSelectSkill(char2, skillinfo, btl);
+								if (!canselect) dogrey = true;
+							} else {
+								dogrey = true;
 							}
 				
 							comps[compins].push(makeButton(skillinfo?.name ?? skillname, emoji1, dogrey ? 'grey' : btncolor, true, skillname, !canselect))
@@ -569,10 +571,11 @@ const menuStates = {
 
 					// CanUse extra
 					if (canselect) {
-						dogrey = true;
-						canselect = canSelectSkill(char, skillinfo, btl);
-					} else {
 						dogrey = false;
+						canselect = canSelectSkill(char, skillinfo, btl);
+						if (!canselect) dogrey = true;
+					} else {
+						dogrey = true;
 					}
 
 					// Lmao.

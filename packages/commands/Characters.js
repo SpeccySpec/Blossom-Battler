@@ -1798,15 +1798,17 @@ commands.forgetskill = new Command({
 		args.shift()
 
 		if (args[0] && thingdef.forms && thingdef.forms[args[0]]) {
-			args.shift()
+			const form = args[0];
+			args.shift();
+
 			for (const skill of args) {
-				if (!knowsSkill(thingdef.forms[args[0]], skill))
-					return void message.channel.send(`${thingdef.name}'s ${thingdef.forms[args[0]].name} doesn't have ${skill}!`)
-				const num = knowsSkill(thingdef.forms[args[0]], skill)
-				thingdef.forms[args[0]].skills.splice(num, 1)
+				if (!knowsSkill(thingdef.forms[form], skill))
+					return void message.channel.send(`${thingdef.name}'s ${thingdef.forms[form].name} doesn't have ${skill}!`)
+				const num = knowsSkill(thingdef.forms[form], skill)
+				thingdef.forms[form].skills.splice(num, 1)
 			}
 		} else {
-			args.shift()
+			args.shift();
 			for (const skill of args) {
 				if (!knowsSkill(thingdef, skill))
 					return void message.channel.send(`${thingdef.name} doesn't know ${skill}!`)
@@ -1838,6 +1840,11 @@ commands.autolearn = new Command({
 			name: "Skill Name",
 			type: "Word",
 			forced: true
+		},
+		{
+			name: "Form",
+			type: "Word",
+			forced: false
 		}
 	],
 	checkban: true,
@@ -1851,15 +1858,24 @@ commands.autolearn = new Command({
 
 		// Do we know the skill
 		if (!skillFile[args[1]]) return message.channel.send('Invalid skill to replace! Remember that these are case sensitive.');
-		if (!knowsSkill(charFile[args[0]], args[1])) return message.channel.send(`${charFile[args[0]].name} doesn't know ${args[1]}!`);
 
 		// Auto Learn
-		if (!charFile[args[0]].autolearn) charFile[args[0]].autolearn = {};
+		if (args[2] && charFile[args[0]].forms && charFile[args[0]].forms[args[2]]) {
+			if (!knowsSkill(charFile[args[0]].forms[args[2]], args[1])) return message.channel.send(`${charFile[args[0]].name} doesn't know ${args[1]} in their ${charFile[args[0]].forms[args[2]].name}!`);
+			if (!charFile[args[0]].forms[args[2]].autolearn) charFile[args[0]].forms[args[2]].autolearn = {};
 
-		// Let's allow it to auto evolve
-		let num = knowsSkill(charFile[args[0]], args[1]);
-		charFile[args[0]].autolearn[num] = !charFile[args[0]].autolearn[num];
-		message.channel.send(`${charFile[args[0]].name}'s ${skillFile[args[1]].name} automatic evolution has been toggled to ${charFile[args[0]].autolearn[num] ? 'On' : 'Off'}!`);
+			let num = knowsSkill(charFile[args[0]].forms[args[2]], args[1]);
+			charFile[args[0]].forms[args[2]].autolearn[num] = !charFile[args[0]].forms[args[2]].autolearn[num];
+			message.channel.send(`__${charFile[args[0]].name}__'s ${charFile[args[0]].forms[args[2]].name} has automatic evolution for ${skillFile[args[1]].name} toggled to ${charFile[args[0]].autolearn[num] ? 'On' : 'Off'}!`);
+		} else {
+			if (!knowsSkill(charFile[args[0]], args[1])) return message.channel.send(`${charFile[args[0]].name} doesn't know ${args[1]}!`);
+			if (!charFile[args[0]].autolearn) charFile[args[0]].autolearn = {};
+
+			let num = knowsSkill(charFile[args[0]], args[1]);
+			charFile[args[0]].autolearn[num] = !charFile[args[0]].autolearn[num];
+			message.channel.send(`${charFile[args[0]].name}'s ${skillFile[args[1]].name} automatic evolution has been toggled to ${charFile[args[0]].autolearn[num] ? 'On' : 'Off'}!`);
+		}
+
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
 })
@@ -4108,6 +4124,7 @@ commands.registerform = new Command({
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid name! Please enter an actual name.');
+		if (args[1] === "normal") return message.channel.send(`"${args[1]}" is known internally as the character's base form! You would unable to transform into this form.`);
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
@@ -4140,10 +4157,10 @@ commands.registerform = new Command({
 
 		if (!thingDefs.forms) thingDefs.forms = {};
 
-		thingDefs.forms[args[1]] = createForm(args);
+		thingDefs.forms[args[1]] = createForm(thingDefs, args);
 		message.channel.send({content: `**__${thingDefs.name}'s__** _${args[1]}_ has been registered!`, embeds: [formDesc(thingDefs, args[1], true, message)]});
 
-		if (thingDefs[args[0]].type) {
+		if (thingDefs.type) {
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
 		} else {
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));

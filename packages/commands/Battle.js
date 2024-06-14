@@ -1246,8 +1246,8 @@ commands.testbattle = new Command({
 
 		let weather = locale.weather ?? 'none'
 		let terrain = locale.terrain ?? 'none';
-		if (args[2].toLowerCase() != 'none') weather = args[2].toLowerCase();
-		if (args[3].toLowerCase() != 'none') terrain = args[3].toLowerCase();
+		if (args[2] && args[2].toLowerCase() != 'none') weather = args[2].toLowerCase();
+		if (args[3] && args[3].toLowerCase() != 'none') terrain = args[3].toLowerCase();
 
 		// Weather and stuff
 		if (weather != 'none') {

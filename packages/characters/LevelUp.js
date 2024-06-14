@@ -90,6 +90,8 @@ updateStats = (charDefs, server, updateXp) => {
 			for (let i = 1; i < charDefs.level; i++) charDefs.maxxp += Math.round(charDefs.maxxp/6.5);
 		}
 	}
+
+	if (charDefs.curform) formChange(charDefs, charDefs.curform, {guild: {id: server}});
 }
 
 checkForEvos = async (charDefs, skillDefs, toUpdate, field) => {

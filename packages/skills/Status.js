@@ -882,7 +882,15 @@ statusList = {
 					turns: Math.round(modSkillResult(char, targ, randNum(8, 16), skill, btl) * multiplier)
 				}
 			}
-			return `The weather has been changed to __${vars[0]}__!`;
+
+			let str = `The weather has been changed to ${weatherDescs[vars[0]].emoji}**${vars[0]}**!\n`;
+
+			for (let i in btl.teams) {
+				for (let k in btl.teams[i].members)
+					if (btl.teams[i].members[k].hp > 0) str += runPassiveHook(btl.teams[i].members[k], 'onweather', btl, btl.teams[i].members[k], btl.weather.type);
+			}
+
+			return str;
 		},
 		getinfo(vars, skill) {
 			return `Changes **Weather** to **${vars[0]}**`
@@ -916,7 +924,14 @@ statusList = {
 				}
 			}
 
-			return `The terrain has been changed to __${vars[0]}__!`;
+			let str = `The terrain has been changed to ${terrainDescs[vars[0]].emoji}**${vars[0]}**!\n`;
+
+			for (let i in btl.teams) {
+				for (let k in btl.teams[i].members)
+					if (btl.teams[i].members[k].hp > 0) str += runPassiveHook(btl.teams[i].members[k], 'onterrain', btl, btl.teams[i].members[k], btl.weather.type);
+			}
+
+			return str;
 		},
 		getinfo(vars, skill) {
 			return `Changes **Terrain** to **${vars[0]}**`
@@ -2030,6 +2045,19 @@ statusList = {
 			}
 
 			makeStatus(skill, "movelink", args);
+			return true
+		}
+	}),
+
+	formchange: new Extra({
+		name: extrasList.formchange.name,
+		desc: extrasList.formchange.desc,
+		args: extrasList.formchange.args,
+		onselect: extrasList.formchange.onselect,
+		onuse: extrasList.formchange.onuse,
+		getinfo: extrasList.formchange.getinfo,
+		applyfunc(message, skill, args) {
+			makeStatus(skill, "formchange", [args[0], Math.min(100, Math.max(0, parseInt(args[1] ?? 100))), args[2] ?? false, args[3] ?? undefined]);
 			return true
 		}
 	}),

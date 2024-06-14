@@ -2582,19 +2582,29 @@ extrasList = {
 			return true;
 		},
 		ondamage(char, targ, dmg, skill, btl, vars) {
-			if (btl?.weather?.type) {
-				btl.weather.type = vars[0];
-				btl.weather.turns = randNum(8, 16);
-			} else {
-				btl.weather = {
-					type: vars[0],
-					turns: randNum(8, 16)
+			if (btl.weather?.type != vars[0]) {
+				if (btl?.weather?.type) {
+					btl.weather.type = vars[0];
+					btl.weather.turns = randNum(8, 16);
+				} else {
+					btl.weather = {
+						type: vars[0],
+						turns: randNum(8, 16)
+					}
 				}
+
+				let str = `The weather has been changed to ${weatherDescs[vars[0]].emoji}**${vars[0]}**!\n`;
+
+				for (let i in btl.teams) {
+					for (let k in btl.teams[i].members)
+						if (btl.teams[i].members[k].hp > 0) str += runPassiveHook(btl.teams[i].members[k], 'onweather', btl, btl.teams[i].members[k], btl.weather.type);
+				}
+	
+				return str;
 			}
-			return `The weather has been changed to __${vars[0]}__!`;
 		},
 		getinfo(vars, skill) {
-			return `Changes **Weather** to **${vars[0]}**`
+			return `Changes **Weather** to ${weatherDescs[vars[0]].emoji}**${vars[0]}**`;
 		}
 	}),
 
@@ -2615,20 +2625,29 @@ extrasList = {
 			return true;
 		},
 		ondamage(char, targ, dmg, skill, btl, vars) {
-			if (btl?.terrain?.type) {
-				btl.terrain.type = vars[0];
-				btl.terrain.turns = randNum(8, 16);
-			} else {
-				btl.terrain = {
-					type: vars[0],
-					turns: randNum(8, 16)
+			if (btl?.terrain?.type != vars[0]) {
+				if (btl?.terrain?.type) {
+					btl.terrain.type = vars[0];
+					btl.terrain.turns = randNum(8, 16);
+				} else {
+					btl.terrain = {
+						type: vars[0],
+						turns: randNum(8, 16)
+					}
 				}
-			}
 
-			return `The terrain has been changed to __${vars[0]}__!`;
+				let str = `The terrain has been changed to ${terrainDescs[vars[0]].emoji}**${vars[0]}**!\n`;
+
+				for (let i in btl.teams) {
+					for (let k in btl.teams[i].members)
+						if (btl.teams[i].members[k].hp > 0) str += runPassiveHook(btl.teams[i].members[k], 'onterrain', btl, btl.teams[i].members[k], btl.weather.type);
+				}
+	
+				return str;
+			}
 		},
 		getinfo(vars, skill) {
-			return `Changes **Terrain** to **${vars[0]}**`
+			return `Changes **Terrain** to ${terrainDescs[vars[0]].emoji}**${vars[0]}**`;
 		}
 	}),
 
@@ -2762,6 +2781,91 @@ extrasList = {
 			}
 
 			return txt;
+		}
+	}),
+
+	formchange: new Extra({
+		name: "Form Change (Original)",
+		desc: "Changes the form of the user to <Form> on select, with a {Chance}% chance. If {Transform on Failure Anyway} is Yes, then the move will allow transformation on block, repel, or other forms of failure. {Custom Message} is the message that would be displayed on transformation. _These skills should be character specific as forms are character specific and may not persist between characters._",
+		args: [
+			{
+				name: "Form",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: false
+			},
+			{
+				name: "Transform on Failure Anyway",
+				type: "YesNo",
+				forced: false
+			},
+			{
+				name: "Custom Message",
+				type: "Word",
+				forced: false
+			}
+		],
+		applyfunc(message, skill, args) {
+			makeExtra(skill, "formchange", [args[0], Math.min(100, Math.max(0, parseInt(args[1] ?? 100))), args[2] ?? false, args[3] ?? undefined]);
+			return true
+		},
+		onselect(char, skill, btl, vars) {
+			if (!vars[2]) return;
+			if (char.transformed) return
+			if (char.notransform) return;
+			if (char.mimic) return;
+			if (char.ragesoul) return;
+			if (char.custom?.orgiamode) return;
+
+			if ((vars[0] === "normal" || (char.forms && char.forms[vars[0]])) && (vars[1] >= 100 || randNum(0, 100) <= vars[1])) {
+				formChange(char, vars[0], btl);
+
+				if (vars[3] && (typeof vars[3] === "string")) {
+					return vars[3];
+				} else {
+					if (vars[0] === "normal") {
+						return `__${char.name}__ returned to normal.`;
+					} else {
+						return `__${char.name}__ transformed into their __${vars[0]}__.`;
+					}
+				}
+			} else {
+				return '';
+			}
+		},
+		onuse(char, targ, skill, btl, vars) {
+			if (vars[2]) return;
+			if (char.transformed) return;
+			if (char.notransform) return;
+			if (char.mimic) return;
+			if (char.ragesoul) return;
+			if (char.custom?.orgiamode) return;
+
+			if ((vars[0] === "normal" || (char.forms && char.forms[vars[0]])) && (vars[1] >= 100 || randNum(0, 100) <= vars[1])) {
+				formChange(char, vars[0], btl);
+
+				if (vars[3] && (typeof vars[3] === "string")) {
+					return vars[3];
+				} else {
+					if (vars[0] === "normal") {
+						return `__${char.name}__ returned to normal.`;
+					} else {
+						return `__${char.name}__ transformed into their __${vars[0]}__.`;
+					}
+				}
+			} else {
+				return '';
+			}
+		},
+		getinfo(vars, skill) {
+			let str = `On use, may change into their **${(vars[0] === "normal") ? "Regular Form from any form they may be in now" : vars[0]}**`;
+			if (vars[1] ?? vars[1] < 100) str = `On use, has a **${vars[1]}%** chance to change into their **${(vars[0] === "normal") ? "Regular Form from any form they may be in now" : vars[0]}**`;
+			if (vars[2]) str += ', even on failure';
+			return str;
 		}
 	}),
 }
