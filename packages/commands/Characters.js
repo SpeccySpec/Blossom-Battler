@@ -4146,7 +4146,7 @@ commands.registerform = new Command({
 		if ((args[3] + args[4]) > settings.caps.hpmpcap) return message.channel.send(`The maximum total points for HP and MP is ${settings.caps.hpmpcap}! Currently, you have ${args[3]+args[4]}.`);
 
 		let bst = 0;
-		for (let i = 5; i < args.length; i++) {
+		for (let i = 5; i < args.length-1; i++) {
 			if (args[i]) {
 				if (args[i] <= 0) return message.channel.send("You can't have a stat that is less than 0!");
 				if (args[i] > settings.caps.basestatcap) return message.channel.send("You can't have a stat that is more than 10!");
