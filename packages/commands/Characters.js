@@ -4148,9 +4148,11 @@ commands.registerform = new Command({
 		let bst = 0;
 		for (let i = 5; i < args.length-1; i++) {
 			if (args[i]) {
-				if (args[i] <= 0) return message.channel.send("You can't have a stat that is less than 0!");
-				if (args[i] > settings.caps.basestatcap) return message.channel.send("You can't have a stat that is more than 10!");
-				bst += args[i];
+				if (parseInt(args[i]) <= 0) return message.channel.send("You can't have a stat that is less than 0!");
+				if (parseInt(args[i]) > settings.caps.basestatcap) return message.channel.send("You can't have a stat that is more than 10!");
+				bst += parseInt(args[i]);
+			} else {
+				//j
 			}
 		}
 
