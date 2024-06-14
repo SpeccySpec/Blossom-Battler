@@ -159,10 +159,10 @@ commands.registerskill = new Command({
 	}
 })
 
-commands.registerstatus = new Command({
+commands.registersupport = new Command({
 	desc: `Register a status skill to use in-battle! Characters can learn skills, items can utilize skills too. Status skills usually apply positive effects to allies or negative effects to opponents.`,
 	section: "skills",
-	alias: ['regstatus', 'regstat', 'makestatus', 'makestat'],
+	alias: ['regsupport', 'regsup', 'makesupport', 'makesup'],
 	args: [
 		{
 			name: "Skill Name",
