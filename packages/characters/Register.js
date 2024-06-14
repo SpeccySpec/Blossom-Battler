@@ -430,9 +430,9 @@ longDescription = (charDefs, level, server, message, useguild) => {
 		skillDesc += `${char.melee.name}\n`;
 
 		if (char.curweapon && char.curweapon.melee)
-			skillDesc += `_${char.melee.pow+char.level}**+${char.curweapon.melee}**<:physical:973077052129423411>`;
+			skillDesc += `_${char.melee.pow+(char.level*1.5)}**+${char.curweapon.melee}**<:physical:973077052129423411>`;
 		else
-			skillDesc += `_${char.melee.pow+char.level}<:physical:973077052129423411>`;
+			skillDesc += `_${char.melee.pow+(char.level*1.5)}<:physical:973077052129423411>`;
 
 		skillDesc += `, ${char.melee.acc}% Accuracy,\n${char.melee.crit}%${critEmoji}`;
 		if (char.melee.status && char.melee.statuschance) skillDesc += `, ${char.melee.statuschance}%${statusEmojis[char.melee.status]}`;

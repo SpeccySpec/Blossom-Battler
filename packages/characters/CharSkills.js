@@ -38,7 +38,7 @@ makeMelee = (char) => {
 	let meleeAtk = {
 		name: char.melee.name,
 		type: char.melee.type,
-		pow: (char.melee.pow+char.level),
+		pow: (char.melee.pow+(char.level*1.5)),
 		acc: Math.min(100, char.melee.acc),
 		crit: char.melee.crit,
 		atktype: atkType,
