@@ -405,7 +405,7 @@ extrasList = {
 				return void message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: deadly, " + Affinities.join(', ') + " or Normal.");
 			if (!Elements.includes(element))
 				return void message.channel.send("You entered an invalid value for <Element>!");
-			if (['support', 'heal', 'passive', 'almighty'].includes(element))
+			if (['support', 'status', 'heal', 'passive', 'almighty'].includes(element))
 				return void message.channel.send("This element cannot have an affinity!");
 			if (side != 'weak' && side != 'resist' && side != 'both')
 				return void message.channel.send("You entered an invalid value for <Weak/Resist/Both>! It can be either Weak, Resist, or Both.");
@@ -1534,7 +1534,7 @@ extrasList = {
 		],
 		applyfunc(message, skill, args) {
 			const element = args[0].toLowerCase()
-			if (Elements.includes(element) && element != skill.type && element != 'passive' && element != 'support' && element != 'heal') {
+			if (Elements.includes(element) && element != skill.type && element != 'passive' && element != 'status' && element != 'support' && element != 'heal') {
 				skill.type = [(typeof skill.type === 'object') ? skill.type[0] : skill.type, element];
 			} else
 				return void message.channel.send("That's not a valid element!");	

@@ -799,7 +799,7 @@ statusList = {
 
 				if (!Elements.includes(element)) return void message.channel.send("That's not a valid element!");
 				if (element == "heal") return void message.channel.send("You can't set a trap to heal!");
-				if (element == "support") return void message.channel.send("You can't set a trap to support!");
+				if (element == "support" || element == "status") return void message.channel.send("You can't set a trap to support!");
 				if (element == "passive") return void message.channel.send("You can't set a trap to passive!");
 
 				makeStatus(skill, "trap", [trapName, powerMult, type, power, accuracy, element]);
@@ -838,7 +838,7 @@ statusList = {
 				return void message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: deadly, " + Affinities.join(', ') + " or Normal.");
 			if (!Elements.includes(element))
 				return void message.channel.send("You entered an invalid value for <Element>!");
-			if (['support', 'heal', 'passive', 'almighty'].includes(element))
+			if (['support', 'status', 'heal', 'passive', 'almighty'].includes(element))
 				return void message.channel.send("This element cannot have an affinity!");
 			if (side != 'weak' && side != 'resist' && side != 'both')
 				return void message.channel.send("You entered an invalid value for <Weak/Resist/Both>! It can be either Weak, Resist, or Both.");
@@ -1147,7 +1147,7 @@ statusList = {
 				newchar.affinities = {};
 				const affinities = ["superweak", "weak", "weak", "weak", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "resist", "resist", "block", "repel", "drain"]
 				for (const k in Elements) {
-					if (Elements[k] != "heal" && Elements[k] != "support" && Elements[k] != "passive" && Elements[k] != "almighty"){
+					if (Elements[k] != "heal" && Elements[k] != "support" && Elements[k] != "status" && Elements[k] != "passive" && Elements[k] != "almighty"){
 						let elementAffinity = Math.floor(Math.random() * (affinities.length-1))
 						if (!newchar.affinities[affinities[elementAffinity]]) newchar.affinities[affinities[elementAffinity]] = [];
 						if (affinities[elementAffinity] != "normal") {newchar.affinities[affinities[elementAffinity]].push(Elements[k])}
@@ -1277,7 +1277,7 @@ statusList = {
 			if (!Elements.includes(element)) {
 				return void message.channel.send({content: 'Please enter a valid element for **Element!**', embeds: [elementList()]})
 			}
-			if (element == 'passive' || element == 'heal' || element == 'support')
+			if (element == 'passive' || element == 'heal' || element == 'support' || element == 'status')
 				return void message.channel.send("The counter must be an attack!");
 
 			if (atype != 'physical' && atype != 'magic' && atype != 'ranged' && atype != 'sorcery') return void message.channel.send(`${atype} is an invalid form of contact! Try physical, magic or ranged.`);

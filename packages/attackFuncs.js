@@ -11,33 +11,6 @@ const skillFuncs = require('./skillFuncs.js');
 // Path to 'data' folder
 const dataPath = './data'
 
-// Elements
-const Elements = [
-    "strike",
-    "slash",
-    "pierce",
-    "fire",
-    "water",
-    "ice",
-    "electric",
-    "wind",
-    "earth",
-    "grass",
-    "psychic",
-    "poison",
-    "nuclear",
-    "metal",
-    "curse",
-    "bless",
-	"gravity",
-	"sound",
-    "almighty",
-
-    "support",
-    "heal",
-    "passive"
-]
-
 const elementEmoji = {
 	strike: "<:strike:877132710370480190>",
 	slash: "<:slash:877132710345338960> ",
