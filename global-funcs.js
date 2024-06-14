@@ -425,7 +425,7 @@ statusEmojis = {
 }
 
 elementTechs = {
-	burn: ['explode', 'wind', 'grass', 'nuclear'],
+	burn: ['explode', 'wind', 'water', 'nuclear'],
 	bleed: ['slash', 'pierce', 'nuclear'],
 	freeze: ['strike', 'explode', 'fire', 'earth', 'gravity', 'nuclear', 'metal'],
 	stun: ['strike', 'earth', 'metal', 'electric'],
