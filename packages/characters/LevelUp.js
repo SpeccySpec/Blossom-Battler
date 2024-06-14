@@ -146,7 +146,7 @@ evoSkillMessageCollector = async (charDefs, toUpdate, channel, server, ind, fiel
 		let btncolor = 'blue'
 		if (skillInfo?.type === 'heal') 
 			btncolor = 'green'
-		else if (skillInfo?.type === 'status') 
+		else if (skillInfo?.type === 'support' || skillInfo?.type === 'status') 
 			btncolor = 'grey'
 		else if (skillInfo?.atktype === 'physical' || skillInfo?.atktype === 'sorcery') 
 			btncolor = 'red'

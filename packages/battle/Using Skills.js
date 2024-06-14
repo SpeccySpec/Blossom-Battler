@@ -304,7 +304,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 			}
 		}
 	// Status Skills
-	} else if (skill.type === 'status' || (skill.limitbreak && (skill.class === 'boost' || skill.class === 'cripple'))) {
+	} else if (skill.type === 'support' || skill.type === 'status' || (skill.limitbreak && (skill.class === 'boost' || skill.class === 'cripple'))) {
 		if (skill.statusses) {
 			for (let i in skill.statusses) {
 				if (!statusList[i]) continue;
@@ -1457,7 +1457,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	if (skill.atktype === 'sorcery') quotetype = 'sorcery';
 
 	// Heals and Status
-	if (skill.type === 'status') quotetype = 'support';
+	if (skill.type === 'support' || skill.type === 'status') quotetype = 'support';
 	if (skill.type === 'heal') quotetype = 'heal';
 
 	// Limit Breaks
@@ -1540,7 +1540,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// First, we modify stats via passives n shit. This isn't the actual character anyway so we don't care.
-	if (skill.type === 'heal' || skill.type === 'status') skill.pow = 1; //this is to make sure healing and status skills can be modified by passives
+	if (skill.type === 'heal' || skill.type === 'support' || skill.type === 'status') skill.pow = 1; //this is to make sure healing and status skills can be modified by passives
 
 	// Failsafe
 	if (!skill.hits) skill.hits = 1;
@@ -2402,7 +2402,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// Another thing... Trust shit.
-	if (!skill.noassistance && (skill.target === 'one' || skill.target === 'allopposing') && !['status', 'heal', 'passive'].includes(skill.type) && targets.length <= 1 && !skill?.limitbreak && !skill?.teamcombo) {
+	if (!skill.noassistance && (skill.target === 'one' || skill.target === 'allopposing') && !['support', 'status', 'heal', 'passive'].includes(skill.type) && targets.length <= 1 && !skill?.limitbreak && !skill?.teamcombo) {
 		for (let i in party.members) {
 			let char2 = party.members[i];
 			if (char.id === char2.id) continue;

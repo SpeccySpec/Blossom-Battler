@@ -366,7 +366,7 @@ const menuStates = {
 								let btncolor = 'blue'
 								if (skillinfo?.type === 'heal') 
 									btncolor = 'green'
-								else if (skillinfo?.type === 'status' || skillinfo?.type === 'passive') 
+								else if (skillinfo?.type === 'support' || skillinfo?.type === 'status' || skillinfo?.type === 'passive') 
 									btncolor = 'grey'
 								else if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'sorcery') 
 									btncolor = 'red'
@@ -433,7 +433,7 @@ const menuStates = {
 							let btncolor = 'blue'
 							if (skillinfo?.type === 'heal') 
 								btncolor = 'green'
-							else if (skillinfo?.type === 'status' || skillinfo?.type === 'passive') 
+							else if (skillinfo?.type === 'support' || skillinfo?.type === 'status' || skillinfo?.type === 'passive') 
 								btncolor = 'grey'
 							else if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'sorcery') 
 								btncolor = 'red'
@@ -500,7 +500,7 @@ const menuStates = {
 					let btncolor = 'blue'
 					if (skillinfo?.type === 'heal') 
 						btncolor = 'green'
-					else if (skillinfo?.type === 'status') 
+					else if (skillinfo?.type === 'support' || skillinfo?.type === 'status') 
 						btncolor = 'grey'
 					else if (skillinfo?.atktype === 'physical' || skillinfo?.atktype === 'sorcery') 
 						btncolor = 'red'
@@ -809,7 +809,7 @@ const menuStates = {
 									if (members[i].hp > 0) canSelect = false;
 								}
 								if (members[i]?.status === 'ego') canSelect = false;
-							} else if (skill.type === 'status' && skill.statusses?.mimic) {
+							} else if ((skill.type === 'support' || skill.type === 'status') && skill.statusses?.mimic) {
 								if (members[i].hp <= 0) canSelect = false;
 								if (members[i].id === char.id) canSelect = false;
 								if (isBoss(members[i])) canSelect = false;
@@ -858,7 +858,7 @@ const menuStates = {
 								if (members[i].hp > 0) canSelect = false;
 							}
 							if (members[i]?.status === 'ego') canSelect = false;
-						} else if (skill.type === 'status' && skill.statusses?.mimic) {
+						} else if ((skill.type === 'support' || skill.type === 'status') && skill.statusses?.mimic) {
 							if (members[i].hp <= 0) canSelect = false;
 							if (members[i].id === char.id) canSelect = false;
 							if (isBoss(members[i])) canSelect = false;

@@ -311,7 +311,7 @@ enemyThinker = (char, btl) => {
 								}
 								break;
 
-							case 'status':
+							case 'support': case 'status':
 								// Abuse good statusses to do shit.
 								if (skill.status && !targ.status) {
 									let statusses = skill.status;
@@ -553,7 +553,7 @@ enemyThinker = (char, btl) => {
 								}
 								break;
 
-							case 'status':
+							case 'support': case 'status':
 								// Abuse good statusses to do shit.
 								if (skill.status && !targ.status) {
 									let statusses = skill.status;
@@ -798,7 +798,7 @@ enemyThinker = (char, btl) => {
 								}
 								break;
 
-							case 'status':
+							case 'support': case 'status':
 								break;
 
 							case 'passive':

@@ -261,7 +261,7 @@ extrasList = {
 				charges[0] = 0
 			}
 			
-			if (skill.type == 'status' && multiplier && multiplier != 1 && charges[4] == 1) charges[4] = multiplier
+			if ((skill.type == 'support' || skill.type == 'status') && multiplier && multiplier != 1 && charges[4] == 1) charges[4] = multiplier
 			return `*(${Math.floor(charges[0])}/${vars[0]}) charges left.*`
 		},
 		getinfo(vars, skill) {
@@ -405,7 +405,7 @@ extrasList = {
 				return void message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: deadly, " + Affinities.join(', ') + " or Normal.");
 			if (!Elements.includes(element))
 				return void message.channel.send("You entered an invalid value for <Element>!");
-			if (['status', 'heal', 'passive', 'almighty'].includes(element))
+			if (['support', 'heal', 'passive', 'almighty'].includes(element))
 				return void message.channel.send("This element cannot have an affinity!");
 			if (side != 'weak' && side != 'resist' && side != 'both')
 				return void message.channel.send("You entered an invalid value for <Weak/Resist/Both>! It can be either Weak, Resist, or Both.");
@@ -430,7 +430,7 @@ extrasList = {
 			let side = vars[3].toLowerCase()
 			let turns = vars[4]
 
-			if (skill.type == 'status' && multiplier) {
+			if ((skill.type == 'support' || skill.type == 'status') && multiplier) {
 				if (multiplier != 1) {
 					let extraBuffChance = 10;
 					extraBuffChance = Math.round(modSkillResult(char, targ, extraBuffChance, skill, btl) * multiplier);
@@ -444,7 +444,7 @@ extrasList = {
 			if (!targ.affinities) targ.affinities = [];
 
 			// Fail on bosses
-			if (char.team != targ.team && isBoss(targ) && skill.type === "status") return "...but it failed!";
+			if (char.team != targ.team && isBoss(targ) && (skill.type === "support" || skill.type === "status")) return "...but it failed!";
 
 			let setAffinities = [];
 			let wasChanged = false;
@@ -666,7 +666,7 @@ extrasList = {
 			const turns = vars[4];
 			let boostedAmount = boosted ?? false;
 
-			if (skill.type == 'status' && multiplier && !boostedAmount) {
+			if ((skill.type == 'support' || skill.type == 'status') && multiplier && !boostedAmount) {
 				chance = modSkillResult(char, targ, chance, skill, btl);
 				chance = Math.round(chance * multiplier);
 
@@ -790,7 +790,7 @@ extrasList = {
 
 					return txt;
 				} else {
-					if (skill.type == 'status')
+					if (skill.type == 'support' || skill.type == 'status')
 						return `But it missed __${targ.name}__!`;
 					else
 						return '';
@@ -1534,7 +1534,7 @@ extrasList = {
 		],
 		applyfunc(message, skill, args) {
 			const element = args[0].toLowerCase()
-			if (Elements.includes(element) && element != skill.type && element != 'passive' && element != 'status' && element != 'heal') {
+			if (Elements.includes(element) && element != skill.type && element != 'passive' && element != 'support' && element != 'heal') {
 				skill.type = [(typeof skill.type === 'object') ? skill.type[0] : skill.type, element];
 			} else
 				return void message.channel.send("That's not a valid element!");	

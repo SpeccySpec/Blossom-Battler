@@ -162,7 +162,7 @@ commands.registerskill = new Command({
 commands.registersupport = new Command({
 	desc: `Register a support skill to use in-battle! Characters can learn skills, items can utilize skills too. Support skills usually apply positive effects to allies or negative effects to opponents.`,
 	section: "skills",
-	alias: ['regsupport', 'regsup', 'makesupport', 'makesup'],
+	alias: ['registerstatus', 'regsupport', 'regsup', 'makesupport', 'makesup'],
 	args: [
 		{
 			name: "Skill Name",
@@ -480,12 +480,12 @@ commands.listatkextras = new Command({
 })
 
 commands.listsupportextras = new Command({
-	desc: 'List the possible extras you can give a __status__ skill.',
-	aliases: ['supportextras', 'extrassupport', 'listextrassupport'],
+	desc: 'List the possible extras you can give a __support__ skill.',
+	aliases: ['liststatusextras', 'supportextras', 'extrassupport', 'listextrassupport'],
 	section: "skills",
 	args: [],
 	func(message, args, guilded) {
-		let title = 'List of Status Extras'
+		let title = 'List of Support Extras'
 		let desc = 'When using a <:status:962465470349463585>**Support** skill, skills can have extra effects! These are called extras, and can be added with the "applyextra" command.'
 
 		let extras = []
@@ -566,14 +566,14 @@ commands.applyextra = new Command({
 			
 			let type = typeof skilldata.type == 'object' ? skilldata.type[0] : skilldata.type
 
-			let extraList = skilldata.type == 'status' ? statusList : skilldata.type == 'heal' ? healList : skilldata.type == 'passive' ? passiveList : extrasList
+			let extraList = (skilldata.type == 'support' || skilldata.type == 'status') ? statusList : skilldata.type == 'heal' ? healList : skilldata.type == 'passive' ? passiveList : extrasList
 			if (extraList?.[extra]?.unregsiterable && !utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send(`You lack permissions to apply ${extraList[extra].name} for this skill.`)
 
 			switch (type) {
 				case 'passive':
 					applyPassive(message, skilldata, extra, args);
 					break;
-				case 'status':
+				case 'support': case 'status':
 					applyStatus(message, skilldata, extra, args);
 					break;
 				case 'heal':
@@ -625,7 +625,7 @@ commands.clearextras = new Command({
 
 					delete skilldata.passive[args[1].toLowerCase()];
 					break;
-				case 'status':
+				case 'support': case 'status':
 					if (!skilldata.statusses) return message.channel.send(`${skilldata.name} has no extras!`);
 					if (!skilldata.statusses[args[1].toLowerCase()]) return message.channel.send(`${skilldata.name} has no ${args[1]} extras!`);
 
@@ -754,10 +754,10 @@ commands.editskill = new Command({
 				case 'type':
 				case 'element':
 					if (!utilityFuncs.inArray(args[2].toLowerCase(), Elements)) return message.channel.send(`${args[2].toLowerCase()} is an invalid element!`);
-					if (skillFile[args[0]].statusses && args[2].toLowerCase() != 'status') {
+					if (skillFile[args[0]].statusses && args[2].toLowerCase() != 'support') {
 						delete skillFile[args[0]].statusses;
 					}
-					if (skillFile[args[0]].extras && (args[2].toLowerCase() == 'status' || args[2].toLowerCase() == 'passive' || args[2].toLowerCase() == 'heal')) {
+					if (skillFile[args[0]].extras && (args[2].toLowerCase() == 'support' || args[2].toLowerCase() == 'passive' || args[2].toLowerCase() == 'heal')) {
 						delete skillFile[args[0]].extras;
 					}
 					if (skillFile[args[0]].heal && args[2].toLowerCase() != 'heal') {
@@ -789,7 +789,7 @@ commands.editskill = new Command({
 				case 'atktype':
 				case 'contact':
 				case 'skilltype':
-					if (skillFile[args[0]].type == 'status' || skillFile[args[0]].type == 'heal' || skillFile[args[0]].type == 'passive') return message.channel.send(`These skills cannot have an attack type!`);
+					if (skillFile[args[0]].type == 'support' || skillFile[args[0]].type == 'status' || skillFile[args[0]].type == 'heal' || skillFile[args[0]].type == 'passive') return message.channel.send(`These skills cannot have an attack type!`);
 					let type = args[2].toLowerCase();
 					if (type != 'physical' && type != 'magic' && type != 'ranged' && type != 'sorcery') return message.channel.send(`${type} is an invalid form of contact! Try physical, magic or ranged.`);
 					skillFile[args[0]].atktype = type;
@@ -1551,7 +1551,7 @@ commands.listskills = new Command({
 							break;
 						case 'element':
 							args[a] = args[a].toLowerCase();
-							isConditionMet = (skillFile[i].type == args[a] || skillFile[i].type.includes(args[a]))
+							isConditionMet = (skillFile[i].type == args[a] || skillFile[i].type.includes(args[a]) || (skillFile[i].type == "status" && args[a] == "support"))
 							break;
 						case 'status':
 							args[a] = args[a].toLowerCase();
@@ -1616,7 +1616,7 @@ commands.listskills = new Command({
 							break;
 						case 'extra':
 							isConditionMet = false
-							if (skillFile[i].type == 'status') {
+							if (skillFile[i].type == 'support' || skillFile[i].type == 'status') {
 								if (skillFile[i].statusses) {
 									isConditionMet = (skillFile[i].statusses[args[a]])
 								}
@@ -1643,8 +1643,8 @@ commands.listskills = new Command({
 			let descTxt = '';
 			if (skillFile[i].type.toString().toLowerCase() == 'passive') {
 				descTxt = 'A passive skill.';
-			} else if (skillFile[i].type.toString().toLowerCase() == 'status') {
-				descTxt = 'A status skill.';
+			} else if (skillFile[i].type.toString().toLowerCase() == 'support' || skillFile[i].type.toString().toLowerCase() == 'status') {
+				descTxt = 'A support skill.';
 			} else if (skillFile[i].type.toString().toLowerCase() == 'heal') {
 				descTxt = 'A heal skill.';
 			} else {
@@ -1691,8 +1691,8 @@ commands.searchskills = new Command({
 				let descTxt = '';
 				if (skillFile[i].type.toString().toLowerCase() == 'passive') {
 					descTxt = 'A passive skill.';
-				} else if (skillFile[i].type.toString().toLowerCase() == 'status') {
-					descTxt = 'A status skill.';
+				} else if (skillFile[i].type.toString().toLowerCase() == 'support' || skillFile[i].type.toString().toLowerCase() == 'status') {
+					descTxt = 'A support skill.';
 				} else if (skillFile[i].type.toString().toLowerCase() == 'heal') {
 					descTxt = 'A heal skill.';
 				} else {

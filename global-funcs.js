@@ -59,7 +59,7 @@ Elements = [
 	"sound",
     "almighty",
 
-    "status",
+    "support",
     "heal",
     "passive"
 ]
@@ -91,6 +91,7 @@ elementEmoji = {
 	almighty: "<:almighty:963413844326219787>",
 
 	status: "<:status:963413845693587497>",
+	support: "<:status:963413845693587497>",
 	heal: "<:heal:963413844972154900>",
 	passive: "<:passive:963413845253193758>"
 }
@@ -122,6 +123,7 @@ elementColors = {
 	almighty: '#ffffff',
 
 	status: '#0008ff',
+	support: '#0008ff',
 	heal: '#61ffab',
 	passive: '#ffa200'
 }
@@ -913,7 +915,7 @@ quoteTypes = {
 	death: 'Used upon death.',
 	kill: 'Used upon killing a foe.',
 	pacify: 'Used upon pacifying an enemy.',
-	support: `Used upon using a ${elementEmoji.status}**Support** skill.`,
+	support: `Used upon using a ${elementEmoji.support}**Support** skill.`,
 	heal: 'Used when healing allies.',
 	helped: 'Used when being helped by an ally (heal or buff)',
 	lvl: 'Used on level up.',

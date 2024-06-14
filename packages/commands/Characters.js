@@ -994,7 +994,7 @@ commands.setaffinity = new Command({
 		// Element Affinities
 		if (utilityFuncs.inArray(args[1].toLowerCase(), Elements)) {
 			if (!utilityFuncs.inArray(args[2].toLowerCase(), Affinities) && args[2].toLowerCase() != 'normal') return message.channel.send('Please enter a valid affinity!```diff\n+ SuperWeak\n+ Weak\n+ Normal\n+ Resist\n+ Block\n+ Repel\n+ Drain```');
-			if (args[1].toLowerCase() == 'almighty' || args[1].toLowerCase() == 'status' || args[1].toLowerCase() == 'passive' || args[1].toLowerCase() == 'heal') return message.channel.send(`You can't set ${args[1]} affinities!`);
+			if (args[1].toLowerCase() == 'almighty' || args[1].toLowerCase() == 'support' || args[1].toLowerCase() == 'passive' || args[1].toLowerCase() == 'heal') return message.channel.send(`You can't set ${args[1]} affinities!`);
 
 			if (args[3]) {
 				if (!thingDefs[args[0]].forms) return void message.channel.send(`__${thingDefs[args[0]].name}__ has no alternate forms!`);
@@ -1491,7 +1491,7 @@ commands.setmelee = new Command({
 		} else return message.channel.send(`${args[0]} doesn't exist!`);
 
 		// Some element and balancing checks
-		if (["status", "support", "heal", "passive"].includes(args[2].toLowerCase())) return message.channel.send(`${args[2]} moves are excluded from melee attacks.`);
+		if (["support", "heal", "passive"].includes(args[2].toLowerCase())) return message.channel.send(`${args[2]} moves are excluded from melee attacks.`);
 		if (args[3] > 60) return message.channel.send('Melee Attacks cannot go above **60 power**!');
 		if (args[5] > 15) return message.channel.send('Melee Attacks cannot go above **15% Critical Hit Chance**!');
 
@@ -1885,8 +1885,8 @@ commands.autolearn = new Command({
 let disallowedLeaderSkillElelemts = {
 	boost: ['passive', 'almighty'],
 	discount: ['passive'],
-	crit: ['status', 'heal', 'passive'],
-	endure: ['status', 'heal', 'passive']
+	crit: ['support', 'heal', 'passive'],
+	endure: ['support', 'heal', 'passive']
 }
 
 let leaderTxt = '';
@@ -3866,7 +3866,7 @@ commands.transformationaffinity = new Command({
 
 		if (utilityFuncs.inArray(args[2].toLowerCase(), Elements)) {
 			if (!utilityFuncs.inArray(args[3].toLowerCase(), Affinities) && args[3].toLowerCase() != 'normal') return message.channel.send('Please enter a valid affinity!```diff\n+ SuperWeak\n+ Weak\n+ Normal\n+ Resist\n+ Block\n+ Repel\n+ Drain```');
-			if (args[2].toLowerCase() == 'almighty' || args[3].toLowerCase() == 'status' || args[2].toLowerCase() == 'passive' || args[2].toLowerCase() == 'heal') return message.channel.send(`You can't set ${args[2]} affinities!`);
+			if (args[2].toLowerCase() == 'almighty' || args[3].toLowerCase() == 'support' || args[2].toLowerCase() == 'passive' || args[2].toLowerCase() == 'heal') return message.channel.send(`You can't set ${args[2]} affinities!`);
 
 			if (hasAffinity(charFile[args[0]].transformations[args[1]], args[2].toLowerCase(), args[3].toLowerCase())) return message.channel.send(`${charFile[args[0]].transformations[args[1]].name} already has a ${args[2]} affinity to ${args[1].charAt(0).toUpperCase()+args[1].slice(1).toLowerCase()}!`);
 
@@ -4148,11 +4148,9 @@ commands.registerform = new Command({
 		let bst = 0;
 		for (let i = 5; i < args.length-1; i++) {
 			if (args[i]) {
-				if (parseInt(args[i]) <= 0) return message.channel.send("You can't have a stat that is less than 0!");
-				if (parseInt(args[i]) > settings.caps.basestatcap) return message.channel.send("You can't have a stat that is more than 10!");
-				bst += parseInt(args[i]);
-			} else {
-				//j
+				if (args[i] <= 0) return message.channel.send("You can't have a stat that is less than 0!");
+				if (args[i] > settings.caps.basestatcap) return message.channel.send("You can't have a stat that is more than 10!");
+				bst += args[i];
 			}
 		}
 

@@ -33,7 +33,7 @@ const Elements = [
 	"sound",
     "almighty",
 
-    "status",
+    "support",
     "heal",
     "passive"
 ]
@@ -62,6 +62,7 @@ const elementEmoji = {
 	almighty: "<:almighty:906748842450509894>",
 	
 	status: "<:status:906877331711344721>",
+	support: "<:status:906877331711344721>",
 	heal: "<:heal:906758309351161907>",
 	passive: "<:passive:906874477210648576>"
 }
@@ -1155,7 +1156,7 @@ function attackEnemy(userName, oppName, userDefs, oppDefs, skillDefs, useEnergy,
 			embedText.attackText = `${userName} used ${skillDefs.name}!`
 			embedText.resultText = `${(oppDefs.id == userDefs.id) ? "They" : oppName} had their HP restored by ${skillDefs.pow}!`
 		}
-	} else if (skillDefs.type === "status") {
+	} else if (skillDefs.type === "support" || skillDefs.type === "status") {
 		if (skillDefs.status && skillDefs.statuschance) {
 			if (skillDefs.statuschance > 0) {
 				let targ = (skillDefs.statuschance + (userDefs.chr - oppDefs.luk));

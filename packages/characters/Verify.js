@@ -43,12 +43,12 @@ verifiedChar = (char, server) => {
 		skill = skillFile[i];
 		if (!skill) return false;
 		if (skill.pow*(skill.hits ?? 1) > 1200) return false;
-		if (skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return false;
+		if (skill.type != "support" && skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return false;
 		if (skillTier(skill) > 5) return false;
 
 		if (typeof(skill.type) == 'object') {
 			for (let type of skill.type) {
-				if (type === 'status')
+				if (type === 'support' || type === 'status')
 					statusses++;
 				else if (type === 'passive')
 					passives++;
@@ -58,7 +58,7 @@ verifiedChar = (char, server) => {
 				}
 			}
 		} else {
-			if (skill.type === 'status')
+			if (skill.type === 'support' || skill.type === 'status')
 				statusses++;
 			else if (skill.type === 'passive')
 				passives++;
@@ -80,12 +80,12 @@ verifiedChar = (char, server) => {
 				skill = skillFile[movelinks[k]];
 				if (!skill) return false;
 				if (skill.pow*(skill.hits ?? 1) > 1200) return false;
-				if (skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return false;
+				if (skill.type != "support" || skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return false;
 				if (skillTier(skill) > 5) return false;
 		
 				if (typeof(skill.type) == 'object') {
 					for (let type of skill.type) {
-						if (type === 'status')
+						if (type === 'support' || type === 'status')
 							statusses++;
 						else if (type === 'passive')
 							passives++;
@@ -95,7 +95,7 @@ verifiedChar = (char, server) => {
 						}
 					}
 				} else {
-					if (skill.type === 'status')
+					if (skill.type === 'support' || skill.type === 'status')
 						statusses++;
 					else if (skill.type === 'passive')
 						passives++;
@@ -110,7 +110,7 @@ verifiedChar = (char, server) => {
 
 	if (almighty > 2) return false;
 	if (passives > (char.mainElement === 'passive' ? 3 : 2)) return false;
-	if (statusses > (char.mainElement === 'status' ? 3 : 2)) return false;
+	if (statusses > ((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)) return false;
 	if (elements.length > 3) return false;
 	if (char.skills.length > 8) return false;
 

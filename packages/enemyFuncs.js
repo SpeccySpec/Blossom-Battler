@@ -26,7 +26,7 @@ const Elements = [
 	"sound",
     "almighty",
 
-    "status",
+    "support",
     "heal",
     "passive"
 ]
@@ -55,6 +55,7 @@ const elementEmoji = {
 	almighty: "<:almighty:906748842450509894>",
 	
 	status: "<:status:906877331711344721>",
+	support: "<:status:906877331711344721>",
 	heal: "<:heal:906758309351161907>",
 	passive: "<:passive:906874477210648576>"
 }
@@ -428,7 +429,7 @@ function enemyThinker(userDefs, allySide, oppSide) {
 	var chosenSkill = possibleSkills[Math.round(Math.random() * (possibleSkills.length-1))];
 	var skillDefs = skillFile[chosenSkill]
 	
-	if (skillDefs.type === 'status') {
+	if (skillDefs.type === 'support' || skillDefs.type === 'status') {
 		// Target allies with shields
 		if (skillDefs.makarakarn || skillDefs.shield || skillDefs.tetrakarn || skillDefs.trap) {
 			var allyNum = Math.round(Math.random() * (allySide.length-1))

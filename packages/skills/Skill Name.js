@@ -236,7 +236,7 @@ skillTier = (skillData) => {
 	let skill = objClone(skillData);
 
 	if (skill.tier) return skill.tier;
-	if (["status", "passive", "heal"].includes(skill.type)) return 1; // you have to set these manually.
+	if (["support", "status", "passive", "heal"].includes(skill.type)) return 1; // you have to set these manually.
 
 	// Base Power.
 	let pow = (skill.pow * (skill.hits ?? 1));
@@ -249,7 +249,7 @@ skillTier = (skillData) => {
 	}
 
 	for (let k in movelinks) {
-		if (skillFile[movelinks[k]] && skillFile[movelinks[k]].pow && !["passive", "heal", "status"].includes(skillFile[movelinks[k]].type))
+		if (skillFile[movelinks[k]] && skillFile[movelinks[k]].pow && !["passive", "heal", "support", "status"].includes(skillFile[movelinks[k]].type))
 			pow += (skillFile[movelinks[k]].pow * (skillFile[movelinks[k]].hits ?? 1));
 	}
 

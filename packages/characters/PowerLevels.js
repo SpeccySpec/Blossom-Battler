@@ -12,7 +12,7 @@ calcPowerLevel = (char) => {
         if (skillFile[char.skills[i]]) {
             skill = skillFile[char.skills[i]];
 
-            if (skill.type != "passive" && skill.type != "status") {
+            if (skill.type != "passive" && skill.type != "support" && skill.type != "status") {
                 pow = (skill.pow * (skill.hits ?? 1));
 
                 if (pow > strongestMovePow) {

@@ -81,7 +81,7 @@ statusList = {
 				}
 			}
 
-			if (skill.type === 'status') {
+			if (skill.type === 'support' || skill.type === 'status') {
 				chance = modSkillResult(char, targ, chance, skill, btl);
 				chance = Math.round(chance * multiplier);
 			}
@@ -89,7 +89,7 @@ statusList = {
 			let randChance = randNum(1, 100)
 
 			if (randChance <= chance) {
-				if (skill.type === 'status' && doPassives(btl)) {
+				if ((skill.type === 'support' || skill.type === 'status') && doPassives(btl)) {
 					let repelChance = 0;
 					let targChance = 0;
 					for (let i in targ.skills) {
@@ -113,7 +113,7 @@ statusList = {
 
 				return `\n${inflictStatus(targ, status)}\n${selectQuote(char, 'landed')}\n${selectQuote(targ, 'hurt')}`;
 			} else {
-				if (skill.type == 'status')
+				if (skill.type == 'support' || skill.type == 'status')
 					return dodgeTxt(char, targ);
 				else
 					return '';
@@ -799,7 +799,7 @@ statusList = {
 
 				if (!Elements.includes(element)) return void message.channel.send("That's not a valid element!");
 				if (element == "heal") return void message.channel.send("You can't set a trap to heal!");
-				if (element == "status") return void message.channel.send("You can't set a trap to status!");
+				if (element == "support") return void message.channel.send("You can't set a trap to support!");
 				if (element == "passive") return void message.channel.send("You can't set a trap to passive!");
 
 				makeStatus(skill, "trap", [trapName, powerMult, type, power, accuracy, element]);
@@ -838,7 +838,7 @@ statusList = {
 				return void message.channel.send("You entered an invalid value for <Affinity>! It can be any of the following: deadly, " + Affinities.join(', ') + " or Normal.");
 			if (!Elements.includes(element))
 				return void message.channel.send("You entered an invalid value for <Element>!");
-			if (['status', 'heal', 'passive', 'almighty'].includes(element))
+			if (['support', 'heal', 'passive', 'almighty'].includes(element))
 				return void message.channel.send("This element cannot have an affinity!");
 			if (side != 'weak' && side != 'resist' && side != 'both')
 				return void message.channel.send("You entered an invalid value for <Weak/Resist/Both>! It can be either Weak, Resist, or Both.");
@@ -1147,7 +1147,7 @@ statusList = {
 				newchar.affinities = {};
 				const affinities = ["superweak", "weak", "weak", "weak", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "normal", "resist", "resist", "block", "repel", "drain"]
 				for (const k in Elements) {
-					if (Elements[k] != "heal" && Elements[k] != "status" && Elements[k] != "passive" && Elements[k] != "almighty"){
+					if (Elements[k] != "heal" && Elements[k] != "support" && Elements[k] != "passive" && Elements[k] != "almighty"){
 						let elementAffinity = Math.floor(Math.random() * (affinities.length-1))
 						if (!newchar.affinities[affinities[elementAffinity]]) newchar.affinities[affinities[elementAffinity]] = [];
 						if (affinities[elementAffinity] != "normal") {newchar.affinities[affinities[elementAffinity]].push(Elements[k])}
@@ -1277,7 +1277,7 @@ statusList = {
 			if (!Elements.includes(element)) {
 				return void message.channel.send({content: 'Please enter a valid element for **Element!**', embeds: [elementList()]})
 			}
-			if (element == 'passive' || element == 'heal' || element == 'status')
+			if (element == 'passive' || element == 'heal' || element == 'support')
 				return void message.channel.send("The counter must be an attack!");
 
 			if (atype != 'physical' && atype != 'magic' && atype != 'ranged' && atype != 'sorcery') return void message.channel.send(`${atype} is an invalid form of contact! Try physical, magic or ranged.`);
@@ -2151,7 +2151,7 @@ buildStatus = (message, extra, args, lb) => {
 	} else {
 		skill = {
 			name: args[0],
-			type: 'status',
+			type: 'support',
 			cost: args[1],
 			costtype: args[2].toLowerCase(),
 			target: args[3],
@@ -3135,7 +3135,7 @@ statusEffectFuncs = {
 						case 0: //Buff random enemy
 							skillDefine = {
 								"name": "Insanity Action: Buff",
-								"type": "status",
+								"type": "support",
 								"cost": 0,
 								"costtype": "mp",
 								"target": "randomopposing",
@@ -3154,7 +3154,7 @@ statusEffectFuncs = {
 						case 1: //Debuff user
 							skillDefine = {
 								"name": "Insanity Action: Hinder",
-								"type": "status",
+								"type": "support",
 								"cost": 0,
 								"costtype": "mp",
 								"target": "caster",

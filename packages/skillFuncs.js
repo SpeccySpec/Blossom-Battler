@@ -85,7 +85,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 
 	// Basic Damage
 	var finalText = '';
-	if (skillDefs.type != "status" && skillDefs.type != "passive") {
+	if (skillDefs.type != "status" && skillDefs.type != "support" && skillDefs.type != "passive") {
 		let powTxt = (skillDefs.generic && skillDefs.fusionskill) ? 'variable' : skillDefs.pow;
 
 		if (hasExtra(skillDefs, 'ohko')) {
@@ -287,7 +287,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 			finalText += `Has **${skillDefs.acc}%** Accuracy.\n`;
 	}
 
-	if (skillDefs.crit && skillDefs.type != "heal" && skillDefs.type != "status" && skillDefs.type != "passive")
+	if (skillDefs.crit && skillDefs.type != "heal" && skillDefs.type != "support" && skillDefs.type != "status" && skillDefs.type != "passive")
 		finalText += `**${skillDefs.crit}%**<:crit:973077052083286056>\n`;
 
 	if (skillDefs.status) {

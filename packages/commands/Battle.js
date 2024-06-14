@@ -35,7 +35,7 @@ commands.guide = new Command({
 					if (descTxt.includes('%RANDOMSKILL%')) {
 						let possibleSkills = []
 						for (const val in skillFile) {
-							if (skillFile[val].type != "heal" && (skillFile[val].type != "status" && !skillFile[val].buff) && skillFile[val].type != "passive" && val != "Metronome") {
+							if (skillFile[val].type != "heal" && ((skillFile[val].type != "support" || skillFile[val].type != "status") && !skillFile[val].buff) && skillFile[val].type != "passive" && val != "Metronome") {
 								possibleSkills.push(val)
 							}
 						}
@@ -904,7 +904,7 @@ commands.startpvp = new Command({
 
 							let aMod = ["superweak", "weak", "weak", "weak", "normal", "normal", "normal", "normal", "resist", "resist", "block", "repel", "drain"];
 							for (const type of Elements) {
-								if (type === "status" || type === "heal" || type === "passive" || type === "almighty") continue;
+								if (type === "support" || type === "status" || type === "heal" || type === "passive" || type === "almighty") continue;
 
 								let j = randNum(aMod.length-1);
 								if (aMod[j] != "normal") {
