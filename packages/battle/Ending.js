@@ -487,6 +487,8 @@ runFromBattle = (char, btl, i) => {
 	// Save HP, MP and trust.
 	let charFile = setUpFile(`${dataPath}/json/${btl.guild.id}/characters.json`);
 	for (let char of btl.teams[i].members) {
+		if (char.curform) formChange(char, "normal", btl);
+
 		if (charFile[char.truename]) {
 			charFile[char.truename].hp = Math.min(charFile[char.truename].maxhp, char.hp);
 			charFile[char.truename].mp = Math.min(charFile[char.truename].maxmp, char.mp);
