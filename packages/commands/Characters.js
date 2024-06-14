@@ -3514,7 +3514,7 @@ commands.settransformation = new Command({
 			if (args[i] > settings.caps.transformations.basestatmaxcap) return message.channel.send(`${args[i]} cannot be greater than ${settings.caps.transformations.statbuff}!`);
 			if (args[i] < settings.caps.transformations.basestatmincap) return message.channel.send(`${args[i]} cannot be less than ${settings.caps.transformations.basestatmincap}!`);
 
-			if (args[i] < 0) allowedMore = -args[i]/2;
+			if (args[i] < 0) allowedMore += -args[i]/2;
 			else BST += args[i];
 		}
 
@@ -3680,7 +3680,7 @@ commands.edittransformation = new Command({
 			if (args[i] > settings.caps.transformations.basestatmaxcap) return message.channel.send(`${args[i]} cannot be greater than ${settings.caps.transformations.statbuff}!`);
 			if (args[i] < settings.caps.transformations.basestatmincap) return message.channel.send(`${args[i]} cannot be less than ${settings.caps.transformations.basestatmincap}!`);
 
-			if (args[i] < 0) allowedMore = -args[i]/2;
+			if (args[i] < 0) allowedMore += -args[i]/2;
 			else BST += args[i];
 		}
 		let normalbst = settings.caps.transformations.bstcap;
