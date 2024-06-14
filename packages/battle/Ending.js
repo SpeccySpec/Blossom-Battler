@@ -217,6 +217,8 @@ winBattle = (btl, i) => {
 
 	let users = [];
 	for (let char of btl.teams[i].members) {
+		if (char.curform) formChange(char, "normal", btl);
+
 		if (charFile[char.truename]) {
 			charFile[char.truename].hp = Math.min(charFile[char.truename].maxhp, char.hp);
 			charFile[char.truename].mp = Math.min(charFile[char.truename].maxmp, char.mp);
@@ -258,6 +260,8 @@ winBattle = (btl, i) => {
 	}
 
 	for (let char of btl.teams[i].backup) {
+		if (char.curform) formChange(char, "normal", btl);
+
 		if (charFile[char.truename]) {
 			charFile[char.truename].hp = Math.min(charFile[char.truename].maxhp, char.hp);
 			charFile[char.truename].mp = Math.min(charFile[char.truename].maxmp, char.mp);

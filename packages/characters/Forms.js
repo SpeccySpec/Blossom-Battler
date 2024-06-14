@@ -184,12 +184,6 @@ formDesc = (char, formName, modStats, message) => {
 }
 
 formChange = (char, form, btl) => {
-	if (char.transformed) return
-	if (char.notransform) return;
-	if (char.mimic) return;
-	if (char.ragesoul) return;
-	if (char.custom?.orgiamode) return;
-
 	if (char.origform) {
 		char.melee = char.origform.melee;
 		char.stats = char.origform.stats;
