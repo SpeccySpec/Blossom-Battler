@@ -1797,8 +1797,8 @@ commands.forgetskill = new Command({
 		{
 			name: "Skill #2, Skill #3, ...",
 			type: "Word",
-			forced: true,
-			multiple: false
+			forced: false,
+			multiple: true
 		}
 	],
 	checkban: true,
