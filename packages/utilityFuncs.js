@@ -305,7 +305,8 @@ module.exports = {
 		}
 
 		let directoryList = fs.readdirSync(`${dataPath}/json`).filter(file => !isNaN(file));
-						
+		let form;
+
 		for (directory in directoryList) {
 			charFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/characters.json`);
 			enemyFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/enemies.json`);
@@ -339,7 +340,8 @@ module.exports = {
 					}
 
 					if (char.forms) {
-						for (let form of char.forms) {
+						for (let k in char.forms) {
+							form = char.forms[k];
 							if (form.skills && form.skills.length) {
 								form.skills = form.skills.filter(skill => skill in skillObj)
 								form.skills.sort(function(a, b) {
@@ -401,6 +403,7 @@ module.exports = {
 
 					if (enemy.forms) {
 						for (let form of enemy.forms) {
+							form = enemy.forms[k];
 							if (form.skills && form.skills.length) {
 								form.skills = form.skills.filter(skill => skill in skillObj)
 								form.skills.sort(function(a, b) {
