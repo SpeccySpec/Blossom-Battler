@@ -309,20 +309,19 @@ module.exports = {
 		for (directory in directoryList) {
 			charFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/characters.json`);
 			enemyFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/enemies.json`);
-
 			
-			for (const char in charFile) {
-				if (charFile[char].skills && charFile[char].skills.length) {
-					charFile[char].skills = charFile[char].skills.filter(skill => skill in skillObj)
-					charFile[char].skills.sort(function(a, b) {
+			for (const char of charFile) {
+				if (char.skills && char.skills.length) {
+					char.skills = char.skills.filter(skill => skill in skillObj)
+					char.skills.sort(function(a, b) {
 						return skillObj[b].rating - skillObj[a].rating
 					})
-					charFile[char].skills.reverse()
+					char.skills.reverse()
 					
-					let mainElement = charFile[char].mainElement;
+					let mainElement = char.mainElement;
 
 					if (typeof mainElement === "object") {
-						charFile[char].skills.sort(function(a, b) {
+						char.skills.sort(function(a, b) {
 							for (let k in mainElement) {
 								if (skillObj[a].type.includes(mainElement[k])) return -1
 								else if (skillObj[b].type.includes(mainElement[k])) return 1
@@ -330,28 +329,58 @@ module.exports = {
 							}
 						})
 					} else {
-						charFile[char].skills.sort(function(a, b) {
+						char.skills.sort(function(a, b) {
 							if (skillObj[a].type.includes(mainElement)) return -1
 							else if (skillObj[b].type.includes(mainElement)) return 1
 							else return 0
 						})
 					}
+
+					if (char.forms) {
+						for (let form of char.forms) {
+							if (form.skills && form.skills.length) {
+								form.skills = form.skills.filter(skill => skill in skillObj)
+								form.skills.sort(function(a, b) {
+									return skillObj[b].rating - skillObj[a].rating
+								})
+								form.skills.reverse()
+								
+								let mainElement = form.mainElement;
+			
+								if (typeof mainElement === "object") {
+									form.skills.sort(function(a, b) {
+										for (let k in mainElement) {
+											if (skillObj[a].type.includes(mainElement[k])) return -1
+											else if (skillObj[b].type.includes(mainElement[k])) return 1
+											else return 0
+										}
+									})
+								} else {
+									form.skills.sort(function(a, b) {
+										if (skillObj[a].type.includes(mainElement)) return -1
+										else if (skillObj[b].type.includes(mainElement)) return 1
+										else return 0
+									})
+								}
+							}
+						}
+					}
 				}
 			}
 			fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/characters.json`, JSON.stringify(charFile))
 
-			for (const enemy in enemyFile) {
-				if (enemyFile[enemy].skills && enemyFile[enemy].skills.length) {
-					enemyFile[enemy].skills = enemyFile[enemy].skills.filter(skill => skill in skillObj)
-					enemyFile[enemy].skills.sort(function(a, b) {
+			for (const enemy of enemyFile) {
+				if (enemy.skills && enemy.skills.length) {
+					enemy.skills = enemy.skills.filter(skill => skill in skillObj)
+					enemy.skills.sort(function(a, b) {
 						return skillObj[b].rating - skillObj[a].rating
 					})
-					enemyFile[enemy].skills.reverse()
+					enemy.skills.reverse()
 
-					let mainElement = enemyFile[enemy].mainElement
+					let mainElement = enemy.mainElement
 
 					if (typeof mainElement === "object") {
-						enemyFile[enemy].skills.sort(function(a, b) {
+						enemy.skills.sort(function(a, b) {
 							for (let k in mainElement) {
 								if (skillObj[a].type.includes(mainElement[k])) return -1
 								else if (skillObj[b].type.includes(mainElement[k])) return 1
@@ -359,11 +388,41 @@ module.exports = {
 							}
 						})
 					} else {
-						enemyFile[enemy].skills.sort(function(a, b) {
+						enemy.skills.sort(function(a, b) {
 							if (skillObj[a].type.includes(mainElement)) return -1
 							else if (skillObj[b].type.includes(mainElement)) return 1
 							else return 0
 						})
+					}
+
+					if (enemy.forms) {
+						for (let form of enemy.forms) {
+							if (form.skills && form.skills.length) {
+								form.skills = form.skills.filter(skill => skill in skillObj)
+								form.skills.sort(function(a, b) {
+									return skillObj[b].rating - skillObj[a].rating
+								})
+								form.skills.reverse()
+								
+								let mainElement = form.mainElement;
+			
+								if (typeof mainElement === "object") {
+									form.skills.sort(function(a, b) {
+										for (let k in mainElement) {
+											if (skillObj[a].type.includes(mainElement[k])) return -1
+											else if (skillObj[b].type.includes(mainElement[k])) return 1
+											else return 0
+										}
+									})
+								} else {
+									form.skills.sort(function(a, b) {
+										if (skillObj[a].type.includes(mainElement)) return -1
+										else if (skillObj[b].type.includes(mainElement)) return 1
+										else return 0
+									})
+								}
+							}
+						}
 					}
 				}
 			}
