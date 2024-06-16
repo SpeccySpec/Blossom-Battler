@@ -1620,7 +1620,7 @@ commands.learnskill = new Command({
 		let learnString = `👍 ${args[0]} learned `;
 		let skillLearn = [];
 
-		if (args[1] && thingDefs[args[0]].forms && thingDefs[args[0]].forms[args[1]]) {
+		if (args[1] && thingDefs[args[0]].forms && thingDefs[args[0]].forms[args[1]] && args[2]) {
 			learnString = `👍 ${args[0]}'s ${args[1]} can now use `;
 
 			if (!thingDefs[args[0]].type && thingDefs[args[0]].forms[args[1]].skills.length >= settings.caps.skillamount) return message.channel.send(`You cannot have more than ${settings.caps.skillamount} skills!`);
@@ -1823,7 +1823,7 @@ commands.forgetskill = new Command({
 		// Get rid of the name.
 		args.shift()
 
-		if (args[0] && thingdef.forms && thingdef.forms[args[0]]) {
+		if (args[0] && thingdef.forms && thingdef.forms[args[0]] && args[2]) {
 			const form = args[0];
 			args.shift();
 
