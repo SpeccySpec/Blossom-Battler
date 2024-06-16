@@ -1587,21 +1587,22 @@ commands.learnskill = new Command({
 			forced: true
 		},
 		{
-			name: "Form Name",
+			name: "Form Name/Skill #1",
 			type: "Word",
 			forced: false
 		},
 		{
-			name: "Skill Names",
+			name: "Skill #2, Skill #3, ...",
 			type: "Word",
 			multiple: true,
-			forced: true
+			forced: false
 		}
 	],
 	checkban: true,
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+		if (!args[1]) return message.channel.send("I know what it looks like, but you can't learn nothing!");
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
@@ -1651,7 +1652,7 @@ commands.learnskill = new Command({
 		} else {
 			if (!thingDefs[args[0]].type && thingDefs[args[0]].skills.length >= settings.caps.skillamount) return message.channel.send(`You cannot have more than ${settings.caps.skillamount} skills!`);
 
-			for (let i = 2; i < args.length; i++) {
+			for (let i = 1; i < args.length; i++) {
 				if (knowsSkill(thingDefs[args[0]], args[i])) return message.channel.send(`${args[0]} already knows ${args[i]}!\n\n**[TIP]**\n_Don't enter two of the same skill!_`);
 
 				if (skillFile[args[i]]) {
@@ -1789,20 +1790,21 @@ commands.forgetskill = new Command({
 			forced: true
 		},
 		{
-			name: "Form Name",
+			name: "Form Name/Skill #1",
 			type: "Word",
 			forced: false
 		},
 		{
-			name: "Skill Name",
+			name: "Skill #2, Skill #3, ...",
 			type: "Word",
 			forced: true,
-			multiple: true
+			multiple: false
 		}
 	],
 	checkban: true,
 	func(message, args, guilded) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
+		if (!args[1]) return message.channel.send("I know what it looks like, but you can't forget nothing!");
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
@@ -1832,7 +1834,6 @@ commands.forgetskill = new Command({
 				thingdef.forms[form].skills.splice(num, 1)
 			}
 		} else {
-			args.shift();
 			for (const skill of args) {
 				if (!knowsSkill(thingdef, skill))
 					return void message.channel.send(`${thingdef.name} doesn't know ${skill}!`)
