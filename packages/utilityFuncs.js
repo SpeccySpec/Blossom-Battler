@@ -309,8 +309,10 @@ module.exports = {
 		for (directory in directoryList) {
 			charFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/characters.json`);
 			enemyFile = setUpFile(`${dataPath}/json/${directoryList[directory]}/enemies.json`);
-			
-			for (const char of charFile) {
+
+			let char;
+			for (let i in charFile) {
+				char = charFile[i];
 				if (char.skills && char.skills.length) {
 					char.skills = char.skills.filter(skill => skill in skillObj)
 					char.skills.sort(function(a, b) {
@@ -369,7 +371,9 @@ module.exports = {
 			}
 			fs.writeFileSync(`${dataPath}/json/${directoryList[directory]}/characters.json`, JSON.stringify(charFile))
 
-			for (const enemy of enemyFile) {
+			let enemy;
+			for (let i in enemyFile) {
+				enemy = enemyFile[i];
 				if (enemy.skills && enemy.skills.length) {
 					enemy.skills = enemy.skills.filter(skill => skill in skillObj)
 					enemy.skills.sort(function(a, b) {
