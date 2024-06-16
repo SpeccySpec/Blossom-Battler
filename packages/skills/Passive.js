@@ -2606,6 +2606,63 @@ passiveList = {
 			return str;
 		}
 	}),
+
+	critboost: new Extra({
+		name: "Crit Boost (Original)",
+		desc: "Upon critical hit, buff a stat. Optionally restrict to an element.",
+		multiple: true,
+		args: [
+			{
+				name: "Stat",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Stages",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Element",
+				type: "Word",
+				forced: false
+			}
+		],
+		applyfunc(message, skill, args) {
+			let stat = args[0].toLowerCase();
+			let stages = args[1];
+			let element = args[2].toLowerCase() ?? "all";
+
+			if (![...stats, 'crit'].includes(stat)) return void message.channel.send("That's not a valid stat!");
+			if (stages == 0) return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
+			if (Math.abs(stages) > 3) return void message.channel.send("The maximum amount of stages is 3!");
+			if (!Elements.includes(element)) return void message.channel.send(`${args[2]} is not a valid element!`);
+
+			makePassive(skill, "critboost", [stat, stages, element]);
+			return true
+		},
+		oncritlanded(char, targ, skill, dmg, passive, btl, vars) {
+			if (!vars[2] || vars[2].toLowerCase() == "all" || (typeof skill.type == "object" && skill.type.includes(vars[2])) || skill.type == vars[2]) {
+				buffStat(char, (vars[0] ?? "atk").toLowerCase(), (vars[1] ?? 1));
+				return `The critical hit on __${targ.name}__ let __${char.name}'s__ _${passive.name}_ ${(vars[1] ?? 1) > 0 ? 'buff' : 'debuff'} **${(vars[0] ?? "atk").toUpperCase()} ${Math.abs(vars[1] ?? 1)} times**.`;
+			}
+		},
+		getinfo(vars, skill) {
+			let e = vars[0][2].toLowerCase();
+			let str = 'Upon landing a critical hit ' + ((e != "all") ? `with a **${elementEmoji[e]}${e} skill**, ` : '') + ' **boosts user ';
+
+			for (let i in vars) {
+				str += `${(vars[i][0] ?? '???').toUpperCase()} ${vars[i][1]} time(s)`;
+
+				if (i < vars.length - 2) 
+					str += `, `
+				else if (i == vars.length - 2) 
+					str += ` and `
+			}
+
+			return `${str}**`;
+		}
+	}),
 }
 
 // Determination Points extra.
