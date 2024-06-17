@@ -54,7 +54,7 @@ commands.joinvc = new Command({
 commands.playsong = new Command({
 	desc: 'Play a <Song>! Use a youtube link.\n**[THIS IS DEPRICATED AND WILL BE REMOVED.]**',
 	section: 'music',
-	aliases: ['playmusic', 'playtrack'],
+	aliases: ['play', 'playmusic', 'playtrack'],
 	args: [
 		{
 			name: 'Song',
@@ -62,20 +62,20 @@ commands.playsong = new Command({
 			forced: true
 		},
     ],
-	func: async(message, args, guilded) => {
+	func: async (message, args, guilded) => {
         if (message.member.voice.channel)
-            joinVc(message.member.voice.channel, message.channel);
+            await joinVc(message.member.voice.channel, message.channel);
         else
             return void message.channel.send('Join a VC first!');
 
         if (args[0]) {
-            if (!voiceChannelShit[message.guild.id].playing) {
+			message.react('👍');
+			await addToQueue(message.guild.id, args[0], message.author);
+            /*if (!voiceChannelShit[message.guild.id].playing) {
                 await playSong(message.guild.id, args[0], message.author, true);
-                message.reply('Playing song!');
             } else {
                 addToQueue(message.guild.id, args[0], message.author);
-                message.reply('Added to song queue.');
-            }
+            }*/
         }
 	}
 })

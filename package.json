@@ -32,7 +32,7 @@
 		"guilded.js": "^0.23.4",
 		"hastebin-gen": "^2.0.5",
 		"libsodium-wrappers": "^0.7.13",
-		"request": "^2.88.2",
-		"ytdl-core": "^4.11.5"
+		"music-metadata": "^8.3.0",
+		"request": "^2.88.2"
 	}
 }

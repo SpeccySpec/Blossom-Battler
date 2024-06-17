@@ -18,6 +18,7 @@ client = new Discord.Client({
 		Discord.Intents.FLAGS.GUILD_MESSAGES,
 		Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
 		Discord.Intents.FLAGS.DIRECT_MESSAGES,
+		Discord.Intents.FLAGS.GUILD_VOICE_STATES,
 	],
 	partials: [
 		'MESSAGE',
@@ -48,11 +49,10 @@ fsP = require("fs/promises");
 
 // Voice Shit
 ffmpeg = require('ffmpeg-static');
-ytdl = require('ytdl-core');
 
 // File modules.
 request = require('request');
-nodeFetch = require('node-fetch');
+fetch = require('node-fetch');
 stream = require('stream');
 streamP = require('stream/promises');
 paths = require("path");
