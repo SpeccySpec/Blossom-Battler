@@ -1096,13 +1096,18 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 			console.log(techs);
 
 			let dmgTxt = '';
+			let didCrit = false;
 			if (affinity == 'drain') {
 				result.txt += `__${targ.name}__'s HP was restored by _`
 
 				for (let i in damages) {
 					dmgTxt += `**${damages[i]}**${affinityEmoji.drain}`;
 					if (emojis[i] != "") dmgTxt += emojis[i];
-					if (crits[i]) dmgTxt += critEmoji;
+
+					if (crits[i]) {
+						dmgTxt += critEmoji;
+						didCrit = true;
+					}
 
 					total += damages[i];
 					if (i < damages.length-1) dmgTxt += ' + ';
@@ -1129,7 +1134,11 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					if (affinityEmoji[affinities[i]] && affinities[i].toLowerCase() != 'normal') dmgTxt += affinityEmoji[affinities[i]];
 					if (techs[i]) dmgTxt += statusEmojis[targ.status.toLowerCase()] ?? statusEmojis.burn;
 					if (emojis[i] != "") dmgTxt += emojis[i];
-					if (crits[i]) dmgTxt += critEmoji;
+
+					if (crits[i]) {
+						dmgTxt += critEmoji;
+						didCrit = true;
+					}
 
 					total += damages[i];
 					if (i < damages.length-1) dmgTxt += ' + ';
@@ -1323,6 +1332,37 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 									}
 								} else {
 									result.txt += '\n' + (passiveList[k].ondamage(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k]) ?? '');
+								}
+							}
+
+							if (didCrit && passiveList[k] && passiveList[k].oncrit) {
+								if (noExtraArray && noExtraArray.includes(k)) continue;
+
+								if (passiveList[k].multiple) {
+									for (let l in skillFile[targ.skills[i]].passive[k]) {
+										result.txt += '\n' + (passiveList[k].oncrit(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k][l]) ?? '');
+									}
+								} else {
+									result.txt += '\n' + (passiveList[k].oncrit(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k]) ?? '');
+								}
+							}
+						}
+					}
+
+					for (let i in char.skills) {
+						if (!skillFile[char.skills[i]]) continue;
+						if (skillFile[char.skills[i]].type != 'passive') continue;
+
+						for (let k in skillFile[char.skills[i]].passive) {
+							if (didCrit && passiveList[k] && passiveList[k].oncritlanded) {
+								if (noExtraArray && noExtraArray.includes(k)) continue;
+
+								if (passiveList[k].multiple) {
+									for (let l in skillFile[char.skills[i]].passive[k]) {
+										result.txt += '\n' + (passiveList[k].oncritlanded(char, targ, skill, total, skillFile[char.skills[i]], btl, skillFile[char.skills[i]].passive[k][l]) ?? '');
+									}
+								} else {
+									result.txt += '\n' + (passiveList[k].oncritlanded(char, targ, skill, total, skillFile[char.skills[i]], btl, skillFile[char.skills[i]].passive[k]) ?? '');
 								}
 							}
 						}

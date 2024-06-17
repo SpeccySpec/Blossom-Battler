@@ -132,6 +132,7 @@ commands.leavevc = new Command({
 	}
 })
 
+let fuckedoff = {};
 commands.fuckoff = new Command({
 	desc: 'Makes me leave the voice chat.\n**[THIS IS DEPRICATED AND WILL BE REMOVED.]**',
 	section: 'music',
@@ -140,6 +141,22 @@ commands.fuckoff = new Command({
 	func: async(message, args, guilded) => {
 		forceStop(message.guild.id);
 		leaveVC(message.guild.id);
+		fuckedoff[message.author.id] = true;
 		message.react('<:cry:973077051852607559>');
+	}
+})
+
+commands.imsorry = new Command({
+	desc: "Y-You're... really sorry...?",
+	section: 'fun',
+	aliases: [],
+	args: [],
+	func: async(message, args, guilded) => {
+		if (fuckedoff[message.author.id]) {
+			message.react('<:lovable:1224346501237575833>');
+			delete fuckedoff[message.author.id];
+		} else {
+			message.channel.send("...Why are you apologising? You did nothing.");
+		}
 	}
 })
