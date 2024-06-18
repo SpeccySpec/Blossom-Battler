@@ -28,25 +28,6 @@ commands.joinvc = new Command({
                 return false;
             }
         }
-
-        const connection = Voice.joinVoiceChannel({
-            channelId: channel.id,
-            guildId: channel.guild.id,
-            adapterCreator: channel.guild.voiceAdapterCreator,
-            selfDeaf: false,
-        });
-
-        voiceChannelShit[message.guild.id] = {
-            sendShit: message.channel,
-            connection: connection,
-            player: null,
-            cursong: {
-                name: '',
-                url: ''
-            },
-            queue: []
-        }
-
         message.react('👍');
 	}
 })

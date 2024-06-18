@@ -4,6 +4,7 @@
 /////////////////////////////////
 
 let music_metadata = import("music-metadata")
+const { setInterval } = require('node:timers/promises');
 
 voiceChannelShit = {}
 
@@ -36,7 +37,8 @@ joinVc = async (channel, originalChannel) => {
 				name: '',
 				url: ''
 			},
-			queue: []
+			queue: [],
+			queuequeue: [],
 		}
 }
 
@@ -73,10 +75,14 @@ addToQueue = async (server, url, request) => {
 				name: '',
 				url: ''
 			},
-			queue: []
+			queue: [],
+			queuequeue: [],
 		}
 	}
 	
+	const queuequeueID = Date.now()
+	voiceChannelShit[server].queuequeue.push(queuequeueID)
+
 	const response = await (await fetch("https://api.cobalt.tools/api/json", {
 		method: "POST",
 		body: JSON.stringify({
@@ -96,7 +102,7 @@ addToQueue = async (server, url, request) => {
 		return
 	}
 
-	const file = `./music/${server}-${Date.now()}.mp3`
+	const file = `./music/${server}-${queuequeueID}.mp3`
 	
 	await fsP.writeFile(file, (await fetch(response.url, {
 		method: "GET",
@@ -118,17 +124,30 @@ addToQueue = async (server, url, request) => {
 		file,
 	}
 
-	console.log(`push ${url} to voice channel queue`)
+	if (voiceChannelShit[server].queuequeue[0] != queuequeueID)
+		for await (const _ of setInterval(500)) {
+			const current_queuequeueID = voiceChannelShit[server].queuequeue[0]
+			console.log("queuequeue:", current_queuequeueID, queuequeueID)
+			if (current_queuequeueID == queuequeueID)
+				break
+			else if (!current_queuequeueID) {
+				fsP.unlink(file)
+				return
+			}
+		}
+	voiceChannelShit[server].queuequeue.shift()
+
 	if (voiceChannelShit[server].playing === undefined) {
 		playSong(server, song, true)
 	} else {
+		console.log(`push ${url} to voice channel queue`)
 		voiceChannelShit[server].queue.push(song)
 		if (voiceChannelShit[server].sendShit) {
 			let musicEmbed = new Discord.MessageEmbed()
 				.setColor('#bb58fc')
 				.setAuthor(`<:sound:962465470403997846> Added to queue! <:sound:962465470403997846>`/*, songInfo.videoDetails.thumbnails[0].url*/)
 				.setTitle(`<:sound:962465470403997846> ${song.title ?? "An unnamed song???"} was added to the queue!`)
-			
+
 			if (song.author) {
 				musicEmbed.setFooter('Song requested by ' + song.author.username)
 			}
@@ -184,7 +203,8 @@ endSong = async (server, sendString) => {
 				name: '',
 				url: ''
 			},
-			queue: []
+			queue: [],
+			queuequeue: [],
 		}
 		
 		return false
@@ -201,16 +221,16 @@ endSong = async (server, sendString) => {
 
 		playSong(server, voiceChannelShit[server].cursong, sendShit);
 	} else if (voiceChannelShit[server].queue) {
-		if (voiceChannelShit[server].queue.length <= 0) {
-			delete voiceChannelShit[server].queue;
-			console.log('end queue')
-			
-			if (voiceChannelShit[server].sendShit && sendString != "no")
-				voiceChannelShit[server].sendShit.send('Oh, no more songs??\nWell, my job here is done! I hope you enjoyed my service!');
-			
-			leaveVC(server)
-		} else {
-			let song = voiceChannelShit[server].queue.shift()
+
+		if (voiceChannelShit[server].queuequeue.length)
+			for await (const _ of setInterval(500)) {
+				if (!voiceChannelShit[server].queuequeue.length) {
+					break
+				}
+			}
+
+		if (voiceChannelShit[server].queue.length) {
+			const song = voiceChannelShit[server].queue.shift()
 			console.log(`move to next song ${song.title}`)
 			playSong(server, song, true);
 		}
@@ -221,8 +241,8 @@ endSong = async (server, sendString) => {
 
 // Force stop the bot's music channel
 forceStop = (server) => {
-	if (voiceChannelShit[server] && !voiceChannelShit[server].battlethemes)
-		return false;
+	//if (voiceChannelShit[server] && !voiceChannelShit[server].battlethemes)
+	//	return false;
 
 	if (!voiceChannelShit[server]) {
 		voiceChannelShit[server] = {
@@ -234,8 +254,13 @@ forceStop = (server) => {
 		
 		return true
 	}
-	
-	delete voiceChannelShit[server].queue;
+		
+	for (const song of voiceChannelShit[server].queue) {
+		fsP.unlink(song.file)
+	}
+
+	voiceChannelShit[server].queue.length = 0
+	voiceChannelShit[server].queuequeue.length = 0
 	
 	voiceChannelShit[server].player.stop();
 	return true
