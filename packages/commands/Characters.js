@@ -3273,8 +3273,16 @@ commands.gettrust = new Command({
 	}
 })
 
+let bioSections = ["FullName", "Nickname", "Species", "Info", "Backstory", "Likes", "Dislikes", "Fears", "Voice", "Weight", "Height", "Age", "Gender", "Appearance", "Theme"]
+let defaultTxt = '';
+for (let i in bioSections)
+	defaultTxt += `+ ${bioSections[i]}\n`;
+
 commands.setbioinfo = new Command({
-	desc: "Sets a character's information, backstory, age, ect",
+	desc: "Sets a character's information, backstory, age, ect.",
+	doc: {
+		desc: "{Info} and {More Info, if necessary} can be used to further build your character's bio. Most of them are cosmetic, except for weight, height, age, and themes, although, they are still not mandatory to be set. They will just affect certain Skill Extras, and the music functionality of the discord bot. There are default values to this command, but you can also add your own sections```diff\n" + defaultTxt + "```",
+	},
 	section: "characters",
 	args: [
 		{
@@ -3290,17 +3298,25 @@ commands.setbioinfo = new Command({
 		{
 			name: "Info",
 			type: "Word",
+		},
+		{
+			name: "More Info, if necessary",
+			type: "Word",
+		},
+		{
+			name: "EVEN More Info, if necessary",
+			type: "Word",
 		}
 	],
 	checkban: true,
-	func(message, args, guilded) {
+	async func(message, args, guilded) {
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
+		let char = charFile[args[0]]
 
-		if (!utilityFuncs.isAdmin(message) && !charFile[args[0]].owner == message.author.id) return message.channel.send('You are not the owner of this character!');
-
+		if (!utilityFuncs.isAdmin(message) && !char.owner == message.author.id) return message.channel.send('You are not the owner of this character!');
 		if (args[1].toLowerCase() != 'appearance' && !args[2]) return message.channel.send('You need to enter a value to set!');
 
 		switch (args[1].toLowerCase()) {
@@ -3313,54 +3329,85 @@ commands.setbioinfo = new Command({
 			case "dislikes":
 			case "fears":
 			case "voice":
-			case "theme":
 				if (args[2].toLowerCase() == 'none') args[2] = '';
-				charFile[args[0]].bio[args[1].toLowerCase()] = args[2];
+				char.bio[args[1].toLowerCase()] = args[2];
 				break;
+
 			case "weight":
 				if (args[2].toLowerCase() == 'none') args[2] = 0;
 				if (isNaN(args[2])) return message.channel.send('Invalid weight! Please enter a decimal.');
-				charFile[args[0]].bio.weight = parseFloat(args[2]);
+				char.bio.weight = parseFloat(args[2]);
 				break;
+
 			case "height":
 				if (args[2].toLowerCase() == 'none') args[2] = [0, 0];
+
 				if (isNaN(args[2])) {
 					let split = args[2].split('\'');
 					if (split.length == 1) {
 						let feet = Math.floor(parseFloat(split[0]) / 0.3048);
 						let inches = Math.round((parseFloat(split[0]) / 0.3048 - feet) * 12);
-						charFile[args[0]].bio.height = [feet, inches]; 
+						char.bio.height = [feet, inches]; 
 					} else {
-						charFile[args[0]].bio.height = [parseInt(split[0]), parseInt(split[1].replace('"', ''))];
+						char.bio.height = [parseInt(split[0]), parseInt(split[1].replace('"', ''))];
 					}
 				} else {
 					return message.channel.send('Invalid Height! Please enter in the format `feet/inches` or `meters`.');
 				}
+
 				break;
+
 			case "age":
 				if (args[2].toLowerCase() == 'none') args[2] = 0;
 				if (isNaN(args[2])) return message.channel.send('Invalid age! Please enter a number.');
-				charFile[args[0]].bio.age = parseInt(args[2]);
+				char.bio.age = parseInt(args[2]);
 				break;
+
 			case "gender":
 				if (!args[2]) return message.channel.send("Please enter either Male, Female or Other.");
-				charFile[args[0]].bio.gender = args[2].toLowerCase() != "male" && args[2].toLowerCase() != "female" ? 'other' : args[2].toLowerCase()
+				char.bio.gender = args[2].toLowerCase() != "male" && args[2].toLowerCase() != "female" ? 'other' : args[2].toLowerCase()
 				break
+
 			case "appearance":
 				if (args[2] && args[2].toLowerCase() == 'none') {
-					charFile[args[0]].bio.appearance = '';
+					char.bio.appearance = '';
 				} else {
 					if (!checkImage(message, args[2], message.attachments.first())) return message.channel.send(`${args[2]} is not a valid image.`);
-					charFile[args[0]].bio.appearance = checkImage(message, args[2], message.attachments.first());
+					char.bio.appearance = checkImage(message, args[2], message.attachments.first());
 				}
 				break;
+
+			case "theme":
+				if (!char.bio.theme || typeof char.bio.theme != "object") char.bio.theme = {};
+				if (!args[2]) return void message.channel.send("No value was inputted for {Info}! This should be the condition of which it should play.\n```+ Transformation\n+ LimitBreak\n+ TeamComboLeader\n+ LastStanding\n+ Generic```");
+				if (!args[3]) return void message.channel.send("No value was inputted for {More Info, if necessary}! This should be the link of the song.");
+				if (!args[4]) return void message.channel.send("No value was inputted for {EVEN More Info, if necessary}! This should be the name of the song.");
+
+				// Check validity of song.
+				const response = await (await fetch("https://api.cobalt.tools/api/json", {
+					method: "POST",
+					body: JSON.stringify({isAudioOnly: true, aFormat: "mp3", url: args[3]}),
+					headers: {"Content-Type": "application/json", "Accept": "application/json"}
+				})).json()
+
+				// Check the song.
+				if (response.status != "stream") return void message.channel.send("I couldn't find a song here... Sowwy!! Make sure you submitted a link for {More Info, if necessary}.")
+
+				// Add the song!
+				if (!char.bio.theme[args[2].toLowerCase()]) {
+					char.bio.theme[args[2].toLowerCase()] = [[args[4], args[3]]];
+				} else {
+					char.bio.theme[args[2].toLowerCase()].push([args[4], args[3]]);
+				}
+
 			default:
-				if (!charFile[args[0]].bio.custom) charFile[args[0]].bio.custom = {};
+				if (!char.bio.custom) char.bio.custom = {};
 				if (args[2].toLowerCase() == 'none') args[2] = '';
-				charFile[args[0]].bio.custom[args[1]] = args[2];
-				if (charFile[args[0]].bio.custom[args[1]] == '') delete charFile[args[0]].bio.custom[args[1]];
+				char.bio.custom[args[1]] = args[2];
+				if (char.bio.custom[args[1]] == '') delete char.bio.custom[args[1]];
 				break;
 		}
+
 		message.react('👍');
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 	}
@@ -3379,6 +3426,10 @@ commands.clearbioinfo = new Command({
 			name: "Section",
 			type: "Word",
 			forced: true
+		},
+		{
+			name: "Specifics",
+			type: "Word"
 		}
 	],
 	checkban: true,
@@ -3387,7 +3438,9 @@ commands.clearbioinfo = new Command({
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]]) return message.channel.send('Nonexistant Character.');
-		if (!utilityFuncs.isAdmin(message) && !charFile[args[0]].owner == message.author.id) return message.channel.send('You are not the owner of this character!');
+		let char = charFile[args[0]];
+
+		if (!utilityFuncs.isAdmin(message) && !char.owner == message.author.id) return message.channel.send('You are not the owner of this character!');
 
 		switch (args[1].toLowerCase()) {
 			case "nickname":
@@ -3401,23 +3454,34 @@ commands.clearbioinfo = new Command({
 			case "dislikes":
 			case "fears":
 			case "voice":
-			case "theme":
 			case "weight":
 			case "height":
 			case "age":
 			case "appearance":
-				delete charFile[args[0]].bio[args[1].toLowerCase()];
+				delete char.bio[args[1].toLowerCase()];
 				break;
 
 			case "gender":
-				charFile[args[0]].bio.gender = 'other';
+				char.bio.gender = 'other';
+				break;
+
+			case "theme":
+				if (args[2]) {
+					if (char.bio.theme[args[2].toLowerCase()])
+						delete char.bio.theme[args[2].toLowerCase()];
+					else
+						return void message.channel.send(`__${char.name}__ has no **${args[2].toUpperCase()}** themes.`);
+				} else {
+					delete char.bio.theme;
+				}
+
 				break;
 
 			default:
-				if (!charFile[args[0]].bio.custom) charFile[args[0]].bio.custom = {};
+				if (!char.bio.custom) char.bio.custom = {};
 				
-				if (charFile[args[0]].bio.custom[args[1]])
-					delete charFile[args[0]].bio.custom[args[1]];
+				if (char.bio.custom[args[1]])
+					delete char.bio.custom[args[1]];
 				else
 					return message.channel.send("That value doesn't exist!");
 

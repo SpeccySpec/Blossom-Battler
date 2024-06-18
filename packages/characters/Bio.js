@@ -38,17 +38,26 @@ longBio = (char, server) => {
 	}
 
 	finalTxt += '\n';
-	
-	if (char.bio.voice) finalTxt += `**<Voice>** ${char.bio.voice}\n`;
-	if (char.bio.theme) finalTxt += `**<Theme(s)>** ${char.bio.theme}\n`;
 
+	if (char.bio.voice) finalTxt += `**<Voice>**\n${char.bio.voice}\n`;
 
+	// Theme Listing
+	if (char.bio.theme && typeof char.bio.theme == "object") {
+		finalTxt += `**<Theme(s)>**\n`;
+		for (let i in char.bio.theme) {
+			finalTxt += `**[${i.toUpperCase()}]**\n`;
+			for (let k in char.bio.theme[i]) {
+				finalTxt += `[${char.bio.theme[i][k][0]}](${char.bio.theme[i][k][1]})\n`;
+			}
+		}
+	}
+
+	// Embed
 	let embed = new Discord.MessageEmbed()
 		.setColor('#12de6a')
 		.setTitle(`${char.name}'s Bio`)
 		.setDescription(finalTxt)
-
-		if (char.bio.appearance) embed.setThumbnail(char.bio.appearance);
+	if (char.bio.appearance) embed.setThumbnail(char.bio.appearance);
 
 	return embed;
 }

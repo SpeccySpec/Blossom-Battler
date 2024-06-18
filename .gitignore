@@ -8,3 +8,4 @@ env.zip
 old.env
 music/
 yarn.lock
+package.json
