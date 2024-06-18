@@ -636,6 +636,18 @@ longDescription = (charDefs, level, server, message, useguild) => {
 		if (negString != '') DiscordEmbed.fields.push({ name: `Pacifying Tactics`, value: negString, inline: true });
 	}
 
+	if (char.type && char.battlethemes) {
+		let finalTxt = '';
+		for (let i in char.battlethemes) {
+			finalTxt += `**[${i.toUpperCase()}]**\n`;
+			for (let k in char.battlethemes[i]) {
+				finalTxt += `[${char.battlethemes[i][k][0]}](${char.battlethemes[i][k][1]})\n`;
+			}
+		}
+
+		DiscordEmbed.fields.push({ name: "Battle Themes", value: finalTxt, inline: false });
+	}
+
 	if (char.image && char.image != '') {
 		let file = ''
 		if (char.image.includes('https://') || char.image.includes('http://')) {

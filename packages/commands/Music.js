@@ -1,5 +1,5 @@
 commands.joinvc = new Command({
-	desc: 'Let me join and snuggle in vc, too!!!\n**[THIS IS DEPRICATED AND WILL BE REMOVED.]**',
+	desc: 'Let me join and snuggle in vc, too!!! Accepts a channel id, or will automatically join a voice channel that you might be in.',
 	section: 'music',
 	aliases: [],
 	args: [
@@ -47,12 +47,12 @@ commands.joinvc = new Command({
             queue: []
         }
 
-        message.react('👍')
+        message.react('👍');
 	}
 })
 
 commands.playsong = new Command({
-	desc: 'Play a <Song>! Use a youtube link.\n**[THIS IS DEPRICATED AND WILL BE REMOVED.]**',
+	desc: 'Play a <Song>! Supply a link for Blossom Battler to play.\n\n_Blossom Battler is **__NOT__** affiliated with any of the services you use for this command._',
 	section: 'music',
 	aliases: ['play', 'playmusic', 'playtrack'],
 	args: [
@@ -81,7 +81,7 @@ commands.playsong = new Command({
 })
 
 commands.loop = new Command({
-	desc: 'Loop the song currently playing.\n**[THIS IS DEPRICATED AND WILL BE REMOVED.]**',
+	desc: 'Loop the song currently playing, or if there is no song, loop the next song you play.',
 	section: 'music',
 	aliases: [],
 	args: [],
@@ -100,7 +100,7 @@ commands.loop = new Command({
 })
 
 commands.skip = new Command({
-	desc: 'Skip the song currently playing.\n**[THIS IS DEPRICATED AND WILL BE REMOVED.]**',
+	desc: 'Skip the song currently playing, if there is any.',
 	section: 'music',
 	aliases: ['skipsong', 'skipmusic'],
 	args: [],
@@ -121,7 +121,7 @@ commands.skip = new Command({
 
 // FuckOff and LeaveVC are aliases but with different functions.
 commands.leavevc = new Command({
-	desc: 'Makes me leave the voice chat.\n**[THIS IS DEPRICATED AND WILL BE REMOVED.]**',
+	desc: 'Makes me leave the voice chat, if I am in one.',
 	section: 'music',
 	aliases: ['goodbye', 'exitvc'],
 	args: [],
@@ -134,7 +134,7 @@ commands.leavevc = new Command({
 
 let fuckedoff = {};
 commands.fuckoff = new Command({
-	desc: 'Makes me leave the voice chat.\n**[THIS IS DEPRICATED AND WILL BE REMOVED.]**',
+	desc: '...',
 	section: 'music',
 	aliases: [],
 	args: [],

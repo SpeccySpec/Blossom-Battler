@@ -1046,6 +1046,64 @@ commands.setheight = new Command({
     }
 })
 
+commands.setenemytheme = new Command({
+    desc: "Sets the enemy's battle theme. Randomly selects between an enemy's set battle theme when opposing them. <Theme> should be a link to the theme.\n\n_Blossom Battler is **__NOT__** affiliated with any of the services you use for this command._",
+    section: 'enemies',
+    args: [
+        {
+            name: "Enemy",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Condition",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Theme",
+            type: "Word",
+            forced: true
+        },
+        {
+            name: "Name",
+            type: "Word",
+            forced: true
+        }
+    ],
+	checkban: true,
+	admin: 'You do not have permission to assign a theme to an enemy.',
+    async func(message, args, guilded) {
+        let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+		
+		if (enemyFile[args[0]]) {
+			let enemy = enemyFile[args[0]];
+			if (!enemy.battlethemes) enemy.battlethemes = {};
+
+			// Check validity of song.
+			const response = await (await fetch("https://api.cobalt.tools/api/json", {
+				method: "POST",
+				body: JSON.stringify({isAudioOnly: true, aFormat: "mp3", url: args[2]}),
+				headers: {"Content-Type": "application/json", "Accept": "application/json"}
+			})).json()
+
+			// Check the song.
+			if (response.status != "stream") return void message.channel.send("I couldn't find a song here... Sowwy!! Make sure you submitted a link for <Theme>!")
+
+			// Add the song!
+			if (!enemy.battlethemes[args[1].toLowerCase()]) {
+				enemy.battlethemes[args[1].toLowerCase()] = [[args[3], args[2]]];
+			} else {
+				enemy.battlethemes[args[1].toLowerCase()].push([args[3], args[2]]);
+			}
+
+			message.react('👍');
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, 4));
+        } else
+            return message.channel.send(`${args[0]} is not a valid enemy.`)
+    }
+})
+
 commands.randenemyquote = new Command({
 	desc: "Get a random quote from any enemy.",
 	aliases: ['randenemyquote', 'randomenemyquote'],
