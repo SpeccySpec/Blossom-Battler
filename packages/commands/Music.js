@@ -119,6 +119,36 @@ commands.skip = new Command({
 	}
 })
 
+commands.stopsong = new Command({
+	desc: 'Clear the queue and stop the song.',
+	section: 'music',
+	aliases: ['stopmusic', 'endqueue', 'shutup'],
+	args: [],
+	func: async (message, args, guilded) => {
+		forceStop(message.guild.id);
+		message.react('👍');
+	}
+})
+
+commands.playbattlethemes = new Command({
+	desc: 'Play the songs that have been defined to play in this server automatically, like a jukebox.',
+	section: 'music',
+	aliases: [],
+	args: [],
+	func: async(message, args, guilded) => {
+        if (!voiceChannelShit[message.guild.id])
+			return message.channel.send("Join me to a VC first!")
+
+		if (voiceChannelShit[message.guild.id].battlemusic) {
+			voiceChannelShit[message.guild.id].battlemusic = false;
+			message.channel.send("I will not play the songs that should be playing during battle.");
+        } else {
+			voiceChannelShit[message.guild.id].battlemusic = true;
+			message.channel.send("I will now play the songs that should be playing during battle!");
+        }
+	}
+})
+
 // FuckOff and LeaveVC are aliases but with different functions.
 commands.leavevc = new Command({
 	desc: 'Makes me leave the voice chat, if I am in one.',
