@@ -8,7 +8,7 @@ let music_metadata = import("music-metadata")
 voiceChannelShit = {}
 
 // Join a VC
-joinVc = async(channel, originalChannel) => {
+joinVc = async (channel, originalChannel) => {
 	const connection = Voice.joinVoiceChannel({
 		channelId: channel.id,
 		guildId: channel.guild.id,
@@ -27,16 +27,17 @@ joinVc = async(channel, originalChannel) => {
 		}
 	})
 
-	voiceChannelShit[channel.guild.id] = {
-		sendShit: originalChannel,
-		connection: connection,
-		player: null,
-		cursong: {
-			name: '',
-			url: ''
-		},
-		queue: []
-	}
+	if (!voiceChannelShit[channel.guild.id])
+		voiceChannelShit[channel.guild.id] = {
+			sendShit: originalChannel,
+			connection: connection,
+			player: null,
+			cursong: {
+				name: '',
+				url: ''
+			},
+			queue: []
+		}
 }
 
 // Download the song so that we can play it! We'll keep this song downloaded so that it can be played instantly if asked for again.
@@ -62,7 +63,7 @@ async function downloadSong(fileName, url) {
 */
 
 // Add it to the queue.
-addToQueue = async(server, url, request) => {
+addToQueue = async (server, url, request) => {
 	if (!voiceChannelShit[server]) {
 		voiceChannelShit[server] = {
 			sendShit: null,
@@ -95,36 +96,32 @@ addToQueue = async(server, url, request) => {
 		return
 	}
 
-	const music_file_path = `./music/${server}-${Date.now()}.mp3`
+	const file = `./music/${server}-${Date.now()}.mp3`
 	
-	await fsP.writeFile(music_file_path, (await fetch(response.url, {
+	await fsP.writeFile(file, (await fetch(response.url, {
 		method: "GET",
 	})).body)
 
 	if (music_metadata.then) { //this is dumb...
 		music_metadata = await music_metadata
 	}
-	const metadata = await music_metadata.parseFile(music_file_path)
+	const metadata = await music_metadata.parseFile(file)
 	const {title} = metadata.common
 
-	const resource = Voice.createAudioResource(music_file_path)
+	const resource = Voice.createAudioResource(file)
 	
-	await fsP.unlink(music_file_path)
-
 	const song = {
 		title,
 		url,
 		request,
-		resource
+		resource,
+		file,
 	}
 
 	console.log(`push ${url} to voice channel queue`)
-	console.log(voiceChannelShit[server].queue)
 	if (voiceChannelShit[server].playing === undefined) {
-		console.log("NEW")
 		playSong(server, song, true)
 	} else {
-		console.log("QUEUE")
 		voiceChannelShit[server].queue.push(song)
 		if (voiceChannelShit[server].sendShit) {
 			let musicEmbed = new Discord.MessageEmbed()
@@ -143,13 +140,9 @@ addToQueue = async(server, url, request) => {
 
 // Play the song!
 playSong = async (server, song, sendToChannel) => {
-	if (voiceChannelShit[server].player || voiceChannelShit[server].player != null)
-		voiceChannelShit[server].player.stop()
-	
 	if (!voiceChannelShit[server].player) {
 		voiceChannelShit[server].player = Voice.createAudioPlayer()
 		voiceChannelShit[server].player.on(Voice.AudioPlayerStatus.Idle, () => {
-			console.log("???")
 			endSong(server, true);
 		});
 	}
@@ -177,211 +170,10 @@ playSong = async (server, song, sendToChannel) => {
 
 	player.play(song.resource)
 	connection.subscribe(player)
-	console.log("QUEUE", voiceChannelShit[server].queue)
 }
 
-/*playSong = async (server, url, author, sendToChannel) => {
-	if (!voiceChannelShit[server]) {
-		voiceChannelShit[server] = {
-			sendShit: null,
-			connection: null,
-			player: null,
-			playing: false,
-			cursong: {
-				name: songInfo.videoDetails.title,
-				url: url,
-				author: author ? author : null
-			}
-		}
-	}
-
-	if (voiceChannelShit[server].player || voiceChannelShit[server].player != null)
-		voiceChannelShit[server].player.stop()
-	
-	if (!voiceChannelShit[server].player)
-		voiceChannelShit[server].player = Voice.createAudioPlayer()
-	
-	const response = await (await fetch("https://api.cobalt.tools/api/json", {
-		method: "POST",
-		body: JSON.stringify({
-			isAudioOnly: true,
-			aFormat: "mp3",
-			url
-		}),
-		headers: {"Content-Type": "application/json", "Accept": "application/json"}
-	})).json()
-
-	if (response.status != "stream") {
-		const errorEmbed = new Discord.MessageEmbed()
-            .setColor('#ff0000')
-            .setTitle("Something went wrong!")
-            .setDescription(response.text ? `\`${response.text}\`` : "_ _")
-		voiceChannelShit[server].sendShit.send({embeds: [errorEmbed]});
-		return
-	}
-
-	const music_file_path = `./music/${server}-${Date.now()}.mp3`
-
-	await fsP.writeFile(music_file_path, (await fetch(response.url, {
-		method: "GET",
-	})).body)
-
-	if (music_metadata.then) { //this is dumb...
-		music_metadata = await music_metadata
-	}
-	const metadata = await music_metadata.parseFile(music_file_path)
-	const {title} = metadata.common
-	console.log(`play ${title}`)
-
-	if (sendToChannel && voiceChannelShit[server].sendShit) {
-		let musicEmbed = new Discord.MessageEmbed()
-			.setColor('#bb58fc')
-			.setAuthor(`<:sound:962465470403997846> Now playing! <:sound:962465470403997846>`, songInfo.videoDetails.thumbnails[0].url)
-			.setTitle(`<:sound:962465470403997846> Now playing ${title ?? "...what is the name of this??"}`)
-		
-		if (author) {
-			musicEmbed.setFooter('Song requested by ' + author.username)
-		}
-	
-		voiceChannelShit[server].sendShit.send({embeds: [musicEmbed]})
-	}
-
-	voiceChannelShit[server].playing = true;
-	voiceChannelShit[server].cursong = {
-		name: title,
-		url: url,
-		request: author
-	}
-
-	const resource = Voice.createAudioResource(music_file_path)
-	
-	let connection = voiceChannelShit[server].connection
-	let player = voiceChannelShit[server].player
-
-	connection.on(Voice.VoiceConnectionStatus.Disconnected, async (oldState, newState) => {
-		try {
-			await Promise.race([
-				entersState(connection, Voice.VoiceConnectionStatus.Signalling, 5_000),
-				entersState(connection, Voice.VoiceConnectionStatus.Connecting, 5_000),
-			]);
-		} catch (error) {
-			connection.destroy()
-		}
-	})
-
-	player.on(Voice.AudioPlayerStatus.Idle, () => {
-		endSong(server, true)
-	});
-
-	player.play(resource)
-	connection.subscribe(player)
-
-		/*ytdl.getInfo(url).then((songInfo) => {
-			console.log(`play ${songInfo.videoDetails.title}`)
-			let title = songInfo.videoDetails.title ? songInfo.videoDetails.title : 'someSong'
-			let fileName = songInfo.videoDetails.title.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '')
-			
-			if (sendToChannel && voiceChannelShit[server].sendShit) {
-				let musicEmbed
-				if (author) {
-					musicEmbed = new Discord.MessageEmbed()
-						.setColor('#bb58fc')
-						.setAuthor(`<:sound:962465470403997846> Now playing! <:sound:962465470403997846>`, songInfo.videoDetails.thumbnails[0].url)
-						.setTitle(`<:sound:962465470403997846> Now playing ${songInfo.videoDetails.title}`)
-						.setFooter('Song requested by ' + author.username)
-				} else {
-					musicEmbed = new Discord.MessageEmbed()
-						.setColor('#bb58fc')
-						.setAuthor(`<:sound:962465470403997846> Now playing! <:sound:962465470403997846>`, songInfo.videoDetails.thumbnails[0].url)
-						.setTitle(`<:sound:962465470403997846> Now playing ${songInfo.videoDetails.title}`)
-				}
-			
-				voiceChannelShit[server].sendShit.send({embeds: [musicEmbed]});
-			}
-		
-			voiceChannelShit[server].playing = true;
-			voiceChannelShit[server].cursong = {
-				name: songInfo.videoDetails.title,
-				url: url,
-				request: author ? author : null
-			}
-		
-			const write_stream = fs.createWriteStream(`./music/${server}.mp3`)
-			const read_stream = ytdl(url, { filter : 'audioonly' });
-			read_stream.on("info", (songInfo, songFormat) => {
-				console.log("INFO:")
-				console.log(songFormat)
-			})
-			read_stream.on("data", (chunk) => {
-				console.log("DATA")
-				write_stream.write(chunk)
-			})
-			read_stream.on("end", () => {
-				console.log("END")
-				write_stream.end()
-				write_stream.on("finish", () => {
-					const resource = Voice.createAudioResource(`./music/${server}.mp3`);
-					console.log('Got the resource.');
-
-					// update connection
-					let connection = voiceChannelShit[server].connection;
-					let player = voiceChannelShit[server].player;
-
-					connection.on(Voice.VoiceConnectionStatus.Disconnected, async (oldState, newState) => {
-						try {
-							await Promise.race([
-								entersState(connection, Voice.VoiceConnectionStatus.Signalling, 5_000),
-								entersState(connection, Voice.VoiceConnectionStatus.Connecting, 5_000),
-							]);
-						} catch (error) {
-							console.log("A -- 2\n" + error);
-							connection.destroy();
-						}
-					});
-				
-					player.on(Voice.AudioPlayerStatus.Idle, () => {
-						endSong(server, true);
-						console.log("A");
-					});
-				
-					player.play(resource)
-        connection.subscribe(player);
-        connection.subscribe(player);
-        player.play(resource);
-					connection.subscribe(player);
-        player.play(resource);
-				
-					console.log('Pain?');
-				})
-			})
-		})
-
-
-/*
-        setTimeout(function() {
-			console.log('Actually playing the song now')
-//			voiceChannelShit[server].player.play(Voice.createAudioResource(`./songs/${fileName}.mp3`));
-		
-/*
-        setTimeout(function() {
-			console.log('Actually playing the song now')
-//			voiceChannelShit[server].player.play(Voice.createAudioResource(`./songs/${fileName}.mp3`));
-
-
-			voiceChannelShit[server].player.play(resource);
-			voiceChannelShit[server].player.on(Voice.AudioPlayerStatus.Idle, () => {
-				endSong(server);
-			})
-		
-			voiceChannelShit[server].player.play(resource);
-			voiceChannelShit[server].player.on(Voice.AudioPlayerStatus.Idle, () => {
-				endSong(server);
-			})
-		
-}*/
-
 // End the song.
-endSong = async(server, sendString) => {
+endSong = async (server, sendString) => {
 	if (!voiceChannelShit[server]) {
 		voiceChannelShit[server] = {
 			sendShit: null,
@@ -398,10 +190,8 @@ endSong = async(server, sendString) => {
 		return false
 	} else {
 		voiceChannelShit[server].playing = false
+		fsP.unlink(voiceChannelShit[server].cursong.file)
 	}
-	
-	if (voiceChannelShit[server].player)
-		voiceChannelShit[server].player.stop();
 
 	if (voiceChannelShit[server].battlethemes || voiceChannelShit[server].loop) {
 		let sendShit = voiceChannelShit[server].battlethemes ? null : true
@@ -421,8 +211,8 @@ endSong = async(server, sendString) => {
 			leaveVC(server)
 		} else {
 			let song = voiceChannelShit[server].queue.shift()
-			playSong(server, song, true);
 			console.log(`move to next song ${song.title}`)
+			playSong(server, song, true);
 		}
 	}
 
@@ -465,7 +255,7 @@ leaveVC = (server) =>  {
 }
 
 // Battle Themes
-playThemeType = async(server, themeType) => {
+playThemeType = async (server, themeType) => {
 	let servPath = dataPath+'/Server Settings/server.json'
 	let servRead = fs.readFileSync(servPath, {flag: 'as+'});
 	let servFile = JSON.parse(servRead);
