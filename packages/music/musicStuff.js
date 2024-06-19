@@ -4,6 +4,7 @@
 /////////////////////////////////
 
 let music_metadata = import("music-metadata")
+const { Client } = require("discord.js");
 const { setInterval } = require('node:timers/promises');
 
 voiceChannelShit = {}
@@ -137,9 +138,7 @@ addToQueue = async (server, url, request) => {
 		}
 	voiceChannelShit[server].queuequeue.shift()
 
-	if (voiceChannelShit[server].playing === undefined) {
-		playSong(server, song, true)
-	} else {
+	if (voiceChannelShit[server].playing) {
 		console.log(`push ${url} to voice channel queue`)
 		voiceChannelShit[server].queue.push(song)
 		if (voiceChannelShit[server].sendShit) {
@@ -154,6 +153,8 @@ addToQueue = async (server, url, request) => {
 		
 			voiceChannelShit[server].sendShit.send({embeds: [musicEmbed]})
 		}
+	} else {
+		playSong(server, song, true)
 	}
 }
 
@@ -262,7 +263,7 @@ forceStop = (server) => {
 	voiceChannelShit[server].queue.length = 0
 	voiceChannelShit[server].queuequeue.length = 0
 	
-	voiceChannelShit[server].player.stop();
+	voiceChannelShit[server].player?.stop();
 	return true
 }
 
@@ -278,6 +279,15 @@ leaveVC = (server) =>  {
 		delete voiceChannelShit[server]
 	}
 }
+
+client.on("voiceStateUpdate", (oldState, newState) => {	
+	if (oldState.member.bot || (!oldState.channelId) || !voiceChannelShit[oldState.guild.id]
+	|| voiceChannelShit[oldState.guild.id].connection.channelId != newState.channelId
+	|| [...oldState.channel.members].length > 1)
+		return
+	forceStop(oldState.guild.id)
+	leaveVC(oldState.guild.id)
+})
 
 // Battle Themes
 playThemeType = async (server, themeType) => {
