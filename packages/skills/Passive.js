@@ -1033,6 +1033,85 @@ passiveList = {
 		}
 	}),
 
+	hitbuff: new Extra({
+		name: "Hit Buff (Original)",
+		desc: "Has a <Chance>% chance of changing the <target/user>'s <Stat> by {Stages} when being hit by <Attack Type>.",
+		args: [
+			{
+				name: "Target/User",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Attack Type",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Stat",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Stages",
+				type: "Num"
+			}
+		],
+		multiple: true,
+		diffflag: 0,
+		applyfunc(message, skill, args) {
+			const target = args[0].toLowerCase();
+			const atktype = args[1].toLowerCase();
+			const chance = Math.min(args[2] ?? 100, 100);
+			const stat = args[3].toLowerCase()
+			const stages = args[4] ?? 1
+
+			if (target != 'user' && target != 'target') 
+				return void message.channel.send(`You typed ${target} as the target. It must be either \`user\` or \`target\`.`);
+			if (chance <= 0)
+				return void message.channel.send("You can't have a percentage less than 0, as then it would never happen!");
+			if (!["physical", "magic", "ranged", "sorcery"].includes(atktype))
+				return void message.channel.send(`${atktype} is not a valid Attack Type. Enter Physical, Magic, Ranged, or Sorcery.`);
+			if (![...stats, "crit", "all", "random"].includes(stat))
+				return void message.channel.send("That's not a valid stat!");
+			if (stages == 0)
+				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
+			if (Math.abs(stages) > 3) 
+				return void message.channel.send("The maximum amount of stages is 3!");
+
+			makePassive(skill, "hitbuff", [target, atktype, chance, stat, stages]);
+			return true;
+		},
+		ondamage(char, inf, skill, dmg, passive, btl, vars) {
+			if (skill.atktype === vars[1] && randNum(1, 100) <= vars[2]) {
+				if (vars[0] == "user") {
+					buffStat(char, vars[3], vars[4]);
+					return `__${char.name}__'s ${vars[3].toUpperCase()} was ${vars[4] > 0 ? 'increased' : 'decreased'} by ${Math.abs(vars[4])} stage(s).`;
+				} else {
+					buffStat(inf, vars[3], vars[4]);
+					return `__${inf.name}__'s ${vars[3].toUpperCase()} was ${vars[4] > 0 ? 'increased' : 'decreased'} by ${Math.abs(vars[4])} stage(s).`;
+				}
+			}
+		},
+		getinfo(vars, skill) {
+			let txt = 'Has'
+
+			for (let i in vars) {
+				txt += ` a **${vars[i][2]}%** chance of ${vars[i][4] > 0 ? 'increasing' : 'decreasing'} ${vars[i][3].toUpperCase()} by ${Math.abs(vars[i][4])} stage(s) upon being struck with **${vars[i][1]}** skills`
+
+				if (i < vars.length - 2) txt += ','
+				else if (i == vars.length - 2) txt += ' and'
+			}
+
+			return txt;
+		}
+	}),
+
 	/*
 	statusdodge: new Extra({
 		name: "Status Dodge",
