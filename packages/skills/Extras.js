@@ -3554,7 +3554,7 @@ customVariables = {
 			for (let i in v) {
 				let vars = v[i];
 
-				txt += "lol text nextmove"
+				txt += `lol test nextmove ${char.attacked}`
 				if (!char.attacked) {
 					delete char.custom.link[i];
 					txt += `${vars.username}'s ${vars.skilldefs.name} has worn off for ${char.name}! (never attacked)\n`;
