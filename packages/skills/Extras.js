@@ -2050,7 +2050,7 @@ extrasList = {
 
 	link: new Extra({
 		name: "Link (Persona Q: Shadow of the Labyrinth)",
-		desc: "After use, if the same enemy is attacked with a single target skill, this skill with a <Power Boost per hit> multiplier is used after. Lasts until <Turns> turns pass, or the enemy is not hit. Stackable.",
+		desc: "After use, if the same enemy is attacked with a single target skill, this skill with a <Power Boost per hit> multiplier is used after. Lasts until used <Uses> times, or the enemy is not hit. Stackable.",
 		args: [
 			{
 				name: "Power Boost Per Hit",
@@ -2058,7 +2058,7 @@ extrasList = {
 				forced: false
 			},
 			{
-				name: "Turns",
+				name: "Uses",
 				type: "Num",
 				forced: false
 			}
@@ -2071,7 +2071,7 @@ extrasList = {
 
 			// Check Turns
 			if (args[1]) {
-				if (args[1] < -1 || args[1] == 0) return void message.channel.send("Please enter a value over 0 for ''Turns'', or enter -1 for this to be done indefinitely!");
+				if (args[1] < -1 || args[1] == 0) return void message.channel.send("Please enter a value over 0 for ''Uses'', or enter -1 for this to be done indefinitely!");
 			}
 
 			makeExtra(skill, "link", [args[0] ?? null, args[1] ?? null]);
@@ -2086,12 +2086,14 @@ extrasList = {
 				if (!targ.custom?.link) addCusVal(targ, "link", {});
 
 				if (!targ.custom.link[id]) {
+					const skilldefs = objClone(skill)
+					skilldefs.pow *= pb
+
 					targ.custom.link[id] = {
-						turns: t + 1,
-						powerboost: pb,
+						uses: t,
 						username: char.name,
 						notthisskill: true,
-						skilldefs: objClone(skill)
+						skilldefs
 					}
 
 					return `__${char.name}__'s _${skill.name}_ was deployed on __${targ.name}__!`;
@@ -2101,7 +2103,7 @@ extrasList = {
 		getinfo(vars, skill) {
 			let txt = "Starts a link chain";
 			if (vars[0] && vars[0] != 1) txt += ` with a **${vars[0]}x** multiplier`;
-			if (vars[1] && vars[1] != 3) txt += ` that lasts **${vars[1]} turns**`;
+			if (vars[1] && vars[1] != 3) txt += ` that lasts **${vars[1]} ${vars[1] == 1 ? "use" : "uses"}**`;
 			return txt;
 		}
 	}),
@@ -3539,25 +3541,9 @@ customVariables = {
 			for (let i in v) {
 				let vars = v[i];
 
-				txt += `lol test ${vars.turns}\n`
-				vars.turns--;
-				if (vars.turns <= 0) {
-					delete char.custom.link[i];
-					txt += `${vars.username}'s ${vars.skilldefs.name} has worn off for ${char.name}! (turns ended)\n`;
-				}
-			}
-
-			return txt;
-		},
-		nextmove(btl, char, v) {
-			let txt = '';
-			for (let i in v) {
-				let vars = v[i];
-
-				txt += "lol text nextmove"
 				if (!char.attacked) {
 					delete char.custom.link[i];
-					txt += `${vars.username}'s ${vars.skilldefs.name} has worn off for ${char.name}! (never attacked)\n`;
+					txt += `${vars.username}'s ${vars.skilldefs.name} has worn off for ${char.name}!\n`;
 				}
 			}
 
@@ -3569,7 +3555,6 @@ customVariables = {
 			for (let i in v) {
 				let vars = v[i];
 
-				txt += `lol test nothisskill ${vars.notthisskill}`
 				if (vars.notthisskill) {
 					delete vars.notthisskill;
 					continue;
@@ -3578,11 +3563,14 @@ customVariables = {
 				if (skill.target === 'one' || skill.target === 'ally' || skill.target === 'caster') {
 					let linkatk = attackWithSkill(inf, char, vars.skilldefs, btl, null, ["link", "damage"], ["link", "damage"]);
 					txt += `__${vars.username}__'s _${vars.skilldefs.name}_ strikes! ${linkatk.txt}\n`;
+					if (!--vars.uses) {
+						delete char.custom.link[i];
+						txt += `${vars.username}'s ${vars.skilldefs.name} has worn off for ${char.name}!\n`;
+					}
 				}
 			}
 
 			char.attacked = true;
-			txt += `lol test attacked ${char.attacked}`
 			return txt;
 		}
 	},
