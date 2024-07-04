@@ -1262,23 +1262,73 @@ passiveList = {
 
 	swordbreaker: new Extra({
 		name: "Sword Breaker (Persona)",
-		desc: "<Chance>% chance for effective and normal attacks that hit the user to turn into a resist.",
+		desc: "<Chance>% chance for effective and normal attacks that hit the user to turn into a resist. When it does, could affect {User/Target} {Stat} by {Stages} for {Turns} turns.",
 		args: [
 			{
 				name: "Chance",
 				type: "Decimal",
 				forced: true
+			},
+			{
+				name: "User/Target",
+				type: "Word"
+			},
+			{
+				name: "Stat",
+				type: "Word"
+			},
+			{
+				name: "Stages",
+				type: "Num"
 			}
 		],
 		applyfunc(message, skill, args) {
 			if (args[0] < 1) return void message.channel.send("If it never happens, why bother?");
-			makePassive(skill, "swordbreaker", [args[0]]);
+
+			if (args[1]) {
+				if (!["user", "target"].includes(args[1].toLowerCase())) return void message.channel.send(`${args[1]} is not a valid input. Enter either "Male" or "Female".`);
+
+				if (!args[2]) return void message.channel.send("{Stat} becomes mandatory when you enter {User/Target}.");
+				if (![...stats, "crit", "all"].includes(args[2].toLowerCase())) return void message.channel.send(`${args[2]} is not a valid stat.`);
+
+				let stages = args[3] ?? -1;
+				if (stages == 0) return void message.channel.send("That amount of stages wouldn't do anything!");
+
+				makePassive(skill, "swordbreaker", [args[0], args[1].toLowerCase(), args[2].toLowerCase(), stages]);
+			} else {
+				makePassive(skill, "swordbreaker", [args[0]]);
+			}
+
 			return true;
 		},
 		affinitymodoninf(char, inf, skill, passive, affinity, btl, vars) {
 			if (affinity === 'deadly' || affinity === 'superweak' || affinity === 'weak' || affinity === 'normal') {
 				if (randNum(1, 100) <= vars[0]) {
-					return ['resist', `__${char.name}__'s __${passive.name}__ changed __${skill.name}__'s attack to a resist!`];
+					if (vars[1]) {
+						let str = `__${char.name}__'s __${passive.name}__ changed __${skill.name}__'s attack to a resist!`;
+
+						if (vars[1] === "user") {
+							buffStat(char, vars[2], vars[3])
+
+							if (vars[3] <= 0) {
+								str += `\n__${char.name}__'s ${vars[2].toUpperCase()} was lowered by ${Math.abs(vars[3])} stage(s)!`
+							} else {
+								str += `\n__${char.name}__'s ${vars[2].toUpperCase()} was boost by ${Math.abs(vars[3])} stage(s)!`
+							}
+						} else {
+							buffStat(inf, vars[2], vars[3])
+
+							if (vars[3] <= 0) {
+								str += `\n__${inf.name}__'s ${vars[2].toUpperCase()} was lowered by ${Math.abs(vars[3])} stage(s)!`
+							} else {
+								str += `\n__${inf.name}__'s ${vars[2].toUpperCase()} was boost by ${Math.abs(vars[3])} stage(s)!`
+							}
+						}
+
+						return ['resist', `${str}\n`];
+					} else {
+						return ['resist', `__${char.name}__'s __${passive.name}__ changed __${skill.name}__'s attack to a resist!`];
+					}
 				}
 			}
 

@@ -794,7 +794,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 							for (let k in skillFile[targ.skills[i]].passive) {
 								if (passiveList[k] && passiveList[k].affinitymodoninf) {
 									if (noExtraArray && noExtraArray.includes(k)) continue;
-									let a = passiveList[k].affinitymodoninf(targ, char, skill, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k])
+									let a = passiveList[k].affinitymodoninf(targ, char, skill, skillFile[targ.skills[i]], curAffinity, btl, skillFile[targ.skills[i]].passive[k])
 									
 									if (a && a != null && a != false) {
 										if (typeof(a) === 'string') {
