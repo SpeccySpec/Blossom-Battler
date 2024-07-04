@@ -331,7 +331,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					status = skill.status;
 				}
 
-				result.txt += statusList.status.inflictStatus(char, targ, skill, status ?? 'burn', btl, skill.pow);
+				result.txt += statusList.status.inflictStatus(char, targ, skill, status ?? 'burn', btl, (!skill.pow || isNaN(skill.pow)) ? 1 : parseFloat(skill.pow));
 			} else {
 				result.txt += '...But it failed!'
 			}
