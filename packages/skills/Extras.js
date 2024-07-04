@@ -2087,7 +2087,7 @@ extrasList = {
 
 				if (!targ.custom.link[id]) {
 					targ.custom.link[id] = {
-						turns: t,
+						turns: t + 1,
 						powerboost: pb,
 						username: char.name,
 						notthisskill: true,
@@ -3540,7 +3540,7 @@ customVariables = {
 				let vars = v[i];
 
 				vars.turns--;
-				if (vars.turns == 0) {
+				if (vars.turns <= 0) {
 					delete char.custom.link[i];
 					txt += `${vars.username}'s ${vars.skilldefs.name} has worn off for ${char.name}!\n`;
 				}
