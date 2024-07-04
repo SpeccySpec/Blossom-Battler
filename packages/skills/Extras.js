@@ -3539,10 +3539,11 @@ customVariables = {
 			for (let i in v) {
 				let vars = v[i];
 
+				txt += `lol test ${vars.turns}\n`
 				vars.turns--;
 				if (vars.turns <= 0) {
 					delete char.custom.link[i];
-					txt += `${vars.username}'s ${vars.skilldefs.name} has worn off for ${char.name}!\n`;
+					txt += `${vars.username}'s ${vars.skilldefs.name} has worn off for ${char.name}! (turns ended)\n`;
 				}
 			}
 
@@ -3553,9 +3554,10 @@ customVariables = {
 			for (let i in v) {
 				let vars = v[i];
 
+				txt += "lol text nextmove"
 				if (!char.attacked) {
 					delete char.custom.link[i];
-					txt += `${vars.username}'s ${vars.skilldefs.name} has worn off for ${char.name}!\n`;
+					txt += `${vars.username}'s ${vars.skilldefs.name} has worn off for ${char.name}! (never attacked)\n`;
 				}
 			}
 
@@ -3567,6 +3569,7 @@ customVariables = {
 			for (let i in v) {
 				let vars = v[i];
 
+				txt += `lol test nothisskill ${vars.notthisskill}`
 				if (vars.notthisskill) {
 					delete vars.notthisskill;
 					continue;
@@ -3579,6 +3582,7 @@ customVariables = {
 			}
 
 			char.attacked = true;
+			txt += `lol test attacked ${char.attacked}`
 			return txt;
 		}
 	},
