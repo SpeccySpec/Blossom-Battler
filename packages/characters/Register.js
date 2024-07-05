@@ -217,7 +217,7 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 	
 		if (char.ai) userTxt = "Automated";
 	
-		let tick = verifiedChar(char, useguild ?? message.guild.id) ? '<:tick:973077052372701294>' : '';
+		let tick = (typeof verifiedChar(char, useguild ?? message.guild.id) != "string") ? '<:tick:973077052372701294>' : `(${verifiedChar(char, useguild ?? message.guild.id)}) `;
 		DiscordEmbed = new Discord.MessageEmbed()
 			.setColor(!char.type ? color : enemyTypeColors[char.type])
 			.setTitle(`${prefix}${tick}${char.name} ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
@@ -365,7 +365,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 		color = elementColors[char.mainElement[0]] ?? elementColors.strike;
 	}
 
-	let tick = verifiedChar(char, server) ? '(<:tick:973077052372701294>) ' : '';
+	let tick = (typeof verifiedChar(char, server) != "string") ? '(<:tick:973077052372701294>) ' : `(${verifiedChar(char, server)}) `;
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(!char.type ? color : enemyTypeColors[char.type])
 		.setTitle(`${prefix}${char.name} ${tick}${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)

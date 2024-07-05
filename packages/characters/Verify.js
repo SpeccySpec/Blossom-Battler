@@ -15,22 +15,22 @@ verifiedChar = (char, server) => {
 
 	// Manual Verification
 	if (char.forceverified) return true;
-	if (char.forceunverified) return false;
+	if (char.forceunverified) return "Made unverified by admin";
 
 	// Level Limit
-	if (char.level > 99) return false;
+	if (char.level > 99) return "Over level 99";
 
 	// HP and MP maximum
-	if ((char.basehp+char.basemp) > 65) return false;
+	if ((char.basehp+char.basemp) > 65) return "BaseHP + BaseMP is over 65";
 
 	// Base Stat Total
 	let bst = 0;
 	for (let i in char.basestats) {
-		if (char.basestats[i] > 10) return false;
+		if (char.basestats[i] > 10) return `${i.toUpperCase()} stat is over 10.`;
 		bst += char.basestats[i];
 	}
 
-	if (bst > 45) return false;
+	if (bst > 45) return "Base stat total is over 45.";
 
 	// Skill limit
 	let elements = [];
@@ -41,10 +41,10 @@ verifiedChar = (char, server) => {
 	let movelinks = [];
 	for (let i of char.skills) {
 		skill = skillFile[i];
-		if (!skill) return false;
-		if (skill.pow*(skill.hits ?? 1) > 1200) return false;
-		if (skill.type != "support" && skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return false;
-		if (skillTier(skill) > 5) return false;
+		if (!skill) return `${i} is not a valid skill.`;
+		if (skill.pow*(skill.hits ?? 1) > 1200) return `${getFullName(skill)} has over 1200 power total.`;
+		if (skill.type != "support" && skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return `${getFullName(skill)} has a guaranteed status.`;
+		if (skillTier(skill) > 5) return `${getFullName(skill)} is tier 6 or higher.`;
 
 		if (typeof(skill.type) == 'object') {
 			for (let type of skill.type) {
@@ -78,10 +78,10 @@ verifiedChar = (char, server) => {
 		for (let k in movelinks) {
 			if (skillFile[movelinks[k]]) {
 				skill = skillFile[movelinks[k]];
-				if (!skill) return false;
-				if (skill.pow*(skill.hits ?? 1) > 1200) return false;
-				if (skill.type != "support" || skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return false;
-				if (skillTier(skill) > 5) return false;
+				if (!skill) return `${getFullName(skillFile[i])} is linked with an invalid skill.`;
+				if (skill.pow*(skill.hits ?? 1) > 1200) return `${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which has too much power.`;
+				if (skill.type != "support" || skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return `${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which has a guaranteed status.`;
+				if (skillTier(skill) > 5) return `${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which is tier 6 or higher.`;
 		
 				if (typeof(skill.type) == 'object') {
 					for (let type of skill.type) {
@@ -108,11 +108,11 @@ verifiedChar = (char, server) => {
 		}
 	}
 
-	if (almighty > 2) return false;
-	if (passives > (char.mainElement === 'passive' ? 3 : 2)) return false;
-	if (statusses > ((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)) return false;
-	if (elements.length > 3) return false;
-	if (char.skills.length > 8) return false;
+	if (almighty > 2) return "More than 2 almighty skills.";
+	if (passives > (char.mainElement === 'passive' ? 3 : 2)) return `More than ${(char.mainElement === 'passive' ? 3 : 2)} passives.`;
+	if (statusses > ((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)) return `More than ${((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)} status skills.`;
+	if (elements.length > 3) return "Too many elements.";
+	if (char.skills.length > 8) return "More than 8 skills.";
 
 	// Affinities: A score higher than 3 unverifies the character. No affinities unverifies the character. 9 or more affinities unverifies the character.
 	let affinityscore = 0
@@ -127,8 +127,8 @@ verifiedChar = (char, server) => {
 		}
 	}
 
-	if (totaffinities === 0 || totaffinities > 15) return false;
-	if (affinityscore > 3) return false;
+	if (totaffinities === 0 || totaffinities > 15) return (totaffinities === 0) ? "No affinities" : "More than 15 affinities.";
+	if (affinityscore > 3) return "Affinity Score higher than 3.";
 
 	// Status Affinities: The same, except, don't care if the character has none.
 	if (settings.mechanics.stataffinities) {
@@ -153,8 +153,8 @@ verifiedChar = (char, server) => {
 				}
 			}
 
-			if (statustotaffinities > 15) return false;
-			if (statusaffinityscore > 3) return false;
+			if (statustotaffinities > 15) return "More than 15 status affinities.";
+			if (statusaffinityscore > 3) return "Status Affinity score higher than 3.";
 		}
 	}
 

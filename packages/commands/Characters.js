@@ -612,7 +612,7 @@ commands.listchars = new Command({
 
 			let descTxt = `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}${charFile[i].mpMeter ? charFile[i].mpMeter[1] : "MP"}`;
 
-			let tick = verifiedChar(charFile[i], message.guild.id) ? '<:tick:973077052372701294>' : '';
+			let tick = (typeof verifiedChar(charFile[i], message.guild.id) != "string") ? '<:tick:973077052372701294>' : verifiedChar(charFile[i], message.guild.id);
 			let prefix = charPrefix(charFile[i]);
 			array.push({title: `${prefix}${tick}${charFile[i].name} (${i})`, desc: descTxt});
 		}
