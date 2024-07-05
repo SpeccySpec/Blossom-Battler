@@ -1453,7 +1453,7 @@ sendCurTurnEmbed = async(char, btl) => {
 					let lbDefs = objClone(canUseLb(char, btl));
 
 					if (lbDefs.target) {
-						if (lbDefs.target === 'allopposing' || lbDefs.target === 'allallies' || lbDefs.target === 'everyone' || lbDefs.target == 'caster' || lbDefs.target.includes('random')) {
+						if (lbDefs.target === 'allopposing' || lbDefs.target === 'allallies' || lbDefs.target === 'allalliesnocaster' || lbDefs.target === 'everyone' || lbDefs.target == 'caster' || lbDefs.target.includes('random')) {
 							btl.action.target = [undefined, undefined];
 							alreadyResponded = true;
 							doAction(char, btl, btl.action);

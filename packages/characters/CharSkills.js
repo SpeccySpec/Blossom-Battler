@@ -15,6 +15,7 @@ makeMelee = (char) => {
 				caster: 'caster',
 				allopposing: 'allopposing',
 				allallies: 'allallies',
+				allalliesnocaster: 'allalliesnocaster',
 				randomopposing: 'randomopposing',
 				randomallies: 'randomallies',
 				random: 'random',

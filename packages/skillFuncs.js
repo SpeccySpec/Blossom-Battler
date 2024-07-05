@@ -176,6 +176,9 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 			case "allallies":
 				finalText += "Targets **all allies**.\n";
 				break;
+			case "allalliesnocaster":
+				finalText += "Targets **all allies** _excluding_ **the caster**.\n";
+				break;
 			case "ally":
 				finalText += "Targets **an ally**.\n";
 				break;

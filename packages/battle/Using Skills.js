@@ -1771,6 +1771,11 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 				if (party.members[i].hp > 0) targets.push([party.members[i].id, 1]);
 			break;
 
+		case 'allalliesnocaster':
+			for (let i in party.members)
+				if (party.members[i].hp > 0 && party.members[i].id != char.id) targets.push([party.members[i].id, 1]);
+			break;
+
 		case 'randomopposing':
 			for (let i in btl.teams) {
 				if (char.team == i) continue;
@@ -2144,6 +2149,11 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					case 'allallies':
 						for (let i in party.members)
 							if (party.members[i].hp > 0) targets2.push([party.members[i].id, 1]);
+						break;
+
+					case 'allalliesnocaster':
+						for (let i in party.members)
+							if (party.members[i].hp > 0 && party.members[i].id != char.id) targets.push([party.members[i].id, 1]);
 						break;
 
 					case 'randomopposing':

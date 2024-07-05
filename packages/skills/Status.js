@@ -1,6 +1,7 @@
 let st = {
 	allallies: 'ally',
 	allopposing: 'one',
+	allalliesnocaster: 'ally',
 	everyone: 'one',
 	spreadopposing: 'one',
 	spreadallies: 'ally',
@@ -2618,6 +2619,7 @@ statusEffectFuncs = {
 				caster: 'caster',
 				allopposing: 'allallies',
 				allallies: 'allopposing',
+				allalliesnocaster: 'allopposing',
 				randomopposing: 'randomallies',
 				randomallies: 'randomopposing',
 				random: 'random',
@@ -3094,6 +3096,7 @@ statusEffectFuncs = {
 						caster: 'random',
 						allopposing: (randNum(1) == 0 ? 'allopposing' : 'allallies'),
 						allallies: (randNum(1) == 0 ? 'allallies' : 'allopposing'),
+						allalliesnocaster: (randNum(1) == 0 ? 'allalliesnocaster' : 'allopposing'),
 						randomopposing: 'random',
 						randomallies: 'random',
 						random: 'random',

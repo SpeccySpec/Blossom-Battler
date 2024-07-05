@@ -801,6 +801,7 @@ Targets = [
 	//ENTIRE SIDES
 	'allopposing', // target all foes
 	'allallies', // target all allies
+	'allalliesnocaster', // target all allies except the caster
 
 	//EVERYONE
 	'everyone', // target all fighters
@@ -842,6 +843,7 @@ TargetDesc = {
 
 	allopposing: 'Targets all enemies.',
 	allallies: 'Targets all allies.',
+	allalliesnocaster: 'Targets all allies excluding the user.',
 
 	everyone: 'Targets every person on the battlefield excluding the user without fail.',
 

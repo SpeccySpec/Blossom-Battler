@@ -19,6 +19,7 @@ let targetNames = {
 
 	allopposing: 'all opponent',
 	allallies: 'all ally',
+	allalliesnocaster: 'all allies excluding the caster',
 	
 	everyone: 'everyone',
 	

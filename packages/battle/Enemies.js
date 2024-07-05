@@ -273,6 +273,7 @@ enemyThinker = (char, btl) => {
 							case 'heal':
 								switch(skill.target) {
 									case 'allallies':
+									case 'allalliesnocaster':
 										for (let char2 of btl.teams[char.team].members) {
 											if (skill.heal?.healstat) {
 												if (!skill.heal.healstat[1] || skill.heal.healstat[1] == "hp") {
@@ -358,6 +359,7 @@ enemyThinker = (char, btl) => {
 										}
 										break;
 									case 'allallies':
+									case 'allalliesnocaster':
 										for (let kay in btl.teams[char.team].members) {
 											if (btl.teams[char.team].members[kay].hp > 0) targets.push(btl.teams[char.team].members[kay]);
 										}
@@ -511,6 +513,7 @@ enemyThinker = (char, btl) => {
 							case 'heal':
 								switch(skill.target) {
 									case 'allallies':
+									case 'allalliesnocaster':
 										for (let char2 of btl.teams[char.team].members) {
 											if (char2.hp <= 0) continue;
 
@@ -600,6 +603,7 @@ enemyThinker = (char, btl) => {
 										}
 										break;
 									case 'allallies':
+									case 'allalliesnocaster':
 										for (let kay in btl.teams[char.team].members) {
 											if (btl.teams[char.team].members[kay].hp > 0) targets.push(btl.teams[char.team].members[kay]);
 										}
@@ -758,6 +762,7 @@ enemyThinker = (char, btl) => {
 							case 'heal':
 								switch(skill.target) {
 									case 'allallies':
+									case 'allalliesnocaster':
 										for (let char2 of btl.teams[char.team].members) {
 											if (skill.heal?.healstat) {
 												if (!skill.heal.healstat[1] || skill.heal.healstat[1] == "hp") {
@@ -819,6 +824,7 @@ enemyThinker = (char, btl) => {
 										}
 										break;
 									case 'allallies':
+									case 'allalliesnocaster':
 										for (let kay in btl.teams[char.team].members) {
 											if (btl.teams[char.team].members[kay].hp > 0) targets.push(btl.teams[char.team].members[kay]);
 										}
