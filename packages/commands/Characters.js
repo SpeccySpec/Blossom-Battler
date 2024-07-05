@@ -5659,9 +5659,11 @@ commands.checkverified = new Command({
 		let prefix = elementEmoji[char.mainElement] ?? elementEmoji.strike;
 		let color = elementColors[char.mainElement] ?? elementColors.strike;
 
-		let DiscordEmbed = new Discord.MessageEmbed()
-			.setColor(!char.type ? color : enemyTypeColors[char.type])
-			.setTitle(`${prefix}${char.name} has ${issues.length} ${issues.length == 1 ? 'issue' : 'issues'}!`)
-			.setDescription(issues.join('\n'))
+		message.channel.send({embeds: [
+			new Discord.MessageEmbed()
+				.setColor(!char.type ? color : enemyTypeColors[char.type])
+				.setTitle(`${prefix}${char.name} has ${issues.length} ${issues.length == 1 ? 'issue' : 'issues'}!`)
+				.setDescription(issues.join('\n'))
+		]});
 	}
 })
