@@ -163,7 +163,7 @@ healList = {
 			targ.custom.regenheal[char.name + '-' + skill.name].push({
 				name: skill.name,
 				username: char.name,
-				heal: Math.round(vars[0] * multiplier),
+				heal: Math.round(vars[0] * ((!multiplier || isNaN(multiplier)) ? 1 : multiplier)),
 				turns: vars[2],
 				type: vars[1],
 				wait: vars[4] > 0 ? vars[4]+1 : vars[3],

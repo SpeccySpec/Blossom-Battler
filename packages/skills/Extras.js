@@ -3456,7 +3456,7 @@ customVariables = {
 				
 				if (Object.keys(char.custom.regenheal).length == 0) killVar(char, 'regenheal');
 
-				return txt;
+				return `${txt}\n`;
 			}
 		}
 	},
