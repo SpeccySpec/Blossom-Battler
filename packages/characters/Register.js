@@ -247,7 +247,7 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 	if (affinityscore == -69) scorecomment = "You'd think this is __nice__, but it really isn't."
 	if (affinityscore == 69) scorecomment = "Heh, __nice__. No but seriously, stop this nonsense."
 
-	if (scorecomment && affinityscore <= 3 && affinityscore >= -3 && totaffinities >= 9)
+	if (scorecomment && affinityscore <= 3 && affinityscore >= -3 && totaffinities > 15)
 		scorecomment += "\nOr at least that would be the case if you didn't have so many affinities."
 	if (totaffinities == 0)
 		scorecomment = `Your character has no affinities yet, add one with \`${getPrefix(useguild ?? message.guild.id)}setaffinity\`!`
@@ -282,7 +282,7 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 			}
 			if (statAffs != '') {
 				let scorecomment = affinityScores[(statusaffinityscore > 0 ? Math.ceil : Math.floor)(statusaffinityscore)]
-				if (scorecomment && statusaffinityscore <= 3 && statusaffinityscore >= -3 && statustotaffinities >= 9)
+				if (scorecomment && statusaffinityscore <= 3 && statusaffinityscore >= -3 && statustotaffinities > 15)
 					scorecomment += "\nOr at least that would be the case if you didn't have so many affinities."
 				if (statustotaffinities == 1)
 					scorecomment += "\nThey...probably should have more than 1 affinity though."
@@ -369,6 +369,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 	}
 
 	let issues = verifiedChar(char, server)
+	console.log(issues)
 	let tick = issues.length
 		? (issues.length == 1 ? issues.pop().slice(2) : `${issues.length} issues!`)
 		: '<:tick:973077052372701294>'
