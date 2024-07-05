@@ -612,12 +612,12 @@ commands.listchars = new Command({
 
 			let descTxt = `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}${charFile[i].mpMeter ? charFile[i].mpMeter[1] : "MP"}`;
 
-			let issues = verifiedChar(char, useguild ?? message.guild.id)
+			let issues = verifiedChar(charFile[i], message.guild.id)
 			let tick = issues.length
 				? (issues.length == 1 ? issues.pop().slice(2) : `${issues.length} issues!`)
 				: '<:tick:973077052372701294>'
 			let prefix = charPrefix(charFile[i]);
-			array.push({title: `${prefix} (${tick}) ${charFile[i].name} (${i})`, desc: descTxt});
+			array.push({title: `${prefix}${charFile[i].name} (${tick}) (${i})`, desc: descTxt});
 		}
 		if (array.length == 0) return message.channel.send('No characters found!');
 
@@ -5658,6 +5658,14 @@ commands.checkverified = new Command({
 
 		let prefix = elementEmoji[char.mainElement] ?? elementEmoji.strike;
 		let color = elementColors[char.mainElement] ?? elementColors.strike;
+
+		if (typeof char.mainElement === "object") {
+			prefix = "";
+			for (let i in char.mainElement)
+				prefix += elementEmoji[char.mainElement[i]] ?? elementEmoji.strike;
+	
+			color = elementColors[char.mainElement[0]] ?? elementColors.strike;
+		}
 
 		message.channel.send({embeds: [
 			new Discord.MessageEmbed()
