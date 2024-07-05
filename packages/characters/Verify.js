@@ -80,7 +80,7 @@ verifiedChar = (char, server) => {
 				skill = skillFile[movelinks[k]];
 				if (!skill) return `${getFullName(skillFile[i])} is linked with an invalid skill.`;
 				if (skill.pow*(skill.hits ?? 1) > 1200) return `${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which has too much power.`;
-				if (skill.type != "support" || skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return `${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which has a guaranteed status.`;
+				if (skill.type != "support" && skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return `${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which has a guaranteed status.`;
 				if (skillTier(skill) > 5) return `${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which is tier 6 or higher.`;
 		
 				if (typeof(skill.type) == 'object') {
