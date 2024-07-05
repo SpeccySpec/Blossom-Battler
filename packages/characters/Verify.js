@@ -11,26 +11,30 @@ const affinityScores = {
 let extratypes = ["extras", "statusses", "heal", "passive"];
 
 verifiedChar = (char, server) => {
-	let settings = setUpSettings(server);
+	const settings = setUpSettings(server);
 
 	// Manual Verification
-	if (char.forceverified) return true;
-	if (char.forceunverified) return "Made unverified by admin";
+	if (char.forceverified) return [];
+	if (char.forceunverified) return ["- Made unverified by admin."];
+
+	const issues = []
 
 	// Level Limit
-	if (char.level > 99) return "Over level 99";
+	if (char.level > 99) issues.push("- Over level 99");
 
 	// HP and MP maximum
-	if ((char.basehp+char.basemp) > 65) return "BaseHP + BaseMP is over 65";
+	if ((char.basehp+char.basemp) > 65) issues.push("- BaseHP + BaseMP is over 65");
 
 	// Base Stat Total
 	let bst = 0;
 	for (let i in char.basestats) {
-		if (char.basestats[i] > 10) return `${i.toUpperCase()} stat is over 10.`;
+		if (char.basestats[i] > 10) {
+			issues.push(`- Base${i.slice(-3).toUpperCase()} is over 10.`)
+		};
 		bst += char.basestats[i];
 	}
 
-	if (bst > 45) return "Base stat total is over 45.";
+	if (bst > 45) issues.push("- Base stat total is over 45.");
 
 	// Skill limit
 	let elements = [];
@@ -41,10 +45,10 @@ verifiedChar = (char, server) => {
 	let movelinks = [];
 	for (let i of char.skills) {
 		skill = skillFile[i];
-		if (!skill) return `${i} is not a valid skill.`;
-		if (skill.pow*(skill.hits ?? 1) > 1200) return `${getFullName(skill)} has over 1200 power total.`;
-		if (skill.type != "support" && skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return `${getFullName(skill)} has a guaranteed status.`;
-		if (skillTier(skill) > 5) return `${getFullName(skill)} is tier 6 or higher.`;
+		if (!skill) issues.push(`- ${i} is not a valid skill.`);
+		if (skill.pow*(skill.hits ?? 1) > 1200) issues.push(`- ${getFullName(skill)} has over 1200 power total.`);
+		if (skill.type != "support" && skill.type != "status" && skill.statuschance && skill.statuschance >= 100) issues.push(`- ${getFullName(skill)} has a guaranteed status.`);
+		if (skillTier(skill) > 5) issues.push(`- ${getFullName(skill)} is tier 6.`);
 
 		if (typeof(skill.type) == 'object') {
 			for (let type of skill.type) {
@@ -78,11 +82,11 @@ verifiedChar = (char, server) => {
 		for (let k in movelinks) {
 			if (skillFile[movelinks[k]]) {
 				skill = skillFile[movelinks[k]];
-				if (!skill) return `${getFullName(skillFile[i])} is linked with an invalid skill.`;
-				if (skill.pow*(skill.hits ?? 1) > 1200) return `${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which has too much power.`;
-				if (skill.type != "support" && skill.type != "status" && skill.statuschance && skill.statuschance >= 100) return `${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which has a guaranteed status.`;
-				if (skillTier(skill) > 5) return `${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which is tier 6 or higher.`;
-		
+				if (!skill) issues.push(`- ${getFullName(skillFile[i])} is linked with an invalid skill.`);
+				if (skill.pow*(skill.hits ?? 1) > 1200) issues.push(`- ${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which has over 1200 power total.`);
+				if (skill.type != "support" && skill.type != "status" && skill.statuschance && skill.statuschance >= 100) issues.push(`- ${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which has a guaranteed status.`);
+				if (skillTier(skill) > 5) issues.push(`- ${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which is tier 6 or higher.`);
+
 				if (typeof(skill.type) == 'object') {
 					for (let type of skill.type) {
 						if (type === 'support' || type === 'status')
@@ -108,13 +112,13 @@ verifiedChar = (char, server) => {
 		}
 	}
 
-	if (almighty > 2) return "More than 2 almighty skills.";
-	if (passives > (char.mainElement === 'passive' ? 3 : 2)) return `More than ${(char.mainElement === 'passive' ? 3 : 2)} passives.`;
-	if (statusses > ((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)) return `More than ${((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)} status skills.`;
-	if (elements.length > 3) return "Too many elements.";
-	if (char.skills.length > 8) return "More than 8 skills.";
+	if (almighty > 2) issues.push("- More than 2 almighty skills.");
+	if (passives > (char.mainElement === 'passive' ? 3 : 2)) issues.push(`- More than ${(char.mainElement === 'passive' ? 3 : 2)} passives.`);
+	if (statusses > ((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)) issues.push(- `More than ${((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)} status skills.`);
+	if (elements.length > 3) issues.push("- Too many elements.");
+	if (char.skills.length > 8) issues.push("- More than 8 skills.");
 
-	// Affinities: A score higher than 3 unverifies the character. No affinities unverifies the character. 9 or more affinities unverifies the character.
+	// Affinities: A score higher than 3 unverifies the character. No affinities unverifies the character. 15 or more affinities unverifies the character.
 	let affinityscore = 0
 	let totaffinities = 0
 
@@ -127,8 +131,8 @@ verifiedChar = (char, server) => {
 		}
 	}
 
-	if (totaffinities === 0 || totaffinities > 15) return (totaffinities === 0) ? "No affinities" : "More than 15 affinities.";
-	if (affinityscore > 3) return "Affinity Score higher than 3.";
+	if (totaffinities === 0 || totaffinities > 15) issues.push((totaffinities === 0) ? "- No affinities." : "- More than 15 affinities.");
+	if (affinityscore > 3) issues.push("- Affinity Score higher than 3.");
 
 	// Status Affinities: The same, except, don't care if the character has none.
 	if (settings.mechanics.stataffinities) {
@@ -153,11 +157,11 @@ verifiedChar = (char, server) => {
 				}
 			}
 
-			if (statustotaffinities > 15) return "More than 15 status affinities.";
-			if (statusaffinityscore > 3) return "Status Affinity score higher than 3.";
+			if (statustotaffinities > 15) issues.push("- More than 15 status affinities.");
+			if (statusaffinityscore > 3) issues.push("- Status Affinity score higher than 3.");
 		}
 	}
 
 	// Basic checks complete
-	return true;
+	return issues;
 }

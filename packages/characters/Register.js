@@ -217,10 +217,13 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 	
 		if (char.ai) userTxt = "Automated";
 	
-		let tick = (typeof verifiedChar(char, useguild ?? message.guild.id) != "string") ? '<:tick:973077052372701294>' : `(${verifiedChar(char, useguild ?? message.guild.id)}) `;
+		let issues = verifiedChar(char, useguild ?? message.guild.id)
+		let tick = issues.length
+			? (issues.length == 1 ? issues.pop().slice(2) : `${issues.length} issues!`)
+			: '<:tick:973077052372701294>'
 		DiscordEmbed = new Discord.MessageEmbed()
 			.setColor(!char.type ? color : enemyTypeColors[char.type])
-			.setTitle(`${prefix}${tick}${char.name} ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
+			.setTitle(`${prefix}${char.name} (${tick}) ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
 	}
 
 	let affinityscore = 0
@@ -365,10 +368,13 @@ longDescription = (charDefs, level, server, message, useguild) => {
 		color = elementColors[char.mainElement[0]] ?? elementColors.strike;
 	}
 
-	let tick = (typeof verifiedChar(char, server) != "string") ? '(<:tick:973077052372701294>) ' : `(${verifiedChar(char, server)}) `;
+	let issues = verifiedChar(char, server)
+	let tick = issues.length
+		? (issues.length == 1 ? issues.pop().slice(2) : `${issues.length} issues!`)
+		: '<:tick:973077052372701294>'
 	let DiscordEmbed = new Discord.MessageEmbed()
 		.setColor(!char.type ? color : enemyTypeColors[char.type])
-		.setTitle(`${prefix}${char.name} ${tick}${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
+		.setTitle(`${prefix}${char.name} (${tick}) ${dispLevel}${!char.type ? ` *(${userTxt})*` : ``}`)
 
 	let desc = ''
 	if (char.curweapon && char.curweapon.name) {

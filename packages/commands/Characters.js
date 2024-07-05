@@ -612,9 +612,12 @@ commands.listchars = new Command({
 
 			let descTxt = `${charFile[i].hp}/${charFile[i].maxhp}HP, ${charFile[i].mp}/${charFile[i].maxmp}${charFile[i].mpMeter ? charFile[i].mpMeter[1] : "MP"}`;
 
-			let tick = (typeof verifiedChar(charFile[i], message.guild.id) != "string") ? '<:tick:973077052372701294>' : ` (${verifiedChar(charFile[i], message.guild.id)}) `;
+			let issues = verifiedChar(char, useguild ?? message.guild.id)
+			let tick = issues.length
+				? (issues.length == 1 ? issues.pop().slice(2) : `${issues.length} issues!`)
+				: '<:tick:973077052372701294>'
 			let prefix = charPrefix(charFile[i]);
-			array.push({title: `${prefix}${tick}${charFile[i].name} (${i})`, desc: descTxt});
+			array.push({title: `${prefix} (${tick}) ${charFile[i].name} (${i})`, desc: descTxt});
 		}
 		if (array.length == 0) return message.channel.send('No characters found!');
 
@@ -5625,5 +5628,40 @@ commands.curestatus = new Command({
 
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 		message.react('👍');
+	}
+})
+
+commands.checkverified = new Command({
+	desc: "Check if your character is verifed and expain what makes them unverified if they are.",
+	aliases: ['verified', 'isverified'],
+	args: [
+		{
+			name: "Character Name",
+			type: "Word",
+			forced: true
+		},
+	],
+	func(message, args, guilded) {
+		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.')
+
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true)
+		let char = charFile[args[0]]
+		if (!char) return message.channel.send('Nonexistant Character.')
+
+		let issues = verifiedChar(char, message.guild.id)
+
+		if (!issues.length) return message.channel.send(
+			char.forceverified
+				? `${char.name} is forcefully verified by an admin.`
+				: `${char.name} is verified!`
+		)
+
+		let prefix = elementEmoji[char.mainElement] ?? elementEmoji.strike;
+		let color = elementColors[char.mainElement] ?? elementColors.strike;
+
+		let DiscordEmbed = new Discord.MessageEmbed()
+			.setColor(!char.type ? color : enemyTypeColors[char.type])
+			.setTitle(`${prefix}${char.name} has ${issues.length} ${issues.length == 1 ? 'issue' : 'issues'}!`)
+			.setDescription(issues.join('\n'))
 	}
 })
