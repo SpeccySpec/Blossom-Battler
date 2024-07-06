@@ -518,7 +518,7 @@ commands.startbattle = new Command({
 		for (const i in party.backup) {
 			if (!charFile[party.backup[i]]) continue;
 
-			let char = objClone(charFile[party.backup[i]]);
+			let char = objClone(charFile[party.backup[i]]); // oh im so smart i dont need to do it
 			if (!char.name) char.name = party.backup[i];
 
 			if (charFile[party.backup[i]].ai) {

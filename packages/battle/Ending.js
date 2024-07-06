@@ -222,6 +222,7 @@ winBattle = (btl, i) => {
 		if (charFile[char.truename]) {
 			charFile[char.truename].hp = Math.min(charFile[char.truename].maxhp, char.hp);
 			charFile[char.truename].mp = Math.min(charFile[char.truename].maxmp, char.mp);
+			charFile[char.truename].lbp = Math.min(1000, char.lbp); // New feature! Save LB% across battles.
 			charFile[char.truename].status = char.status;
 			charFile[char.truename].statusturns = char.statusturns;
 
@@ -265,6 +266,7 @@ winBattle = (btl, i) => {
 		if (charFile[char.truename]) {
 			charFile[char.truename].hp = Math.min(charFile[char.truename].maxhp, char.hp);
 			charFile[char.truename].mp = Math.min(charFile[char.truename].maxmp, char.mp);
+			charFile[char.truename].lbp = Math.min(1000, char.lbp); // New feature! Save LB% across battles.
 			charFile[char.truename].status = char.status;
 			charFile[char.truename].statusturns = char.statusturns;
 
@@ -295,6 +297,7 @@ winBattle = (btl, i) => {
 				charFile[char2.truename].trust = char2.trust;
 			}
 
+			// Backup only gets half XP.
 			if (enemyxp > 0) gainXp(btl.channel, charFile[char.truename], enemyxp/2, true, btl.channel.guildId);
 
 			// Also, get the USERS that participated in this battle
@@ -302,7 +305,8 @@ winBattle = (btl, i) => {
 		}
 	}
 
-	// Save user data.
+	// Save user data. This code si so shit wtf
+	// Ah well, if it works it works tbh kills you but fair
 	for (let user of users) {
 		// Enemy Kills
 		let userdata = addData(user, "enemykills", maxcount-pacifycount);
@@ -492,6 +496,7 @@ runFromBattle = (char, btl, i) => {
 		if (charFile[char.truename]) {
 			charFile[char.truename].hp = Math.min(charFile[char.truename].maxhp, char.hp);
 			charFile[char.truename].mp = Math.min(charFile[char.truename].maxmp, char.mp);
+			charFile[char.truename].lbp = Math.min(1000, char.lbp); //thank yw
 			charFile[char.truename].trust = char.trust;
 		}
 	}

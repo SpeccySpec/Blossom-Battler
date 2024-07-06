@@ -45,7 +45,31 @@ setupBattleStats = (f) => {
 		crit: 0,
 	};
 
-	f.lbp = 0;
+//	f.lbp = 0 -- goodbye days of starting with 0LB%. You will not be missed. rip bozo
+
+	// ok... maybe we still need to make sure. especially coming from pre-LB buff.
+	f.lbp ??= 0;
+
+	// REMNANT OF THE PAST LIVE SESSION //
+	//whats f btw
+	// f = fighter
+	// idk why it wasnt "c" for "char". ... if you say BTW
+	// MY SCREEN MOVES WHEN YOU SCROLL THE MOUSE LOL
+	//do not hange it good point sowwyyyy
+	// theres no point youre wasting your time
+	// nah its ok lmaoooo
+	// LHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHA LMAOOOOOOOOOOOOOOOOO
+	// imagine im just typing the suddenly EARTHQUAKEE
+	// immediatly uses the scroll wheel /j this is very funny. lol
+	// AHHAHAAH
+	// earthquake
+	//LOL
+	// I WASNT AWARE THAT HAPPENED ILL
+	// TRY TO USE THE SCROLL WHEEL LESS
+	// the fact that i was moving over to use my scroll wheel.
+	// lmaooo
+	// END OF REMNANT //
+	
 	f.donetc = false;
 
 	if (f.charms) {

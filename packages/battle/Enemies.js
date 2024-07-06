@@ -16,7 +16,7 @@ learnAffinity = (char, targ, skill) => {
 	return char.affinitycheck[targ.id];
 }
 
-// Recognise skill.
+// Recognise skill. Hm. This function is not used yet.
 recogniseSkill = (char, targ, skill) => {
 }
 
