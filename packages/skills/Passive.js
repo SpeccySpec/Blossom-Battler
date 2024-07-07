@@ -649,6 +649,7 @@ passiveList = {
 			return true;
 		},
 		ondamage(char, inf, skill, dmg, passive, btl, vars) {
+			let settings = setUpFile(`${dataPath}/json/${btl.guild.id}/settings.json`);
 			let affinity = getAffinity(inf, vars[2]);
 			let affinityTxt = affinityEmoji[affinity] ?? '';
 			let d = vars[1];
