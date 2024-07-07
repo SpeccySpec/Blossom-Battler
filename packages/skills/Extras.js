@@ -1,6 +1,6 @@
 const weakSide = ['deadly', 'superweak', 'weak', 'normal']
 const resistSide = ['normal', 'resist', 'block', 'repel', 'drain']
-const damageFormulas = ['persona', 'pokemon', 'lamonka', 'beta']
+const damageFormulas = ['persona', 'pokemon', 'lamonka', 'beta', 'limitbreak']
 const ArgList = require("../arglist.js")
 
 Extra = class extends ArgList {
