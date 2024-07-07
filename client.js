@@ -575,10 +575,14 @@ function messageCommand(message, guilded) {
 
 	if (message.mentions.has(client.user)) {
 		let str = message.content.toLowerCase();
-		if (["hello", "hai", "hewwo", "heya", "hoi", "hi"].includes(str))
+		if (/hello|hai|hewwo|heya|hoi|hi/.test(str))
 			message.channel.send("Hai!!! <3");
-		else if (["thank", "thamnk"].includes(str))
-			message.channel.send("You're welcome!!! Anything for you!!");
+		else if (/thank|thamnk/.test(str))
+			message.channel.send(
+				(/not/g.match(str) || []).length % 2
+					? "You're welcome!!! Anything for you!!"
+					: ". _."
+			);
 
 		return;
 	}
