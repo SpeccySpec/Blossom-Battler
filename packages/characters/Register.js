@@ -498,26 +498,43 @@ longDescription = (charDefs, level, server, message, useguild) => {
 	// Limit Breaks
 	if (settings.mechanics.limitbreaks) {
 		if (char.lb && char.lb[1]) {
+			let lb;
+			let lbDesc;
+			let elements;
+			let atktype;
+			let extratxt;
 			for (const i in char.lb) {
-				let lbDesc = `__**${char.lb[i].name}**__\n__[${char.lb[i].class.toUpperCase()} CLASS]__\nCosts **${char.lb[i].cost}%** of the Limit Break Gauge\n`;
+				lb = objClone(char.lb[i]);
 
-				switch(char.lb[i].class) {
-					case 'attack':
-						lbDesc += `**${char.lb[i].pow}** Power`;
-						if (char.lb[i].hits > 1) lbDesc += `\nAttacks **${char.lb[i].hits}** times`;
-						break;
-
-					case 'heal':
-						lbDesc += `Restores **${char.lb[i].pow}HP**`;
-						break;
-
-					case 'boost':
-					case 'cripple':
-						// maybe later
-						break;
+				if (!lb.islimitbreak) {
+					lbDesc = "This Limit Break is outdated! You must update it."
+					DiscordEmbed.fields.push({ name: `__Limit Break: Level ${i}__`, value: lbDesc, inline: false });
+					continue;
 				}
 
-				lbDesc += `\n_${char.lb[i].desc ?? "A full power attack."}_\n\n`;
+				if (typeof lb.type == "object") {
+					elements = `${elementEmoji[lb.type[0]]}${elementEmoji[lb.type[1]]}`; // they wont have more than 2 types anyway... probably.
+				} else {
+					elements = elementEmoji[lb.type[0]];
+				}
+
+				// attack type
+				let attackArray = lb.atktype.split('');
+				attackArray[0] = attackArray[0].toUpperCase()
+
+				atktype = attackArray.join('');
+
+				// Attack Extras
+				const [extrastype, extraslist] = extraTypes[lb.type == 'support' ? 'status' : lb.type] ?? ["extras", extrasList]
+				const extras = lb[extrastype]
+
+				extratxt = '';
+				for (const extra in extras) {
+					const getinfo = extraslist[extra]?.getinfo;
+					if (getinfo) extratxt += getinfo([...extras[extra]], lb) + ".\n";
+				}
+
+				lbDesc = `__**${elements}${lb.name}**__\n__Costs **${lb.cost}%** of the Limit Break Gauge\n${skillTargetText[lb.target] ?? skillTargetText.one}\n**${atktype}** attack.\n${skillStatusText(lb)}\n${extratxt}\n${lb.desc}`;
 				DiscordEmbed.fields.push({ name: `__Limit Break: Level ${i}__`, value: lbDesc, inline: false });
 			}
 		}

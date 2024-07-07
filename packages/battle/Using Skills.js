@@ -106,29 +106,33 @@ genDmg = (char, targ, btl, skill) => {
 	}
 
 	let def = atkStat/endStat;
-	
-	let formulas = ['persona', 'pokemon', 'lamonka', 'beta'];
-	let damageformula = settings.formulas.damageFormula ?? 'persona';
-
-	if (skill.extras && skill.extras.forceformula && formulas.includes(skill.extras.forceformula.toLowerCase())) {
-		damageformula = skill.extras.forceformula.toLowerCase();
-	}
 
 	let dmg = 0;
-	switch(damageformula) {
-		case 'persona':
-			dmg = Math.round(5 * Math.sqrt(def * Math.abs(skill.pow)))+randNum(-10, 10);
-			console.log(`Attack Stat: ${atkStat}, Endurance Stat: ${endStat}, Skill Pow: ${skill.pow}, Base Dmg: ${Math.round(5 * Math.sqrt(def * skill.pow))}, Real Dmg: ${dmg}`);
-			break;
-		case 'pokemon':
-			dmg = Math.round((((2*char.level)/5+2)*Math.abs(skill.pow)*def)/50+2)+randNum(-10, 10);
-			break;
-		case 'lamonka':
-			dmg = Math.ceil(((skill.pow+char.level)*(def/4)))*(0.95+(Math.random()/20));
-			break;
-		case 'beta':
-			dmg = randNum(char.level+35)+randNum(skill.pow/1.75)+randNum(-10, 10);
-			break;
+	if (skill.limitbreak) {
+		dmg = Math.round((((skill.pow/2)+char.level+atkStat)-(endStat*2)));
+	} else {
+		let formulas = ['persona', 'pokemon', 'lamonka', 'beta'];
+		let damageformula = settings.formulas.damageFormula ?? 'persona';
+
+		if (skill.extras && skill.extras.forceformula && formulas.includes(skill.extras.forceformula.toLowerCase())) {
+			damageformula = skill.extras.forceformula.toLowerCase();
+		}
+
+		switch(damageformula) {
+			case 'persona':
+				dmg = Math.round(5 * Math.sqrt(def * Math.abs(skill.pow)))+randNum(-10, 10);
+				console.log(`Attack Stat: ${atkStat}, Endurance Stat: ${endStat}, Skill Pow: ${skill.pow}, Base Dmg: ${Math.round(5 * Math.sqrt(def * skill.pow))}, Real Dmg: ${dmg}`);
+				break;
+			case 'pokemon':
+				dmg = Math.round((((2*char.level)/5+2)*Math.abs(skill.pow)*def)/50+2)+randNum(-10, 10);
+				break;
+			case 'lamonka':
+				dmg = Math.ceil(((skill.pow+char.level)*(def/4)))*(0.95+(Math.random()/20));
+				break;
+			case 'beta':
+				dmg = randNum(char.level+35)+randNum(skill.pow/1.75)+randNum(-10, 10);
+				break;
+		}
 	}
 	
 	if (isNaN(dmg) || dmg <= 0) dmg = 1;

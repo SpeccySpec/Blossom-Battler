@@ -2094,7 +2094,12 @@ commands.setlb = new Command({
 			forced: true
 		},
 		{
-			name: "Limit Break Class",
+			name: "Limit Break Element",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Limit Break Target Type",
 			type: "Word",
 			forced: true
 		},
@@ -2123,7 +2128,7 @@ commands.setlb = new Command({
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		let thingDefs = ''
-	
+
 		if (charFile[args[0]]) {
 			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
 			thingDefs = charFile;
@@ -2134,154 +2139,25 @@ commands.setlb = new Command({
 	
 		if (message.content.includes("@everyone") || message.content.includes("@here") || message.mentions.users.first()) return message.channel.send("Don't even try it.");
 		if (args[1].length > 50) return message.channel.send(`${args[1]} is too long of a skill name.`);
-	
+
 		// So much shit to check :(
-		if (args[2] > 4 || args[2] < 1) return message.channel.send('Invalid Limit Break Level! Please enter one from 1-4.');
+		if (args[2] > 5 || args[2] < 1) return message.channel.send('Invalid Limit Break Level! Please enter one from 1-5.');
 
-		let powerBounds = [450, 600, 750, 900];
-		let percentBounds = [100, 200, 300, 400];
-		let levelLocks = [20, 48, 69, 85];
+		let percentBounds = [100, 200, 300, 400, 500];
 
-		if (args[2] < 1) return message.channel.send('Please enter Limit Breaks chronologically, starting from Level 1.');
-		else {
-			if (thingDefs[args[0]].lb && args[2] > 1) {
-				if (!thingDefs[args[0]]?.lb?.[args[2]-1]) return message.channel.send(`Please enter Limit Breaks chronologically! You do not have a level ${args[2]-1} Limit Break.`);
-			}
-		}
+		if (!Elements.includes(args[3].toLowerCase())) return message.channel.send('Invalid Limit Break Element!');
+		if (!Targets.includes(args[4].toLowerCase())) return message.channel.send('Invalid Limit Break Target Type!');
+		if (args[5] < percentBounds[args[2]-1]) return message.channel.send(`Level ${args[2]} Limit Breaks costs cannot be lower than ${percentBounds[args[2]-1]} LB%.`);
 
-		if (thingDefs[args[0]].level < levelLocks[args[2]-1]) return message.channel.send(`${thingDefs[args[0]].name} is level ${thingDefs[args[0]].level}, but they must be at level ${levelLocks[args[2]-1]} to obtain a level ${args[2]} limit break.`);
+		// Make a Limit Break.
+		let skillDefs = makeLb(message, args);
+		if (!skillDefs) return;
 
-		let classes = ['attack', 'heal', 'boost', 'cripple'];
-		if (!classes.includes(args[3].toLowerCase())) return message.channel.send('Invalid Limit Break Class! Please enter either "Attack", "Heal", "Boost" or "Cripple".');
-
-		if (thingDefs[args[0]].lb && args[2] > 1) {
-			if (thingDefs[args[0]]?.lb?.[args[2]-1]?.class != args[3].toLowerCase()) return message.channel.send(`Please enter limit breaks within the same class! Your class is currently  __${thingDefs[args[0]].lb[args[2]-1].class}__, based on your first Limit Break.`);
-		}
-	
-		if (args[4] < percentBounds[args[2]-1]) return message.channel.send(`Level ${args[2]} Limit Breaks costs cannot be lower than ${percentBounds[args[2]-1]} LB%.`);
-
-		let skillDefs = {
-			name: args[1],
-			level: args[2],
-			class: args[3].toLowerCase(),
-			cost: args[4],
-			originalAuthor: message.author.id
-		}
-
-		switch(args[3].toLowerCase()) {
-			case 'attack':
-				if (!args[6]) {
-					DiscordEmbed = new Discord.MessageEmbed()
-						.setColor('#b03e5e')
-						.setTitle(`For __Attack Class__ limit breaks:`)
-						.setDescription(`_<Num: Power> <Decimal: Crit Chance> <Num: Hits> <Word: Target Type> {Word: Status Effect} {Decimal: Status Chance}_\n\nAn __Attack Class__ Limit Break is what it is - an attack. This attack however, is rather powerful! It may have **one** extra assigned to it with the "addlbextra" command.`)
-					message.channel.send({embeds: [DiscordEmbed]});
-					return;
-				}
-
-				if (args[6] < 1) return message.channel.send('Limit Break Skills with 0 power or less will not function!');
-				if (args[6] > powerBounds[args[2]-1]) return message.channel.send(`Level ${args[2]} Limit Breaks cannot exceed ${powerBounds[args[2]-1]} power.`);
-
-				if (args[8] < 1) return message.channel.send('Skills with 0 hits or less will not function!');
-
-				if (!args[9] || !utilityFuncs.inArray(args[9].toLowerCase(), Targets)) return message.channel.send('Please enter a valid target type for **Target**!```diff\n- One\n- Ally\n- Caster\n- AllOpposing\n- AllAllies\n- RandomOpposing\n- RandomAllies\n- Random\n- Everyone\n-SpreadOpposing\n- SpreadAllies```')
-
-				skillDefs.pow = parseInt(args[6]);
-				if (args[7] > 0) skillDefs.crit = parseFloat(args[7]);
-				skillDefs.hits = parseInt(args[8]);
-				skillDefs.target = args[9].toLowerCase();
-
-				if (args[10] && args[10].toLowerCase() != 'none') {
-					if (!utilityFuncs.inArray(args[10].toLowerCase(), statusEffects)) {
-						let str = `${args[10]} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
-						for (let i in statusEffects) str += `\n-${statusEffects[i]}`;
-						str += '```'
-
-						return message.channel.send(str);
-					}
-
-					skillDefs.status = args[10].toLowerCase();
-					if (isFinite(parseFloat(args[11])) && parseFloat(args[11]) < 100) skillDefs.statuschance = parseFloat(args[11]);
-				}
-
-				break;
-
-			case 'heal':
-				if (!args[6]) {
-					DiscordEmbed = new Discord.MessageEmbed()
-						.setColor('#99ffe9')
-						.setTitle(`For __Heal Class__ limit breaks:`)
-						.setDescription(`_<Num: Power> {Word: Status Effect} {Decimal: Status Chance}_\n\nA __Heal Class__ Limit Break is also pretty self explanitory. It heals all allies! It may have an unlimited amount of extras with "addlbextra".`)
-					message.channel.send({embeds: [DiscordEmbed]});
-					return;
-				}
-
-				if (parseInt(args[6]) < 1) return message.channel.send('Limit Break Skills with 0 power or less will not function!');
-				if (parseInt(args[6]) > Math.round(powerBounds[args[2]-1]/2)) return message.channel.send(`Level ${args[2]} Limit Breaks cannot exceed ${Math.round(powerBounds[args[2]-1]/2)} power.`);
-
-				skillDefs.pow = parseInt(args[6]);
-				skillDefs.target = "allallies";
-
-				if (args[7] && args[7].toLowerCase() != 'none') {
-					if (!utilityFuncs.inArray(args[7].toLowerCase(), statusEffects)) {
-						let str = `${args[10]} is an invalid status effect! Please enter a valid status effect for **Status!**` + '```diff'
-						for (let i in statusEffects) str += `\n-${statusEffects[i]}`;
-						str += '```'
-
-						return message.channel.send(str);
-					}
-
-					skillDefs.status = args[7].toLowerCase();
-					if (isFinite(parseFloat(args[8])) && parseFloat(args[8]) < 100) skillDefs.statuschance = parseFloat(args[8]);
-				}
-
-				makeHeal(skillDefs, "healstat", [parseInt(args[6]), 'hp'])
-				break;
-
-			case 'boost':
-				if (!args[6]) {
-					DiscordEmbed = new Discord.MessageEmbed()
-						.setColor('#99ffe9')
-						.setTitle(`For __Boost Class__ limit breaks:`)
-						.setDescription(`_<Word: Target Type> <Word: Status Extra> {Any: Variable #1, #Variable 2...} ..._\n\nA __Boost Class__ Limit Break may boost your allies! The amount of extras it can have is affected by it's level. "addlbextra" may add extras.`)
-					message.channel.send({embeds: [DiscordEmbed]});
-					return;
-				}
-
-				if (!['ally', 'caster', 'allallies', 'randomallies'].includes(args[6].toLowerCase())) return message.channel.send(`${args[6]} is an invalid Target Type! A __Boost__ Class Limit Break must either target 'ally', 'caster', 'allallies', or 'randomallies'!`);
-
-				skillDefs = buildStatus(message, args[7], args, true);
-				if (!skillDefs) return;
-
-				skillDefs.limitbreak = true;
-				skillDefs.level = true;
-				break;
-
-			case 'cripple':
-				if (!args[6]) {
-					DiscordEmbed = new Discord.MessageEmbed()
-						.setColor('#99ffe9')
-						.setTitle(`For __Cripple Class__ limit breaks:`)
-						.setDescription(`_<Word: Target Type> <Word: Status Extra> {Any: Variable #1, #Variable 2...} ..._\n\nA __Boost Class__ Limit Break may cripple your opponents! The amount of extras it can have is affected by it's level. "addlbextra" may add extras.`)
-					message.channel.send({embeds: [DiscordEmbed]});
-					return;
-				}
-
-				if (!['one', 'allopposing', 'randomopposing'].includes(args[6].toLowerCase())) return message.channel.send(`${args[6]} is an invalid Target Type! A __Cripple__ Class Limit Break must either target 'one', 'allopposing', or 'randomopposing'!`);
-
-				skillDefs = buildStatus(message, args[7], args, true);
-				if (!skillDefs) return;
-
-				skillDefs.limitbreak = true;
-				skillDefs.level = true;
-				break;
-		}
-
-		if (args[5]) skillDefs.desc = args[5];
-
+		// Assign our Limit Break.
 		if (!thingDefs[args[0]].lb) thingDefs[args[0]].lb = {};
 		thingDefs[args[0]].lb[args[2]] = skillDefs;
 
+		// Lmao.
 		message.react('👍');
 		if (thingDefs[args[0]].type) {
 			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
@@ -2293,7 +2169,7 @@ commands.setlb = new Command({
 
 commands.lbextra = new Command({
 	desc: "Applies an extra to your Limit Break. Attack limit breaks may only have one extra, while Heal, Boost and Cripple Limit Breaks may have up to 5 depending on the level.",
-	aliases: ['limitbreakextra', 'addlbextra'],
+	aliases: ['limitbreakextra', 'addlbextra', 'applylbextra'],
 	section: "characters",
 	checkban: true,
 	args: [
@@ -2327,6 +2203,23 @@ commands.lbextra = new Command({
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		let thingDefs = ''
 
+		// LIVE SHARE FRAGMENT //
+		// we gotta make this a function
+		// I'm not doing it.
+		// oh pain? sounds fun what do you need
+		// You're not doing it.
+		// oh sowwy...
+		// You are going to die by the time you're finished with it lmaoo
+		// wait does this function have anything to do with the fact this file is 2212 lines.
+		// Yes.
+		// .......maybe I'll do later (j)
+		// lmao lol
+		// END OF FRAGMENT...?
+		
+		// TNEMETENMGARF FO DNE// DNE TNEMGARF /
+		// how did you even type that backwards LOL???
+		// END OF FRAGMENT. //
+		
 		if (charFile[args[0]]) {
 			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
 			thingDefs = charFile;
@@ -2336,23 +2229,52 @@ commands.lbextra = new Command({
 		} else return message.channel.send(`${args[0]} is an invalid character!`);
 
 		if (thingDefs[args[0]].lb && thingDefs[args[0]].lb[args[1]]) {
-			let lbclass = thingDefs[args[0]].lb[args[1]].class.toLowerCase()
+			let lb = thingDefs[args[0]].lb[args[1]];
 			let extra = args[2].toLowerCase();
 
-			let extraList = (lbclass == 'boost' || lbclass == 'cripple') ? statusList : lbclass == 'heal' ? healList : extrasList
-			if (extraList?.[extra]?.unregsiterable && !utilityFuncs.RPGBotAdmin(message.author.id)) return message.channel.send(`You lack permissions to apply ${extraList[extra].name} for this Limit Break.`)
-
-			switch (lbclass) {
-				case 'boost':
-				case 'cripple':
-					applyStatus(message, thingDefs[args[0]].lb[args[1]], extra, args, true);
-					break;
+			switch (lb.type) {
 				case 'heal':
-					applyHeal(message, thingDefs[args[0]].lb[args[1]], extra, args, true);
+					applyHeal(message, lb, extra, args, true);
+					break;
+				case 'support':
+				case 'status':
+					applyStatus(message, lb, extra, args, true);
 					break;
 				default:
-					applyExtra(message, thingDefs[args[0]].lb[args[1]], extra, args, true);
+					applyExtra(message, lb, extra, args, true);
+			}
+
+			if (thingDefs[args[0]].type) {
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
+			} else {
+				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+			}
+		} else {
+			return message.channel.send(`${thingDefs[args[0]].name} does not have a level ${args[1]} limit break!`)
+		}
+		
+		if (charFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
+			thingDefs = charFile;
+		} else if (enemyFile[args[0]]) {
+			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to assign a limit break to ${args[0]}.`);
+			thingDefs = enemyFile;
+		} else return message.channel.send(`${args[0]} is an invalid character!`);
+
+		if (thingDefs[args[0]].lb && thingDefs[args[0]].lb[args[1]]) {
+			let lb = thingDefs[args[0]].lb[args[1]];
+			let extra = args[2].toLowerCase();
+
+			switch (lb.type) {
+				case 'heal':
+					applyHeal(message, lb, extra, args, true);
 					break;
+				case 'support':
+				case 'status':
+					applyStatus(message, lb, extra, args, true);
+					break;
+				default:
+					applyExtra(message, lb, extra, args, true);
 			}
 
 			if (thingDefs[args[0]].type) {
@@ -5674,4 +5596,4 @@ commands.checkverified = new Command({
 				.setDescription(issues.join('\n'))
 		]});
 	}
-})
+}) 
