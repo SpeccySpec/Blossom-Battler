@@ -1,6 +1,7 @@
 let extratypes = ["extras", "statusses", "heal", "passive"];
 
 // Can we use a LB
+let lbCaps = [20, 40, 60, 80, 99];
 canUseLb = (char, btl, level) => {
 	let settings = setUpSettings(btl.guild.id);
 	if (!settings.mechanics.limitbreaks) return false;
@@ -8,7 +9,7 @@ canUseLb = (char, btl, level) => {
 	// We'll sort this out later.
 	let possible = [];
 	for (let i in char.lb) {
-		if (char.lbp >= char.lb[i].cost) possible.push(i);
+		if (char.lbp >= char.lb[i].cost && char.level > lbCaps[i]) possible.push(i);
 	}
 	if (possible.length <= 0) return false;
 	if (possible.length == 1) return char.lb[possible[0]];
