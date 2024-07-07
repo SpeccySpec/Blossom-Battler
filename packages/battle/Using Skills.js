@@ -2019,35 +2019,37 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	let targTxt = `__${char.name}__ => `;
 	let noEffectMsg = false;
 	
-	if (skill.limitbreak) {
-		finalText += `__${char.name}__ concentrates, and strikes with their **strongest attack** at full power!\n## **__${skill.name}__!**\n\n`;
-	} else if (skill.teamcombo) {
-		finalText += `__${char.name}__ ${ally ? ("and __" + ally.name + "__") : ""} struck with a powerful skill: **__${skill.name}__**!\n\n`;
-	} else if (skill.fusionskill) {
-		finalText += `__${char.name}__ used **${getFullName(skillFile[act.skills[0]])}**!\n__${ally.name}__ used **${getFullName(skillFile[act.skills[1]])}**!\nThe two skills fused together to become __**${getFullName(skill)}**__!\n\n`;
-	} else {
-		let didreplace = false;
-		if (skill.extras && skill.extras.forcemsg) {
-			for (let i in skill.extras.forcemsg) {
-				if (skill.extras.forcemsg[i][0] == 'onuse') {
-					finalText += `${replaceTxt(skill.extras.forcemsg[i][1], '%USER%', char.name, '%ENEMY%', getCharFromId(targets[0][0], btl).name)}\n\n`;
-					didreplace = true;
-					break;
-				}
+	let didreplace = false;
+	if (skill.extras && skill.extras.forcemsg) {
+		for (let i in skill.extras.forcemsg) {
+			if (skill.extras.forcemsg[i][0] == 'onuse') {
+				finalText += `${replaceTxt(skill.extras.forcemsg[i][1], '%USER%', char.name, '%ENEMY%', getCharFromId(targets[0][0], btl).name)}\n\n`;
+				didreplace = true;
+				break;
 			}
 		}
-		if (skill.statusses && skill.statusses.forcemsg) {
-			for (let i in skill.statusses.forcemsg) {
-				if (skill.statusses.forcemsg[i][0] == 'onuse') {
-					finalText += `${replaceTxt(skill.statusses.forcemsg[i][1], '%USER%', char.name, '%ENEMY%', getCharFromId(targets[0][0], btl).name)}\n\n`;
-					if (skill.statusses.forcemsg[i][2]) noEffectMsg = true;
-					didreplace = true;
-					break;
-				}
+	}
+	if (skill.statusses && skill.statusses.forcemsg) {
+		for (let i in skill.statusses.forcemsg) {
+			if (skill.statusses.forcemsg[i][0] == 'onuse') {
+				finalText += `${replaceTxt(skill.statusses.forcemsg[i][1], '%USER%', char.name, '%ENEMY%', getCharFromId(targets[0][0], btl).name)}\n\n`;
+				if (skill.statusses.forcemsg[i][2]) noEffectMsg = true;
+				didreplace = true;
+				break;
 			}
 		}
+	}
 
-		if (!didreplace) finalText += `__${char.name}__ used __${skill.name}__!\n\n`;
+	if (!didreplace) {
+		if (skill.limitbreak) {
+			finalText += `__${char.name}__ concentrates, and strikes with their **strongest attack** at full power!\n## **__${skill.name}__!**\n\n`;
+		} else if (skill.teamcombo) {
+			finalText += `__${char.name}__ ${ally ? ("and __" + ally.name + "__") : ""} struck with a powerful skill: **__${skill.name}__**!\n\n`;
+		} else if (skill.fusionskill) {
+			finalText += `__${char.name}__ used **${getFullName(skillFile[act.skills[0]])}**!\n__${ally.name}__ used **${getFullName(skillFile[act.skills[1]])}**!\nThe two skills fused together to become __**${getFullName(skill)}**__!\n\n`;
+		} else {
+			finalText += `__${char.name}__ used __${getFullName(skill)}__!\n\n`;
+		}
 	}
 
 	if (targets.length <= 1) 
