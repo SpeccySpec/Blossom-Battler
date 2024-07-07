@@ -27,6 +27,63 @@ buffText = (buffArray) => {
 	return finaltext
 }
 
+skillStatusText = (skillDefs) => {
+	let finalText = "";
+	if (typeof skillDefs.status === 'object') {
+		if (skillDefs.statuschance) {
+			finalText += `Has a **${skillDefs.statuschance}%** chance of inflicting either `;
+		} else if (!skillDefs.statuschance || skillDefs.statuschance >= 100) {
+			finalText += '**Guaranteed** to inflict either ';
+		}
+
+		for (const i in skillDefs.status) {
+			finalText += `**${statusEmojis[skillDefs.status[i]]}${skillDefs.status[i]}**`
+			if (i == skillDefs.status.length-2)
+				finalText += ' or '
+			else if (i >= skillDefs.status.length-1)
+				finalText += '.\n'
+			else
+				finalText += ', '
+		}
+	} else if (skillDefs.status !== "none" && skillDefs.type != "heal") {
+		if (skillDefs.statuschance) {
+			finalText += `Has a **${skillDefs.statuschance}%** chance of inflicting **${statusEmojis[skillDefs.status]}${skillDefs.status}**.\n`;
+		} else if (!skillDefs.statuschance || skillDefs.statuschance >= 100) {
+			finalText += `Guaranteed to inflict **${statusEmojis[skillDefs.status]}${skillDefs.status}**.\n`;
+		}
+	}
+
+	return finalText;
+}
+
+skillTargetText = {
+	one: "Targets **one foe**.",
+	allopposing: "Targets **all foes**.",
+	allallies: "Targets **all allies**.",
+	allalliesnocaster: "Targets **all allies** _excluding_ **the caster**.",
+	ally: "Targets **an ally**.",
+	everyone: "Targets **all fighters** in-battle.",
+	caster: "Targets **the user**.",
+	random: "Targets a **random fighter** in-battle.",
+	randomopposing: "Targets a **random foe** in-battle.",
+	randomallies: "Targets a **random ally** in-battle.",
+	spreadopposing: "Targets **one foe and spreads to two surrounding**.",
+	spreadallies: "Targets **an ally and spreads to two surrounding**.",
+	randomspread: "Targets **a random fighter in-battle and spreads to two surrounding**.",
+	randomspreadopposing: "Targets **a random foe in-battle and spreads to two surrounding**.",
+	randomspreadallies: "Targets **a random ally in-battle and spreads to two surrounding**.",
+	randomwidespread: "Targets **a random fighter in-battle and spreads to everyone on its side based on distance**.",
+	widespreadopposing: "Targets **one foe and spreads to all foes based on distance**.",
+	widespreadallies: "Targets **an ally and spreads to all allies based on distance**.",
+	randomwidespreadopposing: "Targets **a random foe in-battle and spreads to all foes based on distance**.",
+	randomwidespreadallies: "Targets **a random ally in-battle and spreads to all allies based on distance**.",
+	casterandfoe: "Targets **the user** and **a foe**.",
+	casterandally: "Targets **the user** and **an ally**.",
+	casterandrandom: "Targets **the user** and **a random fighter in-battle**.",
+	casterandrandomfoe: "Targets **the user** and **a random foe**.",
+	casterandrandomally: "Targets **the user** and **a random ally**.",
+}
+
 require("./skills/Extras")
 require("./skills/Heal")
 require("./skills/Passive")
@@ -168,84 +225,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 		finalText += "\n";
 	}
 
-	if (skillDefs?.target) {
-		switch(skillDefs.target) {
-			case "allopposing":
-				finalText += "Targets **all foes**.\n";
-				break;
-			case "allallies":
-				finalText += "Targets **all allies**.\n";
-				break;
-			case "allalliesnocaster":
-				finalText += "Targets **all allies** _excluding_ **the caster**.\n";
-				break;
-			case "ally":
-				finalText += "Targets **an ally**.\n";
-				break;
-			case "everyone":
-				finalText += "Targets **all fighters** in-battle.\n";
-				break;
-			case "caster":
-				finalText += "Targets **the user**.\n";
-				break;
-			case "random":
-				finalText += "Targets a **random fighter** in-battle.\n";
-				break;
-			case "randomopposing":
-				finalText += "Targets a **random foe** in-battle.\n";
-				break;
-			case "randomallies":
-				finalText += "Targets a **random ally** in-battle.\n";
-				break;
-			case "spreadopposing":
-				finalText += "Targets **one foe and spreads to two surrounding**.\n";
-				break;
-			case "spreadallies":
-				finalText += "Targets **an ally and spreads to two surrounding**.\n";
-				break;
-			case "randomspread":
-				finalText += "Targets **a random fighter in-battle and spreads to two surrounding**.\n";
-				break;
-			case "randomspreadopposing":
-				finalText += "Targets **a random foe in-battle and spreads to two surrounding**.\n";
-				break;
-			case "randomspreadallies":
-				finalText += "Targets **a random ally in-battle and spreads to two surrounding**.\n";
-				break;
-			case "randomwidespread":
-				finalText += "Targets **a random fighter in-battle and spreads to everyone on its side based on distance**.\n";
-				break;
-			case "widespreadopposing":
-				finalText += "Targets **one foe and spreads to all foes based on distance**.\n";
-				break;
-			case "widespreadallies":
-				finalText += "Targets **an ally and spreads to all allies based on distance**.\n";
-				break;
-			case "randomwidespreadopposing":
-				finalText += "Targets **a random foe in-battle and spreads to all foes based on distance**.\n";
-				break;
-			case "randomwidespreadallies":
-				finalText += "Targets **a random ally in-battle and spreads to all allies based on distance**.\n";
-				break;
-			case "casterandfoe":
-				finalText += "Targets **the user** and **a foe**.\n";
-				break;
-			case "casterandally":
-				finalText += "Targets **the user** and **an ally**.\n";
-				break;
-			case "casterandrandom":
-				finalText += "Targets **the user** and **a random fighter in-battle**.\n";
-				break;
-			case "casterandrandomfoe":
-				finalText += "Targets **the user** and **a random foe**.\n";
-				break;
-			case "casterandrandomally":
-				finalText += "Targets **the user** and **a random ally**.\n";
-				break;
-			default:
-				finalText += "Targets **one foe**.\n";
-		}
-	}
+	finalText += `${skillTargetText[skillDefs.target] ?? skillTargetText.one}\n`;
 
 	if (skillDefs.cost && skillDefs.costtype) {
 		switch(skillDefs.costtype) {
@@ -293,33 +273,9 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 	if (skillDefs.crit && skillDefs.type != "heal" && skillDefs.type != "support" && skillDefs.type != "status" && skillDefs.type != "passive")
 		finalText += `**${skillDefs.crit}%**<:crit:973077052083286056>\n`;
 
-	if (skillDefs.status) {
-		if (typeof skillDefs.status === 'object') {
-			if (skillDefs.statuschance) {
-				finalText += `Has a **${skillDefs.statuschance}%** chance of inflicting either `;
-			} else if (!skillDefs.statuschance || skillDefs.statuschance >= 100) {
-				finalText += '**Guaranteed** to inflict either ';
-			}
+	if (skillDefs.status) finalText += skillStatusText(skillDefs);
 
-			for (const i in skillDefs.status) {
-				finalText += `**${statusEmojis[skillDefs.status[i]]}${skillDefs.status[i]}**`
-				if (i == skillDefs.status.length-2)
-					finalText += ' or '
-				else if (i >= skillDefs.status.length-1)
-					finalText += '.\n'
-				else
-					finalText += ', '
-			}
-		} else if (skillDefs.status !== "none" && skillDefs.type != "heal") {
-			if (skillDefs.statuschance) {
-				finalText += `Has a **${skillDefs.statuschance}%** chance of inflicting **${statusEmojis[skillDefs.status]}${skillDefs.status}**.\n`;
-			} else if (!skillDefs.statuschance || skillDefs.statuschance >= 100) {
-				finalText += `Guaranteed to inflict **${statusEmojis[skillDefs.status]}${skillDefs.status}**.\n`;
-			}
-		}
-	}
-
-	const [extrastype, extraslist] = extraTypes[skillDefs.type] ?? ["extras", extrasList]
+	const [extrastype, extraslist] = extraTypes[skillDefs.type == 'support' ? 'status' : skillDefs.type] ?? ["extras", extrasList]
 	const extras = skillDefs[extrastype]
 	for (const extra in extras) {
 		const getinfo = extraslist[extra]?.getinfo
