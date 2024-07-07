@@ -109,9 +109,9 @@ genDmg = (char, targ, btl, skill) => {
 
 	let dmg = 0;
 	if (skill.limitbreak) {
-		dmg = Math.round((((skill.pow/2)+char.level+atkStat)-(endStat*2)));
+		dmg = Math.round((((skill.pow/2)+char.level+atkStat)-(endStat*2))) + randNum(-20, 20);
 	} else {
-		let formulas = ['persona', 'pokemon', 'lamonka', 'beta'];
+		let formulas = ['persona', 'pokemon', 'lamonka', 'limitbreak', 'beta'];
 		let damageformula = settings.formulas.damageFormula ?? 'persona';
 
 		if (skill.extras && skill.extras.forceformula && formulas.includes(skill.extras.forceformula.toLowerCase())) {
@@ -128,6 +128,9 @@ genDmg = (char, targ, btl, skill) => {
 				break;
 			case 'lamonka':
 				dmg = Math.ceil(((skill.pow+char.level)*(def/4)))*(0.95+(Math.random()/20));
+				break;
+			case 'limitbreak':
+				dmg = Math.round((((skill.pow/2)+char.level+atkStat)-(endStat*2))) + randNum(-20, 20);
 				break;
 			case 'beta':
 				dmg = randNum(char.level+35)+randNum(skill.pow/1.75)+randNum(-10, 10);
