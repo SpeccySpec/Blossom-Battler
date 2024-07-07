@@ -118,7 +118,7 @@ genDmg = (char, targ, btl, skill) => {
 		let damageformula = settings.formulas.damageFormula ?? 'persona';
 
 		if (skill.extras && skill.extras.forceformula && formulas.includes(skill.extras.forceformula[0].toLowerCase()))
-			damageformula = skill.extras.forceformula.toLowerCase();
+			damageformula = skill.extras.forceformula[0].toLowerCase();
 
 		switch(damageformula) {
 			case 'persona':
