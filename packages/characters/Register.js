@@ -508,7 +508,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 				lb = objClone(char.lb[i]);
 
 				if (!lb.islimitbreak) {
-					lbDesc = "This Limit Break is outdated! You must update it."
+					lbDesc = `This Limit Break is outdated! You must update it.\n**${lb.name}**, **${lb.class.toUpperCase()} Class**, **${lb.pow ?? 69} Power**, **${lb.hits ?? 1} hit(s)**\nThis information is all I could get, sowwy!`
 					DiscordEmbed.fields.push({ name: `__Limit Break: Level ${i}__`, value: lbDesc, inline: false });
 					continue;
 				}
