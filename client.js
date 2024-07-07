@@ -573,6 +573,16 @@ function messageCommand(message, guilded) {
 	if (message.author.bot) return;
 	if (message.channel.type === 'DM') return message.channel.send("Don't use me in DMs! That's kinda sussy!");
 
+	if (message.mentions.has(client.user)) {
+		let str = message.content.toLowerCase();
+		if (["hello", "hai", "hewwo", "heya", "hoi", "hi"].includes(str))
+			message.channel.send("Hai!!! <3"); //good girl <3
+		else if (["thank", "thamnk"])
+			message.channel.send("You're welcome!!! Anything for you!!");
+
+		return;
+	}
+
 	message.content = message.content.replace(/“/g, '"').replace(/”/g, '"').replace(/[^\S\r\n]/g, " ") // iOS quotation marks & untypable whitespaces
 
 	// Set up directory :)
