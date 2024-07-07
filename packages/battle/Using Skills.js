@@ -1236,9 +1236,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 				// Limit Breaks
 				if (settings.mechanics.limitbreaks && !skill.limitbreak && !skill.teamcombo) {
-					if (!char.lbp) char.lbp = 0;
+					char.lbp ??= 0;
 
-					let lbgain = truncNum(total/(skill.hits*(['one', 'ally', 'caster'].includes(skill.target) ? 6 : 24)), 2)
+					let lbgain = truncNum(total/(skill.hits*(['one', 'ally', 'caster'].includes(skill.target) ? 8 : 32)), 2)
 
 					// LbGain Extras
 					if (skill.extras) {
