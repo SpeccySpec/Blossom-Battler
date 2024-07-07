@@ -2215,44 +2215,11 @@ commands.lbextra = new Command({
 		// .......maybe I'll do later (j)
 		// lmao lol
 		// END OF FRAGMENT...?
-		
+
 		// TNEMETENMGARF FO DNE// DNE TNEMGARF /
 		// how did you even type that backwards LOL???
 		// END OF FRAGMENT. //
-		
-		if (charFile[args[0]]) {
-			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
-			thingDefs = charFile;
-		} else if (enemyFile[args[0]]) {
-			if (!utilityFuncs.isAdmin(message)) return message.channel.send(`You don't have permission to assign a limit break to ${args[0]}.`);
-			thingDefs = enemyFile;
-		} else return message.channel.send(`${args[0]} is an invalid character!`);
 
-		if (thingDefs[args[0]].lb && thingDefs[args[0]].lb[args[1]]) {
-			let lb = thingDefs[args[0]].lb[args[1]];
-			let extra = args[2].toLowerCase();
-
-			switch (lb.type) {
-				case 'heal':
-					applyHeal(message, lb, extra, args, true);
-					break;
-				case 'support':
-				case 'status':
-					applyStatus(message, lb, extra, args, true);
-					break;
-				default:
-					applyExtra(message, lb, extra, args, true);
-			}
-
-			if (thingDefs[args[0]].type) {
-				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/enemies.json`, JSON.stringify(enemyFile, null, '    '));
-			} else {
-				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
-			}
-		} else {
-			return message.channel.send(`${thingDefs[args[0]].name} does not have a level ${args[1]} limit break!`)
-		}
-		
 		if (charFile[args[0]]) {
 			if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`${args[0]} does not belong to you!`);
 			thingDefs = charFile;

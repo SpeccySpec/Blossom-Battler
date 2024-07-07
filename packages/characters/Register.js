@@ -499,10 +499,11 @@ longDescription = (charDefs, level, server, message, useguild) => {
 	if (settings.mechanics.limitbreaks) {
 		if (char.lb && char.lb[1]) {
 			let lb;
-			let lbDesc;
-			let elements;
-			let atktype;
-			let extratxt;
+			let lbDesc = "";
+			let elements = "";
+			let atktype = "";
+			let extratxt = "";
+			let powtxt = "";
 			for (const i in char.lb) {
 				lb = objClone(char.lb[i]);
 
@@ -515,14 +516,22 @@ longDescription = (charDefs, level, server, message, useguild) => {
 				if (typeof lb.type == "object") {
 					elements = `${elementEmoji[lb.type[0]]}${elementEmoji[lb.type[1]]}`; // they wont have more than 2 types anyway... probably.
 				} else {
-					elements = elementEmoji[lb.type[0]];
+					elements = elementEmoji[lb.type];
 				}
 
-				// attack type
-				let attackArray = lb.atktype.split('');
-				attackArray[0] = attackArray[0].toUpperCase()
+				// pow
+				powtxt = lb.pow ? `**${lb.pow}** power` : '';
+				powtxt += (lb.hits > 1) ? `, and hits **${lb.hits}** times\n` : '';
 
-				atktype = attackArray.join('');
+				// attack type
+				if (!["support", "status", "heal"].includes(lb.type) && lb.atktype) {
+					let attackArray = lb.atktype.split('');
+					attackArray[0] = attackArray[0].toUpperCase()
+
+					atktype = `**${attackArray.join('')}** attack.\n`;
+				} else {
+					atktype = "";
+				}
 
 				// Attack Extras
 				const [extrastype, extraslist] = extraTypes[lb.type == 'support' ? 'status' : lb.type] ?? ["extras", extrasList]
@@ -534,7 +543,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 					if (getinfo) extratxt += getinfo([...extras[extra]], lb) + ".\n";
 				}
 
-				lbDesc = `__**${elements}${lb.name}**__\n__Costs **${lb.cost}%** of the Limit Break Gauge\n${skillTargetText[lb.target] ?? skillTargetText.one}\n**${atktype}** attack.\n${skillStatusText(lb)}\n${extratxt}\n${lb.desc}`;
+				lbDesc = `__**${elements}${lb.name}**__\nCosts **${lb.cost}%** of the Limit Break Gauge\n${powtxt}${skillTargetText[lb.target] ?? skillTargetText.one}\n${atktype}${skillStatusText(lb)}${extratxt}\n_${lb.desc}_`;
 				DiscordEmbed.fields.push({ name: `__Limit Break: Level ${i}__`, value: lbDesc, inline: false });
 			}
 		}

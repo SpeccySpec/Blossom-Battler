@@ -2487,8 +2487,6 @@ doAction = (char, btl, action) => {
 				lbDefs.atktype = aType;
 				lbDefs.cost = char.lbp;
 
-				if (lbDefs.class == 'heal') lbDefs.target = 'allallies';
-
 				useSkill(char, btl, action, lbDefs);
 				break;
 

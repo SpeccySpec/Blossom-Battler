@@ -579,9 +579,9 @@ function messageCommand(message, guilded) {
 			message.channel.send("Hai!!! <3");
 		else if (/thank|thamnk/.test(str))
 			message.channel.send(
-				(/not/g.match(str) || []).length % 2
-					? "You're welcome!!! Anything for you!!"
-					: ". _."
+				(str.match(/not/g) || []).length % 2
+					? ". _."
+					: "You're welcome!!! Anything for you!!"
 			);
 
 		return;

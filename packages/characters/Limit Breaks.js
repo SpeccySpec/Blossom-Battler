@@ -3,7 +3,7 @@ makeLb = (message, args) => {
         name: args[1],
         level: args[2],
         type: args[3].toLowerCase(),
-        target: arsg[4].toLowerCase(),
+        target: args[4].toLowerCase(),
         cost: args[5],
         desc: args[6],
         islimitbreak: true,
@@ -30,15 +30,19 @@ makeLb = (message, args) => {
             // Well that was easy.
             // yeah...was expecting something as huge as our fella down below
             // True...
-            // We're going to get so many bugs.
+            // We're going to get so many bugs. <- the foreshadowing was true
             // Fun!
             // END OF FRAGMENT //
 
             if (!applyStatus(message, lbDefs, args[7].toLowerCase(), args.slice(8))) return;
 
             break;
-        
-        
+
+
+        case 'passive':
+            return void message.channel.send(`You cannot make **${elementEmoji.passive}Passive** type limit breaks... yet. Hear me out, what if using the limit break simply gives you said passive for the rest of the battle... Hmm... That could be accomplished with ${elementEmoji.support}**Simple Beam**, though. I mean, syntax sugar Ig, i dont see any other solution... Hmm... Wait- am I talking to myself? Or am I secretly a Mossimp? Hmmmm?`); //LMAO????? LOL //THE BB LORE EXPANDS TRUEEEEE
+
+
         // An attacking element here. <Power> <Critical Hit Chance> <Hits> <Attack Type> {Status} {Status Chance}
         default:
             if (!args[7]) return void message.channel.send("An offensive limit break should have these fields:\n`<Power> <Critical Hit Chance> <Hits> <Attack Type> {Status} {Status Chance}`");

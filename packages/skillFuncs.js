@@ -27,7 +27,7 @@ buffText = (buffArray) => {
 	return finaltext
 }
 
-skillStatusText = (skillDefs) => {
+skillStatusText = (skillDefs, newline) => {
 	let finalText = "";
 	if (typeof skillDefs.status === 'object') {
 		if (skillDefs.statuschance) {
@@ -53,7 +53,7 @@ skillStatusText = (skillDefs) => {
 		}
 	}
 
-	return finalText;
+	return `${finalText}${newline ? "\n" : ""}`;
 }
 
 skillTargetText = {
