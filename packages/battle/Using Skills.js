@@ -1,4 +1,5 @@
 let extratypes = ["extras", "statusses", "heal", "passive"];
+let lbtext = [];
 
 // Can we use a LB
 let lbCaps = [20, 40, 60, 80, 99];
@@ -56,7 +57,7 @@ isTech = (char, element) => {
 
 // im lazy
 dodgeTxt = (char, targ) => {
-	if (targ) {
+	if (targ && char != targ) {
 		return `__${targ.name}__ dodged it!\n${selectQuote(targ, 'dodge', null, "%ENEMY%", char.name)}${selectQuote(char, 'miss', null, "%ENEMY%", char.name)}`;
 	} else {
 		return `__${char.name}__ dodged it!\n${selectQuote(char, 'dodge', null, "%ENEMY%", "them")}`;
@@ -1273,11 +1274,14 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 					char.lbp += truncNum(lbgain, 2);
 					targ.lbp += truncNum(lbgain/3, 2);
-					
-					if (!btl.battlefooter)
-						btl.battlefooter = `${char.name} gained ${truncNum(lbgain, 2)}LB%.`;
-					else
-						btl.battlefooter += ` ${char.name} also gained ${truncNum(lbgain, 2)}LB%.`;
+
+					if (!lbtext[btl.guild.id]) lbtext[btl.guild.id] = [];
+
+					if (!lbtext[btl.guild.id][char.id]) lbtext[btl.guild.id][char.id] = 0;
+					lbtext[btl.guild.id][char.id] += truncNum(lbgain, 2);
+
+					if (!lbtext[targ.id]) lbtext[btl.guild.id][targ.id] = 0;
+					lbtext[btl.guild.id][targ.id] += truncNum(lbgain/3, 2);
 				}
 
 				// Full Combo!
@@ -1474,6 +1478,7 @@ let trustQuotes = [
 useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	let settings = setUpSettings(btl.guild.id);
 	let skill = objClone(forceskill) ?? objClone(skillFile[act.index]);
+	lbtext[btl.guild.id] = [];
 
 	let color = elementColors[char.mainElement] ?? elementColors.strike;
 	if (typeof char.mainElement === "object")
@@ -1558,6 +1563,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 		let origSkill = objClone(skill);
 		skill = objClone(skillFile[skillname]);
+		skill.name = `${getFullName(skillFile[skillname])} (${getFullName(skillFile[act.index])})`;
 		skill.cost = cost[0];
 		skill.costtype = cost[1];
 
@@ -2170,11 +2176,10 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	if (movelinks.length > 0) {
-		finalText += "\n\n";
-
 		let result2;
 		let targets2 = [];
 		let possible = [];
+		let selectable = ['one', 'ally', 'spreadopposing', 'spreadallies', 'widespreadopposing', 'widespreadallies', 'casterandfoe', 'casterandally'];
 		for (let j in movelinks) {
 			if (skillFile[movelinks[j]]) {
 				let skillLink = objClone(skillFile[movelinks[j]]);
@@ -2199,13 +2204,23 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					skillLink = objClone(skillFile[skillname]);
 					skillLink.cost = cost[0];
 					skillLink.costtype = cost[1];
+
+					// If we never selected someone before...
+					if (selectable.includes(skillLink.target) && !selectable.includes(skill.target)) {
+						if (act.target[0] == undefined) act.target[0] = randNum(0, btl.teams.length-1);
+						if (act.target[1] == undefined) act.target[1] = randNum(0, targTeam.members.length-1);
+					}
+
+					if (skill.limitbreak) skillLink.limitbreak = true;
 				}
+
+				finalText += `\n**${getFullName(skillLink)}** acted as a follow-up.\n`;
 
 				// Insert IDs into the target.
 				targets2 = [];
 				switch(skillLink.target ? skillLink.target.toLowerCase() : 'one') {
 					case 'one':
-						let targ = (btl.teams[act.target[0]] && targTeam.members[act.target[1]]) ? targTeam.members[act.target[1]] : btl.teams[0].members[0];
+						let targ = targTeam.members[act.target[1]] ?? btl.teams[0].members[0];
 						targets2.push([targ.id, 1]);
 						break;
 
@@ -2605,6 +2620,15 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		.setColor(color)
 		.setTitle(targTxt)
 		.setDescription(finalText.replace(/\n{3,}/g, () => "\n\n"))
+
+	for (let i in lbtext[btl.guild.id]) {
+		if (lbtext[btl.guild.id][i]) {
+			if (btl.battlefooter)
+				btl.battlefooter += ` ${getCharFromId(i, btl).name} obtained ${lbtext[btl.guild.id][i]}LB%.`
+			else
+				btl.battlefooter = `${getCharFromId(i, btl).name} obtained ${lbtext[btl.guild.id][i]}LB%.`
+		}
+	}
 
 	// Footers
 	if (btl.battlefooter) {

@@ -250,7 +250,7 @@ extrasList = {
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (!char.custom || !char.custom.charges) {
-				if (!char.custom.charges) char.custom.charges = {};
+				if (!char.custom?.charges) addCusVal(char, "charges", {});
 				char.custom.charges[skill.name] = [vars[0], vars[1], skill.name, vars[0], 1]
 			}
 
@@ -1265,7 +1265,7 @@ extrasList = {
 					percent: vars[0]
 				});
 
-				if (vars[2]) {
+				if (vars[2] && typeof vars[2] == "string") {
 					let txt = vars[2];
 					while (txt.includes('%SKILL%')) txt = txt.replace('%SKILL%', skill.name);
 					while (txt.includes('%USER%')) txt = txt.replace('%USER%', char.name);

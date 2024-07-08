@@ -1453,7 +1453,62 @@ sendCurTurnEmbed = async(char, btl) => {
 					let lbDefs = objClone(canUseLb(char, btl));
 
 					if (lbDefs.target) {
-						if (lbDefs.target === 'allopposing' || lbDefs.target === 'allallies' || lbDefs.target === 'allalliesnocaster' || lbDefs.target === 'everyone' || lbDefs.target == 'caster' || lbDefs.target.includes('random')) {
+						if ((lbDefs.target === "one" || lbDefs.target === "spreadopposing" || lbDefs.target === "widespreadopposing" || lbDefs.target === "casterandfoe")) {
+							let alivecount = 0;
+							let alivenum = [0, 0];
+
+							for (let k in btl.teams) {
+								if (k == char.team) continue;
+
+								for (let j in btl.teams[k].members) {
+									if (btl.teams[k].members[j].hp > 0) {
+										alivenum = [k, j];
+										alivecount++;
+									}
+								}
+							}
+
+							if (alivecount == 1) {
+								btl.action.target = alivenum;
+								alreadyResponded = true;
+								doAction(char, btl, btl.action);
+
+								collector.stop();
+								return updateMsg(i, {
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: []
+								});
+							} else {
+								menustate = MENU_TEAMSEL;
+							}
+						} else if (lbDefs.target === "ally" || lbDefs.target === "spreadallies" || lbDefs.target === "widespreadallies" || lbDefs.target === "casterandally") {
+							btl.action.target[0] = char.team;
+							if (btl.teams[char.team].members.length == 1) {
+								alreadyResponded = true;
+
+								doAction(char, btl, btl.action);
+								collector.stop();
+
+								return updateMsg(i, {
+									content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+									embeds: [DiscordEmbed],
+									components: []
+								});
+							} else
+								menustate = MENU_TARGET;
+						} else if (lbDefs.target === "caster") {
+							btl.action.target = [char.team, char.pos];
+							alreadyResponded = true;
+							doAction(char, btl, btl.action);
+							collector.stop();
+
+							await updateMsg(i, {
+								content: `<@${btl?.initiator ? btl.initiator : char.owner}>`,
+								embeds: [DiscordEmbed],
+								components: []
+							});
+						} else if (lbDefs.target === 'allopposing' || lbDefs.target === 'allallies' || lbDefs.target === 'allalliesnocaster' || lbDefs.target === 'everyone' || lbDefs.target == 'caster' || lbDefs.target.includes('random')) {
 							btl.action.target = [undefined, undefined];
 							alreadyResponded = true;
 							doAction(char, btl, btl.action);
@@ -2478,13 +2533,11 @@ doAction = (char, btl, action) => {
 				break;
 
 			case 'lb':
-				let aType = (char.stats.atk > char.stats.mag) ? 'physical' : 'magic';
 				let lbDefs = objClone(canUseLb(char, btl));
 				lbDefs.acc = 100;
 				lbDefs.crit = 0;
 				lbDefs.costtype = 'lb';
 				lbDefs.limitbreak = canUseLb(char, btl, true);
-				lbDefs.atktype = aType;
 				lbDefs.cost = char.lbp;
 
 				useSkill(char, btl, action, lbDefs);
