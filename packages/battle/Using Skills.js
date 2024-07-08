@@ -1573,7 +1573,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		}
 
 		for (let i in extratypes) {
-			if (origSkill[extratypes[i]].movelink) {
+			if (origSkill[extratypes[i]]?.movelink) {
 				if (skill.type === "support" || skill.type === "status")
 					skill.statusses.movelink = origSkill[extratypes[i]].movelink;
 				else if (skill.type === "heal")
