@@ -2641,7 +2641,7 @@ extrasList = {
 
 				for (let i in btl.teams) {
 					for (let k in btl.teams[i].members)
-						if (btl.teams[i].members[k].hp > 0) str += runPassiveHook(btl.teams[i].members[k], 'onterrain', btl, btl.teams[i].members[k], btl.weather.type);
+						if (btl.teams[i].members[k].hp > 0) str += runPassiveHook(btl.teams[i].members[k], 'onterrain', btl, btl.teams[i].members[k], btl.terrain.type);
 				}
 	
 				return str;

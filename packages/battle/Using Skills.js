@@ -1814,6 +1814,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k].id);
 			}
 
+			console.log(`${possible.length} possible targets.`);
 			if (possible.length <= 1) {
 				targets.push([possible[0], 0.5]);
 			} else {
@@ -1839,6 +1840,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) possible.push(btl.teams[i].members[k].id);
 			}
 
+			console.log(`${possible.length} possible targets.`);
 			if (possible.length <= 1) {
 				targets.push([possible[0], 0.5]);
 			} else {
@@ -2016,6 +2018,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k].id);
 			}
 
+			console.log(`${possible.length} possible targets.`);
 			if (possible.length <= 1) {
 				targets.push([possible[0], 0.5]);
 			} else {
@@ -2045,6 +2048,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) possible.push(btl.teams[i].members[k].id);
 			}
 
+			console.log(`${possible.length} possible targets.`);
 			if (possible.length <= 1) {
 				targets.push([possible[0], 0.5]);
 			} else {
