@@ -1386,7 +1386,7 @@ passiveList = {
 			if (affinity === 'deadly' || affinity === 'superweak' || affinity === 'weak' || affinity === 'normal') {
 				if (randNum(1, 100) <= vars[0]) {
 					if (vars[1]) {
-						let str = `__${char.name}__'s __${passive.name}__ changed __${skill.name}__'s attack to a resist!`;
+						let str = `__${char.name}__'s __${passive.name}__ changed **__${getFullName(skill)}__**'s attack to a resist!`;
 
 						if (vars[1] === "user") {
 							buffStat(char, vars[2], vars[3])
@@ -1408,7 +1408,7 @@ passiveList = {
 
 						return ['resist', `${str}\n`];
 					} else {
-						return ['resist', `__${char.name}__'s __${passive.name}__ changed __${skill.name}__'s attack to a resist!`];
+						return ['resist', `__${char.name}__'s __${passive.name}__ changed **__${getFullName(skill)}__**'s attack to a resist!\n`];
 					}
 				}
 			}
