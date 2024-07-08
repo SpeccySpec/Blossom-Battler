@@ -5523,7 +5523,7 @@ commands.curestatus = new Command({
 commands.setmeter = new Command({
 	desc: "Sets a character's meter.",
 	doc: {
-		desc: "Valid meters are:```diff\n+ HP - The raw HP stat of the character. Cannot exceed max.\n+ MP - The raw MP stat of the character. Cannot exceed max.\n+ HPPercent - The percentage of the HP of the character. Cannot exceed 100%.\n+ MPPercent - The percentage of the MP of the character. Cannot exceed 100%.\n+ LB% - The Limit Break Percentage of the character. Cannot exceed 1000%.```",
+		desc: "Valid meters are:```diff\n+ HP - The raw HP stat of the character. Cannot exceed max.\n+ MP - The raw MP stat of the character. Cannot exceed max.\n+ HPPercent - The percentage of the HP of the character. Cannot exceed 100%.\n+ MPPercent - The percentage of the MP of the character. Cannot exceed 100%.\n+ LBPercent - The Limit Break Percentage of the character. Cannot exceed 1000%.```",
 	},
 	aliases: ['fullyheal', 'fullrestore', 'maxheal', 'maxrestore', 'maxhp'],
 	section: "characters",
