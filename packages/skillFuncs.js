@@ -28,6 +28,8 @@ buffText = (buffArray) => {
 }
 
 skillStatusText = (skillDefs, newline) => {
+	if (!skillDefs.status) return '';
+
 	let finalText = "";
 	if (typeof skillDefs.status === 'object') {
 		if (skillDefs.statuschance) {

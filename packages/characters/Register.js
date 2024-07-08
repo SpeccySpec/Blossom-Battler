@@ -521,7 +521,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 
 				// pow
 				powtxt = lb.pow ? `**${lb.pow}** power` : '';
-				powtxt += (lb.hits > 1) ? `, and hits **${lb.hits}** times\n` : '';
+				powtxt += (lb.hits > 1) ? `, and hits **${lb.hits}** times\n` : '\n';
 
 				// attack type
 				if (!["support", "status", "heal"].includes(lb.type) && lb.atktype) {

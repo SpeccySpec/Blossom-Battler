@@ -13,7 +13,7 @@ makeLb = (message, args) => {
     switch(args[3].toLowerCase()) {
         // A heal skill <Extra> {Extra Variables}
         case 'heal':
-            if (!args[7]) return void message.channel.send("A heal limit break should have these fields:\n`<Extra> {Extra Variables}`");
+            if (!args[7]) return void message.channel.send("A heal limit break should have these fields:\n<Extra> {Extra Variables}");
 
             // We can get away with this right...this should definitively be tested
             if (!applyHeal(message, lbDefs, args[7].toLowerCase(), args.slice(8))) return;
@@ -24,7 +24,7 @@ makeLb = (message, args) => {
         // A status skill. <Extra> {Extra Variables}
         case 'status':
         case 'support':
-            if (!args[7]) return void message.channel.send("A support limit break should have these fields:\n`<Extra> {Extra Variables}`");
+            if (!args[7]) return void message.channel.send("A support limit break should have these fields:\n<Extra> {Extra Variables}");
             
             // LIVE SHARE FRAGMENT //
             // Well that was easy.
@@ -45,11 +45,10 @@ makeLb = (message, args) => {
 
         // An attacking element here. <Power> <Critical Hit Chance> <Hits> <Attack Type> {Status} {Status Chance}
         default:
-            if (!args[7]) return void message.channel.send("An offensive limit break should have these fields:\n`<Power> <Critical Hit Chance> <Hits> <Attack Type> {Status} {Status Chance}`");
-            if (!args[8]) return void message.channel.send("An offensive limit break should have these fields:\n`**<Power>** <Critical Hit Chance> <Hits> <Attack Type> {Status} {Status Chance}`");
-            if (!args[9]) return void message.channel.send("An offensive limit break should have these fields:\n`**<Power> <Critical Hit Chance>** <Hits> <Attack Type> {Status} {Status Chance}`");
-            if (!args[10]) return void message.channel.send("An offensive limit break should have these fields:\n`**<Power> <Critical Hit Chance> <Hits>** <Attack Type> {Status} {Status Chance}`");
-            if (!args[11]) return void message.channel.send("An offensive limit break should have these fields:\n`**<Power> <Critical Hit Chance> <Hits> <Attack Type>** {Status} {Status Chance}`");
+            if (!args[7]) return void message.channel.send("An offensive limit break should have these fields:\n<Power> <Critical Hit Chance> <Hits> <Attack Type> {Status} {Status Chance}");
+            if (!args[8]) return void message.channel.send("An offensive limit break should have these fields:\n**<Power>** <Critical Hit Chance> <Hits> <Attack Type> {Status} {Status Chance}");
+            if (!args[9]) return void message.channel.send("An offensive limit break should have these fields:\n**<Power> <Critical Hit Chance>** <Hits> <Attack Type> {Status} {Status Chance}");
+            if (!args[10]) return void message.channel.send("An offensive limit break should have these fields:\n**<Power> <Critical Hit Chance> <Hits>** <Attack Type> {Status} {Status Chance}");
 
             // Power
             let power = parseInt(args[7]);

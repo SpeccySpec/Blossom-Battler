@@ -2142,6 +2142,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 		let result2;
 		let targets2 = [];
+		let possible = [];
 		for (let j in movelinks) {
 			if (skillFile[movelinks[j]]) {
 				let skillLink = objClone(skillFile[movelinks[j]]);
@@ -2149,27 +2150,27 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 				// Hardcoded metronome 2: electric boogaloo
 				if (skillLink.extras?.metronome) {
-					let possible = [];
+					possible = [];
 					if (skillLink.extras.metronome.length > 1)
 						possible = skillLink.extras.metronome;
 					else {
 						for (let i in skillFile) {
-							if (skillFile[i].type != 'passive') {
-								possible.push(i)
-							}
+							if (skillFile[i].type != 'passive') possible.push(i);
 						}
 					}
-			
+
 					// Get the skill in question.
 					let skillname = possible[randNum(0, possible.length-1)];
-			
+
 					// Get Metronome's cost.
 					let cost = [skillLink.cost, skillLink.costtype];
 					skillLink = objClone(skillFile[skillname]);
 					skillLink.cost = cost[0];
 					skillLink.costtype = cost[1];
+
+					console.log(skillLink.name);
 				}
-			
+
 				// Insert IDs into the target.
 				targets2 = [];
 				switch(skillLink.target ? skillLink.target.toLowerCase() : 'one') {
