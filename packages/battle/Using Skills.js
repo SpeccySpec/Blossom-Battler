@@ -1498,6 +1498,9 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		return;
 	}
 
+	// Easier
+	let targTeam = btl.teams[act.target[0]] ?? btl.teams[0];
+
 	// Get the quote type
 	// Attack Type
 	let quotetype = 'phys';
@@ -1757,7 +1760,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	switch(skill.target ? skill.target.toLowerCase() : 'one') {
 		case 'one':
 		case 'ally':
-			let targ = (btl.teams[act.target[0]] && btl.teams[act.target[0]].members[act.target[1]]) ? btl.teams[act.target[0]].members[act.target[1]] : btl.teams[0].members[0];
+			let targ = (btl.teams[act.target[0]] && targTeam.members[act.target[1]]) ? targTeam.members[act.target[1]] : btl.teams[0].members[0];
 			targets.push([targ.id, 1]);
 			break;
 
@@ -1837,9 +1840,9 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 		case 'spreadallies':
 		case 'spreadopposing':
-			targets.push([btl.teams[act.target[0]].members[act.target[1]].id, 1]);
-			if (btl.teams[act.target[0]].members[act.target[1]-1] && btl.teams[act.target[0]].members[act.target[1]-1].hp > 0) targets.push([btl.teams[act.target[0]].members[act.target[1]-1].id, 0.6666666666666666]);
-			if (btl.teams[act.target[0]].members[act.target[1]+1] && btl.teams[act.target[0]].members[act.target[1]+1].hp > 0) targets.push([btl.teams[act.target[0]].members[act.target[1]+1].id, 0.6666666666666666]);
+			targets.push([targTeam.members[act.target[1]].id, 1]);
+			if (targTeam.members[act.target[1]-1] && targTeam.members[act.target[1]-1].hp > 0) targets.push([targTeam.members[act.target[1]-1].id, 0.6666666666666666]);
+			if (targTeam.members[act.target[1]+1] && targTeam.members[act.target[1]+1].hp > 0) targets.push([targTeam.members[act.target[1]+1].id, 0.6666666666666666]);
 			break;
 
 		case 'randomspreadopposing':
@@ -1877,8 +1880,8 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		case 'widespreadallies':
 		case 'widespreadopposing':
 			let targetValue = act.target[1];
-			for (let i = 0; i < btl.teams[act.target[0]].members.length; i++) {
-				if (btl.teams[act.target[0]].members[i] && btl.teams[act.target[0]].members[i].hp > 0) targets.push([btl.teams[act.target[0]].members[i].id, 1 - (Math.abs(i - targetValue)) / btl.teams[act.target[0]].members.length]);
+			for (let i = 0; i < targTeam.members.length; i++) {
+				if (targTeam.members[i] && targTeam.members[i].hp > 0) targets.push([targTeam.members[i].id, 1 - (Math.abs(i - targetValue)) / targTeam.members.length]);
 			}
 
 			targets.sort((a, b) => b[1] - a[1]);
@@ -1981,7 +1984,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 		case 'casterandally':
 		case 'casterandfoe':
-			let targ2 = (btl.teams[act.target[0]] && btl.teams[act.target[0]].members[act.target[1]]) ? btl.teams[act.target[0]].members[act.target[1]] : btl.teams[0].members[0];
+			let targ2 = (btl.teams[act.target[0]] && targTeam.members[act.target[1]]) ? targTeam.members[act.target[1]] : btl.teams[0].members[0];
 			targets.push([char.id, 1]);
 			if (ally) targets.push([ally.id, 1]);
 			targets.push([targ2.id, 1]);
@@ -2073,7 +2076,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		} else if (skill.fusionskill) {
 			finalText += `__${char.name}__ used **${getFullName(skillFile[act.skills[0]])}**!\n__${ally.name}__ used **${getFullName(skillFile[act.skills[1]])}**!\nThe two skills fused together to become __**${getFullName(skill)}**__!\n\n`;
 		} else {
-			finalText += `__${char.name}__ used __${getFullName(skill)}__!\n\n`;
+			finalText += `__${char.name}__ used **__${getFullName(skill)}__**!\n\n`;
 		}
 	}
 
@@ -2167,15 +2170,13 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					skillLink = objClone(skillFile[skillname]);
 					skillLink.cost = cost[0];
 					skillLink.costtype = cost[1];
-
-					console.log(skillLink.name);
 				}
 
 				// Insert IDs into the target.
 				targets2 = [];
 				switch(skillLink.target ? skillLink.target.toLowerCase() : 'one') {
 					case 'one':
-						let targ = (btl.teams[act.target[0]] && btl.teams[act.target[0]].members[act.target[1]]) ? btl.teams[act.target[0]].members[act.target[1]] : btl.teams[0].members[0];
+						let targ = (btl.teams[act.target[0]] && targTeam.members[act.target[1]]) ? targTeam.members[act.target[1]] : btl.teams[0].members[0];
 						targets2.push([targ.id, 1]);
 						break;
 
@@ -2258,15 +2259,15 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 						break;
 			
 					case 'spreadopposing':
-						targets2.push([btl.teams[act.target[0]].members[act.target[1]].id, 1]);
-						if (btl.teams[act.target[0]].members[act.target[1]-1] && btl.teams[act.target[0]].members[act.target[1]-1].hp > 0) targets2.push([btl.teams[act.target[0]].members[act.target[1]-1].id, 0.6666666666666666]);
-						if (btl.teams[act.target[0]].members[act.target[1]+1] && btl.teams[act.target[0]].members[act.target[1]+1].hp > 0) targets2.push([btl.teams[act.target[0]].members[act.target[1]+1].id, 0.6666666666666666]);
+						targets2.push([targTeam.members[act.target[1]].id, 1]);
+						if (targTeam.members[act.target[1]-1] && targTeam.members[act.target[1]-1].hp > 0) targets2.push([targTeam.members[act.target[1]-1].id, 0.6666666666666666]);
+						if (targTeam.members[act.target[1]+1] && targTeam.members[act.target[1]+1].hp > 0) targets2.push([targTeam.members[act.target[1]+1].id, 0.6666666666666666]);
 						break;
 
 					case 'spreadallies':
 						targets2.push([(btl.teams[char.team].members[act.target[1]] ? btl.teams[char.team].members[act.target[1]].id : char.id), 1]);
-						if (btl.teams[act.target[0]].members[act.target[1]-1] && btl.teams[act.target[0]].members[act.target[1]-1].hp > 0) targets2.push([btl.teams[act.target[0]].members[act.target[1]-1].id, 0.6666666666666666]);
-						if (btl.teams[act.target[0]].members[act.target[1]+1] && btl.teams[act.target[0]].members[act.target[1]+1].hp > 0) targets2.push([btl.teams[act.target[0]].members[act.target[1]+1].id, 0.6666666666666666]);
+						if (targTeam.members[act.target[1]-1] && targTeam.members[act.target[1]-1].hp > 0) targets2.push([targTeam.members[act.target[1]-1].id, 0.6666666666666666]);
+						if (targTeam.members[act.target[1]+1] && targTeam.members[act.target[1]+1].hp > 0) targets2.push([targTeam.members[act.target[1]+1].id, 0.6666666666666666]);
 						break;
 			
 					case 'randomspreadopposing':
@@ -2303,8 +2304,8 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 					case 'widespreadopposing':
 						let targetValue = act.target[1];
-						for (let i = 0; i < btl.teams[act.target[0]].members.length; i++) {
-							if (btl.teams[act.target[0]].members[i] && btl.teams[act.target[0]].members[i].hp > 0) targets2.push([btl.teams[act.target[0]].members[i].id, 1 - (Math.abs(i - targetValue)) / btl.teams[act.target[0]].members.length]);
+						for (let i = 0; i < targTeam.members.length; i++) {
+							if (targTeam.members[i] && targTeam.members[i].hp > 0) targets2.push([targTeam.members[i].id, 1 - (Math.abs(i - targetValue)) / targTeam.members.length]);
 						}
 			
 						targets2.sort((a, b) => b[1] - a[1]);
@@ -2313,7 +2314,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					case 'widespreadallies':
 						let targetValue2 = btl.teams[char.team].members[act.target[1]] ? act.target[1] : char.id;
 						for (let i = 0; i < btl.teams[char.team].members.length; i++) {
-							if (btl.teams[char.team].members[i] && btl.teams[char.team].members[i].hp > 0) targets2.push([btl.teams[act.target[0]].members[i].id, 1 - (Math.abs(i - targetValue2)) / btl.teams[act.target[0]].members.length]);
+							if (btl.teams[char.team].members[i] && btl.teams[char.team].members[i].hp > 0) targets2.push([targTeam.members[i].id, 1 - (Math.abs(i - targetValue2)) / targTeam.members.length]);
 						}
 			
 						targets2.sort((a, b) => b[1] - a[1]);
@@ -2416,7 +2417,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 					case 'casterandally':
 					case 'casterandfoe':
-						let targ3 = (btl.teams[act.target[0]] && btl.teams[act.target[0]].members[act.target[1]]) ? btl.teams[act.target[0]].members[act.target[1]] : btl.teams[0].members[0];
+						let targ3 = (btl.teams[act.target[0]] && targTeam.members[act.target[1]]) ? targTeam.members[act.target[1]] : btl.teams[0].members[0];
 						targets2.push([char.id, 1]);
 						targets2.push([targ3.id, 1]);
 						break;
