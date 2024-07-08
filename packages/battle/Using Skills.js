@@ -1555,9 +1555,16 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 		// Get Metronome's cost.
 		let cost = [skill.cost, skill.costtype];
+
+		let origSkill = objClone(skill);
 		skill = objClone(skillFile[skillname]);
 		skill.cost = cost[0];
 		skill.costtype = cost[1];
+
+		if (origSkill.limitbreak) {
+			skill.name = origSkill.name;
+			skill.limitbreak = origSkill.limitbreak;
+		}
 	}
 
 	if (skill.extras?.copyskill) {
@@ -2070,7 +2077,14 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 	if (!didreplace) {
 		if (skill.limitbreak) {
-			finalText += `__${char.name}__ concentrates, and strikes with their **strongest attack** at full power!\n## **__${skill.name}__!**\n\n`;
+			let elements = '';
+			if (typeof lb.type == "object") {
+				elements = `${elementEmoji[skill.type[0]]}${elementEmoji[skill.type[1]]}`; // they wont have more than 2 types anyway... probably.
+			} else {
+				elements = elementEmoji[skill.type];
+			}
+
+			finalText += `__${char.name}__ concentrates, and strikes with their **strongest attack** at full power!\n### **__${elements}${skill.name}__!**\n\n`;
 		} else if (skill.teamcombo) {
 			finalText += `__${char.name}__ ${ally ? ("and __" + ally.name + "__") : ""} struck with a powerful skill: **__${skill.name}__**!\n\n`;
 		} else if (skill.fusionskill) {
