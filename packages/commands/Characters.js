@@ -5520,6 +5520,69 @@ commands.curestatus = new Command({
 	}
 })
 
+commands.setmeter = new Command({
+	desc: "Sets a character's meter.",
+	doc: {
+		desc: "Valid meters are:```diff\n+ HP - The raw HP stat of the character. Cannot exceed max.\n+ MP - The raw MP stat of the character. Cannot exceed max.\n+ HPPercent - The percentage of the HP of the character. Cannot exceed 100%.\n+ MPPercent - The percentage of the MP of the character. Cannot exceed 100%.\n+ LB% - The Limit Break Percentage of the character. Cannot exceed 1000%.```",
+	},
+	aliases: ['fullyheal', 'fullrestore', 'maxheal', 'maxrestore', 'maxhp'],
+	section: "characters",
+	args: [
+		{
+			name: "Character",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Meter",
+			type: "Word",
+			forced: false
+		},
+		{
+			name: "Value",
+			type: "Decimal",
+			forced: false
+		}
+	],
+	checkban: true,
+	func(message, args, guilded) {
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		// Checks
+		if (!charFile[args[0]]) return message.channel.send(`__**${args[0]}**__ is an invalid character.`);
+		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send(`You don't own __**${args[0]}**__!`);
+		let char = charFile[args[0]];
+
+		switch(args[1].toLowerCase()) {
+			case 'hp':
+				char.hp = Math.max(0, Math.min(char.maxhp, Math.round(args[2])));
+				break;
+
+			case 'mp':
+				char.mp = Math.max(0, Math.min(char.maxmp, Math.round(args[2])));
+				break;
+
+			case 'hppercent':
+				char.hp = Math.round((char.maxhp/100)*Math.max(0, Math.min(100, args[2])));
+				break;
+
+			case 'mppercent':
+				char.mp = Math.round((char.maxmp/100)*Math.max(0, Math.min(100, args[2])));
+				break;
+
+			case 'lbpercent':
+				char.lbp = Math.round(Math.max(0, Math.min(1000, args[2])));
+				break;
+
+			default:
+				return void message.channel.send(`${args[1]} is an invalid meter.`);
+		}
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+		message.react('👍');
+	}
+})
+
 commands.checkverified = new Command({
 	desc: "Check if your character is verifed and expain what makes them unverified if they are.",
 	aliases: ['verified', 'isverified'],
