@@ -2089,7 +2089,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	if (!didreplace) {
 		if (skill.limitbreak) {
 			let elements = '';
-			if (typeof lb.type == "object") {
+			if (typeof skill.type == "object") {
 				elements = `${elementEmoji[skill.type[0]]}${elementEmoji[skill.type[1]]}`; // they wont have more than 2 types anyway... probably.
 			} else {
 				elements = elementEmoji[skill.type];
