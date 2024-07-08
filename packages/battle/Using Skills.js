@@ -1820,11 +1820,10 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k].id);
 			}
 
-			console.log(`${possible.length} possible targets.`);
 			if (possible.length <= 1) {
 				targets.push([possible[0], 0.5]);
 			} else {
-				for (let i = 0; i < skill.hits; i++)
+				for (let i = 0; i < (skill.hits ?? 1); i++)
 					targets.push([possible[randNum(possible.length-1)] ?? possible[0], Math.min(1, 0.5*possible.length)]);
 				skill.hits = 1; // make the skill one hit now.
 			}
@@ -1832,7 +1831,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			break;
 
 		case 'randomallies':
-			while (targets.length < skill.hits) {
+			while (targets.length < (skill.hits ?? 1)) {
 				let charDefs = party.members[randNum(party.members.length-1)];
 				if (charDefs && charDefs.hp > 0) targets.push([charDefs.id, 1]);
 			}
@@ -1850,7 +1849,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			if (possible.length <= 1) {
 				targets.push([possible[0], 0.5]);
 			} else {
-				for (let i = 0; i < skill.hits; i++)
+				for (let i = 0; i < (skill.hits ?? 1); i++)
 					targets.push([possible[randNum(possible.length-1)] ?? possible[0], Math.min(1, 0.5*possible.length)]);
 				skill.hits = 1; // make the skill one hit now.
 			}
@@ -1879,7 +1878,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k]);
 			}
 
-			for (let i = 0; i < skill.hits; i++) {
+			for (let i = 0; i < (skill.hits ?? 1); i++) {
 				let randNumber = randNum(possible.length-1);
 				let initChoice = possible[randNumber]?.id ? randNumber : 0;
 
@@ -1892,7 +1891,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			break;
 
 		case 'randomspreadallies':
-			while (targets.length < skill.hits) {
+			while (targets.length < (skill.hits ?? 1)) {
 				let initChoice = randNum(party.members.length-1);
 
 				if (party.members[initChoice] && party.members[initChoice].hp > 0) targets.push([party.members[initChoice].id, 1]);
@@ -1921,7 +1920,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k]);
 			}
 
-			for (let i = 0; i < skill.hits; i++) {
+			for (let i = 0; i < (skill.hits ?? 1); i++) {
 				let randNumber = randNum(possible.length-1);
 				let initChoice = possible[randNumber]?.id ? randNumber : 0;
 
@@ -1940,7 +1939,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			break;
 
 		case 'randomwidespreadallies':
-			while (targets.length < skill.hits) {
+			while (targets.length < (skill.hits ?? 1)) {
 				let initChoice = randNum(party.members.length-1);
 
 				for (let i = 0; i < party.members.length; i++) {
@@ -1960,7 +1959,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) possible[i].push(btl.teams[i].members[k]);
 			}
 
-			for (let i = 0; i < skill.hits; i++) {
+			for (let i = 0; i < (skill.hits ?? 1); i++) {
 				let randTeam = randNum(possible.length-1);
 				while (possible[randTeam].length == 0) {
 					randTeam++;
@@ -1984,7 +1983,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) possible[i].push(btl.teams[i].members[k]);
 			}
 
-			for (let i = 0; i < skill.hits; i++) {
+			for (let i = 0; i < (skill.hits ?? 1); i++) {
 				let randTeam = randNum(possible.length-1);
 				while (possible[randTeam].length == 0) {
 					randTeam++;
@@ -2028,7 +2027,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			if (possible.length <= 1) {
 				targets.push([possible[0], 0.5]);
 			} else {
-				for (let i = 0; i < skill.hits; i++)
+				for (let i = 0; i < (skill.hits ?? 1); i++)
 					targets.push([possible[randNum(possible.length-1)] ?? possible[0], Math.min(1, 0.5*possible.length)]);
 				skill.hits = 1; // make the skill one hit now.
 			}
@@ -2038,7 +2037,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			break;
 
 		case 'casterandrandomally':
-			while (targets.length < skill.hits) {
+			while (targets.length < (skill.hits ?? 1)) {
 				let charDefs = party.members[randNum(party.members.length-1)];
 				if (charDefs && charDefs.hp > 0 && charDefs.id != char.id) targets.push([charDefs.id, 1]);
 			}
@@ -2054,11 +2053,10 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) possible.push(btl.teams[i].members[k].id);
 			}
 
-			console.log(`${possible.length} possible targets.`);
 			if (possible.length <= 1) {
 				targets.push([possible[0], 0.5]);
 			} else {
-				for (let i = 0; i < skill.hits; i++)
+				for (let i = 0; i < (skill.hits ?? 1); i++)
 					targets.push([possible[randNum(possible.length-1)] ?? possible[0], Math.min(1, 0.5*possible.length)]);
 				skill.hits = 1; // make the skill one hit now.
 			}
@@ -2218,6 +2216,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 				// Insert IDs into the target.
 				targets2 = [];
+				possible = [];
 				switch(skillLink.target ? skillLink.target.toLowerCase() : 'one') {
 					case 'one':
 						let targ = targTeam.members[act.target[1]] ?? btl.teams[0].members[0];
@@ -2255,7 +2254,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					case 'randomopposing':
 						for (let i in btl.teams) {
 							if (char.team == i) continue;
-							
+
 							for (let k in btl.teams[i].members)
 								if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k].id);
 						}
@@ -2263,7 +2262,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 						if (possible.length <= 1) {
 							targets2.push([possible[0], 0.5]);
 						} else {
-							for (let i = 0; i < skillLink.hits; i++)
+							for (let i = 0; i < (skillLink.hits ?? 1); i++)
 								targets2.push([possible[randNum(possible.length-1)] ?? possible[0], Math.min(1, 0.5*possible.length)]);
 							skillLink.hits = 1; // make the skill one hit now.
 						}
@@ -2271,7 +2270,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 						break;
 			
 					case 'randomallies':
-						while (targets2.length < skillLink.hits) {
+						while (targets2.length < (skillLink.hits ?? 1)) {
 							let charDefs = party.members[randNum(party.members.length-1)];
 							if (charDefs && charDefs.hp > 0) targets2.push([charDefs.id, 1]);
 						}
@@ -2288,7 +2287,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 						if (possible.length <= 1) {
 							targets2.push([possible[0], 0.5]);
 						} else {
-							for (let i = 0; i < skillLink.hits; i++)
+							for (let i = 0; i < (skillLink.hits ?? 1); i++)
 								targets2.push([possible[randNum(possible.length-1)] ?? possible[0], Math.min(1, 0.5*possible.length)]);
 							skillLink.hits = 1; // make the skill one hit now.
 						}
@@ -2322,7 +2321,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 								if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k]);
 						}
 			
-						for (let i = 0; i < skillLink.hits; i++) {
+						for (let i = 0; i < (skillLink.hits ?? 1); i++) {
 							let randNumber = randNum(possible.length-1);
 							let initChoice = possible[randNumber]?.id ? randNumber : 0;
 			
@@ -2335,7 +2334,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 						break;
 			
 					case 'randomspreadallies':
-						while (targets2.length < skillLink.hits) {
+						while (targets2.length < (skillLink.hits ?? 1)) {
 							let initChoice = randNum(party.members.length-1);
 			
 							if (party.members[initChoice] && party.members[initChoice].hp > 0) targets2.push([party.members[initChoice].id, 1]);
@@ -2372,7 +2371,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 								if (btl.teams[i].members[k].hp > 0) possible.push(btl.teams[i].members[k]);
 						}
 			
-						for (let i = 0; i < skillLink.hits; i++) {
+						for (let i = 0; i < (skillLink.hits ?? 1); i++) {
 							let randNumber = randNum(possible.length-1);
 							let initChoice = possible[randNumber]?.id ? randNumber : 0;
 			
@@ -2391,7 +2390,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 						break;
 			
 					case 'randomwidespreadallies':
-						while (targets2.length < skillLink.hits) {
+						while (targets2.length < (skillLink.hits ?? 1)) {
 							let initChoice = randNum(party.members.length-1);
 			
 							for (let i = 0; i < party.members.length; i++) {
@@ -2411,7 +2410,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 								if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) possible[i].push(btl.teams[i].members[k]);
 						}
 			
-						for (let i = 0; i < skillLink.hits; i++) {
+						for (let i = 0; i < (skillLink.hits ?? 1); i++) {
 							let randTeam = randNum(possible.length-1);
 							while (possible[randTeam].length == 0) {
 								randTeam++;
@@ -2428,6 +2427,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			
 						skillLink.hits = 1; // make the skill one hit now.
 						break;
+
 					case 'randomwidespread':
 						for (let i in btl.teams) {
 							possible[i] = [];
@@ -2435,7 +2435,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 								if (btl.teams[i].members[k].hp > 0 && btl.teams[i].members[k].id != char.id) possible[i].push(btl.teams[i].members[k]);
 						}
 			
-						for (let i = 0; i < skillLink.hits; i++) {
+						for (let i = 0; i < (skillLink.hits ?? 1); i++) {
 							let randTeam = randNum(possible.length-1);
 							while (possible[randTeam].length == 0) {
 								randTeam++;
@@ -2477,7 +2477,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 						if (possible.length <= 1) {
 							targets2.push([possible[0], 0.5]);
 						} else {
-							for (let i = 0; i < skillLink.hits; i++)
+							for (let i = 0; i < (skillLink.hits ?? 1); i++)
 								targets2.push([possible[randNum(possible.length-1)] ?? possible[0], Math.min(1, 0.5*possible.length)]);
 							skillLink.hits = 1; // make the skill one hit now.
 						}
@@ -2486,13 +2486,13 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 						break;
 			
 					case 'casterandrandomally':
-						while (targets2.length < skill.hits) {
+						while (targets2.length < (skillLink.hits ?? 1)) {
 							let charDefs = party.members[randNum(party.members.length-1)];
 							if (charDefs && charDefs.hp > 0 && charDefs.id != char.id) targets.push([charDefs.id, 1]);
 						}
 			
 						targets2.push([char.id, 1]);
-						skill.hits = 1; // make the skill one hit now.
+						skillLink.hits = 1; // make the skill one hit now.
 						break;
 			
 					case 'casterandrandom':
@@ -2504,7 +2504,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 						if (possible.length <= 1) {
 							targets2.push([possible[0], 0.5]);
 						} else {
-							for (let i = 0; i < skillLink.hits; i++)
+							for (let i = 0; i < (skillLink.hits ?? 1); i++)
 								targets2.push([possible[randNum(possible.length-1)] ?? possible[0], Math.min(1, 0.5*possible.length)]);
 							skillLink.hits = 1; // make the skill one hit now.
 						}
