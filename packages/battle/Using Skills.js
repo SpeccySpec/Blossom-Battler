@@ -1565,6 +1565,17 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			skill.name = origSkill.name;
 			skill.limitbreak = origSkill.limitbreak;
 		}
+
+		for (let i in extratypes) {
+			if (origSkill[extratypes[i]].movelink) {
+				if (skill.type === "support" || skill.type === "status")
+					skill.statusses.movelink = origSkill[extratypes[i]].movelink;
+				else if (skill.type === "heal")
+					skill.heal.movelink = origSkill[extratypes[i]].movelink;
+				else
+					skill.extras.movelink = origSkill[extratypes[i]].movelink;
+			}
+		}
 	}
 
 	if (skill.extras?.copyskill) {
