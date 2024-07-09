@@ -86,28 +86,6 @@ verifiedChar = (char, server) => {
 				if (skill.pow*(skill.hits ?? 1) > 1200) issues.push(`- ${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which has over 1200 power total.`);
 				if (skill.type != "support" && skill.type != "status" && skill.statuschance && skill.statuschance >= 100) issues.push(`- ${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which has a guaranteed status.`);
 				if (skillTier(skill) > 5) issues.push(`- ${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which is tier 6 or higher.`);
-
-				if (typeof(skill.type) == 'object') {
-					for (let type of skill.type) {
-						if (type === 'support' || type === 'status')
-							statusses++;
-						else if (type === 'passive')
-							passives++;
-						else {
-							if (!elements.includes(type)) elements.push(type);
-							if (type === 'almighty') almighty++;
-						}
-					}
-				} else {
-					if (skill.type === 'support' || skill.type === 'status')
-						statusses++;
-					else if (skill.type === 'passive')
-						passives++;
-					else {
-						if (!elements.includes(skill.type)) elements.push(skill.type);
-						if (skill.type === 'almighty') almighty++;
-					}
-				}
 			}
 		}
 	}
