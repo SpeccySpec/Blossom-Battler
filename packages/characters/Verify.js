@@ -13,11 +13,11 @@ let extratypes = ["extras", "statusses", "heal", "passive"];
 verifiedChar = (char, server) => {
 	const settings = setUpSettings(server);
 
-	// Manual Verification
-	if (char.forceverified) return [];
-	if (char.forceunverified) return ["- Made unverified by admin."];
-
 	const issues = []
+
+	// Manual Verification
+	if (char.forceverified) return issues;
+	if (char.forceunverified) issues.push("- Forcefully unverified by admin.");
 
 	// Level Limit
 	if (char.level > 99) issues.push("- Over level 99");
