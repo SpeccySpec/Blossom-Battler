@@ -114,7 +114,7 @@ verifiedChar = (char, server) => {
 
 	if (almighty > 2) issues.push("- More than 2 almighty skills.");
 	if (passives > (char.mainElement === 'passive' ? 3 : 2)) issues.push(`- More than ${(char.mainElement === 'passive' ? 3 : 2)} passives.`);
-	if (statusses > ((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)) issues.push(`- More than ${((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)} status skills.`);
+	if (statusses > ((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)) issues.push(`- More than ${((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)} support skills.`);
 	if (elements.length > 3) issues.push("- Too many elements.");
 	if (char.skills.length > 8) issues.push("- More than 8 skills.");
 
