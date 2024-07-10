@@ -1584,8 +1584,10 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 					skill.statusses.movelink = origSkill[extratypes[i]].movelink;
 				else if (skill.type === "heal")
 					skill.heal.movelink = origSkill[extratypes[i]].movelink;
-				else
+				else if (skill.extras)
 					skill.extras.movelink = origSkill[extratypes[i]].movelink;
+				else
+					skill.extras = { movelink: origSkill[extratypes[i]].movelink }
 			}
 		}
 	}

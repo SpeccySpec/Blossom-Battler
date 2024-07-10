@@ -13,11 +13,11 @@ let extratypes = ["extras", "statusses", "heal", "passive"];
 verifiedChar = (char, server) => {
 	const settings = setUpSettings(server);
 
-	// Manual Verification
-	if (char.forceverified) return [];
-	if (char.forceunverified) return ["- Made unverified by admin."];
-
 	const issues = []
+
+	// Manual Verification
+	if (char.forceverified) return issues;
+	if (char.forceunverified) issues.push("- Forcefully unverified by admin.");
 
 	// Level Limit
 	if (char.level > 99) issues.push("- Over level 99");
@@ -92,7 +92,7 @@ verifiedChar = (char, server) => {
 
 	if (almighty > 2) issues.push("- More than 2 almighty skills.");
 	if (passives > (char.mainElement === 'passive' ? 3 : 2)) issues.push(`- More than ${(char.mainElement === 'passive' ? 3 : 2)} passives.`);
-	if (statusses > ((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)) issues.push(`- More than ${((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)} status skills.`);
+	if (statusses > ((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)) issues.push(`- More than ${((char.mainElement === 'support' || char.mainElement === 'status') ? 3 : 2)} support skills.`);
 	if (elements.length > 3) issues.push("- Too many elements.");
 	if (char.skills.length > 8) issues.push("- More than 8 skills.");
 

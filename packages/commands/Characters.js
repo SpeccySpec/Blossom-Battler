@@ -5594,15 +5594,15 @@ commands.checkverified = new Command({
 		},
 	],
 	func(message, args, guilded) {
-		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.')
+		if (args[0] == "" || args[0] == " ") return void message.channel.send('Invalid character name! Please enter an actual name.')
 
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true)
 		let char = charFile[args[0]]
-		if (!char) return message.channel.send('Nonexistant Character.')
+		if (!char) return void message.channel.send('Nonexistant Character.')
 
 		let issues = verifiedChar(char, message.guild.id)
 
-		if (!issues.length) return message.channel.send(
+		if (!issues.length) return void message.channel.send(
 			char.forceverified
 				? `${char.name} is forcefully verified by an admin.`
 				: `${char.name} is verified!`
@@ -5626,4 +5626,35 @@ commands.checkverified = new Command({
 				.setDescription(issues.join('\n'))
 		]});
 	}
-}) 
+})
+
+function makeForceVerificationCommand(verification) {
+	const field = "force" + verification
+	return new Command({
+		desc: `**[SUPER ADMIN ONLY]**\nForces a character to be ${verification}.`,
+		args: [
+			{
+				name: "Character Name",
+				type: "Word",
+				forced: true
+			},
+		],
+		func(message, args, guilded) {
+			if (!utilityFuncs.RPGBotAdmin(message.author.id)) return void message.channel.send("Only a super admin can use this.");
+
+			if (args[0] == "" || args[0] == " ") return void message.channel.send('Invalid character name! Please enter an actual name.')
+
+			let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true)
+			let char = charFile[args[0]]
+			if (!char) return void message.channel.send('Nonexistant Character.')
+
+			char[field] = !char[field]
+
+			fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
+			message.channel.send(`${char.name} is ${char[field] ? "now" : "no longer"} forcefully ${verification}!`)
+		}
+	})
+}
+
+commands.forceverify = makeForceVerificationCommand("verified")
+commands.forceunverify = makeForceVerificationCommand("unverified")
