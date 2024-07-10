@@ -106,7 +106,7 @@ commands.registerskill = new Command({
 		let atype = args[8].toLowerCase();
 		if (atype != 'physical' && atype != 'magic' && atype != 'ranged' && atype != 'sorcery') return message.channel.send(`${atype} is an invalid form of contact! Try physical, magic or ranged.`);
 
-		if (!args[9] || !utilityFuncs.inArray(args[9].toLowerCase(), Targets)) return message.channel.send(`Please enter a valid target type for **Target**!\`\`\`diff\n- ${Targets.join('\n- ')}\`\`\``)
+		if (!args[9] || !Targets.includes(args[9].toLowerCase())) return message.channel.send(`Please enter a valid target type for **Target**!\`\`\`diff\n- ${Targets.join('\n- ')}\`\`\``)
 
 		let skillDefs = {
 			name: args[0],

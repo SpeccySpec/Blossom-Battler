@@ -535,7 +535,7 @@ const menuStates = {
 					}
 
 					// Lovable
-					if (skillinfo.target && skillinfo.target === "one" && !(skillinfo.extras?.soulless && skillinfo.extras.soulless.includes("lovable"))) {
+					if (skillinfo.target && ["one", "casterandfoe"].includes(skillinfo.target) && !(skillinfo.extras?.soulless && skillinfo.extras.soulless.includes("lovable"))) {
 						let alivecount = 0;
 						let alivechar = {};
 						for (let k in btl.teams) {

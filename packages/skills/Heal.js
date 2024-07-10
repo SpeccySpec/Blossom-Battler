@@ -742,6 +742,63 @@ healList = {
 			return true
 		}
 	}),
+
+	painsplit: new Extra({
+		name: "Pain Split (Pokémon)",
+		desc: "Shares <Percent%> of all targets' <HP/MP/LB%> between them, equally.",
+		diffflag: 0,
+		args: [
+			{
+				name: "Percent%",
+				type: "Decimal"
+			},
+			{
+				name: "HP/MP/LB%",
+				type: "Word",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			let percent = 100;
+			if (args[0] && args[0] > 0) percent = args[0];
+
+			if (!['hp', 'mp', 'lb%'].includes(args[1].toLowerCase())) return void message.channel.send(`${args[1]} is an invalid meter to share! Enter either HP, MP, or LB%.`);
+
+			makeHeal(skill, "painsplit", [percent, args[1].toLowerCase()]);
+			return true;
+		},
+		replaceatk(char, skill, targets, btl, vars) {
+			let str = `The ${vars[1].toUpperCase()} between the targets was shared equally.`;
+
+			let hp = 0;
+			let stat = vars[1] == 'lb%' ? 'lbp' : vars[1];
+
+			let targ;
+			for (let i in targets) {
+				targ = getCharFromId(targets[i][0], btl);
+				hp += targ[stat];
+			}
+
+			hp = Math.round(hp*(vars[0]/100)/targets.length);
+
+			let newhp = 0;
+			let diffhp = 0;
+			for (let i in targets) {
+				targ = getCharFromId(targets[i][0], btl);
+
+				newhp = Math.min(hp, vars[1] == 'lb%' ? 1000 : targ[`max${stat}`]);
+				diffhp = newhp - targ[stat];
+
+				str += `\n__${targ.name}__'s **${vars[1].toUpperCase()}** was set to **${newhp}**, _which is a difference of **${diffhp}**_.`;
+				targ[stat] = newhp;
+			}
+
+			return [true, str];
+		},
+		getinfo(vars, skill) {
+			return `Shares **${vars[0]}%** of the targets' **${vars[1].toUpperCase()}** between each of them`
+		}
+	}),
 }
 
 modSkillResult = (char, targ, result, skill, btl) => {

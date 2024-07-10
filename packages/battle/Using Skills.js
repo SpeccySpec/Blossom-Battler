@@ -1,6 +1,12 @@
 let extratypes = ["extras", "statusses", "heal", "passive"];
 let lbtext = [];
 
+let selectcheck = {
+	extras: extrasList,
+	statusses: statusList,
+	heal: healList
+}
+
 // Can we use a LB
 let lbCaps = [20, 40, 60, 80, 99];
 canUseLb = (char, btl, level) => {
@@ -2009,7 +2015,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 		case 'casterandally':
 		case 'casterandfoe':
-			let targ2 = (btl.teams[act.target[0]] && targTeam.members[act.target[1]]) ? targTeam.members[act.target[1]] : btl.teams[0].members[0];
+			let targ2 = targTeam.members[act.target[1]] ?? targTeam.members[0];
 			targets.push([char.id, 1]);
 			if (ally) targets.push([ally.id, 1]);
 			targets.push([targ2.id, 1]);
@@ -2152,18 +2158,50 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		}
 	}
 
+	// ReplaceAtk
+	let norun = false;
+	for (let j in selectcheck) {
+		if (skill[j]) {
+			for (let i in skill[j]) {
+				if (!selectcheck[j][i]) continue;
+				if (!selectcheck[j][i].replaceatk) continue;
+				if (noExtraArray && noExtraArray.includes(i)) continue;
+
+				if (selectcheck[j][i].multiple) {
+					for (let k in skill[j][i]) {
+						norun = selectcheck[j][i].replaceatk(char, skill, targets, btl, skill[j][i][k]);
+
+						if (typeof norun === "object") {
+							finalText += norun[1];
+							norun = norun[0];
+						}
+					}
+				} else {
+					norun = selectcheck[j][i].replaceatk(char, skill, targets, btl, skill[j][i]);
+
+					if (typeof norun === "object") {
+						finalText += norun[1];
+						norun = norun[0];
+					}
+				}
+			}
+		}
+	}
+
 	let targ;
 	let skillDefs;
-	for (let i in targets) {
-		targ = getCharFromId(targets[i][0], btl);
-		skillDefs = objClone(skill);
-		skillDefs.pow *= targets[i][1];
+	if (!norun) {
+		for (let i in targets) {
+			targ = getCharFromId(targets[i][0], btl);
+			skillDefs = objClone(skill);
+			skillDefs.pow *= targets[i][1];
 
-		let result = attackWithSkill(char, targ, skillDefs, btl, null, noExtraArray);
-		if (!noEffectMsg) finalText += `${result.txt}`;
+			let result = attackWithSkill(char, targ, skillDefs, btl, null, noExtraArray);
+			if (!noEffectMsg) finalText += `${result.txt}`;
 
-		if (result.oneMore) btl.doonemore = true;
-		if (result.teamCombo) btl.canteamcombo = true;
+			if (result.oneMore) btl.doonemore = true;
+			if (result.teamCombo) btl.canteamcombo = true;
+		}
 	}
 
 	// Move Links
@@ -2532,12 +2570,6 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// OnSelect
-	let selectcheck = {
-		extras: extrasList,
-		statusses: statusList,
-		heal: healList
-	}
-
 	for (let j in selectcheck) {
 		if (skill[j]) {
 			for (let i in skill[j]) {
