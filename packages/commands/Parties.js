@@ -1030,6 +1030,65 @@ commands.putarmor = new Command({
     }
 })
 
+commands.addpet = new Command({
+	desc: "Adds a pet to the party.",
+	aliases: ['usepet'],
+	section: "parties",
+	checkban: true,
+	args: [
+		{
+			name: "Party Name",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Enemy Name",
+			type: "Word",
+			forced: true
+		}
+	],
+	func(message, args, guilded) {
+		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
+		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
+
+		let party = parties[args[0]];
+		if (!party) return message.channel.send(`${args[0]} is an invalid party!`);
+		if (!isPartyLeader(message.author, party, message.guild.id) && !utilityFuncs.isAdmin(message)) return message.channel.send("You do not own this party, therefore, you have insufficient permissions to change it.");
+
+		if (!enemyFile[args[1]]) return message.channel.send(`${args[1]} is an invalid enemy!`);
+		let enemy = enemyFile[args[1]];
+
+		if (!enemyFile[args[1]].negotiateDefs.qualities || !enemyFile[args[1]].negotiateDefs.qualities.skill) return message.channel.send(`${args[1]} may not be a pet.`);
+		if (party.negotiateAllies[args[1]]) return message.channel.send(`${args[1]} is already a pet that ${party.name} has recruited.`);
+
+
+		party.negotiateAllies[args[1]] = {
+			nickname: enemy.name,
+			hp: Math.round(enemy.hp/2),
+			mp: Math.round(enemy.mp/2),
+			maxhp: Math.round(enemy.hp/2),
+			maxmp: Math.round(enemy.mp/2),
+
+			melee: enemy.melee,
+			stats: enemy.stats,
+
+			skill: enemy.negotiateDefs.qualities.skill,
+			atkbuff: enemy.negotiateDefs.qualities.atk,
+			magbuff: enemy.negotiateDefs.qualities.mag,
+			endbuff: enemy.negotiateDefs.qualities.end,
+
+			enemytype: args[1],
+
+			happines: 255,
+			mood: 'happy',
+			food: 100,
+		}
+
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, '    '));
+		message.channel.send(`${party.negotiateAllies[args[1]].nickname} was obtained by Team ${args[0]}!`);
+	}
+})
+
 commands.setpet = new Command({
 	desc: "Sets this party's pet. Pets can help with extra damage output, defense of even healing. Essentially, they're lesser characters.",
 	aliases: ['usepet'],
