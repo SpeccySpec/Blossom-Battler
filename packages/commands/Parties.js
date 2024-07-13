@@ -1032,7 +1032,7 @@ commands.putarmor = new Command({
 
 commands.addpet = new Command({
 	desc: "Adds a pet to the party.",
-	aliases: ['usepet'],
+	aliases: ['makepet'],
 	section: "parties",
 	checkban: true,
 	args: [
