@@ -2670,3 +2670,9 @@ function transfer(message, party1, party2, itemsDef) {
     fs.writeFileSync(`${dataPath}/json/${message.guild.id}/parties.json`, JSON.stringify(parties, null, 4));
     message.channel.send(`The transfer has been completed.`)
 }
+
+////////////////////////
+// ENCHANTMENT SYSTEM //
+////////////////////////
+// Use "Runes" to enchant weapons.
+// Weapons can have up to 3 runes, where the first one takes full effect and the rest support the first one.

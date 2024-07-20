@@ -2216,7 +2216,20 @@ extrasList = {
 			return (targ.status != vars[0].toLowerCase());
 		},
 		getinfo(vars, skill) {
-			return `Fails if the **target** is not afflicted with ${statusEmojis[vars[0]] ?? '<:burn:963413989688213524>'}**${statusNames[vars[0]] ?? 'Burning'}**.`
+			let str = `Fails if the **target** is not afflicted with `;
+
+			for (let i in vars) {
+				str += `${statusEmojis[vars[i][0]] ?? '<:burn:963413989688213524>'}**${statusNames[vars[i][0]] ?? 'Burning'}**`;
+
+				if (i == vars.length-2)
+					str += ' or ';
+				else if (i >= vars.length-1)
+					str += ' when attacking them';
+				else
+					str += ', ';
+			}
+
+			return str;
 		}
 	}),
 
