@@ -635,6 +635,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 		let dodgeChance = 0;
 
 		let passive;
+		let guardDodge;
 		for (let i = 0; i < skill.hits; i++) {
 			if (noMiss) {
 				totalHits++;
@@ -680,7 +681,11 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				for (let k in passive.passive) {
 					switch(k) {
 						case "guarddodge":
-							if (targ.guard) dodgeChance -= passive.passive[k][0];
+							if (targ.guard) {
+								dodgeChance -= passive.passive[k][0];
+								guardDodge = getFullName(passive);
+							}
+
 							break;
 					}
 				}
@@ -708,7 +713,11 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					}
 				}
 			} else {
-				result.txt += `${dodgeTxt(char, targ)}\n`;
+				if (guardDodge) {
+					result.txt += `**${guardDodge}** allowed __${targ.name}__ to perfectly dodge the attack.\n${selectQuote(targ, 'dodge', null, "%ENEMY%", char.name)}${selectQuote(char, 'miss', null, "%ENEMY%", char.name)}`;
+				} else {
+					result.txt += `${dodgeTxt(char, targ)}\n`;
+				}
 			}
 
 			console.log(result);
