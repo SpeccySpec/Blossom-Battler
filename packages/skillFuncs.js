@@ -227,7 +227,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 		finalText += "\n";
 	}
 
-	finalText += `${skillTargetText[skillDefs.target] ?? skillTargetText.one}\n`;
+	if (skillDefs.type != 'passive') finalText += `${skillTargetText[skillDefs.target] ?? skillTargetText.one}\n`;
 
 	if (skillDefs.cost && skillDefs.costtype) {
 		switch(skillDefs.costtype) {
