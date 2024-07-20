@@ -661,7 +661,6 @@ healList = {
 		desc: extrasList.buff.desc,
 		args: extrasList.buff.args,
 		multiple: true,
-		diffflag: [0, 1, 2],
 		applyfunc(message, skill, args) {
 			const target = args[0].toLowerCase()
 			const stat = args[1].toLowerCase()
@@ -687,11 +686,11 @@ healList = {
 		},
 		onselect(char, skill, btl, vars, multiplier) {
 			if (vars[0] != 'user') return '';
-			return extrasList.buff.buffChange(char, char, skill, btl, vars, multiplier);
+			return extrasList.buff.buffChange(char, char, skill, btl, vars);
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
 			if (vars[0] != 'target') return '';
-			return extrasList.buff.buffChange(char, targ, skill, btl, vars, multiplier);
+			return extrasList.buff.buffChange(char, targ, skill, btl, vars);
 		},
 		getinfo: buffText
 	}),
