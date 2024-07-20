@@ -410,23 +410,29 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 			}
 
 			// SkillFailOnUse
+			let shouldFail = false;
 			for (let i in skill.extras) {
 				if (extrasList[i] && extrasList[i].skillfailonuse) {
 					if (noExtraArray && noExtraArray.includes(i)) continue;
 					if (extrasList[i].multiple) {
 						for (let k in skill.extras[i]) {
 							if (extrasList[i].skillfailonuse(char, targ, skill, btl, skill.extras[i][k])) {
-								result.txt = `...But it failed on ${targ.name}.`;
-								return result;
+								shouldFail = true;
+							} else {
+								shouldFail = false;
 							}
 						}
 					} else {
 						if (extrasList[i].skillfailonuse(char, targ, skill, btl, skill.extras[i])) {
-							result.txt = `...But it failed on ${targ.name}.`;
-							return result;
+							shouldFail = true;
 						}
 					}
 				}
+			}
+
+			if (shouldFail) {
+				result.txt = `...But it failed on ${targ.name}.`;
+				return result;
 			}
 		}
 
