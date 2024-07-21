@@ -1050,7 +1050,7 @@ commands.preskill = new Command({
 			if (hasPreSkill(skillFile[args[0]], args[1]))
 				return message.channel.send(`${skillFile[args[0]].name} already has a pre-skill for ${args[1]}!`);
 
-			if (skillFile[args[1]].fusionskill)
+			if (args[1] != "remove" && skillFile[args[1]].fusionskill)
 				return message.channel.send("Skills may not evolve into fusion skills.");
 
 			if (!utilityFuncs.RPGBotAdmin(message.author.id)) {
