@@ -513,6 +513,7 @@ weathers = [
 	"acidrain", //
 	"cindershower", //
 	"meteorshower", //
+	"junkstorm", //
 
 	"darkmoon", //
 	"eclipse", //
@@ -607,6 +608,11 @@ weatherDescs = {
 		name: "Meteor Shower",
 		emoji: "<:meteorshower:1265631578130743408>",
 		desc: `**33%** chance to deal **${elementEmoji['explode']}Explode** based damage to a fighter on their turn.\nAffinity based.`
+	},
+	junkstorm: {
+		name: "Junk Storm",
+		emoji: "<:junkstorm:1265648947406442538>",
+		desc: `**33%** chance to deal **${elementEmoji['metal']}Metal** based damage to a fighter on their turn.\nAffinity based.\n10% chance to afflict ${statusEmojis.dizzy}**Dizziness** on hit.`
 	},
 
 	darkmoon: {
