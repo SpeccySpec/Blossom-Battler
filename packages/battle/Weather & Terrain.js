@@ -450,6 +450,9 @@ weatherFuncs = {
 						txt += `\n__${char.name}__ is no longer affected by their ${statusEmojis[char.status]}status ailment.`
 						delete char.status;
 						delete char.statusturns;
+					} else if (char.status === "overheat") {
+						txt += `\n__${char.name}__ is set ablaze!`;
+						char.status = "burn"
 					}
 				}
 			}
