@@ -497,7 +497,6 @@ aiTypes = {
 weathers = [
 	'none', //
 	"rain", //
-	"acidrain", //
 	"thunderstorm", //
 	"sunlight", //
 	"windy", //
@@ -509,10 +508,15 @@ weathers = [
 	"airstrikes", //
 	"cherryblossoms",
 	"fallingash", //
+	"blizzard", //
+
+	"acidrain", //
+	"cindershower", //
+	"meteorshower", //
+
 	"darkmoon", //
 	"eclipse", //
 	"bloodmoon", //
-	"blizzard", //
 	"supermoon", //
 	"bluemoon", //
 ]
@@ -527,11 +531,6 @@ weatherDescs = {
 		name: "Rain",
 		emoji: "<:rain:1225501726073819187>",
 		desc: `Gives **30%** more skill power to ${elementEmoji['water']}**water** skills but reduces skill power of ${elementEmoji['fire']}**fire** skills by **30%**.\nWill put out the ${statusEmojis['burn']}**burning** fighters.\nWill make fighters ${statusEmojis['wet']}**wet**.`
-	},
-	acidrain: {
-		name: "Acid Rain",
-		emoji: "<:acidrain:1225866899502661715>",
-		desc: `Attacks **non-${elementEmoji['acid']}acid** main fighters with **10 ${elementEmoji['acid']}acid** damage.\nDoubles damage the weaker the fighter is.\nEvery turn there's a **10%** chance they get ${statusEmojis['dissolved']}**dissolved**.`
 	},
 	thunderstorm: {
 		name: "Thunderstorm",
@@ -588,6 +587,28 @@ weatherDescs = {
 		emoji: "<:fallingash:1225870976198115358>",
 		desc: `Every fighter has a **20%** chance of getting ${statusEmojis['burn']}**burned** every turn.`
 	},
+	blizzard: {
+		name: "Blizzard",
+		emoji: "<:blizzard:1219385823795875982>",
+		desc: `Gives **50%** more skill power to ${elementEmoji['ice']}**ice** skills but reduces skill power of ${elementEmoji['fire']}**fire** skills by **50%**.\nWill put out the ${statusEmojis['burn']}**burning** fighters and **__single__ ${statusEmojis['freeze']}freezing** chance is raised by **25%**.`
+	},
+
+	acidrain: {
+		name: "Acid Rain",
+		emoji: "<:acidrain:1225866899502661715>",
+		desc: `Attacks **non-${elementEmoji['acid']}acid** main fighters with **10 ${elementEmoji['acid']}acid** damage.\nDoubles damage the weaker the fighter is.\nEvery turn there's a **10%** chance they get ${statusEmojis['dissolved']}**dissolved**.`
+	},
+	cindershower: {
+		name: "Cinder Shower",
+		emoji: "<:cindershower:1265642394246709398>",
+		desc: `Every turn, deal **${elementEmoji['fire']}Fire** based damage to a fighter on their turn.\nAffinity based.\nAny affliction of **${statusEmojis['overheat']}Overheating** will afflict **${statusEmojis['burn']}Burning** instead.`
+	},
+	meteorshower: {
+		name: "Meteor Shower",
+		emoji: "<:meteorshower:1265631578130743408>",
+		desc: `**33%** chance to deal **${elementEmoji['explode']}Explode** based damage to a fighter on their turn.\nAffinity based.`
+	},
+
 	darkmoon: {
 		name: "Dark Moon",
 		emoji: "<:darkmoon:1219385827730133022>",
@@ -602,11 +623,6 @@ weatherDescs = {
 		name: "Blood Moon",
 		emoji: "<:bloodmoon:1219385825641365647>",
 		desc: `Gives **40%** more skill power to ${elementEmoji['curse']}**curse** skills and **20%** more skill power to **${elementEmoji['strike']}strike, ${elementEmoji['slash']}slash and ${elementEmoji['pierce']}pierce** skills, but **cuts the raw ${statusEmojis['magdown']}MAG stat of ${elementEmoji['bless']}bless mains by 25%**.`
-	},
-	blizzard: {
-		name: "Blizzard",
-		emoji: "<:blizzard:1219385823795875982>",
-		desc: `Gives **50%** more skill power to ${elementEmoji['ice']}**ice** skills but reduces skill power of ${elementEmoji['fire']}**fire** skills by **50%**.\nWill put out the ${statusEmojis['burn']}**burning** fighters and **__single__ ${statusEmojis['freeze']}freezing** chance is raised by **25%**.`
 	},
 	supermoon: {
 		name: "Super Moon",

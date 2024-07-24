@@ -397,7 +397,122 @@ weatherFuncs = {
 
 			return stats;
 		},
-	}
+	},
+
+	cindershower: {
+		onturn(char, btl) {
+			let txt = `The ${weatherDescs.cindershower.emoji}**Cinder Shower** affects __${char.name}__!\n`;
+
+			skillDefine = {
+				name: "Cinder Shower",
+				type: "fire",
+				target: "caster",
+				pow: 100,
+				extras: {
+					soulless: [char.status]
+				}
+			}
+
+			let dmg = genDmg(char, char, btl, skillDefine);
+			let affinity = '';
+			let ignore = false;
+
+			if (char.affinities.weak && char.affinities.weak.includes("fire")) {
+				dmg *= 2;
+				affinity = affinityEmoji.weak;
+			} else if (char.affinities.superweak && char.affinities.superweak.includes("fire")) {
+				dmg *= 4;
+				affinity = affinityEmoji.superweak;
+			} else if (char.affinities.deadly && char.affinities.deadly.includes("fire")) {
+				dmg *= 8;
+				affinity = affinityEmoji.deadly;
+			} else if (char.affinities.resist && char.affinities.resist.includes("fire")) {
+				dmg *= 0.5;
+				affinity = affinityEmoji.resist;
+			} else if ((char.affinities.block && char.affinities.block.includes("fire")) || (char.affinities.repel && char.affinities.repel.includes("fire"))) {
+				txt += `__${char.name}__ is able to negate the damage from the ${weatherDescs.cindershower.emoji}**Cinder Shower**.`;
+				ignore = true;
+			} else if (char.affinities.drain && char.affinities.drain.includes("fire")) {
+				char.hp = Math.min(char.maxhp, char.hp+dmg);
+				txt += `The ${weatherDescs.cindershower.emoji}**Cinder Shower** heals __${char.name}__ by ${dmg}${affinityEmoji.drain} HP!`;
+				ignore = true;
+			}
+
+			if (!ignore) {
+				char.hp = Math.max(0, char.hp-dmg);
+
+				if (char.hp <= 0) {
+					txt += `__${char.name}__ took ___${dmg}${affinity}___ damage and was ___defeated${affinity}___.\n${selectQuote(char, 'death', null)}`;
+				} else {
+					txt += `__${char.name}__ took ___${dmg}${affinity}___ damage!`;
+
+					if (char.status === "freeze" || char.status === "chilled") {
+						txt += `\n__${char.name}__ is no longer affected by their ${statusEmojis[char.status]}status ailment.`
+						delete char.status;
+						delete char.statusturns;
+					}
+				}
+			}
+
+			if (txt.trim() == '') txt = null;
+			return txt;
+		}
+	},
+
+	meteorshower: {
+		onturn(char, btl) {
+			if (randNum(100) <= 33) return `A fast falling meteor strikes the ground nearby __${char.name}__.`;
+			let txt = `A fast falling meteor strikes __${char.name}__.\n`;
+
+			skillDefine = {
+				name: "Meteor Shower",
+				type: "explode",
+				target: "caster",
+				pow: 200,
+				extras: {
+					soulless: [char.status]
+				}
+			}
+
+			let dmg = genDmg(char, char, btl, skillDefine);
+			let affinity = '';
+			let ignore = false;
+
+			if (char.affinities.weak && char.affinities.weak.includes("explode")) {
+				dmg *= 2;
+				affinity = affinityEmoji.weak;
+			} else if (char.affinities.superweak && char.affinities.superweak.includes("explode")) {
+				dmg *= 4;
+				affinity = affinityEmoji.superweak;
+			} else if (char.affinities.deadly && char.affinities.deadly.includes("explode")) {
+				dmg *= 8;
+				affinity = affinityEmoji.deadly;
+			} else if (char.affinities.resist && char.affinities.resist.includes("explode")) {
+				dmg *= 0.5;
+				affinity = affinityEmoji.resist;
+			} else if ((char.affinities.block && char.affinities.block.includes("explode")) || (char.affinities.repel && char.affinities.repel.includes("explode"))) {
+				txt += `__${char.name}__ is able to negate the damage from the crashing meteor.`;
+				ignore = true;
+			} else if (char.affinities.drain && char.affinities.drain.includes("explode")) {
+				char.hp = Math.min(char.maxhp, char.hp+dmg);
+				txt += `The crashing meteor heals __${char.name}__ by ${dmg}${affinityEmoji.drain} HP!`;
+				ignore = true;
+			}
+
+			if (!ignore) {
+				char.hp = Math.max(0, char.hp-dmg);
+
+				if (char.hp <= 0) {
+					txt += `__${char.name}__ took ___${dmg}${affinity}___ damage and was ___defeated${affinity}___.\n${selectQuote(char, 'death', null)}`;
+				} else {
+					txt += `__${char.name}__ took ___${dmg}${affinity}___ damage!`;
+				}
+			}
+
+			if (txt.trim() == '') txt = null;
+			return txt;
+		}
+	},
 }
 
 terrainFuncs = {
