@@ -746,10 +746,10 @@ passiveList = {
 			let physmag = args[0]?.toLowerCase();
 			let chance = args[1];
 
-			if (physmag != 'phys' && physmag != 'mag' && physmag != 'ranged' && !Elements.includes(physmag))
-				return void message.channel.send("You entered an invalid value for <Phys/Mag/Ranged/Element>! The valid ones are: PHYS, MAG, RANGED, SORCERY, "+Elements.join(', ')+".");
+			if (physmag != 'phys' && physmag != 'mag' && physmag != 'ranged' && physmag != "sorcery" && !Elements.includes(physmag))
+				return void message.channel.send("You entered an invalid value for <Phys/Mag/Ranged/Sorcery/Element>! The valid ones are: PHYS, MAG, RANGED, SORCERY, "+Elements.join(', ')+".");
 
-			if (chance < 1) return void message.channel.send("What's the point if it never dodges?");
+			if (chance <= 0) return void message.channel.send("What's the point if it never dodges?");
 
 			makePassive(skill, "dodge", [physmag, chance]);
 			return true;
