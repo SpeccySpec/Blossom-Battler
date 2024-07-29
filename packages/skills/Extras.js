@@ -1,32 +1,6 @@
-const weakSide = ['deadly', 'superweak', 'weak', 'normal']
+const weakSide = ['deadly', 'superweak', 'weak', 'normal'] //ChangeAffinity - Applied For Checking Sides Of An Affinity
 const resistSide = ['normal', 'resist', 'block', 'repel', 'drain']
-const damageFormulas = ['persona', 'pokemon', 'lamonka', 'beta', 'limitbreak']
-const ArgList = require("../arglist.js")
-
-Extra = class extends ArgList {
-	constructor(object) {
-		super(object.args, object.desc, object.doc)
-		this.name = object.name
-		this.multiple = object.multiple
-		this.diffflag = object.diffflag
-		this.unregsiterable = object.unregsiterable
-		for (const i in object) {
-			const func = object[i]
-			if (typeof func != "function")
-				continue
-			this[i] = func
-		}
-
-		this.useonfail = object.useonfail; //used for negotiation specials cause I use this exact same class.
-	}
-
-	apply(message, skill, rawargs, extraName) {
-		const args = this.parse(message, rawargs, extraName)
-		if (!args)
-			return false
-		return this.applyfunc(message, skill, args)
-	}
-}
+const damageFormulas = ['persona', 'pokemon', 'lamonka', 'beta', 'limitbreak'] //ForceFormula - Values
 
 /*
 	[[[Hook Documentation - EXTRAS hooks in order of appearance.]]]
@@ -275,91 +249,133 @@ extrasList = {
 
 	need: new Extra({
 		name: "Need",
-		desc: 'Will make the skill require <Less/More> than <Percent>% of <Cost Type> for it to work.',
+		desc: "Will make the skill require from <User/Target>'s <Condition> for {Affected Parameter} to work.",
 		multiple: true,
 		args: [
 			{
-				name: "Less/More",
+				name: "Condition",
 				type: "Word",
 				forced: true
 			},
 			{
-				name: "Equal?",
-				type: "Word"
-			},
-			{
-				name: "Percent",
-				type: "Decimal",
-				forced: true
-			},
-			{
-				name: "Cost Type",
+				name: "User/Target",
 				type: "Word",
 				forced: true
-			}
+			},
+			{
+				name: "Affected Parameter",
+				type: "Word",
+				forced: true
+			},
+			{
+				name: "Additional Parameters",
+				type: "Word",
+				multiple: true,
+			},
 		],
+		doc: {
+			pages: [
+				{
+					desc: "### The {Affected Parameter} can be either:"+
+						"\n- A Skill extra - Checks for applicability of the extra.\n-# Forcemsg is unavailable. Can only check for the user on: powerbuff, lonewolf, heavenwrath, affinitypow, rollout, multihit, guts, weaponmod, steamroller, need, metronome, copyskill, fakeout & movelink."+
+						"\n- \"SkillBeforeUse\" - Checks for usability of the skill entirely.\n-# The default option, but can't check for the target."+
+						"\n- \"SkillOnSelect\" - Checks for usability of the skill after using cost.\n-# Alternate to SkillBeforeUse, that can check for the target."+
+						"\n- \"Crit\" - Decides if the skill's critical chance can be used."+
+						"\n- \"Status\" - Chooses if the skill's status chance can be used.\n-# Different from applying multistatus as it checks for all general status affliction."+
+						"\n- \"Tech\" - Determines if technical damage can be dealt.\n-# Depends on Technical Damage being enabled."+
+						"\n- \"OneMores\" - Establishes ability to strike once more.\n-# Depends on One Mores being enabled."+
+						"\n- \"LBGain\" - Deducts ability gain LB from skill.\n-# Depends on Limit Breaks being enabled."
+				},
+				{
+					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					fields: Object.entries(needConditions).map(x => x = {
+						name: `${x[1].name} (${x[0]})`,
+						value: `\n\n${x[1].getFullDesc()}`,
+						inline: true
+					}).slice(0,6)
+				},
+				{
+					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					fields: Object.entries(needConditions).map(x => x = {
+						name: `${x[1].name} (${x[0]})`,
+						value: `\n\n${x[1].getFullDesc()}`,
+						inline: true
+					}).slice(6,12)
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
-			let less = args[0].toLowerCase()
-			let equal = (args[1] == 'true' || args[1] == 'yes' || args[1] == 'y' || args[1] == '1')
-			const percent = args[2]
-			const stat = args[3].toLowerCase()
-
-			if (less != "less" && less != "more") return void message.channel.send("You specify if the skill needs to be less or more of something, not whatever you said.");
-			if (percent < 1)
-				return void message.channel.send("You can't need less than 0%!");
-			if (stat != 'hp' && stat != 'mp' && stat != 'hppercent' && stat != 'mppercent' && stat != 'lb')
-				return void message.channel.send("You entered an invalid value for <Cost Type>! It can be either HP, HPPercent, MP, MPPercent, or LB.");
+			let condition = args[0].toLowerCase()
+			let target = args[1].toLowerCase()
+			let params = args.slice(3).map(v => v.toLowerCase())
+			let affected = args[2]?.toLowerCase() ?? "skillbeforeuse"
 			
-			makeExtra(skill, "need", [less, equal, percent, stat]);
-			return true
+			if (target != 'target' && target != 'user' && !['turn', 'battlecondition'].includes(condition)) //Target/User
+				return void message.channel.send("You entered an invalid value for <User/Target>! It can be either Target or User.");
+
+			//Affected Parameter
+			if (!extrasList[affected] && !['skillbeforeuse', 'skillonselect', 'crit', 'status', 'tech', 'onemores', 'lbgain'].includes(affected)) return void message.channel.send("That's not the valid affected parameter you can have.");
+
+			if (affected == 'forcemsg') return void message.channel.send("That's a cosmetic change. Why would you gatekeep it?");
+
+			if (affected == 'skillbeforeuse' && target == 'target') return void message.channel.send("Unfortunately it's not possible to check using the target here, as the check for usability of the skill in its entirety is done before you can choose the target.");
+
+			if (extrasList[affected] && (['need', 'metronome', 'copyskill', 'movelink', 'fakeout'].includes(affected) || extrasList[affected].statmod)) return void message.channel.send(`Unfortunately ${affected.toUpperCase()} does not account for the target at all, only the user.`);
+
+			if (!needConditions[condition]) return void message.channel.send(`Hold on, ${condition} is not the valid condition you can have.`);
+
+			params = needConditions[condition].apply(message, skill, params, condition)
+
+			if (params) {
+				makeExtra(skill, "need", [condition, target, affected, ...params]);
+				return true;
+			}
+
+			return false;
+		},
+		variableCheck(target, skill, btl, vars) {
+			let isSkillAffected = (vars[2] == "skillbeforeuse" && skill.type !== 'passive')
+
+			let team = btl.teams[target.team];
+
+			return needConditions[vars[0]].check(target, skill, btl, vars, isSkillAffected, team)
 		},
 		canuse(char, skill, btl, vars) {
-			let check = vars[0] == 'less' ? '<' : '>';
-			if (vars[1]) check += '=';
+			//the target variable here is covered with CHAR
+			if (vars[2] != 'skillbeforeuse') return true;
 
-			const applyOperator = new Function('a', 'b', `return a ${check} b;`);
+			return extrasList.need.variableCheck(char, skill, btl, vars);
+		},
+		skillfailonuse(char, targ, skill, btl, vars) {
+			if (vars[2] != 'skillonselect') return false;
 
-			switch(vars[3].toLowerCase()) {
-				case 'mp':
-					if (!applyOperator(char.mp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}${char.mpMeter ? char.mpMeter[1] : "MP"} to use this move!`;
-					break;
-				case 'hpandmp':
-					if (!applyOperator(char.mp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}${char.mpMeter ? char.mpMeter[1] : "MP"} __and__ ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}HP to use this move!`;
-					break;
-				case 'lb':
-					if (!applyOperator(char.lbpercent, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}LB% to use this move!`;
-					break;
-				case 'mppercent':
-					if (!applyOperator((char.mp/char.maxmp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${(char.mp/char.maxmp)*vars[2]}% ${char.mpMeter ? char.mpMeter[1] : "MP"} to use this move!`;
-					break;
-				case 'hppercent':
-					if (!applyOperator((char.hp/char.maxhp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}% HP to use this move!`;
-					break;
-				case 'hpandmppercent':
-					if (!applyOperator((char.hp/char.maxhp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}% HP __and__ ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}% ${char.mpMeter ? char.mpMeter[1] : "MP"} to use this move!`;
-					break;
-				default:
-					if (!applyOperator(char.hp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}HP to use this move!`;
-					break;
+			let needTarget = vars[1] == 'target' ? targ : char
+
+			return !extrasList.need.variableCheck(needTarget, skill, btl, vars);
+		},
+		requirement(vars, filtration) {
+			let text = `**`
+
+			let filteredVars = vars.filter(x => x[2] == filtration)
+
+			for (i in filteredVars) {
+				text += needConditions[filteredVars[i][0]].getinfo(filteredVars[i])
+
+				if (i < filteredVars.length - 2) text += ', ';
+				else if (i == filteredVars.length - 2) text += ' AND ';
 			}
 
-			return true;
+			return text + '**';
 		},
 		getinfo(vars, skill) {
-			let text = `Requires **`
-			
-			for (i in vars) {
-				let healText = ` ${vars[i][3].toUpperCase()}`
-				if (healText.includes('PERCENT')) healText = `% of caster's max ${healText.replace('PERCENT', '')}`
-				if (healText.includes('LB')) healText = `% LB`
+			let someTexts = ""
 
-				text += `${vars[i][0]} than ${vars[i][1] ? 'or equal to' : ''} ${vars[i][2]}${healText}`
+			let isSkill = vars.some(x => x[2] == 'skillbeforeuse')
+			let is2Skill = vars.some(x => x[2] == 'skillonselect')
 
-				if (i < vars.length - 2) text += ', ';
-				else if (i == vars.length - 2) text += ' and ';
-			}
-
-			return text + '** to use';
+			if (isSkill) someTexts += "To use this skill, it needs " + extrasList.need.requirement(vars, 'skillbeforeuse');
+			if (is2Skill) someTexts += `${isSkill ? ".\n" : ""}For the skill to work after using cost, it needs ${extrasList.need.requirement(vars, 'skillonselect')}`
+			return someTexts;
 		}
 	}),
 
@@ -1162,12 +1178,8 @@ extrasList = {
 					turns: vars[1]
 				});
 
-				if (vars[2] && typeof vars[2] === "string") {
-					let txt = vars[2];
-					while (txt.includes('%SKILL%')) txt = txt.replace('%SKILL%', skill.name);
-					while (txt.includes('%USER%')) txt = txt.replace('%USER%', char.name);
-					while (txt.includes('%ENEMY%')) txt = txt.replace('%ENEMY%', targ.name);
-					return txt;
+				if (vars[2] && typeof vars[2] == 'string') {
+					return vars[2].replace(/%SKILL%/ig, skill.name).replace(/%USER%/ig, char.name).replace(/%ENEMY%/ig, targ.name);
 				} else {
 					return `A green aura is deployed around __${targ.name}__!`;
 				}
@@ -1214,12 +1226,8 @@ extrasList = {
 					type: 'hp'
 				});
 
-				if (vars[2]) {
-					let txt = vars[2];
-					while (txt.includes('%SKILL%')) txt = txt.replace('%SKILL%', skill.name);
-					while (txt.includes('%USER%')) txt = txt.replace('%USER%', char.name);
-					while (txt.includes('%ENEMY%')) txt = txt.replace('%ENEMY%', targ.name);
-					return txt;
+				if (vars[2] && typeof vars[2] == 'string') {
+					return vars[2].replace(/%SKILL%/ig, skill.name).replace(/%USER%/ig, char.name).replace(/%ENEMY%/ig, targ.name);
 				} else {
 					return `A purple aura is deployed around __${targ.name}__!`;
 				}
@@ -1265,12 +1273,8 @@ extrasList = {
 					percent: vars[0]
 				});
 
-				if (vars[2] && typeof vars[2] == "string") {
-					let txt = vars[2];
-					while (txt.includes('%SKILL%')) txt = txt.replace('%SKILL%', skill.name);
-					while (txt.includes('%USER%')) txt = txt.replace('%USER%', char.name);
-					while (txt.includes('%ENEMY%')) txt = txt.replace('%ENEMY%', targ.name);
-					return txt;
+				if (vars[2] && typeof vars[2] == 'string') {
+					return vars[2].replace(/%SKILL%/ig, skill.name).replace(/%USER%/ig, char.name).replace(/%ENEMY%/ig, targ.name);
 				} else {
 					return `A red aura is deployed around __${targ.name}__!`;
 				}
@@ -1315,12 +1319,8 @@ extrasList = {
 					turns: vars[1]
 				});
 
-				if (vars[2]) {
-					let txt = vars[2].toString();
-					while (txt.includes('%SKILL%')) txt = txt.replace('%SKILL%', skill.name);
-					while (txt.includes('%USER%')) txt = txt.replace('%USER%', char.name);
-					while (txt.includes('%ENEMY%')) txt = txt.replace('%ENEMY%', targ.name);
-					return txt;
+				if (vars[2] && typeof vars[2] == 'string') {
+					return vars[2].replace(/%SKILL%/ig, skill.name).replace(/%USER%/ig, char.name).replace(/%ENEMY%/ig, targ.name);
 				} else {
 					return `A yellow aura is deployed around __${targ.name}__!`;
 				}
@@ -1442,6 +1442,11 @@ extrasList = {
 			makeExtra(skill, "hpcalc", [args[0] ?? 50]);
 			return true
 		},
+		dmgmod(char, targ, dmg, skill, btl, vars, emojis) {
+			dmg += dmg * ((char.hp / (char.maxhp / 2)) - 1) * (vars[0]/100)
+
+			return dmg;
+		},
 		getinfo(vars, skill) {
 			return `Current user's HP can modify damage by **${vars[0]}%**`;
 		}
@@ -1459,6 +1464,11 @@ extrasList = {
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "mpcalc", [args[0] ?? 50]);
 			return true
+		},
+		dmgmod(char, targ, dmg, skill, btl, vars, emojis) {
+			dmg += dmg * ((char.mp / (char.maxmp / 2)) - 1) * (vars[0]/100)
+
+			return dmg;
 		},
 		getinfo(vars, skill) {
 			return `Current user's MP can modify damage by **${vars[0]}%**`;
@@ -1888,7 +1898,7 @@ extrasList = {
 		},
 		hardcoded: true,
 		getinfo(vars, skill) {
-			return 'Use a completely random skill.';
+			return 'Use a completely random skill';
 		}
 	}),
 
@@ -2190,44 +2200,6 @@ extrasList = {
 
 			if (vars[1]) str += `. If it fails, debuff the foe's **${vars[1]}**`;
 			if (vars[1] && vars[2]) str += ` by **${-vars[2]}**`;
-
-			return str;
-		}
-	}),
-
-	dreameater: new Extra({
-		name: "Dream Eater (Pokémon)",
-		desc: "The skill will fail if the target is not inflicted with <Status Effect>",
-		multiple: true,
-		args: [
-			{
-				name: "Status Effect",
-				type: "Word",
-				forced: true
-			}
-		],
-		applyfunc(message, skill, args) {
-			if (!statusEffects.includes(args[0].toLowerCase())) return void message.channel.send(`${args[0]} is not a valid status effect.`);
-			
-			makeExtra(skill, "dreameater", [args[0].toLowerCase()]);
-			return true
-		},
-		skillfailonuse(char, targ, skill, btl, vars) {
-			return (targ.status != vars[0].toLowerCase());
-		},
-		getinfo(vars, skill) {
-			let str = `Fails if the **target** is not afflicted with `;
-
-			for (let i in vars) {
-				str += `${statusEmojis[vars[i][0]] ?? '<:burn:963413989688213524>'}**${statusNames[vars[i][0]] ?? 'Burning'}**`;
-
-				if (i == vars.length-2)
-					str += ' or ';
-				else if (i >= vars.length-1)
-					str += ' when attacking them';
-				else
-					str += ', ';
-			}
 
 			return str;
 		}
@@ -2595,7 +2567,7 @@ extrasList = {
 			makeExtra(skill, "weatherchange", [args[0].toLowerCase()]);
 			return true;
 		},
-		ondamage(char, targ, dmg, skill, btl, vars) {
+		onuseatendoffunc(char, targ, skill, btl, vars) {
 			if (btl.weather?.type != vars[0]) {
 				if (btl?.weather?.type) {
 					btl.weather.type = vars[0];
@@ -2638,7 +2610,7 @@ extrasList = {
 			makeExtra(skill, "terrainchange", [args[0].toLowerCase()]);
 			return true;
 		},
-		ondamage(char, targ, dmg, skill, btl, vars) {
+		onuseatendoffunc(char, targ, skill, btl, vars) {
 			if (btl?.terrain?.type != vars[0]) {
 				if (btl?.terrain?.type) {
 					btl.terrain.type = vars[0];
@@ -2769,7 +2741,7 @@ extrasList = {
 			{
 				name: "Skill #1",
 				type: "Word",
-				forced: false,
+				forced: true,
 				multiple: true,
 			}
 		],
@@ -2980,7 +2952,7 @@ customVariables = {
 	forcemove: {
 		onturn(btl, char, vars) {
 			if (vars[1].move === "melee") {
-				useSkill(char, btl, vars[1], makeMelee(char));
+				useSkill(char, btl, vars[1], makeMelee(char, btl));
 			} else {
 				if (vars[2])
 					useSkill(char, btl, vars[1], vars[2]);

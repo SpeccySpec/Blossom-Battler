@@ -18,6 +18,8 @@ funcsAtBattleStart = (btl) => {
 
 				for (let k in psv.passive) {
 					if (passiveList[k] && passiveList[k].battlestart) {
+						if (needCheck(char, char, psv, 'passive', 'skillbeforeuse', btl) !== true) continue;
+						if (!needCheck(char, char, psv, 'passive', k, btl)) continue;
 						if (passiveList[k].multiple) {
 							for (let j in psv.passive[k]) {
 								passiveList[k].battlestart(char, psv, btl, psv.passive[k][j]);

@@ -1302,11 +1302,18 @@ commands.trustxp = new Command({
 			name: "XP",
 			type: "Num",
 			forced: true
+		},
+		{
+			name: "Mutual?",
+			type: "YesNo"
 		}
 	],
 	checkban: true,
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
+
+		if (!settings?.mechanics?.trust) return message.channel.send('Trust is not enabled for this server!')
+		
 		if (args[0] == "" || args[0] == " " || args[1] == "" || args[1] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 
 		// Checks
@@ -1317,7 +1324,7 @@ commands.trustxp = new Command({
 		if (args[2] == 0) return message.channel.send("It won't do anything when you add or subtract nothing from something");
 
 		// changeTrust function handles everything.
-		changeTrust(charFile[args[0]], charFile[args[1]], Math.round(args[2]*(settings.rates.trustrate ?? 1)), true, message.channel, args[0], args[1]);
+		changeTrust(charFile[args[0]], charFile[args[1]], Math.round(args[2]*(settings.rates.trustrate ?? 1)), true, message, null, args[0], args[1], args[3] ?? true);
 		delete charFile[args[0]].truename;
 		delete charFile[args[1]].truename;
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
@@ -1339,11 +1346,21 @@ commands.cleartrust = new Command({
 			name: "Character #2 Name",
 			type: "Word",
 			forced: false
+		},
+		{
+			name: "Mutual?",
+			type: "YesNo"
 		}
 	],
 	checkban: true,
 	func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id)
+
+		if (!settings?.mechanics?.trust) return message.channel.send('Trust is not enabled for this server!')
+
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+
+		let isMutual = args[2] ?? true
 
 		if (args[0].toLowerCase() == 'all') {
 			if (!utilityFuncs.isAdmin(message)) return message.channel.send("You don't have permission to do that.");
@@ -1359,10 +1376,10 @@ commands.cleartrust = new Command({
 			if (args[1] && !charFile[args[0]]?.trust?.[args[1]] && args[1].toLowerCase() != 'all') return message.channel.send("That character doesn't have any Trust XP with that character.");
 			if (args[1] && args[1].toLowerCase() != 'all') {
 				delete charFile[args[0]].trust[args[1]];
-				if (charFile?.[args[1]]?.trust?.[args[0]]) delete charFile[args[1]].trust[args[0]];
+				if (charFile?.[args[1]]?.trust?.[args[0]] && isMutual) delete charFile[args[1]].trust[args[0]];
 			} else {
 				for (let char in charFile[args[0]].trust) {
-					if (charFile?.[char]?.trust?.[args[0]]) delete charFile[char].trust[args[0]];
+					if (charFile?.[char]?.trust?.[args[0]] && isMutual) delete charFile[char].trust[args[0]];
 					delete charFile[args[0]].trust[char];
 				}
 			}
@@ -1391,10 +1408,18 @@ commands.trustlevel = new Command({
 			name: "Trust Level",
 			type: "Num",
 			forced: true
+		},
+		{
+			name: "Mutual?",
+			type: "YesNo"
 		}
 	],
 	checkban: true,
 	func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id)
+
+		if (!settings?.mechanics?.trust) return message.channel.send('Trust is not enabled for this server!')
+
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 		if (!charFile[args[0]] || !charFile[args[1]]) return message.channel.send('Nonexistant Character.');
 		if (!utilityFuncs.isAdmin(message) && charFile[args[0]].owner != message.author.id) return message.channel.send("You don't own this character!");
@@ -1418,7 +1443,7 @@ commands.trustlevel = new Command({
 		char1.trust[args[1]].amount = 0;
 		char1.trust[args[1]].maximum = (100+((Math.abs(char1.trust[args[1]].level)-1)*15)) * (char1.trust[args[1]].level > 0 ? 1 : -1);
 
-		char2.trust[args[0]] = char1.trust[args[1]];
+		if (args[3] ?? true) char2.trust[args[0]] = char1.trust[args[1]];
 
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 		message.channel.send("Trust Level has been set.");
@@ -1926,7 +1951,11 @@ commands.leaderskill = new Command({
 	aliases: ['setleaderskill', 'leadskill', 'frontskill', 'orderskill'],
 	section: "characters",
 	doc: {
-		desc: "A Leader Skill is a skill characters activate for the entire team when they are at the front of a party. This can have various effects on the characters reccomended to use, the skills reccomended to use, the playstyle of your party and more!```diff\n" + leaderTxt + "```",
+		pages: [
+			{
+				desc: "A Leader Skill is a skill characters activate for the entire team when they are at the front of a party. This can have various effects on the characters reccomended to use, the skills reccomended to use, the playstyle of your party and more!```diff\n" + leaderTxt + "```",
+			}
+		]
 	},
 	args: [
 		{
@@ -2692,7 +2721,7 @@ commands.setquote = new Command({
 			forced: true
 		},
 		{
-			name: "Quote Type",
+			name: "Quote Type / Skill Name / Status Ailment",
 			type: "Word",
 			forced: true
 		},
@@ -2728,15 +2757,17 @@ commands.setquote = new Command({
 		if (!quoteTypes[args[1].toLowerCase()]) {
 			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
 
-			if (!skillFile[args[1]]) {
+			if (!skillFile[args[1]] && !statusEffects.includes(args[1])) {
 				let quoteStr = '';
 				for (let i in quoteTypes) quoteStr += `- ${i}\n`;
 
 				return message.channel.send(`Invalid Quote Type! Try one of these:\n${quoteStr}`);
 			} else {
-				if (!thingDefs[args[0]].quotes[`${args[1]}quote`]) thingDefs[args[0]].quotes[`${args[1]}quote`] = [];
-				if (args[3] && thingDefs[args[0]].quotes[`${args[1]}quote`][args[3]]) thingDefs[args[0]].quotes[`${args[1]}quote`][args[3]] = args[2];
-				else thingDefs[args[0]].quotes[`${args[1]}quote`].push(args[2]);
+				let qType = (statusEffects.includes(args[1]) ? 'status-' : '')+args[1]
+
+				if (!thingDefs[args[0]].quotes[`${qType}quote`]) thingDefs[args[0]].quotes[`${qType}quote`] = [];
+				if (args[3] && thingDefs[args[0]].quotes[`${qType}quote`][args[3]]) thingDefs[args[0]].quotes[`${qType}quote`][args[3]] = args[2];
+				else thingDefs[args[0]].quotes[`${qType}quote`].push(args[2]);
 
 				message.react('👍');
 				if (thingDefs[args[0]].type) {
@@ -2774,7 +2805,7 @@ commands.clearquote = new Command({
 			forced: true
 		},
 		{
-			name: "Quote Type",
+			name: "Quote Type / Skill Name / Status Ailment",
 			type: "Word",
 			forced: false
 		},
@@ -2834,13 +2865,13 @@ commands.clearquote = new Command({
 			if (!quoteTypes[quoteinput]) {
 				let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
 	
-				if (!skillFile[args[1]]) {
+				if (!skillFile[args[1]] && !statusEffects.includes(args[1])) {
 					let quoteStr = '';
 					for (let i in quoteTypes) quoteStr += `- ${i}\n`;
 
 					return message.channel.send(`Invalid Quote Type! Try one of these:\n${quoteStr}`);
 				} else {
-					quoteinput = args[1];
+					quoteinput = (statusEffects.includes(args[1]) ? 'status-' : '')+args[1];
 				}
 			}
 
@@ -2894,10 +2925,10 @@ commands.getquotes = new Command({
 
 		if (args[1]) {
 			if (!quoteTypes[args[1].toLowerCase()]) {
-				if (thingDefs[args[0]].quotes && thingDefs[args[0]].quotes[`${args[1]}quote`] && skillFile[args[1]]) {
+				if (thingDefs[args[0]].quotes && ((thingDefs[args[0]].quotes[`${args[1]}quote`] && skillFile[args[1]]) || (thingDefs[args[0]].quotes[`status-${args[1]}quote`] && statusEffects.includes(args[1])))) {
 					let array = [];
-					for (let i in thingDefs[args[0]].quotes[`${args[1]}quote`])
-						array.push({title: `**[${i}]**`, desc: `_"${thingDefs[args[0]].quotes[`${args[1]}quote`][i]}"_`});
+					for (let i in thingDefs[args[0]].quotes[`${(statusEffects.includes(args[1]) ? 'status-' : '')+args[1]}quote`])
+						array.push({title: `**[${i}]**`, desc: `_"${thingDefs[args[0]].quotes[`${(statusEffects.includes(args[1]) ? 'status-' : '')+args[1]}quote`][i]}"_`});
 
 					listArray(message.channel, array, message.author.id);
 					return;
@@ -2929,6 +2960,14 @@ commands.getquotes = new Command({
 			}
 
 			if (thingDefs[args[0]].quotes) {
+				for (let i of statusEffects) {
+					let quoteTxt = '';
+					if (thingDefs[args[0]].quotes[`status-${i}quote`]) {
+						quoteTxt = selectQuote(thingDefs[args[0]], 'status-'+i, true);
+						array.push({title: `Inflicted with ${statusEmojis[i]} ${statusNames[i]}`, desc: quoteTxt});
+					}
+				}
+
 				for (let i in skillFile) {
 					let quoteTxt = '';
 					if (thingDefs[args[0]].quotes[`${i}quote`]) {
@@ -2993,7 +3032,7 @@ commands.listquotetypes = new Command({
 
 		let page = 0;
 		const generateEmbed = async (page) => {
-			const current = quoteTypeData.slice(page, page + 6);
+			const current = quoteTypeData.slice(page, page + 15);
 			return new Discord.MessageEmbed({
 				color: '#0099ff',
 				title: "List of possible Quote Types:",
@@ -3001,7 +3040,7 @@ commands.listquotetypes = new Command({
 				fields: await Promise.all(
 					current.map(async arrayDefs => ({
 						name: `${arrayDefs[0]}`,
-						value: arrayDefs[1],
+						value: `-# ${arrayDefs[1]}`,
 						inline: true
 					}))
 				)
@@ -3020,16 +3059,16 @@ commands.listquotetypes = new Command({
 		collector.on('collect', async interaction => {
 			if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
 				if (interaction.customId === 'forward') {
-					page += 6
+					page += 15
 
 					if (page >= quoteTypeData.length) {
 						page = 0
 					}
 				} else if (interaction.customId === 'back') {
-					page -= 6
+					page -= 15
 
 					if (page < 0) {
-						page = quoteTypeData.length - (quoteTypeData.length % 6 != 0 ? quoteTypeData.length % 6 : 6)
+						page = quoteTypeData.length - (quoteTypeData.length % 15 != 0 ? quoteTypeData.length % 15 : 15)
 					}
 				}
 
@@ -3154,6 +3193,10 @@ commands.gettrust = new Command({
 		}
 	],
 	func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id)
+
+		if (!settings?.mechanics?.trust) return message.channel.send('Trust is not enabled for this server!')
+		
 		if (args[0] == "" || args[0] == " ") return message.channel.send('Invalid character name! Please enter an actual name.');
 		
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`, true);
@@ -3173,7 +3216,11 @@ for (let i in bioSections)
 commands.setbioinfo = new Command({
 	desc: "Sets a character's information, backstory, age, ect.",
 	doc: {
-		desc: "{Info} and {More Info, if necessary} can be used to further build your character's bio. Most of them are cosmetic, except for weight, height, age, and themes, although, they are still not mandatory to be set. They will just affect certain Skill Extras, and the music functionality of the discord bot. There are default values to this command, but you can also add your own sections```diff\n" + defaultTxt + "```",
+		pages: [
+			{
+				desc: "{Info} and {More Info, if necessary} can be used to further build your character's bio. Most of them are cosmetic, except for weight, height, age, and themes, although, they are still not mandatory to be set. They will just affect certain Skill Extras, and the music functionality of the discord bot. There are default values to this command, but you can also add your own sections```diff\n" + defaultTxt + "```",
+			}
+		]
 	},
 	section: "characters",
 	args: [
@@ -5523,7 +5570,11 @@ commands.curestatus = new Command({
 commands.setmeter = new Command({
 	desc: "Sets a character's meter.",
 	doc: {
-		desc: "Valid meters are:```diff\n+ HP - The raw HP stat of the character. Cannot exceed max.\n+ MP - The raw MP stat of the character. Cannot exceed max.\n+ HPPercent - The percentage of the HP of the character. Cannot exceed 100%.\n+ MPPercent - The percentage of the MP of the character. Cannot exceed 100%.\n+ LBPercent - The Limit Break Percentage of the character. Cannot exceed 1000%.```",
+		pages: [
+			{
+				desc: "Valid meters are:```diff\n+ HP - The raw HP stat of the character. Cannot exceed max.\n+ MP - The raw MP stat of the character. Cannot exceed max.\n+ HPPercent - The percentage of the HP of the character. Cannot exceed 100%.\n+ MPPercent - The percentage of the MP of the character. Cannot exceed 100%.\n+ LBPercent - The Limit Break Percentage of the character. Cannot exceed 1000%.```",
+			}
+		]
 	},
 	aliases: ['fullyheal', 'fullrestore', 'maxheal', 'maxrestore', 'maxhp'],
 	section: "characters",

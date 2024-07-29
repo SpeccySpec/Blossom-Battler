@@ -38,6 +38,8 @@ commands.settings = new Command({
 					break
 				case 'charms':
 				case 'transformations':
+				case 'trust':
+				case 'pets':
 					mechanicText += `**${i.charAt(0).toUpperCase() + i.slice(1)}**: ${settings['mechanics'][i] == true ? 'Enabled' : 'Disabled'}\n`
 					break
 			}
@@ -122,6 +124,9 @@ commands.settings = new Command({
 					if (settings['mechanics']['technicaldamage'] == true) {
 						rateText += `**Technical Damage Rate**: ${settings['rates'][i]}x\n`
 					}
+					break
+				case 'limitbreak':
+					rateText += `**Limit Break Gain Rate**: ${settings['rates'][i]}x\n`
 					break
 			}
 		}
@@ -526,6 +531,8 @@ commands.trustrate = new Command({
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
+		if (!settings?.mechanics?.trust) return message.channel.send('Trust is not enabled for this server!')
+
 		if (args[0] < 0) {
 			return message.channel.send('Trust rate cannot be less than 0!')
 		}
@@ -651,8 +658,8 @@ commands.critrate = new Command({
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
-		if (args[0] < 1.1) {
-			return message.channel.send('Critical hit damage rate cannot be less than 1!')
+		if (args[0] <= 1) {
+			return message.channel.send('Critical hit damage rate needs to be more than 1!')
 		}
 
 		settings['rates']['crit'] = args[0]
@@ -677,13 +684,39 @@ commands.techrate = new Command({
 		let settings = setUpSettings(message.guild.id)
 		if (settings.mechanics.technicaldamage == false) return message.channel.send('Technical damage is not enabled for this server!')
 
-		if (args[0] < 1) {
-			return message.channel.send('Technical damage rate cannot be less than 1!')
+		if (args[0] <= 0) {
+			return message.channel.send('Technical damage rate needs to be more than 0!')
 		}
 
 		settings['rates']['tech'] = args[0]
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 		message.channel.send('Technical damage rate set to ' + args[0] + 'x')
+	}
+})
+
+commands.limitbreakrate = new Command({
+	desc: 'Change the technical damage rate in battles for the server.',
+	section: 'moderation',
+	aliases: ['setlimitbreakrate', 'setlbrate', 'lbrate'],
+	args: [
+		{
+			name: 'Limit Break Gain Rate',
+			type: 'Decimal',
+			forced: true
+		}
+	],
+	admin: "You do not have permission to change the limit break gain rate!",
+	func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id)
+		if (settings?.mechanics?.limitbreaks == false) return message.channel.send('Limit Breaks are not enabled for this server!')
+
+		if (args[0] <= 0) {
+			return message.channel.send('Limit Break gain rate needs to be more than 0!')
+		}
+
+		settings['rates']['limitbreak'] = args[0]
+		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
+		message.channel.send('Limit break gain rate set to ' + args[0] + 'x')
 	}
 })
 
@@ -713,6 +746,8 @@ commands.mechanics = new Command({
 			'technicaldamage': 'Technical Damage',
 			'fusionskills': 'Fusion Skills',
 			'powerlevels': 'Power Levels',
+			'trust': 'Trust',
+			'pets': 'Pets'
 		}
 
 		switch (args[0].toLowerCase()) {
@@ -726,12 +761,14 @@ commands.mechanics = new Command({
 			case 'technicaldamage':
 			case 'fusionskills':
 			case 'powerlevels':
+			case 'trust':
+			case 'pets':
 				settings['mechanics'][args[0].toLowerCase()] = !settings['mechanics'][args[0].toLowerCase()]
 				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 				message.channel.send(fullNames[args[0].toLowerCase()] + ' are now ' + (settings['mechanics'][args[0].toLowerCase()] ? 'enabled' : 'disabled'))
 				break
 			default:
-				message.channel.send('Invalid mechanic! Valid mechanics are: limitbreaks, teamcombos, onemores, stataffinities, charms, leaderskills, transformations')
+				message.channel.send('Invalid mechanic! Valid mechanics are: limitbreaks, teamcombos, onemores, stataffinities, charms, leaderskills, transformations, technicaldamage, fusionskills, powerlevels, trust & pets.')
 				break
 		}
 	}

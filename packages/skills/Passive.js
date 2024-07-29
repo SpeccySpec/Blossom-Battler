@@ -37,6 +37,7 @@ let targetNames = {
 	randomwidespreadallies: 'random ally wide spread',
 	randomwidespread: 'random fighter wide spread',
 }
+let attachmentTypes = ['onwin', 'onfusionskill', 'onteamcombo', 'onheal', 'onregenerate', 'onrevive', 'onrecarmdra', 'onpowerheal', 'onstatushealphys', 'onstatushealmen', 'onstatushealpos', 'onstatushealneu', 'onstatushealneg', 'onstatushealall', 'onallheal', 'onstatusheal'] //Custom ones are... onallheal, onstatusheal, this is all for ATTACHMENT PASSIVE
 
 /*
 	[[[Hook Documentation - PASSIVE hooks in order of appearance.]]]
@@ -123,7 +124,7 @@ passiveList = {
 			}
 		},
 		dmgmod(char, targ, dmg, skill, btl, vars) {
-			if (!vars[3]) return;
+			if (!vars[3]) return dmg;
 			if ((typeof(skill.type) === 'object' && skill.type.includes('almighty')) || (typeof(skill.type) === 'string' && skill.type == 'almighty')) return;
 
 			let type = vars[0];
@@ -449,6 +450,67 @@ passiveList = {
 		getinfo(vars, skill) {
 			return `Boosts magic attacks by up to **${vars[0]-100}%** with less HP down to **${vars[1]}% of user's max HP**`;
 		}
+	}),
+
+	need: new Extra({
+		name: extrasList.need.name,
+		desc: extrasList.need.desc,
+		multiple: extrasList.need.multiple,
+		args: extrasList.need.args,
+		doc: {
+			pages: [
+				{
+					desc: "### The {Affected Parameter} can be either:"+
+						"\n- A Skill extra - Checks for applicability of the extra.\n-#  Can only check for the user on: need, skilldeny, dp, neutralisinggas, forceweather, forceterrain, autoboost, magicbounce, boost, statusboost, earlybird, moodswing, berserk, enraged, typemod, perfectkeeper, extrahit, pinchmode, sacrificial, elementstore, finalpush, formchange, magicmelee, meleetarget & attachment."+
+						"\n- \"SkillBeforeUse\" - Checks for usability of the skill entirely.\n-# The default option."+
+						"\n\nA fair amount of options are not included for heals, like CRIT or LBGAIN. This is because passive skills aren't meant to offer such. With that being said, SKILLONSELECT is impossible as well."
+				},
+				{
+					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					fields: Object.entries(needConditions).map(x => x = {
+						name: `${x[1].name} (${x[0]})`,
+						value: `\n\n${x[1].getFullDesc()}`,
+						inline: true
+					}).slice(0,6)
+				},
+				{
+					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					fields: Object.entries(needConditions).map(x => x = {
+						name: `${x[1].name} (${x[0]})`,
+						value: `\n\n${x[1].getFullDesc()}`,
+						inline: true
+					}).slice(6,12)
+				}
+			]
+		},
+		applyfunc(message, skill, args) {
+			let condition = args[0].toLowerCase()
+			let target = args[1].toLowerCase()
+			let params = args.slice(3).map(v => v.toLowerCase())
+			let affected = args[2]?.toLowerCase() ?? "skillbeforeuse"
+			
+			if (target != 'target' && target != 'user' && !['turn', 'battlecondition'].includes(condition)) //Target/User
+				return void message.channel.send("You entered an invalid value for <User/Target>! It can be either Target or User.");
+
+			//Affected Parameter
+			if (!passiveList[affected] && affected != "skillbeforeuse") return void message.channel.send("That's not the valid affected parameter you can have.");
+
+			if (affected == 'skillbeforeuse' && target == 'target') return void message.channel.send("Unfortunately it's not possible to check using the target here, as the check for usability of the skill in its entirety is done before you can choose the target.");
+
+			if (passiveList[affected] && (['need', 'formchange', 'magicmelee', 'meleetarget', 'attachment'].includes(affected) || passiveList[affected].canuseskill || passiveList[affected].endturn || passiveList[affected].battlestart || passiveList[affected].statmod)) return void message.channel.send(`Unfortunately ${affected.toUpperCase()} does not account for the target at all, only the user.`);
+
+			if (!needConditions[condition]) return void message.channel.send(`Hold on, ${condition} is not the valid condition you can have.`);
+
+			params = needConditions[condition].apply(message, skill, params, condition)
+
+			if (params) {
+				makePassive(skill, "need", [condition, "user", affected, ...params]);
+				return true;
+			}
+
+			return false;
+		},
+		getinfo: extrasList.need.getinfo
 	}),
 
 	typemod: new Extra({
@@ -1701,7 +1763,7 @@ passiveList = {
 
 	guardboost: new Extra({
 		name: "Guard Boost (Original)",
-		desc: "Reduces damage taken when guarding further by <Percent>%.",
+		desc: "Reduces damage taken when guarding further by <Percent>%.\n-# Default guard percentage is 55%.",
 		args: [
 			{
 				name: "Percent",
@@ -2762,12 +2824,12 @@ passiveList = {
 		applyfunc(message, skill, args) {
 			let stat = args[0].toLowerCase();
 			let stages = args[1];
-			let element = args[2].toLowerCase() ?? "all";
+			let element = args[2]?.toLowerCase() ?? "all";
 
 			if (![...stats, 'crit'].includes(stat)) return void message.channel.send("That's not a valid stat!");
 			if (stages == 0) return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
 			if (Math.abs(stages) > 3) return void message.channel.send("The maximum amount of stages is 3!");
-			if (!Elements.includes(element)) return void message.channel.send(`${args[2]} is not a valid element!`);
+			if (!Elements.includes(element) && element != 'all') return void message.channel.send(`${args[2]} is not a valid element!`);
 
 			makePassive(skill, "critboost", [stat, stages, element]);
 			return true
@@ -2792,6 +2854,160 @@ passiveList = {
 			}
 
 			return `${str}**`;
+		}
+	}),
+
+	attachment: new Extra({
+		name: "Attachment (Original)",
+		desc: "Changes the effectiveness of trust gain dependent on <Actions> to a <Percentage> of itself.",
+		multiple: true,
+		args: [
+			{
+				name: "Has to be one doing it?",
+				type: "YesNo",
+				forced: true,
+			},
+			{
+				name: "Actions",
+				type: "Word",
+				forced: true,
+				multiple: true
+			},
+			{
+				name: "Percentage",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		doc: {
+			pages: [
+				{
+					desc: `Keep in mine that every action yields a different amount of XP. Here's the list of actions and how much they give:\n`+
+					`- "OnWin" - gives **35** XP by default.\n`+
+					`- "OnFusionSkill" - gives **a variable amount** of XP, depending on the fusion skill.\n`+
+					`- "OnTeamCombo" - gives **30** XP by default.\n`+
+					`- "OnHeal" - gives **20** XP by default.\n`+
+					`- "OnRegenerate" - gives **5** XP by default.\n`+
+					`- "OnRevive" - gives **30** XP by default.\n`+
+					`- "OnRecarmdra" - gives **40** XP by default.\n`+
+					`- "OnPowerHeal" - gives **20** XP by default.\n`+
+					`- "OnStatusHealPhys" - gives **15** XP by default.\n`+
+					`- "OnStatusHealMen" - gives **15** XP by default.\n`+
+					`- "OnStatusHealPos" - gives **-15** XP by default.\n`+
+					`- "OnStatusHealNeu" - gives **10** XP by default.\n`+
+					`- "OnStatusHealNeg" - gives **15** XP by default.\n`+
+					`- "OnStatusHealAll" - gives **15** XP by default.\n\n`+
+					`There are three other options available. "OnAllHeal" applies to every heal action, "OnStatusHeal" applies to every status heal action and "OnAll" is for everything.`
+				}
+			]
+		},
+		hardcoded: true,
+		applyfunc(message, skill, args) {
+			let types = [...new Set(args.slice(1,-1))];
+			
+			if (types.some(x => !attachmentTypes.includes(x))) return void message.channel.send(`The types that aren't right are: ${types.filter(x => !attachmentTypes.includes(x)).join(', ')}. Please take care of them.`)
+
+			if (types.includes('onallheal')) types[types.indexOf('onallheal')] = ['onheal', 'onregenerate', 'onrevive', 'onrecarmdra', 'onpowerheal', 'onstatushealphys', 'onstatushealmen', 'onstatushealpos', 'onstatushealneu', 'onstatushealneg', 'onstatushealall']
+			if (types.includes('onstatusheal')) types[types.indexOf('onstatusheal')] = ['onstatushealphys', 'onstatushealmen', 'onstatushealpos', 'onstatushealneu', 'onstatushealneg', 'onstatushealall']
+			if (types.includes('onall')) types[types.indexOf('onstatusheal')] = ['onwin', 'onfusionskill', 'onteamcombo', 'onheal', 'onregenerate', 'onrevive', 'onrecarmdra', 'onpowerheal', 'onstatushealphys', 'onstatushealmen', 'onstatushealpos', 'onstatushealneu', 'onstatushealneg', 'onstatushealall']
+
+			types = [...new Set(types.flat(2))]
+
+			makePassive(skill, "attachment", [args[0], types, parseFloat(args[args.length-1])]);
+			return true;
+		},
+		getinfo(vars, skill) {
+			let txt =  `Changes the effectiveness of trust gain`;
+
+			for (let i in vars) {
+				txt += ' upon **'
+
+				let types = vars[i][1];
+			
+				let filterings = {
+					onstatusheal: ['onstatushealphys', 'onstatushealmen', 'onstatushealpos', 'onstatushealneu', 'onstatushealneg', 'onstatushealall'],
+					onallheal: ['onheal', 'onregenerate', 'onrevive', 'onrecarmdra', 'onpowerheal', 'onstatusheal'],
+					onall: ['onwin', 'onfusionskill', 'onallheal'],
+				}
+
+				for (m in filterings) {
+					if (types.filter(x => filterings[m].includes(x)).length == filterings[m].length) {
+						types = types.filter(x => !filterings[m].includes(x))
+						types.push(m)
+					}
+				}
+
+				for (c in types) {
+					switch (types[c]) {
+						case 'onall':
+							txt += `every action ${vars[i][0] ? 'the user did' : 'done to the user'}`
+							break;
+						case 'onallheal':
+							txt += `${vars[i][0] ? 'healing someone' : 'being healed'} in general`
+							break;
+						case 'onstatusheal':
+							txt += `${vars[i][0] ? 'curing someone of' : 'being cured of'} any status`
+							break;
+						case 'onstatushealall':
+							txt += `${vars[i][0] ? 'curing someone of' : 'being cured of'} all statuses`
+							break;
+						case 'onstatushealneg':
+							txt += `${vars[i][0] ? 'curing someone of' : 'being cured of'} negative statuses`
+							break;
+						case 'onstatushealneu':
+							txt += `${vars[i][0] ? 'curing someone of' : 'being cured of'} neutral statuses`
+							break;
+						case 'onstatushealpos':
+							txt += `${vars[i][0] ? 'curing someone of' : 'being cured of'} positive statuses`
+							break;
+						case 'onstatushealmen':
+							txt += `${vars[i][0] ? 'curing someone of' : 'being cured of'} mental statuses`
+							break;
+						case 'onstatushealphys':
+							txt += `${vars[i][0] ? 'curing someone of' : 'being cured of'} phyical statuses`
+							break;
+						case 'onpowerheal':
+							txt += `${vars[i][0] ? 'healing someone' : 'being healed'} an amount (POWERHEAL)`
+							break;
+						case 'onrecarmdra':
+							txt += `${vars[i][0] ? 'healing someone' : 'being healed'} to full health`
+							break;
+						case 'onrevive':
+							txt += `${vars[i][0] ? 'reviving someone' : 'being revived'}`
+							break;
+						case 'onregenerate':
+							txt += `${vars[i][0] ? 'giving someone' : 'being given'} regeneration`
+							break;
+						case 'onheal':
+							txt += `${vars[i][0] ? 'reviving someone' : 'being revived'} an amount (HEALSTAT)`
+							break;
+						case 'onteamcombo':
+							txt += `performing a team combo`
+							break;
+						case 'onfusionskill':
+							txt += `performing a fusion skill`
+							break;
+						case 'onwin':
+							txt += `battle victory`
+							break;
+					}
+
+					if (c < types.length - 2) {
+						txt += ', ';
+					} else if (c == types.length - 2) {
+						txt += ' and ';
+					}
+				}
+
+				txt += `** to **${vars[i][2]}%**`
+
+				if (i < vars.length - 2) 
+					str += `, `
+				else if (i == vars.length - 2) 
+					str += ` and `
+			}
+
+			return txt
 		}
 	}),
 }
@@ -2877,6 +3093,9 @@ runPassiveHook = (char, hook, btl, ...parameters) => {
 			psv = skillFile[char.skills[i]];
 			for (let k in psv.passive) {
 				if (passiveList[k] && passiveList[k][hook]) {
+					if (needCheck(char, char, psv, 'passive', 'skillbeforeuse', btl) !== true) continue;
+					if (!needCheck(char, char, psv, 'passive', k, btl)) continue;
+					
 					if (passiveList[k].multiple) {
 						for (let j in psv.passive[k]) {
 							result += `${passiveList[k][hook](...parameters, psv, btl, psv.passive[k][j])}\n`;

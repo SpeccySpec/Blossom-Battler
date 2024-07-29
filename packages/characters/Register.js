@@ -635,7 +635,7 @@ longDescription = (charDefs, level, server, message, useguild) => {
 	}
 	if (enmLoot != '') DiscordEmbed.fields.push({ name: 'Loot', value: enmLoot, inline: true });
 
-	if (char.negotiateDefs && char.negotiateDefs.qualities) {
+	if (settings?.mechanics?.pets && char.negotiateDefs && char.negotiateDefs.qualities) {
 		let enmQualities = char.negotiateDefs.qualities
 		let qualityString = ''
 		

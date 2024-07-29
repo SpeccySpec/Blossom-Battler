@@ -70,13 +70,33 @@ dodgeTxt = (char, targ) => {
 	}
 }
 
+//New Need Extra Check - When It Checks For Specific Extras
+needCheck = (char, targ, skill, extraCat, filter, btl) => {
+	if (skill[extraCat] && skill[extraCat]?.need) {
+		let needExtraNecessary = skill[extraCat].need.filter(x => x[2] == filter)
+
+		for (ned in needExtraNecessary) {
+
+			let needTarget = needExtraNecessary[ned][1] == 'target' ? targ : char
+
+			if (!extrasList.need.variableCheck(needTarget, skill, btl, needExtraNecessary[ned])) return false;
+		}
+	}
+
+	return true;
+}
+
+extraCategory = (skill) => {
+	return ((skill.type == 'support' || skill.type == 'status') ? 'statusses' : (skill.type == 'heal' ? 'heal' : (skill.type == 'passive' ? 'passive' : "extras")))
+}
+
 // Generate Damage dealt to targ with skill using char's stats.
 genDmg = (char, targ, btl, skill) => {
 	let settings = setUpSettings(btl.guild.id);
 
 	// Status Effect StatMod.
-	let charStats = (char.status && !(skill.extras?.soulless && skill.extras.soulless.includes(char.status)) && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].statmod) ? statusEffectFuncs[char.status].statmod(char, objClone(char.stats)) : objClone(char.stats);
-	let targStats = (targ.status && !(skill.extras?.soulless && skill.extras.soulless.includes(targ.status)) && statusEffectFuncs[targ.status] && statusEffectFuncs[targ.status].statmod) ? statusEffectFuncs[targ.status].statmod(targ, objClone(targ.stats)) : objClone(targ.stats);
+	let charStats = (char.status && !(skill.extras?.soulless && skill.extras.soulless.includes(char.status) && needCheck(char, targ, skill, extraCategory(skill), 'soulless', btl)) && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].statmod) ? statusEffectFuncs[char.status].statmod(char, objClone(char.stats)) : objClone(char.stats);
+	let targStats = (targ.status && !(skill.extras?.soulless && skill.extras.soulless.includes(targ.status) && needCheck(targ, char, skill, extraCategory(skill), 'soulless', btl)) && statusEffectFuncs[targ.status] && statusEffectFuncs[targ.status].statmod) ? statusEffectFuncs[targ.status].statmod(targ, objClone(targ.stats)) : objClone(targ.stats);
 
 	// Weather StatMod.
 	if (btl.weather && weatherFuncs && weatherFuncs[btl.weather.type] && weatherFuncs[btl.weather.type].statmod) {
@@ -106,12 +126,12 @@ genDmg = (char, targ, btl, skill) => {
 	let endStat = statWithBuff(targStats.end, targ.buffs.end, targ);
 	console.log(`Atk Checkpoint: ${atkStat}`);
 
-	if (skill.extras?.statcalc) {
+	if (skill.extras?.statcalc && !needCheck(char, targ, skill, 'extras', 'statcalc', btl)) {
 		atkStat = statWithBuff(charStats[skill.extras.statcalc[0].toLowerCase()], char.buffs[skill.extras.statcalc[0].toLowerCase()] ?? 1, char);
-	} else if (skill.extras?.grassknot) {
+	} else if (skill.extras?.grassknot && !needCheck(char, targ, skill, 'extras', 'grassknot', btl)) {
 		atkStat = statWithBuff(targStats[skill.extras.grassknot[0].toLowerCase()], targ.buffs[skill.extras.grassknot[0].toLowerCase()] ?? 1, targ);
 	}
-	if (skill.extras?.hitcalc) {
+	if (skill.extras?.hitcalc && !needCheck(char, targ, skill, 'extras', 'hitcalc', btl)) {
 		endStat = statWithBuff(targStats[skill.extras.hitcalc[0].toLowerCase()], targ.buffs[skill.extras.hitcalc[0].toLowerCase()] ?? 1, targ);
 	}
 
@@ -124,7 +144,7 @@ genDmg = (char, targ, btl, skill) => {
 		let formulas = ['persona', 'pokemon', 'lamonka', 'limitbreak', 'beta'];
 		let damageformula = settings.formulas.damageFormula ?? 'persona';
 
-		if (skill.extras && skill.extras.forceformula && formulas.includes(skill.extras.forceformula[0].toLowerCase()))
+		if (skill.extras && skill.extras.forceformula && formulas.includes(skill.extras.forceformula[0].toLowerCase()) && needCheck(char, targ, skill, 'extras', 'forceformula', btl))
 			damageformula = skill.extras.forceformula[0].toLowerCase();
 
 		switch(damageformula) {
@@ -276,23 +296,63 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 	let party = btl.teams[targ.team];
 	let party2 = btl.teams[char.team];
 
+	// SkillFailOnUse
+	let shouldFail = false;
+
+	for (let j in selectcheck) {
+		if (skill[j]) {
+			for (let i in skill[j]) {
+				if (!selectcheck[j][i]) continue;
+				if (!selectcheck[j][i].skillfailonuse) continue;
+				if (noExtraArray && noExtraArray.includes(i)) continue;
+
+				if (!needCheck(char, targ, skill, j, i, btl)) continue;
+
+				if (selectcheck[j][i].multiple) {
+					for (let k in skill[j][i]) {
+						if (selectcheck[j][i].skillfailonuse(char, targ, skill, btl, skill[j][i][k])) {
+							shouldFail = true;
+							break;
+						} else {
+							shouldFail = false;
+						}
+					}
+				} else {
+					if (selectcheck[j][i].skillfailonuse(char, targ, skill, btl, skill[j][i])) {
+						shouldFail = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	if (shouldFail) {
+		result.txt = `...But it failed on ${targ.name}.`;
+		return result;
+	}
+
 	// Healing Skills
 	if (skill.type === 'heal' || (skill.limitbreak && skill.class == 'heal')) {
 		if (skill.heal) {
-			if (trustLevel(char, targ) >= trustLvl.morehealbuff)
-				skill.pow *= 1.2;
-			else if (trustLevel(char, targ) >= trustLvl.healbuff)
-				skill.pow *= 1.1;
+			if (settings?.mechanics?.trust) {
+				if (trustLevel(char, targ) >= trustLvl.morehealbuff)
+					skill.pow *= 1.2;
+				else if (trustLevel(char, targ) >= trustLvl.healbuff)
+					skill.pow *= 1.1;
+			}
 
 			if (char.mimic || char.clone || char.reincarnate) skill.pow /= 4;
 
-			if (skill.heal.wish && (!noExtraArray || (noExtraArray && !noExtraArray.includes('wish')))) {
+			if (skill.heal.wish && (!noExtraArray || (noExtraArray && !noExtraArray.includes('wish'))) && needCheck(char, targ, skill, 'extras', 'wish', btl)) {
 				result.txt += `\n${healList['wish'].onuse(char, targ, skill, btl, skill.heal.wish, skill.pow) ?? ''}`;
 			} else {
 				for (let i in skill.heal) {
 					if (!healList[i]) continue;
 					if (!healList[i].onuse) continue;
 					if (noExtraArray && noExtraArray.includes(i)) continue;
+
+					if (!needCheck(char, targ, skill, 'heal', i, btl)) continue;
 
 					if (healList[i].multiple) {
 						for (let k in skill.heal[i]) {
@@ -313,6 +373,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					for (let k in skillFile[targ.skills[i]].passive) {
 						if (passiveList[k] && passiveList[k].onheal) {
 							if (noExtraArray && noExtraArray.includes(k)) continue;
+							if (needCheck(targ, char, skillFile[targ.skills[i]], 'passive', 'skillbeforeuse', btl) !== true) continue;
+							if (!needCheck(targ, char, skillFile[targ.skills[i]], 'passive', k, btl)) continue;
 							result.txt += `\n${passiveList[k].onheal(targ, char, skill, skill.pow, btl, skillFile[targ.skills[i]].passive[k]) ?? ''}`;
 						}
 					}
@@ -327,6 +389,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				if (!statusList[i].onuse) continue;
 				if (noExtraArray && noExtraArray.includes(i)) continue;
 
+				if (!needCheck(char, char, skill, 'statusses', i, btl)) continue;
+
 				if (statusList[i].multiple) {
 					for (let k in skill.statusses[i]) {
 						result.txt += `\n${statusList[i].onuse(char, targ, skill, btl, skill.statusses[i][k], skill.pow)}`;
@@ -338,16 +402,24 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 		}
 
 		// Lastly, Status Effects
-		if (skill.status && !targ.status) {
+		if (skill.status && !targ.status && needCheck(char, targ, skill, extraCategory(skill), 'status', btl)) {
 			if (!char.dispelled) {
 				var status;
 				if (typeof(skill.status) === 'object') {
-					status = skill.status[randNum(skill.status.length-1)];
+					if (needCheck(char, targ, skill, extraCategory(skill), 'multistatus', btl)) status = skill.status[randNum(skill.status.length-1)];
+					else status = skill.status[0];
 				} else {
 					status = skill.status;
 				}
 
-				result.txt += statusList.status.inflictStatus(char, targ, skill, status ?? 'burn', btl, (!skill.pow || isNaN(skill.pow)) ? 1 : parseFloat(skill.pow));
+				let txt = statusList.status.inflictStatus(char, targ, skill, status ?? 'burn', btl, (!skill.pow || isNaN(skill.pow)) ? 1 : parseFloat(skill.pow));
+
+				let statusQuote = isPositiveStatus(status) ? 'positivestatus' : (isNeutralStatus(status) ? 'neutralstatus' : 'status')
+				if (char.quotes && char.quotes[`status-${status}quote`]) statusQuote = 'status-'+status
+
+				if (txt && txt != '') {
+					result.txt += `${txt}\n${selectQuote(char, statusQuote, null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}`;
+				}
 			} else {
 				result.txt += '...But it failed!'
 			}
@@ -380,6 +452,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				if (!extrasList[i].onuseoverride) continue;
 				if (noExtraArray && noExtraArray.includes(i)) continue;
 
+				if (!needCheck(char, targ, skill, 'extras', i, btl)) continue;
+
 				if (extrasList[i].multiple) {
 					for (let k in skill.extras[i]) {
 						result.txt += `\n${extrasList[i].onuseoverride(char, targ, skill, result, btl, skill.extras[i][k])}`;
@@ -397,6 +471,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					if (!extrasList[i].onuse) continue;
 					if (noExtraArray && noExtraArray.includes(i)) continue;
 
+					if (!needCheck(char, targ, skill, 'extras', i, btl)) continue;
+
 					if (extrasList[i].multiple) {
 						for (let k in skill.extras[i]) {
 							result.txt += `\n${(extrasList[i].onuse(char, targ, skill, btl, skill.extras[i][k] ) ?? '')}`;
@@ -408,33 +484,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 				return result;
 			}
-
-			// SkillFailOnUse
-			let shouldFail = false;
-			for (let i in skill.extras) {
-				if (extrasList[i] && extrasList[i].skillfailonuse) {
-					if (noExtraArray && noExtraArray.includes(i)) continue;
-					if (extrasList[i].multiple) {
-						for (let k in skill.extras[i]) {
-							if (extrasList[i].skillfailonuse(char, targ, skill, btl, skill.extras[i][k])) {
-								shouldFail = true;
-							} else {
-								shouldFail = false;
-							}
-						}
-					} else {
-						if (extrasList[i].skillfailonuse(char, targ, skill, btl, skill.extras[i])) {
-							shouldFail = true;
-						}
-					}
-				}
-			}
-
-			if (shouldFail) {
-				result.txt = `...But it failed on ${targ.name}.`;
-				return result;
-			}
 		}
+
+		if (typeof skill.type === 'object' && !needCheck(char, targ, skill, 'extras', 'dualelement', btl)) skill.type = skill.type[0]
 
 		let affinity = getAffinity(targ, skill.type);
 
@@ -461,9 +513,13 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				for (let k in skillFile[targ.skills[i]].passive) {
 					if (passiveList[k] && passiveList[k].forcedodge && !noMiss) {
 						if (noExtraArray && noExtraArray.includes(k)) continue;
+
 						const psv = passiveList[k];
 						const passive = skillFile[targ.skills[i]];
 						let dodge = false;
+
+						if (needCheck(targ, char, passive, 'passive', 'skillbeforeuse', btl) !== true) continue;
+						if (!needCheck(targ, char, passive, 'passive', k, btl)) continue;
 						
 						if (psv.multiple) {
 							for (let j in passive.passive[k]) {
@@ -485,6 +541,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						const psv = passiveList[k];
 						const passive = skillFile[targ.skills[i]];
 						let endfunc = false;
+
+						if (needCheck(targ, char, passive, 'passive', 'skillbeforeuse', btl) !== true) continue;
+						if (!needCheck(targ, char, passive, 'passive', k, btl)) continue;
 
 						if (psv.multiple) {
 							for (let j in passive.passive[k]) {
@@ -510,6 +569,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						if (noExtraArray && noExtraArray.includes(k)) continue;
 						const psv = passiveList[k];
 						const passive = skillFile[targ.skills[i]];
+
+						if (needCheck(targ, char, passive, 'passive', 'skillbeforeuse', btl) !== true) continue;
+						if (!needCheck(targ, char, passive, 'passive', k, btl)) continue;
 
 						if (psv.multiple) {
 							for (let j in passive.passive[k]) {
@@ -603,10 +665,12 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				repel = true;
 
 			if (repel) {
+				let hasFeint = skill.extras?.feint && needCheck(char, targ, skill, 'extras', i, btl)
+
 				if (skill.type === 'almighty') {
 					addAtkMsg(btl, `${skill.name} broke through __${targ.name}__'s ${targ.custom.shield.name ?? 'Shield'}!`);
 					delete targ.custom.shield;
-				} else if (!skill.extras?.feint) {
+				} else if (!hasFeint) {
 					skill.acc = 999; // Never miss a repel - just to be flashy :D
 
 					// Run this function again. Ban repelling to avoid infinite loops.
@@ -688,6 +752,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					switch(k) {
 						case "guarddodge":
 							if (targ.guard) {
+								if (needCheck(targ, char, passive, 'passive', 'skillbeforeuse', btl) !== true) continue;
+								if (!needCheck(targ, char, passive, 'passive', k, btl)) continue;
+
 								dodgeChance -= passive.passive[k][0];
 								guardDodge = getFullName(passive);
 							}
@@ -734,6 +801,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				for (let i in skill.extras) {
 					if (extrasList[i] && extrasList[i].skillmod) {
 						if (noExtraArray && noExtraArray.includes(i)) continue;
+
+						if (!needCheck(char, targ, skill, 'extras', i, btl)) continue;
+
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) extrasList[i].skillmod(char, targ, skill, btl, skill.extras[i][k]);
 						} else
@@ -754,8 +824,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 				// Sustain Extra
 				if (totalHits > 1) {
-					if (i > 0 && !skill.extras?.sustain) {
-						if (skill.extras?.reverse) {
+					if (i > 0 && (!skill.extras?.sustain || (skill.extras?.sustain && !needCheck(char, targ, skill, 'extras', 'sustain', btl)))) {
+						if (skill.extras?.reverse && needCheck(char, targ, skill, 'extras', 'reverse', btl)) {
 							let lowestpow = divideBy(dmg, 9, 10, totalHits-1);
 							let diff = dmg-lowestpow;
 
@@ -768,7 +838,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 				// Power Hit passive
 				if (totalHits > 1) {
-					if (skill.extras?.powhit) {
+					if (skill.extras?.powhit && needCheck(char, targ, skill, 'extras', 'powhit', btl)) {
 						for (const k in skill.extras.powhit) {
 							if (typeof skill.extras.powhit[k][0] == "object" && skill.extras.powhit[k][0].slice(1).includes(i+1)) {
 								dmg *= skill.extras.powhit[k][0][0];
@@ -792,7 +862,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				// Handle Final Affinities
 				let curAffinity = affinity
 				if (!char.guard){
-					if (char.status && !(skill.extras?.soulless && skill.extras.soulless.includes(char.status)) && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].affinitymod) {
+					if (char.status && !(skill.extras?.soulless && skill.extras.soulless.includes(char.status) && needCheck(char, targ, skill, extraCategory(skill), 'soulless', btl)) && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].affinitymod) {
 						curAffinity = statusEffectFuncs[char.status].affinitymod(char, targ, skill, btl, affinity);
 					}
 
@@ -804,6 +874,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 							for (let k in skillFile[char.skills[i]].passive) {
 								if (passiveList[k] && passiveList[k].affinitymod) {
 									if (noExtraArray && noExtraArray.includes(k)) continue;
+									if (needCheck(char, targ, skillFile[char.skills[i]], 'passive', 'skillbeforeuse', btl) !== true) continue;
+									if (!needCheck(char, targ, skillFile[char.skills[i]], 'passive', k, btl)) continue;
 									let a = passiveList[k].affinitymod(targ, char, skill, btl, skillFile[char.skills[i]].passive[k])
 
 									if (a && a != null && a != false) {
@@ -825,6 +897,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 							for (let k in skillFile[targ.skills[i]].passive) {
 								if (passiveList[k] && passiveList[k].affinitymodoninf) {
 									if (noExtraArray && noExtraArray.includes(k)) continue;
+									if (needCheck(targ, char, skillFile[targ.skills[i]], 'passive', 'skillbeforeuse', btl) !== true) continue;
+									if (!needCheck(targ, char, skillFile[targ.skills[i]], 'passive', k, btl)) continue;
 									let a = passiveList[k].affinitymodoninf(targ, char, skill, skillFile[targ.skills[i]], curAffinity, btl, skillFile[targ.skills[i]].passive[k])
 									
 									if (a && a != null && a != false) {
@@ -849,7 +923,7 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				if (affinity == 'superweak' && !targ.guard) dmg *= settings.rates.affinities.superweak ?? 2.1;
 				if (affinity == 'deadly' && !targ.guard) dmg *= settings.rates.affinities.deadly ?? 4.2;
 
-				if (affinity == 'weak' || affinity == 'superweak' || affinity == 'deadly' && settings.mechanics.onemores) {
+				if ((affinity == 'weak' || affinity == 'superweak' || affinity == 'deadly') && settings.mechanics.onemores && needCheck(char, targ, skill, 'extras', 'onemores', btl)) {
 					result.oneMore = true;
 					targ.down = true;
 				}
@@ -857,10 +931,10 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				// Critical Hits
 				if (targ.status && targ.status === "stagger" && !skill.crit) skill.crit = 100;
 
-				if (skill.crit) {
+				if (skill.crit && (needCheck(char, targ, skill, 'extras', 'crit', btl) || targ?.status === "stagger")) {
 					let c = randNum(100);
 					if ((c <= skill.crit+((char.stats.luk-targ.stats.luk)/2)) || (targ.status && targ.status === "stagger")) {
-						if (settings.mechanics.onemores) {
+						if (settings.mechanics.onemores && needCheck(char, targ, skill, 'extras', 'onemores', btl)) {
 							result.oneMore = true;
 							targ.down = true;
 						}
@@ -882,6 +956,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 								if (!extrasList[i]) continue;
 								if (!extrasList[i].critmod) continue;
 								if (noExtraArray && noExtraArray.includes(i)) continue;
+
+								if (!needCheck(char, targ, skill, 'extras', i, btl)) continue;
 
 								if (extrasList[i].multiple) {
 									for (let k in skill.extras[i]) {
@@ -906,15 +982,17 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 								for (let i in psv.passive) {
 									if (passiveList[i] && passiveList[i].critmod) {
 										if (noExtraArray && noExtraArray.includes(i)) continue;
+										if (needCheck(char, targ, psv, 'passive', 'skillbeforeuse', btl) !== true) continue;
+										if (!needCheck(char, targ, psv, 'passive', i, btl)) continue;
 
 										if (passiveList[i].multiple) {
 											for (let k in psv.passive[i]) {
 												let critData = passiveList[i].critmod(char, targ, dmg, critRate, skill, btl, psv.passive[i][k]);
-												if (critData) critRate = Math.max(0, Math.min(999, critRate));
+												if (critData) critRate = Math.max(0, Math.min(999, critData));
 											}
 										} else {
 											let critData = passiveList[i].critmod(char, targ, dmg, critRate, skill, btl, psv.passive[i][k]);
-											if (critData) critRate = Math.max(0, Math.min(999, critRate));
+											if (critData) critRate = Math.max(0, Math.min(999, critData));
 										}
 									}
 								}
@@ -938,12 +1016,12 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 				// Techs
 				if (targ.status) {
-					if ((skill.extras?.forcetech && skill.extras.forcetech.includes(targ.status)) || isTech(targ, skill.type)) {
+					if (((skill.extras?.forcetech && skill.extras.forcetech.includes(targ.status) && needCheck(char, targ, skill, 'extras', 'forcetech', btl)) || isTech(targ, skill.type)) && needCheck(char, targ, skill, 'extras', 'tech', btl)) {
 						dmg *= settings.rates.tech ?? 1.2;
 						techs[i] = true;
 						btl.doknockdown = true;
 
-						if (randNum(1, 100) <= 50 && settings.mechanics.onemores) {
+						if (randNum(1, 100) <= 50 && settings.mechanics.onemores && needCheck(char, targ, skill, 'extras', 'onemores', btl)) {
 							result.oneMore = true;
 							targ.down = true;
 						}
@@ -961,6 +1039,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						if (!extrasList[i].dmgmod) continue;
 						if (noExtraArray && noExtraArray.includes(i)) continue;
 
+						if (!needCheck(char, targ, skill, 'extras', i, btl)) continue;
+
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) {
 								dmg = extrasList[i].dmgmod(char, targ, dmg, skill, btl, skill.extras[i][k], emojis[i]) ?? dmg;
@@ -975,6 +1055,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 							if (!extrasList[i]) continue;
 							if (!extrasList[i].critdmgmod) continue;
 							if (noExtraArray && noExtraArray.includes(i)) continue;
+
+							if (!needCheck(char, targ, skill, 'extras', i, btl)) continue;
 
 							if (extrasList[i].multiple) {
 								for (let k in skill.extras[i]) {
@@ -997,50 +1079,26 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						for (let j in psv.passive) {
 							if (passiveList[j]) {
 								if (passiveList[j].dmgmod) {
-									if (noExtraArray && noExtraArray.includes(i)) continue;
+									if (noExtraArray && noExtraArray.includes(j)) continue;
+									if (needCheck(char, targ, psv, 'passive', 'skillbeforeuse', btl) !== true) continue;
+									if (!needCheck(char, targ, psv, 'passive', j, btl)) continue;
 									if (passiveList[j].multiple) {
-										for (let k in psv.passive[i]) {
-											ret = passiveList[j].dmgmod(char, targ, dmg, skill, btl, psv.passive[i][k], emojis[i]) ?? dmg;
-
-											if (typeof ret == "object") {
-												dmg = ret[0];
-												emojis[i] = ret[1];
-											} else {
-												dmg = ret;
-											}
+										for (let k in psv.passive[j]) {
+											dmg = passiveList[j].dmgmod(char, targ, dmg, skill, btl, psv.passive[j][k]) ?? dmg;
 										}
 									} else {
-										ret = passiveList[j].dmgmod(char, targ, dmg, skill, btl, psv.passive[i], emojis[i]) ?? dmg;
-
-										if (typeof ret == "object") {
-											dmg = ret[0];
-											emojis[i] = ret[1];
-										} else {
-											dmg = ret;
-										}
+										dmg = passiveList[j].dmgmod(char, targ, dmg, skill, btl, psv.passive[j]) ?? dmg;
 									}
 								} else if (passiveList[j].critdmgmod && crits[i]) {
-									if (noExtraArray && noExtraArray.includes(i)) continue;
+									if (noExtraArray && noExtraArray.includes(j)) continue;
+									if (needCheck(char, targ, psv, 'passive', 'skillbeforeuse', btl) !== true) continue;
+									if (!needCheck(char, targ, psv, 'passive', j, btl)) continue;
 									if (passiveList[j].multiple) {
-										for (let k in psv.passive[i]) {
-											ret = passiveList[j].critdmgmod(char, targ, dmg, skill, btl, psv.passive[i][k], emojis[i]) ?? dmg;
-
-											if (typeof ret == "object") {
-												dmg = ret[0];
-												emojis[i] = ret[1];
-											} else {
-												dmg = ret;
-											}
+										for (let k in psv.passive[j]) {
+											dmg = passiveList[j].critdmgmod(char, targ, dmg, skill, btl, psv.passive[j][k]) ?? dmg;
 										}
 									} else {
-										ret = passiveList[j].critdmgmod(char, targ, dmg, skill, btl, psv.passive[i], emojis[i]) ?? dmg;
-
-										if (typeof ret == "object") {
-											dmg = ret[0];
-											emojis[i] = ret[1];
-										} else {
-											dmg = ret;
-										}
+										dmg = passiveList[j].critdmgmod(char, targ, dmg, skill, btl, psv.passive[j]) ?? dmg;
 									}
 								}
 							}
@@ -1096,6 +1154,26 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 				// Guarding
 				if (targ.guard && affinity != 'drain') {
+
+					for (let j in targ.skills) {
+						if (!skillFile[targ.skills[j]]) continue;
+						if (skillFile[targ.skills[j]].type != 'passive') continue;
+						passive = skillFile[targ.skills[j]];
+		
+						for (let k in passive.passive) {
+							switch(k) {
+								case "guardboost":
+									if (needCheck(targ, char, passive, 'passive', 'skillbeforeuse', btl) !== true) continue;
+									if (!needCheck(targ, char, passive, 'passive', k, btl)) continue;
+
+									result.txt += `**${getFullName(passive)}** allowed __${targ.name}__ to guard further.\n`;
+
+									targ.guard = Math.max(0, targ.guard - passive.passive[k][0] / 100)
+								break;
+							}
+						}
+					}
+
 					dmg *= targ.guard;
 					delete targ.guard;
 				}
@@ -1210,9 +1288,11 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 					result.txt += `\n${selectQuote(char, 'kill', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'death', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 
 					// AllyDeath quotes
-					for (let char2 of party.members) {
-						if (randNum(1, 100) <= 50 && char2.id != targ.id && char2.trust && char2.trust[targ.truename] && char2.trust[targ.truename].level > 5) {
-							result.txt += selectQuote(char2, 'allydeath', null, "%ALLY%", targ.name, "%ENEMY%", char.name, "%SKILL%", skill.name);
+					if (settings?.mechanics?.trust) {
+						for (let char2 of party.members) {
+							if (randNum(1, 100) <= 50 && char2.id != targ.id && char2.trust && char2.trust[targ.truename] && char2.trust[targ.truename].level > 5) {
+								result.txt += selectQuote(char2, 'allydeath', null, "%ALLY%", targ.name, "%ENEMY%", char.name, "%SKILL%", skill.name);
+							}
 						}
 					}
 
@@ -1235,7 +1315,9 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 							psv = skillFile[char.skills[i]];
 							for (let k in psv.passive) {
 								if (passiveList[k] && passiveList[k].onkill) {
-									if (noExtraArray && noExtraArray.includes(i)) continue;
+									if (noExtraArray && noExtraArray.includes(k)) continue;
+									if (needCheck(char, targ, psv, 'passive', 'skillbeforeuse', btl) !== true) continue;
+									if (!needCheck(char, targ, psv, 'passive', k, btl)) continue;
 
 									if (passiveList[k].multiple) {
 										for (let j in psv.passive[k]) {
@@ -1278,6 +1360,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 							if (!extrasList[i].lbgain) continue;
 							if (noExtraArray && noExtraArray.includes(i)) continue;
 
+							if (!needCheck(char, targ, skill, 'extras', i, btl)) continue;
+
 							if (extrasList[i].multiple) {
 								for (let k in skill.extras[i]) {
 									lbgain = `\n${(extrasList[i].lbgain(char, targ, skill, btl, lbgain, skill.extras[i][k]) ?? '')}`;
@@ -1293,16 +1377,21 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						lbgain = statusEffectFuncs[char.status].lbgain(char, targ, skill, lbgain, btl);
 					}
 
-					char.lbp += truncNum(lbgain, 2);
-					targ.lbp += truncNum(lbgain/3, 2);
+					lbgain *= settings?.rates?.limitbreak ?? 1
 
-					if (!lbtext[btl.guild.id]) lbtext[btl.guild.id] = [];
+					if (lbgain != 0) {
+						if (!lbtext[btl.guild.id]) lbtext[btl.guild.id] = [];
 
-					if (!lbtext[btl.guild.id][char.id]) lbtext[btl.guild.id][char.id] = 0;
-					lbtext[btl.guild.id][char.id] += truncNum(lbgain, 2);
+						if (needCheck(char, targ, skill, extraCategory(skill), 'lbgain', btl)) {
+							char.lbp += truncNum(lbgain, 2);
+							if (!lbtext[btl.guild.id][char.id]) lbtext[btl.guild.id][char.id] = 0;
+							lbtext[btl.guild.id][char.id] += truncNum(lbgain, 2);
+						}
 
-					if (!lbtext[targ.id]) lbtext[btl.guild.id][targ.id] = 0;
-					lbtext[btl.guild.id][targ.id] += truncNum(lbgain/3, 2);
+						targ.lbp += truncNum(lbgain/3, 2);
+						if (!lbtext[targ.id]) lbtext[btl.guild.id][targ.id] = 0;
+						lbtext[btl.guild.id][targ.id] += truncNum(lbgain/3, 2);
+					}
 				}
 
 				// Full Combo!
@@ -1314,6 +1403,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						if (!extrasList[i]) continue;
 						if (!extrasList[i].onuse) continue;
 						if (noExtraArray && noExtraArray.includes(i)) continue;
+
+						if (!needCheck(char, targ, skill, 'extras', i, btl)) continue;
 
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) {
@@ -1342,6 +1433,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						if (!extrasList[i].ondamage) continue;
 						if (noExtraArray && noExtraArray.includes(i)) continue;
 
+						if (!needCheck(char, targ, skill, 'extras', i, btl)) continue;
+
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) {
 								result.txt += '\n' + (extrasList[i].ondamage(char, targ, total, skill, btl, skill.extras[i][k]) ?? '');
@@ -1360,6 +1453,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						for (let k in skillFile[targ.skills[i]].passive) {
 							if (passiveList[k] && passiveList[k].ondamage) {
 								if (noExtraArray && noExtraArray.includes(k)) continue;
+								if (needCheck(targ, char, skillFile[targ.skills[i]], 'passive', 'skillbeforeuse', btl) !== true) continue;
+								if (!needCheck(targ, char, skillFile[targ.skills[i]], 'passive', k, btl)) continue;
 								if (passiveList[k].multiple) {
 									for (let l in skillFile[targ.skills[i]].passive[k]) {
 										result.txt += '\n' + (passiveList[k].ondamage(targ, char, skill, total, skillFile[targ.skills[i]], btl, skillFile[targ.skills[i]].passive[k][l]) ?? '');
@@ -1371,6 +1466,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 							if (didCrit && passiveList[k] && passiveList[k].oncrit) {
 								if (noExtraArray && noExtraArray.includes(k)) continue;
+								if (needCheck(targ, char, skillFile[targ.skills[i]], 'passive', 'skillbeforeuse', btl) !== true) continue;
+								if (!needCheck(targ, char, skillFile[targ.skills[i]], 'passive', k, btl)) continue;
 
 								if (passiveList[k].multiple) {
 									for (let l in skillFile[targ.skills[i]].passive[k]) {
@@ -1390,6 +1487,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						for (let k in skillFile[char.skills[i]].passive) {
 							if (didCrit && passiveList[k] && passiveList[k].oncritlanded) {
 								if (noExtraArray && noExtraArray.includes(k)) continue;
+								if (needCheck(char, targ, skillFile[char.skills[i]], 'passive', 'skillbeforeuse', btl) !== true) continue;
+								if (!needCheck(char, targ, skillFile[char.skills[i]], 'passive', k, btl)) continue;
 
 								if (passiveList[k].multiple) {
 									for (let l in skillFile[char.skills[i]].passive[k]) {
@@ -1417,50 +1516,56 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 				}
 
 				// Console and ImFine, Cheer and Respond, KillPraise and KillRespond
-				if (targ.hp > 0 && ['weak', 'superweak', 'deadly'].includes(affinity)) {
-					for (let char2 of party.members) {
-						if (char2.hp > 0 && randNum(1, 100) <= 50 && char2.id != targ.id && char2.trust && char2.trust[targ.truename] && char2.trust[targ.truename].level > 5) {
-							result.txt += selectQuote(char2, 'console', null, "%ALLY%", targ.name, "%ENEMY%", char.name, "%SKILL%", skill.name);
-							result.txt += selectQuote(targ, 'imfine', null, "%ALLY%", char2.name, "%ENEMY%", char.name, "%SKILL%", skill.name);
-							break;
-						}
-					}
-
-					if (char.team != targ.team) {
-						for (let char2 of party2.members) {
-							if (char2.hp > 0 && randNum(1, 100) <= 50 && char2.id != char.id && char2.trust && char2.trust[char.truename] && char2.trust[char.truename].level > 5) {
-								result.txt += selectQuote(char2, 'cheer', null, "%ALLY%", char.name, "%ENEMY%", targ.name, "%SKILL%", skill.name);
-								result.txt += selectQuote(char, 'response', null, "%ALLY%", char2.name, "%ENEMY%", targ.name, "%SKILL%", skill.name);
+				if (settings?.mechanics?.trust) {
+					if (targ.hp > 0 && ['weak', 'superweak', 'deadly'].includes(affinity)) {
+						for (let char2 of party.members) {
+							if (char2.hp > 0 && randNum(1, 100) <= 50 && char2.id != targ.id && char2.trust && char2.trust[targ.truename] && char2.trust[targ.truename].level > 5) {
+								result.txt += selectQuote(char2, 'console', null, "%ALLY%", targ.name, "%ENEMY%", char.name, "%SKILL%", skill.name);
+								result.txt += selectQuote(targ, 'imfine', null, "%ALLY%", char2.name, "%ENEMY%", char.name, "%SKILL%", skill.name);
 								break;
 							}
 						}
-					}
-				} else if (targ.hp <= 0) {
-					if (char.team != targ.team) {
-						for (let char2 of party2.members) {
-							if (char2.hp > 0 && randNum(1, 100) <= 50 && char2.id != char.id && char2.trust && char2.trust[char.truename] && char2.trust[char.truename].level > 5) {
-								result.txt += selectQuote(char2, 'killpraise', null, "%ALLY%", char.name, "%ENEMY%", targ.name, "%SKILL%", skill.name);
-								result.txt += selectQuote(char, 'killresponse', null, "%ALLY%", char2.name, "%ENEMY%", targ.name, "%SKILL%", skill.name);
-								break;
+
+						if (char.team != targ.team) {
+							for (let char2 of party2.members) {
+								if (char2.hp > 0 && randNum(1, 100) <= 50 && char2.id != char.id && char2.trust && char2.trust[char.truename] && char2.trust[char.truename].level > 5) {
+									result.txt += selectQuote(char2, 'cheer', null, "%ALLY%", char.name, "%ENEMY%", targ.name, "%SKILL%", skill.name);
+									result.txt += selectQuote(char, 'response', null, "%ALLY%", char2.name, "%ENEMY%", targ.name, "%SKILL%", skill.name);
+									break;
+								}
+							}
+						}
+					} else if (targ.hp <= 0) {
+						if (char.team != targ.team) {
+							for (let char2 of party2.members) {
+								if (char2.hp > 0 && randNum(1, 100) <= 50 && char2.id != char.id && char2.trust && char2.trust[char.truename] && char2.trust[char.truename].level > 5) {
+									result.txt += selectQuote(char2, 'killpraise', null, "%ALLY%", char.name, "%ENEMY%", targ.name, "%SKILL%", skill.name);
+									result.txt += selectQuote(char, 'killresponse', null, "%ALLY%", char2.name, "%ENEMY%", targ.name, "%SKILL%", skill.name);
+									break;
+								}
 							}
 						}
 					}
 				}
 
 				// Lastly, Status Effects
-				if (targ.hp > 0 && skill.status && !targ.status) {
+				if (targ.hp > 0 && skill.status && !targ.status && needCheck(char, targ, skill, extraCategory(skill), 'status', btl)) {
 					if (!char.dispelled) {
 						var status;
 						if (typeof(skill.status) === 'object') {
-							status = skill.status[randNum(skill.status.length-1)];
+							if (needCheck(char, targ, skill, extraCategory(skill), 'multistatus', btl)) status = skill.status[randNum(skill.status.length-1)];
+							else status = skill.status[0]
 						} else {
 							status = skill.status;
 						}
 
 						let txt = statusList.status.inflictStatus(char, targ, skill, status, btl, skill.pow);
 
+						let statusQuote = isPositiveStatus(status) ? 'positivestatus' : (isNeutralStatus(status) ? 'neutralstatus' : 'status')
+						if (char.quotes && char.quotes[`status-${status}quote`]) statusQuote = 'status-'+status
+
 						if (txt && txt != '') {
-							result.txt += `${txt}\n${selectQuote(char, isPositiveStatus(status) ? 'positivestatus' : 'status', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}`;
+							result.txt += `${txt}\n${selectQuote(char, statusQuote, null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}`;
 						}
 					} else {
 						result.txt += '...But it failed!'
@@ -1473,6 +1578,8 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						if (!extrasList[i]) continue;
 						if (!extrasList[i].onuseatendoffunc) continue;
 						if (noExtraArray && noExtraArray.includes(i)) continue;
+
+						if (!needCheck(char, targ, skill, 'extras', i, btl)) continue;
 
 						if (extrasList[i].multiple) {
 							for (let k in skill.extras[i]) {
@@ -1564,7 +1671,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// Hardcode some metronome and copyskill bs
-	if (skill.extras?.metronome) {
+	if (skill.extras?.metronome && needCheck(char, char, skill, 'extras', 'metronome', btl)) {
 		let possible = [];
 		if (skill.extras.metronome.length > 1)
 			possible = skill.extras.metronome;
@@ -1594,7 +1701,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		}
 
 		for (let i in extratypes) {
-			if (origSkill[extratypes[i]]?.movelink) {
+			if (origSkill[extratypes[i]]?.movelink && needCheck(char, char, origSkill, extratypes[i], 'movelink', btl)) {
 				if (skill.type === "support" || skill.type === "status")
 					skill.statusses.movelink = origSkill[extratypes[i]].movelink;
 				else if (skill.type === "heal")
@@ -1607,7 +1714,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		}
 	}
 
-	if (skill.extras?.copyskill) {
+	if (skill.extras?.copyskill && needCheck(char, char, skill, 'extras', 'copyskill', btl)) {
 		let possible = [];
 
 		// We can only use ally skills.
@@ -1667,6 +1774,9 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 			for (let i in psv.passive) {
 				if (passiveList[i] && passiveList[i].statmod) {
 					if (noExtraArray && noExtraArray.includes(i)) continue;
+					if (needCheck(char, char, psv, 'passive', 'skillbeforeuse', btl) !== true) continue;
+					if (!needCheck(char, char, psv, 'passive', i, btl)) continue;
+
 					if (passiveList[i].multiple) {
 						for (let k in psv.passive[i]) passiveList[i].statmod(btl, char, skill, psv.passive[i][k]);
 					} else
@@ -1681,6 +1791,9 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		for (let i in skill.extras) {
 			if (extrasList[i] && extrasList[i].statmod) {
 				if (noExtraArray && noExtraArray.includes(i)) continue;
+
+				if (!needCheck(char, char, skill, 'extras', i, btl)) continue;
+
 				if (extrasList[i].multiple) {
 					for (let k in skill.extras[i]) extrasList[i].statmod(char, skill, skill.extras[i][k], btl)
 				} else
@@ -1701,7 +1814,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// Status Effects
-	if (char.status && !(skill.extras?.soulless && skill.extras.soulless.includes(char.status) && (randNum(1, 100) <= skill.extras.soulless[0])) && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].skillmod) {
+	if (char.status && !(skill.extras?.soulless && skill.extras.soulless.includes(char.status) && (randNum(1, 100) <= skill.extras.soulless[0]) && needCheck(char, char, skill, 'extras', 'soulless', btl)) && statusEffectFuncs[char.status] && statusEffectFuncs[char.status].skillmod) {
 		statusEffectFuncs[char.status].skillmod(char, skill, btl);
 	}
 
@@ -1778,17 +1891,19 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	if (skill.melee && char.status && char.status === 'rage') skill.pow *= 2;
 
 	// Trust
-	for (let i in party.members) {
-		let friennn = party.members[i];
-		if (char.id === friennn.id) continue;
+	if (settings?.mechanics?.trust) {
+		for (let i in party.members) {
+			let friennn = party.members[i];
+			if (char.id === friennn.id) continue;
 
-		if (trustLevel(char, friennn) >= 6 && randNum(1, 100) <= 7) {
-			let a = trustQuotes[randNum(trustQuotes.length-1)];
-			a = replaceTxt(a, '%PLAYER1%', char.name, '%PLAYER2%', friennn.name);
+			if (trustLevel(char, friennn) >= 6 && randNum(1, 100) <= 7) {
+				let a = trustQuotes[randNum(trustQuotes.length-1)];
+				a = replaceTxt(a, '%PLAYER1%', char.name, '%PLAYER2%', friennn.name);
 
-			finalText += `\n_${a}_\n`;
+				finalText += `\n_${a}_\n`;
 
-			skill.pow *= 1.5+(trustLevel(char, friennn)/40)
+				skill.pow *= 1.5+(trustLevel(char, friennn)/40)
+			}
 		}
 	}
 
@@ -2154,6 +2269,9 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 		for (let i in skill.heal) {
 			if (healList[i] && healList[i].override) {
 				if (noExtraArray && noExtraArray.includes(i)) continue;
+
+				if (!needCheck(char, targ, skill, 'heal', i, btl)) continue;
+
 				if (healList[i].multiple) {
 					for (let k in skill.heal[i]) {
 						finalText += healList[i].override(char, skill, btl, skill.heal[i][k]);
@@ -2183,6 +2301,8 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 				if (!selectcheck[j][i]) continue;
 				if (!selectcheck[j][i].replaceatk) continue;
 				if (noExtraArray && noExtraArray.includes(i)) continue;
+
+				if (!needCheck(char, char, skill, j, i, btl)) continue;
 
 				if (selectcheck[j][i].multiple) {
 					for (let k in skill[j][i]) {
@@ -2224,7 +2344,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	// Move Links
 	let movelinks = [];
 	for (let i in extratypes) {
-		if (skill[extratypes[i]] && skill[extratypes[i]].movelink)
+		if (skill[extratypes[i]] && skill[extratypes[i]].movelink && needCheck(char, char, skill, extratypes[i], 'movelink', btl))
 			for (let k in skill[extratypes[i]].movelink) movelinks.push(skill[extratypes[i]].movelink[k]);
 	}
 
@@ -2239,7 +2359,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 				if (skillLink.type == "passive") continue;
 
 				// Hardcoded metronome 2: electric boogaloo
-				if (skillLink.extras?.metronome) {
+				if (skillLink.extras?.metronome && needCheck(char, char, skill, 'extras', 'metronome', btl)) {
 					possible = [];
 					if (skillLink.extras.metronome.length > 1)
 						possible = skillLink.extras.metronome;
@@ -2594,6 +2714,8 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 				if (!selectcheck[j][i].onselect) continue;
 				if (noExtraArray && noExtraArray.includes(i)) continue;
 
+				if (!needCheck(char, targ, skill, j, i, btl)) continue;
+
 				if (selectcheck[j][i].multiple) {
 					for (let k in skill[j][i]) finalText += `\n${(selectcheck[j][i].onselect(char, skill, btl, skill[j][i][k], skill.pow) ?? '')}`;
 				} else {
@@ -2613,7 +2735,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 	}
 
 	// Another thing... Trust shit.
-	if (!skill.noassistance && (skill.target === 'one' || skill.target === 'allopposing') && !['support', 'status', 'heal', 'passive'].includes(skill.type) && targets.length <= 1 && !skill?.limitbreak && !skill?.teamcombo) {
+	if (settings?.mechanics?.trust && !skill.noassistance && (skill.target === 'one' || skill.target === 'allopposing') && !['support', 'status', 'heal', 'passive'].includes(skill.type) && targets.length <= 1 && !skill?.limitbreak && !skill?.teamcombo) {
 		for (let i in party.members) {
 			let char2 = party.members[i];
 			if (char.id === char2.id) continue;
@@ -2623,7 +2745,7 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 				let targ = getCharFromId(targets[0][0], btl);
 
 				if (targ.hp > 0) {
-					let meleeAtk = makeMelee(char2);
+					let meleeAtk = makeMelee(char2, btl);
 					meleeAtk.assistSkill = true;
 					meleeAtk.noassistance = true;
 					meleeAtk.acc = 999;

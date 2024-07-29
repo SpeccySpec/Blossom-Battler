@@ -98,21 +98,21 @@ statusList = {
 						if (skillFile[targ.skills[i]].type != 'passive') continue;
 
 						for (let k in skillFile[targ.skills[i]].passive) {
-							if (k == "magicbounce") {
+							if (k == "magicbounce" && needCheck(targ, char, skillFile[targ.skills[i]], 'passive', 'skillbeforeuse', btl) && needCheck(targ, char, skillFile[targ.skills[i]], 'passive', k, btl)) {
 								repelChance = randNum(1, 100)
 								targChance = skillFile[targ.skills[i]].passive[k][0];
 								
 								if (targChance < 100 && skillFile[targ.skills[i]].passive[k][1]) targChance += ((char.stats.luk-targ.stats.luk)/2);
 
 								if (targChance >= 100 || repelChance <= targChance) {
-									return `\nBut, ${targ.name}'s __${skillFile[targ.skills[i]].name}__ repelled the attack!\n\n${inflictStatus(char, status)}\n${selectQuote(targ, 'landed')}\n${selectQuote(char, 'hurt')}`
+									return `\nBut, ${targ.name}'s __${skillFile[targ.skills[i]].name}__ repelled the attack!\n\n${inflictStatus(char, status)}\n${selectQuote(targ, 'landed')}`
 								}
 							}
 						}
 					}
 				}
 
-				return `\n${inflictStatus(targ, status)}\n${selectQuote(char, 'landed')}\n${selectQuote(targ, 'hurt')}`;
+				return `\n${inflictStatus(targ, status)}\n${selectQuote(char, 'landed')}`;
 			} else {
 				if (skill.type == 'support' || skill.type == 'status')
 					return dodgeTxt(char, targ);
@@ -409,6 +409,73 @@ statusList = {
 		getinfo(vars, skill) {
 			return "Swaps user's **stat chances** with the target's"
 		}
+	}),
+
+	need: new Extra({
+		name: extrasList.need.name,
+		desc: extrasList.need.desc,
+		multiple: extrasList.need.multiple,
+		args: extrasList.need.args,
+		doc: {
+			pages: [
+				{
+					desc: "### The {Affected Parameter} can be either:"+
+						"\n- A Skill extra - Checks for applicability of the extra.\n-# Forcemsg is unavailable. Can only check for the user on: need & movelink."+
+						"\n- \"SkillBeforeUse\" - Checks for usability of the skill entirely.\n-# The default option, but can't check for the target."+
+						"\n- \"SkillOnSelect\" - Checks for usability of the skill after using cost.\n-# Alternate to SkillBeforeUse, that can check for the target."+
+						"\n- \"MultiStatus\" - Chooses if multiple statuses can be checked for. Uses the first one only upon fail.\n-# If you want to check for status overall, use Status instead."+
+						"\n\nA fair amount of options are not included for heals, like CRIT or TECH. This is because support skills aren't meant to offer such."
+				},
+				{
+					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					fields: Object.entries(needConditions).map(x => x = {
+						name: `${x[1].name} (${x[0]})`,
+						value: `\n\n${x[1].getFullDesc()}`,
+						inline: true
+					}).slice(0,6)
+				},
+				{
+					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					fields: Object.entries(needConditions).map(x => x = {
+						name: `${x[1].name} (${x[0]})`,
+						value: `\n\n${x[1].getFullDesc()}`,
+						inline: true
+					}).slice(6,12)
+				}
+			]
+		},
+		applyfunc(message, skill, args) {
+			let condition = args[0].toLowerCase()
+			let target = args[1].toLowerCase()
+			let params = args.slice(3).map(v => v.toLowerCase())
+			let affected = args[2]?.toLowerCase() ?? "skillbeforeuse"
+			
+			if (target != 'target' && target != 'user' && !['turn', 'battlecondition'].includes(condition)) //Target/User
+				return void message.channel.send("You entered an invalid value for <User/Target>! It can be either Target or User.");
+
+			//Affected Parameter
+			if (!statusList[affected] && !['skillbeforeuse', 'skillonselect', 'multistatus'].includes(affected)) return void message.channel.send("That's not the valid affected parameter you can have.");
+
+			if (affected == 'forcemsg') return void message.channel.send("That's a cosmetic change. Why would you gatekeep it?");
+
+			if (affected == 'skillbeforeuse' && target == 'target') return void message.channel.send("Unfortunately it's not possible to check using the target here, as the check for usability of the skill in its entirety is done before you can choose the target.");
+
+			if (statusList[affected] && ['need', 'movelink'].includes(affected)) return void message.channel.send(`Unfortunately ${affected.toUpperCase()} does not account for the target at all, only the user.`);
+
+			if (!needConditions[condition]) return void message.channel.send(`Hold on, ${condition} is not the valid condition you can have.`);
+
+			params = needConditions[condition].apply(message, skill, params, condition)
+
+			if (params) {
+				makeStatus(skill, "need", [condition, target, affected, ...params]);
+				return true;
+			}
+
+			return false;
+		},
+		canuse: extrasList.need.canuse,
+		skillfailonuse: extrasList.need.skillfailonuse,
+		getinfo: extrasList.need.getinfo,
 	}),
 
 	mimic: new Extra({
@@ -1418,7 +1485,9 @@ statusList = {
 
 				if (targ.pacify >= 100) {
 					targ.pacified = true;
-					if (targ.negotiateDefs) {
+
+					let settings = setUpSettings(btl.guild.id)
+					if (settings?.mechanics?.pets && targ.negotiateDefs) {
 						let parties = setUpFile(`${dataPath}/json/${btl.guild.id}/parties.json`, true);
 
 						if (parties[btl.teams[char.team].id]) {

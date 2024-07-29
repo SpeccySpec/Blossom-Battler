@@ -1263,7 +1263,7 @@ commands.listnegotiationspecials = new Command({
 
 		let extras = []
 		for (let i in specialList) {
-			if (!extrasList[i]?.unregsiterable) extras.push({name: `${specialList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${specialList[i].getFullDesc()}${specialList[i].multiple ? '\n\n**CAN BE APPLIED MULTIPLE TIMES!**' : ''}`, inline: true});
+			if (!specialList[i]?.unregsiterable) extras.push({name: `${specialList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${specialList[i].getFullDesc()}${specialList[i].multiple ? '\n\n-# **Can be applied multiple times.**' : ''}${specialList[i].doc ? '\n\n-# **Contains documentation.**' : ''}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, 'FF1174')
@@ -1457,6 +1457,9 @@ commands.setpetvalues = new Command({
 	checkban: true,
 	admin: 'You do not have permission to set pet values.',
 	func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings?.mechanics?.pets) return message.channel.send("You can't use this because pets are disabled.")
+
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
@@ -1495,6 +1498,9 @@ commands.clearpetvalues = new Command({
 	checkban: true,
 	admin: 'You do not have permission to clear pet values.',
 	func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings?.mechanics?.pets) return message.channel.send("You can't use this because pets are disabled.")
+
 		enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 		if (!enemyFile[args[0]]) return message.channel.send(`${args[0]} is not a valid enemy.`);
 
@@ -1550,6 +1556,9 @@ commands.addpartypet = new Command({
 	checkban: true,
 	admin: 'You do not have permission to add party pets.',
 	func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings?.mechanics?.pets) return message.channel.send("You can't use this because pets are disabled.")
+
 		let partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		if (!partyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
 
@@ -1585,6 +1594,9 @@ commands.removepartypet = new Command({
 	checkban: true,
 	admin: 'You do not have permission to remove party pets.',
 	func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings?.mechanics?.pets) return message.channel.send("You can't use this because pets are disabled.")
+
 		let partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		if (!partyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
 
@@ -1617,6 +1629,9 @@ commands.setpet = new Command({
 	],
 	checkban: true,
 	func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings?.mechanics?.pets) return message.channel.send("You can't use this because pets are disabled.")
+
 		let partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		if (!partyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
 		if (!partyFile[args[0]].negotiateAllies) return message.channel.send(`${args[0]} doesn't have any pets!`);
@@ -1642,6 +1657,9 @@ commands.removepet = new Command({
 	],
 	checkban: true,
 	func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings?.mechanics?.pets) return message.channel.send("You can't use this because pets are disabled.")
+			
 		let partyFile = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		if (!partyFile[args[0]]) return message.channel.send(`${args[0]} doesn't exist!`);
 		if (!partyFile[args[0]].curPet) return message.channel.send(`${args[0]} doesn't have a current pet!`);

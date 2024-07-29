@@ -227,30 +227,32 @@ winBattle = (btl, i) => {
 			charFile[char.truename].statusturns = char.statusturns;
 
 			// While I'm here... why don't I sort out Trust!
-			if (!char.trust) char.trust = {};
+			if (settings?.mechanics?.trust) {
+				if (!char.trust) char.trust = {};
 
-			for (let char2 of btl.teams[i].members) {
-				if (char2.id  == char.id) continue;
-				if (!charFile[char2.truename]) continue;
+				for (let char2 of btl.teams[i].members) {
+					if (char2.id  == char.id) continue;
+					if (!charFile[char2.truename]) continue;
 
-				if (!charFile[char.truename].trust) charFile[char.truename].trust = {};
-				if (!charFile[char2.truename].trust) charFile[char2.truename].trust = {};
+					if (!charFile[char.truename].trust) charFile[char.truename].trust = {};
+					if (!charFile[char2.truename].trust) charFile[char2.truename].trust = {};
 
-				embedtxt += `${changeTrust(char, char2, Math.round(35*settings.rates.trustrate), false)}`;
-				charFile[char.truename].trust = char.trust;
-				charFile[char2.truename].trust = char2.trust;
-			}
+					embedtxt += `${changeTrust(char, char2, Math.round(35*settings.rates.trustrate), false, btl, 'onwin')}`;
+					charFile[char.truename].trust = char.trust;
+					charFile[char2.truename].trust = char2.trust;
+				}
 
-			for (let char2 of btl.teams[i].backup) {
-				if (char2.id  == char.id) continue;
-				if (!charFile[char2.truename]) continue;
+				for (let char2 of btl.teams[i].backup) {
+					if (char2.id  == char.id) continue;
+					if (!charFile[char2.truename]) continue;
 
-				if (!charFile[char.truename].trust) charFile[char.truename].trust = {};
-				if (!charFile[char2.truename].trust) charFile[char2.truename].trust = {};
+					if (!charFile[char.truename].trust) charFile[char.truename].trust = {};
+					if (!charFile[char2.truename].trust) charFile[char2.truename].trust = {};
 
-				embedtxt += `${changeTrust(char, char2, Math.round(35*settings.rates.trustrate), false)}`;
-				charFile[char.truename].trust = char.trust;
-				charFile[char2.truename].trust = char2.trust;
+					embedtxt += `${changeTrust(char, char2, Math.round(35*settings.rates.trustrate), false, btl, 'onwin')}`;
+					charFile[char.truename].trust = char.trust;
+					charFile[char2.truename].trust = char2.trust;
+				}
 			}
 
 			if (enemyxp > 0) gainXp(btl.channel, charFile[char.truename], enemyxp, true, btl.channel.guildId);
@@ -271,30 +273,32 @@ winBattle = (btl, i) => {
 			charFile[char.truename].statusturns = char.statusturns;
 
 			// While I'm here... why don't I sort out Trust!
-			if (!char.trust) char.trust = {};
+			if (settings?.mechanics?.trust) {
+				if (!char.trust) char.trust = {};
 
-			for (let char2 of btl.teams[i].members) {
-				if (char2.id  == char.id) continue;
-				if (!charFile[char2.truename]) continue;
+				for (let char2 of btl.teams[i].members) {
+					if (char2.id  == char.id) continue;
+					if (!charFile[char2.truename]) continue;
 
-				if (!charFile[char.truename].trust) charFile[char.truename].trust = {};
-				if (!charFile[char2.truename].trust) charFile[char2.truename].trust = {};
+					if (!charFile[char.truename].trust) charFile[char.truename].trust = {};
+					if (!charFile[char2.truename].trust) charFile[char2.truename].trust = {};
 
-				embedtxt += `${changeTrust(char, char2, Math.round(35*settings.rates.trustrate), false)}`;
-				charFile[char.truename].trust = char.trust;
-				charFile[char2.truename].trust = char2.trust;
-			}
+					embedtxt += `${changeTrust(char, char2, Math.round(35*settings.rates.trustrate), false, btl, 'onwin')}`;
+					charFile[char.truename].trust = char.trust;
+					charFile[char2.truename].trust = char2.trust;
+				}
 
-			for (let char2 of btl.teams[i].backup) {
-				if (char2.id  == char.id) continue;
-				if (!charFile[char2.truename]) continue;
+				for (let char2 of btl.teams[i].backup) {
+					if (char2.id  == char.id) continue;
+					if (!charFile[char2.truename]) continue;
 
-				if (!charFile[char.truename].trust) charFile[char.truename].trust = {};
-				if (!charFile[char2.truename].trust) charFile[char2.truename].trust = {};
+					if (!charFile[char.truename].trust) charFile[char.truename].trust = {};
+					if (!charFile[char2.truename].trust) charFile[char2.truename].trust = {};
 
-				embedtxt += `${changeTrust(char, char2, Math.round(35*settings.rates.trustrate), false)}`;
-				charFile[char.truename].trust = char.trust;
-				charFile[char2.truename].trust = char2.trust;
+					embedtxt += `${changeTrust(char, char2, Math.round(35*settings.rates.trustrate), false, btl, 'onwin')}`;
+					charFile[char.truename].trust = char.trust;
+					charFile[char2.truename].trust = char2.trust;
+				}
 			}
 
 			// Backup only gets half XP.

@@ -82,8 +82,10 @@ itemData = {
 			if (targ.pacify && targ.pacify > item.pacify) {
 				let finaltxt = `${targ.name} was pacified by the ${item.name} `;
 
+				let settings = setUpSettings(btl.guild.id)
+
 				targ.pacified = true;
-				if (targ.negotiateDefs) {
+				if (settings?.mechanics?.pets && targ.negotiateDefs) {
 					let parties = setUpFile(`${dataPath}/json/${btl.guild.id}/parties.json`, true);
 
 					if (parties[btl.teams[char.team].id]) {

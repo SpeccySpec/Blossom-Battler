@@ -173,6 +173,8 @@ function canSelectSkill(char, skill, btl) {
 			if (!extrasList[k]) continue;
 			if (!extrasList[k].canuse) continue;
 
+			if (!needCheck(char, char, skill, 'extras', k, btl)) continue;
+
 			if (extrasList[k].multiple) {
 				for (let l in skill.extras[k]) {
 					let txt = extrasList[k].canuse(char, skill, btl, skill.extras[k][l]);
@@ -187,6 +189,8 @@ function canSelectSkill(char, skill, btl) {
 		for (let k in skill.heal) {
 			if (!healList[k]) continue;
 			if (!healList[k].canuse) continue;
+
+			if (!needCheck(char, char, skill, 'heal', k, btl)) continue;
 
 			if (healList[k].multiple) {
 				for (let l in skill.heal[k]) {
@@ -209,6 +213,9 @@ function canSelectSkill(char, skill, btl) {
 				for (let k in pskill.passive) {
 					if (!passiveList[k]) continue;
 					if (!passiveList[k].canuseskill) continue;
+
+					if (needCheck(char, char, skill, 'passive', 'skillbeforeuse', btl) !== true) continue;
+					if (!needCheck(char, char, skill, 'passive', k, btl)) continue;
 
 					if (passiveList[k].multiple && pskill.passive[k]) {
 						for (let l in pskill.passive[k]) {
@@ -242,6 +249,8 @@ function canSelectSkill(char, skill, btl) {
 		for (let k in skill.statusses) {
 			if (!statusList[k]) continue;
 			if (!statusList[k].canuse) continue;
+
+			if (!needCheck(char, char, skill, 'statusses', k, btl)) continue;
 
 			if (statusList[k].multiple) {
 				for (let l in skill.statusses[k]) {
@@ -535,7 +544,7 @@ const menuStates = {
 					}
 
 					// Lovable
-					if (skillinfo.target && ["one", "casterandfoe"].includes(skillinfo.target) && !(skillinfo.extras?.soulless && skillinfo.extras.soulless.includes("lovable"))) {
+					if (skillinfo.target && ["one", "casterandfoe"].includes(skillinfo.target) && !(skillinfo.extras?.soulless && skillinfo.extras.soulless.includes("lovable") && needCheck(char, char, skillinfo, 'extras', 'soulless', btl))) {
 						let alivecount = 0;
 						let alivechar = {};
 						for (let k in btl.teams) {
@@ -1265,7 +1274,7 @@ sendCurTurnEmbed = async(char, btl) => {
 		switch(i.customId) {
 			case 'melee':
 				btl.action.move = 'melee';
-				btl.action.melee = makeMelee(char);
+				btl.action.melee = makeMelee(char, btl);
 
 				if ((btl.action.melee.target === "one" || btl.action.melee.target === "spreadopposing" || btl.action.melee.target === "widespreadopposing" || btl.action.melee.target === "casterandfoe")) {
 					let alivecount = 0;
@@ -2315,7 +2324,7 @@ doAction = (char, btl, action) => {
 				char3.fusionskill = action.skills[1];
 
 				let settings = setUpSettings(btl.guild.id);
-				changeTrust(char3, char, Math.round((skillFile[action.fusionskill].trustgain ?? 30)*(settings.rates.trustrate ?? 1)));
+				if (settings?.mechanics?.trust) changeTrust(char3, char, Math.round((skillFile[action.fusionskill].trustgain ?? 30)*(settings.rates.trustrate ?? 1)), true, btl, 'onfusionskill');
 				break;
 
 			case 'item':
@@ -2586,7 +2595,7 @@ doAction = (char, btl, action) => {
 					char.donetc = true;
 
 					let settings = setUpSettings(btl.guild.id);
-					changeTrust(ally, char, Math.round(30*(settings.rates.trustrate ?? 1)), true, btl.channel);
+					if (settings?.mechanics?.trust) changeTrust(ally, char, Math.round(30*(settings.rates.trustrate ?? 1)), true, btl, 'onteamcombo');
 				}
 				break;
 
@@ -2675,6 +2684,8 @@ doAction = (char, btl, action) => {
 			if (skill && skill.type == 'passive') {
 				for (let i in skill.passive) {
 					if (passiveList[i] && passiveList[i].endturn) {
+						if (needCheck(char, char, skill, 'passive', 'skillbeforeuse', btl) !== true) continue;
+						if (!needCheck(char, char, skill, 'passive', i, btl)) continue;
 						if (passiveList[i].multiple) {
 							for (let k in skill.passive[i]) onturntxt += (passiveList[i].endturn(btl, char, action, skill.passive[i][k]) ?? '');;
 						} else {
@@ -2808,6 +2819,8 @@ doTurn = async(btl, noTurnEmbed) => {
 			if (skill && skill.type == 'passive') {
 				for (let i in skill.passive) {
 					if (passiveList[i] && passiveList[i].onturn) {
+						if (needCheck(char, char, skill, 'passive', 'skillbeforeuse', btl) !== true) continue;
+						if (!needCheck(char, char, skill, 'passive', i, btl)) continue;
 						if (passiveList[i].multiple) {
 							for (let k in skill.passive[i]) statusTxt += (passiveList[i].onturn(btl, char, skill.passive[i][k], skill) ?? '');;
 						} else

@@ -66,7 +66,11 @@ commands.pvpleaderboards = new Command({
 		type: "Word",
 	}],
 	doc: {
-		desc: `The gamemodes that you can check for are:\n- ${['regular', 'metronome', 'randskills', 'randstats', 'charscramble'].join("\n- ")}`,
+		pages: [
+			{
+				desc: `The gamemodes that you can check for are:\n- ${['regular', 'metronome', 'randskills', 'randstats', 'charscramble'].join("\n- ")}`,
+			}
+		]
 		/*fields: [
 			{
 				name: "Field Placeholder",
@@ -539,14 +543,14 @@ commands.startbattle = new Command({
 		// Save other shit
 		battle.teams[0].name = args[0];
 		battle.teams[0].items = objClone(party.items);
-		battle.teams[0].pets = objClone(party.negotiateAllies);
+		if (settings?.mechanics?.pets) battle.teams[0].pets = objClone(party.negotiateAllies);
 		battle.teams[0].weapons = objClone(party.weapons);
 		battle.teams[0].armors = objClone(party.armors);
 		battle.teams[0].id = args[0];
 		if (party.currency) battle.teams[0].currency = battle.teams[0].maxcur = party.currency
 
 		// Current pet
-		if (party.curpet) battle.teams[0].curpet = party.curpet;
+		if (settings?.mechanics?.pets && party.curpet) battle.teams[0].curpet = party.curpet;
 
 		// Set up Enemy Side.
 		// == this time, no encounters set until the enemy is killed or pacified == //
@@ -1074,7 +1078,7 @@ commands.starttrial = new Command({
 		}
 
 		battle.teams[0].name = args[0];
-		battle.teams[0].pets = objClone(party.negotiateAllies);
+		if (settings?.mechanics?.pets) battle.teams[0].pets = objClone(party.negotiateAllies);
 		battle.teams[0].weapons = objClone(party.weapons);
 		battle.teams[0].armors = objClone(party.armors);
 		battle.teams[0].id = args[0];
@@ -1335,14 +1339,14 @@ commands.testbattle = new Command({
 		// Save other shit
 		battle.teams[0].name = args[0];
 		battle.teams[0].items = objClone(party.items);
-		battle.teams[0].pets = objClone(party.negotiateAllies);
+		if (settings?.mechanics?.pets) battle.teams[0].pets = objClone(party.negotiateAllies);
 		battle.teams[0].weapons = objClone(party.weapons);
 		battle.teams[0].armors = objClone(party.armors);
 		battle.teams[0].id = args[0];
 		if (party.currency) battle.teams[0].currency = battle.teams[0].maxcur = party.currency;
 
 		// Current pet
-		if (party.curpet) battle.teams[0].curpet = party.curpet;
+		if (settings?.mechanics?.pets && party.curpet) battle.teams[0].curpet = party.curpet;
 
 		// Set up Enemy Side.
 		// == this time, no encounters set until the enemy is killed or pacified == //

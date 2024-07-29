@@ -41,8 +41,8 @@ healList = {
 			vars[0] = modSkillResult(char, targ, vars[0], skill, btl);
 //			vars[0] = Math.round(vars[0] * multiplier);
 
-			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
-				changeTrust(targ, char, Math.round(20*(settings.rates.trustrate ?? 1)), true, btl.channel);
+			if (settings?.mechanics?.trust && vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
+				changeTrust(targ, char, Math.round(20*(settings.rates.trustrate ?? 1)), true, btl, 'onheal');
 			}
 
 			let mainElementRate = settings?.rates?.mainelement ?? 1.2;
@@ -174,7 +174,7 @@ healList = {
 
 			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
 				settings = setUpSettings(btl.guild.id);
-				changeTrust(targ, char, Math.round(5*(settings.rates.trustrate ?? 1)), true, btl.channel);
+				if (settings?.mechanics?.trust) changeTrust(targ, char, Math.round(5*(settings.rates.trustrate ?? 1)), true, btl, 'onregenerate');
 			}
 			return `__${targ.name}__ is surrounded in a ${targetColors[vars[1]]} coloured aura!`;
 		},
@@ -220,7 +220,7 @@ healList = {
 
 			if (targ.team == char.team) {
 				settings = setUpSettings(btl.guild.id);
-				changeTrust(targ, char, Math.round(30*(settings.rates.trustrate ?? 1)), true, btl.channel);
+				if (settings?.mechanics?.trust) changeTrust(targ, char, Math.round(30*(settings.rates.trustrate ?? 1)), true, btl, 'onrevive');
 			}
 			return `__${targ.name}__ was revived!`;
 		},
@@ -245,7 +245,7 @@ healList = {
 
 				if (targ.team == char.team) {
 					settings = setUpSettings(btl.guild.id);
-					changeTrust(targ, char, Math.round(40*(settings.rates.trustrate ?? 1)), true, btl.channel);
+					if (settings?.mechanics?.trust) changeTrust(targ, char, Math.round(40*(settings.rates.trustrate ?? 1)), true, btl, 'onrecarmdra');
 				}
 			}
 
@@ -282,7 +282,7 @@ healList = {
 				case 'physical':
 					if (targ.team == char.team && targ.id != char.id) {
 						settings = setUpSettings(btl.guild.id);
-						changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl.channel);
+						if (settings?.mechanics?.trust) changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl, 'onstatushealphys');
 					}
 
 					for (let i in statusEffectFuncs) {
@@ -299,7 +299,7 @@ healList = {
 				case 'mental':
 					if (targ.team == char.team && targ.id != char.id) {
 						settings = setUpSettings(btl.guild.id);
-						changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl.channel);
+						if (settings?.mechanics?.trust) changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl, 'onstatushealmen');
 					}
 
 					for (let i in statusEffectFuncs) {
@@ -316,7 +316,7 @@ healList = {
 				case 'positive':
 					if (targ.team == char.team && targ.id != char.id) {
 						settings = setUpSettings(btl.guild.id);
-						changeTrust(targ, char, Math.round(-3*(settings.rates.trustrate ?? 1)), true, btl.channel);
+						if (settings?.mechanics?.trust) changeTrust(targ, char, Math.round(-15*(settings.rates.trustrate ?? 1)), true, btl, 'onstatushealpos');
 					}
 
 					for (let i in statusEffectFuncs) {
@@ -333,7 +333,7 @@ healList = {
 				case 'neutral':
 					if (targ.team == char.team && targ.id != char.id) {
 						settings = setUpSettings(btl.guild.id);
-						changeTrust(targ, char, Math.round(10*(settings.rates.trustrate ?? 1)), true, btl.channel);
+						if (settings?.mechanics?.trust) changeTrust(targ, char, Math.round(10*(settings.rates.trustrate ?? 1)), true, btl, 'onstatushealneu');
 					}
 
 					for (let i in statusEffectFuncs) {
@@ -350,7 +350,7 @@ healList = {
 				case 'negative':
 					if (targ.team == char.team && targ.id != char.id) {
 						settings = setUpSettings(btl.guild.id);
-						changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl.channel);
+						if (settings?.mechanics?.trust) changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl, 'onstatushealneg');
 					}
 
 					for (let i in statusEffectFuncs) {
@@ -367,7 +367,7 @@ healList = {
 				case 'all':
 					if (targ.team == char.team && targ.id != char.id) {
 						settings = setUpSettings(btl.guild.id);
-						changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl.channel);
+						if (settings?.mechanics?.trust) changeTrust(targ, char, Math.round(15*(settings.rates.trustrate ?? 1)), true, btl, 'onstatushealall');
 					}
 
 					for (let i in statusEffectFuncs) {
@@ -493,87 +493,77 @@ healList = {
 	}),
 
 	need: new Extra({
-		name: "Need",
-		desc: 'Will make the skill require <Less/More> than <Percent>% of <Cost Type> for it to work.',
-		multiple: true,
-		args: [
-			{
-				name: "Less/More",
-				type: "Word",
-				forced: true
-			},
-			{
-				name: "Equal?",
-				type: "Word"
-			},
-			{
-				name: "Percent",
-				type: "Decimal",
-				forced: true
-			},
-			{
-				name: "Cost Type",
-				type: "Word",
-				forced: true
-			}
-		],
+		name: extrasList.need.name,
+		desc: extrasList.need.desc,
+		multiple: extrasList.need.multiple,
+		args: extrasList.need.args,
+		doc: {
+			pages: [
+				{
+					desc: "### The {Affected Parameter} can be either:"+
+						"\n- A Skill extra - Checks for applicability of the extra.\n-# Can only check for the user on: need, movelink & painsplit."+
+						"\n- \"SkillBeforeUse\" - Checks for usability of the skill entirely.\n-# The default option, but can't check for the target."+
+						"\n- \"SkillOnSelect\" - Checks for usability of the skill after using cost.\n-# Alternate to SkillBeforeUse, that can check for the target."+
+						"\n\nA fair amount of options are not included for heals, like CRIT or STATUS. This is because heal skills aren't meant to offer such."
+				},
+				{
+					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					fields: Object.entries(needConditions).map(x => x = {
+						name: `${x[1].name} (${x[0]})`,
+						value: `\n\n${x[1].getFullDesc()}`,
+						inline: true
+					}).slice(0,6)
+				},
+				{
+					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					fields: Object.entries(needConditions).map(x => x = {
+						name: `${x[1].name} (${x[0]})`,
+						value: `\n\n${x[1].getFullDesc()}`,
+						inline: true
+					}).slice(6,12)
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
-			let less = args[0].toLowerCase()
-			let equal = (args[1] == 'true' || args[1] == 'yes' || args[1] == 'y' || args[1] == '1')
-			const percent = args[2]
-			const stat = args[3].toLowerCase()
-
-			if (less != "less" && less != "more") return void message.channel.send("You specify if the skill needs to be less or more of something, not whatever you said.");
-			if (percent < 1)
-				return void message.channel.send("You can't need less than 0%!");
-			if (stat != "hp" && stat != "mp" && stat != "hppercent" && stat != "mppercent" && stat != "lb")
-				return void message.channel.send("You entered an invalid value for <Cost Type>! It can be either HP, HPPercent, MP, MPPercent, or LB.");
+			let condition = args[0].toLowerCase()
+			let target = args[1].toLowerCase()
+			let params = args.slice(3).map(v => v.toLowerCase())
+			let affected = args[2]?.toLowerCase() ?? "skillbeforeuse"
 			
-			makeHeal(skill, "need", [less, equal, percent, stat]);
-			return true
-		},
-		canuse(char, skill, btl, vars) {
-			let check = vars[0] == 'less' ? '<' : '>';
-			if (vars[1]) check += '=';
+			if (target != 'target' && target != 'user' && !['turn', 'battlecondition'].includes(condition)) //Target/User
+				return void message.channel.send("You entered an invalid value for <User/Target>! It can be either Target or User.");
 
-			const applyOperator = new Function('a', 'b', `return a ${check} b;`);
+			//Affected Parameter
+			if (!healList[affected] && !['skillbeforeuse', 'skillonselect'].includes(affected)) return void message.channel.send("That's not the valid affected parameter you can have.");
 
-			switch(vars[3].toLowerCase()) {
-				case 'mp':
-					if (!applyOperator(char.mp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}${char.mpMeter ? char.mpMeter[1] : "MP"} to use this move!`;
-					break;
-				case 'lb':
-					if (!applyOperator(char.lbpercent, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}LB% to use this move!`;
-					break;
-				case 'mppercent':
-					if (!applyOperator((char.mp/char.maxmp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${(char.mp/char.maxmp)*vars[2]}% ${char.mpMeter ? char.mpMeter[1] : "MP"} to use this move!`;
-					break;
-				case 'hppercent':
-					if (!applyOperator((char.hp/char.maxhp)*vars[2], vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}% HP to use this move!`;
-					break;
-				default:
-					if (!applyOperator(char.hp, vars[2])) return `You need ${vars[0]} ${vars[1] ? 'or equal to' : 'than'} ${vars[2]}HP to use this move!`;
-					break;
+			if (affected == 'skillbeforeuse' && target == 'target') return void message.channel.send("Unfortunately it's not possible to check using the target here, as the check for usability of the skill in its entirety is done before you can choose the target.");
+
+			if (healList[affected] && ['need', 'movelink', 'painsplit'].includes(affected)) return void message.channel.send(`Unfortunately ${affected.toUpperCase()} does not account for the target at all, only the user.`);
+
+			if (!needConditions[condition]) return void message.channel.send(`Hold on, ${condition} is not the valid condition you can have.`);
+
+			params = needConditions[condition].apply(message, skill, params, condition)
+
+			if (params) {
+				makeHeal(skill, "need", [condition, target, affected, ...params]);
+
+				let hasHeal = false
+				for (var i in skill.heal) {
+					if (i != "sacrifice" && i != "wish") {
+						hasHeal = true;
+						break;
+					}
+				}
+				if (!hasHeal) makeHeal(skill, "healstat", [60, "hp"]);
+
+				return true;
 			}
 
-			return true;
+			return false;
 		},
-		getinfo(vars, skill) {
-			let text = `Requires **`
-			
-			for (i in vars) {
-				let healText = ` ${vars[i][3].toUpperCase()}`
-				if (healText.includes('PERCENT')) healText = `% of caster's max ${healText.replace('PERCENT', '')}`
-				if (healText.includes('LB')) healText = `% LB`
-
-				text += `${vars[i][0]} than ${vars[i][1] ? 'or equal to' : ''} ${vars[i][2]}${healText}`
-
-				if (i < vars.length - 2) text += ', ';
-				else if (i == vars.length - 2) text += ' and ';
-			}
-
-			return text + '** to use';
-		}
+		canuse: extrasList.need.canuse,
+		skillfailonuse: extrasList.need.skillfailonuse,
+		getinfo: extrasList.need.getinfo
 	}),
 
 	powerheal: new Extra({
@@ -625,7 +615,7 @@ healList = {
 
 			if (vars[0] > 0 && targ.team == char.team && targ.id != char.id) {
 				settings = setUpSettings(btl.guild.id);
-				changeTrust(targ, char, Math.round(20*(settings.rates.trustrate ?? 1)), true, btl.channel);
+				if (settings?.mechanics?.trust) changeTrust(targ, char, Math.round(20*(settings.rates.trustrate ?? 1)), true, btl, 'onpowerheal');
 			}
 
 			let atkStat = statWithBuff(char.stats[vars[2]], char.buffs[vars[2]] ?? char.buffs.mag, char) ?? char.stats.mag;
@@ -810,6 +800,9 @@ modSkillResult = (char, targ, result, skill, btl) => {
 
 			for (let i in psv.passive) {
 				if (passiveList[i] && passiveList[i].dmgmod) {
+					if (needCheck(char, targ, psv, 'passive', 'skillbeforeuse', btl) !== true) continue;
+					if (!needCheck(char, targ, psv, 'passive', i, btl)) continue;
+
 					if (passiveList[i].multiple) {
 						for (let k in psv.passive[i]) result = passiveList[i].dmgmod(char, targ, result, skill, btl, psv.passive[i][k]) ?? result;
 					} else

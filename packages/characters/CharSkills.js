@@ -1,12 +1,12 @@
-makeMelee = (char) => {
+makeMelee = (char, btl) => {
 	let atkType = 'physical';
 	let targType = 'one';
 	for (let skillName of char.skills) {
 		let psv = skillFile[skillName];
 		if (psv.type != 'passive' || !psv.passive) continue;
 
-		if (psv.passive.magicmelee) atkType = (psv.passive.magicmelee[0] ?? "magic");
-		if (psv.passive.meleetarget) targType = psv.passive.meleetarget[0][randNum(0, psv.passive.meleetarget[0].length - 1)]
+		if (psv.passive.magicmelee && needCheck(char, char, psv, 'passive', 'skillbeforeuse', btl) && needCheck(char, char, psv, 'passive', 'magicmelee', btl)) atkType = (psv.passive.magicmelee[0] ?? "magic");
+		if (psv.passive.meleetarget && needCheck(char, char, psv, 'passive', 'skillbeforeuse', btl) && needCheck(char, char, psv, 'passive', 'meleetarget', btl)) targType = psv.passive.meleetarget[0][randNum(0, psv.passive.meleetarget[0].length - 1)]
 
 		if (char.ragesoul) {
 			let targRandom = {

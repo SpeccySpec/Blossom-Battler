@@ -1052,6 +1052,8 @@ doPacify = (char, btl, action) => {
 	let negotiation = targ.negotiate[i];
 	let finaltxt = '';
 
+	let settings = setUpSettings(btl.guild.id)
+
 	var result = {
 		text: '', //this will be used for preapply hook texts to prevent unnecessary newlines
 		convince: negotiation.convince,
@@ -1106,7 +1108,7 @@ doPacify = (char, btl, action) => {
 				let skill = skillFile[s]
 				if (skill.type != 'passive') continue;
 
-				if (skill.passive.kindheart) {
+				if (skill.passive.kindheart && needCheck(char, char, skill, 'passive', 'skillbeforeuse', btl) && needCheck(char, char, skill, 'passive', 'kindheart', btl)) {
 					result.convince += Math.trunc(((result.convince/100)*skill.passive.kindheart)*100)/100; // trunc to 2 decimal places
 				}
 			}
@@ -1159,7 +1161,7 @@ doPacify = (char, btl, action) => {
 			targ.pacified = true;
 			finaltxt += `\n${targ.name} is fully pacified `;
 
-			if (targ.negotiateDefs && !btl.testing) {
+			if (settings?.mechanics?.pets && targ.negotiateDefs && !btl.testing) {
 				let parties = setUpFile(`${dataPath}/json/${btl.guild.id}/parties.json`, true);
 
 				if (parties[btl.teams[char.team].id]) {

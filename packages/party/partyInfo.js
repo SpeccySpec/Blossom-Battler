@@ -54,7 +54,7 @@ partyDesc = (party, message) => {
 	}
 
 	// Pets
-	if (party.negotiateAllies) {
+	if (settings?.mechanics?.pets && party.negotiateAllies) {
 		let p = '';
 		for (const i in party.negotiateAllies) {
 			let petDefs = party.negotiateAllies[i];

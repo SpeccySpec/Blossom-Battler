@@ -71,24 +71,73 @@ class ArgList {
 		return args
 	}
 
-	summonDocumentation(message, rawargs, replacementTitle) {
-		let DiscordEmbed = new Discord.MessageEmbed()
-			.setColor('#0099ff')
-			.setTitle(replacementTitle ?? [...message.content.matchAll(/"([^"]*?)"|[^ ]+/gm)].map(
-				(el) => el[1] || el[0] || "",
-			)[0])
-			.setDescription(this.getFullDesc() +
-			(this.doc != undefined
-				? `\n\n**DOCUMENTATION:**${
-					this.doc.desc != undefined ? `\n${this.doc.desc}` : ""
-				}`
-			: ""));
+	async summonDocumentation(message, rawargs, replacementTitle) {
+		let curPage = 0;
 
-		if (this?.doc?.fields != undefined) DiscordEmbed.addFields(this.doc.fields);
+		const documentationEmbed = async () => {
+			let embed = new Discord.MessageEmbed({
+				title: replacementTitle ?? [...message.content.matchAll(/"([^"]*?)"|[^ ]+/gm)].map(
+					(el) => el[1] || el[0] || "",
+				)[0],
+				description: this.getFullDesc() +
+				(this.doc != undefined
+					? `\n\n**DOCUMENTATION:**${
+						this?.doc?.pages[curPage]?.desc != undefined ? `\n${this.doc.pages[curPage].desc}` : ""
+					}`
+				: ""),
+				color: '#0099ff'
+			})
 
-		return void message.channel.send({
-			embeds: [DiscordEmbed]
-		});
+			if (this?.doc?.pages[curPage]?.fields != undefined) embed.addFields(this.doc.pages[curPage].fields);
+
+			if (this?.doc?.pages) {
+				embed.setFooter(`Page ${curPage+1}/${this?.doc?.pages.length ?? 1}`)
+			}
+
+			return embed
+		}
+
+		let embedMessage
+		if ((this?.doc?.pages?.length ?? 1) == 1) {
+			embedMessage = await message.channel.send({
+				embeds: [await documentationEmbed()]
+			})
+			return
+		}
+
+		embedMessage = await message.channel.send({
+			embeds: [await documentationEmbed()],
+			components: [new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]})]
+		})
+
+		const collector = embedMessage.createMessageComponentCollector({
+			filter: ({user}) => user.id == message.author.id
+		})
+
+		collector.on('collect', async interaction => {
+			if (interaction.component.customId != 'cancel' && interaction.component.customId != 'page') {
+				if (interaction.customId === 'back') {
+					curPage--;
+					if (curPage < 0) curPage = this.doc.pages.length - 1
+				} else if (interaction.customId === 'forward') {
+					curPage++;
+					if (curPage >= this.doc.pages.length) curPage = 0
+				}
+	
+				await interaction.update({
+					embeds: [await documentationEmbed()],
+					components: [
+						new Discord.MessageActionRow({components: [backButton, forwardButton, cancelButton]}),
+					]
+				})
+			} else {
+				collector.stop()
+				await interaction.update({
+				embeds: [await documentationEmbed()],
+				components: []
+				})
+			}
+		})
 	}
 
 	getArgs() {

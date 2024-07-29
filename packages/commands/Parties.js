@@ -1048,6 +1048,9 @@ commands.addpet = new Command({
 		}
 	],
 	func(message, args, guilded) {
+		let settings = setUpSettings(message.guild.id);
+		if (!settings?.mechanics?.pets) return message.channel.send("You can't use this because pets are disabled.")
+
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		let enemyFile = setUpFile(`${dataPath}/json/${message.guild.id}/enemies.json`);
 
@@ -1108,6 +1111,8 @@ commands.setpet = new Command({
 	],
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id);
+		if (!settings?.mechanics?.pets) return message.channel.send("You can't use this because pets are disabled.")
+
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
@@ -1148,6 +1153,8 @@ commands.petnickname = new Command({
 	],
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id);
+		if (!settings?.mechanics?.pets) return message.channel.send("You can't use this because pets are disabled.")
+			
 		let parties = setUpFile(`${dataPath}/json/${message.guild.id}/parties.json`);
 		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 

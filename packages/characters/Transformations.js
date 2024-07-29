@@ -158,8 +158,10 @@ canTransform = (char, btl, force) => {
 				break;
 
 			case 'trusteddown':
-				for (let ally of party.members) {
-					if (ally.hp <= 0  && char.id != ally.id && trustLevel(char, ally) > 5) return tname;
+				if (settings?.mechanics?.trust) {
+					for (let ally of party.members) {
+						if (ally.hp <= 0  && char.id != ally.id && trustLevel(char, ally) > 5) return tname;
+					}
 				}
 				break;
 		}
@@ -195,8 +197,10 @@ canTransform = (char, btl, force) => {
 					break;
 
 				case 'trusteddown':
-					for (let ally of party.members) {
-						if (ally.hp <= 0  && char.id != ally.id && trustLevel(char, ally) > 5) return tname;
+					if (settings?.mechanics?.trust) {
+						for (let ally of party.members) {
+							if (ally.hp <= 0  && char.id != ally.id && trustLevel(char, ally) > 5) return tname;
+						}
 					}
 					break;
 			}

@@ -55,6 +55,14 @@ skillStatusText = (skillDefs, newline) => {
 		}
 	}
 
+	if (skillDefs?.[extraCategory(skillDefs)]?.need) {
+		if (skillDefs[extraCategory(skillDefs)].need.some(x => x[2] == 'status')) finalText += `-# STATUS AFFLICTION requires ${extrasList.need.requirement(skillDefs[extraCategory(skillDefs)].need, "status")} to function. Prevents it upon failure.\n`;
+	}
+
+	if (typeof skillDefs.status === 'object' && skillDefs?.[extraCategory(skillDefs)]?.need) {
+		if (skillDefs[extraCategory(skillDefs)].need.some(x => x[2] == 'multistatus')) finalText += `-# MULTISTATUS requires ${extrasList.need.requirement(skillDefs[extraCategory(skillDefs)].need, "multistatus")} to function. It will only choose ${statusEmojis[skillDefs.status[0]]}${skillDefs.status[0]} upon failure.\n`;
+	}
+
 	return `${finalText}${newline ? "\n" : ""}`;
 }
 
@@ -86,6 +94,34 @@ skillTargetText = {
 	casterandrandomally: "Targets **the user** and **a random ally**.",
 }
 
+const ArgList = require("./arglist.js")
+
+Extra = class extends ArgList {
+	constructor(object) {
+		super(object.args, object.desc, object.doc)
+		this.name = object.name
+		this.multiple = object.multiple
+		this.diffflag = object.diffflag
+		this.unregsiterable = object.unregsiterable
+		for (const i in object) {
+			const func = object[i]
+			if (typeof func != "function")
+				continue
+			this[i] = func
+		}
+
+		this.useonfail = object.useonfail; //used for negotiation specials cause I use this exact same class.
+	}
+
+	apply(message, skill, rawargs, extraName) {
+		const args = this.parse(message, rawargs, extraName)
+		if (!args)
+			return false
+		return this.applyfunc(message, skill, args)
+	}
+}
+
+require("./skills/Need Conditions")
 require("./skills/Extras")
 require("./skills/Heal")
 require("./skills/Passive")
@@ -127,7 +163,7 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 	// Handle fusion skills first.
 	if (skillDefs.fusionskill) {
 		let fusionText = `May increase trust up to ${skillDefs.trustgain ?? 0}${statusEmojis.lovable}.\n_Requires:_\n`;
-		if (!skillDefs.trustgain || skillDefs.trustgain === 0)
+		if ((!skillDefs.trustgain || skillDefs.trustgain === 0) && settings?.mechanics?.trust)
 			fusionText = `_Requires:_\n`;
 
 		for (let i in skillDefs.fusionskill) {
@@ -227,6 +263,18 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 		finalText += "\n";
 	}
 
+	if (hasExtra(skillDefs, 'need')) {
+		if (hasExtra(skillDefs, 'ohko') && skillDefs.extras.need.some(x => x[2] == 'ohko')) finalText += `-# OHKO requires ${extrasList.need.requirement(skillDefs.extras.need, "ohko")} to function. It acts as a regular skill with **${powTxt}** power upon failure.\n`;
+		
+		if (typeof skillDefs.type === 'object' && skillDefs.extras.need.some(x => x[2] == 'dualelement')) finalText += `-# DUALELEMENT requires ${extrasList.need.requirement(skillDefs.extras.need, "dualelement")} to function. It will only use ${elementEmoji[skillDefs.type[0]]}${skillDefs.type[0]} upon failure.\n`;
+
+		if (settings.mechanics.technicaldamage && skillDefs.extras.need.some(x => x[2] == 'tech')) finalText += `-# TECHNICAL DAMAGE requires ${extrasList.need.requirement(skillDefs.extras.need, "tech")} to function.\n`;
+
+		if (settings.mechanics.onemores && skillDefs.extras.need.some(x => x[2] == 'onemores')) finalText += `-# ONE MORES requires ${extrasList.need.requirement(skillDefs.extras.need, "onemores")} to function.\n`;
+
+		if (settings.mechanics.limitbreaks && skillDefs.extras.need.some(x => x[2] == 'lbgain')) finalText += `-# LIMIT BREAK GAIN requires ${extrasList.need.requirement(skillDefs.extras.need, "lbgain")} to function.\n`;
+	}
+
 	if (skillDefs.type != 'passive') finalText += `${skillTargetText[skillDefs.target] ?? skillTargetText.one}\n`;
 
 	if (skillDefs.cost && skillDefs.costtype) {
@@ -272,8 +320,13 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 			finalText += `Has **${skillDefs.acc}%** Accuracy.\n`;
 	}
 
-	if (skillDefs.crit && skillDefs.type != "heal" && skillDefs.type != "support" && skillDefs.type != "status" && skillDefs.type != "passive")
+	if (skillDefs.crit && skillDefs.type != "heal" && skillDefs.type != "support" && skillDefs.type != "status" && skillDefs.type != "passive") {
 		finalText += `**${skillDefs.crit}%**<:crit:973077052083286056>\n`;
+
+		if (hasExtra(skillDefs, 'need')) {
+			if (skillDefs.extras.need.some(x => x[2] == 'crit')) finalText += `-# CRITICAL AFFLICTION requires ${extrasList.need.requirement(skillDefs.extras.need, "crit")} to function. ${statusEmojis['stun']}Stun bypasses this.\n`;
+		}
+	}
 
 	if (skillDefs.status) finalText += skillStatusText(skillDefs);
 
@@ -281,8 +334,15 @@ skillDesc = async (skillDefs, skillName, message, additionalMessage) => {
 	const extras = skillDefs[extrastype]
 	for (const extra in extras) {
 		const getinfo = extraslist[extra]?.getinfo
-		if (getinfo)
-			finalText += getinfo([...extras[extra]], skillDefs) + ".\n"
+		if (getinfo) {
+			if (extra != "need" || (extra == "need" && extras[extra].some(x => x[2] == 'skillbeforeuse' || x[2] == 'skillonselect'))) {
+				finalText += getinfo([...extras[extra]], skillDefs) + ".\n"
+
+				if (extras?.need) {
+					if (extras?.need.some(x => x[2] == extra)) finalText += `-# ${extra.toUpperCase()} requires ${extrasList.need.requirement(extras.need, extra)} to function.\n`;
+				}
+			}
+		}
 	}
 
 	if (skillDefs.atktype) {

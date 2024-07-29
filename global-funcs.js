@@ -1,34 +1,3 @@
-// Path to 'data' folder
-dataPath = './data'
-
-// Path to 'packages' folder
-packPath = './packages'
-
-// Bot Stuff
-utilityFuncs = require(packPath + '/utilityFuncs');
-charFuncs = require(packPath + '/charFuncs');
-enemyFuncs = require(packPath + '/enemyFuncs');
-attackFuncs = require(packPath + '/attackFuncs');
-turnFuncs = require(packPath + '/turnFuncs');
-skillFuncs = require(packPath + '/skillFuncs');
-
-RF = require(packPath + '/relicFuncs');
-
-//Canvas, for making custom pictures.
-Canvas = require('canvas');
-
-//FS, for writing files.
-fs = require('fs');
-
-//Request, for requesting files
-request = require('request');
-
-//hatebin, for converting long walls of text into links
-hastebin = require('hastebin-gen');
-
-//ArgList class, for the Command class
-const ArgList = require(packPath + "/arglist.js");
-
 ////////////////////
 // Global Objects //
 ////////////////////
@@ -911,21 +880,38 @@ trustLvl = {
 }
 
 quoteTypes = {
+	//Melee skill
 	melee: 'Used upon using a melee attack.',
+
+	//Quotes based on skill name are separate from this list...
+	
+	//Target Types
 	phys: 'Used upon using a <:physical:973077052129423411>**Physical Attack**.',
 	mag: 'Used upon using a **Magical Attack**.',
 	ranged: 'Used upon using a **Ranged Attack**.',
 	sorcery: 'Used upon using a **Sorcery Attack**.',
+
+	//Trust: Ally Attack
 	allyatk: 'Used when assisting a trusted ally with a powered up melee attack in battle.',
+
+	//Limit Breaks
 	lb1: 'Used when using a Level 1 Limit Break.',
 	lb2: 'Used when using a Level 2 Limit Break.',
 	lb3: 'Used when using a Level 3 Limit Break.',
 	lb4: 'Used when using a Level 4 Limit Break.',
+
+	//Team Combo
 	tc: 'Used when using a Team Combo.',
+
+	//Affinities - Striking
 	strong: `Used when landing a ${affinityEmoji.weak}**Weakness**, ${affinityEmoji.superweak}**Super Weakness**, or ${affinityEmoji.deadly}**Deadly** attack.`,
 	badatk: `Used when landing a ${affinityEmoji.resist}**Resist**, or worse attack.`,
+
+	//Accuracy-based
 	landed: '_Might_ be used when landing a normal attack.',
 	miss: 'Used when missing an attack.',
+
+	//Affinity-based - Hit
 	deadly: `Used when being hit by a move with ${affinityEmoji.deadly}**Deadly** effectiveness.`,
 	superweak: `Used when being hit by a move with ${affinityEmoji.superweak}**Super Weak** effectiveness.`,
 	weak: `Used when being hit by a move with ${affinityEmoji.weak}**Weak** effectiveness.`,
@@ -934,8 +920,15 @@ quoteTypes = {
 	block: `Used when being hit by a move with ${affinityEmoji.block}**Block** effectiveness.`,
 	repel: `Used when being hit by a move with ${affinityEmoji.repel}**Repel** effectiveness.`,
 	drain: `Used when being hit by a move with ${affinityEmoji.drain}**Drain** effectiveness.`,
+
+	//Status
 	status: 'Used upon landing a negative status ailment.',
+	neutralstatus: 'Used upon landing a neutral status ailment.',
 	positivestatus: 'Used upon landing a positive status ailment.',
+
+	//Quotes based on status name are separate from this list...
+
+	//Misc
 	dodge: 'Used when dodging a move.',
 	death: 'Used upon death.',
 	kill: 'Used upon killing a foe.',
@@ -945,6 +938,7 @@ quoteTypes = {
 	helped: 'Used when being helped by an ally (heal or buff)',
 	lvl: 'Used on level up.',
 
+	//Trust Quotes
 	allydeath: 'Used when a trusted ally dies. Banter text.',
 	console: `Used when a trusted ally takes ${affinityEmoji.weak}**Weak**, ${affinityEmoji.superweak}**Super Weak**, or ${affinityEmoji.deadly}**Deadly** damage. Banter text.`,
 	imfine: 'Used in response to "console" quotes. Banter text.',
@@ -952,6 +946,22 @@ quoteTypes = {
 	response: 'Used in response to "cheer" quotes. Banter text.',
 	killpraise: 'Used when a trusted ally kills a foe. Banter text.',
 	killresponse: 'Used in response to "killpraise" quotes. Banter text.',
+
+	//Trust XP Quotes
+	trustlovemax: 'Used on trust level up if the **love** trust reaches level _20_, the max level.',
+	trustloveup: 'Used for **love** trust of level _15 to 19_, on level up.',
+	trustlovedown: 'Used for **love** trust of level _15 to 19_, on level down.',
+	trustlikeup: 'Used for **like** trust of level _5 to 14_, on level up.',
+	trustlikedown: 'Used for **like** trust of level _5 to 14_, on level down.',
+	trustneutralposup: 'Used for **neutral** trust of level _1 to 4_, on level up.',
+	trustneutralposdown: 'Used for **neutral** trust of level _1 to 4_, on level down.',
+	trustneutralnegup: 'Used for **neutral** trust of level _-1 to -4_, on level up.',
+	trustneutralnegdown: 'Used for **neutral** trust of level _-1 to -4_, on level down.',
+	trustdislikeup: 'Used for **dislike** trust of level _-5 to -14_, on level up.',
+	trustdislikedown: 'Used for **dislike** trust of level _-5 to -14_, on level down.',
+	trusthateup: 'Used for **hate** trust of level _-15 to -19_, on level up.',
+	trusthatedown: 'Used for **hate** trust of level _-15 to -19_, on level down.',
+	trusthatemax: 'Used on trust level down if the **hate** trust reaches level _-20_, the max level.'
 }
 
 enemyTypes = [
@@ -1135,6 +1145,40 @@ specialDates = {
 }
 
 //////////////////////
+//     Requires     //
+//////////////////////
+// Path to 'data' folder
+dataPath = './data'
+
+// Path to 'packages' folder
+packPath = './packages'
+
+// Bot Stuff
+utilityFuncs = require(packPath + '/utilityFuncs');
+charFuncs = require(packPath + '/charFuncs');
+enemyFuncs = require(packPath + '/enemyFuncs');
+attackFuncs = require(packPath + '/attackFuncs');
+turnFuncs = require(packPath + '/turnFuncs');
+skillFuncs = require(packPath + '/skillFuncs');
+
+RF = require(packPath + '/relicFuncs');
+
+//Canvas, for making custom pictures.
+Canvas = require('canvas');
+
+//FS, for writing files.
+fs = require('fs');
+
+//Request, for requesting files
+request = require('request');
+
+//hatebin, for converting long walls of text into links
+hastebin = require('hastebin-gen');
+
+//ArgList class, for the Command class
+const ArgList = require(packPath + "/arglist.js");
+
+//////////////////////
 // Global functions //
 //////////////////////
 // Clone Object
@@ -1298,6 +1342,8 @@ setUpSettings = (guild) => {
 				technicaldamage: false,
 				fusionskills: false,
 				powerlevels: false,
+				trust: false,
+				pets: false
 			},
 			caps: {
 				levelcap: 99,
@@ -1331,7 +1377,8 @@ setUpSettings = (guild) => {
 					resist: 0.5,
 					repel: 1,
 					drain: 1,
-				}
+				},
+				limitbreak: 1
 			},
 			formulas: {
 				damageFormula: "persona",

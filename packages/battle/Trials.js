@@ -422,7 +422,7 @@ beginGlobalTrial = (trial, trialid, party, partyid, channel) => {
 	}
 
 	battle.teams[0].name = party.name;
-	battle.teams[0].pets = objClone(party.negotiateAllies);
+	if (settings?.mechanics?.pets) battle.teams[0].pets = objClone(party.negotiateAllies);
 	battle.teams[0].id = partyid;
 	if (party.currency) battle.teams[0].currency = battle.teams[0].maxcur = party.currency
 

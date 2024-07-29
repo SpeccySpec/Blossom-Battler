@@ -375,13 +375,24 @@ commands.updateskills = new Command({
 			}
 
 			if (skillFile[skill]?.heal) {
-				if (skillFile[skill].heal?.regenerate) {
-					for (i in skillFile[skill].heal.regenerate) skillFile[skill].heal.regenerate[i].push(0, 0);
+				if (skillFile[skill].heal?.need) {
+					for (i in skillFile[skill].heal.need) skillFile[skill].heal.need[i] = ['meter', 'user', 'skillbeforeuse', skillFile[skill].heal.need[i][3], skillFile[skill].heal.need[i][2], skillFile[skill].heal.need[i][0], skillFile[skill].heal.need[i][1]]
 				}
 			}
 
 			if (skillFile[skill]?.extras) {
-				
+				if (skillFile[skill].extras?.need) {
+					for (i in skillFile[skill].extras.need) skillFile[skill].extras.need[i] = ['meter', 'user', 'skillbeforeuse', skillFile[skill].extras.need[i][3], skillFile[skill].extras.need[i][2], skillFile[skill].extras.need[i][0], skillFile[skill].extras.need[i][1]]
+				}
+
+				if (skillFile[skill].extras?.dreameater) {
+					let statuses = []
+
+					for (i in skillFile[skill].extras.dreameater) statuses.push(skillFile[skill].extras.dreameater[i][0])
+
+					makeExtra(skillFile[skill], "need", ['status', 'target', 'skillonselect', true, ...statuses]);
+					delete skillFile[skill].extras.dreameater;
+				}
 			}
 		}
 		fs.writeFileSync(dataPath+'/json/skills.json', JSON.stringify(skillFile, null, '    '));
@@ -472,7 +483,7 @@ commands.listatkextras = new Command({
 
 		let extras = []
 		for (let i in extrasList) {
-			if (!extrasList[i]?.unregsiterable) extras.push({name: `${extrasList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${extrasList[i].getFullDesc()}${extrasList[i].multiple ? '\n\n**CAN BE APPLIED MULTIPLE TIMES!**' : ''}`, inline: true});
+			if (!extrasList[i]?.unregsiterable) extras.push({name: `${extrasList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${extrasList[i].getFullDesc()}${extrasList[i].multiple ? '\n\n-# **Can be applied multiple times.**' : ''}${extrasList[i].doc ? '\n\n-# **Contains documentation.**' : ''}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['fire'])
@@ -490,7 +501,7 @@ commands.listsupportextras = new Command({
 
 		let extras = []
 		for (let i in statusList) {
-			if (!extrasList[i]?.unregsiterable) extras.push({name: `${statusList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${statusList[i].getFullDesc()}${statusList[i].multiple ? '\n\n**CAN BE APPLIED MULTIPLE TIMES!**' : ''}`, inline: true});
+			if (!extrasList[i]?.unregsiterable) extras.push({name: `${statusList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${statusList[i].getFullDesc()}${statusList[i].multiple ? '\n\n-# **Can be applied multiple times.**' : ''}${statusList[i].doc ? '\n-# **Contains documentation.**' : ''}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['status'])
@@ -508,7 +519,7 @@ commands.listhealextras = new Command({
 
 		let extras = []
 		for (let i in healList) {
-			if (!extrasList[i]?.unregsiterable) extras.push({name: `${healList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${healList[i].getFullDesc()}${healList[i].multiple ? '\n\n**CAN BE APPLIED MULTIPLE TIMES!**' : ''}`, inline: true});
+			if (!extrasList[i]?.unregsiterable) extras.push({name: `${healList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${healList[i].getFullDesc()}${healList[i].multiple ? '\n\n-# **Can be applied multiple times.**' : ''}${healList[i].doc ? '\n\n-# **Contains documentation.**' : ''}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['heal'])
@@ -526,7 +537,7 @@ commands.listpassiveextras = new Command({
 
 		let extras = []
 		for (let i in passiveList) {
-			if (!extrasList[i]?.unregsiterable) extras.push({name: `${passiveList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${passiveList[i].getFullDesc()}${passiveList[i].multiple ? '\n\n**CAN BE APPLIED MULTIPLE TIMES!**' : ''}`, inline: true});
+			if (!extrasList[i]?.unregsiterable) extras.push({name: `${passiveList[i].name} (${i.charAt(0).toUpperCase()+i.slice(1)})`, value: `${passiveList[i].getFullDesc()}${passiveList[i].multiple ? '\n\n-# **Can be applied multiple times.**' : ''}${passiveList[i].doc ? '\n\n-# **Contains documentation.**' : ''}`, inline: true});
 		}
 
 		listExtras(message, extras, title, desc, elementColors['passive'])
@@ -1312,7 +1323,11 @@ commands.settier = new Command({
 	section: "skills",
 	aliases: ['skilltier', 'tierskill', 'setskilltier'],
 	doc: {
-		desc: "```Tier 1 ≤ 100 Power\nTier 2 ≤ 250 Power\nTier 3 ≤ 400 Power\nTier 4 ≤ 650 Power\nTier 5 ≤ 1200 Power\nTier 6 ≤ 2000 Power```These are the default tiers for autocalculation. You can use this to determine **skill evolution**.",
+		pages: [
+			{
+				desc: "```Tier 1 ≤ 100 Power\nTier 2 ≤ 250 Power\nTier 3 ≤ 400 Power\nTier 4 ≤ 650 Power\nTier 5 ≤ 1200 Power\nTier 6 ≤ 2000 Power```These are the default tiers for autocalculation. You can use this to determine **skill evolution**.",
+			}
+		]
 	},
 	args: [
 		{
@@ -1350,7 +1365,11 @@ commands.fusionskill = new Command({
 	section: "skills",
 	aliases: ['makefusion', 'dofusion', 'makefusionskill', 'dofusionskill', 'assignfusion', 'assignfusionskills'],
 	doc: {
-		desc: "**Fusion Skills** are a mechanic that can be disabled per server. They allow 2 users to use two different skills at the same time to get a completely new skill instead. This will disable usage of the contributing elements for the next turn on the two users that participated. This command can be used on an existing skill to turn it into a fusion skill. {Auto Create} will have the fusion skill be a generic skill with the power of the two skills participating.",
+		pages: [
+			{
+			desc: "**Fusion Skills** are a mechanic that can be disabled per server. They allow 2 users to use two different skills at the same time to get a completely new skill instead. This will disable usage of the contributing elements for the next turn on the two users that participated. This command can be used on an existing skill to turn it into a fusion skill. {Auto Create} will have the fusion skill be a generic skill with the power of the two skills participating.",
+			}
+		]
 	},
 	args: [
 		{
@@ -1389,7 +1408,7 @@ commands.fusionskill = new Command({
 			if (["passive"].includes(skillFile[args[0]].type))
 				return message.channel.send(`${elementEmoji.passive}**Passive** skills may not be Fusion Skills.`);
 
-			skillFile[args[0]].trustgain = args[1];
+			skillFile[args[0]].trustgain = args[1] ?? 0;
 			skillFile[args[0]].fusionskill = [];
 
 			let skillargs = [args[2], args[3]]

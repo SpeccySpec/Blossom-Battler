@@ -15,140 +15,143 @@ setUpTrust = (char, char2) => {
 }
 
 trustEmojis = {
-	'Loves': '❤️',
-	'Likes': '👍',
-	'Is neutral to': '😐',
-	'Dislikes': '👎',
-	'Hates': '🤬',
+	'love': '❤️',
+	'like': '👍',
+	'neutral': '😐',
+	'dislike': '👎',
+	'hate': '🤬',
 
-	'Raising': '😐',
-	'Lowering': '😔',
+	'up': affinityEmoji['weak'],
+	'down': affinityEmoji['resist'],
 }
 
 trustRanges = { //minumum to maximum trust levels
-	'Loves': [15, 20],
-	'Likes': [5, 14],
-	'Is neutral to': [-4, 4],
-	'Dislikes': [-14, -5],
-	'Hates': [-20, -15]
+	'love': [15, 20],
+	'like': [5, 14],
+	'neutral': [-4, 4],
+	'dislike': [-14, -5],
+	'hate': [-20, -15]
 }
 
-changeTrust = (char, char2, i, send, channel, char1Name, char2Name) => {
+changeTrust = (char, char2, i, send = true, btl, passiveCall, char1Name, char2Name, isMutual = true) => {
 	if (char1Name) {
 		char.truename = char1Name;
 		char2.truename = char2Name;
 	}
 	setUpTrust(char, char2);
 
-	let prefix = elementEmoji[char.mainElement] ?? elementEmoji.strike;
 	let color = elementColors[char.mainElement] ?? elementColors.strike;
 
-	if (typeof char.mainElement === "object") {
-		prefix = "";
-		for (let i in char.mainElement)
-			prefix += elementEmoji[char.mainElement[i]] ?? elementEmoji.strike;
+	if (typeof char.mainElement === "object") color = elementColors[char.mainElement[0]] ?? elementColors.strike;
 
-		color = elementColors[char.mainElement[0]] ?? elementColors.strike;
-	}
+	let trustDesc = ""
 
-	let detectedLevelUp = false;
-	let previousLevel = char.trust[char2.truename].level;
+	let checkThrough = [char]
+	if (isMutual) checkThrough.push(char2)
 
-	if (typeof char.trust[char2.truename].amount === "string") char.trust[char2.truename].amount = 0;
-	char.trust[char2.truename].amount += parseInt(i);
+	for (c in checkThrough) {
+		let chacha = checkThrough[c] == char ? char.trust[char2.truename] : char2.trust[char.truename]
 
-	if ((char.trust[char2.truename].level == 20 && char.trust[char2.truename].amount >= char.trust[char2.truename].maximum) || (char.trust[char2.truename].level == -20 && char.trust[char2.truename].amount <= char.trust[char2.truename].maximum)) {
-		char.trust[char2.truename].amount = char.trust[char2.truename].maximum;
-	} else {
-		if ((char.trust[char2.truename].amount <= 0 && char.trust[char2.truename].level >= 1) || (char.trust[char2.truename].amount <= char.trust[char2.truename].maximum && char.trust[char2.truename].level < 1)) {
-			while (((char.trust[char2.truename].amount <= 0 && char.trust[char2.truename].level >= 1) || (char.trust[char2.truename].amount <= char.trust[char2.truename].maximum && char.trust[char2.truename].level < 1)) && Math.abs(char.trust[char2.truename].level) > -20) {
-				detectedLevelUp = true;
-				
-				previousLevel = char.trust[char2.truename].level;
-				char.trust[char2.truename].level--;
-				if (char.trust[char2.truename].level == 0) char.trust[char2.truename].level = -1;
+		let detectedLevelUp = false;
+		let previousLevel = chacha.level;
 
-				if (char.trust[char2.truename].level >= -1) {
-					if (previousLevel <= 1) char.trust[char2.truename].amount -= Math.abs(char.trust[char2.truename].maximum);
-					char.trust[char2.truename].maximum = (100+((Math.abs(char.trust[char2.truename].level)-1)*15)) * (char.trust[char2.truename].level > 0 ? 1 : -1);
-					if (previousLevel > 1) char.trust[char2.truename].amount += Math.abs(char.trust[char2.truename].maximum);
-				} else {
-					if (previousLevel <= 1) char.trust[char2.truename].amount += Math.abs(char.trust[char2.truename].maximum);
-					char.trust[char2.truename].maximum = (100+((Math.abs(char.trust[char2.truename].level)-1)*15)) * (char.trust[char2.truename].level > 0 ? 1 : -1);
-					if (previousLevel > 1) char.trust[char2.truename].amount -= Math.abs(char.trust[char2.truename].maximum);
-				}
+		if (typeof chacha.amount === "string") chacha.amount = 0;
 
-				if (char.trust[char2.truename].level == -1) char.trust[char2.truename].amount += Math.abs(char.trust[char2.truename].maximum);
-			}
-		} else if ((char.trust[char2.truename].amount >= char.trust[char2.truename].maximum && char.trust[char2.truename].level >= 0) || (char.trust[char2.truename].amount >= 0 && char.trust[char2.truename].level < 0)) {
-			while (((char.trust[char2.truename].amount >= char.trust[char2.truename].maximum && char.trust[char2.truename].level >= 0) || (char.trust[char2.truename].amount >= 0 && char.trust[char2.truename].level < 0)) && Math.abs(char.trust[char2.truename].level) < 20) {
-				detectedLevelUp = true;
-				
-				previousLevel = char.trust[char2.truename].level;
-				char.trust[char2.truename].level++;
-				if (char.trust[char2.truename].level == 0) char.trust[char2.truename].level = 1;
+		let xpGiven = parseFloat(i)
 
-				if (char.trust[char2.truename].level == 1) char.trust[char2.truename].amount += Math.abs(char.trust[char2.truename].maximum);
-
-				if (char.trust[char2.truename].level >= -1) {
-					if (previousLevel >= -1) char.trust[char2.truename].amount -= Math.abs(char.trust[char2.truename].maximum);
-					char.trust[char2.truename].maximum = (100+((Math.abs(char.trust[char2.truename].level)-1)*15)) * (char.trust[char2.truename].level > 0 ? 1 : -1);
-					if (previousLevel < -1) char.trust[char2.truename].amount += Math.abs(char.trust[char2.truename].maximum);
-				} else {
-					if (previousLevel >= -1) char.trust[char2.truename].amount += Math.abs(char.trust[char2.truename].maximum);
-					char.trust[char2.truename].maximum = (100+((Math.abs(char.trust[char2.truename].level)-1)*15)) * (char.trust[char2.truename].level > 0 ? 1 : -1);
-					if (previousLevel < -1) char.trust[char2.truename].amount -= Math.abs(char.trust[char2.truename].maximum);
+		if (passiveCall && doPassives(btl)) {
+			let psv = null;
+			for (let i in checkThrough[c].skills) {
+				if (!skillFile[checkThrough[c].skills[i]]) continue;
+				if (skillFile[checkThrough[c].skills[i]].type != 'passive') continue;
+	
+				psv = skillFile[checkThrough[c].skills[i]];
+				for (let k in psv.passive) {
+					if (passiveList[k] && k == 'attachment') {
+						if (needCheck(checkThrough[c], checkThrough[c], psv, 'passive', 'skillbeforeuse', btl) !== true) continue;
+						if (!needCheck(checkThrough[c], checkThrough[c], psv, 'passive', k, btl)) continue;
+						
+						for (ex in psv.passive[k]) {
+							if ((((psv.passive[k][ex][0] && checkThrough[c] == char2) || (!psv.passive[k][ex][0] && checkThrough[c] == char)) || ['onwin', 'onfusionskill', 'onteamcombo'].includes(passiveCall)) && psv.passive[k][ex][1].includes(passiveCall)) xpGiven *= psv.passive[k][ex][2]/100
+						}
+					}
 				}
 			}
 		}
-	}
-	if ((char.trust[char2.truename].level == 20 && char.trust[char2.truename].amount >= char.trust[char2.truename].maximum) || (char.trust[char2.truename].level == -20 && char.trust[char2.truename].amount <= char.trust[char2.truename].maximum)) {
-		char.trust[char2.truename].amount = char.trust[char2.truename].maximum;
-	}
+		
+		chacha.amount += Math.round(xpGiven);
+		
+		if (xpGiven == 0) continue
 
-	char2.trust[char.truename] = { //this is for consistency's sake
-		amount: char.trust[char2.truename].amount,
-		maximum: char.trust[char2.truename].maximum,
-		level: char.trust[char2.truename].level
-	}
-
-	let trustemoji;
-	if (detectedLevelUp) {
-		if (i > 0) {
-			trustemoji = (char.trust[char2.truename].level >= 15) ? trustEmojis['Loves'] : (char.trust[char2.truename].level >= 5) ? trustEmojis['Likes'] : trustEmojis['Is neutral to'];
-			if (char.trust[char2.truename].level < 0) trustemoji = trustEmojis['Raising'];
-			
-			if (send) {
-				let DiscordEmbed = new Discord.MessageEmbed()
-					.setColor(color)
-					.setTitle(`${trustemoji} ${char.name} & ${char2.name} grow closer... ${trustemoji}`)
-					.setDescription(`${char.name} & ${char2.name} reached _Trust Level __${char.trust[char2.truename].level}___!`)
-				return void channel.send({embeds: [DiscordEmbed]});
-			} else {
-				return `\n${trustemoji} ${char.name} & ${char2.name} grow closer, reaching _Trust Level __${char.trust[char2.truename].level}___! ${trustemoji}`;
-			}
+		if ((chacha.level == 20 && chacha.amount >= chacha.maximum) || (chacha.level == -20 && chacha.amount <= chacha.maximum)) {
+			chacha.amount = chacha.maximum;
+			continue;
 		} else {
-			trustemoji = (char.trust[char2.truename].level <= -15) ? trustEmojis['Hates'] : (char.trust[char2.truename].level <= -5) ? trustEmojis['Dislikes'] : trustEmojis['Is neutral to'];
-			if (char.trust[char2.truename].level > 0) trustemoji = trustEmojis['Lowering'];
-
-			if (send) {
-				let DiscordEmbed = new Discord.MessageEmbed()
-					.setColor(color)
-					.setTitle(`${trustemoji} ${char.name} & ${char2.name} draw farther away... ${trustemoji}`)
-					.setDescription(`${char.name} & ${char2.name} reached _Trust Level __${char.trust[char2.truename].level}___!`)
-				return void channel.send({embeds: [DiscordEmbed]});
-			} else {
-				return `\n${trustemoji} ${char.name} & ${char2.name} draw farther away, reaching _Trust Level __${char.trust[char2.truename].level}___! ${trustemoji}`;
+			if ((chacha.amount <= 0 && chacha.level >= 1) || (chacha.amount <= chacha.maximum && chacha.level < 1)) {
+				while (((chacha.amount <= 0 && chacha.level >= 1) || (chacha.amount <= chacha.maximum && chacha.level < 1)) && Math.abs(chacha.level) > -20) {
+					detectedLevelUp = true;
+					
+					previousLevel = chacha.level;
+					chacha.level--;
+					if (chacha.level == 0) chacha.level = -1;
+	
+					if (chacha.level >= -1) {
+						if (previousLevel <= 1) chacha.amount -= Math.abs(chacha.maximum);
+						chacha.maximum = (100+((Math.abs(chacha.level)-1)*15)) * (chacha.level > 0 ? 1 : -1);
+						if (previousLevel > 1) chacha.amount += Math.abs(chacha.maximum);
+					} else {
+						if (previousLevel <= 1) chacha.amount += Math.abs(chacha.maximum);
+						chacha.maximum = (100+((Math.abs(chacha.level)-1)*15)) * (chacha.level > 0 ? 1 : -1);
+						if (previousLevel > 1) chacha.amount -= Math.abs(chacha.maximum);
+					}
+	
+					if (chacha.level == -1) chacha.amount += Math.abs(chacha.maximum);
+				}
+			} else if ((chacha.amount >= chacha.maximum && chacha.level >= 0) || (chacha.amount >= 0 && chacha.level < 0)) {
+				while (((chacha.amount >= chacha.maximum && chacha.level >= 0) || (chacha.amount >= 0 && chacha.level < 0)) && Math.abs(chacha.level) < 20) {
+					detectedLevelUp = true;
+					
+					previousLevel = chacha.level;
+					chacha.level++;
+					if (chacha.level == 0) chacha.level = 1;
+	
+					if (chacha.level == 1) chacha.amount += Math.abs(chacha.maximum);
+	
+					if (chacha.level >= -1) {
+						if (previousLevel >= -1) chacha.amount -= Math.abs(chacha.maximum);
+						chacha.maximum = (100+((Math.abs(chacha.level)-1)*15)) * (chacha.level > 0 ? 1 : -1);
+						if (previousLevel < -1) chacha.amount += Math.abs(chacha.maximum);
+					} else {
+						if (previousLevel >= -1) chacha.amount += Math.abs(chacha.maximum);
+						chacha.maximum = (100+((Math.abs(chacha.level)-1)*15)) * (chacha.level > 0 ? 1 : -1);
+						if (previousLevel < -1) chacha.amount -= Math.abs(chacha.maximum);
+					}
+				}
 			}
 		}
-	} else {
-		if (send) {
-			let bar = char.trust[char2.truename].level > 0 ? 'angel' : 'devil';
-			return void channel.send(`${getBar(bar, char.trust[char2.truename].amount, char.trust[char2.truename].maximum)} ${char.trust[char2.truename].amount}/${char.trust[char2.truename].maximum}\n*${char.name} got ${i} trust XP with ${char2.name}.*`);
+		if ((chacha.level == 20 && chacha.amount >= chacha.maximum) || (chacha.level == -20 && chacha.amount <= chacha.maximum)) {
+			chacha.amount = chacha.maximum;
 		}
+
+		if (detectedLevelUp) {
+			let trustemoji = [(xpGiven > 0 ? trustEmojis['up'] : trustEmojis['down'])];
+
+			if (i > 0) trustemoji.push((chacha.level >= 15) ? trustEmojis['love'] : (chacha.level >= 5) ? trustEmojis['like'] : trustEmojis['neutral'])
+			else trustemoji.push((chacha.level <= -15) ? trustEmojis['hate'] : (chacha.level <= -5) ? trustEmojis['dislike'] : trustEmojis['neutral'])
+
+			trustDesc += `**LEVEL ${(xpGiven > 0 ? 'UP' : 'DOWN')}!**\n**${trustemoji.join("")} ${checkThrough[c] == char ? char.name : char2.name}** ${(xpGiven > 0 ? 'grows closer to' : 'draws away from')} **${checkThrough[c] == char ? char2.name : char.name}**, reaching _Trust Level __${chacha.level}___! ${trustemoji.reverse().join("")}`
+			
+			trustDesc += `\n${selectQuote(checkThrough[c], 'trust'+(chacha.level <= 0 ? ((chacha.level >= 15) ? 'love' : (chacha.level >= 5) ? 'like' : 'neutral') : ((chacha.level <= -15) ? 'hate' : (chacha.level <= -5) ? 'dislike' : 'neutral'))+((chacha.level >= -4 && chacha.level <= -1 ? 'neg' : (chacha.level >= 1 && chacha.level <= 4 ? 'pos' : '')))+`${Math.abs(chacha.level >= 20) ? 'max' : (parseInt(i) > 0 ? 'up' : 'down')}`, null, "%ALLY%", checkThrough[c] == char ? char2.name : char.name)}`
+		} else {
+			trustDesc += `${getBar((chacha.level > 0 ? 'angel' : 'devil'), chacha.amount, chacha.maximum)} ${chacha.amount}/${chacha.maximum}\n*${checkThrough[c] == char ? char.name : char2.name} got ${i} trust XP with ${checkThrough[c] == char ? char2.name : char.name}.*\n`;
+		}
+
+		trustDesc += '\n'
 	}
 
-	return send ? undefined : '';
+	if (trustDesc == "") trustDesc = "*No trust change occured...*"
+
+	return send ? void btl.channel.send({embeds: [new Discord.MessageEmbed().setColor(color).setTitle(`${char.name} & ${char2.name}`).setDescription(trustDesc)]}) : trustDesc;
 }
 
 trustLevel = (char, char2) => {
