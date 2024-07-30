@@ -544,6 +544,36 @@ commands.listpassiveextras = new Command({
 	}
 })
 
+commands.getextra = new Command({
+	desc: 'List the possible extras you can give a __passive__ skill.',
+	aliases: ['showextra', 'displayextra', 'getextradocumentation', 'showextradocumentation', 'displayextradocumentation', 'getextradoc', 'showextradoc', 'displayextradoc', 'extradocumentation', 'extradoc'],
+	section: "skills",
+	args: [
+		{
+			name: "Extra Category",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Extra",
+			type: "Word",
+			forced: true
+		}
+	],
+	func(message, args, guilded) {
+		let cat = args[0].toLowerCase();
+		let extra = args[1].toLowerCase();
+
+		if (!['attack', 'support', 'heal', 'passive'].includes(cat)) return message.channel.send(`That's not a valid extra category. You can only get attack, support, heal and passive extras.`)
+		
+		let extraCat = (cat == 'attack' ? extrasList : (cat == 'support' ? statusList : (cat == 'heal' ? healList : passiveList)))
+		
+		if (!extraCat[extra]) return message.channel.send(`That's not a valid extra for the ${cat} category.`)
+
+		extraCat[extra].summonDocumentation(message, null, extraCat[extra].name);
+	}
+})
+
 commands.applyextra = new Command({
 	desc: 'A registered skill may have extra effects. These are called "extras". Apply an extra with this command, list all the ones possible with "listatkextras".',
 	aliases: ['extraapply'],
