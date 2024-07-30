@@ -9,7 +9,7 @@ let targetColors = {
 healList = {
 	healstat: new Extra({
 		name: "Heal Stat",
-		desc: "The default heal type. Restores <Meter> by <Amount>. _Negative values for <Heal Amount> will damage the target!_",
+		desc: "The default heal type. Restores <Meter> by <Amount>.",
 		multiple: true,
 		diffflag: 0,
 		args: [
@@ -24,8 +24,17 @@ healList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `-# The default heal that you will see in some healing like need for example, is 60 HP.`+
+					`\n\nThe only allowed meters you can use for this extra is: *hp, mp, hppercent, mppercent and lb*.`+
+					`\n\nIf the amount is less than 0, it will **damage** the target in a similar way ${elementEmoji['almighty']} **Almighty** does. No affinity check.` 
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
-			if (args[0] == 0) args[0] = 60;
+			if (args[0] == 0) return message.channel.send(`Healing 0 makes it redundant, doesn't it?`)
 			if (!['hp', 'mp', 'hppercent', 'mppercent', 'lb'].includes(args[1].toLowerCase())) return void message.channel.send(`${args[1]} is an invalid meter to heal! Enter either HP, MP, HPPercent, MPPercent or LB.`);
 
 			makeHeal(skill, "healstat", [args[0], args[1].toLowerCase()]);
@@ -109,7 +118,7 @@ healList = {
 
 	regenerate: new Extra({
 		name: "Regenerate",
-		desc: "Restores <Meter> by <Amount> over time for <Turns> turns. Can be inactive before last regeneration finishes, wait before start, and pause each turn for an amount of turns optionally. _Negative values for <Amount> will damage the target!_",
+		desc: "Restores <Meter> by <Amount> over time for <Turns> turns.",
 		multiple: true,
 		args: [
 			{
@@ -140,6 +149,16 @@ healList = {
 				type: "Num"
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `The only allowed meters you can use for this extra is: *hp, mp, hppercent, mppercent and lb*.`+
+					`\n\nIf the amount is **less than 0**, it will **damage** the target in a similar way ${elementEmoji['almighty']} **Almighty** does. No affinity check.`+
+					`\n\n*{Activate after last regeneration?}* deducts if it can go with previous regeneration or if it has to wait for it to finish. It defaults to **false**.`+
+					`\n\n*{Turns before start} & {Pause turns}* change when the effect of it takes place, former at start and latter between each. The default is 0 for both, which means it will happen immediately with no pause.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let hp = args[0];
 			let meter = args[1].toLowerCase();
@@ -148,7 +167,7 @@ healList = {
 			let startTurns = Math.max(args[4] ?? 0, 0);
 			let pauseTurns = Math.max(args[5] ?? 0, 0);
 
-			if (hp == 0) hp = 20;
+			if (hp == 0) return message.channel.send(`Healing 0 makes it redundant, doesn't it?`)
 			if (!['hp', 'mp', 'hppercent', 'mppercent', 'lb'].includes(meter)) return void message.channel.send(`${args[1]} is an invalid meter to heal! Enter either HP, MP, HPPercent, MPPercent or LB.`);
 			if (turns <= 0) return void message.channel.send(`${turns} is an invalid number of turns! Enter a number greater than 0.`);
 			makeHeal(skill, "regenerate", [hp, meter, turns, lastActivate, startTurns, pauseTurns]);
@@ -198,7 +217,7 @@ healList = {
 
 	revive: new Extra({
 		name: "Revive",
-		desc: "Revives the target to 1/<Amount> of their max HP. _Negative values are not permitted._",
+		desc: "Revives the target to 1/<Amount> of their max HP.",
 		args: [
 			{
 				name: "Amount",
@@ -206,6 +225,13 @@ healList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `The <Amount> may only be at least 1. The higher the number, the less HP it heals.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			if (args[0] <= 0) return void message.channel.send("You can't revive to 0 or less!");
 			makeHeal(skill, "revive", [args[0]]);
@@ -258,7 +284,7 @@ healList = {
 
 	statusheal: new Extra({
 		name: "Status Heal",
-		desc: "Cures the target of the specified status. Accepts 'physical', 'mental', 'positive', and 'neutral', and 'all' as statuses.",
+		desc: "Cures the target of the specified status.",
 		args: [
 			{
 				name: "Status",
@@ -268,10 +294,20 @@ healList = {
 		],
 		multiple: true,
 		diffflag: 0,
+		doc: {
+			pages: [
+				{
+					desc: `Any status ailment is allowed, but there are additional options:`+
+					`\n- **"Physical" and "Mental"** are for all ailments that affect either the body or mind respectively.`+
+					`\n- **"Positive", "Neutral" & "Negative"** are for all ailments that yield either kind of change on the target.`+
+					`\n- **"All"** is for every kind of status, no matter what it is.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const status = args[0]?.toLowerCase();
 
-			if (![...statusEffects, "all", "physical", "sorcery", "mental", "positive", "neutral"].includes(status))
+			if (![...statusEffects, "all", "physical", "mental", "positive", "neutral", "negative"].includes(status))
 				return void message.channel.send("That's not a valid status effect.");
 
 			makeHeal(skill, "statusheal", [status]);
@@ -416,11 +452,19 @@ healList = {
 				type: "Num"
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Any value for {HP} is allowed, but it has a hard cap in effect, 0 at the low end and max hp of the target at the high end.`+
+					`\n\n-# If upon registration, the skill doesn't heal anything, it will make it heal 60 HP by default.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			makeHeal(skill, "sacrifice", [args[0] ?? 0]);
 			let hasHeal = false;
 			for (var i in skill.heal) {
-				if (i != "wish" && i != "sacrifice") {
+				if (i != "wish" && i != "sacrifice" && i != "need") {
 					hasHeal = true;
 					break;
 				}
@@ -441,7 +485,7 @@ healList = {
 			if (char.hp > char.maxhp) char.hp = char.maxhp;
 			if (char.hp < 0) char.hp = 0;
 
-			return `__${char.name}__ sacrificed themselves, lowering their HP to __${vars[0]}__!`;
+			return `__${char.name}__ sacrificed themselves, lowering their HP to __${char.hp}__!`;
 		},
 		getinfo(vars, skill) {
 			return extrasList.sacrifice.getinfo(vars, skill);
@@ -450,7 +494,7 @@ healList = {
 
 	wish: new Extra({
 		name: "Wish",
-		desc: "Will restore after <Turns> turns. _Negative values are not permitted._",
+		desc: "Will restore after <Turns> turns.",
 		args: [
 			{
 				name: "Turns",
@@ -458,6 +502,14 @@ healList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `The amount of {Turns} needs to be at least 1. The higher, the longer the wait.`+
+					`\n\n-# If upon registration, the skill doesn't heal anything, it will make it heal 60 HP by default.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const turns = args[0];
 
@@ -466,7 +518,7 @@ healList = {
 
 			let hasHeal = false
 			for (var i in skill.heal) {
-				if (i != "sacrifice" && i != "wish") {
+				if (i != "sacrifice" && i != "wish" && i != "need") {
 					hasHeal = true;
 					break;
 				}
@@ -500,14 +552,15 @@ healList = {
 		doc: {
 			pages: [
 				{
-					desc: "### The {Affected Parameter} can be either:"+
-						"\n- A Skill extra - Checks for applicability of the extra.\n-# Can only check for the user on: need, movelink & painsplit."+
-						"\n- \"SkillBeforeUse\" - Checks for usability of the skill entirely.\n-# The default option, but can't check for the target."+
-						"\n- \"SkillOnSelect\" - Checks for usability of the skill after using cost.\n-# Alternate to SkillBeforeUse, that can check for the target."+
-						"\n\nA fair amount of options are not included for heals, like CRIT or STATUS. This is because heal skills aren't meant to offer such."
+					desc: "### The *{Affected Parameter}* can be either:"+
+						"\n- **A Skill extra** - Checks for applicability of the extra.\n-# Can only check for the user on: need, movelink & painsplit."+
+						"\n- **\"SkillBeforeUse\"** - Checks for usability of the skill entirely.\n-# The default option, but can't check for the target."+
+						"\n- **\"SkillOnSelect\"** - Checks for usability of the skill after using cost.\n-# Alternate to **SKILLBEFOREUSE**, that can check for the target."+
+						"\n\nA fair amount of options are not included for heals, like CRIT or STATUS. This is because they aren't meant to offer such."+
+						`\n\n-# If upon registration, the skill doesn't heal anything, it will make it heal 60 HP by default.`
 				},
 				{
-					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					desc: "### As for *<Condition>...*\nThere are multiple different kinds of conditions, and those come with different *<Additional Parameters>*. These are:",
 					fields: Object.entries(needConditions).map(x => x = {
 						name: `${x[1].name} (${x[0]})`,
 						value: `\n\n${x[1].getFullDesc()}`,
@@ -515,7 +568,7 @@ healList = {
 					}).slice(0,6)
 				},
 				{
-					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					desc: "### As for *<Condition>...*\nThere are multiple different kinds of conditions, and those come with different *<Additional Parameters>*. These are:",
 					fields: Object.entries(needConditions).map(x => x = {
 						name: `${x[1].name} (${x[0]})`,
 						value: `\n\n${x[1].getFullDesc()}`,
@@ -549,7 +602,7 @@ healList = {
 
 				let hasHeal = false
 				for (var i in skill.heal) {
-					if (i != "sacrifice" && i != "wish") {
+					if (i != "sacrifice" && i != "wish" && i != "need") {
 						hasHeal = true;
 						break;
 					}
@@ -568,7 +621,7 @@ healList = {
 
 	powerheal: new Extra({
 		name: "Power-based Healing",
-		desc: "Restores <HP/MP> by <Amount>, but is calculated as if it were dealing damage. _Negative values for <Heal Amount> will damage the target!_",
+		desc: "Restores <HP/MP> by <Amount>, but is calculated as if it were dealing damage.",
 		multiple: true,
 		diffflag: 0,
 		args: [
@@ -593,11 +646,20 @@ healList = {
 				forced: true
 			},
 		],
+		doc: {
+			pages: [
+				{
+					desc: `As per *<HP/MP>*, the only allowed meters are: *hp and mp*.`+
+					`\n\nIf the amount is less than 0, it will **damage** the target in a similar way ${elementEmoji['almighty']} **Almighty** does. No affinity check.`+
+					`\n\nThe stats allowed for *<User Stat>* & *<Target Stat>* are: *${stats.join(', ')}*`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let ustat = args[2].toLowerCase();
 			let ostat = args[3].toLowerCase();
 
-			if (args[0] == 0) args[0] = 60;
+			if (args[0] == 0)  return message.channel.send(`Healing 0 makes it redundant, doesn't it?`)
 
 			if (!['hp', 'mp'].includes(args[1].toLowerCase())) return void message.channel.send(`${args[1]} is an invalid meter to heal! Enter either HP or MP.`);
 			if (!stats.includes(ustat)) return void message.channel.send(`${args[2]} isn't a valid stat.`);
@@ -650,6 +712,7 @@ healList = {
 		name: "Stat Buff",
 		desc: extrasList.buff.desc,
 		args: extrasList.buff.args,
+		doc: extrasList.buff.doc,
 		multiple: true,
 		applyfunc(message, skill, args) {
 			const target = args[0].toLowerCase()
@@ -689,6 +752,7 @@ healList = {
 		name: extrasList.charges.name,
 		desc: extrasList.charges.desc,
 		args: extrasList.charges.args,
+		doc: extrasList.charges.doc,
 		canuse: extrasList.charges.canuse,
 		onuse: extrasList.charges.onuse,
 		getinfo: extrasList.charges.getinfo,
@@ -705,6 +769,7 @@ healList = {
 	movelink: new Extra({
 		name: extrasList.movelink.name,
 		desc: extrasList.movelink.desc,
+		doc: extrasList.movelink.doc,
 		hardcoded: extrasList.movelink.hardcoded,
 		args: extrasList.movelink.args,
 		getinfo: extrasList.movelink.getinfo,
@@ -723,6 +788,7 @@ healList = {
 		name: extrasList.formchange.name,
 		desc: extrasList.formchange.desc,
 		args: extrasList.formchange.args,
+		doc: extrasList.formchange.doc,
 		onselect: extrasList.formchange.onselect,
 		onuse: extrasList.formchange.onuse,
 		getinfo: extrasList.formchange.getinfo,
@@ -747,9 +813,17 @@ healList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `As per *<HP/MP/LB%>*, the only allowed meters are: *hp, mp and lb%*.`+
+					`\n\nPercentages that are *0%* and less, default to *100%* instead, meaning **all** of every target's meter is shared.\n-# Percentages above 100% cap at 100% though.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let percent = 100;
-			if (args[0] && args[0] > 0) percent = args[0];
+			if (args[0] && (args[0] > 0 || args <= 100)) percent = args[0];
 
 			if (!['hp', 'mp', 'lb%'].includes(args[1].toLowerCase())) return void message.channel.send(`${args[1]} is an invalid meter to share! Enter either HP, MP, or LB%.`);
 

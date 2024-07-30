@@ -460,13 +460,13 @@ passiveList = {
 		doc: {
 			pages: [
 				{
-					desc: "### The {Affected Parameter} can be either:"+
-						"\n- A Skill extra - Checks for applicability of the extra.\n-#  Can only check for the user on: need, skilldeny, dp, neutralisinggas, forceweather, forceterrain, autoboost, magicbounce, boost, statusboost, earlybird, moodswing, berserk, enraged, typemod, perfectkeeper, extrahit, pinchmode, sacrificial, elementstore, finalpush, formchange, magicmelee, meleetarget & attachment."+
-						"\n- \"SkillBeforeUse\" - Checks for usability of the skill entirely.\n-# The default option."+
-						"\n\nA fair amount of options are not included for heals, like CRIT or LBGAIN. This is because passive skills aren't meant to offer such. With that being said, SKILLONSELECT is impossible as well."
+					desc: "### The *{Affected Parameter}* can be either:"+
+						"\n- **A Skill extra** - Checks for applicability of the extra.\n-#  Can only check for the user on: need, skilldeny, dp, neutralisinggas, forceweather, forceterrain, autoboost, magicbounce, boost, statusboost, earlybird, moodswing, berserk, enraged, typemod, perfectkeeper, extrahit, pinchmode, sacrificial, elementstore, finalpush, formchange, magicmelee, meleetarget & attachment."+
+						"\n- **\"SkillBeforeUse\"** - Checks for usability of the skill entirely.\n-# The default option, but can only check for the target."+
+						"\n\nA fair amount of options are not included for passive skills, like CRIT or LBGAIN. This is because they aren't meant to offer such. With that being said, SKILLONSELECT is impossible as well."
 				},
 				{
-					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					desc: "### As for *<Condition>...*\nThere are multiple different kinds of conditions, and those come with different *<Additional Parameters>*. These are:",
 					fields: Object.entries(needConditions).map(x => x = {
 						name: `${x[1].name} (${x[0]})`,
 						value: `\n\n${x[1].getFullDesc()}`,
@@ -474,7 +474,7 @@ passiveList = {
 					}).slice(0,6)
 				},
 				{
-					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					desc: "### As for *<Condition>...*\nThere are multiple different kinds of conditions, and those come with different *<Additional Parameters>*. These are:",
 					fields: Object.entries(needConditions).map(x => x = {
 						name: `${x[1].name} (${x[0]})`,
 						value: `\n\n${x[1].getFullDesc()}`,

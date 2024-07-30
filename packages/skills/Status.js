@@ -419,15 +419,15 @@ statusList = {
 		doc: {
 			pages: [
 				{
-					desc: "### The {Affected Parameter} can be either:"+
-						"\n- A Skill extra - Checks for applicability of the extra.\n-# Forcemsg is unavailable. Can only check for the user on: need & movelink."+
-						"\n- \"SkillBeforeUse\" - Checks for usability of the skill entirely.\n-# The default option, but can't check for the target."+
-						"\n- \"SkillOnSelect\" - Checks for usability of the skill after using cost.\n-# Alternate to SkillBeforeUse, that can check for the target."+
-						"\n- \"MultiStatus\" - Chooses if multiple statuses can be checked for. Uses the first one only upon fail.\n-# If you want to check for status overall, use Status instead."+
-						"\n\nA fair amount of options are not included for heals, like CRIT or TECH. This is because support skills aren't meant to offer such."
+					desc: "### The *{Affected Parameter}* can be either:"+
+						"\n- **A Skill extra** - Checks for applicability of the extra.\n-# Forcemsg is unavailable. Can only check for the user on: need & movelink."+
+						"\n- **\"SkillBeforeUse\"** - Checks for usability of the skill entirely.\n-# The default option, but can't check for the target."+
+						"\n- **\"SkillOnSelect\"** - Checks for usability of the skill after using cost.\n-# Alternate to **SKILLBEFOREUSE**, that can check for the target."+
+						"\n- **\"MultiStatus\"** - Chooses if multiple statuses can be checked for. Uses the first one only upon fail.\n-# If you want to check for status overall, use Status instead."+
+						"\n\nA fair amount of options are not included for support skills, like CRIT or TECH. This is because they aren't meant to offer such."
 				},
 				{
-					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					desc: "### As for *<Condition>...*\nThere are multiple different kinds of conditions, and those come with different *<Additional Parameters>*. These are:",
 					fields: Object.entries(needConditions).map(x => x = {
 						name: `${x[1].name} (${x[0]})`,
 						value: `\n\n${x[1].getFullDesc()}`,
@@ -435,7 +435,7 @@ statusList = {
 					}).slice(0,6)
 				},
 				{
-					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					desc: "### As for *<Condition>...*\nThere are multiple different kinds of conditions, and those come with different *<Additional Parameters>*. These are:",
 					fields: Object.entries(needConditions).map(x => x = {
 						name: `${x[1].name} (${x[0]})`,
 						value: `\n\n${x[1].getFullDesc()}`,

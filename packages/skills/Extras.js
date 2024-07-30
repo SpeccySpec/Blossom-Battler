@@ -276,18 +276,18 @@ extrasList = {
 		doc: {
 			pages: [
 				{
-					desc: "### The {Affected Parameter} can be either:"+
-						"\n- A Skill extra - Checks for applicability of the extra.\n-# Forcemsg is unavailable. Can only check for the user on: powerbuff, lonewolf, heavenwrath, affinitypow, rollout, multihit, guts, weaponmod, steamroller, need, metronome, copyskill, fakeout & movelink."+
-						"\n- \"SkillBeforeUse\" - Checks for usability of the skill entirely.\n-# The default option, but can't check for the target."+
-						"\n- \"SkillOnSelect\" - Checks for usability of the skill after using cost.\n-# Alternate to SkillBeforeUse, that can check for the target."+
-						"\n- \"Crit\" - Decides if the skill's critical chance can be used."+
-						"\n- \"Status\" - Chooses if the skill's status chance can be used.\n-# Different from applying multistatus as it checks for all general status affliction."+
-						"\n- \"Tech\" - Determines if technical damage can be dealt.\n-# Depends on Technical Damage being enabled."+
-						"\n- \"OneMores\" - Establishes ability to strike once more.\n-# Depends on One Mores being enabled."+
-						"\n- \"LBGain\" - Deducts ability gain LB from skill.\n-# Depends on Limit Breaks being enabled."
+					desc: "### The *{Affected Parameter}* can be either:"+
+						"\n- **A Skill extra** - Checks for applicability of the extra.\n-# Forcemsg is unavailable. Can only check for the user on: powerbuff, lonewolf, heavenwrath, affinitypow, rollout, multihit, guts, weaponmod, steamroller, need, metronome, copyskill, fakeout & movelink."+
+						"\n- **\"SkillBeforeUse\"** - Checks for usability of the skill entirely.\n-# The default option, but can't check for the target."+
+						"\n- **\"SkillOnSelect\"** - Checks for usability of the skill after using cost.\n-# Alternate to **SKILLBEFOREUSE**, that can check for the target."+
+						"\n- **\"Crit\"** - Decides if the skill's critical chance can be used."+
+						"\n- **\"Status\"** - Chooses if the skill's status chance can be used.\n-# Different from applying **MULTISTATUS** as it checks for all general status affliction."+
+						"\n- **\"Tech\"** - Determines if technical damage can be dealt.\n-# Depends on Technical Damage being enabled."+
+						"\n- **\"OneMores\"** - Establishes ability to strike once more.\n-# Depends on One Mores being enabled."+
+						"\n- **\"LBGain\"** - Deducts ability gain LB from skill.\n-# Depends on Limit Breaks being enabled."
 				},
 				{
-					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					desc: "### As for *<Condition>...*\nThere are multiple different kinds of conditions, and those come with different *<Additional Parameters>*. These are:",
 					fields: Object.entries(needConditions).map(x => x = {
 						name: `${x[1].name} (${x[0]})`,
 						value: `\n\n${x[1].getFullDesc()}`,
@@ -295,7 +295,7 @@ extrasList = {
 					}).slice(0,6)
 				},
 				{
-					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					desc: "### As for *<Condition>...*\nThere are multiple different kinds of conditions, and those come with different *<Additional Parameters>*. These are:",
 					fields: Object.entries(needConditions).map(x => x = {
 						name: `${x[1].name} (${x[0]})`,
 						value: `\n\n${x[1].getFullDesc()}`,
