@@ -651,7 +651,8 @@ healList = {
 				{
 					desc: `As per *<HP/MP>*, the only allowed meters are: *hp and mp*.`+
 					`\n\nIf the amount is less than 0, it will **damage** the target in a similar way ${elementEmoji['almighty']} **Almighty** does. No affinity check.`+
-					`\n\nThe stats allowed for *<User Stat>* & *<Target Stat>* are: *${stats.join(', ')}*`
+					`\n\nThe stats allowed for *<User Stat>* & *<Target Stat>* are: *${stats.join(', ')}*`+
+					`\n\nPowerheal only uses the **Persona** damage formula exclusively.`
 				}
 			]
 		},
@@ -685,7 +686,7 @@ healList = {
 
 			let def = (atkStat/endStat);
 
-			let heal = Math.round(5 * Math.sqrt(def * vars[0]))+randNum(-7, 7);
+			let heal = Math.round(5 * (vars[0] / Math.abs(vars[0])) * Math.sqrt(def * Math.abs(vars[0] )))+randNum(-10, 10);
 			console.log(`Attack Stat: ${atkStat}, Endurance Stat: ${endStat}, Skill Pow: ${vars[0]}, Base Dmg: ${Math.round(5 * Math.sqrt(def * vars[0]))}, Real Dmg: ${heal}`);
 
 			targ[vars[1]] = Math.max(Math.min(targ[`max${vars[1]}`], targ[vars[1]]+heal), 0);
@@ -723,7 +724,7 @@ healList = {
 
 			if (target != 'user' && target != 'target') 
 				return void message.channel.send(`You typed ${target} as the target. It must be either \`user\` or \`target\`.`)
-			if (![...stats, "crit", "all"].includes(stat))
+			if (!['atk', 'mag', 'prc', 'end', 'agl', "crit", "all"].includes(stat))
 				return void message.channel.send("That's not a valid stat!");
 			if (stages == 0)
 				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
