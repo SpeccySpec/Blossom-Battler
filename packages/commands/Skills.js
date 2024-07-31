@@ -367,7 +367,23 @@ commands.updateskills = new Command({
 
 		for (skill in skillFile) {
 			if (skillFile[skill]?.passive) {
+				if (skillFile[skill].passive?.boost) {
+					skillFile[skill].passive.boost = skillFile[skill].passive.boost.filter(x => x[0] != 'critdmg')
+				}
 
+				if (skillFile[skill].passive?.damage) {
+					skillFile[skill].passive.damage = skillFile[skill].passive.damage.map(x => {
+						if (x[0] == 'phys') x[0] = 'physical'
+						if (x[0] == 'mag') x[0] = 'magic'
+					})
+				}
+
+				if (skillFile[skill].passive?.dodge) {
+					skillFile[skill].passive.dodge = skillFile[skill].passive.dodge.map(x => {
+						if (x[0] == 'phys') x[0] = 'physical'
+						if (x[0] == 'mag') x[0] = 'magic'
+					})
+				}
 			}
 
 			if (skillFile[skill]?.statusses) {
@@ -375,24 +391,10 @@ commands.updateskills = new Command({
 			}
 
 			if (skillFile[skill]?.heal) {
-				if (skillFile[skill].heal?.need) {
-					for (i in skillFile[skill].heal.need) skillFile[skill].heal.need[i] = ['meter', 'user', 'skillbeforeuse', skillFile[skill].heal.need[i][3], skillFile[skill].heal.need[i][2], skillFile[skill].heal.need[i][0], skillFile[skill].heal.need[i][1]]
-				}
+				
 			}
 
 			if (skillFile[skill]?.extras) {
-				if (skillFile[skill].extras?.need) {
-					for (i in skillFile[skill].extras.need) skillFile[skill].extras.need[i] = ['meter', 'user', 'skillbeforeuse', skillFile[skill].extras.need[i][3], skillFile[skill].extras.need[i][2], skillFile[skill].extras.need[i][0], skillFile[skill].extras.need[i][1]]
-				}
-
-				if (skillFile[skill].extras?.dreameater) {
-					let statuses = []
-
-					for (i in skillFile[skill].extras.dreameater) statuses.push(skillFile[skill].extras.dreameater[i][0])
-
-					makeExtra(skillFile[skill], "need", ['status', 'target', 'skillonselect', true, ...statuses]);
-					delete skillFile[skill].extras.dreameater;
-				}
 			}
 		}
 		fs.writeFileSync(dataPath+'/json/skills.json', JSON.stringify(skillFile, null, '    '));

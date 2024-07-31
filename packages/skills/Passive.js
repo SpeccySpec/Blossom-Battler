@@ -68,10 +68,10 @@ passiveList = {
 	// On Attack.
 	boost: new Extra({
 		name: "Boost (Persona)",
-		desc: "Boosts the powers/damage of skills of a specific element/attack type/cost type/target, of user's main element, multi-hit skills, skills that inflict or don't inflict a status effect, or all skills in general.",
+		desc: "Boosts the power/damage of skills of a specific <Type>.",
 		args: [
 			{
-				name: "Element / 'All' / Attack Type / 'Multi-hit' / Cost Type / Target / Status Effect / 'NoStatus' / 'MainElement' / 'Crit' / 'CritDmg' / StatusChance",
+				name: "Type",
 				type: "Word",
 				forced: true
 			},
@@ -91,13 +91,32 @@ passiveList = {
 		],
 		multiple: true,
 		diffflag: 0,
+		doc: {
+			pages: [
+				{
+					desc: `There are many choices how you filter effects of a boost for *<Type>* within skills. Here's what they are:`+
+					`\n- **An element** - A skill with a certain element is eligible.\n-# The only elements not allowed are ${elementEmoji['almighty']} **Almighty** & ${elementEmoji['passive']} **Passive**.`+
+					`\n- **A target type** - A skill with a certain target type is eligible.`+
+					`\n- **A status effect** - A skill where a certain status ailment can be afflicted is eligible.`+
+					`\n- **An attack type** - A skill with a specific attack type is eligible.`+
+					`\n- **A cost type** - A skill with a specific cost type is eligible.`+
+					`\n- **"Multi-hit"** - A skill with more than one hit is eligible.`+
+					`\n- **"NoStatus"** - A skill with no status to afflict is eligible.`+
+					`\n- **"MainElement"** - A skill of an element contained in the user's main element is eligible. It works with dual main elements as well.`+
+					`\n- **"Crit"** - A skill with a critical chance is eligible.`+
+					`\n- **"All"** - Every skill is eligible.`+
+					`\n\n*{Boost damage instead?}* affects whether it boosts skill power, or attack damage. It defaults to boosting power.`+
+					`\n\n*{Use percentages?}* makes sure that, an amount of *2* for example boosts it by 2x or 2%. It defaults to using percentages.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let element = args[0].toLowerCase();
 			let amount = args[1];
 			let usePercent = args[2] ?? true;
 			let boostDamage = args[3] ?? false;
 
-			if (![...Elements, ...Targets, ...statusEffects, 'all', 'magic', 'ranged', 'sorcery', 'physical', 'multi-hit', 'nostatus', 'mainelement', 'crit', 'critdmg', 'statuschance'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
+			if (![...Elements, ...Targets, ...statusEffects, ...costTypes, 'all', 'magic', 'ranged', 'sorcery', 'physical', 'multi-hit', 'nostatus', 'mainelement', 'crit'].includes(element) && !costTypeNames[element]) return void message.channel.send("You entered an invalid type for the boost!");
 			if (element == 'almighty' || element == 'passive') return void message.channel.send("You cannot boost the powers of almighty or passive skills!");
 			if (amount == 0) return void message.channel.send('With the amount being 0, it wouldn\'t change power at all.');
 
@@ -112,6 +131,7 @@ passiveList = {
 
 			if (type == 'all' 
 			|| ((typeof(skill.type) === 'object' && skill.type.includes(type)) || (typeof(skill.type) === 'string' && skill.type == type))
+			|| (type == 'crit' && skill?.crit)
 			|| type == skill?.atktype
 			|| (type == 'multi-hit' && skill?.hits > 1)
 			|| type == skill?.costtype
@@ -131,6 +151,7 @@ passiveList = {
 
 			if (type == 'all' 
 			|| ((typeof(skill.type) === 'object' && skill.type.includes(type)) || (typeof(skill.type) === 'string' && skill.type == type))
+			|| (type == 'crit' && skill?.crit)
 			|| type == skill?.atktype
 			|| (type == 'multi-hit' && skill?.hits > 1)
 			|| type == skill?.costtype
@@ -143,21 +164,6 @@ passiveList = {
 			}
 			
 			return dmg;
-		},
-		critmod(char, targ, dmg, crit, skill, btl, vars) {
-			let type = vars[0];
-			if (type == 'crit') crit += vars[1];
-			return crit;
-		},
-		critdmgmod(char, targ, dmg, skill, btl, vars) {
-			let type = vars[0];
-			if (type == 'critdmg') {
-				if (vars[2])
-					dmg *= (vars[1]/100) + 1;
-				else
-					dmg += vars[1];
-			}
-			return crit;
 		},
 		getinfo(vars, skill) {
 			let txt = `Boosts `;
@@ -172,17 +178,14 @@ passiveList = {
 				if (Targets.includes(midText)) midText = targetNames[midText];
 				if (midText == 'nostatus') midText = 'non-status effect';
 				if (midText == 'mainelement') midText = 'user\'s main element';
+				if (midText == 'crit') midText = `crit containing`;
 
 				let suffixText = '';
 				if (Targets.includes(type)) suffixText = ' targetting';
 				if (costTypeNames[type]) suffixText = ' costing';
 				if (statusEffects.includes(type)) suffixText = ' inflictable';
 
-				if (type == 'crit') {
-					symbol = statusEmojis.critup;
-				} else {
-					symbol = elementEmoji[type] ?? statusEmojis[type] ?? '';
-				}
+				symbol = elementEmoji[type] ?? statusEmojis[type] ?? '';
 
 				let typeTxt = midText.charAt(0).toUpperCase() + midText.slice(1) + suffixText
 				txt += `${symbol}**${typeTxt}** ${type == 'heal' || (type == 'support' || type == 'status') ? 'skill' : 'attack'} ${type == 'heal' || (type == 'support' || type == 'status') ? `${vars[i][3] ? 'result' : 'effectiveness'}` : `${vars[i][3] ? 'damage' : 'power'}`} by **${vars[i][1] / (!vars[i][3] && !vars[i][2] && (type == 'heal' || (type == 'support' || type == 'status')) ? 100 : 1)}${vars[i][2] ? '%' : (!vars[i][3] && (type == 'heal' || (type == 'support' || type == 'status')) ? 'x' : '')}**`
@@ -199,10 +202,10 @@ passiveList = {
 
 	statusboost: new Extra({
 		name: "Status Boost (Original)",
-		desc: "Boosts the chance of inflicting <Status Effect> by <Percentage>.",
+		desc: "Boosts the chance of inflicting <Status Ailment> by <Percentage>.",
 		args: [
 			{
-				name: "Status Effect / Physical / Mental / All",
+				name: "Status Ailment / Physical / Mental / All",
 				type: "Word",
 				forced: true
 			},
@@ -214,6 +217,14 @@ passiveList = {
 		],
 		multiple: true,
 		diffflag: 0,
+		doc: {
+			pages: [
+				{
+					desc: `**All status ailments** are allowed, but there are extra options. **"All"** for every status ailment without filtration and **"Physical" and "Mental"** for ones affecting the body and mind respectively.`+
+					`\n\nIf <Percentage> is less than 0, it makes chance less likely to happen.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let status = args[0].toLowerCase();
 			let amount = args[1];
@@ -368,7 +379,7 @@ passiveList = {
 
 	berserk: new Extra({
 		name: "Berserk (Original)",
-		desc: "The higher the HP, up to <Highest HP Percent>%, the stronger physical and ranged attacks will be by up to <Percentage Multiplier>%. <Percentage Multiplier> should be more than 100%.",
+		desc: "The higher the HP, up to <Highest HP Percent>%, the stronger physical and ranged attacks will be by up to <Percentage Multiplier>%.",
 		args: [
 			{
 				name: "Percentage Multiplier",
@@ -381,11 +392,19 @@ passiveList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `*<Percentage Multiplier>* should be more than **100%**.`+
+					`\n\nIf you want the passive to affect magic and sorcery attacks, utilize ${elementEmoji['passive']} **Enraged** instead.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let percentage = args[0];
 			let hpPercent = args[1];
 
-			if (percentage == 0) return void message.channel.send("What's the point if you're not boosting anything?");
+			if (percentage == 100) return void message.channel.send("What's the point if you're not boosting anything?");
 
 			makePassive(skill, "berserk", [percentage, hpPercent]);
 			return true;
@@ -411,7 +430,7 @@ passiveList = {
 
 	enraged: new Extra({
 		name: "Enraged (Original)",
-		desc: "The less the HP, up to <Highest HP Percent>%, the stronger magical attacks will be by up to <Percentage Multiplier>%. <Percentage Multiplier> should be more than 100%.",
+		desc: "The less the HP, up to <Highest HP Percent>%, the stronger magical and sorcery attacks will be by up to <Percentage Multiplier>%.",
 		args: [
 			{
 				name: "Percentage Multiplier",
@@ -424,17 +443,25 @@ passiveList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `*<Percentage Multiplier>* should be more than **100%**.`+
+					`\n\nIf you want the passive to affect physical and ranged attacks, utilize ${elementEmoji['passive']} **Berserk** instead.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let percentage = args[0];
 			let hpPercent = args[1];
 
-			if (percentage == 0) return void message.channel.send("What's the point if you're not boosting anything?");
+			if (percentage == 100) return void message.channel.send("What's the point if you're not boosting anything?");
 
 			makePassive(skill, "enraged", [percentage, hpPercent]);
 			return true;
 		},
 		statmod(btl, char, skill, vars) {
-			if (skill.atktype === 'magic') {
+			if (skill.atktype === 'magic' || skill.atktype == 'sorcery') {
 				let hppercent = (char.hp/char.maxhp)*100;
 				let percent = (vars[0]-100)/100;
 				let hpcap = vars[1];
@@ -448,7 +475,7 @@ passiveList = {
 			}
 		},
 		getinfo(vars, skill) {
-			return `Boosts magic attacks by up to **${vars[0]-100}%** with less HP down to **${vars[1]}% of user's max HP**`;
+			return `Boosts magic and sorcery attacks by up to **${vars[0]-100}%** with less HP down to **${vars[1]}% of user's max HP**`;
 		}
 	}),
 
@@ -518,12 +545,12 @@ passiveList = {
 		desc: "Changes a move's element from one to another, along with boosting power slightly. Only works with single type skills.",
 		args: [
 			{
-				name: "Target Type",
+				name: "Element",
 				type: "Word",
 				forced: true
 			},
 			{
-				name: "Type to change to",
+				name: "Element to change to",
 				type: "Word",
 				forced: true
 			},
@@ -533,6 +560,15 @@ passiveList = {
 				forced: false
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Elements that cannot be used at all are: *${elementEmoji['support']} **Support**, ${elementEmoji['heal']} **Heal** & ${elementEmoji['passive']} **Passive***.`+
+					` ${elementEmoji['almighty']} **Almighty** is only partially allowed, as you can change from it to another element, not the other way around.`+
+					`\n\n*{Power Modifier in Percent}* needs to be in the 0%-500% range. It defaults to 100%.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let usertype = args[0].toLowerCase();
 			let targtype = args[1].toLowerCase();
@@ -547,7 +583,7 @@ passiveList = {
 			if (!Elements.includes(targtype))
 				return void message.channel.send(`${args[1]} is an invalid element!`);
 
-			if (targtype == 'almighty' || targtype == 'support' || usertype == 'status' || targtype == 'passive' || targtype == 'heal')
+			if (targtype == 'almighty' || targtype == 'support' || targtype == 'status' || targtype == 'passive' || targtype == 'heal')
 				return void message.channel.send(`You can't change skills to ${args[1]} type!`);
 
 			if (dmgmod && (dmgmod <= 0 || dmgmod >= 500))
@@ -580,7 +616,7 @@ passiveList = {
 	// Start Of Turn
 	heal: new Extra({
 		name: "Heal (Original)",
-		desc: "Restores <Amount> of max <Cost Type> on the start of your turn, <Cost Type> being either HP, HPPercent, MP, MPPercent, or LB.",
+		desc: "Restores <Amount> of max <Cost Type> on the start of your turn.",
 		args: [
 			{
 				name: "Amount",
@@ -595,6 +631,14 @@ passiveList = {
 		],
 		multiple: true,
 		diffflag: 1,
+		doc: {
+			pages: [
+				{
+					desc: `The only allowed meters you can use for this extra is: *hp, mp, hppercent, mppercent and lb*.`+
+					`\n\nIf the amount is less than 0, it will **damage** the user over time.` 
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let amount = args[0];
 			let stat = args[1]?.toLowerCase();
@@ -674,10 +718,10 @@ passiveList = {
 
 	damage: new Extra({
 		name: "Damage (Original)",
-		desc: "Inflicts <Damage> of <Element> damage to the target when attacked with a <Phys/Mag/Ranged/Sorcery> skill.",
+		desc: "Inflicts <Damage> of <Element> damage to the target when attacked with a <Attack Type> skill.",
 		args: [
 			{
-				name: "Phys/Mag/Ranged/Sorcery",
+				name: "Attack Type",
 				type: "Word",
 				forced: true
 			},
@@ -692,6 +736,15 @@ passiveList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Allowed attack types are: physical, magic, ranged and sorcery.`+
+					`\n\nIf the damage is less than 0, it will **heal** the target instead.`+
+					`\n\nElements that cannot be used at all are: *${elementEmoji['support']} **Support**, ${elementEmoji['heal']} **Heal** & ${elementEmoji['passive']} **Passive***.`
+				}
+			]
+		},
 		multiple: true,
 		diffflag: [0, 2],
 		applyfunc(message, skill, args) {
@@ -699,8 +752,8 @@ passiveList = {
 			let damage = args[1];
 			let element = args[2]?.toLowerCase();
 
-			if (physmag != 'phys' && physmag != 'mag' && physmag != 'ranged' && physmag != 'sorcery')
-				return void message.channel.send("You entered an invalid value for <Phys/Mag>! It can be either PHYS, MAG or RANGED.");
+			if (physmag != 'physical' && physmag != 'magic' && physmag != 'ranged' && physmag != 'sorcery')
+				return void message.channel.send("You entered an invalid value for <Attack Type>! It can be either physical, magic, ranged or sorcery.");
 
 			if (damage == 0) return void message.channel.send("What's the point if it's dealing no damage?");
 
@@ -716,7 +769,7 @@ passiveList = {
 			let affinityTxt = affinityEmoji[affinity] ?? '';
 			let d = vars[1];
 
-			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic') || (vars[0] === 'ranged' && skill.atktype === 'ranged') || (vars[0] === 'sorcery' && skill.atktype === 'sorcery')) {
+			if (vars[0] === skill.atktype) {
 				if (vars[1] < 0) {
 					inf.hp -= vars[1];
 					return ` __${inf.name}__ had their HP restored by ***${-vars[1]}*** thanks to __${char.name}__'s _${passive.name}_.`;
@@ -774,7 +827,7 @@ passiveList = {
 			let txt = 'Inflicts '
 
 			for (i in vars) {
-				txt += `**${vars[i][1]} ${elementEmoji[vars[i][2]]}${vars[i][2].charAt(0).toUpperCase() + vars[i][2].slice(1)} damage** when struck with a **${vars[i][0] == 'sorcery' ? 'sorcery' : (vars[i][0] == 'phys' ? 'physical' : (vars[i][0] == 'ranged' ? 'ranged' : 'magic'))}** skill`;
+				txt += `**${vars[i][1]} ${elementEmoji[vars[i][2]]}${vars[i][2].charAt(0).toUpperCase() + vars[i][2].slice(1)} damage** when struck with a **${vars[i][0]}** skill`;
 
 				if (i < vars.length - 2) {
 					txt += ', ';
@@ -789,10 +842,10 @@ passiveList = {
 
 	dodge: new Extra({
 		name: "Dodge (Original)",
-		desc: "Has a <Chance>% chance to dodge attacks from a <Phys/Mag/Ranged/Sorcery/Element> skill.",
+		desc: "Has a <Chance>% chance to dodge attacks from a <Attack Type/Element> skill.",
 		args: [
 			{
-				name: "Phys/Mag/Ranged/Sorcery/Element",
+				name: "Attack Type/Element",
 				type: "Word",
 				forced: true
 			},
@@ -804,12 +857,22 @@ passiveList = {
 		],
 		multiple: true,
 		diffflag: 0,
+		doc: {
+			pages: [
+				{
+					desc: `Allowed attack types are: physical, magic, ranged and sorcery.`+
+					`\n\nElements that cannot be used at all are: *${elementEmoji['support']} **Support**, ${elementEmoji['heal']} **Heal** & ${elementEmoji['passive']} **Passive***.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let physmag = args[0]?.toLowerCase();
 			let chance = args[1];
 
-			if (physmag != 'phys' && physmag != 'mag' && physmag != 'ranged' && physmag != "sorcery" && !Elements.includes(physmag))
-				return void message.channel.send("You entered an invalid value for <Phys/Mag/Ranged/Sorcery/Element>! The valid ones are: PHYS, MAG, RANGED, SORCERY, "+Elements.join(', ')+".");
+			if (physmag != 'physical' && physmag != 'magic' && physmag != 'ranged' && physmag != "sorcery" && !Elements.includes(physmag))
+				return void message.channel.send("You entered an invalid value for <Phys/Mag/Ranged/Sorcery/Element>! The valid ones are: physical, magic, ranged, sorcery, "+Elements.join(', ')+".");
+
+			if (physmag == 'support' || physmag == 'status' || physmag == 'heal' || physmag == 'passive') return void message.channel.send("You can't use this element!");
 
 			if (chance <= 0) return void message.channel.send("What's the point if it never dodges?");
 
@@ -817,7 +880,7 @@ passiveList = {
 			return true;
 		},
 		forcedodge(char, inf, skill, passive, btl, vars) {
-			if ((vars[0] === 'phys' && skill.atktype === 'physical') || (vars[0] === 'mag' && skill.atktype === 'magic') || (vars[0] === 'ranged' && skill.atktype === 'ranged') || (vars[0] === 'sorcery' && skill.atktype === 'sorcery') || (vars[0] === skill.type || skill.type.includes(vars[0]))) {
+			if (vars[0] === skill.atktype || (vars[0] === skill.type || skill.type.includes(vars[0]))) {
 				if (randNum(1, 100) <= vars[1]) return true;
 				return false;
 			} else {
@@ -828,7 +891,7 @@ passiveList = {
 			let txt = 'Has'
 
 			for (i in vars) {
-				txt += ` a **${vars[i][1]}%** chance to dodge **${vars[i][0] == 'sorcery' ? 'sorcery' : (vars[i][0] == 'phys' ? 'physical' : (vars[i][0] == 'ranged' ? 'ranged' : 'magic'))}** attacks`;
+				txt += ` a **${vars[i][1]}%** chance to dodge **${elementEmoji[vars[i][i]] ?? ''}${vars[i][0]}** attacks`;
 
 				if (i < vars.length - 2) {
 					txt += ', ';
@@ -843,7 +906,7 @@ passiveList = {
 
 	counter: new Extra({
 		name: "Counter (Persona)",
-		desc: "Has a <Chance>% chance to counter <Phys/Mag> attacks with an <Attack Type> skill named <Counter Name> with <Power> power, <Accuracy>% accuracy, {Critical Hit Chance}% crit chance, like a regular skill but the cost is optional and usually not necessary. **Physical** and **Sorcery** attacks will be countered by _Phys_, **Magic** and **Ranged** attacks will be countered by _Mag_.",
+		desc: "Has a <Chance>% chance to counter <Phys/Mag> attacks with an <Attack Type> skill named <Counter Name>.",
 		args: [
 			{
 				name: "Phys/Mag",
@@ -920,6 +983,14 @@ passiveList = {
 				type: "Word"
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `For the most part, you register this like you would register an attacking skill. A lot of restrictions that came from them will apply here.`+
+					`\n\nAs for *<Phys/Mag>*, these cover what attack types the extra counters from. **PHYS** counters physical and ranged attacks, while **MAG** covers sorcery and magic.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const physmag = args[0]?.toLowerCase();
 			const chance = args[1];
@@ -1128,6 +1199,14 @@ passiveList = {
 		],
 		multiple: true,
 		diffflag: 0,
+		doc: {
+			pages: [
+				{
+					desc: `Allowed attack types are: physical, magic, ranged and sorcery.`+
+					`\n\nAllowed stats are: ATK, MAG, PRC, END, AGL & CRIT. All and Random are allowed too.\n\nYou can't choose any more than 3 buffs or debuffs. If unspecified, it defaults to a single buff.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const target = args[0].toLowerCase();
 			const atktype = args[1].toLowerCase();
@@ -1141,7 +1220,7 @@ passiveList = {
 				return void message.channel.send("You can't have a percentage less than 0, as then it would never happen!");
 			if (!["physical", "magic", "ranged", "sorcery"].includes(atktype))
 				return void message.channel.send(`${atktype} is not a valid Attack Type. Enter Physical, Magic, Ranged, or Sorcery.`);
-			if (![...stats, "crit", "all", "random"].includes(stat))
+			if (!['atk', 'mag', 'prc', 'end', 'agl', "crit", "all", "random"].includes(stat))
 				return void message.channel.send("That's not a valid stat!");
 			if (stages == 0)
 				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
@@ -1225,10 +1304,23 @@ passiveList = {
 			return true;
 		},
 		onturn(btl, char, vars) {
-			if (char.status && randNum(1, 100) <= vars[0]) {
-				delete char.status;
-				delete char.statuschance;
-				return `__${char.name}__ was able to cure themselves of their status effect.`;
+			if (randNum(1, 100) <= vars[0]) {
+				let hasRemoved = false;
+
+				for (let i in statusEffectFuncs) {
+					if ((!isNeutralStatus(i) || !isPositiveStatus(i)) && statusEffectFuncs[i].stackable) {
+						delete targ[i];
+						hasRemoved = true
+					}
+				}
+
+				if (!isNeutralStatus(targ.status) || !isPositiveStatus(targ.status)) {
+					delete targ.status;
+					delete targ.statusturns;
+					hasRemoved = true
+				}
+				
+				if (hasRemoved) return `__${char.name}__ was able to cure themselves of their status effect.`;
 			}
 		},
 		getinfo(vars, skill) {
@@ -1238,7 +1330,7 @@ passiveList = {
 
 	perfectkeeper: new Extra({
 		name: "Perfect Keeper (Persona)",
-		desc: "Power of Physical Attacks is boosted at higher HP, and decreased at lower HP by up to <Percent>%.",
+		desc: "Power of Physical and Ranged Attacks is boosted at higher HP, and decreased at lower HP by up to <Percent>%.",
 		args: [
 			{
 				name: "Percent",
@@ -1252,12 +1344,12 @@ passiveList = {
 			return true;
 		},
 		statmod(btl, char, skill, vars) {
-			if (skill.atktype === 'physical' || skill.atktype === 'sorcery') {
+			if (skill.atktype === 'physical' || skill.atktype === 'ranged') {
 				skill.pow *= 1+(userDefs.hp/userDefs.maxhp)/1.42857142-0.2;
 			}
 		},
 		getinfo(vars, skill) {
-			return `Changes power of **physical attacks** at higher HP, and decreases at lower HP by up to **${vars[0]}%**`
+			return `Changes power of **physical and ranged attacks** at higher HP, and decreases at lower HP by up to **${vars[0]}%**`
 		}
 	}),
 
@@ -1376,7 +1468,7 @@ passiveList = {
 
 	affinityslicer: new Extra({
 		name: "Affinity Slicer (Original)",
-		desc: "<Chance>% chance to bypass all resisting affinities, turning them into a resist or better.\n```diff\n+ Drain, Repel, Block ---> Resist\n+ Resist ---> Normal\n```",
+		desc: "<Chance>% chance to bypass all resisting affinities, turning them into a resist or better.",
 		args: [
 			{
 				name: "Chance",
@@ -1384,6 +1476,13 @@ passiveList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `${affinityEmoji['drain']} **Drain**, ${affinityEmoji['repel']} **Repel** and ${affinityEmoji['block']} **Block** turn into ${affinityEmoji['resist']} **Resist**, while ${affinityEmoji['resist']} **Resist** turns into ${affinityEmoji['normal']} **Normal**`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			if (args[0] < 1) return void message.channel.send("If it never happens, why bother?");
 			makePassive(skill, "affinityslicer", [args[0]]);
@@ -1405,7 +1504,7 @@ passiveList = {
 
 	swordbreaker: new Extra({
 		name: "Sword Breaker (Persona)",
-		desc: "<Chance>% chance for effective and normal attacks that hit the user to turn into a resist. When it does, could affect {User/Target} {Stat} by {Stages} for {Turns} turns.",
+		desc: "<Chance>% chance for effective and normal attacks that hit the user to turn into a resist. Optional buffing included.",
 		args: [
 			{
 				name: "Chance",
@@ -1425,17 +1524,27 @@ passiveList = {
 				type: "Num"
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `The ability to buff is optional and same restrictions that affect the original buff extra apply here. Except buffs are always guaranteed, when a skill's registered with them and it happens.`+
+					`\n\nAllowed stats are: ATK, MAG, PRC, END, AGL & CRIT. All is allowed too.\n\nYou can't choose any more than 3 buffs or debuffs. If not specified, it defaults to a single debuff.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			if (args[0] < 1) return void message.channel.send("If it never happens, why bother?");
 
 			if (args[1]) {
-				if (!["user", "target"].includes(args[1].toLowerCase())) return void message.channel.send(`${args[1]} is not a valid input. Enter either "Male" or "Female".`);
+				if (!["user", "target"].includes(args[1].toLowerCase())) return void message.channel.send(`${args[1]} is not a valid input. Enter either "user" or "target".`);
 
 				if (!args[2]) return void message.channel.send("{Stat} becomes mandatory when you enter {User/Target}.");
-				if (![...stats, "crit", "all"].includes(args[2].toLowerCase())) return void message.channel.send(`${args[2]} is not a valid stat.`);
+				if (!['atk', 'mag', 'prc', 'end', 'agl', "crit", "all"].includes(args[2].toLowerCase())) return void message.channel.send(`${args[2]} is not a valid stat.`);
 
 				let stages = args[3] ?? -1;
 				if (stages == 0) return void message.channel.send("That amount of stages wouldn't do anything!");
+				if (Math.abs(stages) > 3) 
+					return void message.channel.send("The maximum amount of stages is 3!");
 
 				makePassive(skill, "swordbreaker", [args[0], args[1].toLowerCase(), args[2].toLowerCase(), stages]);
 			} else {
@@ -1609,6 +1718,13 @@ passiveList = {
 				multiple: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Elements that cannot be used at all are: *${elementEmoji['support']} **Support**, ${elementEmoji['heal']} **Heal**, ${elementEmoji['passive']} **Passive** & ${elementEmoji['almighty']} **Almighty***.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let chance = args[0]
 			let elements = args.slice(1);
@@ -1763,7 +1879,7 @@ passiveList = {
 
 	guardboost: new Extra({
 		name: "Guard Boost (Original)",
-		desc: "Reduces damage taken when guarding further by <Percent>%.\n-# Default guard percentage is 55%.",
+		desc: "Reduces damage taken when guarding further by <Percent>%.",
 		args: [
 			{
 				name: "Percent",
@@ -1771,6 +1887,13 @@ passiveList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `When guarding, damage is reduced by **55%** by default. *If you want 100% of damage nullified, try using 45%.*\nValues beyond that will **not** heal the user.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let percent = args[0];
 
@@ -1780,7 +1903,7 @@ passiveList = {
 		},
 		hardcoded: true,
 		getinfo(vars, skill) {
-			return `Reduces damage taken when guarding by **${vars[0]}%**`
+			return `Reduces damage taken further when guarding by **${vars[0]}%**`
 		}
 	}),
 
@@ -1901,7 +2024,7 @@ passiveList = {
 
 	elementstore: new Extra({
 		name: "Element Store (Original)",
-		desc: "<Chance>% chance to store <Damage Percent>% of damage taken from <Element> attacks to add up for the next attack. Stackable. Once hit, the stored damage is reset.",
+		desc: "<Chance>% chance to store <Damage Percent>% of damage taken from <Element> attacks to add up for your future attack. Stackable. Once hit, the stored damage is reset.",
 		args: [
 			{
 				name: "Element",
@@ -1921,6 +2044,14 @@ passiveList = {
 		],
 		multiple: true,
 		diffflag: 0,
+		doc: {
+			pages: [
+				{
+					desc: `Elements that cannot be used at all are: *${elementEmoji['support']} **Support**, ${elementEmoji['heal']} **Heal** & ${elementEmoji['passive']} **Passive***.`+
+					`\n\nIf the *<Damage Percent>* is negative, it will decrease the power of your skill.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let element = args[0].toLowerCase()
 			let damage = args[1];
@@ -2046,11 +2177,18 @@ passiveList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Allowed stats are: ATK, MAG, PRC, END, AGL & CRIT.\n\nYou can't choose any more than 3 buffs or debuffs.\n\nUnlike other buff extras, this will only buff the user.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let stat = args[0].toLowerCase();
 			let stages = args[1];
 
-			if (![...stats, 'crit'].includes(stat)) return void message.channel.send("That's not a valid stat!");
+			if (!['atk', 'mag', 'prc', 'end', 'agl', 'crit'].includes(stat)) return void message.channel.send("That's not a valid stat!");
 			if (stages == 0) return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
 			if (Math.abs(stages) > 3) return void message.channel.send("The maximum amount of stages is 3!");
 
@@ -2079,10 +2217,10 @@ passiveList = {
 
 	finalpush: new Extra({
 		name: "Final Push (Pokémon)",
-		desc: "Boosts the powers of skills of a specific element by <Percentage> when HP is below <HPPercent>",
+		desc: "Boosts the powers of skills of a specific element or attack type by <Percentage> when HP is below <HPPercent>",
 		args: [
 			{
-				name: "Element",
+				name: "Element / Attack Type",
 				type: "Word",
 				forced: true
 			},
@@ -2099,6 +2237,13 @@ passiveList = {
 		],
 		multiple: true,
 		diffflag: 0,
+		doc: {
+			pages: [
+				{
+					desc: `The only element not allowed is ${elementEmoji['almighty']} **Almighty**.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let element = args[0]?.toLowerCase();
 			let percentage = args[1];
@@ -2164,6 +2309,14 @@ passiveList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `If the turn count is **-1**, the effect is **permanent**. Maximum turn count is 100 because battles don't go this long in most cases.`+
+					`\n\nIf it can be changed, then it will go back to the weather specified once it's done its work, should it be permanent.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			if (!weathers.includes(args[0].toLowerCase())) return void message.channel.send("That's an invalid weather!");
 			if (args[1] == 0 || args[1] < -1 || args[1] > 100) return void message.channel.send("Please enter a value for <Turns> that is between -1 (Permanent) and 100.");
@@ -2210,6 +2363,14 @@ passiveList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `If the turn count is **-1**, the effect is **permanent**. Maximum turn count is 100 because battles don't go this long in most cases.`+
+					`\n\nIf it can be changed, then it will go back to the terrain specified once it's done its work, should it be permanent.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			if (!terrains.includes(args[0].toLowerCase())) return void message.channel.send("That's an invalid terrain!");
 			if (args[1] == 0 || args[1] < -1 || args[1] > 100) return void message.channel.send("Please enter a value for <Turns> that is between -1 (Permanent) and 100.");
@@ -2256,6 +2417,14 @@ passiveList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `**All status ailments** are allowed, but there are extra options. **"All"** for every status ailment without filtration and **"Physical" and "Mental"** for ones affecting the body and mind respectively.`+
+					`\n\nIf <Boost in Percent> is less than 0, it makes a skill less powerful.`
+				}
+			]
+		},
 		multiple: true,
 		diffflag: 0,
 		applyfunc(message, skill, args) {
@@ -2377,6 +2546,15 @@ passiveList = {
 				type: "Num"
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Allowed stats are: ATK, MAG, PRC, END, AGL & CRIT.\n\nYou can't choose any more than 3 buffs or debuffs. If it's not specified, it will default to a single buff.`+
+					`\n\nYou can have it be applied to the user, to the user's team, or the enemies.`+
+					`\n\nYou can have it be temporary with *{Turns}*.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const target = args[0].toLowerCase()
 			const stat = args[1].toLowerCase()
@@ -2385,7 +2563,7 @@ passiveList = {
 
 			if (target != 'user' && target != 'foes' && target != 'team') 
 				return void message.channel.send(`You typed ${target} as the target. It must be either \`user\`, \`foes\`, or \`team\`.`)
-			if (![...stats, "crit", "all"].includes(stat))
+			if (!['atk', 'mag', 'prc', 'end', 'agl', "crit", "all"].includes(stat))
 				return void message.channel.send("That's not a valid stat!");
 			if (stages == 0)
 				return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
@@ -2492,8 +2670,15 @@ passiveList = {
 
 	dp: new Extra({
 		name: "Determination Points (Original)",
-		desc: "Starts the battle with 0 MP, but restores it when dealing or being dealt damage or when shielding.",
+		desc: "Starts the battle with 0 MP, but restores it when dealing or being dealt damage or when guarding.",
 		args: [],
+		doc: {
+			pages: [
+				{
+					desc: `Gaining MP is *modular*, as it is based on maximums. The amount of MP recovered from damage is based on **how much damage is taken or dealt** and divided by the *Max HP*.\n\nGuarding **always raises it by 25% of the Max MP**.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			makePassive(skill, "dp", [true])
 			return true
@@ -2543,13 +2728,20 @@ passiveList = {
 				multiple: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `The only element not allowed is ${elementEmoji['almighty']} **Almighty**, as affinities cannot be used with it.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let chance = args[0] ?? 100;
 			let affinity = args[1].toLowerCase();
 			let elements = args.slice(2);
 
 			if (chance < 1) return void message.channel.send("Why do this if it never happens?");
-			if (!Affinities.includes(affinity)) return void message.channel.send(`${affinity} is not a valid affinity.`);
+			if (![...Affinities, 'normal'].includes(affinity)) return void message.channel.send(`${affinity} is not a valid affinity.`);
 
 			for (let i in elements) {
 				if (elements[i] === "all") {
@@ -2639,16 +2831,25 @@ passiveList = {
 				multiple: true,
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `This extra does not allow **Metronome** skills, and does not support multi-target ones. Random targets are fine, but *allopposing, allallies, allalliesnocaster & everyone* are not.`+
+					`\n\nBeyond that, all other skills are allowed, except for ${elementEmoji['passive']} **Passive** ones.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let chance = Math.min(100, args[0] ?? 100);
 			let skilllist = args.slice(1);
 
-			if (chance < 1) return void message.channel.send("Why do this if it never happens?");
+			if (chance <= 0) return void message.channel.send("Why do this if it never happens?");
 
 			for (let i in skilllist) {
 				if (!skillFile[skilllist[i]]) return void message.channel.send(`${skilllist[i]} is an invalid skill.`);
+				if (skillFile[skilllist[i]].type == 'passive') return message.channel.send(`You don't just cast a passive skill. That's not possible. You may not use **${getFullName(skillFile[skilllist[i]])}** for this _ChanceCast_ skill.`)
 				if (skillFile[skilllist[i]].extras?.metronome) return void message.channel.send(`Metronome skills are unsupported, so you may not use **${getFullName(skillFile[skilllist[i]])}** for this _ChanceCast_ skill.`);
-				if (!["one", "randomopposing", "ally", "randomallies", "random", "caster"].includes(skillFile[skilllist[i]].target)) return void message.channel.send(`You may only use single-target skills, so you may not use **${getFullName(skillFile[skilllist[i]])}** for this _ChanceCast_ skill.`);
+				if (["allopposing", "allallies", "allalliesnocaster", "everyone"].includes(skillFile[skilllist[i]].target)) return void message.channel.send(`You may only use single-target skills, so you may not use **${getFullName(skillFile[skilllist[i]])}** for this _ChanceCast_ skill.`);
 			}
 
 			makePassive(skill, "chancecast", [chance, skilllist]);
@@ -2717,7 +2918,7 @@ passiveList = {
 
 	formchange: new Extra({
 		name: "Form Change (Original)",
-		desc: "Changes the form of the user to <Form> on select, with a {Chance}% chance. If {Transform on Failure Anyway} is Yes, then the move will allow transformation on block, repel, or other forms of failure. {Custom Message} is the message that would be displayed on transformation. _These skills should be character specific as forms are character specific and may not persist between characters._",
+		desc: "Changes the form of the user to <Form> on select, with a {Chance}% chance.",
 		args: [
 			{
 				name: "Form",
@@ -2745,6 +2946,16 @@ passiveList = {
 				forced: false
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `### _These skills should be character specific as forms are character specific and may not persist between characters._`+
+					`\n\nIf *{Transform on Failure Anyway}* is Yes, then the move will allow transformation on block, repel, or other forms of failure.`+
+					`\n\n*{Custom Message}* is the message that would be displayed on transformation. It doesn't show one as. default.`+
+					`\n\nUnlike other iterations of *FORMCHANGE*, it has conditions. The only conditions possible so far are: weather & terrain. These are triggered under specific weather or terrain respectively.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let cond = args[1].toLowerCase();
 			let variable = args[2];
@@ -2816,20 +3027,28 @@ passiveList = {
 				forced: true
 			},
 			{
-				name: "Element",
+				name: "Element / \"All\"",
 				type: "Word",
 				forced: false
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Allowed stats are: ATK, MAG, PRC, END, AGL & CRIT.\n\nYou can't choose any more than 3 buffs or debuffs. If not specified, it defaults to a single debuff.`+
+					`\n\nIf specified, every element is allowed except for: *${elementEmoji['support']} **Support**, ${elementEmoji['heal']} **Heal** & ${elementEmoji['passive']} **Passive***.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let stat = args[0].toLowerCase();
 			let stages = args[1];
 			let element = args[2]?.toLowerCase() ?? "all";
 
-			if (![...stats, 'crit'].includes(stat)) return void message.channel.send("That's not a valid stat!");
+			if (!['atk', 'mag', 'prc', 'end', 'agl', 'crit'].includes(stat)) return void message.channel.send("That's not a valid stat!");
 			if (stages == 0) return void message.channel.send("...This amount of stages won't do anything, I'm afraid.");
 			if (Math.abs(stages) > 3) return void message.channel.send("The maximum amount of stages is 3!");
-			if (!Elements.includes(element) && element != 'all') return void message.channel.send(`${args[2]} is not a valid element!`);
+			if ((!Elements.includes(element) && element != 'all') || (element == 'passive' || element == 'heal' || element == 'support')) return void message.channel.send(`${args[2]} is not a valid element!`);
 
 			makePassive(skill, "critboost", [stat, stages, element]);
 			return true
@@ -2883,21 +3102,22 @@ passiveList = {
 			pages: [
 				{
 					desc: `Keep in mine that every action yields a different amount of XP. Here's the list of actions and how much they give:\n`+
-					`- "OnWin" - gives **35** XP by default.\n`+
-					`- "OnFusionSkill" - gives **a variable amount** of XP, depending on the fusion skill.\n`+
-					`- "OnTeamCombo" - gives **30** XP by default.\n`+
-					`- "OnHeal" - gives **20** XP by default.\n`+
-					`- "OnRegenerate" - gives **5** XP by default.\n`+
-					`- "OnRevive" - gives **30** XP by default.\n`+
-					`- "OnRecarmdra" - gives **40** XP by default.\n`+
-					`- "OnPowerHeal" - gives **20** XP by default.\n`+
-					`- "OnStatusHealPhys" - gives **15** XP by default.\n`+
-					`- "OnStatusHealMen" - gives **15** XP by default.\n`+
-					`- "OnStatusHealPos" - gives **-15** XP by default.\n`+
-					`- "OnStatusHealNeu" - gives **10** XP by default.\n`+
-					`- "OnStatusHealNeg" - gives **15** XP by default.\n`+
-					`- "OnStatusHealAll" - gives **15** XP by default.\n\n`+
-					`There are three other options available. "OnAllHeal" applies to every heal action, "OnStatusHeal" applies to every status heal action and "OnAll" is for everything.`
+					`- **"OnWin"** - gives *35* XP by default.\n`+
+					`- **"OnFusionSkill"** - gives *a variable amount* of XP, depending on the fusion skill.\n`+
+					`- **"OnTeamCombo"** - gives *30* XP by default.\n`+
+					`- **"OnHeal"** - gives *20* XP by default.\n`+
+					`- **"OnRegenerate"** - gives *5* XP by default.\n`+
+					`- **"OnRevive"** - gives *30* XP by default.\n`+
+					`- **"OnRecarmdra"** - gives *40* XP by default.\n`+
+					`- **"OnPowerHeal"** - gives *20* XP by default.\n`+
+					`- **"OnStatusHealPhys"** - gives *15* XP by default.\n`+
+					`- **"OnStatusHealMen"** - gives *15* XP by default.\n`+
+					`- **"OnStatusHealPos"** - gives *-15* XP by default.\n`+
+					`- **"OnStatusHealNeu"** - gives *10* XP by default.\n`+
+					`- **"OnStatusHealNeg"** - gives *15* XP by default.\n`+
+					`- **"OnStatusHealAll"** - gives *15* XP by default.\n\n`+
+					`There are three other options available. **"OnAllHeal"** applies to every heal action, **"OnStatusHeal"** applies to every status heal action and **"OnAll"** is for everything.`+
+					`\n\n**"OnWin", "OnFusionSkill" & "OnTeamCombo"** do not benefit from *<Has to be one doing it?>* as both sides contribute equally.`
 				}
 			]
 		},
