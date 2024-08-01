@@ -372,17 +372,17 @@ commands.updateskills = new Command({
 				}
 
 				if (skillFile[skill].passive?.damage) {
-					skillFile[skill].passive.damage = skillFile[skill].passive.damage.map(x => {
-						if (x[0] == 'phys') x[0] = 'physical'
-						if (x[0] == 'mag') x[0] = 'magic'
-					})
+					for (x in skillFile[skill].passive.damage) {
+						if (skillFile[skill].passive.damage[x][0] == 'phys') skillFile[skill].passive.damage[x][0] = 'physical'
+						if (skillFile[skill].passive.damage[x][0] == 'mag') skillFile[skill].passive.damage[x][0] = 'magic'
+					}
 				}
 
 				if (skillFile[skill].passive?.dodge) {
-					skillFile[skill].passive.dodge = skillFile[skill].passive.dodge.map(x => {
-						if (x[0] == 'phys') x[0] = 'physical'
-						if (x[0] == 'mag') x[0] = 'magic'
-					})
+					for (x in skillFile[skill].passive.dodge) {
+						if (skillFile[skill].passive.dodge[x][0] == 'phys') skillFile[skill].passive.dodge[x][0] = 'physical'
+						if (skillFile[skill].passive.dodge[x][0] == 'mag') skillFile[skill].passive.dodge[x][0] = 'magic'
+					}
 				}
 			}
 
