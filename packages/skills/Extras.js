@@ -38,7 +38,7 @@ const damageFormulas = ['persona', 'pokemon', 'lamonka', 'beta', 'limitbreak'] /
 extrasList = {
 	ohko: new Extra({
 		name: "One Hit KO (Persona)",
-		desc: 'Instantly defeats the foe at a <Chance>% chance. Can be only affected for foes with specific statuses, and/or specific main element, and/or specific affinity to the skill by choice. Can use the {Calculated Stat} stat for calculating chance, or \'none\' to use raw chance, and can attack upon failure.',
+		desc: 'Instantly defeats the foe at a <Chance>% chance.',
 		multiple: true,
 		args: [
 			{
@@ -64,6 +64,16 @@ extrasList = {
 				multiple: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `The chance for an OHKO can be modified with *{Calculated Stat / 'None'}* "None" will use raw chance instead of being dependent on a stat. It defaults to LUK if not specified.`+
+					`\n\nIt can progress as a normal skill if it fails, with *{Damage upon failure?}*. It's set to **false** by default.`+
+					`\n\nYou can also filter which foes this works with. Dependent on *{Must pass all conditions?}*, they either need to *pass **all**, or only **one** requirement* of them all. Defaults to *true*.`+
+					`\n\nThose conditions can be based on **the main element of the target**, **the status ailment inflicted on the foe** or **affinity to the skill's element**.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let chance = args.shift()
 			let stat = args?.shift()?.toLowerCase() ?? 'luk';
@@ -381,7 +391,7 @@ extrasList = {
 
 	changeaffinity: new Extra({
 		name: "Change Affinity (Pokémon)",
-		desc: "Will change <Target/User>'s affinity from the <Weak/Resist/Both> side of <Element> to <Affinity>. *Keep in mind that if you want it to last {Turns} turns, it can't be overwritten by a different affinity until then.*",
+		desc: "Will change <Target/User>'s affinity from the <Weak/Resist/Both> side of <Element> to <Affinity>.",
 		multiple: true,
 		args: [
 			{
@@ -409,6 +419,15 @@ extrasList = {
 				type: "Num",
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Every element is allowed except for: *${elementEmoji['almighty']} **Almighty**, ${elementEmoji['support']} **Support**, ${elementEmoji['heal']} **Heal** & ${elementEmoji['passive']} **Passive***.`+
+					`\n\nAffinities allowed are: *Deadly, Superweak, Weak, Normal, Resist, Block, Repel & Drain*.`+
+					`\n\nYou can have it be temporary with *{Turns}*. It lasts forever otherwise, unless changed. *Keep in mind that if it's specified, then it can't be overwritten by a different affinity until then*.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const target = args[0].toLowerCase()
 			const element = args[1].toLowerCase()
@@ -643,6 +662,14 @@ extrasList = {
 				type: "Num"
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Allowed stats are: ATK, MAG, PRC, END, AGL & CRIT. "Random" and "All" are allowed too.\n\nYou can't choose any more than 3 buffs or debuffs. If it's not specified, it will default to a single buff.`+
+					`\n\nYou can have it be temporary with *{Turns}*. It lasts forever otherwise, unless changed.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const target = args[0].toLowerCase()
 			const stat = args[1].toLowerCase()
@@ -878,11 +905,18 @@ extrasList = {
 				type: "Word"
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Allowed stats are: ATK, MAG, PRC, END, AGL & CRIT.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const stat = args[0].toLowerCase()
 			const trueFa = (args[3] == 'true' || args[3] == 'yes' || args[3] == 'y' || args[3] == '1')
 			const upto = (args[2] == 'true' || args[2] == 'yes' || args[2] == 'y' || args[2] == '1')
-			if (![...stats, 'crit'].includes(stat))
+			if (!['atk', 'mag', 'prc', 'end', 'agl', 'crit'].includes(stat))
 				return void message.channel.send("That's not a valid stat!");
 			makeExtra(skill, "powerbuff", [stat, args[1], upto, trueFa]);
 			return true
@@ -993,6 +1027,13 @@ extrasList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `The extra lets a person steal items, but it will let them steal un-equipped weapons and armor.\nAs for non-characters that are targetted by the skill, this will affect loot. It'll mean that upon victory, less items may drop from the loot table but the winning team may gain more.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const chance = args[0]
 			const amount = args[1]
@@ -1162,6 +1203,13 @@ extrasList = {
 				type: "Word"
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `With *{Deploy Message}*, there are keywords you can use to replace with what they represent. These are: **%USER%, %ENEMY%, and %SKILL%**`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const turns = args[1]
 			if (turns < 1)
@@ -1209,6 +1257,13 @@ extrasList = {
 				type: "Word"
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `With *{Deploy Message}*, there are keywords you can use to replace with what they represent. These are: **%USER%, %ENEMY%, and %SKILL%**`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const turns = args[1]
 			if (turns < 1)
@@ -1257,6 +1312,13 @@ extrasList = {
 				type: "Word"
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `With *{Deploy Message}*, there are keywords you can use to replace with what they represent. These are: **%USER%, %ENEMY%, and %SKILL%**`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const turns = args[1]
 			if (turns < 1)
@@ -1304,6 +1366,13 @@ extrasList = {
 				type: "Word"
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `With *{Deploy Message}*, there are keywords you can use to replace with what they represent. These are: **%USER%, %ENEMY%, and %SKILL%**`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const turns = args[1]
 			if (turns < 1)
@@ -1514,6 +1583,13 @@ extrasList = {
 				multiple: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Be careful with the first status, as it will replace the one already specfiied.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			try {
 				skill.status = args.map(status => {
@@ -1542,6 +1618,13 @@ extrasList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Every element is allowed except for: *${elementEmoji['support']} **Support**, ${elementEmoji['heal']} **Heal** & ${elementEmoji['passive']} **Passive***.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const element = args[0].toLowerCase()
 			if (Elements.includes(element) && element != skill.type && element != 'passive' && element != 'status' && element != 'support' && element != 'heal') {
@@ -1629,6 +1712,13 @@ extrasList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `The formulas allowed are: Persona, Pokemon, Lamonka and Beta.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const formula = args[0].toLowerCase();
 			if (!damageFormulas.includes(formula)) return void message.channel.send('Invalid damage formula!\nValid formulas are: Persona, Pokemon, Lamonka, Beta')
@@ -1804,6 +1894,14 @@ extrasList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `*<Chance>* needs to be above 0%, and up to 50%.`+
+					`\n\nIt will read how many hits the skill has beforehand, so it will limit the max amount because skills cannot exceed 99 hits.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const chance = args[0];
 			const hits = args[1];
@@ -1890,6 +1988,13 @@ extrasList = {
 				multiple: true,
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Every skill is applicable, except for ${elementEmoji['passive']} **Passives**.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let skills = args;
 			skills = skills.filter(skill => skillFile[skill] && skillFile[skill]?.type !== "passive");
@@ -1917,13 +2022,20 @@ extrasList = {
 
 	brickbreak: new Extra({
 		name: "Brick Break (Pokémon)",
-		desc: "Breaks any kind of shield the foe may have, but may reduce damage when doing so. The extent to which can be determined by __{Multiplier}__. This should be a number that the attack is multiplied by, so 0.5 is the default.",
+		desc: "Breaks any kind of shield the foe may have, but may reduce damage by {Multiplier} when doing so.",
 		args: [
 			{
 				name: "Multiplier",
 				type: "Decimal"
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `The default multiplier, if not specified is *0.5*, which means a skill will have **half the power** if it breaks a shield.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "brickbreak", [args[0] ?? 0.5])
 			return true
@@ -2031,6 +2143,13 @@ extrasList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `It overrides power calculations and affinity checks.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			if (args[0] <= 0 || args[0] > 2000) return message.channel.send(`${args[0]} is an invalid number! Please enter a value between 0 and 2000.`);
 
@@ -2059,7 +2178,7 @@ extrasList = {
 
 	link: new Extra({
 		name: "Link (Persona Q: Shadow of the Labyrinth)",
-		desc: "After use, if the same enemy is attacked with a single target skill, this skill with a <Power Boost per hit> multiplier is used after. Lasts until used <Uses> times, or the enemy is not hit. Stackable.",
+		desc: "After use, if the same enemy is attacked with a single target skill, this skill with a <Power Boost per hit> multiplier is used after.",
 		args: [
 			{
 				name: "Power Boost Per Hit",
@@ -2072,6 +2191,15 @@ extrasList = {
 				forced: false
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `{Uses} has to be at least *1* if you want it to be **temporary**. However, setting it to *-1* will make it apply **indefinitely**, unless the target is not hit once within said uses.`+
+					`\n-# It has to be consistently attacked by every party member for it to work its magic to the fullest.`+
+					`\n\nIf *{Uses}* is not specified, it will default to *3* uses.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			// Check Power Boost Per Hit
 			if (args[0]) {
@@ -2119,7 +2247,7 @@ extrasList = {
 
 	roar: new Extra({
 		name: "Roar (Pokémon)",
-		desc: "<Chance>% chance to send the foe into backup, or debuff <Fail Stat> by <Fail Stages> if they cannot be sent into backup.",
+		desc: "<Chance>% chance to send the foe into backup, or debuff {Fail Stat} by {Fail Stages} if they cannot be sent into backup.",
 		args: [
 			{
 				name: "Chance",
@@ -2135,12 +2263,20 @@ extrasList = {
 				type: "Num"
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Allowed stats are: ATK, MAG, PRC, END, AGL & CRIT. All is allowed too.\n\nYou can't choose any more than 3 buffs or debuffs. If it's not specified, it won't debuff the target if it fails to send to backup.`+
+					`\n\nBosses cannot be sent into backup at all.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			if (args[0] <= 0 || args[0] > 100) return message.channel.send(`${args[0]} is an invalid number! Please enter a value between 0 and 100.`);
 			let roar = [args[0]];
 
 			if (args[1]) {
-				if (![...stats, "crit", "all"].includes(args[1]))
+				if (!['atk', 'mag', 'prc', 'end', 'agl', "crit", "all"].includes(args[1]))
 					return void message.channel.send("That's not a valid stat!");
 				else
 					roar.push(args[1]);
@@ -2246,7 +2382,7 @@ extrasList = {
 
 	fakeout: new Extra({
 		name: "Fake Out (Pokémon)",
-		desc: "This move only works on the first <Turn Count> turn(s). If paired with **Flinch (Pokémon)**, and <Turn Count> is 1, it may bypass bosses.",
+		desc: "This move only works on the first <Turn Count> turn(s).",
 		args: [
 			{
 				name: "Turn Count",
@@ -2254,6 +2390,13 @@ extrasList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `If the skill is paired with *FLINCH*, and the <Turn Count> is 1, it may bypass bosses.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let turns = parseInt(args[0]);
 			if (turns <= 0) return void message.channel.send("Please set turns above 0.");
@@ -2294,6 +2437,13 @@ extrasList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `The multiplier needs to be within the **0%-500%** range.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const target = args[0].toLowerCase();
 			const multiplier = parseFloat(args[1]);
@@ -2301,7 +2451,7 @@ extrasList = {
 			if (target != 'target' && target != 'user')
 				return void message.channel.send("You entered an invalid value for <User/Target>! It can be either Target or User.");
 
-			if (multiplier <= 0 || multiplier >= 500) 
+			if (multiplier < 0 || multiplier > 500) 
 				return void message.channel.send("Please set a multiplier between 0 and 500%.");
 
 			makeExtra(skill, "nightshade", [target, multiplier]);
@@ -2331,7 +2481,7 @@ extrasList = {
 
 	forcemsg: new Extra({
 		name: "Force Message (Original)",
-		desc: "A message will be displayed in a specific situation instead of the default message. Situations may include 'OnUse', 'OnHit', 'OnMiss', 'OnKill', 'OnBuff', and 'OnDebuff'. You can use %USER%, %ENEMY%, and %DAMAGE% to replace these values with the specified ones.",
+		desc: "A message will be displayed in a specific situation instead of the default message.",
 		multiple: true,
 		hardcoded: true,
 		args: [
@@ -2346,6 +2496,14 @@ extrasList = {
 				forced: true,
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `There are multiple situations you can consider for the message you want to replace. Each of them are self-explanatory. These are: **"OnUse", "OnHit", "OnMiss", "OnKill", "OnBuff", and "OnDebuff"**.`+
+					`\n\nAs with *<Full Message>*, there are keywords you can use to replace with what they represent. These are: **%USER%, %ENEMY%, and %DAMAGE%**.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let situation = args[0].toLowerCase();
 
@@ -2407,7 +2565,7 @@ extrasList = {
 
 	firespin: new Extra({
 		name: "Fire Spin (Pokemon)",
-		desc: "<Chance%> to inflict the opponent with a constant <Damage%> damage of the original damage. Additionally, you can set an {Immobilize Chance%} to make the opponent completely immobile for these turns. The effect itself will be referred to as {Lingering Damage Name}, or the Skill's name if there isn't one supplied.",
+		desc: "<Chance%> to inflict the opponent with a constant <Damage%> damage of the original damage.",
 		args: [
 			{
 				name: "Chance%",
@@ -2435,6 +2593,14 @@ extrasList = {
 				forced: false
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `If *{Immobilize Chance%}* is specified, the lingering effect may be able to **immobilize** them in a similar fashion to **${statusEmojis['sleep']} ${statusNames['sleep']}**, meaning the target wouldn't be able to make a move.`+
+					`\n\nSaid damage can be named with {Lingering Damage Name}. It uses the skill name instead if not specified.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const chance = parseFloat(args[0]);
 			const dmgmult = parseFloat(args[1]);
@@ -2521,6 +2687,14 @@ extrasList = {
 				multiple: true,
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Many status ailments are supported. The exceptions are ${statusEmojis['brainwash']} **${statusNames['brainwash']}**, ${statusEmojis['infatuation']} **${statusNames['infatuation']}**, ${statusEmojis['guilt']} **${statusNames['guilt']}**, ${statusEmojis['mirror']} **${statusNames['mirror']}** & ${statusEmojis['dragonscale']} **${statusNames['dragonscale']}**.`+
+					`\n\nIf you decide to include either ${statusEmojis['lovable']} **${statusNames['lovable']}** or ${statusEmojis['target']} **${statusNames['target']}**, *<Chance%>* has to be **guaranteed**.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			for (let i in args) {
 				if (i <= 0) continue;
@@ -2561,6 +2735,13 @@ extrasList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `When this is used, the weather change will last *from 8 to 16 turns*.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			if (!weathers.includes(args[0].toLowerCase())) return void message.channel.send("That's not a valid weather!");
 
@@ -2604,6 +2785,13 @@ extrasList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `When this is used, the terrain change will last *from 8 to 16 turns*.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			if (!terrains.includes(args[0].toLowerCase())) return void message.channel.send("That's not a valid terrain!");
 
@@ -2642,7 +2830,7 @@ extrasList = {
 		desc: "If the current terrain is <Terrain>, the skill will get a power multiplier, and remove the terrain.",
 		args: [
 			{
-				name: "Terrain",
+				name: "Terrain / \"All\"",
 				type: "Word",
 				forced: true
 			},
@@ -2687,6 +2875,14 @@ extrasList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `The only element not allowed is ${elementEmoji['almighty']} **Almighty**, as it's prohibited to have that set as a main element.`+
+					`\n\nIt's recommended that the *<Damage Boost>* is **higher than 100%**, as less will make the damage less prominent, or heal instead in some cases.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let mult = args[0];
 			let element = args[1].toLowerCase();
@@ -2735,7 +2931,7 @@ extrasList = {
 
 	movelink: new Extra({
 		name: "Move Link (Pokémon)",
-		desc: `Skills with this extra will act as multiple skills when a character has them in possession. May not call **Metronome** skills.`,
+		desc: `Skills with this extra will act as multiple skills when a character has them in possession.`,
 		hardcoded: true,
 		args: [
 			{
@@ -2745,6 +2941,13 @@ extrasList = {
 				multiple: true,
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `It does not support *METRONOME* skills.\n\nAny skill is supported so long as it's not **itself** for obvious reasons.\n\n${elementEmoji['passive']} **Passives** are supported, they will be active so long as the character knows the skill.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			for (let i in args) {
 				if (!skillFile[args[i]]) return void message.channel.send(`${args[i]} is not an existing skill.`);
@@ -2772,7 +2975,7 @@ extrasList = {
 
 	formchange: new Extra({
 		name: "Form Change (Original)",
-		desc: "Changes the form of the user to <Form> on select, with a {Chance}% chance. If {Transform on Failure Anyway} is Yes, then the move will allow transformation on block, repel, or other forms of failure. {Custom Message} is the message that would be displayed on transformation. _These skills should be character specific as forms are character specific and may not persist between characters._",
+		desc: "Changes the form of the user to <Form> on select, with a {Chance}% chance.",
 		args: [
 			{
 				name: "Form",
@@ -2795,6 +2998,16 @@ extrasList = {
 				forced: false
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `### _These skills should be character specific as forms are character specific and may not persist between characters._`+
+					`\n\nIf *{Transform on Failure Anyway}* is Yes, then the move will allow transformation on block, repel, or other forms of failure.`+
+					`\n\n*{Custom Message}* is the message that would be displayed on transformation. It doesn't show one if not specified.`+
+					`\n\n*{Chance}* defaults to 100% if note specified.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			makeExtra(skill, "formchange", [args[0], Math.min(100, Math.max(0, parseInt(args[1] ?? 100))), args[2] ?? false, args[3] ?? undefined]);
 			return true

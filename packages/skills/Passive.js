@@ -2551,7 +2551,7 @@ passiveList = {
 				{
 					desc: `Allowed stats are: ATK, MAG, PRC, END, AGL & CRIT.\n\nYou can't choose any more than 3 buffs or debuffs. If it's not specified, it will default to a single buff.`+
 					`\n\nYou can have it be applied to the user, to the user's team, or the enemies.`+
-					`\n\nYou can have it be temporary with *{Turns}*.`
+					`\n\nYou can have it be temporary with *{Turns}*. It lasts forever otherwise, unless changed.`
 				}
 			]
 		},
@@ -2741,7 +2741,7 @@ passiveList = {
 			let elements = args.slice(2);
 
 			if (chance < 1) return void message.channel.send("Why do this if it never happens?");
-			if (![...Affinities, 'normal'].includes(affinity)) return void message.channel.send(`${affinity} is not a valid affinity.`);
+			if (![...Affinities, 'normal', 'deadly'].includes(affinity)) return void message.channel.send(`${affinity} is not a valid affinity.`);
 
 			for (let i in elements) {
 				if (elements[i] === "all") {
@@ -2951,8 +2951,9 @@ passiveList = {
 				{
 					desc: `### _These skills should be character specific as forms are character specific and may not persist between characters._`+
 					`\n\nIf *{Transform on Failure Anyway}* is Yes, then the move will allow transformation on block, repel, or other forms of failure.`+
-					`\n\n*{Custom Message}* is the message that would be displayed on transformation. It doesn't show one as. default.`+
-					`\n\nUnlike other iterations of *FORMCHANGE*, it has conditions. The only conditions possible so far are: weather & terrain. These are triggered under specific weather or terrain respectively.`
+					`\n\n*{Custom Message}* is the message that would be displayed on transformation. It doesn't show one if not specified.`+
+					`\n\nUnlike other iterations of *FORMCHANGE*, it has conditions. The only conditions possible so far are: weather & terrain. These are triggered under specific weather or terrain respectively.`+
+					`\n\n*{Chance}* defaults to 100% if note specified.`
 				}
 			]
 		},
