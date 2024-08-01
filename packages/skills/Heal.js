@@ -147,6 +147,14 @@ healList = {
 			{
 				name: "Pause turns",
 				type: "Num"
+			},
+			{
+				name: "Decay Amount",
+				type: "Num"
+			},
+			{
+				name: "Use percentages with decay?",
+				type: "YesNo"
 			}
 		],
 		doc: {
@@ -155,7 +163,9 @@ healList = {
 					desc: `The only allowed meters you can use for this extra is: *hp, mp, hppercent, mppercent and lb*.`+
 					`\n\nIf the amount is **less than 0**, it will **damage** the target in a similar way ${elementEmoji['almighty']} **Almighty** does. No affinity check.`+
 					`\n\n*{Activate after last regeneration?}* deducts if it can go with previous regeneration or if it has to wait for it to finish. It defaults to **false**.`+
-					`\n\n*{Turns before start} & {Pause turns}* change when the effect of it takes place, former at start and latter between each. The default is 0 for both, which means it will happen immediately with no pause.`
+					`\n\n*{Turns before start} & {Pause turns}* change when the effect of it takes place, former at start and latter between each. The default is 0 for both, which means it will happen immediately with no pause.`+
+					`\n\nYou can also set if it decays with strength or not, thanks to *{Decay Amount}*. By default, it doesn't, but if you do it, *{Use percentages with decay?}* decides if it decreases by a percentage of it, or by an amount. By default, it uses amounts.`+
+					`\n-# Negative *{Decay Amount}* will make the regeneration stronger with time. 0 *{Decay Amount}* will have it not apply at all.`
 				}
 			]
 		},
@@ -166,11 +176,13 @@ healList = {
 			let lastActivate = args[3] ?? false;
 			let startTurns = Math.max(args[4] ?? 0, 0);
 			let pauseTurns = Math.max(args[5] ?? 0, 0);
+			let decay = args[6] ?? 0;
+			let decayPercent = args[7] ?? false;
 
 			if (hp == 0) return message.channel.send(`Healing 0 makes it redundant, doesn't it?`)
 			if (!['hp', 'mp', 'hppercent', 'mppercent', 'lb'].includes(meter)) return void message.channel.send(`${args[1]} is an invalid meter to heal! Enter either HP, MP, HPPercent, MPPercent or LB.`);
 			if (turns <= 0) return void message.channel.send(`${turns} is an invalid number of turns! Enter a number greater than 0.`);
-			makeHeal(skill, "regenerate", [hp, meter, turns, lastActivate, startTurns, pauseTurns]);
+			makeHeal(skill, "regenerate", [hp, meter, turns, lastActivate, startTurns, pauseTurns, decay, decayPercent]);
 			return true;
 		},
 		onuse(char, targ, skill, btl, vars, multiplier) {
@@ -188,6 +200,8 @@ healList = {
 				wait: vars[4] > 0 ? vars[4]+1 : vars[3],
 				pause: vars[5]+1,
 				first: vars[3],
+				decay: vars[6],
+				decayPercent: vars[7],
 				user: char.id
 			});
 
@@ -206,7 +220,7 @@ healList = {
 				else if (healType.includes('lb')) healType = '% LB';
 				else healType = ` ${healType.toUpperCase()}`;
 
-				txt += `**around ${vars[i][0]}${healType}** for **${vars[i][2]} turns**${vars[i][3] ? ' when last regeneration finishes' : ''}${vars[i][4] > 0 ? `, after **${vars[i][4]} turn${vars[i][4] > 1 ? 's' : ''}**` : ''}${vars[i][5] > 0 ? `, pausing each turn for **${vars[i][5]} turn${vars[i][5] > 1 ? 's' : ''}**` : ''}`
+				txt += `**around ${vars[i][0]}${healType}** ${vars[i][6] && vars[i][6] != 0 ? `and decays in strength by **${vars[i][6]}${vars[i][6] ? '%' : ''}** every time it procs` : ``} for **${vars[i][2]} turns**${vars[i][3] ? ' when last regeneration finishes' : ''}${vars[i][4] > 0 ? `, after **${vars[i][4]} turn${vars[i][4] > 1 ? 's' : ''}**` : ''}${vars[i][5] > 0 ? `, pausing each turn for **${vars[i][5]} turn${vars[i][5] > 1 ? 's' : ''}**` : ''}`
 
 				if (i < vars.length - 2) txt += ', ';
 				else if (i == vars.length - 2) txt += ' and ';

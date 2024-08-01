@@ -3596,6 +3596,14 @@ customVariables = {
 						}
 
 						let regenType = curRegen.type;
+
+						if (curRegen?.decay && curRegen?.decay != 0) {
+							if (!curRegen?.baseTurn) curRegen.baseTurn = curRegen.turns
+							if (!curRegen?.baseHeal) curRegen.baseHeal = curRegen.heal
+
+							curRegen.heal -= (curRegen.decayPercent ? (curRegen.baseHeal * curRegen.decay/100) : curRegen.decay) * (Math.min(1, curRegen.baseTurn - curRegen.turns))
+						}
+
 						let regenAmount = curRegen.heal;
 
 						if (i != 0) txt += '\n';

@@ -547,7 +547,7 @@ commands.listpassiveextras = new Command({
 })
 
 commands.getextra = new Command({
-	desc: 'List the possible extras you can give a __passive__ skill.',
+	desc: 'Get the extra of a skill to view documentation on it.',
 	aliases: ['showextra', 'displayextra', 'getextradocumentation', 'showextradocumentation', 'displayextradocumentation', 'getextradoc', 'showextradoc', 'displayextradoc', 'extradocumentation', 'extradoc'],
 	section: "skills",
 	args: [
