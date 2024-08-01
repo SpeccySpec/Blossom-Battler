@@ -67,7 +67,7 @@ extrasList = {
 		doc: {
 			pages: [
 				{
-					desc: `The chance for an OHKO can be modified with *{Calculated Stat / 'None'}* "None" will use raw chance instead of being dependent on a stat. It defaults to LUK if not specified.`+
+					desc: `The chance for an OHKO can be modified with *{Calculated Stat / 'None'}* "None" will use raw chance instead of being dependent on a stat. It defaults to **LUK** if not specified.`+
 					`\n\nIt can progress as a normal skill if it fails, with *{Damage upon failure?}*. It's set to **false** by default.`+
 					`\n\nYou can also filter which foes this works with. Dependent on *{Must pass all conditions?}*, they either need to *pass **all**, or only **one** requirement* of them all. Defaults to *true*.`+
 					`\n\nThose conditions can be based on **the main element of the target**, **the status ailment inflicted on the foe** or **affinity to the skill's element**.`

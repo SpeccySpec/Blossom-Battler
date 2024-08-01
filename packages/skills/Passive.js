@@ -2421,7 +2421,7 @@ passiveList = {
 			pages: [
 				{
 					desc: `**All status ailments** are allowed, but there are extra options. **"All"** for every status ailment without filtration and **"Physical" and "Mental"** for ones affecting the body and mind respectively.`+
-					`\n\nIf <Boost in Percent> is less than 0, it makes a skill less powerful.`
+					`\n\nIf *<Boost in Percent>* is less than 0, it makes a skill less powerful.`
 				}
 			]
 		},
