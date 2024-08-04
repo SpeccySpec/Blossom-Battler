@@ -149,7 +149,7 @@ genDmg = (char, targ, btl, skill) => {
 
 		switch(damageformula) {
 			case 'persona':
-				dmg = Math.round(5 * Math.sqrt(def * Math.abs(skill.pow)))+randNum(-10, 10);
+				dmg = Math.round(5 * (skill.pow / Math.abs(skill.pow)) * Math.sqrt(def * Math.abs(skill.pow)))+randNum(-10, 10);
 				console.log(`Attack Stat: ${atkStat}, Endurance Stat: ${endStat}, Skill Pow: ${skill.pow}, Base Dmg: ${Math.round(5 * Math.sqrt(def * skill.pow))}, Real Dmg: ${dmg}`);
 				break;
 			case 'pokemon':

@@ -1,9 +1,9 @@
 let damageFormulas = {
-	'persona': '5*√(Attack/Endurance * Skill Power) + (-7 to 7)',
-	'pokemon': '(((2*level)/5+2)*Power*Attack/Endurance)/50+2',
-	'lamonka': '((Power+Level)*((Attack/Endurance)/4))*(0.95 to 1.05)',
-	'beta': '(0 to Level+35) + (0 to Power/1.75) + (-7 to 7)',
-	'limitbreak': '(Power/2 + Level + Attack) - (Endurance * 2)',
+	'persona': '5 * (Skill Power / |Skill Power|) * √(Attack/Endurance * |Skill Power|) + (-10 to 10)',
+	'pokemon': '(((2 * level) / 5 + 2) * Power * Attack/Endurance) / 50 + 2 + (-10 to 10)',
+	'lamonka': '((Power+Level) * ((Attack/Endurance) / 4)) * (0.95 to 1.05)',
+	'beta': '(0 to Level+35) + (0 to Power/1.75) + (-20 to 20)',
+	'limitbreak': '(Power / 2 + Level + Attack) - (Endurance * 2)',
 	'custom': 'uhhhh Spectra you handle this'
 }
 

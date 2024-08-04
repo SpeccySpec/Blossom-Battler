@@ -126,6 +126,7 @@ statusList = {
 		name: "Stat Buff",
 		desc: extrasList.buff.desc,
 		args: extrasList.buff.args,
+		doc: extrasList.buff.doc,
 		multiple: true,
 		diffflag: [0, 1, 2],
 		applyfunc(message, skill, args) {
@@ -419,15 +420,15 @@ statusList = {
 		doc: {
 			pages: [
 				{
-					desc: "### The {Affected Parameter} can be either:"+
-						"\n- A Skill extra - Checks for applicability of the extra.\n-# Forcemsg is unavailable. Can only check for the user on: need & movelink."+
-						"\n- \"SkillBeforeUse\" - Checks for usability of the skill entirely.\n-# The default option, but can't check for the target."+
-						"\n- \"SkillOnSelect\" - Checks for usability of the skill after using cost.\n-# Alternate to SkillBeforeUse, that can check for the target."+
-						"\n- \"MultiStatus\" - Chooses if multiple statuses can be checked for. Uses the first one only upon fail.\n-# If you want to check for status overall, use Status instead."+
-						"\n\nA fair amount of options are not included for heals, like CRIT or TECH. This is because support skills aren't meant to offer such."
+					desc: "### The *{Affected Parameter}* can be either:"+
+						"\n- **A Skill extra** - Checks for applicability of the extra.\n-# Forcemsg is unavailable. Can only check for the user on: need & movelink."+
+						"\n- **\"SkillBeforeUse\"** - Checks for usability of the skill entirely.\n-# The default option, but can't check for the target."+
+						"\n- **\"SkillOnSelect\"** - Checks for usability of the skill after using cost.\n-# Alternate to **SKILLBEFOREUSE**, that can check for the target."+
+						"\n- **\"MultiStatus\"** - Chooses if multiple statuses can be checked for. Uses the first one only upon fail.\n-# If you want to check for status overall, use Status instead."+
+						"\n\nA fair amount of options are not included for support skills, like CRIT or TECH. This is because they aren't meant to offer such."
 				},
 				{
-					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					desc: "### As for *<Condition>...*\nThere are multiple different kinds of conditions, and those come with different *<Additional Parameters>*. These are:",
 					fields: Object.entries(needConditions).map(x => x = {
 						name: `${x[1].name} (${x[0]})`,
 						value: `\n\n${x[1].getFullDesc()}`,
@@ -435,7 +436,7 @@ statusList = {
 					}).slice(0,6)
 				},
 				{
-					desc: "### As for <Condition>...\nThere are multiple different kinds of conditions, and those come with different <Additional Parameters>. These are:",
+					desc: "### As for *<Condition>...*\nThere are multiple different kinds of conditions, and those come with different *<Additional Parameters>*. These are:",
 					fields: Object.entries(needConditions).map(x => x = {
 						name: `${x[1].name} (${x[0]})`,
 						value: `\n\n${x[1].getFullDesc()}`,
@@ -662,6 +663,13 @@ statusList = {
 				type: "Num",
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Do keep in mind that it will not stack with *MAKARAKARN* and *TETRAKARN* in-battle because of OP concerns.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let shieldName = args[0]
 			let element = args[1].toLowerCase()
@@ -711,6 +719,13 @@ statusList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Do keep in mind that it will not stack with *SHIELD* in-battle because of OP concerns.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let phys = args[0].toLowerCase()
 
@@ -768,7 +783,7 @@ statusList = {
 		desc: "Has a <Chance>% chance to break the target's <Shield/Tetra/Makara>.",
 		args: [
 			{
-				name: "Shield/Tetra/Makara",
+				name: "Shield/Tetra/Makara/All",
 				type: "Word",
 				forced: true
 			},
@@ -806,7 +821,7 @@ statusList = {
 
 	trap: new Extra({
 		name: "Trap",
-		desc: "Protects the target with a trap called <Trap Name> that is set off once a physical attack strikes them and multiplies power by <Power Multiplier>x, which should be a value less than one. Variables differ based on <Type>\n```diff\n+ Buff: Stat, Stages, Chance\n+ Status: Valid Status Effect, Chance\n+ Damage: Power, Accuracy, Element```",
+		desc: "Protects the target with a trap called <Trap Name> that is set off once a physical attack strikes them and multiplies power by <Power Multiplier>x, which should be a value less than one.",
 		args: [
 			{
 				name: "Trap Name",
@@ -830,6 +845,13 @@ statusList = {
 				multiple: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Variables differ based on <Type>\n\`\`\`diff\n+ Buff: Stat, Stages, Chance\n+ Status: Valid Status Effect, Chance\n+ Damage: Power, Accuracy, Element\`\`\``
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let trapName = args[0]
 			let powerMult = args[1]
@@ -892,6 +914,7 @@ statusList = {
 		name: "Change Affinity",
 		desc: extrasList.changeaffinity.desc,
 		args: extrasList.changeaffinity.args,
+		doc: extrasList.changeaffinity.doc,
 		multiple: true,
 		diffflag: extrasList.changeaffinity.diffflag,
 		applyfunc(message, skill, args) {
@@ -934,6 +957,13 @@ statusList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `When this is used, the weather change will last *from 8 to 16 turns*, though that changes with ${elementEmoji['passive']} **Boosts** and ${elementEmoji['support']} **Support** main elements.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			if (!weathers.includes(args[0].toLowerCase())) return void message.channel.send("That's not a valid weather!");
 
@@ -975,6 +1005,13 @@ statusList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `When this is used, the terrain change will last *from 8 to 16 turns*, though that changes with ${elementEmoji['passive']} **Boosts** and ${elementEmoji['support']} **Support** main elements.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			if (!terrains.includes(args[0].toLowerCase())) return void message.channel.send("That's not a valid terrain!");
 
@@ -1008,7 +1045,7 @@ statusList = {
 
 	corrupt: new Extra({
 		name: "Corrupt",
-		desc: "Has a chance to corrupt the foe, and make them work for your party for a few turns, the corrupted foe will be weaker and will constantly take damage. Corruption chance based on foe's HP and <Chance Stat>, the chance cannot be exceed 20%.",
+		desc: "Has a chance to corrupt the foe, and make them work for your party for a few turns, the corrupted foe will be weaker and will constantly take damage.",
 		args: [
 			{
 				name: "Chance stat",
@@ -1016,6 +1053,13 @@ statusList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `Corruption chance based on foe's HP and <Chance Stat>, the chance cannot be exceed 20%.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const stat = args[0].toLowerCase()
 			if (!stats.includes(stat))
@@ -1062,7 +1106,7 @@ statusList = {
 
 	reincarnate: new Extra({
 		name: "Reincarnate",
-		desc: "Summons a level <Level> reincarnate to the user's team. The reincarnate will have stats randomized between <Minimum of Stat> and <Maximum of Stat>, HP at <HP Percent>% of user's Max HP and MP at <Percent>% of user's Max HP. You also choose which skills the reincarnated has, it will choose at random two of the skills you enter. You can add flair to this skill with a {Deploy Message}. These can use %PLAYER% to replace with the user, and %UNDEAD% to replace with the undead.",
+		desc: "Summons a level <Level> reincarnate to the user's team. The reincarnate will have stats randomized, HP and MP at fractions of user's Max HP and Max HP respectively.",
 		args: [
 			{
 				name: "Level",
@@ -1120,6 +1164,21 @@ statusList = {
 				multiple: true
 			},
 		],
+		doc: {
+			pages: [
+				{
+					desc: `### When it comes to summoning reincarnated, a lot of RNG is involved in terms of what it has.`+
+					`\n\n*<Minimum of Stat> & <Minimum of Stat>* mean that randomized stats will be within the range of two numbers.\n-# Do keep in mind that it changes when *{Scale stats with User Level}* is true. It will require the maximum stat to be no more than 10.`+
+					`\n\n*<HP Percent> & <MP Percent>* imply that the reincarnate's meters are based on the caster's.`+
+					`\n\n*{Deploy Message}* serves as flair, custom text. It defaults to **"%PLAYER% has summoned an undead %UNDEAD%"** if unspecified. If you decide to have it though, keep in mind the keywords you can use to replace with what they represent. These are: **%PLAYER% & %UNDEAD%**.\n-# It can be 500 characters in length max.`+
+					`\n\nSimilarly, *{Reincarnate Name}* is also flair. It will default to "Reincarnate" if not specified.`+
+					`\n\n*{High Stat} & {Low Stat}* imply which stat may be highest or lowest. "None" is the default option, and you can have "all" be low stats if need be.`+
+					`\n\nBy default, the reincarnate will choose affinities at random, but if you don't want to, it will not have any affinities whatsoever.`+
+					`\n\nAnd lastly, you can choose how many skills it can have, but do keep in mind that it will only choose two of them.`+
+					`\n### Reincarnates will be stripped of many things. Limit breaks, charms, weapons, armor, quotes, transformations, etc. It will be as basic as it can be.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			const level = args[0];
 			let min = args[1];
@@ -1323,6 +1382,13 @@ statusList = {
 				type: "Decimal",
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `For the most part, you register this like you would register an attacking skill. A lot of restrictions that came from them will apply here.\n-# You will not be able to apply an extra however.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let turns = args[0];
 			let power = args[1];
@@ -1420,7 +1486,7 @@ statusList = {
 			let accuracy = args[1];
 
 			if (power < 1) return void message.channel.send("Power must be above 0!");
-			if (accuracy < 1) return void message.channel.send("Accuracy must be above 0!");
+			if (accuracy <= 0) return void message.channel.send("Accuracy must be above 0!");
 			skill.target = 'caster';
 
 			makeStatus(skill, "chaosstir", [power, accuracy]);
@@ -1442,7 +1508,7 @@ statusList = {
 
 	pacifystatus: new Extra({
 		name: "Pacify Status",
-		desc: "_<Status Effect> <Amount>_\nPacifies the target if they have <Status Effect>, by <Amount>. Accepts 'physical', 'mental', and 'all' as statuses.",
+		desc: "Pacifies the target if they have <Status Effect>, by <Amount>. Accepts 'physical', 'mental', and 'all' as statuses.",
 		args: [
 			{
 				name: "Status Effect",
@@ -1457,6 +1523,14 @@ statusList = {
 		],
 		multiple: true,
 		diffflag: 0,
+		doc: {
+			pages: [
+				{
+					desc: `**All status ailments** are allowed, but there are extra options. **"All"** for every status ailment without filtration and **"Physical" and "Mental"** for ones affecting the body and mind respectively.`+
+					`\n\nIf *<Amount>* is less than 0, it will reduce pacify percentage instead.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let status = args[0].toLowerCase();
 			let amount = args[1];
@@ -1554,7 +1628,7 @@ statusList = {
 
 	ragesoul: new Extra({
 		name: "Rage Soul",
-		desc: "Multiplies the user's Melee Attack Power by <Melee Power Multiplier> and their Attack Stat by <ATK Stat Multiplier>, but locks them into using Melee Attacks. If <Turns> is set to 0 or below, this will be indefinite.",
+		desc: "Multiplies the user's Melee Attack Power by <Melee Power Multiplier> and their Attack Stat by <ATK Stat Multiplier>, but locks them into using Melee Attacks.",
 		args: [
 			{
 				name: "Melee Power Multiplier",
@@ -1572,6 +1646,13 @@ statusList = {
 				forced: false
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `If *<Turns>* is set to 0 or below, this will be indefinite.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			makeStatus(skill, "ragesoul", [args[0], args[1], Math.max(args[2], 0) ?? 0]);
 			return true;
@@ -1606,7 +1687,7 @@ statusList = {
 
 	charge: new Extra({
 		name: "Charge (SMT)",
-		desc: "_(Not to be confused with Charges)_\nBoosts <Phys/Mag/Crit> damage by <Power Multiplier>x for one turn. Removed whether attacked or not.",
+		desc: "_(Not to be confused with Charges)_\nBoosts <Phys/Mag/Crit> damage by <Power Percentage>% for one turn. Removed whether attacked or not.",
 		args: [
 			{
 				name: "Phys/Mag/Crit",
@@ -1614,11 +1695,18 @@ statusList = {
 				forced: true
 			},
 			{
-				name: "Power Multiplier",
+				name: "Power Percentage",
 				type: "Decimal",
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `"Phys" & "Mag" affect damage, while "Crit" affects critical chance instead.\n\n*<Power Percentage>* caps at 100% on the low end.`
+				}
+			]
+		},
 		multiple: true,
 		diffflag: 0,
 		applyfunc(message, skill, args) {
@@ -1664,9 +1752,9 @@ statusList = {
 				if (vars[i][1] >= 100 && type == 'critical') {
 					finalText += `**${type}** chance by ∞%`
 				} else if (type == 'critical') {
-					finalText += `**${type}** chance by ${vars[i][1]}×`
+					finalText += `**${type}** chance by ${vars[i][1]}%`
 				} else {
-					finalText += `**${type}** damage by ${vars[i][1]}×`
+					finalText += `**${type}** damage by ${vars[i][1]}%`
 				}
 
 				if (i < vars.length - 1) {
@@ -1728,6 +1816,7 @@ statusList = {
 		name: "Psycho Shift (Pokémon)",
 		args: [],
 		desc: extrasList.psychoshift.desc,
+		doc: extrasList.psychoshift.doc,
 		applyfunc(message, skill, args) {
 			makeStatus(skill, "psychoshift", [true]);
 			return true;
@@ -1766,6 +1855,7 @@ statusList = {
 		name: extrasList.charges.name,
 		desc: extrasList.charges.desc,
 		args: extrasList.charges.args,
+		doc: extrasList.charges.doc,
 		applyfunc(message, skill, args) {
 			let charges = args[0]
 			let rate = args[1] ?? 0
@@ -1781,7 +1871,7 @@ statusList = {
 
 	burst: new Extra({
 		name: "Burst (Original)",
-		desc: "Cures the user's status effects, and gives a healverse-like effect. (HP regeneration)\nThis skill __should__ cost a decent amount.",
+		desc: "Cures the user's status effects, and gives a healverse-like effect.",
 		args: [
 			{
 				name: "HPPercent",
@@ -1789,6 +1879,13 @@ statusList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `### Because of the effects, it's expected for a skill with Burst to be a bit pricier than usual.\n\nThe healverse-like effect is regeneration for 3 turns with no pause.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			skill.target = 'caster';
 			makeStatus(skill, "burst", [parseFloat(args[0])]);
@@ -1826,10 +1923,10 @@ statusList = {
 
 	evasionboost: new Extra({
 		name: "Evasion Boost (Original)",
-		desc: "When this skill is used you have a <Chance%> to dodge <Atk Type> skills <Activation Limit> times for <Turns> turns. Additionally, you <Can [not] act during evasion state>.",
+		desc: "When this skill is used {User/Target} has a <Chance%> to dodge <Type> skills {Activation Limit} times for {Turns} turns.",
 		args: [
 			{
-				name: "Atk Type",
+				name: "Type",
 				type: "Word",
 				forced: true
 			},
@@ -1855,6 +1952,17 @@ statusList = {
 				type: "Word"
 			},
 		],
+		doc: {
+			pages: [
+				{
+					desc: `*<Type>* can be one of three things: **An element, An attack type or "All"**.`+
+					`\n\nIf {chance} is unspecified, it defaults to being guatanteed.`+
+					`\n\n*{Activation Limit}* determines how many skills you may be able to dodge. It defaults to 1.`+
+					`\n\n*{Turns}* determines how long this lasts. It defaults to 1.\n-# If you manage to dodge *{Activation Limit}* skills before time runs out, it will wear off, and vicewersa.`+
+					`\n\nBe default, you cannot act when you dodge in this manner, however you can change it with *{Can act during evasion state}*.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let element = args[0].toLowerCase();
 			let chance = args[1] ?? 100;
@@ -1928,6 +2036,14 @@ statusList = {
 				type: "Decimal"
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `If {Turns} are unspecified, the given move will last until the battle ends.`+
+					`\n\nIf {chance} is unspecified, it defaults to being guatanteed.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let skillName = args[0];
 			let turns = args[1] ?? 0;
@@ -2012,7 +2128,7 @@ statusList = {
 
 	forcemsg: new Extra({
 		name: "Force Message (Original)",
-		desc: "A message will be displayed in a specific situation instead of the default message. Situations may include 'OnUse', 'OnBuff', and 'OnDebuff'. You can use %USER%, and %ENEMY% to replace these values with the specified ones.",
+		desc: "A message will be displayed in a specific situation instead of the default message.",
 		multiple: true,
 		hardcoded: true,
 		args: [
@@ -2031,6 +2147,14 @@ statusList = {
 				type: "YesNo",
 			}
 		],
+		doc: {
+			pages: [
+				{
+					desc: `There are multiple situations you can consider for the message you want to replace. Each of them are self-explanatory. These are: **"OnUse", "OnBuff", and "OnDebuff"**.`+
+					`\n\nAs with *<Full Message>*, there are keywords you can use to replace with what they represent. These are: **%USER% and %ENEMY%.`
+				}
+			]
+		},
 		applyfunc(message, skill, args) {
 			let situation = args[0].toLowerCase();
 
@@ -2107,6 +2231,7 @@ statusList = {
 		desc: extrasList.movelink.desc,
 		hardcoded: extrasList.movelink.hardcoded,
 		args: extrasList.movelink.args,
+		doc: extrasList.movelink.doc,
 		getinfo: extrasList.movelink.getinfo,
 		applyfunc(message, skill, args) {
 			for (let i in args) {
@@ -2123,6 +2248,7 @@ statusList = {
 		name: extrasList.formchange.name,
 		desc: extrasList.formchange.desc,
 		args: extrasList.formchange.args,
+		doc: extrasList.formchange.doc,
 		onselect: extrasList.formchange.onselect,
 		onuse: extrasList.formchange.onuse,
 		getinfo: extrasList.formchange.getinfo,

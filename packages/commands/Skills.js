@@ -367,7 +367,23 @@ commands.updateskills = new Command({
 
 		for (skill in skillFile) {
 			if (skillFile[skill]?.passive) {
+				if (skillFile[skill].passive?.boost) {
+					skillFile[skill].passive.boost = skillFile[skill].passive.boost.filter(x => x[0] != 'critdmg')
+				}
 
+				if (skillFile[skill].passive?.damage) {
+					for (x in skillFile[skill].passive.damage) {
+						if (skillFile[skill].passive.damage[x][0] == 'phys') skillFile[skill].passive.damage[x][0] = 'physical'
+						if (skillFile[skill].passive.damage[x][0] == 'mag') skillFile[skill].passive.damage[x][0] = 'magic'
+					}
+				}
+
+				if (skillFile[skill].passive?.dodge) {
+					for (x in skillFile[skill].passive.dodge) {
+						if (skillFile[skill].passive.dodge[x][0] == 'phys') skillFile[skill].passive.dodge[x][0] = 'physical'
+						if (skillFile[skill].passive.dodge[x][0] == 'mag') skillFile[skill].passive.dodge[x][0] = 'magic'
+					}
+				}
 			}
 
 			if (skillFile[skill]?.statusses) {
@@ -375,24 +391,10 @@ commands.updateskills = new Command({
 			}
 
 			if (skillFile[skill]?.heal) {
-				if (skillFile[skill].heal?.need) {
-					for (i in skillFile[skill].heal.need) skillFile[skill].heal.need[i] = ['meter', 'user', 'skillbeforeuse', skillFile[skill].heal.need[i][3], skillFile[skill].heal.need[i][2], skillFile[skill].heal.need[i][0], skillFile[skill].heal.need[i][1]]
-				}
+				
 			}
 
 			if (skillFile[skill]?.extras) {
-				if (skillFile[skill].extras?.need) {
-					for (i in skillFile[skill].extras.need) skillFile[skill].extras.need[i] = ['meter', 'user', 'skillbeforeuse', skillFile[skill].extras.need[i][3], skillFile[skill].extras.need[i][2], skillFile[skill].extras.need[i][0], skillFile[skill].extras.need[i][1]]
-				}
-
-				if (skillFile[skill].extras?.dreameater) {
-					let statuses = []
-
-					for (i in skillFile[skill].extras.dreameater) statuses.push(skillFile[skill].extras.dreameater[i][0])
-
-					makeExtra(skillFile[skill], "need", ['status', 'target', 'skillonselect', true, ...statuses]);
-					delete skillFile[skill].extras.dreameater;
-				}
 			}
 		}
 		fs.writeFileSync(dataPath+'/json/skills.json', JSON.stringify(skillFile, null, '    '));
@@ -541,6 +543,36 @@ commands.listpassiveextras = new Command({
 		}
 
 		listExtras(message, extras, title, desc, elementColors['passive'])
+	}
+})
+
+commands.getextra = new Command({
+	desc: 'Get the extra of a skill to view documentation on it.',
+	aliases: ['showextra', 'displayextra', 'getextradocumentation', 'showextradocumentation', 'displayextradocumentation', 'getextradoc', 'showextradoc', 'displayextradoc', 'extradocumentation', 'extradoc'],
+	section: "skills",
+	args: [
+		{
+			name: "Extra Category",
+			type: "Word",
+			forced: true
+		},
+		{
+			name: "Extra",
+			type: "Word",
+			forced: true
+		}
+	],
+	func(message, args, guilded) {
+		let cat = args[0].toLowerCase();
+		let extra = args[1].toLowerCase();
+
+		if (!['attack', 'support', 'heal', 'passive'].includes(cat)) return message.channel.send(`That's not a valid extra category. You can only get attack, support, heal and passive extras.`)
+		
+		let extraCat = (cat == 'attack' ? extrasList : (cat == 'support' ? statusList : (cat == 'heal' ? healList : passiveList)))
+		
+		if (!extraCat[extra]) return message.channel.send(`That's not a valid extra for the ${cat} category.`)
+
+		extraCat[extra].summonDocumentation(message, null, extraCat[extra].name);
 	}
 })
 
