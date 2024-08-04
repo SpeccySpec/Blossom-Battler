@@ -2022,7 +2022,7 @@ statusDescs = [
 						normal: `Takes **1/10th** of max HP & **halves** the ${statusEmojis["atkdown"]}**ATK** stat.`,
 						resist: `Takes **1/20th** of max HP & **-20%** to the ${statusEmojis["atkdown"]}**ATK** stat.`,
 					},
-					boss: `Takes **5 HP** & doesn't change ${statusEmojis["atkdown"]}**ATK** stat.`
+					boss: `Takes up to **35 HP** & doesn't change ${statusEmojis["atkdown"]}**ATK** stat.`
 				}
 			},
 			{
@@ -2030,11 +2030,11 @@ statusDescs = [
 				desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once the afflicted is defeated**.`,
 				ailments: {
 					nonboss: {
-						weak: `Takes **1/5th** of max HP.`,
-						normal: `Takes **1/10th** of max HP.`,
-						resist: `Takes **1/20th** of max HP.`,
+						weak: `Takes **1/5th** of max HP & **-75%** to the ${statusEmojis["prcdown"]}**PRC** stat.`,
+						normal: `Takes **1/10th** of max HP & **halves** the ${statusEmojis["prcdown"]}**PRC** stat.`,
+						resist: `Takes **1/20th** of max HP & **-25%** the ${statusEmojis["prcdown"]}**PRC** stat.`,
 					},
-					boss: `Takes **10 HP**.`
+					boss: `Takes up to **35 HP** & doesn't change ${statusEmojis["prcdown"]}**PRC** stat.`
 				}
 			},
 			{
@@ -2094,7 +2094,7 @@ statusDescs = [
 						normal: `Takes **1/10th** of max HP & **halves** the ${statusEmojis["magdown"]}**MAG** stat.`,
 						resist: `Takes **1/20th** of max HP & **-20%** to the ${statusEmojis["magdown"]}**MAG** stat.`,
 					},
-					boss: `Takes **5 HP** & doesn't change ${statusEmojis["magdown"]}**MAG** stat.`
+					boss: `Takes up to **35 HP** & doesn't change ${statusEmojis["magdown"]}**MAG** stat.`
 				}
 			},
 			{
@@ -2174,7 +2174,7 @@ statusDescs = [
 						normal: `Takes **1/10th** of max HP & **1/2s** the ${statusEmojis["enddown"]}**END** stat. Has a **10%** chance of dissolving the afflicted's armor.`,
 						resist: `Takes **1/20th** of max HP & **1/1.25s** the ${statusEmojis["enddown"]}**END** stat. Has a **5%** chance of dissolving the afflicted's armor.`,
 					},
-					boss: `Takes **5 HP** & **doesn't change ${statusEmojis["enddown"]}END stat**. Bosses can't wear armor in the first place.`
+					boss: `Takes up to **35 HP** & **doesn't change ${statusEmojis["enddown"]}END stat**. Bosses can't wear armor in the first place.`
 				}
 			},
 			{

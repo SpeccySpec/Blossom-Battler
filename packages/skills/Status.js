@@ -2364,6 +2364,19 @@ statusEffectFuncs = {
 			if (char.hp <= 0) return `${char.name} took ${dmg}${affinityTxt} damage from their bleeding, being defeated!`;
 
 			return `${char.name} took ${dmg}${affinityTxt} damage from their bleeding!`;
+		},
+		statmod: function(char, stats) {
+			if (isBoss(char)) return stats;
+
+			if (hasStatusAffinity(char, 'bleed', 'weak')) {
+				stats.prc /= 4;
+			} else if (hasStatusAffinity(char, 'bleed', 'resist')) {
+				stats.prc /= 1.25;
+			} else {
+				stats.prc /= 2;
+			}
+
+			return stats;
 		}
 	},
 
