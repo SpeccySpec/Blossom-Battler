@@ -3079,6 +3079,9 @@ extrasList = {
 				forced: true
 			}
 		],
+		doc: {
+			pages: [{desc: "A <Multiplier> below 1x will make critical hits deal less damage. A <Multiplier> below 0x and a <Multiplier> above 100x is not supported."}]
+		},
 		applyfunc(message, skill, args) {
 			if (args[0] <= 0 || args[0] > 100) return void message.channel.send(`${args[0]} isn't a valid multiplier.`);
 			makeExtra(skill, "critdmgmod", [args[0]]);
