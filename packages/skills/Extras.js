@@ -2854,6 +2854,35 @@ extrasList = {
 			return str;
 		}
 	}),
+
+	critdmgmod: new Extra({
+		name: "Critical Hit Damage Modifier (Original)",
+		desc: "Landing a critical hit will multiply the damage dealt by <Multiplier> rather than the server standard.",
+		args: [
+			{
+				name: "Multiplier",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		applyfunc(message, skill, args) {
+			if (args[0] <= 0) return void message.channel.send(`${args[0]} isn't a`)
+			makeExtra(skill, "steelroller", [args[0].toLowerCase(), args[1]]);
+			return true;
+		},
+		statmod(char, skill, vars, btl) {
+			if (btl.terrain && (vars[0].toLowerCase() === "all" || btl.terrain.type == vars[0].toLowerCase())) skill.pow *= vars[1];
+		},
+		onuseatendoffunc(char, targ, skill, btl, vars) {
+			if (btl.terrain && (vars[0].toLowerCase() === "all" || btl.terrain.type == vars[0].toLowerCase())) {
+				delete btl.terrain;
+				addAtkMsg(btl, "_The terrain was destroyed._");
+			}
+		},
+		getinfo(vars, skill) {
+			return `Consumes a **${vars[0]}** terrain to boost the attack power by **${vars[1]}x**`
+		}
+	}),
 }
 
 // Make an Extra for a skill. "func" should be an array of 1-5 values indicating what the extra does.

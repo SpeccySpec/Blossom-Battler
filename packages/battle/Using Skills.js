@@ -214,7 +214,7 @@ getAffinity = (char, skillType) => {
 	if (typeof skillType === 'object') {
 		skillType = skillType.filter((_, index) => _ != "almighty");
 		console.log(skillType)
-		
+
 		if (skillType.length < 2) skillType = skillType[0]
 	}
 

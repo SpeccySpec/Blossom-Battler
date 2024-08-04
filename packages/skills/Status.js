@@ -2274,12 +2274,13 @@ isNeutralStatus = (status) => {
 
 statusEffectFuncs = {
 	burn: {
+		permanent: true,
 		endturn: function(btl, char) {
 			let statusTxt = '';
 			let affinityTxt = '';
 
 			let dmg = Math.round(char.maxhp/10)
-			if (isBoss(char)) dmg = 5;
+			if (isBoss(char) && dmg > 35) dmg = 35;
 
 			if (hasStatusAffinity(char, 'burn', 'weak')) {
 				dmg *= 2;
@@ -2308,12 +2309,13 @@ statusEffectFuncs = {
 	},
 
 	toxin: {
+		permanent: true,
 		endturn: function(btl, char) {
 			let statusTxt = '';
 			let affinityTxt = '';
 
 			let dmg = Math.round(char.maxhp/10)
-			if (isBoss(char)) dmg = 5;
+			if (isBoss(char) && dmg > 35) dmg = 35;
 
 			if (hasStatusAffinity(char, 'toxin', 'weak')) {
 				dmg *= 2;
@@ -2342,12 +2344,13 @@ statusEffectFuncs = {
 	},
 
 	bleed: {
+		permanent: true,
 		endturn: function(btl, char) {
 			let statusTxt = '';
 			let affinityTxt = '';
 
-			let dmg = Math.round(char.maxhp/10)
-			if (isBoss(char)) dmg = 10;
+			let dmg = Math.round(char.maxhp/10);
+			if (isBoss(char) && dmg > 35) dmg = 35;
 
 			if (hasStatusAffinity(char, 'bleed', 'weak')) {
 				dmg *= 2;
@@ -2365,14 +2368,14 @@ statusEffectFuncs = {
 	},
 
 	dissolved: {
+		permanent: true,
 		endturn: function(btl, char) {
 			let statusTxt = '';
 			let affinityTxt = '';
 
 			let dmg = Math.round(char.maxhp/10);
 			let chance = 10;
-
-			if (isBoss(char)) dmg = 5;
+			if (isBoss(char) && dmg > 35) dmg = 35;
 
 			if (hasStatusAffinity(char, 'dissolved', 'weak')) {
 				dmg *= 2;
@@ -2422,6 +2425,7 @@ statusEffectFuncs = {
 		},
 		statmod: function(char, stats) {
 			if (isBoss(char)) return stats;
+
 			if (hasStatusAffinity(char, 'dissolved', 'weak')) {
 				stats.end /= 4;
 			} else if (hasStatusAffinity(char, 'dissolved', 'resist')) {

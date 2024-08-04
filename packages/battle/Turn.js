@@ -2858,7 +2858,7 @@ doTurn = async(btl, noTurnEmbed) => {
 			delete char.status;
 			delete char.statusturns;
 		} else {
-			if (char.status && !statusEffectFuncs[char.status.toLowerCase()].endturn) {
+			if (char.status && !statusEffectFuncs[char.status.toLowerCase()].endturn && (!statusEffectFuncs[char.status.toLowerCase()].permanent || (statusEffectFuncs[char.status.toLowerCase()].permanent && isBoss(char)))) {
 				char.statusturns--;
 				if (char.statusturns <= 0) {
 					if (statusEffectFuncs[char.status]?.onremove) statusEffectFuncs[char.status].onremove(btl, char);
