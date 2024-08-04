@@ -2015,7 +2015,7 @@ statusDescs = [
 		statuses: [
 			{
 				name: "burn",
-				desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once 1 HP is reached**. May change the ${statusEmojis["atkdown"]}**ATK** stat.`,
+				desc: `Takes **an amount of HP** of damage each turn until **cured, or once 1 HP is reached**. May change the ${statusEmojis["atkdown"]}**ATK** stat.`,
 				ailments: {
 					nonboss: {
 						weak: `Takes **1/5th** of max HP & **-75%** to the ${statusEmojis["atkdown"]}**ATK** stat.`,
@@ -2027,7 +2027,7 @@ statusDescs = [
 			},
 			{
 				name: "bleed",
-				desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once the afflicted is defeated**.`,
+				desc: `Takes **an amount of HP** of damage each turn until **cured, or once the afflicted is defeated**. May change the ${statusEmojis["prcdown"]}**PRC** stat.`,
 				ailments: {
 					nonboss: {
 						weak: `Takes **1/5th** of max HP & **-75%** to the ${statusEmojis["prcdown"]}**PRC** stat.`,
@@ -2087,7 +2087,7 @@ statusDescs = [
 			},
 			{
 				name: "toxin",
-				desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once 1 HP is reached**. May change the ${statusEmojis["magdown"]}**MAG** stat.`,
+				desc: `Takes **an amount of HP** of damage each turn until **cured, or once 1 HP is reached**. May change the ${statusEmojis["magdown"]}**MAG** stat.`,
 				ailments: {
 					nonboss: {
 						weak: `Takes **1/5th** of max HP & **-75%** to the ${statusEmojis["magdown"]}**MAG** stat.`,
@@ -2167,7 +2167,7 @@ statusDescs = [
 			},
 			{
 				name: "dissolved",
-				desc: `Takes **an amount of HP** of damage each turn until **3 turns pass, cured, or once 1 HP is reached**. May change the ${statusEmojis["enddown"]}**END** stat. Has a chance to **dissolve the afflicted's armor**.`,
+				desc: `Takes **an amount of HP** of damage each turn until **cured, or once 1 HP is reached**. May change the ${statusEmojis["enddown"]}**END** stat. Has a chance to **dissolve the afflicted's armor**.`,
 				ailments: {
 					nonboss: {
 						weak: `Takes **1/5th** of max HP & **1/4s** the ${statusEmojis["enddown"]}**END** stat. Has a **20%** chance of dissolving the afflicted's armor.`,
