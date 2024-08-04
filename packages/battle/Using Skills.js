@@ -962,11 +962,11 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 								if (extrasList[i].multiple) {
 									for (let k in skill.extras[i]) {
 										let critData = extrasList[i].critmod(char, targ, dmg, critRate, skill, btl, skill.extras[i][k]);
-										if (critData) critRate = Math.max(0, Math.min(999, critRate));
+										if (critData) critRate = Math.max(0, Math.min(999, critData));
 									}
 								} else {
 									let critData = extrasList[i].critmod(char, targ, dmg, critRate, skill, btl, skill.extras[i]);
-									if (critData) critRate = Math.max(0, Math.min(999, critRate));
+									if (critData) critRate = Math.max(0, Math.min(999, critData));
 								}
 							}
 						}
