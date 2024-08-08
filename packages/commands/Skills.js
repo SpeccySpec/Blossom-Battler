@@ -367,34 +367,27 @@ commands.updateskills = new Command({
 
 		for (skill in skillFile) {
 			if (skillFile[skill]?.passive) {
-				if (skillFile[skill].passive?.boost) {
-					skillFile[skill].passive.boost = skillFile[skill].passive.boost.filter(x => x[0] != 'critdmg')
-				}
-
-				if (skillFile[skill].passive?.damage) {
-					for (x in skillFile[skill].passive.damage) {
-						if (skillFile[skill].passive.damage[x][0] == 'phys') skillFile[skill].passive.damage[x][0] = 'physical'
-						if (skillFile[skill].passive.damage[x][0] == 'mag') skillFile[skill].passive.damage[x][0] = 'magic'
-					}
-				}
-
-				if (skillFile[skill].passive?.dodge) {
-					for (x in skillFile[skill].passive.dodge) {
-						if (skillFile[skill].passive.dodge[x][0] == 'phys') skillFile[skill].passive.dodge[x][0] = 'physical'
-						if (skillFile[skill].passive.dodge[x][0] == 'mag') skillFile[skill].passive.dodge[x][0] = 'magic'
-					}
+				if (skillFile[skill].passive?.need) {
+					if (skillFile[skill].passive.need[0] == 'item') skillFile[skill].passive.need.push('skip')
 				}
 			}
 
 			if (skillFile[skill]?.statusses) {
-
+				if (skillFile[skill].statusses?.need) {
+					if (skillFile[skill].statusses.need[0] == 'item') skillFile[skill].statusses.need.push('skip')
+				}
 			}
 
 			if (skillFile[skill]?.heal) {
-				
+				if (skillFile[skill].heal?.need) {
+					if (skillFile[skill].heal.need[0] == 'item') skillFile[skill].heal.need.push('skip')
+				}
 			}
 
 			if (skillFile[skill]?.extras) {
+				if (skillFile[skill].extras?.need) {
+					if (skillFile[skill].extras.need[0] == 'item') skillFile[skill].extras.need.push('skip')
+				}
 			}
 		}
 		fs.writeFileSync(dataPath+'/json/skills.json', JSON.stringify(skillFile, null, '    '));
