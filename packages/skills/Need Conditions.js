@@ -1,3 +1,5 @@
+var shieldVerse_TYPES = [...Elements, 'any', 'shield', 'makarakarn', 'tereakarn', 'healverse', 'revitaverse', 'powerverse', 'spreadverse']
+
 needConditions = {
 	meter: new Extra({
 		name: "Meter",
@@ -916,6 +918,10 @@ needConditions = {
 				name: "Cost",
 				type: "Num",
 			},
+			{
+				name: "Has recipe? (Yes / No / Skip)",
+				type: "Word",
+			},
 		],
 		applyfunc(message, skill, params) {
 			let shouldHave = params[0] = params[0] ?? true
@@ -930,6 +936,7 @@ needConditions = {
 			let iMoreC = params[9] = params[9] ?? 'more'
 			let iEqualC = params[10] = params[10] ?? true
 			let iCost = params[11] = params[11] ?? 0
+			let iRecipe = params[12] = params[12] ?? "skip"
 
 			if (!['more', 'less', 'exact'].includes(iMoreA)) return void message.channel.send("That's not the correct comparison type for amount. It's either less, more or exact.");
 
@@ -966,6 +973,8 @@ needConditions = {
 				if (iMoreC != 'less' && iCost < 0) iCost = 0
 			}
 
+			if (iRecipe != "skip") iRecipe = ['yes', 'true', 'y', '1'].includes(iRecipe)
+
 			return params
 		},
 		check(target, skill, btl, vars, isSkillAffected, team) {
@@ -989,6 +998,8 @@ needConditions = {
 			let iEqualC = vars[13]
 			let iCost = vars[14]
 
+			let iRecipe = vars[15]
+
 			let checkRarity = iMoreR == 'less' ? '<' : (iMoreR == 'more' ? '>' : '==');
 			if (iEqualR && iMoreR != 'exact') checkRarity += '=';
 			let checkCost = iMoreC == 'less' ? '<' : (iMoreC == 'more' ? '>' : '==');
@@ -1001,15 +1012,17 @@ needConditions = {
 			let amountOperator = new Function('a', `return a ${checkAmount} ${iAmount};`);
 
 			for (i in toCheck) {
-				if (!itemFile[i]) toCheck[i] = "DO NOT DETECT"
+				if (!itemFile[i]) {toCheck[i] = "DO NOT DETECT"; continue;}
 
-				if (toCheck[i] != "DO NOT DETECT" && (iRarity != 'any' && !rarityOperator(itemFile[i]?.rarity ?? 'common'))) toCheck[i] = "DO NOT DETECT"
+				if (toCheck[i] != "DO NOT DETECT" && (iRarity != 'any' && !rarityOperator(itemFile[i]?.rarity ?? 'common'))) {toCheck[i] = "DO NOT DETECT"; continue;}
 
-				if (toCheck[i] != "DO NOT DETECT" && (iType != 'any' && ((iType == "inedible" && consumableItems.includes(itemFile[i].type)) || (iType == "edible" && !consumableItems.includes(itemFile[i].type)) || itemFile[i].type != iType))) toCheck[i] = "DO NOT DETECT"
+				if (toCheck[i] != "DO NOT DETECT" && (iType != 'any' && ((iType == "inedible" && consumableItems.includes(itemFile[i].type)) || (iType == "edible" && !consumableItems.includes(itemFile[i].type)) || itemFile[i].type != iType))) {toCheck[i] = "DO NOT DETECT"; continue;}
 
-				if (toCheck[i] != "DO NOT DETECT" && !costOperator(itemFile[i]?.cost ?? 0)) toCheck[i] = "DO NOT DETECT"
+				if (toCheck[i] != "DO NOT DETECT" && !costOperator(itemFile[i]?.cost ?? 0)) {toCheck[i] = "DO NOT DETECT"; continue;}
 
-				if (toCheck[i] != "DO NOT DETECT" && aComparison == 'of' && !amountOperator(toCheck[i])) toCheck[i] = "DO NOT DETECT"
+				if (toCheck[i] != "DO NOT DETECT" && aComparison == 'of' && !amountOperator(toCheck[i])) {toCheck[i] = "DO NOT DETECT"; continue;}
+
+				if (toCheck[i] != "DO NOT DETECT" && iRecipe != 'skip' && ((iRecipe && !itemFile[i].recipe) || (!iRecipe && itemFile[i].recipe))) {toCheck[i] = "DO NOT DETECT"; continue;}
 			}
 
 			toCheck = Object.entries(toCheck).filter(x => x[1] !== 'DO NOT DETECT')
@@ -1034,8 +1047,9 @@ needConditions = {
 			let iMoreC = filteredVars[12]
 			let iEqualC = filteredVars[13]
 			let iCost = filteredVars[14]
+			let iRecipe = filteredVars[14]
 
-			lessText += `the ${filteredVars[1]} to ${shouldHave ? "" : "not "}have ${iMoreA == 'exact' ? "" : `${iMoreA}${iEqualA ? ' or equal to' : ' than'}`} ${iAmount} ${aComparison} ${iType == 'any' ? (aComparison == "of" ? "an " : "") : (iType == 'inedible' ? `${aComparison == "of" ? "an " : ""}inedible` : (iType == 'edible' ? `${aComparison == "of" ? "an " : ""}edible` : `${aComparison == "of" ? "a " : ""}${itemTypeEmoji[iType]} ${iType}`))} item${aComparison == "of" ? "" : "s"}`
+			lessText += `the ${filteredVars[1]} to ${shouldHave ? "" : "not "}have ${iMoreA == 'exact' ? "" : `${iMoreA}${iEqualA ? ' or equal to' : ' than'}`} ${iAmount} ${aComparison} ${iType == 'any' ? (aComparison == "of" ? "an " : "") : (iType == 'inedible' ? `${aComparison == "of" ? "an " : ""}inedible` : (iType == 'edible' ? `${aComparison == "of" ? "an " : ""}edible` : `${aComparison == "of" ? "a " : ""}${itemTypeEmoji[iType]} ${iType}`))} ${iRecipe != 'skip' ? (iRecipe == true ? 'craftable' : 'non-craftable') : ""} item${aComparison == "of" ? "" : "s"}`
 
 			if (iRarity != 'any') lessText += ` that ${aComparison == "of" ? "is" : "are"} ${iMoreR == 'exact' ? "" : `${iMoreR == 'more' ? 'rarer' : 'more common'}${iEqualR ? ' or equal to' : ' than'}`} ${itemRarityEmoji[iRarity]} ${iRarity}`
 
@@ -1044,6 +1058,96 @@ needConditions = {
 			}
 
 			return lessText + ' available'
+		}
+	}),
+
+	shieldverse: new Extra({
+		name: "Shield / Verse",
+		desc: `Checks for the fighter's active shield and/or verse to proceed.\n\n-# The types allowed are: **Any, Shield, Shield Element (e.g. Acid), Makarakarn, Tetrakarn, Healverse, Revitaverse, Powerverse & Spreadverse**.`,
+		args: [
+			{
+				name: "Should Have?",
+				type: "YesNo",
+				forced: true
+			},
+			{
+				name: "Types",
+				type: "Word",
+				forced: true,
+				multiple: true
+			},
+		],
+		applyfunc(message, skill, params) {
+			let types = [...new Set(params.slice(1))];
+			
+			if (types.some(x => !shieldVerse_TYPES.includes(x))) return void message.channel.send(`The types that aren't right are: ${types.filter(x => !shieldVerse_TYPES.includes(x)).join(', ')}. Please take care of them.`)
+
+			return [params[0], [...new Set(types)]]
+		},
+		check(target, skill, btl, vars, isSkillAffected, team) {
+			let shouldHave = vars[3]
+			let shieldTypes = vars[4]
+
+			let shield_gen = target?.custom?.shield
+			let healv = target?.custom?.healverse
+			let revitav = target?.custom?.powerverse
+			let powerv = target?.custom?.spreadverse
+			let spreadv = target?.custom?.revitaverse
+
+			let applyOperator = new Function('a', `return ${shouldHave ? '' : '!'}a;`);
+
+			if (shieldTypes.includes('any')) {
+				if ((shouldHave && (shield_gen || healv || revitav || powerv || spreadv)) || (!shouldHave && !(shield_gen || healv || revitav || powerv || spreadv))) return true
+			} else {
+				for (s in shieldTypes) {
+					if (shieldTypes == 'any') continue;
+
+					switch (shieldTypes[s]) {
+						case 'shield': if (applyOperator(shield_gen?.element)) return true; break;
+						case 'makarakarn': if (applyOperator(shield_gen?.type == 'repelmag')) return true; break;
+						case 'tetrakarn': if (applyOperator(shield_gen?.type == 'repelphys')) return true; break;
+						case 'healverse': if (applyOperator(healv)) return true; break;
+						case 'revitaverse': if (applyOperator(revitav)) return true; break;
+						case 'powerverse': if (applyOperator(powerv)) return true; break;
+						case 'spreadverse': if (applyOperator(spreadv)) return true; break;
+						default: if (applyOperator(shield_gen?.element == shieldTypes[s])) return true; break;
+					}
+				}
+			}
+
+			return isSkillAffected ? "You don't meet the requirement to use this move at the moment!" : false;
+		},
+		getinfo(filteredVars) {
+			let lessText = ``
+
+			let types = filteredVars[4]
+
+			lessText += `the ${filteredVars[1]} to ${filteredVars[3] ? "" : "not "}have `
+
+			if (types.includes('any')) lessText += "any kind of shield"
+			else {
+				lessText += `${types.filter(x => x != 'any').length > 1 ? "either" : ""} `
+
+				for (s in types) {
+					if (types[s] == 'any') continue;
+
+					switch (types[s]) {
+						case 'shield': lessText += `a *generic shield*`; break;
+						case 'makarakarn': lessText += `a *Makarakarn*`; break;
+						case 'tetrakarn': lessText += `a *Tetrakarn*`; break;
+						case 'healverse': lessText += `a *healing aura*`; break;
+						case 'revitaverse': lessText += `a *revitalizing aura*`; break;
+						case 'powerverse': lessText += `an *empowering aura*`; break;
+						case 'spreadverse': lessText += `a *scattering aura*`; break;
+						default: lessText += `A shield with the ${elementEmoji[types[s]]} *${types[s]}* element`
+					}
+
+					if (s < types.length - 2) lessText += ', ';
+					else if (s == types.length - 2) lessText += ' or ';
+				}
+			}
+
+			return lessText + ' on them'
 		}
 	}),
 }

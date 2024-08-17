@@ -4726,6 +4726,7 @@ commands.equipweapon = new Command({
 				}
 
 				char.curweapon = objClone(char.weapons[args[1]]);
+				char.curweapon.id = args[1]
 				delete char.weapons[args[1]];
 
 				message.react('👍');
@@ -4737,11 +4738,13 @@ commands.equipweapon = new Command({
 				}
 
 				char.curweapon = objClone(char.weapons[args[1]]);
+				char.curweapon.id = args[1]
+				delete char.weapons[args[1]];
 
 				message.react('👍');
 				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 			}
-		}
+		} else return message.channel.send(`I'm sorry, but ${charFile[args[0]].name} does not own ${args[1]}!`)
 	}
 })
 
@@ -4775,7 +4778,7 @@ commands.obtainarmor = new Command({
 		if (!char.armorclass) char.armorclass = 'none';
 
 		if (charFile[args[0]].owner != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send('You do not own this character.');
-		if (!armorFile[args[1]]) return message.channel.send(`${args[1]} is an invalid weapon!`);
+		if (!armorFile[args[1]]) return message.channel.send(`${args[1]} is an invalid armor!`);
 		if (char.armors[args[1]]) return message.channel.send(`${char.name} already owns a ${armorFile[args[1]].name}.`);
 
 		message.react('👍');
@@ -4801,7 +4804,7 @@ commands.equiparmor = new Command({
 		}
 	],
 	func(message, args, guilded) {
-       let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
+		let charFile = setUpFile(`${dataPath}/json/${message.guild.id}/characters.json`);
 
 		if (!charFile[args[0]]) return message.channel.send(`${args[0]} is not a valid character!`);
 
@@ -4821,6 +4824,7 @@ commands.equiparmor = new Command({
 				}
 
 				char.curarmor = objClone(char.armors[args[1]]);
+				char.curarmor.id = args[1]
 				delete char.armors[args[1]];
 
 				message.react('👍');
@@ -4832,12 +4836,13 @@ commands.equiparmor = new Command({
 				}
 
 				char.curarmor = objClone(char.armors[args[1]]);
+				char.curarmor.id = args[1]
 				delete char.armors[args[1]];
 
 				message.react('👍');
 				fs.writeFileSync(`${dataPath}/json/${message.guild.id}/characters.json`, JSON.stringify(charFile, null, '    '));
 			}
-		}
+		} else return message.channel.send(`I'm sorry, but ${charFile[args[0]].name} does not own ${args[1]}!`)
 	}
 })
 
@@ -4874,20 +4879,23 @@ commands.unequipequipment = new Command({
 
 		switch(args[1].toLowerCase()) {
 			case 'weapon':
-				if (char.curweapon == {}) return message.channel.send(`${char.name} has no weapon equipped.`);
+				if (!char?.curweapon?.id) return message.channel.send(`${char.name} has no weapon equipped.`);
 				char.weapons[char.curweapon.id] = objClone(char.curweapon);
+				delete char.weapons[char.curweapon.id].id
 				char.curweapon = {};
 				break;
 
 			case 'armor':
-				if (char.curarmor == {}) return message.channel.send(`${char.name} has no armor equipped.`);
+				if (!char?.curarmor?.id) return message.channel.send(`${char.name} has no armor equipped.`);
 				char.armors[char.curarmor.id] = objClone(char.curarmor);
+				delete char.armors[char.curarmor.id].id
 				char.curarmor = {};
 				break;
 
 			case 'accessory':
-				if (char.curaccessory == {}) return message.channel.send(`${char.name} has no accessory equipped.`);
+				if (!char?.curaccessory?.id) return message.channel.send(`${char.name} has no accessory equipped.`);
 				char.accessories[char.accessory.id] = objClone(char.curaccessory);
+				delete char.accessories[char.curaccessory.id].id
 				char.curaccessory = {};
 				break;
 			

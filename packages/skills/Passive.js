@@ -524,7 +524,7 @@ passiveList = {
 
 			if (affected == 'skillbeforeuse' && target == 'target') return void message.channel.send("Unfortunately it's not possible to check using the target here, as the check for usability of the skill in its entirety is done before you can choose the target.");
 
-			if (passiveList[affected] && (['need', 'formchange', 'magicmelee', 'meleetarget', 'attachment'].includes(affected) || passiveList[affected].canuseskill || passiveList[affected].endturn || passiveList[affected].battlestart || passiveList[affected].statmod)) return void message.channel.send(`Unfortunately ${affected.toUpperCase()} does not account for the target at all, only the user.`);
+			if (target == 'target' && passiveList[affected] && (['need', 'formchange', 'magicmelee', 'meleetarget', 'attachment'].includes(affected) || passiveList[affected].canuseskill || passiveList[affected].endturn || passiveList[affected].battlestart || passiveList[affected].statmod)) return void message.channel.send(`Unfortunately ${affected.toUpperCase()} does not account for the target at all, only the user.`);
 
 			if (!needConditions[condition]) return void message.channel.send(`Hold on, ${condition} is not the valid condition you can have.`);
 

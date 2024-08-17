@@ -461,7 +461,7 @@ statusList = {
 
 			if (affected == 'skillbeforeuse' && target == 'target') return void message.channel.send("Unfortunately it's not possible to check using the target here, as the check for usability of the skill in its entirety is done before you can choose the target.");
 
-			if (statusList[affected] && ['need', 'movelink'].includes(affected)) return void message.channel.send(`Unfortunately ${affected.toUpperCase()} does not account for the target at all, only the user.`);
+			if (target == 'target' && statusList[affected] && ['need', 'movelink'].includes(affected)) return void message.channel.send(`Unfortunately ${affected.toUpperCase()} does not account for the target at all, only the user.`);
 
 			if (!needConditions[condition]) return void message.channel.send(`Hold on, ${condition} is not the valid condition you can have.`);
 
@@ -1871,7 +1871,7 @@ statusList = {
 
 	burst: new Extra({
 		name: "Burst (Original)",
-		desc: "Cures the user's status effects, and gives a healverse-like effect.",
+		desc: "Cures the user's status effects, and gives regeneration.",
 		args: [
 			{
 				name: "HPPercent",
@@ -1882,7 +1882,7 @@ statusList = {
 		doc: {
 			pages: [
 				{
-					desc: `### Because of the effects, it's expected for a skill with Burst to be a bit pricier than usual.\n\nThe healverse-like effect is regeneration for 3 turns with no pause.`
+					desc: `### Because of the effects, it's expected for a skill with Burst to be a bit pricier than usual.\n\nThe regeneration lasts 3 turns with no pause.`
 				}
 			]
 		},

@@ -46,46 +46,49 @@ verifiedChar = (char, server) => {
 	for (let i of char.skills) {
 		skill = skillFile[i];
 		if (!skill) issues.push(`- ${i} is not a valid skill.`);
-		if (skill.pow*(skill.hits ?? 1) > 1200) issues.push(`- ${getFullName(skill)} has over 1200 power total.`);
-		if (skill.type != "support" && skill.type != "status" && skill.statuschance && skill.statuschance >= 100) issues.push(`- ${getFullName(skill)} has a guaranteed status.`);
-		if (skillTier(skill) > 5) issues.push(`- ${getFullName(skill)} is tier 6.`);
+		
+		if (skill) {
+			if (skill.pow*(skill.hits ?? 1) > 1200) issues.push(`- ${getFullName(skill)} has over 1200 power total.`);
+			if (skill.type != "support" && skill.type != "status" && skill.statuschance && skill.statuschance >= 100) issues.push(`- ${getFullName(skill)} has a guaranteed status.`);
+			if (skillTier(skill) > 5) issues.push(`- ${getFullName(skill)} is tier 6.`);
 
-		if (typeof(skill.type) == 'object') {
-			for (let type of skill.type) {
-				if (type === 'support' || type === 'status')
+			if (typeof(skill.type) == 'object') {
+				for (let type of skill.type) {
+					if (type === 'support' || type === 'status')
+						statusses++;
+					else if (type === 'passive')
+						passives++;
+					else {
+						if (!elements.includes(type)) elements.push(type);
+						if (type === 'almighty') almighty++;
+					}
+				}
+			} else {
+				if (skill.type === 'support' || skill.type === 'status')
 					statusses++;
-				else if (type === 'passive')
+				else if (skill.type === 'passive')
 					passives++;
 				else {
-					if (!elements.includes(type)) elements.push(type);
-					if (type === 'almighty') almighty++;
+					if (!elements.includes(skill.type)) elements.push(skill.type);
+					if (skill.type === 'almighty') almighty++;
 				}
 			}
-		} else {
-			if (skill.type === 'support' || skill.type === 'status')
-				statusses++;
-			else if (skill.type === 'passive')
-				passives++;
-			else {
-				if (!elements.includes(skill.type)) elements.push(skill.type);
-				if (skill.type === 'almighty') almighty++;
+
+			// Move Link
+			movelinks = [];
+			for (let k in extratypes) {
+				if (skill[extratypes[k]] && skill[extratypes[k]].movelink)
+					for (let j in skill[extratypes[k]].movelink) movelinks.push(skill[extratypes[k]].movelink[j]);
 			}
-		}
 
-		// Move Link
-		movelinks = [];
-		for (let k in extratypes) {
-			if (skill[extratypes[k]] && skill[extratypes[k]].movelink)
-				for (let j in skill[extratypes[k]].movelink) movelinks.push(skill[extratypes[k]].movelink[j]);
-		}
-
-		for (let k in movelinks) {
-			if (skillFile[movelinks[k]]) {
-				skill = skillFile[movelinks[k]];
-				if (!skill) issues.push(`- ${getFullName(skillFile[i])} is linked with an invalid skill.`);
-				if (skill.pow*(skill.hits ?? 1) > 1200) issues.push(`- ${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which has over 1200 power total.`);
-				if (skill.type != "support" && skill.type != "status" && skill.statuschance && skill.statuschance >= 100) issues.push(`- ${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which has a guaranteed status.`);
-				if (skillTier(skill) > 5) issues.push(`- ${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which is tier 6 or higher.`);
+			for (let k in movelinks) {
+				if (skillFile[movelinks[k]]) {
+					skill = skillFile[movelinks[k]];
+					if (!skill) issues.push(`- ${getFullName(skillFile[i])} is linked with an invalid skill.`);
+					if (skill.pow*(skill.hits ?? 1) > 1200) issues.push(`- ${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which has over 1200 power total.`);
+					if (skill.type != "support" && skill.type != "status" && skill.statuschance && skill.statuschance >= 100) issues.push(`- ${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which has a guaranteed status.`);
+					if (skillTier(skill) > 5) issues.push(`- ${getFullName(skillFile[i])} is linked with ${getFullName(skill)} which is tier 6 or higher.`);
+				}
 			}
 		}
 	}
