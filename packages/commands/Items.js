@@ -125,6 +125,15 @@ function weaponDesc(weaponDefs, weaponName, message) {
 		}
     }
 
+    if (weaponDefs.itemAmmo) {
+        let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
+        let itemDefs = itemFile[weaponDefs.itemAmmo];
+
+        if (itemDefs) {
+            finalText += `Requires ${itemTypeEmoji[itemDefs.type]}${itemDefs.rarity && itemDefs.rarity != 'none' ? itemRarityEmoji[itemDefs.rarity] : ``}**${itemDefs.name}** as ammo.\n`;
+        }
+    }
+
     finalText += '\n'
     finalText += getRecipe(weaponDefs, message)
     finalText += '\n'
@@ -249,7 +258,7 @@ commands.registeritem = new Command({
 	],
     checkban: true,
     func(message, args, guilded) {
-        itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`)
+        let itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
 
         if (itemFile[args[0]] && itemFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("This item exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
 
@@ -951,6 +960,10 @@ commands.registerweapon = new Command({
             type: "Word"
         },
         {
+            name: "Ammo (Item)",
+            type: "Word"
+        },
+        {
             name: "Description",
             type: "Word",
         }
@@ -974,11 +987,20 @@ commands.registerweapon = new Command({
 
 		// Skill
         let skill
-        if (args[9]) {
+        if (args[9] && args[9].toLowerCase() != 'none') {
             if (!skillFile[args[9]]) 
 				message.channel.send(`_"${args[9]}"_ is not a valid skill. I'll still make this weapon regardless`);
             else
 				skill = args[9];
+        }
+
+		// Ammo
+        let ammo
+        if (args[10] && args[10].toLowerCase() != 'none') {
+            if (!itemFile[args[10]])
+				message.channel.send(`_"${args[10]}"_ is not a valid item for ammo. I'll still make this weapon regardless`);
+            else
+				ammo = args[10];
         }
 
         weaponFile[args[0]] = {
@@ -986,7 +1008,7 @@ commands.registerweapon = new Command({
             class: args[2].toLowerCase(),
             cost: Math.max(args[1], 0),
             element: args[3].toLowerCase(),
-            desc: args[10],
+            desc: args[11],
 			atk: args[5],
 			mag: args[6],
 			agl: args[7],
@@ -995,6 +1017,7 @@ commands.registerweapon = new Command({
         }
 
         if (skill) weaponFile[args[0]].skill = skill;
+        if (ammo) weaponFile[args[0]].itemAmmo = ammo;
         if (args[4] > 0) weaponFile[args[0]].melee = args[4];
 
         fs.writeFileSync(`${dataPath}/json/${message.guild.id}/weapons.json`, JSON.stringify(weaponFile, null, 4));

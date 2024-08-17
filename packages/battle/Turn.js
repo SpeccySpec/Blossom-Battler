@@ -167,7 +167,7 @@ function CalcCompins(comps, i) {
 	return compins
 }
 
-function canSelectSkill(char, skill, btl) {
+function canSelectSkill(char, skill, btl, skillid) {
 	if (skill.extras) {
 		for (let k in skill.extras) {
 			if (!extrasList[k]) continue;
@@ -267,6 +267,24 @@ function canSelectSkill(char, skill, btl) {
 			let canUse = statusEffectFuncs[char.status.toLowerCase()].canuse(char, skill, btl)
 
 			if (canUse && canUse[1] != true) {
+				return false;
+			}
+		}
+	}
+
+	// Weapon Ammo
+	if (skillid && char.curweapon && char.curweapon.skill && skillid == char.curweapon.skill) {
+		if (char.curweapon.itemAmmo) {
+			let targItem = char.curweapon.itemAmmo;
+
+			let party;
+			for (const i in btl.teams) {
+				if (char.team != i) continue;
+				party = btl.teams[i];
+				break;
+			}
+
+			if (!party.items[targItem] || party.items[targItem] <= 0) {
 				return false;
 			}
 		}
@@ -416,7 +434,7 @@ const menuStates = {
 
 								if (canselect) {
 									dogrey = false;
-									canselect = canSelectSkill(char2, skillinfo, btl);
+									canselect = canSelectSkill(char2, skillinfo, btl, skillname);
 									if (!canselect) dogrey = true;
 								} else {
 									dogrey = true;
@@ -483,7 +501,7 @@ const menuStates = {
 
 							if (canselect) {
 								dogrey = false;
-								canselect = canSelectSkill(char2, skillinfo, btl);
+								canselect = canSelectSkill(char2, skillinfo, btl, skillname);
 								if (!canselect) dogrey = true;
 							} else {
 								dogrey = true;
@@ -581,7 +599,7 @@ const menuStates = {
 					// CanUse extra
 					if (canselect) {
 						dogrey = false;
-						canselect = canSelectSkill(char, skillinfo, btl);
+						canselect = canSelectSkill(char, skillinfo, btl, skillname);
 						if (!canselect) dogrey = true;
 					} else {
 						dogrey = true;

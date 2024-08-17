@@ -1604,6 +1604,7 @@ let trustQuotes = [
 ];
 
 useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
+	let skillID = act.index ?? "Agi";
 	let settings = setUpSettings(btl.guild.id);
 	let skill = objClone(forceskill) ?? objClone(skillFile[act.index]);
 	lbtext[btl.guild.id] = [];
@@ -2727,6 +2728,20 @@ useSkill = (char, btl, act, forceskill, ally, noExtraArray) => {
 
 	// Take away the cost
 	if (skillCost && !skill.forcefree) useCost(char, Math.round(skillCost), skill.costtype, btl);
+
+	// Weapon Ammo
+	if (skillID && char.curweapon && char.curweapon.skill && skillID == char.curweapon.skill) {
+		if (char.curweapon.itemAmmo) {
+			let targItem = char.curweapon.itemAmmo;
+			let itemFile = setUpFile(`${dataPath}/json/${btl.guild.id}/items.json`);
+			let itemDefs = itemFile[targItem];
+	
+			if (party.items[targItem] && party.items[targItem] > 0 && itemDefs) {
+				party.items[targItem]--;
+				finalText += `\nThe attack consumed **1 ${itemTypeEmoji[itemDefs.type]}${itemDefs.rarity && itemDefs.rarity != 'none' ? itemRarityEmoji[itemDefs.rarity] : ``}${itemDefs.name}**! _(${party.items[targItem]} Left)_`
+			}
+		}
+	}
 
 	// Do we have any final messages
 	if (btl.atkmsg && !noEffectMsg) {
