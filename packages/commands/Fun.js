@@ -19,7 +19,7 @@ commands.ping = new Command({
 commands.diceroll = new Command({
 	desc: "Rolls the specified amount of dice with the specified amount of sides.",
 	section: "fun",
-	aliases: ['dice'],
+	aliases: ['dice', 'rolldice'],
 	args: [
 		{
 			name: "Sides",
@@ -51,10 +51,18 @@ commands.diceroll = new Command({
 		resultsNums.sort(function(a, b) {return a + b})
 
 		let resultsTxt = `(${resultsNums})`
+		let avgText = '';
 
-		let endTxt = `Your result ${num2 == 1 ? `` : `from multiple rolls`} is ${totalNum} ${num2 != 1 ? resultsTxt : ''} after rolling a ${num2}d${num1}.`
-		if (totalNum == 69)
-			endTxt += ' Therefore, I have a [prize](https://www.youtube.com/watch?v=ub82Xb1C8os) for you :)';
+		if (num2 > 1) {
+			let avgNums = 0;
+			for (let i of resultsNums) avgNums += i
+			avgNums = Math.round(avgNums/num2);
+
+			avgText = ` _(${avgNums} average)_`;
+		}
+
+		let endTxt = `Your result ${num2 == 1 ? `` : `from multiple rolls`} is ${totalNum} ${num2 != 1 ? resultsTxt : ''}${avgText} after rolling a ${num2}d${num1}.`
+		if (totalNum == 69) endTxt += ' Therefore, I have a [prize](https://www.youtube.com/watch?v=ub82Xb1C8os) for you :)';
 
 		const DiscordEmbed = new Discord.MessageEmbed()
             .setColor('#0099ff')
