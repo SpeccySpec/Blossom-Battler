@@ -970,7 +970,8 @@ commands.registerweapon = new Command({
     ],
     checkban: true,
     func(message, args, guilded) {
-        weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`)
+        weaponFile = setUpFile(`${dataPath}/json/${message.guild.id}/weapons.json`);
+        itemFile = setUpFile(`${dataPath}/json/${message.guild.id}/items.json`);
 
         if (weaponFile[args[0]] && weaponFile[args[0]].originalAuthor != message.author.id && !utilityFuncs.isAdmin(message)) return message.channel.send("This weapon exists already, and you do not own it, therefore, you have insufficient permissions to overwrite it.")
 
