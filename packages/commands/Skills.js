@@ -208,7 +208,7 @@ commands.registersupport = new Command({
 		if (!skill) return;
 
 		skillFile[args[0]] = skill;
-		if (args[4].toLowerCase != 'none') skillFile[args[0]].desc = args[4];
+		if (args[4] && args[4].toLowerCase != 'none') skillFile[args[0]].desc = args[4];
 		fs.writeFileSync(`${dataPath}/json/skills.json`, JSON.stringify(skillFile, null, '    '));
 
 		if (Object.keys(skillFile).length == 7000) {

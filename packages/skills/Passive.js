@@ -1309,14 +1309,14 @@ passiveList = {
 
 				for (let i in statusEffectFuncs) {
 					if ((!isNeutralStatus(i) || !isPositiveStatus(i)) && statusEffectFuncs[i].stackable) {
-						delete targ[i];
+						delete char[i];
 						hasRemoved = true
 					}
 				}
 
 				if (!isNeutralStatus(targ.status) || !isPositiveStatus(targ.status)) {
-					delete targ.status;
-					delete targ.statusturns;
+					delete char.status;
+					delete char.statusturns;
 					hasRemoved = true
 				}
 				
