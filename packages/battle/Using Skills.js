@@ -1111,7 +1111,20 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 						if (noVarsArray && noVarsArray.includes(i)) continue;
 
 						if (customVariables[i] && customVariables[i].dmgmod) {
-							result.txt += '\n' + (customVariables[i].dmgmod(btl, targ, char, dmg, skill, targ.custom[i], emojis[i]) ?? '');
+							let ret = (customVariables[i].dmgmod(btl, targ, char, dmg, skill, targ.custom[i], emojis[i]) ?? '');
+
+							console.log(ret);
+							if (typeof ret == "object") {
+								if (ret[0]) result.txt += '\n' + ret[0];
+								if (ret[1]) dmg = ret[1];
+								
+								if (ret[2])
+									emojis[i] = ret[2];
+								else if (customVariables[i].toembed)
+									emojis[i] = customVariables[i].toembed;
+							} else {
+								result.txt += '\n' + ret;
+							}
 						}
 					}
 				}

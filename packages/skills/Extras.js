@@ -3094,6 +3094,108 @@ extrasList = {
 			return `Critical hits deal **${vars[0]}x** rather than the standard.`;
 		}
 	}),
+
+	deathmark: new Extra({
+		name: "Death Mark (Risk of Rain 2)",
+		desc: "If the opponent has more than <Debuffs Count> total debuffs, they will be afflicted with a Death Mark, that deals <Multiplier>x damage for <Turns> turns.",
+		args: [
+			{
+				name: "Debuff Count",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Multiplier",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			}
+		],
+		doc: {
+			pages: [
+				{
+					desc: `The Death Mark will stay even if they become cured of these debuffs. States that count as debuffs are as follows:
+- Negative Status Ailments
+- Neutral Status Ailments
+- Debuffs
+- Fire Spin
+- Flinching
+- Being the target of a link skill
+- Verse skills
+- ${elementEmoji.passive}**Pinch Mode**
+- Being the target of a ${elementEmoji.support}**Future Sight** skill
+- ${elementEmoji.support}**Simple Beam**
+- ${elementEmoji.support}**Disable**
+- Being angry during ${elementEmoji.passive}**Mood Swing**
+- Affected by ${elementEmoji.passive}**Neutralising Gas**`
+				}
+			]
+		},
+		applyfunc(message, skill, args) {
+			const debuffs = parseInt(args[0]);
+			const dmgmult = parseFloat(args[1]);
+			const turns = parseInt(args[2]);
+
+			if (turns < 0) return void message.channel.send("But, it would ware off immediately-")
+			if (dmgmult < 0) return void message.channel.send("I see no point in this.")
+
+			makeExtra(skill, "deathmark", [debuffs, dmgmult, turns]);
+			return true
+		},
+		ondamage(char, targ, dmg, skill, btl, vars) {
+			if (targ.custom?.deathmark) return;
+
+			let debuffs = 0;
+
+			// Status ailments.
+			if (targ.status && targ.status != "none") debuffs++;
+
+			// Stackable status ailments.
+			for (let i in statusEffectFuncs) {
+				if (statusEffectFuncs[i].stackable && targ[i]) debuffs++;
+			}
+
+			// Debuffs
+			for (let i in stats) {
+				if (targ.buffs[stats[i]] && targ.buffs[stats[i]] < 0) debuffs -= targ.buffs[stats[i]];
+			}
+
+			// Extras debuffs
+			if (targ.custom) {
+				let debuffstuff = ["firespin", "flinch", "link", "healverse", "revitaverse", "powerverse", "spreadverse", "pinch", "futuresight", "simplebeam", "disable"]
+
+				for (let i in debuffstuff) {
+					if (targ.custom[i]) debuffs++;
+				}
+
+				// Mood Swing
+				if (targ.custom.moodswing?.isAngry) debuffs++;
+			}
+
+			// Battle State Debuffs
+			if (btl.nopassives) debuffs++;
+
+			// The final check
+			console.log(`${debuffs} debuffs, must be over ${vars[0]}.`)
+			if (debuffs >= vars[0]) {
+				addCusVal(targ, "deathmark", {
+					name: skill.name,
+					infname: char.name,
+					multiplier: vars[1],
+					turns: vars[2]
+				});
+
+				return `__${targ.name}__ was _marked and weakened_!`;
+			}
+		},
+		getinfo(vars, skill) {
+			return `After the **opponent** has ${vars[0] ?? 4} debuffs, deal ${vars[1] ?? 1.5}✕ damage for ${vars[2] ?? 3} turns.`
+		}
+	}),
 }
 
 // Make an Extra for a skill. "func" should be an array of 1-5 values indicating what the extra does.
@@ -3906,5 +4008,22 @@ customVariables = {
 				return txt;
 			}
 		}
-	}
+	},
+
+	deathmark: {
+		toembed: "<:deathmark:1290660187413282906>",
+		dmgmod(btl, char, inf, dmg, skill, vars, emotes) {
+			return [null, Math.round(dmg*vars.multiplier), "<:deathmark:1290660187413282906>"]
+		},
+		endturn(btl, char, vars) {
+			if (char.custom?.deathmark) {
+				char.custom.deathmark.turns--;
+				if (char.custom.deathmark.turns <= 0) {
+					let txt = `${char.name} is no longer marked.`;
+					killVar(char, "deathmark");
+					return txt;
+				}
+			}
+		}
+	},
 }
