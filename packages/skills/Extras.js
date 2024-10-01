@@ -3127,11 +3127,13 @@ extrasList = {
 - Being the target of a link skill
 - Verse skills
 - ${elementEmoji.passive}**Pinch Mode**
+- A ${elementEmoji.support}**Corrupted** foe.
 - Being the target of a ${elementEmoji.support}**Future Sight** skill
 - ${elementEmoji.support}**Simple Beam**
 - ${elementEmoji.support}**Disable**
 - Being angry during ${elementEmoji.passive}**Mood Swing**
-- Affected by ${elementEmoji.passive}**Neutralising Gas**`
+- Affected by ${elementEmoji.passive}**Neutralising Gas**
+- Being ${elementEmoji.physical}**collapsed**`
 				}
 			]
 		},
@@ -3166,7 +3168,7 @@ extrasList = {
 
 			// Extras debuffs
 			if (targ.custom) {
-				let debuffstuff = ["firespin", "flinch", "link", "healverse", "revitaverse", "powerverse", "spreadverse", "pinch", "futuresight", "simplebeam", "disable"]
+				let debuffstuff = ["firespin", "flinch", "link", "healverse", "revitaverse", "powerverse", "spreadverse", "pinch", "futuresight", "simplebeam", "disable", "collapse"]
 
 				for (let i in debuffstuff) {
 					if (targ.custom[i]) debuffs++;
@@ -3193,7 +3195,66 @@ extrasList = {
 			}
 		},
 		getinfo(vars, skill) {
-			return `After the **opponent** has ${vars[0] ?? 4} debuffs, deal ${vars[1] ?? 1.5}✕ damage for ${vars[2] ?? 3} turns.`
+			return `After the **opponent** has ${vars[0] ?? 4} debuffs, deal ${vars[1] ?? 1.5}✕ damage for ${vars[2] ?? 3} turns`
+		}
+	}),
+
+	collapse: new Extra({
+		name: "Collapse (Risk of Rain 2)",
+		desc: "A <Chance>% chance to affects the opponent for <Turns> turns. After it wares off, the opponent takes the amount of damage that was dealt to them in that time multiplied by the <Multiplier>.",
+		args: [
+			{
+				name: "Multiplier",
+				type: "Decimal",
+				forced: true
+			},
+			{
+				name: "Turns",
+				type: "Num",
+				forced: true
+			},
+			{
+				name: "Chance",
+				type: "Decimal",
+				forced: true
+			}
+		],
+		doc: {
+			pages: [
+				{
+					desc: "This extra only tracks direct. It does not track damage from sources such as status ailments, fire spin, traps, ect. If it comes from a skill and is dealt in that moment, then it will most likely be tracked, but damage over time effects will not be tracked."
+				}
+			]
+		},
+		applyfunc(message, skill, args) {
+			const dmgmult = parseFloat(args[0]);
+			const turns = Math.max(parseInt(args[1]), 1);
+			const chance = parseFloat(args[2]);
+
+			if (dmgmult < 0) return void message.channel.send("I see no point in this.");
+			if (chance < 0) return void message.channel.send("I see no point in this.");
+
+			makeExtra(skill, "collapse", [dmgmult, turns, chance]);
+			return true
+		},
+		ondamage(char, targ, dmg, skill, btl, vars) {
+			if (targ.custom?.collapse) return;
+
+			if (vars[2] >= 100 || (randNum(1, 1000)/10 <= vars[2])) {
+				addCusVal(targ, "collapse", {
+					name: skill.name,
+					infname: char.name,
+					multiplier: vars[0],
+					turns: vars[1],
+					dmg: dmg,
+				});
+
+				return `__${targ.name}__ was <:collapse:1290668933346623569>**Collapsed**!`;
+			}
+		},
+		getinfo(vars, skill) {
+			let txt = (vars[2] < 100 ? `${vars[2]}% chance to ` : "On hit, ") + `<:collapse:1290668933346623569>**Collapse** the foe, dealing ${vars[0]}✕ collective damage in ${vars[1]} turns`;
+			return txt;
 		}
 	}),
 }
@@ -4021,6 +4082,32 @@ customVariables = {
 				if (char.custom.deathmark.turns <= 0) {
 					let txt = `${char.name} is no longer marked.`;
 					killVar(char, "deathmark");
+					return txt;
+				}
+			}
+		}
+	},
+
+	collapse: {
+		toembed: "<:collapse:1290668933346623569>",
+		dmgmod(btl, char, inf, dmg, skill, vars, emotes) {
+			if (char.custom?.collapse) char.custom.collapse.dmg += dmg;
+		},
+		endturn(btl, char, vars) {
+			if (char.custom?.collapse) {
+				char.custom.collapse.turns--;
+				if (char.custom.collapse.turns <= 0) {
+					let txt = `${char.name} is struck with <:collapse:1290668933346623569>**Collapsing** energy!`;
+					let dmg = Math.round(char.custom.collapse.dmg*char.custom.collapse.multiplier);
+					char.hp -= Math.max(0, dmg);
+
+					if (char.hp <= 0) {
+						txt += `\n${char.name} took <:collapse:1290668933346623569>**${dmg}** damage and was defeated!`;
+					} else {
+						txt += `\n${char.name} took <:collapse:1290668933346623569>**${dmg}** damage!`;
+					}
+
+					killVar(char, "collapse");
 					return txt;
 				}
 			}
