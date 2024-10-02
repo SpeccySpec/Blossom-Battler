@@ -264,6 +264,7 @@ renderAffinities = (shortenAmount, charDefs, DiscordEmbed, settings, message, us
 			let statAffs = '';
 			
 			for (const affinity in char.statusaffinities) {
+				if (!statusEffectFuncs[affinity]) continue;
 				if (char.statusaffinities[affinity].length == 0) continue;
 				statAffs += `\n${affinityEmoji[affinity]}: `
 
