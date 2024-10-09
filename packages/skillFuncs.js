@@ -29,7 +29,6 @@ buffText = (buffArray) => {
 
 skillStatusText = (skillDefs, newline) => {
 	if (!skillDefs.status) return '';
-	if (!statusEffectFuncs[skillDefs.status]) return '';
 
 	let finalText = "";
 	if (typeof skillDefs.status === 'object') {
@@ -40,6 +39,7 @@ skillStatusText = (skillDefs, newline) => {
 		}
 
 		for (const i in skillDefs.status) {
+			console.log(skillDefs.status[i]);
 			if (statusEffectFuncs[skillDefs.status[i]]) {
 				finalText += `**${statusEmojis[skillDefs.status[i]]}${skillDefs.status[i]}**`
 				if (i == skillDefs.status.length-2)
@@ -48,9 +48,11 @@ skillStatusText = (skillDefs, newline) => {
 					finalText += '.\n'
 				else
 					finalText += ', '
-	}
+			}
 		}
 	} else if (skillDefs.status !== "none" && skillDefs.type != "heal") {
+		if (!statusEffectFuncs[skillDefs.status]) return '';
+
 		if (skillDefs.statuschance) {
 			finalText += `Has a **${skillDefs.statuschance}%** chance of inflicting **${statusEmojis[skillDefs.status]}${skillDefs.status}**.\n`;
 		} else if (!skillDefs.statuschance || skillDefs.statuschance >= 100) {

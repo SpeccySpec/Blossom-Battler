@@ -2604,53 +2604,6 @@ statusEffectFuncs = {
 		}
 	},
 
-	petrified: {
-		oninflict: function(char) {
-			if (hasStatusAffinity(char, 'petrified', 'weak'))
-				char.statusturns = 3;
-			else if (hasStatusAffinity(char, 'petrified', 'resist'))
-				char.statusturns = 1;
-			else
-				char.statusturns = 2;
-		},
-		onremove: function(btl, char) {
-			DiscordEmbed = new Discord.MessageEmbed()
-				.setColor("#ff1fa9")
-				.setTitle(`${char.name}'s turn!`)
-				.setDescription(`${char.name} breaks out!`);
-			btl.channel.send({embeds: [DiscordEmbed]});
-		},
-		onturn: function(btl, char) {
-			if (isBoss(char)) {
-				delete char.status;
-				delete char.statuschance;
-				return `${char.name} breaks out!`;
-			}
-
-			return [`${char.name} is petrified, losing their turn!`, false];
-		},
-		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
-			if (hasStatusAffinity(targ, 'petrified', 'weak'))
-				dmg *= 0.97;
-			else if (hasStatusAffinity(targ, 'petrified', 'resist'))
-				dmg *= 0.95;
-			else
-				dmg *= 0.96;
-
-			return dmg;
-		},
-		critmod: function(btl, targ, critRate, skill) {
-			if (hasStatusAffinity(targ, 'petrified', 'weak'))
-				critRate *= 1.4;
-			else if (hasStatusAffinity(targ, 'petrified', 'resist'))
-				critRate *= 1.1;
-			else
-				critRate *= 1.2;
-
-			return critRate;
-		}
-	},
-
 	stun: {
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'stun', 'weak'))
@@ -2778,97 +2731,6 @@ statusEffectFuncs = {
 		}
 	},
 
-	brainwash: {
-		oninflict: function(char) {
-			if (hasStatusAffinity(char, 'brainwash', 'weak')) {
-				char.statusturns = 3;
-			} else if (hasStatusAffinity(char, 'brainwash', 'resist')) {
-				char.statusturns = 1;
-			} else {
-				char.statusturns = 2;
-			}
-		},
-		turnoverride: function(btl, char) {
-			if (isBoss(char)) {
-				DiscordEmbed = new Discord.MessageEmbed()
-					.setColor("#ff1fa9")
-					.setTitle(`${char.name}'s turn!`)
-					.setDescription(`${char.name} shakes it off immediately!`);
-				btl.channel.send({embeds: [DiscordEmbed]});
-
-				delete char.status;
-				delete char.statusturns;
-				return true;
-			}
-
-			let skillFile = setUpFile(`${dataPath}/json/skills.json`, true);
-			
-			let usableskills = [];
-			for (let i in char.skills) {
-				if (canUseSkill(char, skillFile[char.skills[i]], char.skills[i], btl)) usableskills.push(char.skills[i]);
-			}
-			
-			if (usableskills.length <= 0) {
-				let dmg = char.stats.atk + (-8 + randNum(16));
-
-				DiscordEmbed = new Discord.MessageEmbed()
-					.setColor(charColor(char))
-					.setTitle(`${char.name} => Self`)
-					.setDescription(`__${char.name}__ has no usable skills! __${char.name}__ strikes themselves, taking ${dmg} damage!`);
-				btl.channel.send({embeds: [DiscordEmbed]});
-				
-				char.hp -= dmg;
-				return false;
-			}
-
-			let skill = usableskills[randNum(usableskills.length-1)];
-			let skillDefs = objClone(skillFile[skill]);
-
-			// Flip the skill's target.
-			let targFlip = {
-				one: 'ally',
-				ally: 'one',
-				caster: 'caster',
-				allopposing: 'allallies',
-				allallies: 'allopposing',
-				allalliesnocaster: 'allopposing',
-				randomopposing: 'randomallies',
-				randomallies: 'randomopposing',
-				random: 'random',
-				everyone: 'everyone',
-				randomspread: 'randomspread',
-				randomwidespread: 'randomwidespread',
-				spreadopposing: 'spreadallies',
-				spreadallies: 'spreadopposing',
-				randomspreadopposing: 'randomspreadallies',
-				randomspreadallies: 'randomspreadopposing',
-				widespreadopposing: 'widespreadallies',
-				widespreadallies: 'widespreadopposing',
-				randomwidespreadopposing: 'randomwidespreadallies',
-				randomwidespreadallies: 'randomwidespreadopposing',
-				casterandfoe: 'casterandally',
-				casterandally: 'casterandfoe',
-				casterandrandom: 'casterandrandom',
-				casterandrandomfoe: 'casterandrandomally',
-				casterandrandomally: 'casterandrandomfoe'
-			}
-
-			if (!skillDefs.target)
-				skillDefs.target = 'ally';
-			else
-				skillDefs.target = targFlip[skillDefs.target];
-
-			let result = {
-				move: 'skills',
-				index: skill,
-				target: [char.team, randNum(btl.teams[char.team].members.length-1)],
-			}
-
-			useSkill(char, btl, result, skillDefs);
-			return false;
-		}
-	},
-
 	fear: {
 		onturn: function(btl, char) {
 			if (isBoss(char)) {
@@ -2947,66 +2809,6 @@ statusEffectFuncs = {
 			}
 		},
 		hardcoded: true
-	},
-
-	silence: {
-		oninflict: function(char) {
-			if (hasStatusAffinity(char, 'silence', 'weak')) {
-				char.statusturns = 3;
-			} else if (hasStatusAffinity(char, 'silence', 'resist') || isBoss(char)) {
-				char.statusturns = 1;
-			} else {
-				char.statusturns = 2;
-			}
-		},
-		hardcoded: true
-	},
-
-	dazed: {
-		oninflict: function(char) {
-			if (hasStatusAffinity(char, 'dazed', 'weak')) {
-				char.statusturns = 3;
-			} else if (hasStatusAffinity(char, 'dazed', 'resist') || isBoss(char)) {
-				char.statusturns = 1;
-			} else {
-				char.statusturns = 2;
-			}
-		},
-		hardcoded: true
-	},
-
-	hunger: {
-		opposite: ['stuffed'],
-		statmod: function(char, stats) {
-			if (hasStatusAffinity(char, 'hunger', 'weak')) {
-				stats.atk /= 4;
-				stats.mag /= 4;
-			} else if (hasStatusAffinity(char, 'hunger', 'resist')) {
-				stats.atk /= 1.5;
-				stats.mag /= 1.5;
-			} else {
-				stats.atk /= 2;
-				stats.mag /= 2;
-			}
-
-			return stats;
-		}
-	},
-
-	infatuation: {
-		stackable: true,
-		opposite: ['guilt'],
-		onturn: function(btl, char) {
-			if (randNum(1, 100) <= 50) return [`${char.name} is stopped in their tracks by lust, losing their turn!`, false];
-		},
-	},
-
-	guilt: {
-		stackable: true,
-		opposite: ['infatuation'],
-		onturn: function(btl, char) {
-			if (randNum(1, 100) <= 50) return [`${char.name} is held back by guilt...`, false];
-		},
 	},
 
 	blind: {
@@ -3146,12 +2948,6 @@ statusEffectFuncs = {
 		skillmod: function(char, skill, btl) {
 			if (skill.atktype == 'magic') skill.pow *= 2;
 		}
-	},
-
-	drenched: {
-		stackable: true,
-		hardcoded: true,
-		forceturns: 3,
 	},
 
 	stagger: {
@@ -3749,72 +3545,6 @@ statusEffectFuncs = {
 		}
 	},
 
-	doomed: {
-		stackable: true,
-		opposite: ['weakened'],
-		forceturns: 3,
-		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
-			if ((typeof skill.type === "object" && skill.type.includes("bless")) || (skill.type === "bless")) {
-				let mult = 1.5;
-
-				if (hasStatusAffinity(targ, 'doomed', 'weak')) {
-					mult = 2;
-				} else if (hasStatusAffinity(targ, 'doomed', 'resist')) {
-					mult = 1.25;
-				}
-
-				dmg = Math.round(dmg*mult);
-				emojitxt += statusEmojis.doomed;
-			}
-
-			return [dmg, emojitxt];
-		},
-		statmod: function(char, stats) {
-			if (isBoss(char)) return stats;
-
-			if (hasStatusAffinity(char, 'doomed', 'resist')) {
-				stats.end *= 0.75;
-			} else {
-				stats.end /= 2;
-			}
-
-			return stats;
-		}
-	},
-
-	weakened: {
-		stackable: true,
-		opposite: ['doomed'],
-		forceturns: 3,
-		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
-			if ((typeof skill.type === "object" && skill.type.includes("curse")) || (skill.type === "curse")) {
-				let mult = 1.5;
-
-				if (hasStatusAffinity(targ, 'weakened', 'weak')) {
-					mult = 2;
-				} else if (hasStatusAffinity(targ, 'weakened', 'resist')) {
-					mult = 1.25;
-				}
-
-				dmg = Math.round(dmg*mult);
-				emojitxt += statusEmojis.weakened;
-			}
-
-			return [dmg, emojitxt];
-		},
-		statmod: function(char, stats) {
-			if (isBoss(char)) return stats;
-
-			if (hasStatusAffinity(char, 'weakened', 'resist')) {
-				stats.atk *= 0.75;
-			} else {
-				stats.atk /= 2;
-			}
-
-			return stats;
-		}
-	},
-
 	grassimped: {
 		forceturns: 2,
 		onturn: function(btl, char) {
@@ -3974,20 +3704,6 @@ statusEffectFuncs = {
 
 			return [dmg, emojitxt];
 		}
-	},
-
-	stuffed: {
-		opposite: ['hunger'],
-		oninflict: function(char) {
-			if (hasStatusAffinity(char, 'stuffed', 'weak')) {
-				char.statusturns = 3;
-			} else if (hasStatusAffinity(char, 'stuffed', 'resist') || isBoss(char)) {
-				char.statusturns = 1;
-			} else {
-				char.statusturns = 2;
-			}
-		},
-		hardcoded: true
 	},
 
 	tired: {
