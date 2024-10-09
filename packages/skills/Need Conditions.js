@@ -754,7 +754,7 @@ needConditions = {
 
 	affinity: new Extra({
 		name: "Affinity",
-		desc: `Checks for the affinity to an element or status effect from a fighter to proceed.\n\n-# With affinities the strongest ones are ${affinityEmoji['repel']} repel and ${affinityEmoji['drain']} drain, both of equal priority.\n\n-# Most elements and ailments are allowed, except for ${elementEmoji['almighty']} almighty, ${elementEmoji['support']} support, ${elementEmoji['heal']} heal, ${elementEmoji['passive']} passive & ${statusEmojis['dispelled']} dispelled.\n-# There are ailments that you can only check for ${affinityEmoji['normal']} normal and ${affinityEmoji['block']} block, such as: ${statusEmojis['infatuation']} infatuation, ${statusEmojis['confusion']} confusion, ${statusEmojis['drenched']} drenched, ${statusEmojis['stagger']} stagger, ${statusEmojis['grassimped']} grassimped, ${statusEmojis['dizzy']} dizzy & ${statusEmojis['guilt']} guilt.`,
+		desc: `Checks for the affinity to an element or status effect from a fighter to proceed.\n\n-# With affinities the strongest ones are ${affinityEmoji['repel']} repel and ${affinityEmoji['drain']} drain, both of equal priority.\n\n-# Most elements and ailments are allowed, except for ${elementEmoji['almighty']} almighty, ${elementEmoji['support']} support, ${elementEmoji['heal']} heal, ${elementEmoji['passive']} passive & ${statusEmojis['dispelled']} dispelled.\n-# There are ailments that you can only check for ${affinityEmoji['normal']} normal and ${affinityEmoji['block']} block, such as: ${statusEmojis['infatuation']} infatuation, ${statusEmojis['confusion']} confusion, ${statusEmojis['stagger']} stagger, ${statusEmojis['grassimped']} grassimped, ${statusEmojis['dizzy']} dizzy & ${statusEmojis['guilt']} guilt.`,
 		args: [
 			{
 				name: "Weaker/Stronger/Exact",
@@ -795,7 +795,7 @@ needConditions = {
 
 			if (stel.some(x => ['dispelled', 'almighty', 'support', 'heal', 'passive'].includes(x))) return void message.channel.send(`You put either: almighty, support, heal, passive or dispelled, which are valid but cannot have an affinity to. They're not allowed.`);
 
-			if (stel.some(x => ['infatuation', 'confusion', 'drenched', 'stagger', 'grassimped', 'dizzy', 'guilt'].includes(x))) {
+			if (stel.some(x => ['infatuation', 'confusion', 'stagger', 'grassimped', 'dizzy', 'guilt'].includes(x))) {
 				let problemArray = stel.filter(x => ['infatuation', 'confusion', 'drenched', 'stagger', 'grassimped', 'dizzy', 'guilt'].includes(x))
 				let problemtxt = ``
 

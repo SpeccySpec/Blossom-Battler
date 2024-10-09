@@ -2377,7 +2377,7 @@ isPhysicalStatus = (status) => {
 	return phys.includes(status.toLowerCase());
 }
 
-let stackable = ['confusion', 'infatuation', 'drenched', 'shrouded', 'blessed', 'lovable', 'light', 'heavy', 'dry', 'wet', 'doomed', 'weakened', 'overheat', 'chilled', 'target', 'cursed', 'neutralized', 'dispelled', 'unstable'];
+let stackable = ['confusion', 'infatuation', 'shrouded', 'blessed', 'lovable', 'light', 'heavy', 'dry', 'wet', 'doomed', 'weakened', 'overheat', 'chilled', 'target', 'cursed', 'neutralized', 'dispelled', 'unstable'];
 isStackableStatus = (status) => {
 	if (!status) return false;
 

@@ -49,7 +49,6 @@ let st = {
 	ego: 4,
 	silence: 3,
 	dazed: 3,
-	hunger: 2,
 	mirror: 1,
 	blind: 1,
 	irradiation: 2,

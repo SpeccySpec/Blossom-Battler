@@ -942,7 +942,6 @@ hasStatusAffinity = (charDefs, element, affinity) => {
 
 	if (!charDefs.statusaffinities) return false;
 	if (!charDefs.statusaffinities[affinity]) return false;
-	if (charDefs.drenched) return false;
 
 	for (const aff of charDefs.statusaffinities[affinity]) {
 		if (aff.toLowerCase() == element.toLowerCase()) return true;
@@ -1050,7 +1049,7 @@ commands.setaffinity = new Command({
 			if (!thingDefs[args[0]].statusaffinities) thingDefs[args[0]].statusaffinities = {};
 
 			if ((!utilityFuncs.inArray(args[2].toLowerCase(), Affinities) && args[2].toLowerCase() != 'normal') || args[2].toLowerCase() === 'superweak' || args[2].toLowerCase() === 'repel' || args[2].toLowerCase() === 'drain') return message.channel.send('Please enter a valid affinity!```diff\n+ Weak\n+ Normal\n+ Resist\n+ Block```');
-			if (['infatuation', 'confusion', 'drenched', 'stagger', 'grassimped', 'dizzy', 'guilt'].includes(args[1].toLowerCase()) && !['normal', 'block'].includes(args[2].toLowerCase())) return message.channel.send(`You can't set this kind of affinity for ${args[1]}, at most either normal or block!`);
+			if (['infatuation', 'confusion', 'stagger', 'grassimped', 'dizzy', 'guilt'].includes(args[1].toLowerCase()) && !['normal', 'block'].includes(args[2].toLowerCase())) return message.channel.send(`You can't set this kind of affinity for ${args[1]}, at most either normal or block!`);
 			if (['dispelled'].includes(args[1].toLowerCase())) return message.channel.send(`You can't set an affinity for ${args[1]}!`);
 
 			if (args[3]) {
