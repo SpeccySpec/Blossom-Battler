@@ -2082,11 +2082,11 @@ statusDescs = [
 				desc: "Immobilizes the afflicted for an **amount of turns**. Technical damage will be **increased even more than usual**, but thaw the opponent. Very small resistance to all other attacks.",
 				ailments: {
 					nonboss: {
-						weak: `Lasts **2 turns**.`,
-						normal: `Lasts **1 turn**.`,
-						resist: `Lasts **1 turn, but has a 50% chance of thawing out**.`,
+						weak: `Lasts **3 turns**.`,
+						normal: `Lasts **2 turns**.`,
+						resist: `Lasts **1 turn**.`,
 					},
-					boss: `**Thaws out immediately**.`
+					boss: `Has a **40%** chance of thawing out on any of it's frozen turns.`
 				}
 			},
 			{

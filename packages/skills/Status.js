@@ -2580,19 +2580,15 @@ statusEffectFuncs = {
 	freeze: {
 		oninflict: function(char) {
 			if (hasStatusAffinity(char, 'freeze', 'weak'))
-				char.statusturns = 2;
-			else
+				char.statusturns = 3;
+			else if (hasStatusAffinity(char, 'freeze', 'resist'))
 				char.statusturns = 1;
+			else
+				char.statusturns = 2;
 		},
 		onturn: function(btl, char) {
-			if (isBoss(char)) {
-				delete char.status;
-				delete char.statuschance;
-				return `${char.name} thaws out!`;
-			}
-
 			let chance = 100;
-			if (hasStatusAffinity(char, 'freeze', 'resist')) chance = 50;
+			if (isBoss(char)) chance = 60;
 
 			if (randNum(1, 100) <= chance)
 				return [`${char.name} is frozen, losing their turn!`, false];
@@ -2601,6 +2597,16 @@ statusEffectFuncs = {
 				delete char.statuschance;
 				return `${char.name} thaws out!`;
 			}
+		},
+		dmgmod: function(btl, targ, dmg, skill, emojitxt) {
+			if ((typeof skill.type === "object" && (elementTechs.freeze.includes(skill.type[0]) || elementTechs.freeze.includes(skill.type[1]))) || elementTechs.freeze.includes(skill.type)) {
+				dmg = Math.round(dmg*1.5);
+				emojitxt += '<:physical:973077052129423411>';
+			} else {
+				dmg = Math.round(dmg*0.85);
+			}
+
+			return [dmg, emojitxt];
 		}
 	},
 

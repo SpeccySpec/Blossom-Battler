@@ -1251,11 +1251,18 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 
 				result.txt += `\n${selectQuote(char, 'badatk', null, "%ENEMY%", targ.name, "%SKILL%", skill.name)}${selectQuote(targ, 'drain', null, "%ENEMY%", char.name, "%SKILL%", skill.name)}`;
 			} else {
+				let wasTech = false;
+
 				result.txt += `__${targ.name}__ took _`
 				for (let i in damages) {
 					dmgTxt += `**${damages[i]}**`;
 					if (affinityEmoji[affinities[i]] && affinities[i].toLowerCase() != 'normal') dmgTxt += affinityEmoji[affinities[i]];
-					if (techs[i]) dmgTxt += statusEmojis[targ.status.toLowerCase()] ?? statusEmojis.burn;
+
+					if (techs[i]) {
+						dmgTxt += statusEmojis[targ.status.toLowerCase()] ?? statusEmojis.burn;
+						wasTech = true;
+					}
+
 					if (emojis[i] != "") dmgTxt += emojis[i];
 
 					if (crits[i]) {
@@ -1356,6 +1363,12 @@ attackWithSkill = (char, targ, skill, btl, noRepel, noExtraArray, noVarsArray, n
 								break;
 							}
 						}
+					}
+
+					if (wasTech) {
+						delete targ.status;
+						delete targ.statuschance;
+						addAtkMsg(btl, `__${targ.name}__ is released!`);
 					}
 				}
 
