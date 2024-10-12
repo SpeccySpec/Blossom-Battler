@@ -1345,7 +1345,7 @@ passiveList = {
 		},
 		statmod(btl, char, skill, vars) {
 			if (skill.atktype === 'physical' || skill.atktype === 'ranged') {
-				skill.pow *= 1+(userDefs.hp/userDefs.maxhp)/1.42857142-0.2;
+				skill.pow *= 1+(char.hp/char.maxhp)/1.42857142-0.2;
 			}
 		},
 		getinfo(vars, skill) {
