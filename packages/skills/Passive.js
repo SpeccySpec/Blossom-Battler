@@ -2952,7 +2952,7 @@ passiveList = {
 					desc: `### _These skills should be character specific as forms are character specific and may not persist between characters._`+
 					`\n\nIf *{Transform on Failure Anyway}* is Yes, then the move will allow transformation on block, repel, or other forms of failure.`+
 					`\n\n*{Custom Message}* is the message that would be displayed on transformation. It doesn't show one if not specified.`+
-					`\n\nUnlike other iterations of *FORMCHANGE*, it has conditions. The only conditions possible so far are: 'weather', 'terrain', and 'forcedtimer'. 'Weather' and 'terrain' are triggered under specific weather or terrain respectively. 'ForcedTimer' is unique in that it triggers whenever`+
+					`\n\nUnlike other iterations of *FORMCHANGE*, it has conditions. The only conditions possible so far are: 'weather', 'terrain', and 'forcedtimer'. 'Weather' and 'terrain' are triggered under specific weather or terrain respectively. 'ForcedTimer' is unique in that it triggers whenever the specified number of turns pass, whether the player wants it to trigger or not.`+
 					`\n\n*{Chance}* defaults to 100% if note specified.`
 				}
 			]
@@ -2972,6 +2972,11 @@ passiveList = {
 					variable = variable.toLowerCase();
 					break;
 
+				case 'forcedtimer':
+					if (parseInt(variable) <= 0) return void message.channel.send(`${variable} is not a valid turn number. Please input the number of turns before each transformation.`);
+					variable = parseInt(variable)
+					break;
+
 				default:
 					return void message.channel.send(`${cond} is an invalid condition.`);
 			}
@@ -2980,7 +2985,6 @@ passiveList = {
 			return true
 		},
 		onweather(char, weather, psv, btl, vars) {
-			console.log(`the weather is ${weather}`);
 			if (vars[1] === 'weather' && weather.toLowerCase() === vars[2].toLowerCase() && (vars[3] >= 100 || randNum(1, 100) <= vars[3])) {
 				return extrasList.formchange.onselect(char, null, btl, [vars[0], 999, true, vars[4]]);
 			}
@@ -2988,6 +2992,26 @@ passiveList = {
 		onterrain(char, terrain, psv, btl, vars) {
 			if (vars[1] === 'terrain' && terrain.toLowerCase() === vars[2].toLowerCase() && (vars[3] >= 100 || randNum(1, 100) <= vars[3])) {
 				return extrasList.formchange.onselect(char, null, btl, [vars[0], 999, true, vars[4]]);
+			}
+		},
+		onturn(btl, char, vars) {
+			if (vars[1] === 'forcedtimer') {
+				if (!char.custom?.forcedtimer) addCusVal(char, 'forcedtimer', 0);
+				char.custom.forcedtimer++;
+
+				if (char.custom.forcedtimer >= vars[1]) {
+					char.custom.forcedtimer = 0;
+
+					if (vars[3] >= 100 || randNum(1, 100) <= vars[3]) {
+						return `${char.name} is spared from the transformation.`
+					} else {				
+						if (char.curform) {
+							return extrasList.formchange.onselect(char, null, btl, [vars[0], 999, true, vars[4]]);
+						} else {
+							return extrasList.formchange.onselect(char, null, btl, ["normal", 999, true, vars[4]]);
+						}
+					}
+				}
 			}
 		},
 		getinfo(vars, skill) {
@@ -3000,6 +3024,10 @@ passiveList = {
 
 				case 'terrain':
 					str = `On the change to ${terrainDescs[vars[2]].emoji}**${vars[2]}** terrain, `;
+					break;
+
+				case 'forcedtimer':
+					str = `Uncontrollably, every **${vars[2]}** turns, `;
 					break;
 			}
 
