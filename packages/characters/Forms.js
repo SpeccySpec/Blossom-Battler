@@ -54,6 +54,11 @@ modForm = (char, formName, server) => {
 			let baseStat = origForm.stats[stats[i]];
 			form.stats[stats[i]] = Math.min(99, Math.round((baseStat+3) * (1 + ((char.level-1) * 0.06751))))
 		}
+	} else if (settings.formulas && settings.formulas.levelUpFormula && settings.formulas.levelUpFormula === 'lamonka') {
+		for (const i in stats) {
+			let baseStat = origForm.stats[stats[i]];
+			form.stats[stats[i]] = Math.round((baseStat+3) * (1 + ((char.level-1) * 0.0626)))
+		}
 	} else {
 		for (const stat of stats) form.stats[stat] = origForm.stats[stat];
 

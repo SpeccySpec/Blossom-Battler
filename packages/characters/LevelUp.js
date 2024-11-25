@@ -55,6 +55,11 @@ updateStats = (charDefs, server, updateXp) => {
 			let baseStat = charDefs.basestats[`base${stats[i]}`]
 			charDefs[stats[i]] = Math.min(99, Math.round((baseStat+3) * (1 + ((charDefs.level-1) * 0.06751))))
 		}
+	} else if (settings.formulas && settings.formulas.levelUpFormula && settings.formulas.levelUpFormula === 'lamonka') {
+		for (const i in stats) {
+			let baseStat = charDefs.basestats[`base${stats[i]}`]
+			charDefs[stats[i]] = Math.round((baseStat+3) * (1 + ((charDefs.level-1) * 0.0626)))
+		}
 	} else {
 		for (const stat of stats) charDefs.stats[stat] = charDefs.basestats[`base${stat}`];
 

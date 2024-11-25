@@ -84,6 +84,7 @@ commands.settings = new Command({
 			'original': 'No Specific Formula',
 			'assist': '(BaseStat+3) * (1 + ((Level-1) * 0.06751))',
 			'percent': 'BaseStat * (1 + ((Level-1) * 0.091))',
+			'lamonka': 'A system',
 			'custom': 'bruh'
 		}
 
@@ -436,10 +437,11 @@ commands.levelupformula = new Command({
 			'original': 'No Specific Formula',
 			'assist': '(BaseStat+3) * (1 + ((Level-1) * 0.06751))',
 			'percent': 'BaseStat * (1 + ((Level-1) * 0.091))',
+			'lamonka': 'A system',
 			'custom': 'uhhhh Spectra you handle this'
 		}
 
-		if (args[0].toLowerCase() != 'original' && args[0].toLowerCase() != 'assist' && args[0].toLowerCase() != 'percent' && args[0].toLowerCase() != 'custom') {
+		if (args[0].toLowerCase() != 'original' && args[0].toLowerCase() != 'assist' && args[0].toLowerCase() != 'percent' && args[0].toLowerCase() != 'custom' && args[0].toLowerCase() != 'lamonka') {
 			return message.channel.send('Invalid level up formula! Valid formulas are: original, assist, percent, custom')
 		}
 

@@ -156,7 +156,11 @@ genDmg = (char, targ, btl, skill) => {
 				dmg = Math.round((((2*char.level)/5+2)*Math.abs(skill.pow)*def)/50+2)+randNum(-10, 10);
 				break;
 			case 'lamonka':
-				dmg = Math.ceil(((skill.pow+char.level)*(def/4)))*(0.95+(Math.random()/20));
+				let power_divider = Math.floor(Math.log(skill.pow, 2))
+				let divided_power = skill.pow / (power_divider * 2)
+				let levelled_power = (skill.pow / power_divider) + (char.level - targ.level)
+				let square_root = Math.sqrt(def)
+				let dmg = Math.max(1, Math.ceil(divided_power + levelled_power * square_root))
 				break;
 			case 'limitbreak':
 				dmg = Math.round((((skill.pow/2)+char.level+atkStat)-(endStat*2))) + randNum(-20, 20);
