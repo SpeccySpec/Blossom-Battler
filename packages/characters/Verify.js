@@ -11,6 +11,8 @@ const affinityScores = {
 let extratypes = ["extras", "statusses", "heal", "passive"];
 
 verifiedChar = (char, server) => {
+	if (char.type) return []; // This is an enemy, and shouldn't be scrutinized.
+
 	const settings = setUpSettings(server);
 
 	const issues = []

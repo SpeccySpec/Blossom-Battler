@@ -2952,7 +2952,7 @@ passiveList = {
 					desc: `### _These skills should be character specific as forms are character specific and may not persist between characters._`+
 					`\n\nIf *{Transform on Failure Anyway}* is Yes, then the move will allow transformation on block, repel, or other forms of failure.`+
 					`\n\n*{Custom Message}* is the message that would be displayed on transformation. It doesn't show one if not specified.`+
-					`\n\nUnlike other iterations of *FORMCHANGE*, it has conditions. The only conditions possible so far are: weather & terrain. These are triggered under specific weather or terrain respectively.`+
+					`\n\nUnlike other iterations of *FORMCHANGE*, it has conditions. The only conditions possible so far are: 'weather', 'terrain', and 'forcedtimer'. 'Weather' and 'terrain' are triggered under specific weather or terrain respectively. 'ForcedTimer' is unique in that it triggers whenever`+
 					`\n\n*{Chance}* defaults to 100% if note specified.`
 				}
 			]
