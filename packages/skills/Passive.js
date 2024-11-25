@@ -2973,6 +2973,7 @@ passiveList = {
 					break;
 
 				case 'forcedtimer':
+					if (!variable) return void message.channel.send("This condition requires a variable.");
 					if (parseInt(variable) <= 0) return void message.channel.send(`${variable} is not a valid turn number. Please input the number of turns before each transformation.`);
 					variable = parseInt(variable)
 					break;
@@ -2999,16 +3000,17 @@ passiveList = {
 				if (!char.custom?.forcedtimer) addCusVal(char, 'forcedtimer', 0);
 				char.custom.forcedtimer++;
 
-				if (char.custom.forcedtimer >= vars[1]) {
+				console.log(char.custom.forcedtimer, vars[2])
+				if (char.custom.forcedtimer >= vars[2]) {
 					char.custom.forcedtimer = 0;
 
-					if (vars[3] >= 100 || randNum(1, 100) <= vars[3]) {
+					if (vars[3] < 100 && randNum(1, 100) > vars[3]) {
 						return `${char.name} is spared from the transformation.`
 					} else {				
-						if (char.curform) {
-							return extrasList.formchange.onselect(char, null, btl, [vars[0], 999, true, vars[4]]);
-						} else {
+						if (char.curform && char.curform != "normal") {
 							return extrasList.formchange.onselect(char, null, btl, ["normal", 999, true, vars[4]]);
+						} else {
+							return extrasList.formchange.onselect(char, null, btl, [vars[0], 999, true, vars[4]]);
 						}
 					}
 				}
