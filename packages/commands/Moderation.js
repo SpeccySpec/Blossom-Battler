@@ -449,7 +449,7 @@ commands.levelupformula = new Command({
 			return message.channel.send('Custom level up formulas are not yet supported!')
 		}
 
-		settings['formulas']['levelUpFormula'] = levelUpFormulas[args[0].toLowerCase()]
+		settings['formulas']['levelUpFormula'] = args[0].toLowerCase()
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
 		message.channel.send('Level up formula set to ' + args[0].charAt(0).toUpperCase() + args[0].slice(1) + '\n\`' + levelUpFormulas[args[0].toLowerCase()] + '\`')
 	}
