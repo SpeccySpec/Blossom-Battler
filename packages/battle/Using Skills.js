@@ -137,7 +137,7 @@ genDmg = (char, targ, btl, skill) => {
 
 	let def = atkStat/endStat;
 
-	let dmg = 0;
+	var dmg = 0;
 	if (skill.limitbreak) {
 		dmg = Math.round((((skill.pow/2)+char.level+atkStat)-(endStat*2))) + randNum(-20, 20);
 	} else {
