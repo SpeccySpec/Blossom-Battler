@@ -160,7 +160,7 @@ genDmg = (char, targ, btl, skill) => {
 				let divided_power = skill.pow / (power_divider * 2)
 				let levelled_power = (skill.pow / power_divider) + (char.level - targ.level)
 				let square_root = Math.sqrt(def)
-				let dmg = Math.max(1, Math.ceil(divided_power + levelled_power * square_root))
+				dmg = Math.max(1, Math.ceil(divided_power + levelled_power * square_root))
 				break;
 			case 'limitbreak':
 				dmg = Math.round((((skill.pow/2)+char.level+atkStat)-(endStat*2))) + randNum(-20, 20);
