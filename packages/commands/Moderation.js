@@ -326,7 +326,7 @@ commands.currency = new Command({
 })
 
 commands.currencyemoji = new Command({
-	desc: 'Change the currency emoji for the server.',
+	desc: 'Change the currency emoji for the server. _Please note that if you say "yes" to "Ignore Checks", you must use the FULL ID of an emoji, else it will likely not function._',
 	section: 'moderation',
 	aliases: ['setcurrencyemoji', 'setmoneyemoji', 'setmoneyemoji'],
 	args: [
@@ -334,17 +334,25 @@ commands.currencyemoji = new Command({
 			name: 'Emoji',
 			type: 'Word',
 			forced: true
+		},
+		{
+			name: 'Ignore Checks',
+			type: 'YesNo'
 		}
 	],
 	admin: "You do not have permission to change the currency emoji!",
 	func(message, args, guilded) {
 		let settings = setUpSettings(message.guild.id)
 
-		let emotes = message.content.match(/<a?:.+?:\d{18}>|\p{Extended_Pictographic}/gu);
+		let emotes = args[0].match(/<a?:.+?:\d{18}>|\p{Extended_Pictographic}/gu);
 		let emoj = emotes?.[0]
 
-		if (emoj == undefined) return message.channel.send('You must provide an existing emoji! This means it must not be from another server, or not an emoji.');
-		if (emoj.length > 3 && !message.guild.emojis.cache.find(emoji => emoj == emoji.toString())) return message.channel.send('The emoji you provided is not valid in this server! The emoji **must be present** in this server, sorry Nitro users!');
+		if (args[1]) {
+			emoj = args[0]
+		} else {
+			if (emoj == undefined) return message.channel.send('You must provide an existing emoji! This means it must not be from another server, or not an emoji.');
+			if (emoj.length > 3 && !message.guild.emojis.cache.find(emoji => emoj == emoji.toString())) return message.channel.send('The emoji you provided is not valid in this server! The emoji **must be present** in this server, sorry Nitro users!');
+		}
 
 		settings['currency_emoji'] = emoj
 		fs.writeFileSync(`${dataPath}/json/${message.guild.id}/settings.json`, JSON.stringify(settings, null, 4))
