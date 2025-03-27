@@ -2,7 +2,7 @@
 // Global Objects //
 ////////////////////
 
-// Elements
+// Default Elements
 Elements = [
     "strike",
     "slash",
@@ -28,12 +28,12 @@ Elements = [
 	"sound",
     "almighty",
 
-	"status",
     "support",
     "heal",
     "passive"
 ]
 
+// Default Element Emojis
 elementEmoji = {
 	strike: "<:strike:963413845764874290>",
 	slash: "<:slash:963413845244797029>",
@@ -60,12 +60,12 @@ elementEmoji = {
 
 	almighty: "<:almighty:963413844326219787>",
 
-	status: "<:status:963413845693587497>",
 	support: "<:status:963413845693587497>",
 	heal: "<:heal:963413844972154900>",
 	passive: "<:passive:963413845253193758>"
 }
 
+// Default Element Colors
 elementColors = {
 	strike: '#ffc012',
 	slash: '#aba060',
@@ -92,14 +92,15 @@ elementColors = {
 
 	almighty: '#ffffff',
 
-	status: '#0008ff',
 	support: '#0008ff',
 	heal: '#61ffab',
 	passive: '#ffa200'
 }
 
+// List of affinities
 Affinities = ['superweak', 'weak', 'resist', 'block', 'repel', 'drain'];
 
+// Affinity Emojis
 affinityEmoji = {
 	deadly: '<:deadly:963413916879319072>',
 	superweak: '<:supereffective:963413917198082048>',
@@ -111,6 +112,7 @@ affinityEmoji = {
 	drain: '<:drain:963413916959010896>'
 }
 
+// List of Stats
 stats = ['atk', 'mag', 'prc', 'end', 'chr', 'int', 'agl', 'luk']
 
 // Item

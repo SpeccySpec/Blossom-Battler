@@ -2025,29 +2025,8 @@ commands.orderskills = new Command({
 })
 
 /*
-	GETTING ELEMENTS AND STATUSES
+	GETTING STATUSES
 									*/
-
-commands.listelements = new Command({
-	desc: 'Lists all the elements.',
-	section: "skills",
-	aliases: ['listelement', 'elementlist'],
-	args: [],
-	func(message, args, guilded) {
-		const DiscordEmbed = new Discord.MessageEmbed()
-			.setColor('#0099ff')
-			.setTitle('List of usable elements:')
-
-		let elementList = '';
-		for (let element in Elements) {
-			if (Elements[element] == 'status') continue
-			elementList += `${elementEmoji[Elements[element]]}**${Elements[element].charAt(0).toUpperCase()}${Elements[element].slice(1)}**\n`;
-		}
-
-		DiscordEmbed.setDescription(elementList)
-		message.channel.send({embeds: [DiscordEmbed]})
-	}
-})
 
 statusDescs = [
 	{

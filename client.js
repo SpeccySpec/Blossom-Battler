@@ -496,6 +496,7 @@ client.on("guildCreate", (guild) => {
 	setUpFile(`${dataPath}/json/${guild.id}/skills.json`)
 	setUpFile(`${dataPath}/json/${guild.id}/loot.json`)
 	setUpFile(`${dataPath}/json/${guild.id}/chests.json`)
+	setUpFile(`${dataPath}/json/${guild.id}/elements.json`)
 
 	// Character Data
 	setUpFile(`${dataPath}/json/${guild.id}/characters.json`)
